@@ -59,7 +59,7 @@
 | `visual-assist` | 继续显示为隐藏听辨、写 correct/firstTry 或宣称听音通过 | 普通界面字母+键位模型、小恐龙一句引导、`accessibilityVisualAssist=true` |
 | `complete` | 结果弹层、下一关按钮、虚构剩余正确 | 三花一起开放、自然休息 |
 
-正常钢琴键以及任务、花朵、花粉环、反馈、结果和地图仍只显示自己的 C/D/E/F/G 字母身份；小恐龙对话框是唯一可见唱名载体。家长端和非泄题 ARIA 可保留双身份。禁止把某个键提前标成“当前答案”，也禁止在普通提示中恢复 `Do/Re/Mi` 或 `C/Do`。
+正常钢琴键以及任务、花朵、花粉环、反馈、结果、地图和孩子端 ARIA 仍只显示自己的 C/D/E/F/G 字母身份；小恐龙对话框是唯一孩子端唱名载体。家长端可保留双身份。禁止把某个键提前标成“当前答案”，也禁止在普通提示或无障碍朗读中恢复 `Do/Re/Mi` 或 `C/Do`。
 
 ## 六、计分和掌握证据
 
@@ -123,7 +123,7 @@ LS05 必须生成新的候选合同，至少覆盖：garden-entry、reference、
 
 1. 新增独立 `check:chapter3-ls05`，不把全部断言堆入 LS04 或旧 visible 专项。
 2. LS05 专项至少覆盖：三个固定 seed、2/2/1、单次音轮换、无泄题 DOM/ARIA/CSS、固定花位与花朵重置、中性环、答后角色气泡的 letter-solfege 回连、无效帮助控件隐藏及下一呼叫清除、first-response scoring、4/5+候选覆盖、call-local repair 重置、重听上限、错误音/目标音顺序、pair compare、assisted/modeled、sound-paused、visual-assist 非评分完成、touch/MIDI/mic、地图/刷新连续性、modeled rest 跨 session 续剩余题但不拼 stable、家长证据和无 LS06。
-3. 复用并扩展儿童可见音名门禁：reference、waiting、wrong、pair、assisted、complete 和地图状态中，排除小恐龙对话框与家长区后不得出现 `Do/Re/Mi`、中文音译或 `C/Do` 双标；键盘/目标的合法 ARIA 双身份不能被误判为视觉泄漏。
+3. 复用并扩展儿童音名门禁：reference、waiting、wrong、pair、assisted、complete 和地图状态中，排除小恐龙对话框与家长区后，可见文本与 ARIA 均不得出现 `Do/Re/Mi`、中文音译或 `C/Do` 双标。
 4. 复跑 LS04 `39/39`、Chapter 3 visible、339d continuity、sessions、clean-state、M03/garden、PWA、input、audio settings、iPad a11y、motion、palette/contrast、Xingya suit、第一二章共享门禁。
 5. 复跑 generic zones、LS05 Chapter 3 zones、quick 和 strict bundle。
 6. 人工查看 1024x768、1194x834 DPR2、1366x1024 的 reference/waiting/wrong/pair/assisted/sound-paused/visual-assist/complete 原尺寸截图。

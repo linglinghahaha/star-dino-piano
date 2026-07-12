@@ -43,17 +43,17 @@ Before expanding the keyboard range, define how octave, hand area, and staff pos
 
 These rows are locked curriculum targets for `LP01-LP10`, but they are not current runtime targets until Chapter 4 implementation begins.
 
-| Letter | Child label | MIDI / Hz | Keyboard locator | Bass-staff position | Story role | Common confusion | Repair focus |
+| Letter | Ordinary child label | MIDI / Hz | Keyboard locator | Bass-staff position | Story role | Common confusion | Repair focus |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| C3 | 低音 Do | `48 / 130.81` | lower two-black left | second space | first foundation stone | C4 / D3 | same name, different home; compare low vs middle C |
-| D3 | 低音 Re | `50 / 146.83` | lower two-black middle | middle/third line | tunnel rail | C3 / E3 | show it between low C and E |
-| E3 | 低音 Mi | `52 / 164.81` | lower two-black right | third space | echo crystal | D3 / F3 | compare two-black right with three-black left |
-| F3 | 低音 Fa | `53 / 174.61` | lower three-black left | fourth line | bridge support pad | E3 / G3 | show it as the first white key before three black keys |
-| G3 | 低音 Sol | `55 / 196.00` | lower three-black left-middle | fourth space | main bridge anchor | F3 / G4 | compare first and second white keys around the three-black group; then compare registers |
+| C3 | 低音 C | `48 / 130.81` | lower two-black left | second space | first foundation stone | C4 / D3 | same name, different home; compare low vs middle C |
+| D3 | 低音 D | `50 / 146.83` | lower two-black middle | middle/third line | tunnel rail | C3 / E3 | show it between low C and E |
+| E3 | 低音 E | `52 / 164.81` | lower two-black right | third space | echo crystal | D3 / F3 | compare two-black right with three-black left |
+| F3 | 低音 F | `53 / 174.61` | lower three-black left | fourth line | bridge support pad | E3 / G3 | show it as the first white key before three black keys |
+| G3 | 低音 G | `55 / 196.00` | lower three-black left-middle | fourth space | main bridge anchor | F3 / G4 | compare first and second white keys around the three-black group; then compare registers |
 
 Register-language contract:
 
-- Child-facing first exposure uses `低音 Do` and `星芽的 Do`/`较高的 Do`, not an abstract octave lecture.
+- Ordinary child UI uses `低音 C` and `中央 C`/`较高的 C`, not an abstract octave lecture. A dinosaur dialogue may call the same sounds `低音 Do` and `中央 Do`.
 - Parent/teacher evidence always records `C3` or `C4` explicitly.
 - A correct letter/solfege in the wrong octave is a useful near miss: name what was correct, show the required home, and do not count staff mastery.
 - Color and character identity must not be the only way to distinguish registers.
@@ -98,7 +98,7 @@ Allowed:
 - subtle note color in early stages;
 - stable ordinary visual labels that show only `C/D/E/F/G`;
 - Xingya's or Dongdong's spoken/bubble prompt may say `Do/Re/Mi/Fa/Sol` and may connect it to the required letter in one short sentence;
-- gated parent evidence and non-leaking accessibility labels may show both identities, such as `C / Do`;
+- gated parent evidence may show both identities, such as `C / Do`; child-facing accessibility labels remain letter-only and may add a keyboard locator, such as `C，两黑键左边`;
 - stable keyboard locator language;
 - stable staff position language;
 - a small story object that explains why the note matters in that level.
@@ -115,7 +115,7 @@ Course 1 display hierarchy is therefore a deliberate two-channel link, not two c
 - Xingya's or Dongdong's child-facing speech and listening gestures use `Do/Re/Mi/Fa/Sol` as the main spoken/character name;
 - action verbs must keep the roles clear: a character may "唱 Do", while the child is asked to "弹 C" or "找到 C". Do not use a bare command such as `唱 Re/D` when the expected input is a piano key, and never describe a letter name as something to sing;
 - correct and repair feedback reconnect both names across channels: ordinary UI may show `C · 两黑左`, while a dinosaur bubble says `这是 Do，你来弹 C`; do not create an ordinary dual-label badge;
-- parent-only evidence and accessibility descriptions may retain `C / Do`, provided they do not leak a hidden target;
+- parent-only evidence may retain `C / Do`; child-facing accessibility descriptions use the same letter-only identity as the visible control and must not leak a hidden target;
 - hidden listening calls show neither target-specific letter nor solfege before the child responds.
 
 When two registers appear together in Chapters 4-5, ordinary child surfaces disambiguate with `低音 C`, `中央 C`, `下面的 C`, or the black-key locator. They do not use `低音 Do` as a visual label and do not show scientific pitch names such as `C3/C4` on the ordinary child path. A dinosaur bubble may say `低音 Do` or `中央 Do`; parent/teacher evidence records `C3/C4`.

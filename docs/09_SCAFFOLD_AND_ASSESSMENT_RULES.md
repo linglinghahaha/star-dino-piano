@@ -20,7 +20,7 @@ For `listen`, the table describes two different moments. A visible modeled echo 
 
 Hidden listening calls also forbid indirect visual answers. The target must come from one neutral sound source whose position, animation, color, and stereo image do not change by note. Candidate plants, characters, route ends, and key homes remain visually equal until the child responds. Their note-specific story motion begins only after the scored input. A balanced candidate map may be taught before the hidden call, but the active target cannot receive a unique label, glow, movement, direction, or color.
 
-Naming hierarchy does not change the reveal threshold. Ordinary visual UI uses only letter names `C/D/E/F/G`; Xingya's dialogue bubble may use solfege as the character-language prompt. In a teach state the two channels may be connected across the UI and the dialogue, but they must not be collapsed into a visible `Do/C` chip. Parent-only evidence and non-leaking accessibility labels may retain both identities. In a hidden listen/check state neither the target letter nor target solfege may appear before action.
+Naming hierarchy does not change the reveal threshold. Ordinary visual UI and child-facing accessibility labels use only letter names `C/D/E/F/G`; Xingya's dialogue bubble may use solfege as the character-language prompt. In a teach state the two channels may be connected across the UI and the dialogue, but they must not be collapsed into a visible or screen-reader `Do/C` chip. Parent-only evidence may retain both identities. In a hidden listen/check state neither the target letter nor target solfege may appear before action.
 
 ## Child-facing Hint Order
 

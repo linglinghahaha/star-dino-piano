@@ -61,7 +61,7 @@ The current display rule is authoritative across every chapter:
 - planning notation such as `Do/C` means the teaching relationship between solfege and letter name; it does **not** authorize a literal dual label in the child-facing game;
 - visible keyboard labels, task/target cards, parts, route pads, staff hints, locators, feedback, effects, results, map labels, and garden objects use letter names only: `C D E F G` (later `A B` under their own entry gates);
 - only a small-dinosaur dialogue bubble may visibly use `Do Re Mi Fa Sol`; that dialogue may connect the channels with a sentence such as `我唱 Do，你来弹 C`;
-- gated parent evidence and non-leaking accessibility descriptions may retain dual identity such as `C / Do`;
+- gated parent evidence may retain dual identity such as `C / Do`; child-facing accessibility descriptions use letter names only and may add a non-answer keyboard locator;
 - hidden listening/check states override every naming allowance: the current target must not leak through visible text, ARIA, title, alt text, classes, color, motion, or a highlighted key before the child responds.
 
 `14_NOTE_IDENTITY_MATRIX.md` owns this carrier policy. Older screenshots, historical gate logs, or lesson shorthand that contain `Do/C` remain historical evidence, not the current UI specification.

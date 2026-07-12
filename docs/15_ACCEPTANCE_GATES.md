@@ -207,7 +207,7 @@ A pass fails if any of these are true:
 - a prompt or asset imitates a protected franchise, studio, living artist, toy line, anime, movie, or superhero style.
 - A/B or any reserved note appears as a target before its full note-identity row and entry gate exist.
 - the child-facing UI depends on reading `Do/C`, `2-black left`, or staff-position words without an equivalent visual cue.
-- a visible child-facing surface outside the small-dinosaur dialogue bubble shows solfege or a dual label such as `Do/C`; keyboard labels, cards, routes, staff hints, feedback, effects, results, map labels, and garden objects must use letter names only.
+- a child-facing surface or accessibility label outside the small-dinosaur dialogue bubble shows solfege or a dual label such as `Do/C`; keyboard labels/ARIA, cards, routes, staff hints, feedback, effects, results, map labels, and garden objects must use letter names only.
 - the letter-only display rule silently removes the solfege objective: each core note's first guided teaching must still connect the visible letter/key home to the dinosaur dialogue's corresponding solfege, while later reduced-cue checks must prove the child can act without that dialogue becoming a permanent answer card.
 - visible child or parent copy is mojibake, stale placeholder text, or an accidental fallback from another mode.
 - the release build keeps multi-megabyte product assets or broad CSS overrides without a documented cleanup decision.

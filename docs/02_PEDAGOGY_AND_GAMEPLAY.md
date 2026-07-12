@@ -117,7 +117,7 @@ Example:
 - ordinary staff feedback: `Look lower: C sits on the little ledger line.`
 - dinosaur dialogue may say: `刚才是 Re；我要 Do，你来弹 C。`
 
-Parent-only evidence and non-leaking accessibility labels may explain `C / Do`. A visible child-facing badge, key, route pad, toast, or result must not use that dual form.
+Parent-only evidence may explain `C / Do`. Child-facing accessibility labels follow the visible letter-only identity and may add a keyboard locator, but must not speak solfege or a dual label. A child-facing badge, key, route pad, toast, result, or accessible name must not use that dual form.
 
 Avoid generic wrong feedback like "press the glowing key" once the child is beyond phase 1.
 

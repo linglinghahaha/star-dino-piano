@@ -14,7 +14,7 @@ The overall direction is reasonable. Do not restart the product.
 
 Latest whole-plan audit addendum, 2026-07-12:
 
-- The current carrier policy is letter-only ordinary child UI, solfege only in the small-dinosaur dialogue, dual identity allowed in gated parent evidence and non-leaking accessibility descriptions. Historical rows below that mention route solfege badges, large solfege or visible `Do/C` document old builds and are superseded as UI targets.
+- The current carrier policy is letter-only ordinary child UI and child-facing accessibility labels, solfege only in the small-dinosaur dialogue, and dual identity only in gated parent evidence. Historical rows below that mention route solfege badges, large solfege, accessible `C Do`, or visible `Do/C` document old builds and are superseded as UI targets.
 - The planning system is coherent enough to guide work: fixed-do `Do=C`, touch-first web prototype, optional MIDI/microphone, S01 as flagship, C4-G4 register scope, A-G word typing parked, and parent-gate separation are not contradictions.
 - The previous evidence/version drift has been repaired through `340a`. M08's world-action and seal-check contracts remain green; M03/S01 retain their accepted behavior; Chapter 3 `LS01-LS03` continuity remains intact; and LS04 hidden C/D listening now passes independent browser review.
 - The verification harness has been repaired for this machine: `tools/with-playwright-path.mjs` resolves the bundled pnpm Playwright layout and falls back to installed Chrome/Edge. Keep this healthy before promoting any future runtime.
