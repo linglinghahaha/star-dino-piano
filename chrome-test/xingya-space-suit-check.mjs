@@ -135,7 +135,7 @@ try {
   record("all six sealed-suit images contain a substantial nonblank subject", decodedAssets.every((asset) => asset.visible >= 70_000 && asset.partial >= 8_000), decodedAssets);
 
   const version = await page.evaluate(() => [...document.scripts].map((script) => script.src).find((src) => src.includes("app.js")));
-  record("prototype loads the 341a runtime version", version?.includes("overhaul-341a"), { version });
+  record("prototype loads the 342a runtime version", version?.includes("overhaul-342a"), { version });
 
   const m01Dino = await readImageState(page, "#dinoSvg");
   const m01Coach = await readImageState(page, "#coachDino");

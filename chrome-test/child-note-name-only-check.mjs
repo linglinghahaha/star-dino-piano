@@ -103,6 +103,15 @@ try {
           value: [element.getAttribute("aria-label"), element.getAttribute("title"), element.getAttribute("alt")].filter(Boolean).join(" ")
         }))
         .filter((row) => tokenPattern.test(row.value) || /法法|索尔/.test(row.value));
+      const accessibleLeaks = [...document.querySelectorAll("[aria-label], [title], [alt]")]
+        .filter((element) => elementVisible(element) && !element.closest(allowed))
+        .map((element) => ({
+          tag: element.tagName,
+          id: element.id || "",
+          className: element.className || "",
+          value: [element.getAttribute("aria-label"), element.getAttribute("title"), element.getAttribute("alt")].filter(Boolean).join(" ")
+        }))
+        .filter((row) => tokenPattern.test(row.value) || /法法|索尔|Do\s*[/→-]\s*C/.test(row.value));
       const keys = [...document.querySelectorAll(".key.white-key:not(.reserved-key)")].map((key) => ({
         text: key.querySelector(".key-content")?.innerText?.replace(/\s+/g, "").trim() || "",
         aria: key.getAttribute("aria-label") || ""
@@ -164,11 +173,14 @@ try {
       return {
         leaks,
         routeAttributeLeaks,
+        accessibleLeaks,
         pseudoLeaks,
         pseudoRows,
         keys,
         m07: [...document.querySelectorAll("#memoryStarRoute .memory-route-label strong")].map((item) => item.textContent?.trim() || ""),
         fg03: [...document.querySelectorAll("#fgStarRoute .fg-route-label strong")].map((item) => item.textContent?.trim() || ""),
+        m08Blueprint: [...document.querySelectorAll("#buildBlueprint:not([hidden]) .blueprint-part b")].map((item) => item.textContent?.trim() || ""),
+        m08RoofRouteVisible: elementVisible(document.querySelector("#roofScaleRoute")),
         routeAria: document.querySelector("#memoryStarRoute:not([hidden]), #fgStarRoute:not([hidden])")?.getAttribute("aria-label") || "",
         routeDinoCount: [document.querySelector(".memory-route-dino"), document.querySelector(".fg-route-dino"), document.querySelector("#coachDino")].filter(elementVisible).length,
         routeBubbleCount: [document.querySelector(".route-action-dialog"), document.querySelector(".route-idle-dialog:not(.route-action-dialog)"), document.querySelector("#coachBubble")].filter(elementVisible).length,
@@ -209,22 +221,44 @@ try {
           await page.waitForSelector(".key.white-key[data-midi='60']", { state: "visible", timeout: 4000 });
         }
         const result = await inspect();
-        record(`${viewport.id} ${state.id}: child-visible text uses note names outside dinosaur bubbles`, result.leaks.length === 0 && result.routeAttributeLeaks.length === 0 && result.pseudoLeaks.length === 0, result);
-        record(`${viewport.id} ${state.id}: piano keycaps show letters while ARIA retains dual identity`,
+        record(`${viewport.id} ${state.id}: child-visible text and accessible labels use note names outside dinosaur bubbles`, result.leaks.length === 0 && result.routeAttributeLeaks.length === 0 && result.accessibleLeaks.length === 0 && result.pseudoLeaks.length === 0, result);
+        record(`${viewport.id} ${state.id}: piano keycaps and ARIA use note names only`,
           result.keys.map((key) => key.text).join("") === "CDEFG" &&
-          result.keys.every((key, index) => key.aria.includes(["Do", "Re", "Mi", "Fa", "Sol"][index])),
+          result.keys.every((key, index) => key.aria.startsWith(["C", "D", "E", "F", "G"][index]) && !/(^|[^A-Za-z])(Do|Re|Mi|Fa|Sol)(?=$|[^A-Za-z])/.test(key.aria)),
           result.keys);
         record(`${viewport.id} ${state.id}: note-name layout has no page overflow`, !result.overflowX && !result.overflowY, result);
         if (state.id === "M07") {
           record(`${viewport.id}: M07 route labels are C-D-E-D-C`, result.m07.join("") === "CDEDC", result.m07);
           record(`${viewport.id}: M07 current-part and action badges use only note names`, result.hangingBadge === "C" && !/(Do|Re|Mi|Fa|Sol|法法|索尔)/.test(result.actionCue), result);
           record(`${viewport.id}: M07 exposes one route character, one dialogue, and a letter-only route name`, result.routeDinoCount === 1 && result.routeBubbleCount === 1 && result.routeAria === "星星路线 C D E D C", result);
+          record(`${viewport.id}: M07 route visible text and ARIA contain no solfege outside the dinosaur dialogue`, result.leaks.length === 0 && result.routeAttributeLeaks.length === 0 && result.pseudoLeaks.length === 0 && result.routeAria === "星星路线 C D E D C", result);
         }
         if (state.id === "FG03") {
           record(`${viewport.id}: FG03 route labels are E-F-G`, result.fg03.join("") === "EFG", result.fg03);
           record(`${viewport.id}: FG03 exposes one route character, one dialogue, and a letter-only route name`, result.routeDinoCount === 1 && result.routeBubbleCount === 1 && result.routeAria === "星星路线 E F G", result);
         }
+        if (state.id === "M08") {
+          record(`${viewport.id}: M08 visible blueprint remains letter-only C-D-E-F-G`, result.m08Blueprint.join("") === "CDEFG" && !result.m08RoofRouteVisible && result.leaks.length === 0, result);
+        }
         await page.screenshot({ path: path.join(screenshotDir, `${viewport.id}_${state.id}.png`), fullPage: false });
+      }
+
+      if (viewport.id === "ipad-1024x768") {
+        await open("?level=M07&check=child-note-names-forced-refresh");
+        await page.evaluate(async () => {
+          if ("caches" in window) {
+            for (const key of await caches.keys()) await caches.delete(key);
+          }
+          if ("serviceWorker" in navigator) {
+            for (const registration of await navigator.serviceWorker.getRegistrations()) await registration.update();
+          }
+        });
+        await page.reload({ waitUntil: "domcontentloaded", timeout: 20000 });
+        await page.waitForSelector("#bootLoader", { state: "hidden", timeout: 20000 });
+        await page.waitForTimeout(260);
+        const refreshed = await inspect();
+        record("ipad-1024x768 M07 forced refresh: route and child ARIA remain letter-only", refreshed.m07.join("") === "CDEDC" && refreshed.routeAria === "星星路线 C D E D C" && refreshed.leaks.length === 0 && refreshed.accessibleLeaks.length === 0 && refreshed.routeAttributeLeaks.length === 0 && refreshed.pseudoLeaks.length === 0, refreshed);
+        await page.screenshot({ path: path.join(screenshotDir, "ipad-1024x768_M07_forced_refresh.png"), fullPage: false });
       }
 
       for (const audit of ["color-reduced", "high-contrast"]) {
@@ -249,7 +283,7 @@ try {
             label.visible && label.width > 0 && label.height > 0 && label.cumulativeOpacity >= 0.85 && label.fontSize >= 12 && label.contrastRatio >= 4.5 && label.color !== "rgba(0, 0, 0, 0)" && label.color !== "transparent"
           );
           record(`${viewport.id} ${route.id} ${audit}: route letters remain fully visible`, labels.join("") === route.expected && readable, result);
-          record(`${viewport.id} ${route.id} ${audit}: route has no child-visible solfege leak`, result.leaks.length === 0 && result.routeAttributeLeaks.length === 0 && result.pseudoLeaks.length === 0, result);
+          record(`${viewport.id} ${route.id} ${audit}: route has no child-visible or accessible solfege leak`, result.leaks.length === 0 && result.routeAttributeLeaks.length === 0 && result.accessibleLeaks.length === 0 && result.pseudoLeaks.length === 0, result);
           record(`${viewport.id} ${route.id} ${audit}: route remains contained`, !result.overflowX && !result.overflowY, result);
           await page.screenshot({ path: path.join(screenshotDir, `${viewport.id}_${route.id}_${audit}.png`), fullPage: false });
         }
@@ -270,7 +304,10 @@ try {
             const expectedStates = labels.map((_, index) => index < stepIndex ? "done" : index === stepIndex ? "current" : "upcoming");
             if (stepIndex >= labels.length) expectedStates.fill("done");
             record(`${viewport.id} ${route.id} ${audit} step ${stepIndex}: route states retain letter-only sequence`, labels.join("") === route.expected && result.routeNodeStates.map((item) => item.state).join(",") === expectedStates.join(","), result);
-            record(`${viewport.id} ${route.id} ${audit} step ${stepIndex}: DOM, pseudo-elements and effects contain no solfege`, result.leaks.length === 0 && result.routeAttributeLeaks.length === 0 && result.pseudoLeaks.length === 0, result);
+            record(`${viewport.id} ${route.id} ${audit} step ${stepIndex}: DOM, ARIA, pseudo-elements and effects contain no solfege`, result.leaks.length === 0 && result.routeAttributeLeaks.length === 0 && result.accessibleLeaks.length === 0 && result.pseudoLeaks.length === 0, result);
+            if (route.id === "M07") {
+              record(`${viewport.id} M07 ${audit} step ${stepIndex}: current, completed, and upcoming nodes keep C-D-E-D-C`, result.routeAria === "星星路线 C D E D C" && result.routeNodeStates.map((item) => item.note).join("") === "CDEDC", result);
+            }
             await page.screenshot({ path: path.join(screenshotDir, `${viewport.id}_${route.id}_${audit}_step-${stepIndex}.png`), fullPage: false });
           }
         }

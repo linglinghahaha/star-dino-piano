@@ -2,6 +2,41 @@
 
 This file records concrete pass/fail evidence for UI, teaching, and polish gates. It is not a substitute for the acceptance rules in `15_ACCEPTANCE_GATES.md`; it is the evidence trail.
 
+## 2026-07-13 - Overhaul 342a C3-05 / LS06 and C3-06 / LS07 Listening Slices
+
+Scope: LS06 and LS07 only, against supervisor fact source commit `99b8c8e`. LS08, the Chapter 3 exit, approved-media integration, LS01-LS05 behavior, Chapter 1/2 semantics and the global CSS architecture remain unchanged.
+
+Runtime and teaching evidence:
+
+- LS06 and LS07 each require a fresh explicit map click and create independent `C3-05` / `C3-06` sessions. LS06 returns to the map before LS07 becomes available; neither level auto-starts the next lesson.
+- Each session begins with a real two-step unscored guide loop. LS06 guides C then G; LS07 guides E then F with the two-black-key/three-black-key boundary locators. Guide input is stored separately from the four hidden calls and never enters the stable denominator.
+- A guide second error or bounded wait ends at `guide-rest`; modeled or bounded hidden repair ends at the current level's neutral safe rest. Resume creates a new session, repeats the complete guide, preserves old call/session evidence and remaining calls, and cannot combine fragments into stable.
+- Hidden rounds persist four calls with an exact `2/2` candidate distribution. `target-playing` input is observation-only; touch and MIDI use the same formal scoring path; confirmed microphone input can complete played evidence but cannot grant stable or retained.
+- First wrong replays the child's actual MIDI frequency before the target. Valid candidate pairs are neutral and sorted independently of answer role; black keys and wrong octaves use candidate-outside strong repair. The fourth wrong has one modeled target demonstration and a non-interactive safe-rest transition.
+- Stable requires at least 3/4 first-response correct in one complete session, a complete guide in that session, and no strong, modeled, visual-assist, experimental microphone, early reveal or crossed-session evidence. LS07 stores opening boundary guide evidence separately from post-prompt boundary strong help.
+- Hidden `target-playing`, `awaiting-response`, `wrong-known` and `pair-compare` keyboard states have no target class/data/ARIA/style/pixel carrier. Only the current visible guide, bounded assisted pulse, visual assist and short correct feedback may expose one target.
+- Complete and rest keyboards are neutral. LS06 map rest says only `回声藤拱门已经搭好，边界花在等你。`; LS07 alone may say `两株边界花已经安顿好`. `lastRest` now persists bundle, reward and reason, and guide/modeled rests never claim completion.
+- Ordinary child text and child-facing ARIA use letter names only. Dinosaur dialogue may sing solfege; parent-only evidence may retain adult mappings. Forced Service Worker refresh preserves M07 `C-D-E-D-C`, M08 `C-D-E-F-G`, and letter-only keyboard ARIA.
+
+Focused and shared gates:
+
+- `check:chapter3-ls06-ls07`: `64/64`; LS05 `65/65`; LS04 isolated rerun `39/39`; Chapter 3 visible `74/74`; child note names `183/183` including forced-refresh evidence.
+- Sessions `72/72`; clean-state `124/124`; M03/garden `32/32`; assembly `39/39`; workshop identity `36/36`; M01 hierarchy `17/17`; roof route `97/97`; staff readability `13/13`; staff repair `27/27`; staff mini `20/20`; continuity `14/14`.
+- PWA `7/7`; input `12/12`; audio settings `13/13`; iPad accessibility `43/43`; motion `19/19`; palette `17/17`; contrast `9/9`; Xingya suit `23/23`.
+- Generic and Chapter 3 legacy coordinate regressions each passed six browser viewports with zero failures/errors; their historical JSON files were restored and not included in this candidate.
+- `check:quick` and `check:bundle:strict` passed. Strict bundle remains 41 files and 1,641,265 runtime-asset bytes; runtime references to `concepts/**`, `audio/**`, technical previews and parallel LS05 media candidates remain zero.
+- One loaded shared-batch continuity navigation and one LS04 fixed five-second phase wait timed out; both immediate isolated reruns passed `14/14` and `39/39` without runtime or timing changes.
+
+Coordinate and screenshot evidence:
+
+- LS06 contract ID `chapter3-ls06-media-zones-overhaul-342a-v1`; LS07 contract ID `chapter3-ls07-media-zones-overhaul-342a-v1`. Each uses six landscape browser viewports and 13 actual-phase-bound states: `map-entry`, `visible-guide`, `visible-guide-soft-replay`, `guide-rest`, `target-playing`, `awaiting-response`, `sound-paused`, `visual-assist`, `wrong-known`, `pair-compare`, `assisted-retry`, `complete`, `reduced-motion`.
+- Three consecutive fixed-directory runs were identical. LS06 internal SHA-256: `ddd3d18157f9d2000edac5c9852345351c741a3dea80488959f066d4a96b0d69`; JSON file SHA-256: `3D622EE458C882BFB3670791BE4607FC0092E04F0838981101ABA378D4BB4FBC`. LS07 internal SHA-256: `1582e5623504683feaa3b24584c28edc871f0adf1244c4ff480f7569b7ad5ff5`; JSON file SHA-256: `52CBFA31BECD98AED518F72048681462389A2079529086B00C4AAF20EE866FF4`.
+- Both contracts report `runtimeIntegrationAllowed=false`, six viewports, 13/13 states, zero phase mismatches, zero browser errors and zero hidden target carriers.
+- Focused original-size evidence includes `screenshots/chapter3_ls06_ls07_342a/ls06_guide_1366x1024.png`, `ls06_waiting_1366x1024.png`, `ls06_pair_1024x768.png`, `ls06_assisted_1024x768.png`, `ls06_sound_paused_1024x768.png`, `ls06_map_rest_1366x1024.png`, `ls07_guide_1366x1024.png`, `ls07_wrong_1366x1024.png` and `ls07_map_rest_1366x1024.png`. Contract directories contain the complete 13-state six-viewport captures, including 1024 DPR2 and 1194 DPR2.
+- Manual review confirms guide letter/locator/key alignment, neutral hidden keyboards, equal pair presentation, bounded assisted versus persistent visual-assist distinction, neutral completion keyboards, and stage-correct LS06/LS07 map-rest copy.
+
+Status: browser runtime, focused evidence and both coordinate contracts `passed`. Runtime media integration is intentionally `missing`/disallowed. Physical iPad Safari, real MIDI hardware, acoustic microphone, teacher review, 3-5 child sessions and external similarity/release clearance remain `missing`. No curriculum, equipment, approved-media or sound-contract contradiction was found.
+
 ## 2026-07-12 - Overhaul 341a C3-04 / LS05 Listening Slice
 
 Scope: LS05 only. LS06-LS08, approved media, the LS01-LS04 teaching sequence, Chapter 1/2 mastery semantics and the global visual architecture remain unchanged.

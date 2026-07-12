@@ -97,7 +97,7 @@ try {
         details.group.width >= details.stage.width * 0.5 &&
         details.group.height >= details.stage.height * 0.45;
 
-      record(`${viewport.id}: runs the 341a shell`, details.runtimeVersion.includes("overhaul-341a"), details);
+      record(`${viewport.id}: runs the 342a shell`, details.runtimeVersion.includes("overhaul-342a"), details);
       record(`${viewport.id}: five staff lines stay bold and visible`, details.sceneOpacity >= 0.76 && details.groupVisible && linesReadable, details);
       record(`${viewport.id}: measure lines and ledger stay visible`, measuresReadable && staffHasUsefulGeometry, details);
       record(`${viewport.id}: staff stage remains contained`, !details.horizontalOverflow && !details.verticalOverflow, details);
