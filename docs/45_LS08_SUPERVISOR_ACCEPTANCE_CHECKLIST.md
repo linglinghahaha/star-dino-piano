@@ -167,7 +167,7 @@ Stable 必须同时满足：
 
 ## 十、孩子可见音名规则
 
-- 除明确挂在星芽身上的对话框外，地图、声音格、键盘、反馈、根结、结果和章节出口只显示字母音名。
+- 除明确挂在星芽身上的对话框外，地图、声音格、键盘、反馈、根结、结果、章节出口及孩子端 ARIA 只显示字母音名；ARIA 可补充键位定位，但不得朗读唱名或双标。
 - 不出现普通 `Do/C`、`Re/D`、`Mi/E` 双标；星芽气泡可说 Do/Re/Mi。
 - 正式隐藏 pair 播放和等待时，星芽也不说目标唱名。
 - 地底低音事件不在孩子端显示 `C3`、低 Do、低音谱表或“你学会低音了”。
@@ -257,7 +257,7 @@ Stable 必须同时满足：
 11. touch/MIDI/mic、sound-paused、音量 0、AudioContext 失败和麦克风 uncertain。
 12. 章节末低音事件不要求输入、不写 mastery、不自动启动第四章。
 13. 家长证据、每 pair sessionId、responseMs 和 timingUsedForMastery=false。
-14. 非星芽孩子表面仅字母音名，无普通唱名或双标。
+14. 非星芽孩子表面与 child-facing ARIA 仅字母音名，无普通唱名或双标。
 15. 无结果弹层、关闭/下一关按钮和未批准媒体路径。
 
 新增独立 phase-bound 六视口合同，至少覆盖 map-entry、guide-first、guide-second、pair-playing、awaiting-first、awaiting-second、wrong-first、wrong-second、assisted、sound-paused、visual-assist、complete-roots、unscored-low-echo、reduced-motion。状态名必须与实际 phase 原子匹配；固定目录至少三连 internal hash 一致。
