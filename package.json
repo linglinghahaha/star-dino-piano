@@ -29,10 +29,11 @@
     "check:sessions": "node tools/with-playwright-path.mjs chrome-test/session-retention-check.mjs http://127.0.0.1:4173/ screenshots/session_retention_334g",
     "check:contrast": "node tools/with-playwright-path.mjs chrome-test/contrast-preference-check.mjs http://127.0.0.1:4173/ screenshots/contrast_preference_334g",
     "check:m01-hierarchy": "node tools/with-playwright-path.mjs chrome-test/m01-note-hierarchy-check.mjs http://127.0.0.1:4173/ screenshots/m01_hierarchy_334g",
+    "check:child-note-names": "node tools/with-playwright-path.mjs chrome-test/child-note-name-only-check.mjs http://127.0.0.1:4173/ screenshots/child_note_names_340c",
     "check:roof-route": "node tools/with-playwright-path.mjs chrome-test/roof-route-visual-check.mjs http://127.0.0.1:4173/ screenshots/roof_route_340c",
     "check:assembly-blueprint": "node tools/with-playwright-path.mjs chrome-test/assembly-blueprint-check.mjs http://127.0.0.1:4173/ screenshots/assembly_blueprint_340c",
     "check:zones": "node tools/with-playwright-path.mjs chrome-test/teaching-zone-coordinate-contract.mjs http://127.0.0.1:4173/ docs/30_TEACHING_ZONE_COORDINATE_CONTRACT_340C.json screenshots/teaching_zones_340c",
-    "check:chapter3-zones": "node tools/with-playwright-path.mjs chrome-test/chapter3-media-zone-contract.mjs http://127.0.0.1:4173/ docs/30_CHAPTER3_MEDIA_ZONE_CONTRACT_340A_V2.json screenshots/chapter3_media_zones_340a_v2",
+    "check:chapter3-zones": "node tools/with-playwright-path.mjs chrome-test/chapter3-media-zone-contract-340c.mjs http://127.0.0.1:4173/ docs/30_CHAPTER3_MEDIA_ZONE_CONTRACT_340C.json screenshots/chapter3_media_zones_340c",
     "check:staff-mini": "node tools/with-playwright-path.mjs chrome-test/staff-mini-observation-check.mjs http://127.0.0.1:4173/ screenshots/staff_mini_latest",
     "check:clean-state": "node tools/with-playwright-path.mjs chrome-test/clean-state-slice-check.mjs http://127.0.0.1:4173/ screenshots/clean_state_latest",
     "build:quality-css-candidate": "node tools/with-playwright-path.mjs tools/css-declaration-dedupe.mjs"

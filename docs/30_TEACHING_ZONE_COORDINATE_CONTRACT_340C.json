@@ -1,11 +1,11 @@
 {
   "coordinateContractStatus": "browser_coordinate_contract_passed_device_unverified",
   "coordinateContractId": "teaching-zones-overhaul-340c-v1",
-  "contractSha256": "037d4c6069fd1dd23379b955d060ed492f2e0094e21f86ad23ae924d78827386",
+  "contractSha256": "6db90c11eada4733e2fb7a40bdad4fdd6599a60603960889ad0e43f599b4f1f1",
   "contractHashScope": "sha256 of canonical JSON with contractSha256 and generatedAt set to null",
   "prototypeBaseline": "overhaul-340c",
   "prototypeTaskId": "019f4aa6-edba-7843-a835-c4b930a388ff",
-  "generatedAt": "2026-07-12T01:25:40.704Z",
+  "generatedAt": "2026-07-12T03:07:25.938Z",
   "sourceMethod": "Playwright DOM getBoundingClientRect measurement; no screenshot, SVG, or CSS-coordinate inference",
   "geometryMeasurementMotion": "reduced_motion_stable_snapshot",
   "geometryMeasurementRationale": "Coordinate output freezes nonessential animation; normal-motion behavior remains covered by check:motion.",
@@ -17,13 +17,13 @@
     },
     {
       "path": "index.html",
-      "bytes": 39778,
-      "sha256": "76a7dee39f27f02ff9fc3e3157d24d91046f47d27df91c918ac177513d36c8b9"
+      "bytes": 39654,
+      "sha256": "341013093a08c79477c853afab9b366a29688ca57c44a0865c886f2c7661fb12"
     },
     {
       "path": "app.js",
-      "bytes": 316632,
-      "sha256": "2156ce751524412182d95a81c563f787ca377bbb2df8a76d8e8c3fe530f948ae"
+      "bytes": 317258,
+      "sha256": "07be8a4640d77305feeaa731fdd468f6f5cab15d5dfd91bb0fee9b464ebebf1b"
     },
     {
       "path": "styles.css",
@@ -72,8 +72,8 @@
     },
     {
       "path": "current-overhaul.css",
-      "bytes": 102099,
-      "sha256": "3d0a979c6d4ba86792e9bc89a8ea134e9e7bda238e6ebdd083b8e613b9d0715d"
+      "bytes": 102831,
+      "sha256": "bc29ea16b95e775cf986d7f67bdefbe3d680d4e36a53e2ce19a59025b431fe4c"
     },
     {
       "path": "roof-blueprint-overrides.css",

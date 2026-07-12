@@ -137,9 +137,9 @@ const levels = [
     scaffold: "strong",
     title: "第一块月亮地板",
     storyNeed: "星芽脚下还空着，需要第一块地板。",
-    prompt: "找 Do/C，把第一块地板落下来。",
+    prompt: "找 C，把第一块地板落下来。",
     reward: "月亮地板",
-    parts: [{ midi: 60, label: "Do 地板", colorName: "星紫", color: "#CB84FA", shape: "floor", action: "铺上" }]
+    parts: [{ midi: 60, label: "C 地板", colorName: "星紫", color: "#CB84FA", shape: "floor", action: "铺上" }]
   },
   {
     id: "M02",
@@ -150,12 +150,12 @@ const levels = [
     scaffold: "strong",
     title: "三颗小灯醒醒",
     storyNeed: "小屋墙上的三颗灯睡着了。",
-    prompt: "按 Do-Re-Mi，叫醒三颗小灯。",
+    prompt: "按 C-D-E，叫醒三颗小灯。",
     reward: "醒来的小灯",
     parts: [
-      { midi: 60, label: "Do 小灯", colorName: "星紫", color: "#CB84FA", shape: "light", action: "点亮" },
-      { midi: 62, label: "Re 小灯", colorName: "亮橙", color: "#FB9608", shape: "light", action: "点亮" },
-      { midi: 64, label: "Mi 小灯", colorName: "嫩绿", color: "#62C60C", shape: "light", action: "点亮" }
+      { midi: 60, label: "C 小灯", colorName: "星紫", color: "#CB84FA", shape: "light", action: "点亮" },
+      { midi: 62, label: "D 小灯", colorName: "亮橙", color: "#FB9608", shape: "light", action: "点亮" },
+      { midi: 64, label: "E 小灯", colorName: "嫩绿", color: "#62C60C", shape: "light", action: "点亮" }
     ]
   },
   {
@@ -170,8 +170,8 @@ const levels = [
     prompt: "先听声音，再找同样的琴键。",
     reward: "会唱小车轮",
     parts: [
-      { midi: 62, label: "Re 车轮", colorName: "亮橙", color: "#FB9608", shape: "wheel", action: "听一听" },
-      { midi: 60, label: "Do 回声", colorName: "星紫", color: "#CB84FA", shape: "wheel", action: "找回声" }
+      { midi: 62, label: "D 车轮", colorName: "亮橙", color: "#FB9608", shape: "wheel", action: "听一听" },
+      { midi: 60, label: "C 回声", colorName: "星紫", color: "#CB84FA", shape: "wheel", action: "找回声" }
     ]
   },
   {
@@ -183,12 +183,12 @@ const levels = [
     scaffold: "medium",
     title: "咔哒小桥",
     storyNeed: "门口缺三块短桥板。",
-    prompt: "按 Do-Re-Mi，从左到右接上小桥。",
+    prompt: "按 C-D-E，从左到右接上小桥。",
     reward: "咔哒小桥",
     parts: [
-      { midi: 60, label: "Do 桥板", colorName: "星紫", color: "#CB84FA", shape: "bridge", action: "接上" },
-      { midi: 62, label: "Re 桥板", colorName: "亮橙", color: "#FB9608", shape: "bridge", action: "接上" },
-      { midi: 64, label: "Mi 桥板", colorName: "嫩绿", color: "#62C60C", shape: "bridge", action: "接上" }
+      { midi: 60, label: "C 桥板", colorName: "星紫", color: "#CB84FA", shape: "bridge", action: "接上" },
+      { midi: 62, label: "D 桥板", colorName: "亮橙", color: "#FB9608", shape: "bridge", action: "接上" },
+      { midi: 64, label: "E 桥板", colorName: "嫩绿", color: "#62C60C", shape: "bridge", action: "接上" }
     ]
   },
   {
@@ -200,12 +200,12 @@ const levels = [
     scaffold: "medium",
     title: "火箭倒数灯",
     storyNeed: "小火箭要从高到低倒数。",
-    prompt: "按 Mi-Re-Do，让倒数灯往下亮。",
+    prompt: "按 E-D-C，让倒数灯往下亮。",
     reward: "火箭倒数灯",
     parts: [
-      { midi: 64, label: "Mi 倒数灯", colorName: "嫩绿", color: "#62C60C", shape: "light", action: "点亮" },
-      { midi: 62, label: "Re 倒数灯", colorName: "亮橙", color: "#FB9608", shape: "light", action: "点亮" },
-      { midi: 60, label: "Do 倒数灯", colorName: "星紫", color: "#CB84FA", shape: "light", action: "点亮" }
+      { midi: 64, label: "E 倒数灯", colorName: "嫩绿", color: "#62C60C", shape: "light", action: "点亮" },
+      { midi: 62, label: "D 倒数灯", colorName: "亮橙", color: "#FB9608", shape: "light", action: "点亮" },
+      { midi: 60, label: "C 倒数灯", colorName: "星紫", color: "#CB84FA", shape: "light", action: "点亮" }
     ]
   },
   {
@@ -217,12 +217,12 @@ const levels = [
     scaffold: "medium",
     title: "大跳墙",
     storyNeed: "高墙太远，需要一个大跳音。",
-    prompt: "按 Do-Sol-Do，让墙板一块块立起来。",
+    prompt: "按 C-G-C，让墙板一块块立起来。",
     reward: "大跳墙",
     parts: [
-      { midi: 60, label: "Do 起跳墙", colorName: "星紫", color: "#CB84FA", shape: "wall", action: "立起" },
-      { midi: 67, label: "Sol 高墙", colorName: "星蓝", color: "#6F8FFE", shape: "wall", action: "立起" },
-      { midi: 60, label: "Do 回家墙", colorName: "星紫", color: "#CB84FA", shape: "wall", action: "立起" }
+      { midi: 60, label: "C 起跳墙", colorName: "星紫", color: "#CB84FA", shape: "wall", action: "立起" },
+      { midi: 67, label: "G 高墙", colorName: "星蓝", color: "#6F8FFE", shape: "wall", action: "立起" },
+      { midi: 60, label: "C 回家墙", colorName: "星紫", color: "#CB84FA", shape: "wall", action: "立起" }
     ]
   },
   {
@@ -234,14 +234,14 @@ const levels = [
     scaffold: "light",
     title: "星星记忆串",
     storyNeed: "星芽想把五颗星灯按顺序挂好。",
-    prompt: "少看提示，按 Do-Re-Mi-Re-Do。",
+    prompt: "少看提示，按 C-D-E-D-C。",
     reward: "星星灯串",
     parts: [
-      { midi: 60, label: "Do 星灯", colorName: "星紫", color: "#CB84FA", shape: "star", action: "点亮" },
-      { midi: 62, label: "Re 星灯", colorName: "亮橙", color: "#FB9608", shape: "star", action: "点亮" },
-      { midi: 64, label: "Mi 星灯", colorName: "嫩绿", color: "#62C60C", shape: "star", action: "点亮" },
-      { midi: 62, label: "Re 星灯", colorName: "亮橙", color: "#FB9608", shape: "star", action: "点亮" },
-      { midi: 60, label: "Do 星灯", colorName: "星紫", color: "#CB84FA", shape: "star", action: "点亮" }
+      { midi: 60, label: "C 星灯", colorName: "星紫", color: "#CB84FA", shape: "star", action: "点亮" },
+      { midi: 62, label: "D 星灯", colorName: "亮橙", color: "#FB9608", shape: "star", action: "点亮" },
+      { midi: 64, label: "E 星灯", colorName: "嫩绿", color: "#62C60C", shape: "star", action: "点亮" },
+      { midi: 62, label: "D 星灯", colorName: "亮橙", color: "#FB9608", shape: "star", action: "点亮" },
+      { midi: 60, label: "C 星灯", colorName: "星紫", color: "#CB84FA", shape: "star", action: "点亮" }
     ]
   },
   {
@@ -253,14 +253,14 @@ const levels = [
     scaffold: "medium",
     title: "合上月亮屋顶",
     storyNeed: "屋顶要沿着五个音一步步爬上去。",
-    prompt: "按 Do-Re-Mi-Fa-Sol，合上月亮屋顶。",
+    prompt: "按 C-D-E-F-G，合上月亮屋顶。",
     reward: "月亮屋顶",
     parts: [
-      { midi: 60, label: "Do 屋顶", colorName: "星紫", color: "#CB84FA", shape: "roof", action: "盖上" },
-      { midi: 62, label: "Re 屋顶", colorName: "亮橙", color: "#FB9608", shape: "roof", action: "盖上" },
-      { midi: 64, label: "Mi 屋顶", colorName: "嫩绿", color: "#62C60C", shape: "roof", action: "盖上" },
-      { midi: 65, label: "Fa 屋顶", colorName: "洋红", color: "#CC338D", shape: "roof", action: "盖上" },
-      { midi: 67, label: "Sol 屋顶", colorName: "星蓝", color: "#6F8FFE", shape: "roof", action: "盖上" }
+      { midi: 60, label: "C 屋顶", colorName: "星紫", color: "#CB84FA", shape: "roof", action: "盖上" },
+      { midi: 62, label: "D 屋顶", colorName: "亮橙", color: "#FB9608", shape: "roof", action: "盖上" },
+      { midi: 64, label: "E 屋顶", colorName: "嫩绿", color: "#62C60C", shape: "roof", action: "盖上" },
+      { midi: 65, label: "F 屋顶", colorName: "洋红", color: "#CC338D", shape: "roof", action: "盖上" },
+      { midi: 67, label: "G 屋顶", colorName: "星蓝", color: "#6F8FFE", shape: "roof", action: "盖上" }
     ]
   },
   {
@@ -270,11 +270,11 @@ const levels = [
     focus: ["F"],
     concepts: ["letter", "keyboard-locator"],
     scaffold: "medium",
-    title: "法法落脚垫",
+    title: "F 落脚垫",
     storyNeed: "新桥缺第一块三黑键旁的垫子。",
-    prompt: "找 Fa/F，在三黑键左边放落脚垫。",
-    reward: "Fa 登陆垫",
-    parts: [{ midi: 65, label: "Fa 落脚垫", colorName: "洋红", color: "#CC338D", shape: "bridge", action: "放好" }]
+    prompt: "找 F，在三黑键左边放落脚垫。",
+    reward: "F 登陆垫",
+    parts: [{ midi: 65, label: "F 落脚垫", colorName: "洋红", color: "#CC338D", shape: "bridge", action: "放好" }]
   },
   {
     id: "FG02",
@@ -283,11 +283,11 @@ const levels = [
     focus: ["G"],
     concepts: ["letter", "keyboard-locator"],
     scaffold: "medium",
-    title: "索尔星门",
+    title: "G 星门",
     storyNeed: "星门需要三黑键旁的第二个声音。",
-    prompt: "找 Sol/G，在三黑键左中打开星门。",
-    reward: "Sol 星门",
-    parts: [{ midi: 67, label: "Sol 星门", colorName: "星蓝", color: "#6F8FFE", shape: "wall", action: "打开" }]
+    prompt: "找 G，在三黑键左中打开星门。",
+    reward: "G 星门",
+    parts: [{ midi: 67, label: "G 星门", colorName: "星蓝", color: "#6F8FFE", shape: "wall", action: "打开" }]
   },
   {
     id: "FG03",
@@ -298,12 +298,12 @@ const levels = [
     scaffold: "light",
     title: "三颗近邻星",
     storyNeed: "三颗近邻星要排成小梯子。",
-    prompt: "分清 Mi-Fa-Sol，少看提示也能找到。",
+    prompt: "分清 E-F-G，少看提示也能找到。",
     reward: "三颗预备星",
     parts: [
-      { midi: 64, label: "Mi 近邻星", colorName: "嫩绿", color: "#62C60C", shape: "star", action: "排好" },
-      { midi: 65, label: "Fa 近邻星", colorName: "洋红", color: "#CC338D", shape: "star", action: "排好" },
-      { midi: 67, label: "Sol 近邻星", colorName: "星蓝", color: "#6F8FFE", shape: "star", action: "排好" }
+      { midi: 64, label: "E 近邻星", colorName: "嫩绿", color: "#62C60C", shape: "star", action: "排好" },
+      { midi: 65, label: "F 近邻星", colorName: "洋红", color: "#CC338D", shape: "star", action: "排好" },
+      { midi: 67, label: "G 近邻星", colorName: "星蓝", color: "#6F8FFE", shape: "star", action: "排好" }
     ]
   },
   {
@@ -315,11 +315,11 @@ const levels = [
     scaffold: "medium",
     title: "桥前小地图",
     storyNeed: "星芽看见星桥前两格谱位。",
-    prompt: "Fa 在第一间，Sol 在第二线，先铺小地图。",
+    prompt: "F 在第一间，G 在第二线，先铺小地图。",
     reward: "桥前小地图",
     parts: [
-      { midi: 65, label: "Fa 第一间", colorName: "洋红", color: "#CC338D", shape: "bridge", action: "铺好" },
-      { midi: 67, label: "Sol 第二线", colorName: "星蓝", color: "#6F8FFE", shape: "bridge", action: "铺好" }
+      { midi: 65, label: "F 第一间", colorName: "洋红", color: "#CC338D", shape: "bridge", action: "铺好" },
+      { midi: 67, label: "G 第二线", colorName: "星蓝", color: "#6F8FFE", shape: "bridge", action: "铺好" }
     ]
   }
 ];
@@ -378,8 +378,8 @@ const mapNodes = [
   { levelId: "M06", title: "大跳墙" },
   { levelId: "M07", title: "星星串" },
   { levelId: "M08", title: "月亮屋顶" },
-  { levelId: "FG01", title: "Fa 垫子" },
-  { levelId: "FG02", title: "Sol 星门" },
+  { levelId: "FG01", title: "F 垫子" },
+  { levelId: "FG02", title: "G 星门" },
   { levelId: "FG03", title: "近邻星" },
   { levelId: "FG04", title: "桥前地图" }
 ];
@@ -590,7 +590,7 @@ const learningPhases = {
   climb: {
     label: "五音爬梯",
     short: "爬梯",
-    prompt: "从 Do 一路爬到 Sol。",
+    prompt: "从 C 一路爬到 G。",
     coach: "一路往上"
   },
   staffPrep: {
@@ -1319,10 +1319,9 @@ function noteIdentity(note, staffStep = null) {
 
 function partObjectLabel(part, note = noteForMidi(part?.midi)) {
   if (!part?.label) return "零件";
-  const prefix = note?.solfege ? `${note.solfege} ` : "";
-  return prefix && part.label.startsWith(prefix)
-    ? part.label.slice(prefix.length)
-    : part.label;
+  const prefixes = [note?.solfege, note?.name].filter(Boolean).map((value) => `${value} `);
+  const prefix = prefixes.find((value) => part.label.startsWith(value));
+  return prefix ? part.label.slice(prefix.length) : part.label;
 }
 
 function currentAttemptStepKey() {
@@ -1468,18 +1467,18 @@ function actionTextForPart(part) {
 
 function storyRibbonCopyFor(level, part, target, options = {}) {
   const id = noteIdentity(target);
-  const noteText = state.auditMode === "no-reading" ? id.solfege : target.name;
+  const noteText = target.name;
   const shortLines = {
     M01: "地板还没落下",
     M02: "三颗灯睡着了",
     M03: "小车轮在找声音伙伴",
     M04: "短桥板要接上",
     M05: "火箭灯往下亮",
-    M06: "大跳墙等 Sol",
+    M06: "大跳墙等 G",
     M07: "星灯要记顺序",
     M08: "屋顶一步步合上",
-    FG01: "Fa 垫子等落下",
-    FG02: "Sol 星门等打开",
+    FG01: "F 垫子等落下",
+    FG02: "G 星门等打开",
     FG03: "三颗星排成梯",
     FG04: "先看星桥谱位"
   };
@@ -1529,58 +1528,58 @@ function successStoryFor(level, part, note, nextNote) {
   const nextId = nextNote ? noteIdentity(nextNote) : null;
   if (isListeningLevel(level)) {
     return {
-      title: `${id.full} 找到了`,
+      title: `${id.letter} 找到了`,
       subtitle: nextId ? `${partObjectLabel(part, note)}装好了 · 下一声先听再找` : `${partObjectLabel(part, note)}装好了`
     };
   }
   if (level?.id === "M06") {
     return {
-      title: note?.name === "G" ? "Sol 高墙站起来" : `${id.full} 墙板站稳`,
-      subtitle: nextId ? `下一跳 ${nextId.full} · ${nextId.keyShort}` : "大跳墙完成"
+      title: note?.name === "G" ? "G 高墙站起来" : `${id.letter} 墙板站稳`,
+      subtitle: nextId ? `下一跳 ${nextId.letter} · ${nextId.keyShort}` : "大跳墙完成"
     };
   }
   if (level?.phase === "listen") {
     return {
       title: "听出来了",
-      subtitle: `${id.full} 找到小车轮的声音`
+      subtitle: `${id.letter} 找到小车轮的声音`
     };
   }
   if (level?.phase === "staffPrep") {
     return {
-      title: `${id.full} 铺到星桥前`,
-      subtitle: nextId ? `下一格 ${nextId.full} · ${nextId.keyShort}` : "桥前小地图完成"
+      title: `${id.letter} 铺到星桥前`,
+      subtitle: nextId ? `下一格 ${nextId.letter} · ${nextId.keyShort}` : "桥前小地图完成"
     };
   }
   return {
-    title: `${id.full} 找到了`,
-    subtitle: nextId ? `${actionTextForPart(part)} · 下一步 ${nextId.full}` : actionTextForPart(part)
+    title: `${id.letter} 找到了`,
+    subtitle: nextId ? `${actionTextForPart(part)} · 下一步 ${nextId.letter}` : actionTextForPart(part)
   };
 }
 
 function wrongStoryFor(level, target, heard) {
   const targetId = noteIdentity(target);
-  const heardText = heard ? `刚才是 ${heard.solfege}/${heard.name}` : "刚才还没听清";
+  const heardText = heard ? `刚才是 ${heard.name}` : "刚才还没听清";
   if (isReservedNote(heard)) {
     return {
       title: "这颗琴键后面学",
-      subtitle: `先回到 ${targetId.full} · ${targetId.keyShort}`
+      subtitle: `先回到 ${targetId.letter} · ${targetId.keyShort}`
     };
   }
   if (level?.id === "M06") {
     return {
       title: "墙板还没站稳",
-      subtitle: `${heardText}，大跳要找 ${targetId.full} · ${targetId.keyShort}`
+      subtitle: `${heardText}，大跳要找 ${targetId.letter} · ${targetId.keyShort}`
     };
   }
   if (isListeningLevel(level)) {
     return {
       title: "小车轮再唱一次",
-      subtitle: `听声音，再找 ${targetId.full} · ${targetId.keyShort}`
+      subtitle: `听声音，再找 ${targetId.letter} · ${targetId.keyShort}`
     };
   }
   return {
     title: "星芽指给你看",
-    subtitle: `${heardText}，目标是 ${targetId.full} · ${targetId.keyShort}`
+    subtitle: `${heardText}，目标是 ${targetId.letter} · ${targetId.keyShort}`
   };
 }
 
@@ -1593,18 +1592,18 @@ function playPromptFor(level, part, target) {
     return `${need} 听一声，再点同样的琴键。`;
   }
   if (level?.phase === "check") {
-    return `${need} 先读 ${id.full}，再找 ${id.keyLong}。`;
+    return `${need} 先读 ${id.letter}，再找 ${id.keyLong}。`;
   }
   if (level?.phase === "climb") {
-    return `${need} ${id.full} 在 ${id.keyLong}。`;
+    return `${need} ${id.letter} 在 ${id.keyLong}。`;
   }
   if (level?.phase === "leap") {
-    return `${need} ${id.full} 在 ${id.keyLong}。`;
+    return `${need} ${id.letter} 在 ${id.keyLong}。`;
   }
   if (level?.phase === "direction") {
-    return `${need} 读 ${id.full}，找 ${id.keyLong}。`;
+    return `${need} 读 ${id.letter}，找 ${id.keyLong}。`;
   }
-  return `${need} 读 ${id.full}，找 ${id.keyLong}，${action}。`;
+  return `${need} 读 ${id.letter}，找 ${id.keyLong}，${action}。`;
 }
 
 function instructionFeedbackFor(level, part, target) {
@@ -1613,25 +1612,25 @@ function instructionFeedbackFor(level, part, target) {
     return "听一声，找同样键。";
   }
   if (isLevelReducedCueRun(level)) {
-    return `少提示：找 ${id.full}。`;
+    return `少提示：找 ${id.letter}。`;
   }
   if (id.staffPrep) {
-    return `找 ${id.full}：${id.keyShort} · ${id.staffPrep}。`;
+    return `找 ${id.letter}：${id.keyShort} · ${id.staffPrep}。`;
   }
-  return `${id.full} · ${id.keyShort}，${actionTextForPart(part)}。`;
+  return `${id.letter} · ${id.keyShort}，${actionTextForPart(part)}。`;
 }
 
 function wrongFeedbackFor(heard, target, staffStep = null) {
   const targetId = noteIdentity(target, staffStep);
   if (isReservedNote(heard)) {
-    return `${heard.name} 后面学。先找 ${targetId.full}：${targetId.keyShort}。`;
+    return `${heard.name} 后面学。先找 ${targetId.letter}：${targetId.keyShort}。`;
   }
-  const heardText = heard ? `这是 ${heard.solfege}/${heard.name}。` : "";
+  const heardText = heard ? `这是 ${heard.name}。` : "";
   const staffText = targetId.staffHint ? `${targetId.staffHint}，` : "";
   if (!staffStep && isListeningLevel()) {
-    return `${heardText}再听一次，找 ${targetId.full}：${targetId.keyShort}。`;
+    return `${heardText}再听一次，找 ${targetId.letter}：${targetId.keyShort}。`;
   }
-  return `${heardText}要 ${targetId.full}：${staffText}${targetId.keyShort}。`;
+  return `${heardText}要 ${targetId.letter}：${staffText}${targetId.keyShort}。`;
 }
 
 function staffSuccessStoryFor(target, targetStep, nextStep) {
@@ -1640,8 +1639,8 @@ function staffSuccessStoryFor(target, targetStep, nextStep) {
   const nextId = nextNote ? noteIdentity(nextNote, nextStep) : null;
   return {
     title: "落稳",
-    subtitle: nextId ? `下一跳 ${nextId.solfege}` : "到星门",
-    feedback: `${targetId.full} · ${targetId.staffHint}${nextId ? ` -> ${nextId.staffHint}` : " -> 星星门"}`,
+    subtitle: nextId ? `下一跳 ${nextId.letter}` : "到星门",
+    feedback: `${targetId.letter} · ${targetId.staffHint}${nextId ? ` -> ${nextId.staffHint}` : " -> 星星门"}`,
     tip: nextId ? "下一跳" : "到星门"
   };
 }
@@ -1651,16 +1650,16 @@ function staffWrongStoryFor(target, targetStep, heard) {
   if (isReservedNote(heard)) {
     return {
       title: "后面学",
-      subtitle: `先跳 ${targetId.solfege}`,
-      feedback: `${heard.name}后面 · ${targetId.full} · ${targetId.staffHint} · ${targetId.keyShort}`,
+      subtitle: `先跳 ${targetId.letter}`,
+      feedback: `${heard.name}后面 · ${targetId.letter} · ${targetId.staffHint} · ${targetId.keyShort}`,
       tip: "看亮垫"
     };
   }
-  const heardText = heard ? `${heard.solfege}/${heard.name} -> ` : "";
+  const heardText = heard ? `${heard.name} -> ` : "";
   return {
     title: "看落点",
-    subtitle: `亮垫 ${targetId.solfege}`,
-    feedback: `${heardText}${targetId.full} · ${targetId.staffHint} · ${targetId.keyShort}`,
+    subtitle: `亮垫 ${targetId.letter}`,
+    feedback: `${heardText}${targetId.letter} · ${targetId.staffHint} · ${targetId.keyShort}`,
     tip: "看落点"
   };
 }
@@ -2205,7 +2204,7 @@ function fgBridgeReadiness() {
     nextLevel,
     message: nextLevel
       ? `先把 ${nextLevel.title} 练稳，再跳谱线星桥。`
-      : "Fa/Sol 已准备好，可以跳谱线星桥。"
+      : "F/G 已准备好，可以跳谱线星桥。"
   };
 }
 
@@ -2229,7 +2228,7 @@ function staffFgSupportInfo(step = activeStaffStep()) {
     note,
     weak: weakForNote,
     source: currentMisses > 0 ? "missed-in-bridge" : weakForNote.length ? "weak-prep" : "",
-    label: note.name === "F" ? "Fa 加固" : "Sol 加固"
+    label: note.name === "F" ? "F 加固" : "G 加固"
   };
 }
 
@@ -2239,8 +2238,8 @@ function routeToFgPrep(readiness = fgBridgeReadiness()) {
   els.feedback.classList.remove("good");
   els.feedback.classList.add("bad");
   els.feedback.textContent = readiness.message;
-  if (els.dinoHint) els.dinoHint.textContent = "先练稳 Fa/Sol，再去星桥。";
-  if (els.modeHint) els.modeHint.textContent = "谱桥入口会等 Fa/Sol 稳定后打开。";
+  if (els.dinoHint) els.dinoHint.textContent = "先练稳 F/G，再去星桥。";
+  if (els.modeHint) els.modeHint.textContent = "谱桥入口会等 F/G 稳定后打开。";
   return true;
 }
 
@@ -2256,12 +2255,12 @@ function staffRemediationPlan(attempt = state.practiceAttempt) {
   if (gWrongs >= 2 && fWrongs < 2) levelId = "FG02";
   const level = levels.find((item) => item.id === levelId) || levels.find((item) => item.id === "FG03");
   const focus = fWrongs >= 2 && gWrongs >= 2
-    ? "Fa 和 Sol"
+    ? "F 和 G"
     : fWrongs >= 2
-    ? "Fa"
+    ? "F"
     : gWrongs >= 2
-    ? "Sol"
-    : "Fa/Sol";
+    ? "G"
+    : "F/G";
   return {
     levelId: level?.id || "FG03",
     level,
@@ -2474,7 +2473,7 @@ function render() {
     : isListening
     ? "小车轮在找声音伙伴。"
     : isLevelCheckRun
-    ? `读 ${targetId.full}，自己找键。`
+    ? `读 ${targetId.letter}，自己找键。`
     : (level.prompt || playPromptFor(level, part, target));
   els.rewardCard.querySelector("strong").textContent = displayStepLabel;
   els.rewardCard.querySelector("small").textContent = "这一步要帮忙";
@@ -2507,7 +2506,7 @@ function render() {
     els.hangingPartBadge.hidden = suppressListeningObjectIdentity;
     els.hangingPartBadge.innerHTML = suppressListeningObjectIdentity
       ? ""
-      : `<b>${visualPartNote.name}</b><i>${visualPartNote.solfege}</i>`;
+      : `<b>${visualPartNote.name}</b>`;
     els.hangingPartBadge.style.setProperty("--note-color", suppressListeningObjectIdentity ? LISTENING_IDENTITY_NEUTRAL : visualPartNote.color);
   }
   if (els.hangingPartLabel) els.hangingPartLabel.textContent = partObjectLabel(visualPart, visualPartNote);
@@ -2593,7 +2592,7 @@ function render() {
   }
   const listeningPromptOnly = isListening && !revealListeningTarget;
   if (els.stageNoteText) els.stageNoteText.textContent = listeningPromptOnly ? "♪" : target.name;
-  if (els.stageNoteName) els.stageNoteName.textContent = listeningPromptOnly ? "" : target.solfege;
+  if (els.stageNoteName) els.stageNoteName.textContent = "";
   if (els.stageNoteOrb) {
     els.stageNoteOrb.dataset.promptOnly = listeningPromptOnly ? "true" : "false";
     els.stageNoteOrb.style.setProperty("--target-color", partColor);
@@ -2635,8 +2634,7 @@ function render() {
   els.targetNote.classList.toggle("listen-card", isListening);
   els.targetNote.classList.toggle("note-chip-card", !isListening);
   els.targetNote.classList.toggle("check-note-card", isLevelCheckRun);
-  const noReadingAudit = state.auditMode === "no-reading";
-  const targetMainLabel = noReadingAudit ? targetId.solfege : target.name;
+  const targetMainLabel = target.name;
   if (isListening) {
     els.targetNote.tabIndex = 0;
     els.targetNote.setAttribute("role", "button");
@@ -2647,7 +2645,7 @@ function render() {
     els.targetNote.removeAttribute("aria-label");
   }
   els.targetNote.innerHTML = isListening
-    ? `<small>${revealListeningTarget ? "再听车轮" : "听小车轮"}</small><strong>${revealListeningTarget ? target.solfege : "♪"}</strong><span>${revealListeningTarget ? `${target.name} · ${targetId.keyShort}` : "点这里重播"}</span>${revealListeningTarget ? locatorVisualHtml(target, "找这格", "card-locator") : ""}<em>${revealListeningTarget ? targetId.keyLong : "会唱的小车轮"}</em>`
+    ? `<small>${revealListeningTarget ? "再听车轮" : "听小车轮"}</small><strong>${revealListeningTarget ? target.name : "♪"}</strong><span>${revealListeningTarget ? `${target.name} · ${targetId.keyShort}` : "点这里重播"}</span>${revealListeningTarget ? locatorVisualHtml(target, "找这格", "card-locator") : ""}<em>${revealListeningTarget ? targetId.keyLong : "会唱的小车轮"}</em>`
     : isLevelCheckRun
     ? `<small>当前音</small><strong>${targetMainLabel}</strong><span>${targetId.staffPrep || "少提示"}</span>${locatorVisualHtml(target, "自己找", "card-locator")}<em>错了再亮</em>`
     : `<small>当前音</small><strong>${targetMainLabel}</strong><span>${targetId.keyShort}</span>${locatorVisualHtml(target, "住这里", "card-locator")}<em>${targetId.keyShort}</em>`;
@@ -2668,10 +2666,10 @@ function render() {
   }
   els.dinoName.textContent = target.dino || "星芽";
   els.dinoHint.textContent = isLevelCheckRun
-    ? `少提示：找 ${targetId.full}。`
+    ? `少提示：找 ${targetId.letter}。`
     : isListening
-    ? (revealListeningTarget ? `轮子唱 ${targetId.solfege}，你来弹 ${targetId.letter}。` : "我陪你听小车轮。")
-    : `找 ${targetId.full}。`;
+    ? (revealListeningTarget ? `听轮子的声音，你来弹 ${targetId.letter}。` : "我陪你听小车轮。")
+    : `找 ${targetId.letter}。`;
   if (els.modeHint) {
     els.modeHint.textContent = isLevelCheckRun
       ? "自己找；错了我再提示。"
@@ -2758,7 +2756,7 @@ function renderMapScreen() {
         els.mapStarCount.setAttribute("aria-label", `呼吸花园进度：三片嫩芽已完成 ${leafCount} 片，${gardenState}`);
       }
     } else {
-      const staffStatus = state.staffComplete ? "小恐龙完成" : (staffReadiness.ready ? "小恐龙待跳" : "Fa/Sol待稳");
+      const staffStatus = state.staffComplete ? "小恐龙完成" : (staffReadiness.ready ? "小恐龙待跳" : "F/G待稳");
       els.mapStarCount.textContent = `基地 ${state.completed.size}/${levels.length} · ${staffStatus}`;
       els.mapStarCount.setAttribute("aria-label", `月球基地进度：${state.completed.size}/${levels.length}，${staffStatus}`);
     }
@@ -2807,7 +2805,7 @@ function renderMapScreen() {
       node.classList.toggle("done", state.staffComplete);
       node.classList.toggle("active", !gardenReached && (state.screen === "staff" || shouldFocusStaff));
       node.classList.toggle("needs-practice", baseComplete && !state.staffComplete && !staffReadiness.ready);
-      node.setAttribute("aria-label", `${node.textContent.trim()} ${state.staffComplete ? "已完成" : (staffReadiness.ready ? "未完成" : "Fa/Sol 还需练稳")}`);
+      node.setAttribute("aria-label", `${node.textContent.trim()} ${state.staffComplete ? "已完成" : (staffReadiness.ready ? "未完成" : "F/G 还需练稳")}`);
     } else {
       node.setAttribute("aria-label", `${node.textContent.trim()} ${state.completed.has(levelId) ? "已完成" : "未完成"}`);
     }
@@ -3176,8 +3174,7 @@ function renderActionCue(part, target) {
   const level = activeLevel();
   const phase = phaseForLevel(level);
   const id = noteIdentity(target);
-  const noReadingAudit = state.auditMode === "no-reading";
-  const noteText = noReadingAudit ? id.solfege : id.letter;
+  const noteText = id.letter;
   const isLevelCheckRun = isLevelReducedCueRun(level);
   const isRoofBlueprint = level?.id === "M08";
   const roofMode = roofBlueprintMode(level);
@@ -3305,8 +3302,9 @@ function showWorkshopIdleHint(stage) {
 }
 
 function renderRouteIdleDialog(level, target, stage) {
-  document.querySelectorAll(".route-idle-dialog").forEach((dialog) => dialog.remove());
+  document.querySelectorAll(".route-idle-dialog:not(.route-action-dialog)").forEach((dialog) => dialog.remove());
   if (stage === "none" || !level || !target) return;
+  document.querySelectorAll(".route-action-dialog").forEach((dialog) => dialog.remove());
   const config = level.id === "M07"
     ? { host: els.memoryStarRoute, dino: ".memory-route-dino" }
     : level.id === "M08"
@@ -3368,12 +3366,12 @@ function renderWorkshopIdleHint(level = activeLevel(), target = noteForMidi(acti
       : `<small>再给一点提示</small><strong>${id.solfege}</strong><span>${id.letter} · ${id.keyShort}</span>`;
     if (els.dinoHint) {
       els.dinoHint.textContent = stage === "identity"
-        ? `${id.solfege} 对应音名 ${id.letter}。`
+        ? `蓝图里找 ${id.letter}。`
         : `${id.letter} 在${id.keyLong}。`;
     }
     if (els.modeHint) {
       els.modeHint.textContent = stage === "identity"
-        ? "先把唱名和音名连起来。"
+        ? "先看蓝图里的音名。"
         : "慢慢找；这次位置提示会被记录。";
     }
     return;
@@ -3384,12 +3382,12 @@ function renderWorkshopIdleHint(level = activeLevel(), target = noteForMidi(acti
     : `<small>星芽提示</small><strong>${id.full}</strong>${locatorVisualHtml(target, "住这里", "coach-locator")}<span>${id.keyShort}</span>`;
   if (els.dinoHint) {
     els.dinoHint.textContent = stage === "identity"
-      ? `先说 ${id.solfege}，再找字母 ${id.letter}。`
-      : `${id.full} 住在${id.keyLong}。`;
+      ? `找字母 ${id.letter}。`
+      : `${id.letter} 住在${id.keyLong}。`;
   }
   if (els.modeHint) {
     els.modeHint.textContent = stage === "identity"
-      ? "先把唱名和音名连起来。"
+      ? "先看音名，再找琴键。"
       : "不用快，慢慢找；这次提示会被记录。";
   }
 }
@@ -3677,7 +3675,15 @@ function renderFgStarRoute(level) {
   const isFgRoute = level?.id === "FG03";
   els.fgStarRoute.hidden = !isFgRoute;
   els.fgStarRoute.innerHTML = "";
-  if (!isFgRoute) return;
+  if (!isFgRoute) {
+    els.fgStarRoute.setAttribute("aria-hidden", "true");
+    els.fgStarRoute.removeAttribute("role");
+    els.fgStarRoute.removeAttribute("aria-label");
+    return;
+  }
+  els.fgStarRoute.removeAttribute("aria-hidden");
+  els.fgStarRoute.setAttribute("role", "img");
+  els.fgStarRoute.setAttribute("aria-label", "星星路线 E F G");
 
   const points = [
     { x: 18, y: 68 },
@@ -3690,6 +3696,7 @@ function renderFgStarRoute(level) {
   const path = `M ${points[0].x} ${points[0].y} Q 50 57 ${points[2].x} ${points[2].y}`;
   const dinoIndex = Math.min(Math.max(state.stepIndex, 0), points.length - 1);
   const dinoPoint = points[dinoIndex] || points[0];
+  const currentNote = noteForMidi(parts[Math.min(dinoIndex, parts.length - 1)]?.midi) || notes[0];
   els.fgStarRoute.innerHTML = `
     <div class="fg-route-title">
       <small>${isLevelCheckRun ? "少提示" : "三颗星"}</small>
@@ -3700,6 +3707,9 @@ function renderFgStarRoute(level) {
       <path class="fg-route-main" d="${path}"></path>
     </svg>
     <span class="fg-route-dino" style="left:${dinoPoint.x}%; top:${dinoPoint.y}%;" aria-hidden="true"></span>
+    <span class="route-idle-dialog route-action-dialog" style="left:${dinoPoint.x}%; top:calc(${dinoPoint.y}% - 62px); --dialog-color:${currentNote.color}; --dialog-soft:${alpha(currentNote.color, 0.20)}">
+      <small>星芽说</small><strong>唱 ${currentNote.solfege}</strong><em>找 ${currentNote.name}</em>
+    </span>
   `;
 
   parts.forEach((part, index) => {
@@ -3709,8 +3719,8 @@ function renderFgStarRoute(level) {
     const isDone = index < state.stepIndex;
     const isCurrent = index === state.stepIndex;
     const isUpcoming = index > state.stepIndex;
-    const currentLabel = state.auditMode === "no-reading" ? note.solfege : note.name;
-    const primaryLabel = isDone ? "✓" : (isCurrent ? currentLabel : "");
+    const currentLabel = note.name;
+    const primaryLabel = currentLabel;
     const secondaryLabel = isCurrent
       ? (showLocator ? id.keyShort : "自己找")
       : (isDone ? "亮了" : "");
@@ -3742,7 +3752,15 @@ function renderMemoryStarRoute(level) {
   const isMemoryRoute = level?.id === "M07";
   els.memoryStarRoute.hidden = !isMemoryRoute;
   els.memoryStarRoute.innerHTML = "";
-  if (!isMemoryRoute) return;
+  if (!isMemoryRoute) {
+    els.memoryStarRoute.setAttribute("aria-hidden", "true");
+    els.memoryStarRoute.removeAttribute("role");
+    els.memoryStarRoute.removeAttribute("aria-label");
+    return;
+  }
+  els.memoryStarRoute.removeAttribute("aria-hidden");
+  els.memoryStarRoute.setAttribute("role", "img");
+  els.memoryStarRoute.setAttribute("aria-label", "星星路线 C D E D C");
 
   const points = [
     { x: 10, y: 68 },
@@ -3757,6 +3775,7 @@ function renderMemoryStarRoute(level) {
   const path = `M ${points[0].x} ${points[0].y} C 26 66, 38 61, ${points[2].x} ${points[2].y} S 76 66, ${points[4].x} ${points[4].y}`;
   const dinoIndex = Math.min(Math.max(state.stepIndex, 0), points.length - 1);
   const dinoPoint = points[dinoIndex] || points[0];
+  const currentNote = noteForMidi(parts[Math.min(dinoIndex, parts.length - 1)]?.midi) || notes[0];
   els.memoryStarRoute.innerHTML = `
     <div class="memory-route-title">
       <small>${isLevelCheckRun ? "少提示" : "记忆串"}</small>
@@ -3767,6 +3786,9 @@ function renderMemoryStarRoute(level) {
       <path class="memory-route-main" d="${path}"></path>
     </svg>
     <span class="memory-route-dino" style="left:${dinoPoint.x}%; top:${dinoPoint.y}%;" aria-hidden="true"></span>
+    <span class="route-idle-dialog route-action-dialog" style="left:${dinoPoint.x}%; top:calc(${dinoPoint.y}% - 62px); --dialog-color:${currentNote.color}; --dialog-soft:${alpha(currentNote.color, 0.20)}">
+      <small>星芽说</small><strong>唱 ${currentNote.solfege}</strong><em>找 ${currentNote.name}</em>
+    </span>
   `;
 
   parts.forEach((part, index) => {
@@ -3776,8 +3798,8 @@ function renderMemoryStarRoute(level) {
     const isDone = index < state.stepIndex;
     const isCurrent = index === state.stepIndex;
     const isUpcoming = index > state.stepIndex;
-    const currentLabel = state.auditMode === "no-reading" ? note.solfege : note.name;
-    const primaryLabel = isDone ? "✓" : (isCurrent ? currentLabel : "");
+    const currentLabel = note.name;
+    const primaryLabel = currentLabel;
     const secondaryLabel = isCurrent
       ? (showLocator ? id.keyShort : "自己找")
       : (isDone ? "亮了" : "");
@@ -3845,11 +3867,11 @@ function renderRoofScaleRoute(level) {
     const isCurrent = index === state.stepIndex;
     const isUpcoming = index > state.stepIndex;
     const justLocked = isDone && index === state.routeJustLockedIndex;
-    const currentLabel = state.auditMode === "no-reading" ? note.solfege : note.name;
+    const currentLabel = note.name;
     const primaryLabel = isDone ? "✓" : (isCurrent ? currentLabel : "");
     const secondaryLabel = isCurrent
       ? (showLocator ? id.keyShort : "自己找")
-      : (isDone ? note.solfege : "");
+      : (isDone ? note.name : "");
     const node = document.createElement("span");
     node.className = "roof-route-node";
     if (isDone) node.classList.add("done");
@@ -3951,20 +3973,20 @@ function syncStaffFallbackCopy({ target, targetId, staffHint, isCheckRun, finish
   const prompt = finished
     ? "星芽跳到对面星球。"
     : isCheckRun
-    ? `看${staffHint}，读 ${targetId.full}，自己找键。`
-    : `看${staffHint}，读 ${targetId.full}，找${targetId.keyLong}。`;
+    ? `看${staffHint}，读 ${targetId.letter}，自己找键。`
+    : `看${staffHint}，读 ${targetId.letter}，找${targetId.keyLong}。`;
   const cueText = finished ? "星桥完成" : `${targetId.full} · ${staffHint} · ${targetId.keyShort}`;
 
   if (els.levelTitle) els.levelTitle.textContent = title;
   if (els.levelPrompt) els.levelPrompt.textContent = prompt;
-  if (els.stageTitle) els.stageTitle.textContent = finished ? "星桥终点" : `${target.solfege} 星垫`;
+  if (els.stageTitle) els.stageTitle.textContent = finished ? "星桥终点" : `${target.name} 星垫`;
   if (els.feedback) {
     els.feedback.classList.remove("good", "bad");
-    els.feedback.textContent = finished ? "谱线星桥读完啦。" : "看谱位、读唱名、找琴键。";
+    els.feedback.textContent = finished ? "谱线星桥读完啦。" : "看谱位、读音名、找琴键。";
   }
   if (els.hangingPart) {
     const hangingLabel = els.hangingPart.querySelector("strong");
-    if (hangingLabel) hangingLabel.textContent = finished ? "终点星球" : `${target.solfege} 星垫`;
+    if (hangingLabel) hangingLabel.textContent = finished ? "终点星球" : `${target.name} 星垫`;
   }
   if (els.rewardCard) {
     const brick = els.rewardCard.querySelector(".reward-brick");
@@ -3973,7 +3995,7 @@ function syncStaffFallbackCopy({ target, targetId, staffHint, isCheckRun, finish
     els.rewardCard.style.setProperty("--part-color", target.color);
     els.rewardCard.style.setProperty("--part-color-soft", alpha(target.color, 0.18));
     if (brick) brick.style.setProperty("--part-image", imageCssUrl(partImages.star));
-    if (strong) strong.textContent = finished ? "星桥完成" : `${target.solfege} 星垫`;
+    if (strong) strong.textContent = finished ? "星桥完成" : `${target.name} 星垫`;
     if (small) small.textContent = isCheckRun ? "少提示复读" : "看谱跳桥";
   }
   if (els.targetNote) {
@@ -3988,7 +4010,7 @@ function syncStaffFallbackCopy({ target, targetId, staffHint, isCheckRun, finish
     els.targetNote.style.setProperty("--target-glow", alpha(target.color, 0.20));
     els.targetNote.innerHTML = finished
       ? `<small>完成</small><strong>✓</strong><span>对面星球</span><em>星桥完成</em>`
-      : `<small>${isCheckRun ? "少提示" : "下一跳"}</small><strong>${target.solfege}</strong><span>${target.name} · ${targetId.keyShort}</span><em>${staffHint}</em>`;
+      : `<small>${isCheckRun ? "少提示" : "下一跳"}</small><strong>${target.name}</strong><span>${targetId.keyShort}</span><em>${staffHint}</em>`;
   }
   if (els.stageStoryRibbon) {
     els.stageStoryRibbon.style.setProperty("--story-color", target.color);
@@ -3996,13 +4018,13 @@ function syncStaffFallbackCopy({ target, targetId, staffHint, isCheckRun, finish
     els.stageStoryRibbon.innerHTML = `
       <span class="story-part-icon" style="--part-image:${imageCssUrl(partImages.star)}"></span>
       <span class="story-problem">${finished ? "星桥已经连到对面" : "星芽要跳到谱线星垫"}</span>
-      <span class="story-note-pill" style="--note-color:${target.color}">${finished ? "✓" : target.solfege}</span>
+      <span class="story-note-pill" style="--note-color:${target.color}">${finished ? "✓" : target.name}</span>
       <span class="locator-mini" aria-hidden="true">${finished ? "终点" : locatorVisualHtml(target, "", "story-locator")}</span>
       <span class="story-staff-chip">${finished ? "完成" : staffHint}</span>
     `;
   }
-  if (els.stageNoteText) els.stageNoteText.textContent = finished ? "✓" : target.solfege;
-  if (els.stageNoteName) els.stageNoteName.textContent = finished ? "完成" : target.name;
+  if (els.stageNoteText) els.stageNoteText.textContent = finished ? "✓" : target.name;
+  if (els.stageNoteName) els.stageNoteName.textContent = finished ? "完成" : "";
   if (els.coachNote) els.coachNote.textContent = finished ? "星桥完成" : target.solfege;
   if (els.coachBubble) els.coachBubble.textContent = cueText;
 }
@@ -4047,10 +4069,10 @@ function renderStaffScreen() {
       ? "前三跳完成，到小休息星先停一下。"
       : "全读对了，小恐龙跳到对面星球啦。"
     : isCheckRun
-    ? `看${targetId.staffHint}，读 ${targetId.full}，自己找键。`
+    ? `看${targetId.staffHint}，读 ${targetId.letter}，自己找键。`
     : isMini
     ? `看亮垫，听一声，帮星芽跳前三颗星。`
-    : `看${targetId.staffHint}，读 ${targetId.full}，找${targetId.keyLong}。`;
+    : `看${targetId.staffHint}，读 ${targetId.letter}，找${targetId.keyLong}。`;
   if (els.staffDino && !els.staffDino.classList.contains("mood-bad")) {
     els.staffDino.src = finished ? dinoImages.celebrate : dinoImages.point;
   }
@@ -4072,14 +4094,14 @@ function renderStaffScreen() {
   els.nextAction.style.setProperty("--part-color-soft", alpha(targetColor, 0.16));
   els.nextAction.innerHTML = isMini
     ? `
-      <span class="cue-chip cue-pos"><small>亮垫</small><strong>${target.solfege}</strong></span>
+      <span class="cue-chip cue-pos"><small>亮垫</small><strong>${target.name}</strong></span>
       <span class="cue-connector" aria-hidden="true"></span>
       <span class="cue-chip cue-key-place"><small>找键</small><strong>${targetId.keyShort}</strong></span>
     `
     : `
       <span class="cue-chip cue-pos"><small>看谱</small><strong>${staffHint}</strong></span>
       <span class="cue-connector" aria-hidden="true"></span>
-      <span class="cue-chip cue-note" style="--cue-color:${targetColor}"><small>读音</small><strong>${target.solfege} / ${target.name}</strong></span>
+      <span class="cue-chip cue-note" style="--cue-color:${targetColor}"><small>读音</small><strong>${target.name}</strong></span>
       <span class="cue-connector" aria-hidden="true"></span>
       <span class="cue-chip cue-key-place"><small>找键</small><strong>${targetId.keyShort}</strong></span>
     `;
@@ -4104,10 +4126,10 @@ function renderStaffScreen() {
       ? `<small>小休息星</small><strong>✓</strong><span>前三跳完成</span>`
       : `<small>全部读完</small><strong>✓</strong><span>对面星球</span>`
     : isCheckRun
-    ? `<small>少提示</small><strong>${target.solfege}</strong><span>${target.name} · ${staffHint}</span>`
+    ? `<small>少提示</small><strong>${target.name}</strong><span>${staffHint}</span>`
     : isMini
-    ? `<small>亮垫</small><strong>${target.solfege}</strong><span>${targetId.keyShort}</span>`
-    : `<small>下一跳</small><strong>${target.solfege}</strong><span>${target.name} · ${staffHint} · ${targetId.keyShort}</span>`;
+    ? `<small>亮垫</small><strong>${target.name}</strong><span>${targetId.keyShort}</span>`
+    : `<small>下一跳</small><strong>${target.name}</strong><span>${staffHint} · ${targetId.keyShort}</span>`;
   setStaffDinoTip(
     finished ? (isMini ? "休息星" : "到星门") : staffDinoTipForStep(targetStep || finalStep),
     targetColor,
@@ -4121,7 +4143,7 @@ function renderStaffScreen() {
     : isCheckRun
     ? "自己找"
     : "跳亮垫";
-  if (els.modeHint) els.modeHint.textContent = isMini ? "观察小段：只跳前三颗，看看孩子能不能理解谱桥。" : (isCheckRun ? "少提示复读：先不亮目标键，错了再提示。" : "五线谱星桥：看谱位、读唱名、找琴键。");
+  if (els.modeHint) els.modeHint.textContent = isMini ? "观察小段：只跳前三颗，看看孩子能不能理解谱桥。" : (isCheckRun ? "少提示复读：先不亮目标键，错了再提示。" : "五线谱星桥：看谱位、读音名、找琴键。");
   els.heardStatus.textContent = "听到：--";
   els.inputStatus.textContent = "输入：屏幕琴键";
 
@@ -4146,7 +4168,7 @@ function renderStaffSteps() {
     const isHint = state.lastInputResult === "wrong" && index === state.staffStepIndex;
     const isMiniRest = index === miniFinalIndex;
     const fgSupport = isCurrent ? staffFgSupportInfo(step) : { needed: false, source: "" };
-    const noteLabel = `<strong>${note.solfege}</strong><span class="staff-note-name">${note.name}</span>`;
+    const noteLabel = `<strong>${note.name}</strong>`;
     const pad = document.createElement("button");
     pad.className = "staff-step";
     pad.type = "button";
@@ -4378,7 +4400,7 @@ function renderKeyboard(target, options = {}) {
     const tapBadge = isTargetKey ? `<span class="tap-badge" aria-hidden="true"></span><span class="tap-finger" aria-hidden="true"><i></i></span>` : "";
     const keyLabel = reserved
       ? `<strong>${note.name}</strong><span>后面</span>`
-      : `<strong>${note.name}</strong><span>${note.solfege}</span>`;
+      : `<strong>${note.name}</strong>`;
     const keyTag = reserved ? "后面学" : (friendlyKeyLocator(note) || locatorShort[index]);
     const keyFindTag = reserved ? `<span class="key-find-tag">${keyTag}</span>` : "";
     const keyLocatorVisual = !reserved && isTargetKey
@@ -4485,7 +4507,7 @@ function showKeyPressLabel(key, note, result = "press") {
   const label = document.createElement("span");
   const staffClass = state.screen === "staff" ? " staff-key-label" : "";
   label.className = `key-press-label label-${result}${staffClass}`;
-  label.innerHTML = `<strong>${note.solfege}</strong><small>${note.name}</small>`;
+  label.innerHTML = `<strong>${note.name}</strong>`;
   label.setAttribute("aria-hidden", "true");
   label.style.left = `${rect.left + rect.width / 2}px`;
   label.style.top = `${rect.top + Math.max(26, rect.height * 0.24)}px`;
@@ -4538,12 +4560,12 @@ function beginAssistedRepair(targetMidi) {
   const id = noteIdentity(target, state.screen === "staff" ? activeStaffStep() : null);
   if (state.screen === "staff") {
     els.staffFeedback.classList.remove("good", "bad");
-    els.staffFeedback.textContent = `星芽先踩一遍 ${id.solfege}，再按亮起的琴键。`;
+    els.staffFeedback.textContent = `星芽先示范 ${id.letter}，再按亮起的琴键。`;
     setStaffDinoTip(`${id.solfege}/${id.letter} · 跟着亮键`, target?.color || "#FFD166", "wrong");
   } else {
     els.feedback.classList.remove("good", "bad");
-    els.feedback.textContent = `星芽先示范 ${id.solfege}/${id.letter}，再按亮起的琴键。`;
-    if (els.dinoHint) els.dinoHint.textContent = `跟星芽一起按 ${id.solfege}/${id.letter}`;
+    els.feedback.textContent = `星芽先示范 ${id.letter}，再按亮起的琴键。`;
+    if (els.dinoHint) els.dinoHint.textContent = `跟星芽一起按 ${id.letter}`;
   }
   state.assistedSuccessTimer = setTimeout(() => {
     playPianoNote(target?.frequency || 261.63, { gain: 0.10, duration: 0.52 });
@@ -4641,7 +4663,7 @@ function handleInput(midi, source) {
   const usesBlueprintLock = inputLevel?.id === "M08";
   state.lastInputMidi = midi;
 
-  els.heardStatus.textContent = `听到：${heard ? heard.solfege : midi}`;
+  els.heardStatus.textContent = `听到：${heard ? heard.name : midi}`;
   els.inputStatus.textContent = `输入：${source}`;
 
   if (midi === targetMidi) {
@@ -4675,8 +4697,8 @@ function handleInput(midi, source) {
       els.feedback.classList.remove("bad");
       els.feedback.classList.add("good");
       els.feedback.textContent = assistedRepair
-        ? `${correctId.full} 跟着星芽修好了，完成这一小段后休息。`
-        : `${correctId.full} 找到了，${story.subtitle}。`;
+        ? `${correctId.letter} 跟着星芽修好了，完成这一小段后休息。`
+        : `${correctId.letter} 找到了，${story.subtitle}。`;
       // A correct input changes the plan, crane card, character and piano immediately.
       // Keep the large scene toast for repair only so it cannot cover the next blueprint step.
       setDinoMood("good");
@@ -5076,7 +5098,7 @@ function handleStaffInput(midi, source) {
   const heard = noteForMidi(midi);
   const target = noteForMidi(targetMidi) || notes[0];
   state.lastInputMidi = midi;
-  els.heardStatus.textContent = `听到：${heard ? heard.solfege : midi}`;
+  els.heardStatus.textContent = `听到：${heard ? heard.name : midi}`;
   els.inputStatus.textContent = `输入：${source}`;
 
   if (midi === targetMidi) {
@@ -5095,13 +5117,13 @@ function handleStaffInput(midi, source) {
     render();
     if (state.staffStepIndex < activeStaffStepCount()) beginPracticeStepClock();
     els.inputStatus.textContent = `输入：${source}`;
-    els.heardStatus.textContent = `听到：${target.solfege}`;
+    els.heardStatus.textContent = `听到：${target.name}`;
     els.staffFeedback.classList.remove("good", "bad");
     const nextStep = activeStaffStep();
     const successStory = staffSuccessStoryFor(target, targetStep, nextStep);
     els.staffFeedback.classList.add("good");
     els.staffFeedback.textContent = assistedRepair
-      ? `${target.solfege}/${target.name} 跟着星芽落稳，走到安全点就休息。`
+      ? `${target.name} 跟着星芽落稳，走到安全点就休息。`
       : successStory.feedback;
     setStaffDinoTip(successStory.tip, target.color, nextStep ? "correct" : "done");
     showStaffStageToast("correct", {
@@ -5128,7 +5150,7 @@ function handleStaffInput(midi, source) {
     playWrongSound();
     render();
     els.inputStatus.textContent = `输入：${source}`;
-    els.heardStatus.textContent = `听到：${heard ? heard.solfege : midi}`;
+    els.heardStatus.textContent = `听到：${heard ? heard.name : midi}`;
     els.staffFeedback.classList.remove("good", "bad");
     els.staffFeedback.classList.add("bad");
     const wrongStory = staffWrongStoryFor(target, targetStep, heard);
@@ -5292,14 +5314,14 @@ function showStaffStageToast(type, { title, note, subtitle }) {
   if (!noReadingAudit) toast.dataset.toastStyle = "event";
   toast.innerHTML = noReadingAudit
     ? `
-      <span class="staff-toast-note">${note?.solfege || "Do"}</span>
+      <span class="staff-toast-note">${note?.name || "C"}</span>
       <span class="staff-toast-visual" aria-hidden="true">
         <i class="toast-gesture ${type === "wrong" ? "gesture-repair" : "gesture-jump"}"></i>
         ${note ? locatorVisualHtml(note, "", "toast-locator") : ""}
       </span>
     `
     : `
-      <span class="staff-toast-note">${note?.solfege || "Do"}</span>
+      <span class="staff-toast-note">${note?.name || "C"}</span>
       <span class="staff-toast-visual" aria-hidden="true">
         <i class="toast-gesture ${type === "wrong" ? "gesture-repair" : "gesture-jump"}"></i>
       </span>
@@ -5445,15 +5467,15 @@ function showNoteBurst(midi, result, note) {
 
     const symbols = isStaffBurst
       ? result === "correct"
-        ? [note?.solfege || "Do", "✓"]
+        ? [note?.name || "C", "✓"]
         : result === "hint"
-          ? [note?.solfege || "Do"]
-          : ["?", note?.solfege || "Do"]
+          ? [note?.name || "C"]
+          : ["?", note?.name || "C"]
       : result === "correct"
-        ? [note?.solfege || "Do", "♪", "★", "✓", note?.name || "C", "♪"]
+        ? [note?.name || "C", "♪", "★", "✓", note?.name || "C", "♪"]
         : result === "hint"
-          ? [note?.solfege || "Do", "•", "•"]
-          : ["?", "•", note?.solfege || "Do"];
+          ? [note?.name || "C", "•", "•"]
+          : ["?", "•", note?.name || "C"];
     const paths = isStaffBurst
       ? result === "correct"
         ? [[-24, -44, -8], [24, -42, 8]]
@@ -5540,7 +5562,7 @@ function showMusicFlight(midi, note, targetElement, type = "correct") {
 
     const notePill = document.createElement("span");
     notePill.className = "music-flight-note";
-    notePill.textContent = note?.solfege || note?.name || "";
+    notePill.textContent = note?.name || "";
     flight.appendChild(notePill);
 
     const sparkPaths = [
@@ -5600,7 +5622,7 @@ function showStageInputToast(type, { title, note, subtitle }) {
     toast.style.setProperty("--toast-note-color", note.color);
     toast.style.setProperty("--toast-note-soft", alpha(note.color, 0.22));
   }
-  const noteLabel = note?.solfege || "";
+  const noteLabel = note?.name || "";
   toast.innerHTML = `
     <span class="toast-note">${noteLabel}</span>
     ${routeVisual}
@@ -5656,7 +5678,7 @@ function showLevelIntro() {
     <span class="intro-copy">
       <small>${level.id} · ${level.title}</small>
       <strong>${level.title}</strong>
-      <em>${isListening ? "听一声，找同样的键" : `${level.storyNeed || `${phase.short} ${id.full} · ${id.keyShort}`}`}</em>
+      <em>${isListening ? "听一声，找同样的键" : `${level.storyNeed || `${phase.short} ${id.letter} · ${id.keyShort}`}`}</em>
     </span>
   `;
   els.moonYard.appendChild(card);
@@ -5716,7 +5738,7 @@ function showFlyingPart(part) {
 
   const badge = document.createElement("span");
   badge.className = "part-note-badge flying-part-badge";
-  badge.innerHTML = note ? `<b>${note.solfege}</b><i>${note.name}</i>` : "";
+  badge.innerHTML = note ? `<b>${note.name}</b>` : "";
   badge.style.setProperty("--note-color", note?.color || part.color);
   badge.setAttribute("aria-hidden", "true");
 
@@ -5794,11 +5816,11 @@ function showResultModal(level) {
       : isListening
       ? `${nextLevel?.id || "下一关"} · ${nextLevel?.title || "继续"}`
       : shouldPracticeFgBeforeStaff
-      ? `${staffReadiness.nextLevel?.id || "FG"} · ${staffReadiness.nextLevel?.title || "Fa/Sol 预备"}`
+      ? `${staffReadiness.nextLevel?.id || "FG"} · ${staffReadiness.nextLevel?.title || "F/G 预备"}`
       : shouldGoStaffAfterBase
       ? "小恐龙跳"
       : (isFinalLevel ? "月球基地" : `${nextLevel.id} · ${nextLevel.title}`),
-    nextHint: needsLevelCheckReplay ? "不亮目标键" : (isListening ? "继续修月亮小家" : (shouldPracticeFgBeforeStaff ? "先稳住 Fa/Sol" : (shouldGoStaffAfterBase ? "马上开始" : (isFinalLevel ? "全部关卡完成" : "已亮起"))))
+    nextHint: needsLevelCheckReplay ? "不亮目标键" : (isListening ? "继续修月亮小家" : (shouldPracticeFgBeforeStaff ? "先稳住 F/G" : (shouldGoStaffAfterBase ? "马上开始" : (isFinalLevel ? "全部关卡完成" : "已亮起"))))
   });
   openResultModal();
   restartResultMeter();
@@ -5861,13 +5883,13 @@ function showStaffResultModal() {
     ? `${remediation.message} 小恐龙会带你回去练一小段。`
     : needsCheckReplay
     ? "第一遍小恐龙已经带路。下一遍不亮目标键，自己看谱位找琴键。"
-    : "看谱位、读唱名、自己找到琴键，这次真的稳了。";
+    : "看谱位、读音名、自己找到琴键，这次真的稳了。";
   updateResultSummary({
     prizeName: remediation ? "星桥加固任务" : (needsCheckReplay ? "少提示复读" : staffCourse.reward),
     prizeImage: partImages.star,
     prizeColor: remediation?.level?.parts?.[0]?.color || "#FFD166",
     nextName: remediation
-      ? `${remediation.level?.id || "FG"} · ${remediation.level?.title || "Fa/Sol 预备"}`
+      ? `${remediation.level?.id || "FG"} · ${remediation.level?.title || "F/G 预备"}`
       : needsCheckReplay
       ? "S01 · 少提示复读"
       : "再练一次",
@@ -7305,7 +7327,7 @@ function startLevelCheckReplay() {
   resetLevel("check");
   els.feedback.classList.remove("good", "bad");
   els.feedback.textContent = "这次不亮目标键，自己读音名找键。";
-  if (els.dinoHint) els.dinoHint.textContent = "少提示复练：读唱名和音名，自己找键。";
+  if (els.dinoHint) els.dinoHint.textContent = "少提示复练：读音名，自己找键。";
   if (els.modeHint) els.modeHint.textContent = "少提示复练：错了才会临时亮目标。";
 }
 
@@ -7348,7 +7370,7 @@ function startStaffCheckReplay() {
     els.staffFeedback.classList.remove("good", "bad");
     els.staffFeedback.textContent = "这次不亮目标键，自己看谱跳过去。";
   }
-  if (els.dinoHint) els.dinoHint.textContent = "少提示复读：看谱位、读唱名、自己找键。";
+  if (els.dinoHint) els.dinoHint.textContent = "少提示复读：看谱位、读音名、自己找键。";
   if (els.modeHint) els.modeHint.textContent = "少提示复读：错了才会临时亮目标。";
 }
 
@@ -7590,12 +7612,12 @@ function listenLoop() {
   if (!detectedPitch) {
     setMicrophoneUi(audio, "输入：麦克风试听", "听到：再弹清楚一点");
   } else if (gateResult.state === "accepted") {
-    setMicrophoneUi(audio, "输入：麦克风", `听到：${detectedPitch.note.solfege}`);
+    setMicrophoneUi(audio, "输入：麦克风", `听到：${detectedPitch.note.name}`);
     handleInput(detectedPitch.note.midi, "麦克风");
   } else if (gateResult.state === "held") {
-    setMicrophoneUi(audio, "输入：麦克风听音", `听到：${detectedPitch.note.solfege} · 等琴音停一下`);
+    setMicrophoneUi(audio, "输入：麦克风听音", `听到：${detectedPitch.note.name} · 等琴音停一下`);
   } else {
-    setMicrophoneUi(audio, "输入：麦克风试听", `听到：${detectedPitch.note.solfege} · 稳一稳`);
+    setMicrophoneUi(audio, "输入：麦克风试听", `听到：${detectedPitch.note.name} · 稳一稳`);
   }
 
   audio.raf = requestAnimationFrame(listenLoop);

@@ -2,6 +2,45 @@
 
 This file records concrete pass/fail evidence for UI, teaching, and polish gates. It is not a substitute for the acceptance rules in `15_ACCEPTANCE_GATES.md`; it is the evidence trail.
 
+## 2026-07-12 - Overhaul 340c Route and Note-Name Correction
+
+Build/version: `overhaul-340c-p7`; product baseline remains `overhaul-340c` pending supervisor promotion.
+
+Scope:
+
+- `M08` remains the only blueprint level. `M01-M07` and `FG01-FG04` keep their physical world scenes.
+- Restored the complete M07 five-point route (`C D E D C`) and FG03 three-point route (`E F G`) while suppressing the duplicate star fixture.
+- M07 and FG03 now use one route character and one route-attached dinosaur dialogue instead of a second coach character.
+- Child-visible note identity uses letters only across keyboard keycaps, level/staff/garden surfaces, route nodes, feedback and transient effects. Dinosaur dialogue may retain solfege; parent evidence and non-leaking keyboard/staff ARIA retain dual identity.
+- Static startup/offline copy was updated so no solfege keycap or route label flashes before runtime render.
+- PWA runtime URLs and cache advanced to `star-dino-pwa-overhaul-340c-p7-v1`. No pitch, MIDI, microphone, note order, scoring, mastery, session, sound or Chapter 3 behavior changed.
+
+Focused evidence:
+
+- `check:child-note-names`: `55/55` across 1024x768 and 1194x834 DPR2, including normal, color-reduced and high-contrast modes; M07/FG03 letter sequences, one-character/one-dialogue policy, letter-only keycaps and dual-identity keyboard ARIA all pass.
+- `check:assembly-blueprint`: `39/39`; M07 and FG03 routes are visible without duplicate fixtures and only M08 retains a blueprint.
+- `check:workshop-identity`: `36/36`; `check:m01-hierarchy`: `17/17`; `check:staff-mini`: `20/20`; `check:staff-repair`: `27/27`; `check:staff-readability`: `13/13`.
+- `check:input-reliability`: `12/12`; `check:palette`: `17/17`; `check:xingya-suit`: `23/23`; `check:ipad-a11y`: `43/43`; `check:audio-settings`: `13/13`; `check:motion`: `19/19`; `check:contrast`: `9/9`.
+- `check:m03-garden`: `32/32`; `check:roof-route`: `97/97`; `check:chapter3-visible`: `74/74`; `check:chapter3-ls04`: `39/39`; `check:supervisor-339c`: `14/14`.
+- `check:sessions`: `72/72`; `check:clean-state`: `124/124`; `check:pwa-shell`: `7/7`; `check:quick` and `check:bundle:strict`: passed (`41` files, `1,641,265` runtime-asset bytes).
+
+Coordinate evidence:
+
+- Current Chapter 3 contract: `chapter3-media-zones-overhaul-340c-v1`, nine states, six viewports, zero failures, `runtimeIntegrationAllowed=false`, internal SHA-256 `a61253dcdb366f907afe64428baacbb7635f54974b7710ce7a21a2ad03ee5b70`, current file SHA-256 `248A3A36FB2E92424576ACFC901BCB9F166EB0C504914B7C2D764AE2A4805813`.
+- Consecutive Chapter 3 contract runs produced the same internal hash; only `generatedAt` changed. Historical `docs/30_CHAPTER3_MEDIA_ZONE_CONTRACT_340A_V2.json` remained byte-identical at SHA-256 `11299884B8C7837812C5968AD6C75F53A4F169A803C7CBF412A19FA4796E547B`.
+- Generic contract: `teaching-zones-overhaul-340c-v1`, six viewports, zero failures/errors, internal SHA-256 `6db90c11eada4733e2fb7a40bdad4fdd6599a60603960889ad0e43f599b4f1f1`.
+
+Screenshots:
+
+- `screenshots/child_note_names_340c/ipad-1024x768_M01.png`
+- `screenshots/child_note_names_340c/ipad-1024x768_M07.png`
+- `screenshots/child_note_names_340c/ipad-1024x768_FG03.png`
+- `screenshots/child_note_names_340c/ipad-1024x768_staff.png`
+- `screenshots/child_note_names_340c/ipad-1024x768_garden.png`
+- Matching 1194x834 DPR2 originals are in the same directory.
+
+Status: browser runtime and coordinate evidence `passed`; physical iPad Safari, real child/teacher review and external media clearance remain `missing`. LS05 and media runtime integration remain locked.
+
 ## 2026-07-12 - Overhaul 340c M08-Only Blueprint Boundary
 
 Build/version: `overhaul-340c`

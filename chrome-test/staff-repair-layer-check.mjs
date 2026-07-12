@@ -165,7 +165,7 @@ try {
 
     record(`${spec.id}: runtime is overhaul-340c`, stable.version.includes("overhaul-340c"), stable);
     record(`${spec.id}: repair state is explicit on app and stage`, stable.repairState === "repair" && stable.stageRepairState === "repair", stable);
-    record(`${spec.id}: central staff target remains the main task`, stable.currentPadVisible && stable.currentPadText.includes("Do"), stable);
+    record(`${spec.id}: central staff target remains the main task`, stable.currentPadVisible && stable.currentPadText.includes("C") && !stable.currentPadText.includes("Do"), stable);
     record(`${spec.id}: stable repair has exactly two persistent guidance surfaces`, stable.guidanceCount === 2, stable);
     record(`${spec.id}: Xingya bubble carries the one scene-level Do/C repair`, stable.bubbleVisible && stable.bubbleContent.includes("Do/C"), stable);
     record(`${spec.id}: correct key locator is the only second repair system`, stable.targetLocatorVisible && stable.targetKeyLabelVisible, stable);

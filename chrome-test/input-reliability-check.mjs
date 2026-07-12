@@ -233,7 +233,7 @@ try {
   }));
   record(
     "parent panel exposes live microphone input without child-facing assessment language",
-    parentMicState.inputMode?.includes("麦克风") && parentMicState.heardState?.includes("Re") &&
+    parentMicState.inputMode?.includes("麦克风") && parentMicState.heardState?.includes("D") && !parentMicState.heardState?.includes("Re") &&
       parentMicState.privacyCopy.includes("本机") && parentMicState.privacyCopy.includes("不上传"),
     parentMicState
   );

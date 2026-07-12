@@ -2037,10 +2037,15 @@ html[data-motion="reduced"] #appShell .keyboard.real-piano .key.hint {
   }
 }
 
-/* M07, M08 and FG03 use the same grounded blueprint language as the early workshop. */
-#appShell.app-shell:not(.staff-mode)[data-level-id="M07"] .memory-star-route,
-#appShell.app-shell:not(.staff-mode)[data-level-id="FG03"] .fg-star-route,
+/* M07 and FG03 keep their world routes; only M08 replaces its legacy route with the roof blueprint. */
 #appShell.app-shell:not(.staff-mode)[data-level-id="M08"] .roof-scale-route {
+  display: none !important;
+}
+
+#appShell.app-shell:not(.staff-mode)[data-level-id="M07"] #baseBuild .build-slot,
+#appShell.app-shell:not(.staff-mode)[data-level-id="M07"] #baseBuild .scene-fixture-stars,
+#appShell.app-shell:not(.staff-mode)[data-level-id="FG03"] #baseBuild .build-slot,
+#appShell.app-shell:not(.staff-mode)[data-level-id="FG03"] #baseBuild .scene-fixture-stars {
   display: none !important;
 }
 
@@ -2596,9 +2601,26 @@ html[data-contrast="more"] #appShell.app-shell .keyboard.real-piano .white-key {
   stroke-dasharray: none !important;
 }
 
-#appShell.app-shell:not(.staff-mode)[data-level-id="M07"] .memory-route-label,
-#appShell.app-shell:not(.staff-mode)[data-level-id="FG03"] .fg-route-label,
 #appShell.app-shell:not(.staff-mode)[data-level-id="M08"] .roof-route-label {
+  display: none !important;
+}
+
+#appShell.app-shell:not(.staff-mode)[data-level-id="M07"] .memory-route-label,
+#appShell.app-shell:not(.staff-mode)[data-level-id="FG03"] .fg-route-label {
+  display: grid !important;
+  place-items: center !important;
+}
+
+#appShell.app-shell:not(.staff-mode)[data-level-id="M07"] .coach-overlay,
+#appShell.app-shell:not(.staff-mode)[data-level-id="FG03"] .coach-overlay {
+  display: none !important;
+}
+
+/* Route scenes use the route character as their only child-facing coach. */
+#appShell.app-shell:not(.staff-mode)[data-level-id="M07"] #coachDino,
+#appShell.app-shell:not(.staff-mode)[data-level-id="M07"] #coachBubble,
+#appShell.app-shell:not(.staff-mode)[data-level-id="FG03"] #coachDino,
+#appShell.app-shell:not(.staff-mode)[data-level-id="FG03"] #coachBubble {
   display: none !important;
 }
 
@@ -3074,8 +3096,6 @@ html[data-contrast="more"] #appShell.app-shell .keyboard.real-piano .white-key {
   transform-origin: center bottom !important;
 }
 
-#appShell.app-shell:not(.staff-mode)[data-level-id="M07"] .memory-star-route,
-#appShell.app-shell:not(.staff-mode)[data-level-id="FG03"] .fg-star-route,
 #appShell.app-shell:not(.staff-mode)[data-level-id="M08"] .roof-scale-route {
   display: none !important;
 }

@@ -102,14 +102,14 @@ try {
         state.coachRect.left >= state.yardRect.left - 2 && state.coachRect.right <= state.yardRect.right + 2 &&
         state.coachRect.top >= state.yardRect.top - 2 && state.coachRect.bottom <= state.yardRect.bottom + 2);
       const keyOrder = state.primaryKeys.map((key) => key.primary).join("");
-      const solfegeOrder = state.primaryKeys.map((key) => key.secondary).join(",");
+      const secondaryOrder = state.primaryKeys.map((key) => key.secondary).join("");
 
       record(`${viewport.id}: runs the 340c shell`, state.runtimeVersion.includes("overhaul-340c"), state);
       record(`${viewport.id}: story card contains the story problem without a duplicate identity row`, state.storyIdentitySuppressed === "true" && state.storyCueCount === 0 && !/[A-G]|Do|Re|Mi|Fa|Sol|黑键/.test(state.storyText), state);
-      record(`${viewport.id}: hanging part gives C priority with Do retained`, state.badge.visible && state.badge.primary === "C" && state.badge.secondary === "Do", state.badge);
+      record(`${viewport.id}: hanging part shows only the C note name`, state.badge.visible && state.badge.primary === "C" && state.badge.secondary === "", state.badge);
       record(`${viewport.id}: Xingya owns the only initial solfege prompt`, state.coachText.includes("唱 Do") && !state.coachText.includes("C") && !state.coachText.includes("黑"), state);
       record(`${viewport.id}: duplicate M01 identity cards and build-slot letter stay hidden`, !state.targetCardVisible && !state.stageOrbVisible && !state.currentSlotLetterVisible, state);
-      record(`${viewport.id}: real piano keys use C-G as primary labels with solfege secondary`, keyOrder === "CDEFG" && solfegeOrder === "Do,Re,Mi,Fa,Sol", state.primaryKeys);
+      record(`${viewport.id}: real piano keys show only C-G note names`, keyOrder === "CDEFG" && secondaryOrder === "", state.primaryKeys);
       record(`${viewport.id}: larger Xingya remains inside the scene`, dinoContained && (state.coachRect?.width || 0) >= 140 && (state.coachRect?.height || 0) >= 140, { coachRect: state.coachRect, yardRect: state.yardRect });
       record(`${viewport.id}: M01 hierarchy has no page overflow`, !state.horizontalOverflow && !state.verticalOverflow, state);
       await page.screenshot({ path: `${screenshotPrefix}_${viewport.id}.png`, fullPage: false });

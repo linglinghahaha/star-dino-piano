@@ -178,15 +178,24 @@ async function readCoachIdleState() {
       const rect = element.getBoundingClientRect();
       return rect.width > 0 && rect.height > 0;
     };
-    const dialog = document.querySelector("#coachBubble");
-    const dino = document.querySelector("#coachDino");
+    const levelId = document.querySelector("#appShell")?.dataset.levelId;
+    const dialog = levelId === "M07"
+      ? document.querySelector("#memoryStarRoute .route-idle-dialog")
+      : levelId === "FG03"
+      ? document.querySelector("#fgStarRoute .route-idle-dialog")
+      : document.querySelector("#coachBubble");
+    const dino = levelId === "M07"
+      ? document.querySelector("#memoryStarRoute .memory-route-dino")
+      : levelId === "FG03"
+      ? document.querySelector("#fgStarRoute .fg-route-dino")
+      : document.querySelector("#coachDino");
     const dialogRect = dialog?.getBoundingClientRect();
     const dinoRect = dino?.getBoundingClientRect();
     const overlapWidth = dialogRect && dinoRect ? Math.max(0, Math.min(dialogRect.right, dinoRect.right) - Math.max(dialogRect.left, dinoRect.left)) : 0;
     const overlapHeight = dialogRect && dinoRect ? Math.max(0, Math.min(dialogRect.bottom, dinoRect.bottom) - Math.max(dialogRect.top, dinoRect.top)) : 0;
     return {
       stage: document.querySelector("#appShell")?.dataset.idleHint,
-      levelId: document.querySelector("#appShell")?.dataset.levelId,
+      levelId,
       dialogStage: dialog?.dataset.idleStage,
       text: dialog?.innerText?.replace(/\n+/g, " / ").trim() || "",
       dialogVisible: isVisible(dialog),
@@ -251,7 +260,7 @@ try {
     };
   });
   record("prototype loads the 340c runtime version", m02Initial.version?.includes("overhaul-340c"), m02Initial);
-  record("current workshop part gives C priority while retaining Do", m02Initial.letter === "C" && m02Initial.solfege === "Do", m02Initial);
+  record("current workshop part shows C without visible solfege", m02Initial.letter === "C" && !m02Initial.solfege, m02Initial);
   record("part keeps the object label separate from note identity", m02Initial.objectLabel === "小灯", m02Initial);
   record("M02 keeps its original scene without a construction blueprint", m02Initial.blueprintHidden, m02Initial);
   record("part badge is contained and uses the approved C color", m02Initial.badgeContained && m02Initial.partColor === "#CB84FA", m02Initial);
@@ -268,7 +277,7 @@ try {
     blueprintHidden: document.querySelector("#buildBlueprint")?.hidden === true && document.querySelector("#buildBlueprint")?.childElementCount === 0,
     placedWorldSlots: document.querySelectorAll("#baseBuild .build-slot.placed").length
   }));
-  record("next part updates to D with Re retained", m02AfterC.hanging.letter === "D" && m02AfterC.hanging.solfege === "Re", m02AfterC);
+  record("next part updates to D without visible solfege", m02AfterC.hanging.letter === "D" && !m02AfterC.hanging.solfege, m02AfterC);
   record("real scene keeps placed C while current D appears without a blueprint", m02AfterC.blueprintHidden && m02AfterC.placedWorldSlots === 1, m02AfterC);
   await page.screenshot({ path: `${screenshotPrefix}_M02_after_C.png`, fullPage: false });
 
@@ -280,7 +289,7 @@ try {
     slotLetter: document.querySelector(".build-slot.current .slot-note-letter")?.textContent?.trim(),
     blueprintHidden: document.querySelector("#buildBlueprint")?.hidden === true && document.querySelector("#buildBlueprint")?.childElementCount === 0
   }));
-  record("color-reduced mode preserves C/Do text identity", reduced.badgeText === "CDo" && reduced.slotLetter === "C", reduced);
+  record("color-reduced mode preserves the C note-name identity", reduced.badgeText === "C" && reduced.slotLetter === "C", reduced);
   record("color-reduced mode removes color as the answer without adding a blueprint", reduced.badgeColor === "#5F7286" && reduced.slotColor === "#5F7286" && reduced.blueprintHidden, reduced);
   await playSequence([60, 62, 64]);
   await waitResult();
@@ -323,7 +332,7 @@ try {
     ...m03Wrong,
     sceneRepairSurfaces: m03WrongSceneSurfaces
   });
-  record("M03 wrong answer uses the target key as the only second repair system", m03Wrong.targetVisible === "true" && m03Wrong.targetKeyVisible && m03Wrong.targetKeyText.includes("Re") && m03Wrong.targetKeyText.includes("D") && m03Wrong.targetKeyText.includes("2黑中") && m03Wrong.targetHintLabelVisible, m03Wrong);
+  record("M03 wrong answer uses the target key as the only second repair system", m03Wrong.targetVisible === "true" && m03Wrong.targetKeyVisible && !m03Wrong.targetKeyText.includes("Re") && m03Wrong.targetKeyText.includes("D") && m03Wrong.targetKeyText.includes("2黑中") && m03Wrong.targetHintLabelVisible, m03Wrong);
   record("M03 wrong answer hides duplicate cards, part identity, toast, and answer particles", Object.values(m03Wrong.duplicateRepairVisibility).every((visible) => !visible) && m03Wrong.transientClutterCount === 0 && m03Wrong.hangingColor === "#5F7286" && m03Wrong.currentSlotColor === "#5F7286" && m03Wrong.hangingFilter.includes("grayscale") && m03Wrong.currentSlotArtFilter.includes("grayscale"), m03Wrong);
   record("M03 wrong and target key markers leave both key names readable", m03Wrong.wrongMarkerVisible && m03Wrong.wrongMarkerKeyNameOverlapRatio === 0 && m03Wrong.targetHintKeyNameOverlapRatio === 0, m03Wrong);
   await page.screenshot({ path: `${screenshotPrefix}_M03_wrong_revealed.png`, fullPage: false });
@@ -339,15 +348,15 @@ try {
   await page.waitForFunction(() => document.querySelector("#appShell")?.dataset.idleHint === "identity", null, { timeout: 9000 });
   const identityHint = await page.evaluate(() => ({
     stage: document.querySelector("#appShell")?.dataset.idleHint,
-    bubble: document.querySelector("#coachBubble")?.innerText?.replace(/\n+/g, " / "),
+    bubble: document.querySelector("#memoryStarRoute .route-idle-dialog")?.innerText?.replace(/\n+/g, " / "),
     visible: (() => {
-      const dialog = document.querySelector("#coachBubble");
+      const dialog = document.querySelector("#memoryStarRoute .route-idle-dialog");
       const rect = dialog?.getBoundingClientRect();
       return Boolean(dialog && rect && getComputedStyle(dialog).visibility !== "hidden" && rect.width > 0 && rect.height > 0);
     })(),
     targetVisible: document.querySelector("#keyboard")?.dataset.targetVisible
   }));
-  record("first idle hint is a visible dino dialog connecting solfege and letter", identityHint.stage === "identity" && identityHint.visible && identityHint.bubble?.includes("Do/C") && identityHint.bubble?.includes("C") && identityHint.targetVisible === "false", identityHint);
+  record("first idle hint is a visible dino dialog connecting solfege and letter", identityHint.stage === "identity" && identityHint.visible && identityHint.bubble?.includes("Do") && identityHint.bubble?.includes("C") && identityHint.targetVisible === "false", identityHint);
   await page.screenshot({ path: `${screenshotPrefix}_M07_idle_identity.png`, fullPage: false });
 
   await playSequence(m07Sequence, 280);
@@ -362,16 +371,16 @@ try {
   await page.waitForFunction(() => document.querySelector("#appShell")?.dataset.idleHint === "locator", null, { timeout: 13000 });
   const locatorHint = await page.evaluate(() => ({
     stage: document.querySelector("#appShell")?.dataset.idleHint,
-    bubble: document.querySelector("#coachBubble")?.innerText?.replace(/\n+/g, " / "),
+    bubble: document.querySelector("#memoryStarRoute .route-idle-dialog")?.innerText?.replace(/\n+/g, " / "),
     visible: (() => {
-      const dialog = document.querySelector("#coachBubble");
+      const dialog = document.querySelector("#memoryStarRoute .route-idle-dialog");
       const rect = dialog?.getBoundingClientRect();
       return Boolean(dialog && rect && getComputedStyle(dialog).visibility !== "hidden" && rect.width > 0 && rect.height > 0);
     })(),
     dinoHint: document.querySelector("#dinoHint")?.textContent,
     targetVisible: document.querySelector("#keyboard")?.dataset.targetVisible
   }));
-  record("second idle hint visibly gives the key locator without a permanent target key", locatorHint.stage === "locator" && locatorHint.visible && locatorHint.bubble?.includes("Do/C") && locatorHint.bubble?.includes("2") && locatorHint.targetVisible === "false", locatorHint);
+  record("second idle hint visibly gives the key locator without a permanent target key", locatorHint.stage === "locator" && locatorHint.visible && locatorHint.bubble?.includes("Do") && locatorHint.bubble?.includes("C") && locatorHint.bubble?.includes("两黑键") && locatorHint.targetVisible === "false", locatorHint);
   await page.screenshot({ path: `${screenshotPrefix}_M07_idle_locator.png`, fullPage: false });
 
   await playSequence(m07Sequence, 280);

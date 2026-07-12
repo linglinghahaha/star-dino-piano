@@ -58,7 +58,8 @@ async function readKeys() {
         boxShadow: style.boxShadow,
         opacity: Number(style.opacity),
         filter: style.filter,
-        letterColor: getComputedStyle(key.querySelector(".key-content span")).color,
+        letterColor: getComputedStyle(key.querySelector(".key-content strong")).color,
+        visibleText: key.querySelector(".key-content")?.innerText?.replace(/\s+/g, "").trim() || "",
         reserved: key.classList.contains("reserved-key")
       }];
     })
@@ -76,6 +77,7 @@ try {
     record(`${note} uses the approved palette color`, normal[note]?.noteColor === color, { expected: color, actual: normal[note] });
   }
   record("all seven key-edge shadows are color-specific", new Set(Object.values(normal).map((key) => key.boxShadow)).size === 7, normal);
+  record("keycaps use note-name letters without visible solfege", Object.entries(normal).every(([note, key]) => key.visibleText === note || (key.reserved && key.visibleText === `${note}后面`)), normal);
   record("A and B remain visibly reserved", normal.A?.reserved && normal.B?.reserved && normal.A.opacity < 0.7 && normal.B.opacity < 0.7, { A: normal.A, B: normal.B });
   record("normal keyboard has no horizontal overflow", await page.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth + 1));
   await page.screenshot({ path: `${screenshotPrefix}_normal.png`, fullPage: false });

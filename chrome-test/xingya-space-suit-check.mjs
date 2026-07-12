@@ -174,8 +174,21 @@ try {
 
   for (const level of ["M07", "M08", "FG03"]) {
     await gotoMode(page, `?level=${level}&check=xingya-suit-323a-route`);
-    const coachState = await readImageState(page, "#coachDino");
-    record(`${level} grounded coach uses sealed-suit art`, coachState.src?.endsWith("xingya-suit-point.webp") && coachState.rect.width >= 80 && coachState.rect.height >= 80, coachState);
+    const coachState = level === "M08"
+      ? await readImageState(page, "#coachDino")
+      : await page.evaluate((selector) => {
+          const element = document.querySelector(selector);
+          const rect = element?.getBoundingClientRect();
+          return {
+            backgroundImage: element ? getComputedStyle(element).backgroundImage : "",
+            rect: rect ? { left: rect.left, top: rect.top, right: rect.right, bottom: rect.bottom, width: rect.width, height: rect.height } : null
+          };
+        }, level === "M07" ? ".memory-route-dino" : ".fg-route-dino");
+    record(`${level} grounded coach uses sealed-suit art`,
+      level === "M08"
+        ? coachState.src?.endsWith("xingya-suit-point.webp") && coachState.rect.width >= 80 && coachState.rect.height >= 80
+        : coachState.backgroundImage?.includes("xingya-suit-point.webp") && coachState.rect?.width >= 80 && coachState.rect?.height >= 80,
+      coachState);
     if (level === "M08") {
       const m08Separation = await page.evaluate(() => {
         const dino = document.querySelector("#coachDino")?.getBoundingClientRect();

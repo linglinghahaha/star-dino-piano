@@ -79,6 +79,18 @@ try {
         hangingCard: document.querySelector("#hangingPartBadge b")?.textContent?.trim() || "",
         hangingVisible: visible("#hangingPart"),
         cartVisible: visible("#baseBuild .m03-wheel-complete"),
+        memoryRouteVisible: visible("#memoryStarRoute"),
+        memoryRouteNodes: document.querySelectorAll("#memoryStarRoute .memory-route-node").length,
+        memoryRouteLabels: [...document.querySelectorAll("#memoryStarRoute .memory-route-label strong")].map((label) => label.textContent?.trim() || ""),
+        memoryRouteDinoVisible: visible("#memoryStarRoute .memory-route-dino"),
+        fgRouteVisible: visible("#fgStarRoute"),
+        fgRouteNodes: document.querySelectorAll("#fgStarRoute .fg-route-node").length,
+        fgRouteLabels: [...document.querySelectorAll("#fgStarRoute .fg-route-label strong")].map((label) => label.textContent?.trim() || ""),
+        fgRouteDinoVisible: visible("#fgStarRoute .fg-route-dino"),
+        routeActionDialogVisible: visible(".route-action-dialog"),
+        coachDinoVisible: visible("#coachDino"),
+        coachBubbleVisible: visible("#coachBubble"),
+        starFixtureVisible: visible("#baseBuild .scene-fixture-stars"),
         targetVisible: document.querySelector("#keyboard")?.dataset.targetVisible || "",
         horizontalOverflow: document.documentElement.scrollWidth > document.documentElement.clientWidth + 1,
         verticalOverflow: document.documentElement.scrollHeight > document.documentElement.clientHeight + 1
@@ -131,6 +143,20 @@ try {
         m03Complete.cartVisible && m03Complete.blueprintHidden && m03Complete.blueprintChildCount === 0,
         m03Complete);
       await page.screenshot({ path: `${screenshotPrefix}_${viewport.id}_M03_complete.png`, fullPage: false });
+
+      await openLevel("M07");
+      const m07 = await readScene();
+      record(`${viewport.id}: M07 restores the five-node memory route without the duplicate star fixture`,
+        m07.memoryRouteVisible && m07.memoryRouteNodes === 5 && m07.memoryRouteLabels.join("") === "CDEDC" && m07.memoryRouteDinoVisible && m07.routeActionDialogVisible && !m07.coachDinoVisible && !m07.coachBubbleVisible && !m07.starFixtureVisible && m07.blueprintHidden,
+        m07);
+      await page.screenshot({ path: `${screenshotPrefix}_${viewport.id}_M07_memory_route.png`, fullPage: false });
+
+      await openLevel("FG03");
+      const fg03 = await readScene();
+      record(`${viewport.id}: FG03 restores the three-node star route and route character without the duplicate fixture`,
+        fg03.fgRouteVisible && fg03.fgRouteNodes === 3 && fg03.fgRouteLabels.join("") === "EFG" && fg03.fgRouteDinoVisible && fg03.routeActionDialogVisible && !fg03.coachDinoVisible && !fg03.coachBubbleVisible && !fg03.starFixtureVisible && fg03.blueprintHidden,
+        fg03);
+      await page.screenshot({ path: `${screenshotPrefix}_${viewport.id}_FG03_star_route.png`, fullPage: false });
 
       await openLevel("M08");
       const m08 = await readScene();
