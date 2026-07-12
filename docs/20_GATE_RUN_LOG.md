@@ -2,6 +2,42 @@
 
 This file records concrete pass/fail evidence for UI, teaching, and polish gates. It is not a substitute for the acceptance rules in `15_ACCEPTANCE_GATES.md`; it is the evidence trail.
 
+## 2026-07-12 - Overhaul 340d Evidence Resilience and Note-Name Boundary
+
+Baseline: follow-up to `af13deb` without changing lesson runtime, pitch, input, scoring, mastery, story or media behavior.
+
+Corrections:
+
+- Chapter 3 visible testing now installs an air-state observer before the entry click and proves the ordered `sealed -> scanning -> safe-open` transition. Scanning return and refresh cases wait for the actual state instead of sampling at a fixed 520 ms.
+- The 340D media-zone generator uses bounded 12-second phase waits that require DOM and persisted attempt agreement, with explicit session/phase/audio diagnostics on timeout. The final completion observer is armed before the last child input and requires the complete garden panel to be visibly present, so a stale marker on the map cannot pass.
+- Static `#staffFeedback` startup copy now says `读音名`; dinosaur dialogue, parent records and legal non-leaking ARIA dual identity remain unchanged.
+- The child note-name matrix covers M07 and FG03 initial, mixed and complete route states in normal, color-reduced and high-contrast modes at 1024x768 and 1194x834 DPR2. It scans DOM text, route attributes and visible pseudo-elements, and calculates cumulative ancestor opacity plus text/background contrast.
+- Color-reduced and no-reading audit labels are compact corner badges instead of inherited full-screen pseudo-element overlays. Auxiliary M07/FG03 route labels remain at cumulative opacity `>= 0.85` and contrast `>= 4.5`; normal-mode progress hierarchy is unchanged.
+- FG03 no-reading feedback now reads `data-note`, not `data-solfege`, so the non-dialogue pseudo-element displays `E` rather than `Mi`.
+- Historical 340C generators and contracts are frozen. Current gates write independent `overhaul-340d` contracts and screenshot directories.
+- PWA cache advanced to `star-dino-pwa-overhaul-340d-v1` for the corrected static shell.
+
+Evidence:
+
+- `check:chapter3-visible`: `74/74` with observer-based scanning evidence.
+- `check:child-note-names`: `160/160`, including all M07 `C-D-E-D-C` and FG03 `E-F-G` node states, two viewports, three visual modes, compact audit badges and no-reading pseudo-elements.
+- `check:chapter3-zones`: three consecutive complete six-viewport/nine-state 340D runs passed. Each produced internal SHA-256 `b73d2da45527ddec49a0b6a91f5a31251c2a1b95b77f67c5838e8f1a6108b9d7`; final file SHA-256 is `6FA71E298B580ED59DFD2B465BBDBD23B56449F3BC438597D03A52FF3BA1C891`.
+- Historical files remained byte-identical: 340A V2 SHA-256 `11299884B8C7837812C5968AD6C75F53A4F169A803C7CBF412A19FA4796E547B`; Chapter 3 340C SHA-256 `248A3A36FB2E92424576ACFC901BCB9F166EB0C504914B7C2D764AE2A4805813`; generic 340C SHA-256 `BE5D74A9765D1B6F3B6BF9E58EE322C204978F29B550ECE1A321459622A360C2`.
+- `check:chapter3-ls04`: `39/39`; PWA `7/7`; assembly/M08-only blueprint `39/39`; workshop identity `36/36`; M01 hierarchy `17/17`; staff readability `13/13`; iPad accessibility `43/43`; palette `17/17`; contrast `9/9`.
+- Generic 340D six-viewport contract passed with internal SHA-256 `1aafae3b27a3f9a8fb72db22619b65f4c981f24425b9bb5dabc15c9ac8d0bc3a`, file SHA-256 `D79E9A84C9D6A904C421AAA424BE3579A770F58AA625BE41D1A0DD7C71B800C5`.
+- `check:quick` and `check:bundle:strict` passed; strict bundle remains 41 files and 1,641,265 runtime-asset bytes.
+
+Auxiliary-mode screenshots:
+
+- `screenshots/child_note_names_340d/ipad-1024x768_M07_color-reduced_step-2.png`
+- `screenshots/child_note_names_340d/ipad-1024x768_M07_high-contrast_step-5.png`
+- `screenshots/child_note_names_340d/ipad-1024x768_FG03_high-contrast_step-0.png`
+- `screenshots/child_note_names_340d/ipad-1024x768_FG03_high-contrast_step-3.png`
+- `screenshots/child_note_names_340d/ipad-1024x768_FG03_no-reading.png`
+- Matching 1194x834 DPR2 originals are in the same directory.
+
+Status: `passed_browser`; physical iPad Safari and external child/teacher review remain `missing`. `runtimeIntegrationAllowed=false`; LS05 remains locked.
+
 ## 2026-07-12 - Overhaul 340c Route and Note-Name Correction
 
 Build/version: `overhaul-340c-p7`; product baseline remains `overhaul-340c` pending supervisor promotion.

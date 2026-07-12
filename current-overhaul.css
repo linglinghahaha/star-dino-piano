@@ -2624,6 +2624,109 @@ html[data-contrast="more"] #appShell.app-shell .keyboard.real-piano .white-key {
   display: none !important;
 }
 
+/* Audit labels are compact diagnostics, never a full-scene overlay. */
+body[data-audit="color-reduced"] #appShell.app-shell::after,
+body[data-audit="no-reading"] #appShell.app-shell::after {
+  inset: auto 10px 8px auto !important;
+  top: auto !important;
+  left: auto !important;
+  right: 10px !important;
+  bottom: 8px !important;
+  width: auto !important;
+  min-width: 0 !important;
+  max-width: 170px !important;
+  height: auto !important;
+  min-height: 0 !important;
+  max-height: 34px !important;
+  margin: 0 !important;
+  padding: 3px 7px !important;
+  border: 0 !important;
+  outline: 0 !important;
+  border-radius: 999px !important;
+  box-shadow: none !important;
+  filter: none !important;
+  clip-path: none !important;
+  transform: none !important;
+}
+
+/* Accessibility audits keep every route letter readable, including future stops. */
+body[data-audit="color-reduced"] #appShell.app-shell[data-level-id="M07"] .memory-route-label,
+body[data-audit="high-contrast"] #appShell.app-shell[data-level-id="M07"] .memory-route-label,
+body[data-audit="color-reduced"] #appShell.app-shell[data-level-id="FG03"] .fg-route-label,
+body[data-audit="high-contrast"] #appShell.app-shell[data-level-id="FG03"] .fg-route-label {
+  opacity: 0.94 !important;
+  color: #17324f !important;
+  background: rgba(255, 255, 255, 0.96) !important;
+  border-color: #ffffff !important;
+}
+
+body[data-audit="color-reduced"] #appShell.app-shell[data-level-id="M07"] .memory-route-label strong,
+body[data-audit="high-contrast"] #appShell.app-shell[data-level-id="M07"] .memory-route-label strong,
+body[data-audit="color-reduced"] #appShell.app-shell[data-level-id="FG03"] .fg-route-label strong,
+body[data-audit="high-contrast"] #appShell.app-shell[data-level-id="FG03"] .fg-route-label strong {
+  color: #17324f !important;
+}
+
+body[data-audit="color-reduced"] #appShell.app-shell:not(.staff-mode)[data-level-id="M07"] .memory-route-node .memory-route-label,
+body[data-audit="high-contrast"] #appShell.app-shell:not(.staff-mode)[data-level-id="M07"] .memory-route-node .memory-route-label,
+body[data-audit="color-reduced"] #appShell.app-shell:not(.staff-mode)[data-level-id="FG03"] .fg-route-node .fg-route-label,
+body[data-audit="high-contrast"] #appShell.app-shell:not(.staff-mode)[data-level-id="FG03"] .fg-route-node .fg-route-label {
+  opacity: 0.94 !important;
+  color: #17324f !important;
+  background: rgba(255, 255, 255, 0.96) !important;
+  border-color: #ffffff !important;
+}
+
+body[data-audit="color-reduced"] #appShell.app-shell:not(.staff-mode)[data-level-id="M07"] .memory-route-node .memory-route-label strong,
+body[data-audit="high-contrast"] #appShell.app-shell:not(.staff-mode)[data-level-id="M07"] .memory-route-node .memory-route-label strong,
+body[data-audit="color-reduced"] #appShell.app-shell:not(.staff-mode)[data-level-id="FG03"] .fg-route-node .fg-route-label strong,
+body[data-audit="high-contrast"] #appShell.app-shell:not(.staff-mode)[data-level-id="FG03"] .fg-route-node .fg-route-label strong {
+  color: #17324f !important;
+}
+
+/* No-reading replaces the hidden FG03 label with the note name, never solfege. */
+body[data-audit="no-reading"] #appShell.app-shell[data-level-id="FG03"] .fg-route-node.current::after {
+  content: attr(data-note) !important;
+}
+
+body[data-audit="color-reduced"] #appShell.app-shell:not(.staff-mode)[data-level-id="M07"] .memory-route-node,
+body[data-audit="color-reduced"] #appShell.app-shell:not(.staff-mode)[data-level-id="FG03"] .fg-route-node,
+html[data-contrast="more"] #appShell.app-shell:not(.staff-mode)[data-level-id="M07"] .memory-route-node,
+html[data-contrast="more"] #appShell.app-shell:not(.staff-mode)[data-level-id="FG03"] .fg-route-node {
+  opacity: 1 !important;
+}
+
+html[data-contrast="more"] #appShell.app-shell:not(.staff-mode)[data-level-id="M07"] .memory-route-node .memory-route-label,
+html[data-contrast="more"] #appShell.app-shell:not(.staff-mode)[data-level-id="FG03"] .fg-route-node .fg-route-label {
+  opacity: 1 !important;
+  color: #102b47 !important;
+  background: #ffffff !important;
+  border-color: #102b47 !important;
+}
+
+html[data-contrast="more"] #appShell.app-shell:not(.staff-mode)[data-level-id="M07"] .memory-route-node .memory-route-label strong,
+html[data-contrast="more"] #appShell.app-shell:not(.staff-mode)[data-level-id="FG03"] .fg-route-node .fg-route-label strong {
+  color: #102b47 !important;
+}
+
+body[data-audit="color-reduced"] #appShell.app-shell:not(.staff-mode)[data-level-id="M07"][data-level-run-mode="check"] .memory-route-node:is(.current, .done, .upcoming) .memory-route-label,
+body[data-audit="color-reduced"] #appShell.app-shell:not(.staff-mode)[data-level-id="FG03"][data-level-run-mode="check"] .fg-route-node:is(.current, .done, .upcoming) .fg-route-label,
+html[data-contrast="more"] #appShell.app-shell:not(.staff-mode)[data-level-id="M07"][data-level-run-mode="check"] .memory-route-node:is(.current, .done, .upcoming) .memory-route-label,
+html[data-contrast="more"] #appShell.app-shell:not(.staff-mode)[data-level-id="FG03"][data-level-run-mode="check"] .fg-route-node:is(.current, .done, .upcoming) .fg-route-label {
+  opacity: 1 !important;
+  color: #102b47 !important;
+  background: #ffffff !important;
+  border-color: #102b47 !important;
+}
+
+body[data-audit="color-reduced"] #appShell.app-shell:not(.staff-mode)[data-level-id="M07"][data-level-run-mode="check"] .memory-route-node:is(.current, .done, .upcoming) .memory-route-label strong,
+body[data-audit="color-reduced"] #appShell.app-shell:not(.staff-mode)[data-level-id="FG03"][data-level-run-mode="check"] .fg-route-node:is(.current, .done, .upcoming) .fg-route-label strong,
+html[data-contrast="more"] #appShell.app-shell:not(.staff-mode)[data-level-id="M07"][data-level-run-mode="check"] .memory-route-node:is(.current, .done, .upcoming) .memory-route-label strong,
+html[data-contrast="more"] #appShell.app-shell:not(.staff-mode)[data-level-id="FG03"][data-level-run-mode="check"] .fg-route-node:is(.current, .done, .upcoming) .fg-route-label strong {
+  color: #102b47 !important;
+  -webkit-text-fill-color: #102b47 !important;
+}
+
 #appShell.app-shell:not(.staff-mode)[data-level-id="M07"] .memory-route-dino,
 #appShell.app-shell:not(.staff-mode)[data-level-id="FG03"] .fg-route-dino,
 #appShell.app-shell:not(.staff-mode)[data-level-id="M08"] .roof-route-dino {

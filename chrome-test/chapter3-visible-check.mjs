@@ -150,6 +150,39 @@ async function snapshot(page) {
   });
 }
 
+async function installAirStateObserver(page) {
+  await page.evaluate(() => {
+    window.__chapter3AirTransitions = [];
+    window.__chapter3AirObserver?.disconnect();
+    const scene = document.querySelector("#gardenScene");
+    if (!scene) return;
+    const capture = () => {
+      const value = scene.dataset.airState || "";
+      if (value && window.__chapter3AirTransitions.at(-1) !== value) window.__chapter3AirTransitions.push(value);
+    };
+    capture();
+    window.__chapter3AirObserver = new MutationObserver(capture);
+    window.__chapter3AirObserver.observe(scene, { attributes: true, attributeFilter: ["data-air-state"] });
+  });
+}
+
+async function waitForAirState(page, expected, timeout = 5000) {
+  try {
+    await page.waitForFunction((value) => document.querySelector("#gardenScene")?.dataset.airState === value, expected, { timeout });
+  } catch (error) {
+    const diagnostics = await page.evaluate(() => ({
+      current: document.querySelector("#gardenScene")?.dataset.airState || "",
+      transitions: window.__chapter3AirTransitions || [],
+      runtime: JSON.parse(localStorage.getItem("starDinoSessionRuntime") || "{}")
+    }));
+    throw new Error(`Timed out waiting for air state ${expected}: ${JSON.stringify(diagnostics)}`, { cause: error });
+  }
+}
+
+async function airTransitions(page) {
+  return page.evaluate(() => [...(window.__chapter3AirTransitions || [])]);
+}
+
 async function inspectGardenCharacter(page) {
   return page.evaluate(async () => {
     const image = document.querySelector("#gardenXingyaImage");
@@ -197,6 +230,8 @@ record("Garden entry meets the child touch-target minimum", view.markerRect?.wid
 record("Seeing and refreshing the entrance does not unlock audio", view.audioContexts === 0 && !view.audioGesture, view);
 await main.page.screenshot({ path: path.join(screenshotDir, "garden_entry_1024x768.png") });
 
+await installAirStateObserver(main.page);
+const mainScanningObserved = waitForAirState(main.page, "scanning");
 await main.page.locator("#gardenRestMarker").click();
 view = await snapshot(main.page);
 record("Entrance gesture creates exactly one formal C3-01", view.active?.bundleId === "C3-01" && view.active.actions?.length === 2 && view.history.filter((item) => item.bundleId === "C3-01").length === 0, view);
@@ -212,14 +247,16 @@ record("Air check begins sealed with no unapproved media", view.airState === "se
 record("Sealed arrival uses the sealed-suit character asset without a second fake helmet layer", view.gardenCharacterSrc.endsWith("xingya-suit-point.webp") && view.gardenCharacterAssetState === "sealed-suit" && view.fakeEquipmentLayers === 0, view);
 const sealedCharacterSrc = view.gardenCharacterSrc;
 await main.page.screenshot({ path: path.join(screenshotDir, "air_check_sealed_1024x768.png") });
-await main.page.waitForTimeout(520);
+await mainScanningObserved;
 view = await snapshot(main.page);
-record("Air check reaches scanning", view.airState === "scanning", view);
+let observedAirStates = await airTransitions(main.page);
+record("Air check reaches scanning", view.airState === "scanning" && observedAirStates.includes("sealed") && observedAirStates.includes("scanning"), { view, observedAirStates });
 record("Scanning keeps the same sealed-suit bitmap without stacking fake equipment", view.gardenCharacterSrc === sealedCharacterSrc && view.gardenCharacterAssetState === "sealed-suit" && view.fakeEquipmentLayers === 0, view);
 await main.page.screenshot({ path: path.join(screenshotDir, "air_check_scanning_1024x768.png") });
-await main.page.waitForTimeout(900);
+await waitForAirState(main.page, "safe-open");
 view = await snapshot(main.page);
-record("Air check converges to safe-open before LS01 input", view.airState === "safe-open" && view.lesson === "LS01" && view.targetVisible === "true", view);
+observedAirStates = await airTransitions(main.page);
+record("Air check converges to safe-open before LS01 input", view.airState === "safe-open" && view.lesson === "LS01" && view.targetVisible === "true" && observedAirStates.indexOf("sealed") < observedAirStates.indexOf("scanning") && observedAirStates.indexOf("scanning") < observedAirStates.indexOf("safe-open"), { view, observedAirStates });
 const safeOpenCharacter = await inspectGardenCharacter(main.page);
 record("Safe-open switches from the sealed suit to the approved garden-mode runtime asset", view.gardenCharacterAssetState === "garden-mode" && view.gardenCharacterSrc.endsWith("xingya-garden-invite-v1.webp") && view.gardenCharacterSrc !== sealedCharacterSrc && !view.mediaRefs.some((src) => /concepts\/runtime-candidates\//.test(src)), { view, safeOpenCharacter });
 record("Garden-mode runtime asset matches the approved prototype hash and transparent dimensions", safeOpenCharacter?.sha256 === "1228082D4DF2BF576ED916B16950799296A975279ED6EFC554F6BB9EDDE88EBA" && safeOpenCharacter?.naturalWidth === 512 && safeOpenCharacter?.naturalHeight === 512 && safeOpenCharacter?.corners?.every((alpha) => alpha === 0), safeOpenCharacter);
@@ -292,10 +329,13 @@ record("Completed map state has no new Chapter 3 active session", view.history.f
 await main.page.screenshot({ path: path.join(screenshotDir, "garden_complete_map_1024x768.png") });
 await main.context.close();
 
-async function runPreLs01ReturnCase(id, prepare) {
+async function runPreLs01ReturnCase(id, expectedState, prepare = async () => {}) {
   const probe = await makePage();
   await seed(probe.page);
+  await installAirStateObserver(probe.page);
+  const stateObserved = waitForAirState(probe.page, expectedState);
   await probe.page.locator("#gardenRestMarker").click();
+  await stateObserved;
   await prepare(probe.page);
   const beforeReturn = await snapshot(probe.page);
   await probe.page.locator("#mapReturn").click();
@@ -322,17 +362,10 @@ async function runPreLs01ReturnCase(id, prepare) {
   await probe.context.close();
 }
 
-await runPreLs01ReturnCase("sealed", async (page) => {
-  await page.waitForTimeout(80);
-});
-await runPreLs01ReturnCase("scanning", async (page) => {
-  await page.waitForTimeout(520);
-});
-await runPreLs01ReturnCase("safe_open_zero_input", async (page) => {
-  await page.waitForTimeout(1450);
-});
-await runPreLs01ReturnCase("one_wrong", async (page) => {
-  await page.waitForTimeout(1450);
+await runPreLs01ReturnCase("sealed", "sealed");
+await runPreLs01ReturnCase("scanning", "scanning");
+await runPreLs01ReturnCase("safe_open_zero_input", "safe-open");
+await runPreLs01ReturnCase("one_wrong", "safe-open", async (page) => {
   await page.locator('.key.white-key[data-midi="62"]').click();
   await page.waitForTimeout(120);
 });
@@ -474,8 +507,10 @@ await voluntary.context.close();
 
 const recovery = await makePage();
 await seed(recovery.page);
+await installAirStateObserver(recovery.page);
+const recoveryScanningObserved = waitForAirState(recovery.page, "scanning");
 await recovery.page.locator("#gardenRestMarker").click();
-await recovery.page.waitForTimeout(520);
+await recoveryScanningObserved;
 const scanning = await snapshot(recovery.page);
 await recovery.page.reload({ waitUntil: "domcontentloaded", timeout: 12000 });
 await recovery.page.waitForSelector("#bootLoader", { state: "hidden", timeout: 12000 });
