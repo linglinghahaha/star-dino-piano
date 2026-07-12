@@ -48,7 +48,7 @@
 两关都使用同一四段循环，但世界物件和教学焦点不同：
 
 1. `发现`：孩子从地图明确点击进入，创建唯一正式 session；没有自动进入或无手势教学音。
-2. `带路`：先看见、听见两个候选的可见模型，普通界面只显示字母，星芽气泡可说唱名；该段不计四次 check。
+2. `带路`：先看见、听见两个候选的可见模型，再由孩子分别在真实键盘上找到并按一次；普通界面只显示字母，星芽气泡可说唱名；这两个 guided step 只写教学观察，不计四次 check。
 3. `自己听`：完成四次受约束隐藏呼叫；目标播放结束后才开放触屏、MIDI 或实验麦克风输入。
 4. `故事停点`：世界物件给出完整结果，随后自动回地图休息；没有结果弹层、关闭、继续或下一关按钮。
 
@@ -61,7 +61,8 @@
 - 画面同时提供普通字母 `C`、`G` 和真实键盘上的两个键位家；星芽气泡可说 Do、Sol。
 - 中央回声石按相同音色、力度、时长和中央声像先后示范 C4、G4。
 - 两块远石保持固定位置和同等视觉权重；“近/远”是故事地理，不得用目标声像、朝向、冒芽或运动编码答案。
-- 可让孩子分别按一次 C、G 做可见回声；这些输入只写 guided/played 观察，不计四次 check、stable 或 retained。
+- 孩子必须分别按一次 C、G 完成两个可见 guided step；每一步同时建立字母音名、星芽唱名、声音和真实键位的联系。这些输入只写 guided/played 观察，不计四次 check、stable 或 retained。
+- 带路第一次错按只柔和重播当前音并同时保留 C/G 两个键位家；再次错按或长等待时只完成中性小结果并回地图休息，不进入隐藏 check。下一次明确点击创建新 session，并从两个 guided step 重新开始。
 
 ### 四次隐藏呼叫
 
@@ -74,7 +75,7 @@
 
 ### Stable
 
-同一完整 check session 内至少 `3/4` 首次有效孩子回答正确，且无提前目标揭示、strong、modeled、visual-assist 或实验麦克风推动。普通错误后自行修复可完成故事，但不得回填该题 qualifying correct。LS06 只证明“能比较 C/G 两个已知声音并找键”，不得写成高低音、音区、绝对音感或跨八度能力。
+同一完整 check session 内至少 `3/4` 首次有效孩子回答正确，且本 session 已完成两个不计分 guided step，并且无提前目标揭示、strong、modeled、visual-assist 或实验麦克风推动。普通错误后自行修复可完成故事，但不得回填该题 qualifying correct。LS06 只证明“能比较 C/G 两个已知声音并找键”，不得写成高低音、音区、绝对音感或跨八度能力。
 
 ## 六、LS07：挨着睡的 E 和 F
 
@@ -83,7 +84,8 @@
 - 画面同时显示普通字母 `E`、`F`，以及 E 在两黑键右侧、F 在三黑键左侧的边界关系；星芽气泡可说 Mi、Fa。
 - 中央露珠用相同音色、力度、时长和声像分别示范 E4、F4。
 - 两朵边界花在目标播放前保持同样姿势、大小和亮度；可见边界图属于不计分带路，不能常驻在隐藏 check 中。
-- 孩子可分别按一次 E、F 做可见回声；这些输入只写 guided/played 观察。
+- 孩子必须分别按一次 E、F 完成两个可见 guided step；每一步同时建立字母音名、星芽唱名、黑键组边界和真实键位的联系。这些输入只写 guided/played 观察，不计四次 check、stable 或 retained。
+- 带路第一次错按只柔和重播当前音并继续等权显示 E/F 边界；再次错按或长等待时只完成中性小结果并回地图休息，不进入隐藏 check。下一次明确点击创建新 session，并从两个 guided step 重新开始。
 
 ### 四次隐藏呼叫
 
@@ -95,7 +97,7 @@
 
 ### Stable
 
-同一完整 check session 内至少 `3/4` 首次有效孩子回答正确，且无提前边界答案、strong、modeled、visual-assist 或实验麦克风推动。LS07 要把“声音比较”和“键盘边界帮助”分开记录；使用边界强帮助后可以完成故事，但不能称听辨稳定。
+同一完整 check session 内至少 `3/4` 首次有效孩子回答正确，且本 session 已完成两个不计分 guided step，并且无提前边界答案、strong、modeled、visual-assist 或实验麦克风推动。LS07 要把必经的“开场可见边界教学”和隐藏作答后的“边界强帮助”分开记录；前者不阻断 stable，后者可以完成故事但不能称听辨稳定。
 
 ## 七、孩子可见身份规则
 
@@ -164,6 +166,8 @@
 
 - `responseMs` 只作观察；速度不判错、不扣奖励、不参与 stable/retained。
 - guided 与 check 证据分开，visible-guide 不进入 check 分母。
+- guided step 必须写入 `levelId`、`bundleId`、真实 `sessionId`、`phaseRole=guide`、`targetMidi`、`inputRoute`、孩子实际输入、正确与否、repair 和时间；两个 guided step 完成后才可开始 hidden check。
+- 每次进入或 resume 都新增本 session 的 `guideRun`；不能只保留一个跨 session 的 `guidePlayed=true`。完成证据、partial-rest 和 resume 都要保留各次 `guideRun` 的原 session 归属。
 - 错后修对保留在 child input history，但不能覆盖 first response。
 - resume 前后的 call 保留各自真实 sessionId，最终故事汇总不得改写旧 call 归属。
 - 历史 stable/retained 不因后来困难删除；当天困难单独写 needsPractice。
@@ -180,7 +184,7 @@ LS06 必须显示：
 LS07 必须显示：
 
 - `E/F 相邻声音比较 · 键盘边界` 或等价准确名称；
-- 声音首答与边界帮助是否使用分开呈现；
+- 声音首答、开场 E/F 可见边界教学是否完成、隐藏作答后是否使用边界强帮助三者分开呈现；
 - played、stable、retained、today-needs-practice；
 - 不把可见边界帮助称作听辨成功。
 
@@ -209,14 +213,14 @@ LS07 必须显示：
 
 1. LS05 完成后只解锁 LS06；LS06 完成回地图后才解锁 LS07；无 LS08。
 2. 地图点击才创建 session，刷新、根地址、debug URL 不自动播放或写证据。
-3. 两关 visible-guide 不计四次 check、stable 或 retained；困难带路提前休息。
+3. 两关各有两个真实 guided step，正确完成后才进入 hidden check；guided 不计四次 check、stable 或 retained，第二次错按或长等待会提前休息，resume 新 session 重新完成整段带路。
 4. LS06 C/G 各两次，LS07 E/F 各两次，seed 可复现且不泄露剩余频次。
 5. target-playing 输入只记 observation，awaiting-response 才评分。
 6. 首答计分、错后修对不回填、`3/4` stable、strong/modeled/mic/visual-assist 阻断。
 7. pair 两种方向、候选外/错误八度、同权样式和无固定目标位置。
 8. call-local repair 重置，地图/刷新连续性，modeled rest 跨 session 续做但不拼 stable。
 9. sound-paused、音量 0、AudioContext 失败、touch/MIDI/mic、听力辅助非评分。
-10. 家长证据、每题 sessionId/responseMs/timingUsedForMastery、历史 stable 保留。
+10. 家长证据、每题 sessionId/responseMs/timingUsedForMastery、每次 guideRun 的真实 sessionId、LS07 开场边界教学与答后边界强帮助分离、历史 stable 保留。
 11. 非星芽孩子表面只显示音名字母；隐藏 DOM/ARIA/class/data/伪元素无目标泄漏。
 12. 无结果弹层、无下一关按钮、无 LS08、无未批准媒体路径。
 
