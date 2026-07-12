@@ -1,6 +1,26 @@
 # 星龙工坊整体调度与独立审查规则
 
-状态：2026-07-13 调度重排继续生效；`overhaul-341a` 已完成主管独立复核并晋升为最新浏览器实现基线。它在 `340d` 的第一、二章、LS01-LS04、音名-only 和确定性证据基础上，完成独立 `C3-04 / LS05` C/D/E 三音听后找键。当前唯一运行工作切换为 `C3-05 / LS06` 与 `C3-06 / LS07`；LS08、正式媒体集成、全局重构和第四章继续锁定。媒体任务可并行制作 LS05 花粉铃/三花透明 source-clearance 候选，但仍禁止 runtime；LS04 植物/声源提取包仍为 `rejected_extraction / runtimeApproval=false`，现有离线音频仍缺人工耳机/扬声器/iPad 听审。没有远程 Git、真实录音、实体 iPad、教师、儿童、最终来源/外部相似性、原生工程、TestFlight 或商店证据，项目整体未达到发布准备状态。
+状态：2026-07-13 调度重排继续生效；`overhaul-341a` 已完成主管独立复核并晋升为最新浏览器实现基线。它在 `340d` 的第一、二章、LS01-LS04、音名-only 和确定性证据基础上，完成独立 `C3-04 / LS05` C/D/E 三音听后找键。当前唯一运行工作为 `C3-05 / LS06` 与 `C3-06 / LS07` 的 `overhaul-342a` 收口；LS08、正式媒体集成、全局重构和第四章继续锁定。LS05 花粉铃/三花方向 C 已通过主管 source-clearance 审图，但仍为 `runtimeApproval=false / releaseCleared=false`；它只可作为后续精修基底，不能替代发布美术。LS04 植物/声源提取包仍为 `rejected_extraction`，现有离线音频仍缺人工耳机/扬声器/iPad 听审。没有远程 Git、真实录音、实体 iPad、教师、儿童、最终来源/外部相似性、原生工程、TestFlight 或商店证据，项目整体未达到发布准备状态。
+
+## 2026-07-13 LS05 花粉铃/三花方向 C 独立裁决
+
+裁决：`source_clearance_direction_c_passed / runtime_forbidden / release_art_missing / external_similarity_missing / physical_device_missing`。
+
+- 主管独立运行 `python concepts/runtime-candidates/ls05-pollen-flowers-v1/build_candidate.py --direction c --verify`；17/17 媒体文件哈希保持一致，341a 合同 66/66、零几何失败，alpha 连通域 6/6。
+- 独立扫描 `app.js`、`index.html`、全部运行 CSS、`service-worker.js` 和 `package.json`，候选目录及候选文件名运行引用为 0。
+- 人工审看透明棋盘、1024x768 awaiting/sound-paused 与 1194x834 complete：三朵 neutral 花确为同一文件复制，同形同权；暂停铃没有 C/D/E、音高、方向或角色答案线索；透明边缘未见白边、洋红残留或意外悬空碎片。
+- 方向 B 的绘制质感更成熟，但在 1024 CSS px 安全槽内中性花过窄；继续放大会进入进度保护带。方向 C 小尺寸可读性更好，因此只获 source-clearance 方向选择。
+- 方向 C 仍与 3D 星芽的材质语言不统一，完成态偏基础矢量素材，不能称为成熟 App 发布美术。342a 冻结后坐标、视觉层级和实际运行叠层必须重新审查；当前不得复制到 `assets/runtime`。
+- 媒体自审文件曾残留“运行引用 pending scan”，已退回媒体任务改为通过/0；这是一处文档状态修正，不改变图像、脚本或运行批准边界。
+
+## 2026-07-13 第四、五章音名显示规划纠偏
+
+裁决：`global_note_name_policy_extended_to_chapters_4_5 / runtime_still_locked`。
+
+- `docs/14` 的两通道规则现覆盖全五章：琴键、任务、地图、路线、谱垫、反馈、特效、结果和普通物件只显示字母音名；只有星芽/咚咚对话框可显示唱名。
+- 两个音区同时出现时，普通孩子界面使用 `低音 C`、`中央 C`、`下面的 C` 和黑键组定位，不显示普通 `低音 Do`、`Do/C` 双标或 `C3/C4` 科学音高；家长/教师证据仍记录 `C3/C4`。
+- Chapter 4 公开任务 `LP02` 改为 `低音 C 的家`；Chapter 5 公开任务 `TH01/TH02` 改为 `两个 C 说你好`、`G 回声接力`。角色台词仍可说 Do/Sol，课程音高、顺序、故事结果和掌握阈值未改变。
+- `docs/03/24/34/35` 已同步孩子动作、谱垫、脚印、桥路线、两小节表格和未来自动化门禁。第四、五章仍无运行实现，不能据此宣称浏览器通过。
 
 ## 2026-07-12 `overhaul-341a` LS05 正式独立裁决
 

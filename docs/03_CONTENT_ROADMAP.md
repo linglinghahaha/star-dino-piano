@@ -259,7 +259,7 @@ Entry conditions:
 | Level | Child-facing mission | New teaching job | Playable note task | Story consequence | Cue fade / check |
 | --- | --- | --- | --- | --- | --- |
 | `LP01` | 地底传来“咚” | hear high vs low before hand/clef labels | distinguish `C3` from `C4` in 3-4 short calls | cave door trembles when the low call is found | sound + character motion first; remove character glow in check |
-| `LP02` | 低音 Do 的家 | same solfege/letter can live in another register | find `C3` at the lower two-black-left home; compare with `C4` | first foundation stone lands | keep `低音 Do` large; `C3` stays parent/small-badge detail |
+| `LP02` | 低音 C 的家 | same solfege/letter can live in another register | find `C3` at the lower two-black-left home; compare with `C4` | first foundation stone lands | keep `低音 C` large; `C3` stays parent/teacher detail |
 | `LP03` | 三块地基石 | low two-black-group geography | `C3-D3-E3` | three stones lock left to right | fade direct key glow after one guided run |
 | `LP04` | 地洞回声 | low descending direction plus sound matching | hear/play `E3-D3-C3` | echo lights travel down the cave | hide answer key before sound; reveal locator only after wrong input |
 | `LP05` | 三黑键旁的脚印 | isolate low `F3/G3` and compare `E3-F3-G3` | `E3-F3-G3`, then short random comparison | Dongdong's footprints reach the bridge support | reduce color and future-note labels in check |
@@ -273,7 +273,7 @@ Chapter 4 guardrails:
 
 - Exact taught register is `C3-G3` (`MIDI 48-55`). Do not count octave-equivalent notes as bass-staff mastery.
 - Chapter 4-5 play uses one continuous, non-scrolling two-octave keyboard from `C3` through `B4`, so `C3-G3` and `C4-G4` keep their real spatial relationship. Black keys follow real 2/3 groups and key widths never change between levels.
-- Child copy uses `低音 Do/Re/...`; parent/teacher evidence records `C3/D3/...`.
+- Ordinary child copy uses `低音 C/D/E/F/G`, `下面的 C`, or a black-key locator. Only dinosaur dialogue may say `低音 Do/Re/Mi/Fa/Sol`; parent/teacher evidence records `C3/D3/...`.
 - The left hand is introduced in `LP07`, after location and sound are familiar. Before that, high/low is a musical contrast, not a hand test.
 - Do not require a small child to hold a five-key span or play legato. Single-note taps and repositioning are valid; fingering is a support layer, not the answer.
 - Microphone may experimentally support the single-note key-response tasks in `LP02-LP06`, but it is not a scored response route for the touch-only high/low comparison in `LP01` and cannot prove hand use or simultaneous coordination.
@@ -322,8 +322,8 @@ Entry conditions:
 
 | Level | Child-facing mission | New teaching job | Playable note task | Story consequence | Cue fade / check |
 | --- | --- | --- | --- | --- | --- |
-| `TH01` | 两个 Do 说你好 | same name across registers; left/right turn taking | left/low `C3`, then right/middle `C4` | two homes exchange their first light signal | sequential only; character motion replaces long text |
-| `TH02` | Sol 回声接力 | transfer the same idea to another keyboard group | `G3 -> G4`, then `C3 -> C4` | bridge lights answer from low to high | no direct glow on the responding key in check |
+| `TH01` | 两个 C 说你好 | same name across registers; left/right turn taking | left/low `C3`, then right/middle `C4` | two homes exchange their first light signal | sequential only; character motion replaces long text |
+| `TH02` | G 回声接力 | transfer the same idea to another keyboard group | `G3 -> G4`, then `C3 -> C4` | bridge lights answer from low to high | no direct glow on the responding key in check |
 | `TH03` | 两边轮流修桥 | slow left/right alternation | `L:C3 -> R:C4 -> L:D3 -> R:D4 -> L:E3 -> R:E4` | bridge grows from both ends | one hand icon at a time; free-time exploration first, then the same 48-56 BPM guided range used by the canonical piece; speed never fails the story |
 | `TH04` | 中央 C 会合点 | understand treble/bass as two maps joined around one middle-C landmark | find bass `C3` on its second-space home, then find middle `C4` on the treble ledger-line home | the brace closes and one middle-C meeting light joins the maps | show `C4` once as the meeting landmark; no new rhythm or simultaneous notes |
 | `TH05` | 一边托住，一边点灯 | rehearse the two musical jobs before choosing a route | resumable phases: low anchors `C3 | G3`; high bar 1 and bar 2; then the known two-bar relay | supports and stars remain installed across rests; completing the relay makes the main bridge ready | each phase is a separate short session; no child is asked to rehearse both parts and perform the relay in one sitting |

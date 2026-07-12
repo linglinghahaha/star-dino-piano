@@ -97,7 +97,7 @@ Allowed:
 
 - subtle note color in early stages;
 - stable ordinary visual labels that show only `C/D/E/F/G`;
-- Xingya's spoken/bubble prompt may say `Do/Re/Mi/Fa/Sol` and may connect it to the required letter in one short sentence;
+- Xingya's or Dongdong's spoken/bubble prompt may say `Do/Re/Mi/Fa/Sol` and may connect it to the required letter in one short sentence;
 - gated parent evidence and non-leaking accessibility labels may show both identities, such as `C / Do`;
 - stable keyboard locator language;
 - stable staff position language;
@@ -112,13 +112,15 @@ Avoid:
 Course 1 display hierarchy is therefore a deliberate two-channel link, not two competing naming systems:
 
 - keyboard keys, target/task cards, current parts, staff pads/hints, route markers, locators, feedback, effects, results, map labels, garden objects, and ordinary object labels use only `C/D/E/F/G` as the visible note name;
-- Xingya's child-facing speech and listening gestures use `Do/Re/Mi/Fa/Sol` as the main spoken/character name;
-- action verbs must keep the roles clear: Xingya may "唱 Do", while the child is asked to "弹 C" or "找到 C". Do not use a bare command such as `唱 Re/D` when the expected input is a piano key, and never describe a letter name as something to sing;
-- correct and repair feedback reconnect both names across channels: ordinary UI may show `C · 两黑左`, while Xingya's bubble says `这是 Do，你来弹 C`; do not create an ordinary dual-label badge;
+- Xingya's or Dongdong's child-facing speech and listening gestures use `Do/Re/Mi/Fa/Sol` as the main spoken/character name;
+- action verbs must keep the roles clear: a character may "唱 Do", while the child is asked to "弹 C" or "找到 C". Do not use a bare command such as `唱 Re/D` when the expected input is a piano key, and never describe a letter name as something to sing;
+- correct and repair feedback reconnect both names across channels: ordinary UI may show `C · 两黑左`, while a dinosaur bubble says `这是 Do，你来弹 C`; do not create an ordinary dual-label badge;
 - parent-only evidence and accessibility descriptions may retain `C / Do`, provided they do not leak a hidden target;
 - hidden listening calls show neither target-specific letter nor solfege before the child responds.
 
-This hierarchy must be consistent across M01-M08, F/G preparation, S01, and Chapter 3. It is not enough to change one keyboard label while duplicate cards continue to present the old hierarchy elsewhere.
+When two registers appear together in Chapters 4-5, ordinary child surfaces disambiguate with `低音 C`, `中央 C`, `下面的 C`, or the black-key locator. They do not use `低音 Do` as a visual label and do not show scientific pitch names such as `C3/C4` on the ordinary child path. A dinosaur bubble may say `低音 Do` or `中央 Do`; parent/teacher evidence records `C3/C4`.
+
+This hierarchy must be consistent across M01-M08, F/G preparation, S01, and Chapters 3-5. It is not enough to change one keyboard label while duplicate cards continue to present the old hierarchy elsewhere.
 
 Notation such as `Do/C` elsewhere in curriculum documents is adult-facing shorthand for the identity mapping. It must not be copied literally into a child-facing visual label.
 
