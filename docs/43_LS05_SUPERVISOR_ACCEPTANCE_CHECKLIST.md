@@ -27,8 +27,9 @@
 3. 开始前只给一次可见、可听的 C4 定锚：普通界面显示 `C`，小恐龙对话框可说 `Do`；它不计正式题，也不得出现普通 `C/Do` 双标。
 4. 正式共有五次隐藏呼叫，候选是 C4/D4/E4；声音播放结束后才开放作答。
 5. 三朵花从开场起保持固定弧形位置，作答前完全同态且不按目标移动。答后只有匹配花短暂回应，并在下一呼叫前恢复同态。
-6. 跨呼叫只保留五格中性花粉环，不保留“哪朵花已经出现过”的频次答案。
-7. 五次完成后，三朵花一起永久开放；随后自动回地图自然休息，无结果弹层、关闭、继续或下一关按钮。
+6. 已评分的答后短反馈由星芽气泡把本题音名字母连回唱名，例如普通主句 `D 找到了`、角色副句 `我把它唱作 Re`；普通非角色表面仍只显示字母，进入下一呼叫前旧答案的字母/唱名反馈必须清除。
+7. 跨呼叫只保留五格中性花粉环，不保留“哪朵花已经出现过”的频次答案。
+8. 五次完成后，三朵花一起永久开放；随后自动回地图自然休息，无结果弹层、关闭、继续或下一关按钮。
 
 低龄人工审图重点：第一眼应是中央花粉铃、三朵同态花、当前故事问题和真实钢琴；不能先看到规则说明卡、分数、倒计时或成人式测验语言。
 
@@ -121,7 +122,7 @@ LS05 必须生成新的候选合同，至少覆盖：garden-entry、reference、
 ## 十二、主管最小复跑集合
 
 1. 新增独立 `check:chapter3-ls05`，不把全部断言堆入 LS04 或旧 visible 专项。
-2. LS05 专项至少覆盖：三个固定 seed、2/2/1、单次音轮换、无泄题 DOM/ARIA/CSS、固定花位与花朵重置、中性环、first-response scoring、4/5+候选覆盖、call-local repair 重置、重听上限、错误音/目标音顺序、pair compare、assisted/modeled、sound-paused、visual-assist 非评分完成、touch/MIDI/mic、地图/刷新连续性、modeled rest 跨 session 续剩余题但不拼 stable、家长证据和无 LS06。
+2. LS05 专项至少覆盖：三个固定 seed、2/2/1、单次音轮换、无泄题 DOM/ARIA/CSS、固定花位与花朵重置、中性环、答后角色气泡的 letter-solfege 回连及下一呼叫清除、first-response scoring、4/5+候选覆盖、call-local repair 重置、重听上限、错误音/目标音顺序、pair compare、assisted/modeled、sound-paused、visual-assist 非评分完成、touch/MIDI/mic、地图/刷新连续性、modeled rest 跨 session 续剩余题但不拼 stable、家长证据和无 LS06。
 3. 复用并扩展儿童可见音名门禁：reference、waiting、wrong、pair、assisted、complete 和地图状态中，排除小恐龙对话框与家长区后不得出现 `Do/Re/Mi`、中文音译或 `C/Do` 双标；键盘/目标的合法 ARIA 双身份不能被误判为视觉泄漏。
 4. 复跑 LS04 `39/39`、Chapter 3 visible、339d continuity、sessions、clean-state、M03/garden、PWA、input、audio settings、iPad a11y、motion、palette/contrast、Xingya suit、第一二章共享门禁。
 5. 复跑 generic zones、LS05 Chapter 3 zones、quick 和 strict bundle。
