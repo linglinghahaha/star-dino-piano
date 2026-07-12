@@ -278,7 +278,7 @@ Current progress:
 
 ## Phase 2B: Chapter 3 Listening Garden
 
-Status: in progress. Steps 1-4 passed independently at `overhaul-339d`; step 5 (`overhaul-340a / LS04`) is active; step 6 remains locked.
+Status: in progress. Steps 1-5 passed independently through `overhaul-340d`; step 6 is split into gated milestones. `C3-04 / LS05` is the only active runtime milestone, while `LS06-LS08` remain locked.
 
 Goal: turn the existing M03 listening seed into a staged story course that links heard piano sound, C/D/E/F/G letter name, Xingya's solfege, real keyboard geography, and neutral story consequences without claiming absolute pitch.
 
@@ -290,8 +290,8 @@ Implementation order:
 2. `[completed at 339d]` Add the code-driven Chapter 3 entry fallback: garden-node user gesture, sealed Xingya, atmosphere scan, open/stowed safe state, reduced-motion/static fallback, refresh idempotence. Do not wait for approved video.
 3. `[completed at 339d]` Implement only `C3-01` (`LS01-LS02`) and `C3-02` (`LS03`). These are introduction-only, write played/observation evidence, and never enter the mastery opening-review queue.
 4. `[completed at 339d]` Stop and audit the visible echo loop, early LS01 rest/resume, letter-first UI, audio priority, touch route, debug isolation, map destination and pending-attempt continuity before adding hidden calls.
-5. `[active at 340a]` Implement `C3-03` (`LS04`) as the first hidden C/D set. Prove neutral source, target-free accessibility names, balanced calls, candidate reset, bounded repair, stable/retained separation and the Chapter 3 media-coordinate contract.
-6. `[locked]` Only after LS04 passes independently, add `LS05`, then `LS06-LS07`, then `LS08`; do not land all hidden listening families in one unreviewed patch. LS05 stable additionally requires at least one unassisted correct for every C/D/E candidate, and its persistent progress must remain note-neutral.
+5. `[completed at 340d]` Implement `C3-03` (`LS04`) as the first hidden C/D set. The approved browser baseline proves the neutral source, target-free waiting state, balanced calls, candidate reset, bounded repair, stable/retained separation, sound recovery and phase-bound Chapter 3 media-coordinate contract.
+6. `[active: LS05 only]` Implement `C3-04 / LS05` as a separate five-call C/D/E milestone. Stable requires at least 4/5, at least one unassisted correct for every C/D/E candidate, no strong/modeled/microphone/visual-assist contamination, at most one successful child replay and one complete same-session run. Persistent progress remains note-neutral; modeled/fatigue resume re-anchors with an unscored C4 before continuing remaining calls. `LS06-LS07` and then `LS08` stay locked until LS05 passes independently.
 
 Acceptance:
 
