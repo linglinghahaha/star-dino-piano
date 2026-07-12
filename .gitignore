@@ -1,0 +1,41 @@
+# Runtime/editor noise
+.DS_Store
+Thumbs.db
+*.log
+
+# Local test browser profiles and caches
+chrome-test/**
+!chrome-test/*.mjs
+
+# Generated visual evidence; keep only curated screenshots under docs/logs when needed.
+screenshots/**
+screenshot_*.png
+screenshot_*.jpg
+screenshot_*.jpeg
+screenshot_*.webp
+generated_*contact_sheet*.jpg
+ui_design_concept_board.png
+
+# Provisional/source art. Release builds should consume assets/runtime only.
+assets/generated/**
+concepts/**
+
+# Audio sources and candidates are not part of the approved browser runtime.
+audio/**
+
+# Technical previews and runtime candidates require explicit approval before tracking.
+**/runtime-candidates/**
+**/technical-preview*/**
+
+# Local build output, when introduced.
+dist/**
+build/**
+.vite/**
+node_modules/**
+**/__pycache__/**
+*.py[cod]
+
+# Private family voice recordings and consent records. Never commit.
+private-recordings/**
+!private-recordings/
+!private-recordings/README.md

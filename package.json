@@ -1,0 +1,48 @@
+{
+  "name": "star-dino-piano-web-prototype",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "check:syntax": "node --check app.js",
+    "check:copy": "node tools/copy-integrity-audit.mjs",
+    "check:note-matrix": "node tools/note-matrix-sync-audit.mjs",
+    "check:audio": "node tools/audio-contract-audit.mjs",
+    "check:bundle": "node tools/production-bundle-audit.mjs",
+    "check:bundle:strict": "node tools/production-bundle-audit.mjs --strict",
+    "check:runtime-art-pipeline": "python tools/process-xingya-action-sheet.py --manifest concepts/generated-v2/xingya-sealed-action-sheet-v1.runtime-layout.json --runtime-dir screenshots/runtime_art_pipeline_333a/runtime --audit-out screenshots/runtime_art_pipeline_333a/xingya-sealed-action-cuts.png",
+    "check:quick": "npm run check:syntax && npm run check:note-matrix && npm run check:copy && npm run check:audio && npm run check:bundle",
+    "check:audio-settings": "node tools/with-playwright-path.mjs chrome-test/audio-settings-check.mjs http://127.0.0.1:4173/ screenshots/audio_settings_latest",
+    "check:input-reliability": "node tools/with-playwright-path.mjs chrome-test/input-reliability-check.mjs http://127.0.0.1:4173/ screenshots/input_reliability_334g",
+    "check:pwa-shell": "node tools/with-playwright-path.mjs chrome-test/pwa-shell-check.mjs http://127.0.0.1:4173/ screenshots/pwa_shell_340c",
+    "check:ipad-a11y": "node tools/with-playwright-path.mjs chrome-test/ipad-accessibility-check.mjs http://127.0.0.1:4173/ screenshots/ipad_accessibility_latest",
+    "check:palette": "node tools/with-playwright-path.mjs chrome-test/note-palette-check.mjs http://127.0.0.1:4173/ screenshots/note_palette_latest",
+    "check:motion": "node tools/with-playwright-path.mjs chrome-test/motion-settings-check.mjs http://127.0.0.1:4173/ screenshots/motion_settings_latest",
+    "check:xingya-suit": "node tools/with-playwright-path.mjs chrome-test/xingya-space-suit-check.mjs http://127.0.0.1:4173/ screenshots/xingya_space_suit_latest",
+    "check:workshop-identity": "node tools/with-playwright-path.mjs chrome-test/workshop-identity-telemetry-check.mjs http://127.0.0.1:4173/ screenshots/workshop_identity_latest",
+    "check:m03-garden": "node tools/with-playwright-path.mjs chrome-test/m03-garden-narrow-check.mjs http://127.0.0.1:4173/ screenshots/m03_garden_340c",
+    "check:chapter3-visible": "node tools/with-playwright-path.mjs chrome-test/chapter3-visible-check.mjs http://127.0.0.1:4173/ screenshots/chapter3_visible_340a",
+    "check:chapter3-ls04": "node tools/with-playwright-path.mjs chrome-test/chapter3-ls04-listening-check.mjs http://127.0.0.1:4173/ screenshots/chapter3_ls04_340a",
+    "check:supervisor-339c": "node tools/with-playwright-path.mjs chrome-test/supervisor-339c-continuity-check.mjs http://127.0.0.1:4173/ screenshots/supervisor_340a",
+    "check:staff-repair": "node tools/with-playwright-path.mjs chrome-test/staff-repair-layer-check.mjs http://127.0.0.1:4173/ screenshots/staff_repair_334g",
+    "check:staff-readability": "node tools/with-playwright-path.mjs chrome-test/staff-readability-check.mjs http://127.0.0.1:4173/ screenshots/staff_readability_334g",
+    "check:sessions": "node tools/with-playwright-path.mjs chrome-test/session-retention-check.mjs http://127.0.0.1:4173/ screenshots/session_retention_334g",
+    "check:contrast": "node tools/with-playwright-path.mjs chrome-test/contrast-preference-check.mjs http://127.0.0.1:4173/ screenshots/contrast_preference_334g",
+    "check:m01-hierarchy": "node tools/with-playwright-path.mjs chrome-test/m01-note-hierarchy-check.mjs http://127.0.0.1:4173/ screenshots/m01_hierarchy_334g",
+    "check:roof-route": "node tools/with-playwright-path.mjs chrome-test/roof-route-visual-check.mjs http://127.0.0.1:4173/ screenshots/roof_route_340c",
+    "check:assembly-blueprint": "node tools/with-playwright-path.mjs chrome-test/assembly-blueprint-check.mjs http://127.0.0.1:4173/ screenshots/assembly_blueprint_340c",
+    "check:zones": "node tools/with-playwright-path.mjs chrome-test/teaching-zone-coordinate-contract.mjs http://127.0.0.1:4173/ docs/30_TEACHING_ZONE_COORDINATE_CONTRACT_340C.json screenshots/teaching_zones_340c",
+    "check:chapter3-zones": "node tools/with-playwright-path.mjs chrome-test/chapter3-media-zone-contract.mjs http://127.0.0.1:4173/ docs/30_CHAPTER3_MEDIA_ZONE_CONTRACT_340A_V2.json screenshots/chapter3_media_zones_340a_v2",
+    "check:staff-mini": "node tools/with-playwright-path.mjs chrome-test/staff-mini-observation-check.mjs http://127.0.0.1:4173/ screenshots/staff_mini_latest",
+    "check:clean-state": "node tools/with-playwright-path.mjs chrome-test/clean-state-slice-check.mjs http://127.0.0.1:4173/ screenshots/clean_state_latest",
+    "build:quality-css-candidate": "node tools/with-playwright-path.mjs tools/css-declaration-dedupe.mjs"
+  },
+  "devDependencies": {
+    "lightningcss": "1.30.1",
+    "playwright": "1.60.0",
+    "postcss": "8.5.6"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

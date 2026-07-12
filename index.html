@@ -1,0 +1,721 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#1397e9">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="星龙工坊">
+  <title>星龙音阶工坊</title>
+  <link rel="icon" href="assets/runtime/app-icon.png" type="image/png">
+  <link rel="apple-touch-icon" href="assets/runtime/app-icon.png">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="stylesheet" href="styles.css?v=overhaul-340c">
+  <link rel="stylesheet" href="staff-overrides.css?v=overhaul-340c">
+  <link rel="stylesheet" href="play-overrides.css?v=overhaul-340c">
+  <link rel="stylesheet" href="keyboard-overrides.css?v=overhaul-340c">
+  <link rel="stylesheet" href="map-overrides.css?v=overhaul-340c">
+  <link rel="stylesheet" href="quality-overrides.css?v=overhaul-340c">
+  <link rel="stylesheet" href="quality-overrides-2.css?v=overhaul-340c">
+  <link rel="stylesheet" href="quality-overrides-3.css?v=overhaul-340c">
+  <link rel="stylesheet" href="quality-overrides-4.css?v=overhaul-340c">
+  <link rel="stylesheet" href="current-overhaul.css?v=overhaul-340c">
+  <link rel="stylesheet" href="roof-blueprint-overrides.css?v=overhaul-340c">
+  <link rel="stylesheet" href="chapter3-visible.css?v=overhaul-340c">
+</head>
+<body class="booting">
+  <div class="boot-loader" id="bootLoader" role="status" aria-live="polite">
+    <div class="boot-card">
+      <span class="boot-mark" aria-hidden="true">★</span>
+      <strong>星龙音阶工坊</strong>
+      <span>准备月球基地</span>
+      <div class="boot-progress"><i id="bootProgress"></i></div>
+    </div>
+  </div>
+
+  <div class="orientation-guard" role="status" aria-live="polite">
+    <div class="orientation-card">
+      <div class="orientation-visual" aria-hidden="true">
+        <div class="orientation-device">
+          <span class="orientation-screen"></span>
+          <span class="orientation-key key-a"></span>
+          <span class="orientation-key key-b"></span>
+          <span class="orientation-key key-c"></span>
+        </div>
+        <span class="orientation-arrow">→</span>
+        <img class="orientation-dino" src="assets/runtime/xingya-suit-point.webp" alt="">
+      </div>
+      <strong>横过来玩钢琴</strong>
+      <span>把 iPad 转成横屏，琴键和跳台会更大。</span>
+    </div>
+  </div>
+
+  <main class="map-shell" id="mapShell" hidden>
+    <header class="map-topbar" aria-label="音阶岛进度">
+      <div class="map-brand">
+        <span class="brand-mark">★</span>
+        <div>
+          <p class="eyebrow">星龙音阶工坊</p>
+          <h1>音阶岛</h1>
+        </div>
+      </div>
+      <div class="chapter-pill">
+        <span class="chapter-icon">◆</span>
+        <span id="mapChapterLabel">当前章节：月球基地</span>
+      </div>
+      <div class="star-pill">
+        <span class="star-icon">★</span>
+        <strong id="mapStarCount">0 / 12</strong>
+      </div>
+      <button class="parent-gate" id="mapParentGate" type="button">
+        <span>⚙</span>
+        <strong>家长区</strong>
+      </button>
+    </header>
+
+    <section class="island-map" aria-label="音阶岛关卡">
+      <svg class="map-route" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+        <path class="map-route-shadow" d="M 17 48 C 24 42, 28 39, 34 39 C 42 39, 46 42, 52 42 C 60 42, 64 38, 69 36 C 78 36, 84 40, 84 47 C 84 57, 78 62, 72 66 C 66 72, 61 75, 55 75 C 46 75, 42 68, 38 67 C 30 67, 24 70, 22 76 C 24 84, 29 88, 35 88 C 43 88, 50 90, 58 90 C 66 90, 71 86, 75 84"></path>
+        <path class="map-route-line" d="M 17 48 C 24 42, 28 39, 34 39 C 42 39, 46 42, 52 42 C 60 42, 64 38, 69 36 C 78 36, 84 40, 84 47 C 84 57, 78 62, 72 66 C 66 72, 61 75, 55 75 C 46 75, 42 68, 38 67 C 30 67, 24 70, 22 76 C 24 84, 29 88, 35 88 C 43 88, 50 90, 58 90 C 66 90, 71 86, 75 84"></path>
+        <path class="map-route-shadow route-branch" d="M 75 84 C 81 79, 86 78, 90 82"></path>
+        <path class="map-route-line route-branch" d="M 75 84 C 81 79, 86 78, 90 82"></path>
+        <path class="map-route-shadow garden-branch" d="M 90 82 C 92 76, 93 70, 92 64" hidden></path>
+        <path class="map-route-line garden-branch" d="M 90 82 C 92 76, 93 70, 92 64" hidden></path>
+      </svg>
+
+      <div class="map-session-status" id="mapSessionStatus" role="status" aria-live="polite" hidden>
+        <img src="assets/runtime/xingya-suit-point.webp" alt="" aria-hidden="true">
+        <span>
+          <strong id="mapSessionTitle">星芽在这里歇一歇</strong>
+          <small id="mapSessionDetail">这一小段已经安顿好，地图可以慢慢选。</small>
+        </span>
+      </div>
+
+      <button class="map-node node-1" type="button" data-level="M01">
+        <span class="node-mascot node-do"></span>
+        <span class="node-title"><b>1</b> 找到 Do</span>
+        <span class="node-note">C</span>
+      </button>
+      <button class="map-node node-2" type="button" data-level="M02">
+        <span class="node-mascot node-lights"></span>
+        <span class="node-title"><b>2</b> 小灯醒醒</span>
+        <span class="node-note">C D E</span>
+      </button>
+      <button class="map-node node-3" type="button" data-level="M03">
+        <span class="node-mascot node-wheel"></span>
+        <span class="node-title"><b>3</b> 听车轮</span>
+        <span class="node-note">听 Re / Do</span>
+      </button>
+      <button class="map-node node-4" type="button" data-level="M04">
+        <span class="node-mascot node-bridge"></span>
+        <span class="node-title"><b>4</b> 咔哒小桥</span>
+        <span class="node-note">C D E</span>
+      </button>
+      <button class="map-node node-5" type="button" data-level="M05">
+        <span class="node-mascot node-rocket"></span>
+        <span class="node-title"><b>5</b> 倒数灯</span>
+        <span class="node-note">Mi Re Do</span>
+      </button>
+      <button class="map-node node-6" type="button" data-level="M06">
+        <span class="node-mascot node-wall"></span>
+        <span class="node-title"><b>6</b> 大跳墙</span>
+        <span class="node-note">Do Sol Do</span>
+      </button>
+      <button class="map-node node-7" type="button" data-level="M07">
+        <span class="node-mascot node-star-lights"></span>
+        <span class="node-title"><b>7</b> 星星串</span>
+        <span class="node-note">Do Re Mi</span>
+      </button>
+      <button class="map-node node-8" type="button" data-level="M08">
+        <span class="node-mascot node-roof"></span>
+        <span class="node-title"><b>8</b> 月亮屋顶</span>
+        <span class="node-note">Do-Sol</span>
+      </button>
+      <button class="map-node node-9" type="button" data-level="FG01">
+        <span class="node-mascot node-bridge"></span>
+        <span class="node-title"><b>9</b> Fa 垫</span>
+        <span class="node-note">Fa/F</span>
+      </button>
+      <button class="map-node node-10" type="button" data-level="FG02">
+        <span class="node-mascot node-wall"></span>
+        <span class="node-title"><b>10</b> Sol 门</span>
+        <span class="node-note">Sol/G</span>
+      </button>
+      <button class="map-node node-11" type="button" data-level="FG03">
+        <span class="node-mascot node-star-lights"></span>
+        <span class="node-title"><b>11</b> 近邻星</span>
+        <span class="node-note">Mi Fa Sol</span>
+      </button>
+      <button class="map-node node-12" type="button" data-level="FG04">
+        <span class="node-mascot node-staff-art"></span>
+        <span class="node-title"><b>12</b> 桥前地图</span>
+        <span class="node-note">Fa Sol</span>
+      </button>
+      <button class="map-node node-staff" type="button" data-screen="staff">
+        <span class="node-mascot node-staff-art"></span>
+        <span class="node-title"><b>★</b> 小恐龙跳</span>
+        <span class="node-note">S01</span>
+      </button>
+      <button class="garden-rest-marker" id="gardenRestMarker" type="button" aria-label="进入星桥尽头的花园入口" hidden>
+        <span class="garden-rest-icon" aria-hidden="true">✦</span>
+        <span class="garden-rest-copy">
+          <strong>花园入口</strong>
+          <small>点这里走进花园</small>
+        </span>
+      </button>
+    </section>
+  </main>
+
+  <main class="app-shell" id="appShell">
+    <header class="topbar" aria-label="关卡进度">
+      <div class="brand-lockup">
+        <span class="brand-mark">★</span>
+        <div>
+          <p class="eyebrow">星龙音阶工坊</p>
+          <h1 id="mainTitle">月球基地</h1>
+        </div>
+      </div>
+      <div class="progress-map" id="levelMap" role="status" aria-live="polite" aria-atomic="true" aria-label="关卡进度"></div>
+      <button class="map-return icon-tool" id="mapReturn" type="button" aria-label="回到音阶岛" title="回到音阶岛">
+        <span aria-hidden="true">⌂</span>
+      </button>
+      <button class="mode-switch" id="staffModeButton" type="button">小恐龙跳</button>
+      <button class="parent-gate play-parent-gate icon-tool" id="playParentGate" type="button" aria-label="家长区" title="家长区">
+        <span aria-hidden="true">⚙</span>
+      </button>
+      <div class="badge" id="levelBadge">M01</div>
+    </header>
+
+    <section class="build-panel" aria-label="月球工地">
+      <div class="panel-head">
+        <div>
+          <p class="eyebrow">星芽需要</p>
+          <h2 id="stageTitle">Do 地板</h2>
+        </div>
+        <div class="stage-chip">帮星芽</div>
+      </div>
+
+        <div class="moon-yard" aria-hidden="true">
+          <div class="stars"></div>
+          <div class="planet"></div>
+          <div class="stage-story-ribbon" id="stageStoryRibbon">
+            <small>第一块月亮地板</small>
+            <strong>星芽脚下还空着</strong>
+            <span>Do/C · 两黑键左边</span>
+          </div>
+          <div class="crane"></div>
+        <div class="roof-world-build" id="roofWorldBuild" aria-hidden="true"></div>
+        <div class="build-blueprint" id="buildBlueprint" aria-hidden="true"></div>
+        <div class="hanging-part" id="hangingPart">
+          <span class="part-studs"></span>
+          <span class="hanging-part-art" id="hangingPartArt" aria-hidden="true"></span>
+          <span class="part-note-badge" id="hangingPartBadge" aria-hidden="true"><b>Do</b><i>C</i></span>
+          <strong id="hangingPartLabel">地板</strong>
+        </div>
+        <div class="coach-overlay" aria-hidden="true">
+          <div class="coach-bubble" id="coachBubble">
+            <small>认识音符</small>
+            <strong id="coachNote">Do</strong>
+            <span>两黑键左边</span>
+          </div>
+          <img class="coach-dino" id="coachDino" src="assets/runtime/xingya-suit-point.webp" alt="">
+        </div>
+        <div class="stage-signal-trail" id="stageSignalTrail" aria-hidden="true">
+          <span></span><span></span><span></span><span></span>
+        </div>
+        <svg class="stage-energy-svg" id="stageEnergySvg" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+          <path class="stage-energy-path stage-energy-path-soft" id="stageEnergyPathSoft" d="M 7 90 Q 32 52 56 43"></path>
+          <path class="stage-energy-path" id="stageEnergyPath" d="M 7 90 Q 32 52 56 43"></path>
+        </svg>
+        <div class="stage-note-orb" id="stageNoteOrb" aria-hidden="true">
+          <small>读音找键</small>
+          <strong id="stageNoteText">Do</strong>
+          <span id="stageNoteName">C</span>
+        </div>
+        <div class="base" id="baseBuild"></div>
+        <div class="memory-star-route" id="memoryStarRoute" aria-hidden="true"></div>
+        <div class="fg-star-route" id="fgStarRoute" aria-hidden="true"></div>
+        <div class="roof-scale-route" id="roofScaleRoute" aria-hidden="true"></div>
+        <div class="build-pad" aria-hidden="true"></div>
+      </div>
+      <button class="m03-wheel-replay" id="m03WheelReplay" type="button" aria-label="再听一次会唱小车轮的声音" hidden>
+        <span aria-hidden="true">♪</span>
+        <strong>再听车轮</strong>
+      </button>
+      <p class="sr-only" id="m03InstructionStatus" role="status" aria-live="polite" hidden>小车轮先唱，你弹同样的琴键。</p>
+
+      <div class="earned">
+        <p class="small-title">月亮小家</p>
+        <ul id="earnedList"></ul>
+      </div>
+    </section>
+
+    <section class="practice-panel" aria-label="本关任务">
+      <div class="task-card">
+        <div class="task-copy">
+          <p class="eyebrow" id="chapterTitle">认识音符 · 强提示</p>
+          <h2 id="levelTitle">第一块月亮地板</h2>
+          <p id="levelPrompt">读 Do/C，找两黑键左边，铺上第一块地板。</p>
+          <p class="feedback" id="feedback">认识 · Do/C · 两黑键左边。</p>
+          <div class="step-strip" id="stepStrip" aria-label="当前步骤"></div>
+        </div>
+
+        <div class="cue-cards">
+          <div class="reward-card" id="rewardCard">
+            <span class="reward-brick"></span>
+            <strong>Do 地板</strong>
+            <small>这一步要帮忙</small>
+          </div>
+          <div class="target-note" id="targetNote">
+            <small>认识</small>
+            <strong>Do</strong>
+            <span>C · 2黑左</span>
+            <em>两黑键左边</em>
+          </div>
+        </div>
+      </div>
+
+      <aside class="dino-panel" aria-label="星龙伙伴">
+        <div class="dino-stage">
+          <img class="dino" id="dinoSvg" src="assets/runtime/xingya-suit-point.webp" alt="星芽龙伙伴">
+        </div>
+        <div class="buddy-copy">
+          <p class="eyebrow">星龙伙伴</p>
+          <h2 id="dinoName">星芽</h2>
+          <p id="dinoHint">Do/C · 两黑键左边</p>
+          <p class="quiet" id="modeHint">看音名，也看黑键位置。</p>
+        </div>
+      </aside>
+    </section>
+
+    <section class="staff-panel" id="staffPanel" aria-label="小恐龙跳玩法" hidden>
+      <div class="staff-hero">
+        <div class="staff-copy">
+          <p class="eyebrow">跳台亮了</p>
+          <h2>小恐龙跳</h2>
+          <p id="staffPrompt">看亮起跳台，按同名琴键，小恐龙就跳过去。</p>
+        </div>
+        <div class="staff-note-card" id="staffNoteCard">
+          <small>亮起跳台</small>
+          <strong>Do</strong>
+          <span>C</span>
+        </div>
+      </div>
+
+      <div class="staff-stage" id="staffStage">
+        <svg class="staff-scene-art" viewBox="0 0 1000 360" preserveAspectRatio="none" aria-hidden="true">
+          <defs>
+            <linearGradient id="staffStageSky167" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#071A3D" stop-opacity="0.10"/>
+              <stop offset="56%" stop-color="#09265A" stop-opacity="0.10"/>
+              <stop offset="100%" stop-color="#061328" stop-opacity="0.12"/>
+            </linearGradient>
+            <radialGradient id="staffPlanetLeft167" cx="50%" cy="50%" r="58%">
+              <stop offset="0%" stop-color="#58F0D8" stop-opacity="0.62"/>
+              <stop offset="58%" stop-color="#1E9AC5" stop-opacity="0.40"/>
+              <stop offset="100%" stop-color="#0A315D" stop-opacity="0"/>
+            </radialGradient>
+            <linearGradient id="staffLaunchPad167" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#FFF2A9"/>
+              <stop offset="58%" stop-color="#FFB869"/>
+              <stop offset="100%" stop-color="#7F533F"/>
+            </linearGradient>
+            <linearGradient id="staffBridgeLine167" x1="0" y1="0" x2="1" y2="0">
+              <stop offset="0%" stop-color="#E8FBFF" stop-opacity="0.18"/>
+              <stop offset="8%" stop-color="#E8FBFF" stop-opacity="0.82"/>
+              <stop offset="50%" stop-color="#F7FDFF" stop-opacity="1"/>
+              <stop offset="92%" stop-color="#D4F6FF" stop-opacity="0.82"/>
+              <stop offset="100%" stop-color="#D4F6FF" stop-opacity="0.18"/>
+            </linearGradient>
+            <radialGradient id="staffPortal167" cx="50%" cy="50%" r="54%">
+              <stop offset="0%" stop-color="#FFF7B8"/>
+              <stop offset="58%" stop-color="#FFC264"/>
+              <stop offset="100%" stop-color="#FF895E"/>
+            </radialGradient>
+            <linearGradient id="staffBridgeDeck176" x1="0" y1="0" x2="1" y2="0">
+              <stop offset="0%" stop-color="#6EF2FF" stop-opacity="0"/>
+              <stop offset="12%" stop-color="#96F6FF" stop-opacity=".42"/>
+              <stop offset="50%" stop-color="#F7FDFF" stop-opacity=".18"/>
+              <stop offset="88%" stop-color="#FFD18B" stop-opacity=".28"/>
+              <stop offset="100%" stop-color="#FFD18B" stop-opacity="0"/>
+            </linearGradient>
+            <radialGradient id="staffLaunchCore176" cx="50%" cy="40%" r="62%">
+              <stop offset="0%" stop-color="#E9FDFF"/>
+              <stop offset="56%" stop-color="#69DDF2"/>
+              <stop offset="100%" stop-color="#0D658C"/>
+            </radialGradient>
+            <linearGradient id="staffPortalRing176" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="#FFF7B9"/>
+              <stop offset="48%" stop-color="#FFB75B"/>
+              <stop offset="100%" stop-color="#F76E65"/>
+            </linearGradient>
+            <filter id="staffSoftGlow167" x="-40%" y="-70%" width="180%" height="240%">
+              <feGaussianBlur stdDeviation="6" result="blur"/>
+              <feMerge>
+                <feMergeNode in="blur"/>
+                <feMergeNode in="SourceGraphic"/>
+              </feMerge>
+            </filter>
+          </defs>
+          <rect width="1000" height="360" fill="url(#staffStageSky167)"/>
+          <g class="svg-depth-stars-176">
+            <path class="svg-constellation-line" d="M 82 68 L 142 96 L 194 62" fill="none"/>
+            <path class="svg-constellation-line" d="M 704 72 L 756 104 L 828 76" fill="none"/>
+            <circle class="svg-tiny-star" cx="106" cy="185" r="1.8"/>
+            <circle class="svg-tiny-star" cx="215" cy="143" r="1.5"/>
+            <circle class="svg-tiny-star warm" cx="734" cy="164" r="2"/>
+            <circle class="svg-tiny-star warm" cx="934" cy="125" r="1.6"/>
+            <ellipse class="svg-nebula-smudge" cx="515" cy="300" rx="230" ry="36"/>
+          </g>
+          <g class="svg-stage-micro-179">
+            <path class="svg-orbit-thread-179 left" d="M 38 274 C 78 242, 143 237, 200 263"/>
+            <path class="svg-orbit-thread-179 right" d="M 806 192 C 845 154, 924 151, 970 188"/>
+            <circle class="svg-star-speck-179 warm" cx="780" cy="211" r="2.8"/>
+            <circle class="svg-star-speck-179 cool" cx="192" cy="76" r="2.1"/>
+            <circle class="svg-star-speck-179" cx="455" cy="70" r="1.4"/>
+            <circle class="svg-star-speck-179" cx="624" cy="54" r="1.5"/>
+            <path class="svg-shooting-star-179" d="M 720 96 L 755 112"/>
+            <path class="svg-shooting-star-179 alt" d="M 138 116 L 174 130"/>
+          </g>
+          <g class="svg-stars" fill="#FFFFFF">
+            <circle cx="78" cy="74" r="2.6" opacity=".82"/>
+            <circle cx="176" cy="54" r="1.8" opacity=".50"/>
+            <circle cx="318" cy="82" r="2.4" opacity=".66"/>
+            <circle cx="481" cy="46" r="2.6" opacity=".84"/>
+            <circle cx="662" cy="70" r="2.1" opacity=".70"/>
+            <circle cx="817" cy="86" r="2.0" opacity=".58"/>
+            <circle cx="928" cy="56" r="2.2" opacity=".78"/>
+            <circle cx="248" cy="130" r="1.4" opacity=".42"/>
+            <circle cx="726" cy="132" r="1.6" opacity=".44"/>
+            <circle cx="906" cy="118" r="1.3" opacity=".36"/>
+          </g>
+          <g class="svg-staff-bridge-base">
+            <path class="svg-staff-glass" d="M 188 45 H 858 Q 886 45 886 73 V 259 Q 886 287 858 287 H 188 Q 160 287 160 259 V 73 Q 160 45 188 45 Z" fill="#5EDCFF" opacity=".045"/>
+            <path class="svg-staff-horizon" d="M 162 276 C 278 252, 395 250, 514 262 C 646 275, 762 252, 904 210" fill="none" stroke="#8FE5FF" stroke-width="16" stroke-linecap="round" opacity=".08"/>
+            <path class="svg-bridge-beam" d="M 166 286 C 275 248, 388 246, 514 258 C 647 270, 758 250, 902 207" fill="none" stroke="#8FE5FF" stroke-width="16" stroke-linecap="round" opacity=".08"/>
+          </g>
+          <g class="svg-bridge-depth-176">
+            <path class="svg-bridge-deck" d="M 188 286 H 872"/>
+            <path class="svg-bridge-deck soft" d="M 188 48 H 872"/>
+            <path class="svg-bridge-side" d="M 185 56 V 272"/>
+            <path class="svg-bridge-side end" d="M 874 56 V 272"/>
+            <circle class="svg-bridge-node" cx="185" cy="56" r="7"/>
+            <circle class="svg-bridge-node" cx="185" cy="272" r="7"/>
+            <circle class="svg-bridge-node end" cx="874" cy="56" r="7"/>
+            <circle class="svg-bridge-node end" cx="874" cy="272" r="7"/>
+          </g>
+          <g class="svg-staff-lines" filter="url(#staffSoftGlow167)">
+            <g class="svg-staff-line-glows">
+              <path d="M 185 56 H 874"/>
+              <path d="M 185 110 H 874"/>
+              <path d="M 185 164 H 874"/>
+              <path d="M 185 218 H 874"/>
+              <path d="M 185 272 H 874"/>
+              <path class="svg-ledger-glow" d="M 214 326 H 310"/>
+            </g>
+            <path class="svg-staff-line line-top" d="M 185 56 H 874" stroke="url(#staffBridgeLine167)" stroke-width="5" stroke-linecap="round"/>
+            <path class="svg-staff-line" d="M 185 110 H 874" stroke="url(#staffBridgeLine167)" stroke-width="5" stroke-linecap="round"/>
+            <path class="svg-staff-line" d="M 185 164 H 874" stroke="url(#staffBridgeLine167)" stroke-width="5" stroke-linecap="round"/>
+            <path class="svg-staff-line" d="M 185 218 H 874" stroke="url(#staffBridgeLine167)" stroke-width="5" stroke-linecap="round"/>
+            <path class="svg-staff-line line-bottom" d="M 185 272 H 874" stroke="url(#staffBridgeLine167)" stroke-width="5" stroke-linecap="round"/>
+            <path class="svg-ledger-line" d="M 214 326 H 310" stroke="url(#staffBridgeLine167)" stroke-width="5" stroke-linecap="round"/>
+            <path class="svg-measure-line svg-measure-start" d="M 185 56 V 272" stroke="#DDF8FF" stroke-width="4" stroke-linecap="round" opacity=".58"/>
+            <path class="svg-measure-line svg-measure-mid" d="M 510 56 V 272" stroke="#DDF8FF" stroke-width="4" stroke-linecap="round" opacity=".58"/>
+            <path class="svg-measure-line svg-measure-end" d="M 874 56 V 272" stroke="#DDF8FF" stroke-width="4" stroke-linecap="round" opacity=".58"/>
+          </g>
+          <g class="svg-bridge-glints-176">
+            <path class="svg-glint glint-left" d="M 178 164 H 224"/>
+            <path class="svg-glint glint-mid" d="M 493 164 H 528"/>
+            <path class="svg-glint glint-end" d="M 836 164 H 886"/>
+            <circle class="svg-glint-dot" cx="510" cy="56" r="4"/>
+            <circle class="svg-glint-dot" cx="510" cy="272" r="4"/>
+          </g>
+          <g class="svg-bridge-fine-179">
+            <path class="svg-bridge-shadow-179" d="M 194 294 C 330 315, 678 315, 860 286"/>
+            <path class="svg-bridge-inner-179 top" d="M 198 62 H 862"/>
+            <path class="svg-bridge-inner-179 bottom" d="M 198 266 H 862"/>
+            <path class="svg-bridge-bar-179" d="M 348 60 V 268"/>
+            <path class="svg-bridge-bar-179 soft" d="M 668 60 V 268"/>
+            <path class="svg-bridge-dust-179" d="M 212 306 C 290 291, 375 290, 462 300 C 572 313, 687 302, 850 276"/>
+          </g>
+          <path class="svg-bridge-road" d="M 160 288 C 260 254, 389 248, 520 260 C 650 272, 758 250, 896 208" fill="none" stroke="#8FE5FF" stroke-width="16" stroke-linecap="round" opacity=".08"/>
+          <g class="svg-left-planet">
+            <circle cx="116" cy="284" r="84" fill="url(#staffPlanetLeft167)"/>
+            <ellipse cx="120" cy="338" rx="70" ry="12" fill="#031328" opacity=".28"/>
+            <path d="M 64 317 A 58 58 0 0 1 176 317 Z" fill="url(#staffLaunchPad167)" stroke="#FFF4C7" stroke-width="4"/>
+            <ellipse cx="120" cy="286" rx="38" ry="20" fill="#B9F7FF" opacity=".94"/>
+            <ellipse cx="120" cy="286" rx="28" ry="13" fill="#54C7F2" opacity=".72"/>
+          </g>
+          <g class="svg-left-polish-176">
+            <ellipse class="svg-launch-shadow" cx="124" cy="330" rx="92" ry="14"/>
+            <path class="svg-launch-lip" d="M 61 317 C 84 291, 154 291, 181 317"/>
+            <ellipse class="svg-launch-glass" cx="120" cy="286" rx="42" ry="22"/>
+            <ellipse class="svg-launch-core" cx="120" cy="286" rx="30" ry="14"/>
+            <path class="svg-launch-strut" d="M 78 317 L 50 342"/>
+            <path class="svg-launch-strut" d="M 164 317 L 195 342"/>
+            <circle class="svg-launch-light" cx="72" cy="308" r="5"/>
+            <circle class="svg-launch-light alt" cx="171" cy="308" r="5"/>
+          </g>
+          <g class="svg-left-detail-179">
+            <path class="svg-launch-rim-179" d="M 70 314 C 96 300, 146 300, 172 314"/>
+            <path class="svg-launch-panel-179" d="M 88 320 C 108 327, 138 327, 158 320"/>
+            <circle class="svg-launch-rivet-179" cx="91" cy="313" r="2.5"/>
+            <circle class="svg-launch-rivet-179" cx="150" cy="313" r="2.5"/>
+            <path class="svg-planet-contour-179" d="M 58 270 C 88 248, 139 244, 179 263"/>
+            <path class="svg-planet-contour-179 soft" d="M 61 292 C 95 274, 143 273, 184 289"/>
+          </g>
+          <g class="svg-right-portal">
+            <circle cx="888" cy="196" r="80" fill="#FFE39A" opacity=".20"/>
+            <circle cx="888" cy="196" r="64" fill="#FF8760" opacity=".70"/>
+            <ellipse cx="888" cy="196" rx="66" ry="43" fill="url(#staffPortal167)" stroke="#FFF1B9" stroke-width="5"/>
+            <path d="M 819 196 C 846 184, 869 184, 888 196 C 916 212, 939 204, 957 194" fill="none" stroke="#FFF2B0" stroke-width="7" stroke-linecap="round" opacity=".74"/>
+            <path d="M 888 169 L 896 189 L 918 189 L 900 202 L 907 224 L 888 211 L 869 224 L 876 202 L 858 189 L 880 189 Z" fill="#FFF2A6"/>
+          </g>
+          <g class="svg-right-polish-176">
+            <ellipse class="svg-portal-orbit outer" cx="888" cy="196" rx="84" ry="54"/>
+            <ellipse class="svg-portal-orbit inner" cx="888" cy="196" rx="56" ry="35"/>
+            <path class="svg-portal-shine" d="M 835 183 C 858 171, 890 169, 924 184"/>
+            <circle class="svg-portal-bolt" cx="817" cy="196" r="5"/>
+            <circle class="svg-portal-bolt" cx="958" cy="196" r="5"/>
+            <circle class="svg-portal-bolt cool" cx="888" cy="151" r="5"/>
+            <circle class="svg-portal-bolt cool" cx="888" cy="241" r="5"/>
+          </g>
+          <g class="svg-right-detail-179">
+            <path class="svg-portal-core-179" d="M 850 204 C 874 223, 911 222, 932 201"/>
+            <path class="svg-portal-surface-179" d="M 828 216 C 856 237, 914 242, 950 214"/>
+            <path class="svg-portal-surface-179 soft" d="M 833 173 C 866 154, 914 156, 947 177"/>
+            <circle class="svg-portal-spark-179" cx="836" cy="231" r="2.2"/>
+            <circle class="svg-portal-spark-179" cx="932" cy="163" r="2.1"/>
+            <circle class="svg-portal-spark-179 cool" cx="970" cy="202" r="2.4"/>
+          </g>
+        </svg>
+        <div class="staff-sky">
+          <span></span><span></span><span></span>
+        </div>
+        <div class="staff-lines" aria-hidden="true">
+          <span></span><span></span><span></span><span></span><span></span>
+        </div>
+        <svg class="staff-jump-guide" id="staffJumpGuide" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+          <path class="staff-jump-guide-shadow" id="staffJumpGuideShadow"></path>
+          <path class="staff-jump-guide-path" id="staffJumpGuidePath"></path>
+        </svg>
+        <div class="staff-jump-footprints" id="staffJumpFootprints" aria-hidden="true"></div>
+        <div class="staff-start">出发</div>
+        <div class="staff-finish">星星门</div>
+        <div class="staff-dino-wrap" id="staffDinoWrap">
+          <img class="staff-dino" id="staffDino" src="assets/runtime/xingya-suit-point.webp" alt="">
+        </div>
+        <div class="staff-visual-cue" id="staffVisualCue" aria-hidden="true"></div>
+        <div class="staff-steps" id="staffSteps"></div>
+      </div>
+
+      <div class="staff-bottom">
+        <div class="staff-progress" id="staffProgress"></div>
+        <p class="staff-feedback" id="staffFeedback">看谱位，读唱名，找琴键。</p>
+      </div>
+    </section>
+
+    <section class="garden-panel" id="gardenPanel" aria-label="呼吸花园音符嫩芽" hidden>
+      <div class="garden-scene" id="gardenScene" data-air-state="sealed" data-lesson="LS01">
+        <div class="garden-sky" aria-hidden="true"></div>
+        <div class="garden-hills" aria-hidden="true"></div>
+        <div class="garden-air-check" id="gardenAirCheck" role="status" aria-live="polite">
+          <span class="air-check-orbit" aria-hidden="true"></span>
+          <strong id="gardenAirCheckTitle">密封抵达</strong>
+          <small id="gardenAirCheckDetail">背包正在检查花园空气</small>
+        </div>
+        <div class="garden-plant" id="gardenPlant" aria-label="三片音符叶">
+          <span class="garden-stem" aria-hidden="true"></span>
+          <span class="garden-leaf leaf-c" data-leaf="1"><b>C</b><small>Do</small></span>
+          <span class="garden-leaf leaf-d" data-leaf="2"><b>D</b><small>Re</small></span>
+          <span class="garden-leaf leaf-e" data-leaf="3"><b>E</b><small>Mi</small></span>
+          <span class="garden-soil" aria-hidden="true"></span>
+        </div>
+        <div class="garden-xingya" id="gardenXingya" data-equipment="sealed">
+          <img id="gardenXingyaImage" src="assets/runtime/xingya-suit-point.webp" alt="星芽龙伙伴">
+        </div>
+        <div class="garden-speech" id="gardenSpeech" role="status" aria-live="polite">
+          <small id="gardenSpeechKicker">第一片叶</small>
+          <strong id="gardenSpeechMain">找琴键 C</strong>
+          <span id="gardenSpeechSupport">我唱 Do，它在两黑键左侧。</span>
+        </div>
+        <div class="garden-progress" id="gardenProgress" aria-label="花园进度"></div>
+        <div class="garden-listening" id="gardenListening" hidden>
+          <div class="listening-source" id="listeningSource" aria-hidden="true">
+            <span class="listening-source-core"></span>
+            <span class="listening-wave wave-one"></span>
+            <span class="listening-wave wave-two"></span>
+          </div>
+          <div class="listening-candidates" id="listeningCandidates" aria-label="两个声音朋友">
+            <span class="listening-candidate" aria-hidden="true"></span>
+            <span class="listening-candidate" aria-hidden="true"></span>
+          </div>
+          <button class="listening-replay" id="listeningReplay" type="button" aria-label="重听这个声音" title="重听这个声音">
+            <span aria-hidden="true">↻</span>
+          </button>
+          <div class="listening-call-progress" id="listeningCallProgress" aria-label="声音呼叫进度"></div>
+          <div class="listening-result" id="listeningResult" aria-hidden="true">
+            <span class="listening-hand-leaf leaf-left"></span>
+            <span class="listening-hand-leaf leaf-right"></span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="keyboard-panel" aria-label="屏幕钢琴">
+      <div class="status-row">
+        <div class="next-action" id="nextAction">认识 → Do/C · 2黑左 → 铺上地板</div>
+        <div class="input-pills" aria-live="polite">
+          <div class="pill" id="inputStatus">输入：屏幕琴键</div>
+          <div class="pill" id="heardStatus">听到：-</div>
+        </div>
+        <details class="input-tools dev-only-tools">
+          <summary>家长可选：听音 / MIDI</summary>
+          <div class="tool-body">
+            <button class="control primary" id="micButton" type="button" title="用麦克风听孩子弹出的单音">
+              <span class="icon">●</span>
+              <span>开始听音</span>
+            </button>
+            <button class="control midi" id="midiButton" type="button" title="Web MIDI 仅部分浏览器可用">
+              <span class="icon">⌁</span>
+              <span>连接 MIDI</span>
+            </button>
+          </div>
+        </details>
+      </div>
+
+      <div class="keyboard" id="keyboard" aria-label="屏幕钢琴键盘"></div>
+
+      <details class="parent-controls dev-only-tools">
+        <summary>家长关卡</summary>
+        <div class="level-controls helper-controls">
+          <button type="button" id="prevLevel">← 上一关</button>
+          <button type="button" id="resetLevel">重来</button>
+          <button type="button" id="nextLevel">下一关 →</button>
+        </div>
+      </details>
+    </section>
+  </main>
+
+  <div class="parent-modal" id="parentModal" hidden>
+    <div class="parent-card" role="dialog" aria-modal="true" aria-labelledby="parentTitle">
+      <button class="parent-close" id="parentClose" type="button" aria-label="关闭家长区">×</button>
+      <div class="parent-card-head">
+        <img src="assets/runtime/app-icon.webp" alt="">
+        <div>
+          <p class="eyebrow">家长区</p>
+          <h2 id="parentTitle">输入与练习设置</h2>
+        </div>
+      </div>
+      <div class="parent-status-grid">
+        <div class="parent-status-card">
+          <small>练习进度</small>
+          <strong id="parentProgressText">基地 0/8</strong>
+          <span id="parentStaffState">小恐龙跳待玩</span>
+        </div>
+        <div class="parent-status-card">
+          <small>当前输入</small>
+          <strong id="parentInputMode">屏幕琴键</strong>
+          <span id="parentHeardState">听到：-</span>
+          <span class="parent-response-record" id="parentResponseRecord">本轮未按键 · 只记录不限时</span>
+        </div>
+        <div class="parent-status-card parent-learning-card">
+          <small>当前训练</small>
+          <strong id="parentLearningFocus">Do/C · 两黑键左边</strong>
+          <span id="parentLearningDetail">认识音符 · 强提示 · 谱位下方小线</span>
+        </div>
+        <div class="parent-status-card parent-mastery-card">
+          <small>掌握状态</small>
+          <strong id="parentMasteryStatus">未完成</strong>
+          <span id="parentMasteryDetail">先玩通，再进入少提示复练。</span>
+          <div class="parent-evidence-list" id="parentEvidenceList" aria-label="学习记录"></div>
+        </div>
+      </div>
+      <div class="parent-option-list">
+        <div class="parent-option parent-audio-setting parent-setting-row">
+          <span class="parent-option-icon sound" aria-hidden="true">♫</span>
+          <span>
+            <strong>游戏声音</strong>
+            <small>琴音优先；反馈音更轻，不盖住孩子刚听到的音。</small>
+          </span>
+          <div class="parent-audio-controls">
+            <button class="parent-audio-toggle" id="parentSoundToggle" type="button" aria-label="开关游戏声音" aria-pressed="true">
+              <span class="parent-audio-toggle-track" aria-hidden="true"><i></i></span>
+              <span id="parentSoundState">开</span>
+            </button>
+            <label class="parent-volume-control">
+              <input id="parentVolumeControl" type="range" min="0" max="70" step="5" value="60" aria-label="游戏音量">
+              <output id="parentVolumeValue" for="parentVolumeControl">60%</output>
+            </label>
+          </div>
+        </div>
+        <div class="parent-option parent-motion-setting parent-setting-row">
+          <span class="parent-option-icon motion" aria-hidden="true">≋</span>
+          <span>
+            <strong>减少动态效果</strong>
+            <small>减少持续跳动和飞散特效，保留按键与对错反馈。</small>
+          </span>
+          <button class="parent-audio-toggle parent-motion-toggle" id="parentMotionToggle" type="button" aria-label="开关减少动态效果" aria-pressed="false">
+            <span class="parent-audio-toggle-track" aria-hidden="true"><i></i></span>
+            <span id="parentMotionState">关</span>
+          </button>
+        </div>
+        <button class="parent-option" id="parentMicButton" type="button">
+          <span class="parent-option-icon mic">●</span>
+          <span>
+            <strong>听钢琴声音</strong>
+            <small>只识别清楚的单音；声音只在本机即时分析，不上传、不保存。</small>
+          </span>
+        </button>
+        <button class="parent-option" id="parentMidiButton" type="button">
+          <span class="parent-option-icon midi">⌁</span>
+          <span>
+            <strong>连接 MIDI 键盘</strong>
+            <small>仅部分浏览器可用；iPad 网页先用屏幕琴键。</small>
+          </span>
+        </button>
+        <div class="parent-option passive">
+          <span class="parent-option-icon touch">♪</span>
+          <span>
+            <strong>屏幕琴键可直接玩</strong>
+            <small>不接设备也能点下方钢琴键。</small>
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="result-modal" id="resultModal" hidden>
+    <div class="result-card" role="status" aria-live="polite" aria-atomic="true" aria-labelledby="resultTitle" aria-describedby="resultText">
+      <img class="result-dino" src="assets/runtime/xingya-suit-celebrate.webp" alt="" aria-hidden="true">
+      <div class="result-badge">
+        <img class="result-icon" src="assets/runtime/success-badge.webp" alt="">
+      </div>
+      <h2 id="resultTitle">星芽修好一块！</h2>
+      <p id="resultText">月亮小家亮了一点，自动去下一步。</p>
+      <div class="result-summary" aria-live="polite">
+        <div class="result-prize">
+          <span class="result-prize-art"></span>
+          <small>拿到</small>
+          <strong id="resultPrizeName">月亮地板</strong>
+        </div>
+        <div class="result-next">
+          <small>下一站</small>
+          <strong id="resultNextName">下一关</strong>
+          <span id="resultNextHint">自动出发</span>
+        </div>
+      </div>
+      <div class="result-stars" aria-hidden="true"><span></span><span></span><span></span></div>
+      <div class="auto-next"><span>自动去下一步</span><i></i></div>
+      <button class="result-skip" type="button" id="modalNext">继续</button>
+    </div>
+  </div>
+
+  <script src="app.js?v=overhaul-340c"></script>
+</body>
+</html>
+
+
+

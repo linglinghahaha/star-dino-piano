@@ -1,0 +1,926 @@
+/* M08 only: reference composition with one floor blueprint, one coach cue and one piano. */
+
+#appShell.app-shell:not(.staff-mode)[data-level-id="M08"] .moon-yard {
+  isolation: isolate !important;
+  background: url("assets/runtime/m08-flat-moon-workshop-bg-v1.webp") center center / cover no-repeat !important;
+}
+
+#appShell.app-shell:not(.staff-mode)[data-level-id="M08"] .moon-yard.yard-scene-roof::after {
+  content: none !important;
+  display: none !important;
+}
+
+#appShell.app-shell:not(.staff-mode)[data-level-id="M08"] .topbar {
+  grid-template-columns: minmax(176px, 1fr) auto !important;
+}
+
+#appShell.app-shell:not(.staff-mode)[data-level-id="M08"] .progress-map {
+  position: absolute !important;
+  top: 50% !important;
+  left: 50% !important;
+  width: auto !important;
+  min-width: 70px !important;
+  transform: translate(-50%, -50%) !important;
+}
+
+#appShell.app-shell:not(.staff-mode)[data-level-id="M08"] .build-panel .panel-head,
+#appShell.app-shell:not(.staff-mode)[data-level-id="M08"] .stage-story-ribbon,
+#appShell.app-shell:not(.staff-mode)[data-level-id="M08"] .stage-signal-trail,
+#appShell.app-shell:not(.staff-mode)[data-level-id="M08"] .stage-energy-svg,
+#appShell.app-shell:not(.staff-mode)[data-level-id="M08"] .stage-note-orb,
+#appShell.app-shell:not(.staff-mode)[data-level-id="M08"] .roof-scale-route,
+#appShell.app-shell:not(.staff-mode)[data-level-id="M08"] .memory-star-route,
+#appShell.app-shell:not(.staff-mode)[data-level-id="M08"] .fg-star-route,
+#appShell.app-shell:not(.staff-mode)[data-level-id="M08"] .base,
+#appShell.app-shell:not(.staff-mode)[data-level-id="M08"] .build-pad,
+#appShell.app-shell:not(.staff-mode)[data-level-id="M08"] .crane,
+#appShell.app-shell:not(.staff-mode)[data-level-id="M08"] .stars,
+#appShell.app-shell:not(.staff-mode)[data-level-id="M08"] .planet,
+#appShell.app-shell:not(.staff-mode)[data-level-id="M08"] .stage-input-toast,
+#appShell.app-shell:not(.staff-mode)[data-level-id="M08"] .stage-confetti-effect,
+#appShell.app-shell:not(.staff-mode)[data-level-id="M08"] .flying-part {
+  display: none !important;
+}
+
+.roof-world-build {
+  display: none;
+}
+
+/* The blueprint is the score; this separate cabin is the world object the child actually builds. */
+#appShell.app-shell:not(.staff-mode)[data-level-id="M08"] .roof-world-build {
+  position: absolute !important;
+  z-index: 10 !important;
+  right: auto !important;
+  bottom: 35% !important;
+  left: 50% !important;
+  display: block !important;
+  width: clamp(244px, 27vw, 300px) !important;
+  height: clamp(132px, 15vw, 164px) !important;
+  transform: translateX(-50%) !important;
+  pointer-events: none !important;
+  filter: drop-shadow(0 12px 10px rgba(25, 52, 70, 0.18)) !important;
+}
+
+#appShell.app-shell:not(.staff-mode)[data-level-id="M08"] .roof-world-build::after {
+  content: "" !important;
+  position: absolute !important;
+  z-index: -1 !important;
+  right: 12% !important;
+  bottom: -4% !important;
+  left: 12% !important;
+  height: 13% !important;
+  border-radius: 50% !important;
+  background: rgba(34, 62, 78, 0.2) !important;
+  filter: blur(5px) !important;
+}
+
+#appShell.app-shell:not(.staff-mode)[data-level-id="M08"] .roof-world-cabin {
+  position: absolute !important;
+  right: 13% !important;
+  bottom: 0 !important;
+  left: 13% !important;
+  height: 56% !important;
+  overflow: hidden !important;
+  border: 4px solid rgba(234, 247, 239, 0.94) !important;
+  border-radius: 15px 15px 8px 8px !important;
+  background:
+    linear-gradient(90deg, transparent 0 31%, rgba(243, 181, 91, 0.8) 31% 34%, transparent 34% 66%, rgba(243, 181, 91, 0.76) 66% 69%, transparent 69%),
+    linear-gradient(180deg, #75c5c3 0 62%, #3e8797 62% 100%) !important;
+  box-shadow: inset 0 7px 0 rgba(255, 255, 255, 0.2), inset 0 -9px 0 rgba(27, 74, 91, 0.16) !important;
+}
+
+#appShell.app-shell:not(.staff-mode)[data-level-id="M08"] .roof-world-window,
+#appShell.app-shell:not(.staff-mode)[data-level-id="M08"] .roof-world-door,
+#appShell.app-shell:not(.staff-mode)[data-level-id="M08"] .roof-world-pressure {
+  position: absolute !important;
+  display: block !important;
+}
+
+#appShell.app-shell:not(.staff-mode)[data-level-id="M08"] .roof-world-window {
+  top: 24% !important;
+  left: 19% !important;
+  width: 24% !important;
+  height: 36% !important;
+  border: 3px solid rgba(239, 250, 242, 0.92) !important;
+  border-radius: 50% !important;
+  background: linear-gradient(180deg, rgba(190, 239, 242, 0.92), rgba(71, 151, 176, 0.96)) !important;
+  box-shadow: inset 0 4px 0 rgba(255, 255, 255, 0.35) !important;
+}
+
+#appShell.app-shell:not(.staff-mode)[data-level-id="M08"] .roof-world-door {
+  right: 17% !important;
+  bottom: -3px !important;
+  width: 25% !important;
+  height: 62% !important;
+  border: 3px solid rgba(239, 250, 242, 0.92) !important;
+  border-bottom: 0 !important;
+  border-radius: 24px 24px 0 0 !important;
+  background: linear-gradient(180deg, #f4c276, #c97855) !important;
+  box-shadow: inset 0 5px 0 rgba(255, 255, 255, 0.24) !important;
+}
+
+#appShell.app-shell:not(.staff-mode)[data-level-id="M08"] .roof-world-door::after {
+  content: "" !important;
+  position: absolute !important;
+  top: 48% !important;
+  right: 14% !important;
+  width: 6px !important;
+  height: 6px !important;
+  border-radius: 50% !important;
+  background: #fff2b0 !important;
+}
+
+#appShell.app-shell:not(.staff-mode)[data-level-id="M08"] .roof-world-pressure {
+  top: 15% !important;
+  right: 43% !important;
+  width: 13px !important;
+  height: 13px !important;
+  border: 3px solid rgba(235, 248, 240, 0.9) !important;
+  border-radius: 50% !important;
+  background: #6e8693 !important;
+  box-shadow: 0 0 0 4px rgba(54, 104, 119, 0.14) !important;
+}
+
+#appShell.app-shell:not(.staff-mode)[data-level-id="M08"] .roof-world-frame {
+  position: absolute !important;
+  z-index: 3 !important;
+  top: 0 !important;
+  right: 5% !important;
+  left: 5% !important;
+  height: 67% !important;
+}
+
+#appShell.app-shell:not(.staff-mode)[data-level-id="M08"] .roof-world-frame::after {
+  content: "" !important;
+  position: absolute !important;
+  z-index: 2 !important;
+  top: 8% !important;
+  right: 5% !important;
+  bottom: 0 !important;
+  left: 5% !important;
+  opacity: 0 !important;
+  clip-path: polygon(0 66%, 18% 29%, 39% 7%, 61% 7%, 82% 29%, 100% 66%, 92% 100%, 8% 100%) !important;
+  background: linear-gradient(180deg, rgba(213, 247, 241, 0.72), rgba(63, 137, 156, 0.82)) !important;
+  box-shadow: inset 0 -8px 0 rgba(31, 86, 103, 0.12) !important;
+  transition: opacity 180ms ease !important;
+}
+
+#appShell.app-shell:not(.staff-mode)[data-level-id="M08"] .roof-world-build[data-installed-count="5"] .roof-world-frame::after {
+  opacity: 1 !important;
+}
+
+#appShell.app-shell:not(.staff-mode)[data-level-id="M08"] .roof-world-beam {
+  position: absolute !important;
+  z-index: 0 !important;
+  right: 10% !important;
+  bottom: 4% !important;
+  left: 10% !important;
+  height: 8px !important;
+  border: 3px solid rgba(235, 247, 239, 0.9) !important;
+  border-radius: 999px !important;
+  background: #5299a3 !important;
+  box-shadow: 0 4px 0 rgba(34, 77, 91, 0.12) !important;
+}
+
+#appShell.app-shell:not(.staff-mode)[data-level-id="M08"] .roof-world-panel {
+  position: absolute !important;
+  z-index: 3 !important;
+  display: block !important;
+  width: 22% !important;
+  height: 34% !important;
+  box-sizing: border-box !important;
+  border: 3px dashed rgba(220, 245, 244, 0.9) !important;
+  border-radius: 9px 9px 5px 5px !important;
+  background: rgba(50, 126, 148, 0.12) !important;
+  transform-origin: center bottom !important;
+  transition: filter 180ms ease, opacity 180ms ease, transform 180ms ease !important;
+}
+
+#appShell.app-shell:not(.staff-mode)[data-level-id="M08"] .roof-world-panel[data-index="0"] {
+  top: 43% !important;
+  left: 3% !important;
+  transform: rotate(-24deg) !important;
+}
+
+#appShell.app-shell:not(.staff-mode)[data-level-id="M08"] .roof-world-panel[data-index="1"] {
+  top: 22% !important;
+  left: 21% !important;
+  transform: rotate(-12deg) !important;
+}
+
+#appShell.app-shell:not(.staff-mode)[data-level-id="M08"] .roof-world-panel[data-index="2"] {
+  top: 12% !important;
+  left: 39% !important;
+}
+
+#appShell.app-shell:not(.staff-mode)[data-level-id="M08"] .roof-world-panel[data-index="3"] {
+  top: 22% !important;
+  left: 57% !important;
+  transform: rotate(12deg) !important;
+}
+
+#appShell.app-shell:not(.staff-mode)[data-level-id="M08"] .roof-world-panel[data-index="4"] {
+  top: 43% !important;
+  left: 75% !important;
+  transform: rotate(24deg) !important;
+}
+
+#appShell.app-shell:not(.staff-mode)[data-level-id="M08"] .roof-world-panel.install-current {
+  border-style: solid !important;
+  border-color: rgba(255, 248, 211, 0.98) !important;
+  background: rgba(255, 241, 173, 0.16) !important;
+  box-shadow: 0 0 0 4px rgba(255, 234, 153, 0.12), 0 0 14px rgba(255, 232, 145, 0.28) !important;
+}
+
+#appShell.app-shell:not(.staff-mode)[data-level-id="M08"] .roof-world-panel.installed {
+  border-style: solid !important;
+  border-color: rgba(242, 250, 240, 0.96) !important;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.36), transparent 42%),
+    linear-gradient(180deg, color-mix(in srgb, var(--roof-color) 68%, #bce5d9 32%), color-mix(in srgb, var(--roof-color) 58%, #376f82 42%)) !important;
+  box-shadow: inset 0 -6px 0 rgba(30, 76, 93, 0.14), 0 5px 7px rgba(28, 61, 78, 0.16) !important;
+}
+
+#appShell.app-shell:not(.staff-mode)[data-level-id="M08"] .roof-world-skylight {
+  position: absolute !important;
+  z-index: 6 !important;
+  top: 19% !important;
+  left: 50% !important;
+  display: block !important;
+  width: 16% !important;
+  height: 19% !important;
+  opacity: 0 !important;
+  transform: translateX(-50%) !important;
+  border: 3px solid rgba(242, 251, 246, 0.96) !important;
+  border-radius: 50% !important;
+  background: linear-gradient(180deg, rgba(213, 249, 252, 0.92), rgba(95, 178, 196, 0.88)) !important;
+  box-shadow: inset 0 4px 0 rgba(255, 255, 255, 0.42), 0 4px 7px rgba(30, 71, 85, 0.18) !important;
+  transition: opacity 180ms ease !important;
+}
+
+#appShell.app-shell:not(.staff-mode)[data-level-id="M08"] .roof-world-skylight.is-closed {
+  opacity: 1 !important;
+}
+
+#appShell.app-shell:not(.staff-mode)[data-level-id="M08"] .roof-world-seal-light {
+  position: absolute !important;
+  right: 50% !important;
+  bottom: -7px !important;
+  display: none !important;
+  width: 12px !important;
+  height: 12px !important;
+  transform: translateX(50%) !important;
+  border: 3px solid rgba(245, 252, 247, 0.94) !important;
+  border-radius: 50% !important;
+  background: #718692 !important;
+  box-shadow: 0 3px 5px rgba(25, 57, 72, 0.2) !important;
+}
+
+#appShell.app-shell:not(.staff-mode)[data-level-id="M08"] .roof-world-build[data-mode="seal"] .roof-world-panel {
+  border-style: solid !important;
+  filter: saturate(0.62) !important;
+}
+
+#appShell.app-shell:not(.staff-mode)[data-level-id="M08"] .roof-world-build[data-mode="seal"] .roof-world-seal-light {
+  display: block !important;
+}
+
+#appShell.app-shell:not(.staff-mode)[data-level-id="M08"] .roof-world-panel.seal-current .roof-world-seal-light {
+  background: #ffd36e !important;
+  box-shadow: 0 0 0 5px rgba(255, 211, 110, 0.18), 0 0 14px rgba(255, 211, 110, 0.48) !important;
+  animation: roof-world-seal-pulse 1.2s ease-in-out infinite !important;
+}
+
+#appShell.app-shell:not(.staff-mode)[data-level-id="M08"] .roof-world-panel.seal-checked .roof-world-seal-light {
+  background: #6fe0ac !important;
+  box-shadow: 0 0 0 4px rgba(111, 224, 172, 0.16), 0 0 12px rgba(111, 224, 172, 0.42) !important;
+}
+
+#appShell.app-shell:not(.staff-mode)[data-level-id="M08"] .roof-world-build[data-pressure-state="safe"] {
+  filter: drop-shadow(0 12px 10px rgba(25, 52, 70, 0.16)) drop-shadow(0 0 16px rgba(91, 224, 178, 0.34)) !important;
+}
+
+#appShell.app-shell:not(.staff-mode)[data-level-id="M08"] .roof-world-build[data-pressure-state="safe"] .roof-world-pressure {
+  background: #6fe0ac !important;
+  box-shadow: 0 0 0 5px rgba(111, 224, 172, 0.18), 0 0 16px rgba(111, 224, 172, 0.54) !important;
+}
+
+#appShell.app-shell:not(.staff-mode)[data-level-id="M08"] .roof-world-panel.just-installed {
+  animation: roof-world-panel-lock 620ms cubic-bezier(0.18, 0.84, 0.24, 1.12) both !important;
+}
+
+#appShell.app-shell:not(.staff-mode)[data-level-id="M08"] .roof-world-build.roof-world-payoff {
+  animation: roof-world-payoff 1.1s ease both !important;
+}
+
+/* The plan is a shallow projection on the floor, not a full-stage interface panel. */
+#appShell.app-shell:not(.staff-mode)[data-level-id="M08"] .build-blueprint {
+  z-index: 12 !important;
+  top: auto !important;
+  right: auto !important;
+  bottom: 13.5% !important;
+  left: 49% !important;
+  width: min(650px, 55%) !important;
+  min-width: 0 !important;
+  max-width: 650px !important;
+  height: min(138px, 25%) !important;
+  min-height: 116px !important;
+  max-height: 138px !important;
+  transform: translateX(-50%) !important;
+  overflow: hidden !important;
+  clip-path: polygon(8% 0, 92% 0, 100% 100%, 0 100%) !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background:
+    linear-gradient(rgba(180, 239, 255, 0.18) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(180, 239, 255, 0.18) 1px, transparent 1px),
+    linear-gradient(160deg, rgba(35, 151, 197, 0.88), rgba(12, 88, 145, 0.9)) !important;
+  background-size: 72px 52px, 72px 52px, auto !important;
+  box-shadow: inset 0 -12px 24px rgba(0, 35, 72, 0.12) !important;
+  filter: drop-shadow(0 9px 10px rgba(0, 24, 54, 0.2)) !important;
+}
+
+#appShell.app-shell:not(.staff-mode)[data-level-id="M08"] .build-blueprint::before {
+  inset: 5px 9px !important;
+  clip-path: polygon(7% 0, 93% 0, 100% 100%, 0 100%) !important;
+  border: 2px solid rgba(218, 249, 255, 0.58) !important;
+  border-radius: 0 !important;
+}
+
+#appShell.app-shell:not(.staff-mode)[data-level-id="M08"] .build-blueprint::after {
+  right: 12% !important;
+  bottom: 6px !important;
+  left: 12% !important;
+  width: auto !important;
+  height: 2px !important;
+  transform: none !important;
+  border-radius: 999px !important;
+  background: rgba(194, 244, 255, 0.32) !important;
+  filter: none !important;
+}
+
+#appShell.app-shell:not(.staff-mode)[data-level-id="M08"] .blueprint-title {
+  display: none !important;
+}
+
+#appShell.app-shell:not(.staff-mode)[data-level-id="M08"] .blueprint-draft {
+  inset: 7px 24px 8px !important;
+}
+
+/* The finished cabin remains a quiet blueprint silhouette behind the playable path. */
+#appShell.app-shell:not(.staff-mode)[data-level-id="M08"] .blueprint-outline {
+  z-index: 1 !important;
+  inset: 1% 24% 0 !important;
+  width: 52% !important;
+  height: 98% !important;
+  color: rgba(221, 249, 255, 0.52) !important;
+  opacity: 0.74 !important;
+  filter: none !important;
+}
+
+#appShell.app-shell:not(.staff-mode)[data-level-id="M08"] .blueprint-outline path {
+  stroke-width: 1.7 !important;
+  stroke-dasharray: 4 4.5 !important;
+}
+
+/* This connector is only the 1-to-5 build order. It stays horizontal and close to the floor. */
+#appShell.app-shell:not(.staff-mode)[data-level-id="M08"] .blueprint-sequence-line {
+  position: absolute !important;
+  z-index: 2 !important;
+  inset: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  overflow: visible !important;
+  color: rgba(221, 249, 255, 0.84) !important;
+  pointer-events: none !important;
+  filter: drop-shadow(0 0 4px rgba(108, 229, 255, 0.24)) !important;
+}
+
+#appShell.app-shell:not(.staff-mode)[data-level-id="M08"] .blueprint-sequence-line path {
+  fill: none !important;
+  stroke: currentColor !important;
+  stroke-width: 1.8 !important;
+  stroke-linecap: round !important;
+  stroke-linejoin: round !important;
+  stroke-dasharray: 3.5 4.5 !important;
+}
+
+#appShell.app-shell:not(.staff-mode)[data-level-id="M08"] .blueprint-sequence-line .blueprint-arrow-head {
+  fill: currentColor !important;
+  stroke: none !important;
+}
+
+#appShell.app-shell:not(.staff-mode)[data-level-id="M08"] .blueprint-sequence-line circle {
+  fill: #daf7ff !important;
+  stroke: rgba(17, 105, 156, 0.9) !important;
+  stroke-width: 0.7 !important;
+}
+
+#appShell.app-shell:not(.staff-mode)[data-level-id="M08"] .blueprint-part,
+#appShell.app-shell:not(.staff-mode)[data-level-id="M08"] .blueprint-part.current,
+#appShell.app-shell:not(.staff-mode)[data-level-id="M08"] .blueprint-part.future,
+#appShell.app-shell:not(.staff-mode)[data-level-id="M08"] .blueprint-part.placed,
+#appShell.app-shell:not(.staff-mode)[data-level-id="M08"] .blueprint-part.just-placed {
+  z-index: 5 !important;
+  display: block !important;
+  width: 48px !important;
+  height: 54px !important;
+  opacity: 1 !important;
+  transform: translate(-50%, -50%) !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  filter: none !important;
+}
+
+#appShell.app-shell:not(.staff-mode)[data-level-id="M08"] .blueprint-part b {
+  position: absolute !important;
+  z-index: 5 !important;
+  top: 15px !important;
+  left: 50% !important;
+  display: grid !important;
+  place-items: center !important;
+  width: 36px !important;
+  height: 34px !important;
+  transform: translateX(-50%) !important;
+  border: 3px solid var(--part-color) !important;
+  border-radius: 7px !important;
+  color: #ffffff !important;
+  background: rgba(14, 53, 99, 0.95) !important;
+  box-shadow: 0 4px 8px rgba(0, 12, 35, 0.28) !important;
+  font-size: 22px !important;
+  font-weight: 950 !important;
+  line-height: 1 !important;
+  text-shadow: 0 1px 2px rgba(0, 15, 40, 0.7) !important;
+}
+
+#appShell.app-shell:not(.staff-mode)[data-level-id="M08"] .blueprint-part b::after {
+  content: "" !important;
+  position: absolute !important;
+  bottom: -8px !important;
+  left: 50% !important;
+  width: 0 !important;
+  height: 0 !important;
+  transform: translateX(-50%) !important;
+  border: 5px solid transparent !important;
+  border-top-color: var(--part-color) !important;
+  border-bottom: 0 !important;
+}
+
+#appShell.app-shell:not(.staff-mode)[data-level-id="M08"] .blueprint-part[data-index="1"] b::after,
+#appShell.app-shell:not(.staff-mode)[data-level-id="M08"] .blueprint-part[data-index="4"] b::after {
+  top: -8px !important;
+  bottom: auto !important;
+  border-top: 0 !important;
+  border-bottom: 5px solid var(--part-color) !important;
+}
+
+#appShell.app-shell:not(.staff-mode)[data-level-id="M08"] .blueprint-part em {
+  position: absolute !important;
+  z-index: 7 !important;
+  top: -8px !important;
+  left: 50% !important;
+  display: grid !important;
+  place-items: center !important;
+  width: 22px !important;
+  height: 22px !important;
+  transform: translateX(-50%) !important;
+  border: 2px solid rgba(235, 252, 255, 0.96) !important;
+  border-radius: 50% !important;
+  color: #17375e !important;
+  background: #f5fcff !important;
+  box-shadow: 0 3px 7px rgba(0, 11, 28, 0.22) !important;
+  font-size: 12px !important;
+  font-style: normal !important;
+  font-weight: 950 !important;
+  line-height: 1 !important;
+}
+
+/* Each correct note locks a small roof strip at its waypoint. */
+#appShell.app-shell:not(.staff-mode)[data-level-id="M08"] .blueprint-roof-panel {
+  position: absolute !important;
+  z-index: 3 !important;
+  top: 49px !important;
+  left: 50% !important;
+  display: block !important;
+  width: 34px !important;
+  height: 7px !important;
+  transform: translateX(-50%) !important;
+  border: 2px dashed var(--part-color) !important;
+  border-radius: 4px !important;
+  background: var(--part-color-soft) !important;
+  box-shadow: none !important;
+}
+
+#appShell.app-shell:not(.staff-mode)[data-level-id="M08"] .blueprint-part[data-index="1"] .blueprint-roof-panel,
+#appShell.app-shell:not(.staff-mode)[data-level-id="M08"] .blueprint-part[data-index="4"] .blueprint-roof-panel {
+  top: -3px !important;
+}
+
+#appShell.app-shell:not(.staff-mode)[data-level-id="M08"] .blueprint-part.future b,
+#appShell.app-shell:not(.staff-mode)[data-level-id="M08"] .blueprint-part.future em {
+  opacity: 0.68 !important;
+}
+
+#appShell.app-shell:not(.staff-mode)[data-level-id="M08"] .blueprint-part.future .blueprint-roof-panel {
+  opacity: 0 !important;
+}
+
+#appShell.app-shell:not(.staff-mode)[data-level-id="M08"] .blueprint-part.current b {
+  border-color: var(--part-color) !important;
+  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.9), 0 0 0 7px var(--part-color-soft), 0 0 14px var(--part-color-soft), 0 5px 10px rgba(0, 12, 35, 0.3) !important;
+}
+
+#appShell.app-shell:not(.staff-mode)[data-level-id="M08"] .blueprint-part.current .blueprint-roof-panel {
+  opacity: 1 !important;
+  border-style: solid !important;
+  border-color: rgba(255, 255, 255, 0.94) !important;
+}
+
+#appShell.app-shell:not(.staff-mode)[data-level-id="M08"] .blueprint-part.placed b {
+  background: color-mix(in srgb, var(--part-color) 54%, #123a67) !important;
+}
+
+#appShell.app-shell:not(.staff-mode)[data-level-id="M08"] .blueprint-part.placed .blueprint-roof-panel {
+  opacity: 1 !important;
+  border-style: solid !important;
+  border-color: rgba(240, 253, 255, 0.9) !important;
+  background: var(--part-color) !important;
+  box-shadow: 0 0 8px var(--part-color-soft) !important;
+}
+
+#appShell.app-shell:not(.staff-mode)[data-level-id="M08"] .blueprint-seal-point {
+  display: none !important;
+}
+
+/* The second pass keeps the completed roof and turns the same locations into seal lights. */
+#appShell.app-shell:not(.staff-mode)[data-level-id="M08"][data-roof-mode="seal"] .build-blueprint {
+  background:
+    linear-gradient(rgba(145, 231, 211, 0.1) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(145, 231, 211, 0.1) 1px, transparent 1px),
+    linear-gradient(160deg, rgba(22, 132, 155, 0.82), rgba(7, 57, 98, 0.88)) !important;
+  background-size: 18px 18px, 18px 18px, auto !important;
+}
+
+#appShell.app-shell:not(.staff-mode)[data-level-id="M08"][data-roof-mode="seal"] .blueprint-sequence-line {
+  color: rgba(194, 247, 226, 0.58) !important;
+}
+
+#appShell.app-shell:not(.staff-mode)[data-level-id="M08"][data-roof-mode="seal"] .build-blueprint[data-identity-hidden="true"] .blueprint-part {
+  border: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+#appShell.app-shell:not(.staff-mode)[data-level-id="M08"][data-roof-mode="seal"] .blueprint-part b {
+  display: none !important;
+}
+
+#appShell.app-shell:not(.staff-mode)[data-level-id="M08"][data-roof-mode="seal"] .build-blueprint[data-identity-hidden="true"] .blueprint-part em {
+  display: grid !important;
+  opacity: 1 !important;
+}
+
+#appShell.app-shell:not(.staff-mode)[data-level-id="M08"][data-roof-mode="seal"] .blueprint-part.current .blueprint-roof-panel,
+#appShell.app-shell:not(.staff-mode)[data-level-id="M08"][data-roof-mode="seal"] .blueprint-part.future .blueprint-roof-panel,
+#appShell.app-shell:not(.staff-mode)[data-level-id="M08"][data-roof-mode="seal"] .blueprint-part.placed .blueprint-roof-panel {
+  display: block !important;
+  opacity: 1 !important;
+  border-style: solid !important;
+  border-color: rgba(222, 249, 247, 0.74) !important;
+  background: linear-gradient(180deg, rgba(116, 190, 201, 0.96), rgba(45, 119, 145, 0.98)) !important;
+  box-shadow: 0 3px 7px rgba(0, 18, 38, 0.18) !important;
+}
+
+#appShell.app-shell:not(.staff-mode)[data-level-id="M08"][data-roof-mode="seal"] .blueprint-seal-point {
+  position: absolute !important;
+  z-index: 7 !important;
+  top: 35px !important;
+  left: 50% !important;
+  display: block !important;
+  width: 18px !important;
+  height: 18px !important;
+  transform: translateX(-50%) !important;
+  border: 3px solid rgba(235, 251, 255, 0.88) !important;
+  border-radius: 50% !important;
+  background: #6d8493 !important;
+  box-shadow: 0 3px 7px rgba(0, 13, 30, 0.24), inset 0 2px 0 rgba(255, 255, 255, 0.28) !important;
+}
+
+#appShell.app-shell:not(.staff-mode)[data-level-id="M08"][data-roof-mode="seal"] .blueprint-part.current .blueprint-seal-point {
+  background: #ffd46b !important;
+  box-shadow: 0 0 0 5px rgba(255, 212, 107, 0.2), 0 0 16px rgba(255, 212, 107, 0.5) !important;
+  animation: roof-seal-breathe 1.25s ease-in-out infinite !important;
+}
+
+#appShell.app-shell:not(.staff-mode)[data-level-id="M08"][data-roof-mode="seal"] .blueprint-part.placed .blueprint-seal-point {
+  background: #71e1ac !important;
+  box-shadow: 0 0 0 4px rgba(113, 225, 172, 0.16), 0 0 13px rgba(113, 225, 172, 0.42) !important;
+}
+
+/* The crane carries only the current physical piece. The rope visually reaches the crane arm. */
+#appShell.app-shell:not(.staff-mode)[data-level-id="M08"] .hanging-part,
+#appShell.app-shell:not(.staff-mode)[data-level-id="M08"] .moon-yard.yard-scene-roof .hanging-part[data-shape="roof"] {
+  z-index: 18 !important;
+  top: 32% !important;
+  right: auto !important;
+  bottom: auto !important;
+  left: 76% !important;
+  display: grid !important;
+  place-items: center !important;
+  width: clamp(72px, 7.2vw, 88px) !important;
+  min-width: 0 !important;
+  max-width: 88px !important;
+  height: clamp(64px, 6.5vw, 78px) !important;
+  min-height: 0 !important;
+  max-height: 78px !important;
+  padding: 6px 8px !important;
+  overflow: visible !important;
+  box-sizing: border-box !important;
+  transform: translateX(-50%) !important;
+  border: 3px solid rgba(239, 225, 184, 0.94) !important;
+  border-radius: 5px !important;
+  background: linear-gradient(180deg, #eff6ed, #b9d2d2) !important;
+  box-shadow: inset 0 0 0 2px rgba(64, 97, 111, 0.1), 0 7px 12px rgba(0, 12, 30, 0.18) !important;
+  animation: none !important;
+}
+
+#appShell.app-shell:not(.staff-mode)[data-level-id="M08"] .hanging-part::before,
+#appShell.app-shell:not(.staff-mode)[data-level-id="M08"] .moon-yard.yard-scene-roof .hanging-part[data-shape="roof"]::before {
+  content: "" !important;
+  position: absolute !important;
+  top: -30px !important;
+  right: 7px !important;
+  left: 7px !important;
+  display: block !important;
+  width: auto !important;
+  height: 30px !important;
+  transform: none !important;
+  background:
+    linear-gradient(64deg, transparent 48%, rgba(211, 163, 79, 0.96) 49% 51%, transparent 52%) left bottom / 50% 30px no-repeat,
+    linear-gradient(-64deg, transparent 48%, rgba(211, 163, 79, 0.96) 49% 51%, transparent 52%) right bottom / 50% 30px no-repeat !important;
+  box-shadow: none !important;
+}
+
+#appShell.app-shell:not(.staff-mode)[data-level-id="M08"] .hanging-part::after,
+#appShell.app-shell:not(.staff-mode)[data-level-id="M08"] .moon-yard.yard-scene-roof .hanging-part[data-shape="roof"]::after {
+  display: none !important;
+  content: "" !important;
+}
+
+#appShell.app-shell:not(.staff-mode)[data-level-id="M08"] .hanging-part .hanging-part-art,
+#appShell.app-shell:not(.staff-mode)[data-level-id="M08"] .moon-yard.yard-scene-roof .hanging-part[data-shape="roof"] .hanging-part-art {
+  position: relative !important;
+  display: block !important;
+  width: 76% !important;
+  height: 46px !important;
+  opacity: 1 !important;
+  filter: drop-shadow(0 5px 4px rgba(0, 10, 25, 0.16)) !important;
+}
+
+#appShell.app-shell:not(.staff-mode)[data-level-id="M08"] .hanging-part .hanging-part-art::before,
+#appShell.app-shell:not(.staff-mode)[data-level-id="M08"] .moon-yard.yard-scene-roof .hanging-part[data-shape="roof"] .hanging-part-art::before {
+  inset: 8px 5px 7px !important;
+  border: 3px solid rgba(245, 252, 244, 0.92) !important;
+  border-radius: 8px 8px 5px 5px !important;
+  background:
+    radial-gradient(circle at 22% 23%, rgba(255, 255, 255, 0.76) 0 3px, transparent 4px),
+    radial-gradient(circle at 78% 23%, rgba(255, 255, 255, 0.58) 0 3px, transparent 4px),
+    linear-gradient(180deg, color-mix(in srgb, var(--part-color, #cb84fa) 46%, #e5f7ed 54%), color-mix(in srgb, var(--part-color, #cb84fa) 58%, #4b7f8e 42%)) !important;
+  box-shadow: inset 0 -6px 0 rgba(14, 54, 75, 0.12) !important;
+  clip-path: polygon(12% 18%, 50% 0, 88% 18%, 82% 100%, 18% 100%) !important;
+}
+
+#appShell.app-shell:not(.staff-mode)[data-level-id="M08"] .hanging-part .hanging-part-art::after,
+#appShell.app-shell:not(.staff-mode)[data-level-id="M08"] .moon-yard.yard-scene-roof .hanging-part[data-shape="roof"] .hanging-part-art::after {
+  display: none !important;
+}
+
+#appShell.app-shell:not(.staff-mode)[data-level-id="M08"] .hanging-part .part-note-badge,
+#appShell.app-shell:not(.staff-mode)[data-level-id="M08"] .hanging-part .part-studs,
+#appShell.app-shell:not(.staff-mode)[data-level-id="M08"] .hanging-part > strong {
+  display: none !important;
+}
+
+#appShell.app-shell:not(.staff-mode)[data-level-id="M08"][data-roof-mode="seal"] .moon-yard.yard-scene-roof .hanging-part[data-shape="roof"],
+#appShell.app-shell:not(.staff-mode)[data-level-id="M08"][data-roof-mode="seal"] .hanging-part {
+  display: none !important;
+}
+
+/* Xingya and the speech bubble form one grounded coaching group left of the plan. */
+#appShell.app-shell:not(.staff-mode)[data-level-id="M08"] .coach-overlay {
+  z-index: 20 !important;
+  top: auto !important;
+  right: auto !important;
+  bottom: clamp(96px, 24%, 150px) !important;
+  left: clamp(70px, 10.1%, 136px) !important;
+  display: block !important;
+  width: clamp(270px, 26vw, 330px) !important;
+  min-height: min(220px, 48%) !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+#appShell.app-shell:not(.staff-mode)[data-level-id="M08"] .coach-overlay::after {
+  right: auto !important;
+  bottom: 2px !important;
+  left: 22px !important;
+  width: 112px !important;
+  height: 12px !important;
+  background: rgba(1, 10, 28, 0.24) !important;
+  filter: blur(4px) !important;
+}
+
+#appShell.app-shell:not(.staff-mode)[data-level-id="M08"] .coach-dino {
+  position: absolute !important;
+  right: auto !important;
+  bottom: 0 !important;
+  left: -34px !important;
+  width: clamp(174px, 14.5vw, 204px) !important;
+  max-width: none !important;
+  height: auto !important;
+  max-height: none !important;
+  object-fit: contain !important;
+  transform: none !important;
+  transform-origin: center bottom !important;
+  content: url("assets/runtime/xingya-suit-point-flat-m08-v3.webp") !important;
+  filter: drop-shadow(0 9px 8px rgba(0, 22, 42, 0.24)) !important;
+}
+
+#appShell.app-shell:not(.staff-mode)[data-level-id="M08"] .coach-bubble {
+  top: -84px !important;
+  right: auto !important;
+  left: 0 !important;
+  display: flex !important;
+  align-items: baseline !important;
+  justify-content: center !important;
+  gap: 5px !important;
+  width: auto !important;
+  min-width: clamp(250px, 23vw, 292px) !important;
+  max-width: 306px !important;
+  min-height: 56px !important;
+  box-sizing: border-box !important;
+  padding: 12px 16px 13px !important;
+  border: 3px solid rgba(210, 225, 244, 0.95) !important;
+  border-radius: 17px !important;
+  color: #17233a !important;
+  background: rgba(255, 253, 249, 0.98) !important;
+  text-align: left !important;
+  white-space: nowrap !important;
+  transform: none !important;
+  box-shadow: 0 8px 16px rgba(0, 13, 32, 0.17), inset 0 1px 0 rgba(255, 255, 255, 0.92) !important;
+}
+
+#appShell.app-shell:not(.staff-mode)[data-level-id="M08"] .coach-bubble::after {
+  right: auto !important;
+  bottom: -11px !important;
+  left: 66px !important;
+  width: 18px !important;
+  height: 18px !important;
+  border-right: 3px solid rgba(210, 225, 244, 0.95) !important;
+  border-bottom: 3px solid rgba(210, 225, 244, 0.95) !important;
+  background: #fffdf9 !important;
+  transform: rotate(45deg) !important;
+}
+
+#appShell.app-shell:not(.staff-mode)[data-level-id="M08"] .coach-bubble small {
+  display: none !important;
+}
+
+#appShell.app-shell:not(.staff-mode)[data-level-id="M08"] .coach-bubble .roof-coach-copy,
+#appShell.app-shell:not(.staff-mode)[data-level-id="M08"] .coach-bubble span {
+  display: inline !important;
+  margin: 0 !important;
+  color: #17233a !important;
+  font-size: clamp(15px, 1.45vw, 18px) !important;
+  font-weight: 850 !important;
+  line-height: 1.2 !important;
+  white-space: nowrap !important;
+  max-width: none !important;
+  overflow: visible !important;
+  overflow-wrap: normal !important;
+  text-overflow: clip !important;
+}
+
+#appShell.app-shell:not(.staff-mode)[data-level-id="M08"] .coach-bubble strong {
+  display: inline !important;
+  margin: 0 !important;
+  color: var(--target-color, #cb84fa) !important;
+  font-size: clamp(19px, 1.9vw, 24px) !important;
+  font-weight: 950 !important;
+  line-height: 1 !important;
+  letter-spacing: 0 !important;
+  text-shadow: none !important;
+}
+
+#appShell.app-shell:not(.staff-mode)[data-level-id="M08"] .blueprint-payoff {
+  animation: roof-blueprint-payoff 1.1s ease both !important;
+}
+
+@keyframes roof-seal-breathe {
+  0%, 100% { transform: translateX(-50%) scale(1); }
+  50% { transform: translateX(-50%) scale(1.12); }
+}
+
+@keyframes roof-world-seal-pulse {
+  0%, 100% { transform: translateX(50%) scale(1); }
+  50% { transform: translateX(50%) scale(1.12); }
+}
+
+@keyframes roof-world-panel-lock {
+  0% { opacity: 0.2; filter: brightness(1.22); }
+  58% { opacity: 1; filter: brightness(1.16); }
+  100% { opacity: 1; filter: brightness(1); }
+}
+
+@keyframes roof-world-payoff {
+  0%, 100% { filter: drop-shadow(0 12px 10px rgba(25, 52, 70, 0.18)); }
+  48% { filter: drop-shadow(0 12px 10px rgba(25, 52, 70, 0.14)) drop-shadow(0 0 18px rgba(255, 226, 132, 0.42)); }
+}
+
+@keyframes roof-blueprint-payoff {
+  0%, 100% { filter: brightness(1) drop-shadow(0 10px 12px rgba(0, 9, 28, 0.22)); }
+  46% { filter: brightness(1.12) drop-shadow(0 0 14px rgba(113, 225, 172, 0.34)); }
+}
+
+@media (max-width: 1040px), (max-height: 820px) {
+  #appShell.app-shell:not(.staff-mode)[data-level-id="M08"] .roof-world-build {
+    bottom: 35% !important;
+    width: 252px !important;
+    height: 140px !important;
+  }
+
+  #appShell.app-shell:not(.staff-mode)[data-level-id="M08"] .build-blueprint {
+    bottom: 14% !important;
+    left: 49% !important;
+    width: min(552px, 55%) !important;
+    height: min(122px, 25%) !important;
+    min-height: 112px !important;
+  }
+
+  #appShell.app-shell:not(.staff-mode)[data-level-id="M08"] .blueprint-draft {
+    inset: 7px 20px 8px !important;
+  }
+
+  #appShell.app-shell:not(.staff-mode)[data-level-id="M08"] .coach-overlay {
+    bottom: clamp(96px, 24%, 122px) !important;
+    left: 72px !important;
+    width: 276px !important;
+    min-height: min(200px, 45%) !important;
+  }
+
+  #appShell.app-shell:not(.staff-mode)[data-level-id="M08"] .coach-dino {
+    left: -34px !important;
+    width: 180px !important;
+  }
+
+  #appShell.app-shell:not(.staff-mode)[data-level-id="M08"] .coach-bubble {
+    min-width: 286px !important;
+    padding: 11px 14px 12px !important;
+  }
+
+  #appShell.app-shell:not(.staff-mode)[data-level-id="M08"] .hanging-part,
+  #appShell.app-shell:not(.staff-mode)[data-level-id="M08"] .moon-yard.yard-scene-roof .hanging-part[data-shape="roof"] {
+    top: 31% !important;
+    left: 76% !important;
+    width: 72px !important;
+    height: 64px !important;
+  }
+
+  #appShell.app-shell:not(.staff-mode)[data-level-id="M08"] .hanging-part .hanging-part-art {
+    height: 43px !important;
+  }
+}
+
+@media (max-height: 740px) {
+  #appShell.app-shell:not(.staff-mode)[data-level-id="M08"] .roof-world-build {
+    bottom: 34% !important;
+    width: 226px !important;
+    height: 126px !important;
+  }
+
+  #appShell.app-shell:not(.staff-mode)[data-level-id="M08"] .coach-overlay {
+    min-height: min(188px, 44%) !important;
+  }
+
+  #appShell.app-shell:not(.staff-mode)[data-level-id="M08"] .coach-dino {
+    width: 154px !important;
+  }
+
+  #appShell.app-shell:not(.staff-mode)[data-level-id="M08"] .build-blueprint {
+    height: min(118px, 26%) !important;
+    min-height: 112px !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #appShell.app-shell:not(.staff-mode)[data-level-id="M08"] .blueprint-part.just-placed,
+  #appShell.app-shell:not(.staff-mode)[data-level-id="M08"] .blueprint-seal-point,
+  #appShell.app-shell:not(.staff-mode)[data-level-id="M08"] .roof-world-panel.just-installed,
+  #appShell.app-shell:not(.staff-mode)[data-level-id="M08"] .roof-world-panel.seal-current .roof-world-seal-light,
+  #appShell.app-shell:not(.staff-mode)[data-level-id="M08"] .roof-world-build.roof-world-payoff,
+  #appShell.app-shell:not(.staff-mode)[data-level-id="M08"] .blueprint-payoff {
+    animation: none !important;
+  }
+}

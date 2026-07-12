@@ -1,0 +1,3122 @@
+/* Overhaul 316a: current C4-G4 visual convergence layer.
+   Scope: current web prototype screens only, especially S01 staff mode. */
+
+#appShell.app-shell.staff-mode {
+  background:
+    radial-gradient(circle at 18% 24%, rgba(63, 156, 197, 0.20), transparent 28%),
+    radial-gradient(circle at 82% 22%, rgba(245, 168, 82, 0.16), transparent 24%),
+    linear-gradient(180deg, #071932 0%, #07152b 54%, #061225 100%) !important;
+}
+
+#appShell.app-shell.staff-mode .staff-panel {
+  border-color: rgba(154, 221, 255, 0.30) !important;
+  background:
+    linear-gradient(180deg, rgba(13, 34, 66, 0.58), rgba(6, 18, 39, 0.72)) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.12),
+    0 14px 30px rgba(0, 0, 0, 0.22) !important;
+}
+
+#appShell.app-shell.staff-mode .staff-stage {
+  background:
+    radial-gradient(circle at 16% 78%, rgba(76, 215, 223, 0.22), transparent 23%),
+    radial-gradient(circle at 84% 47%, rgba(255, 186, 92, 0.20), transparent 26%),
+    linear-gradient(180deg, rgba(9, 28, 58, 0.20), rgba(5, 18, 41, 0.64)) !important;
+}
+
+#appShell.app-shell.staff-mode .staff-stage::before {
+  content: "" !important;
+  position: absolute !important;
+  inset: 0 !important;
+  pointer-events: none !important;
+  background:
+    linear-gradient(90deg, rgba(4, 13, 31, 0.36) 0%, rgba(7, 24, 52, 0.10) 23%, rgba(6, 21, 48, 0.03) 68%, rgba(5, 16, 37, 0.32) 100%),
+    radial-gradient(ellipse at 48% 62%, rgba(132, 237, 255, 0.16), transparent 56%) !important;
+  z-index: 1 !important;
+}
+
+#appShell.app-shell.staff-mode .staff-stage::after {
+  content: "" !important;
+  position: absolute !important;
+  left: 9% !important;
+  right: 9% !important;
+  top: 21% !important;
+  height: 69% !important;
+  pointer-events: none !important;
+  border-radius: 28px !important;
+  background:
+    linear-gradient(180deg, rgba(184, 242, 255, 0.05), rgba(63, 186, 212, 0.09) 55%, rgba(255, 211, 132, 0.05)),
+    linear-gradient(90deg, transparent 0%, rgba(126, 230, 255, 0.08) 22%, rgba(255, 236, 173, 0.08) 76%, transparent 100%) !important;
+  box-shadow:
+    inset 0 0 0 1px rgba(190, 244, 255, 0.08),
+    0 0 34px rgba(91, 210, 246, 0.08) !important;
+  z-index: 1 !important;
+}
+
+#appShell.app-shell.staff-mode .staff-scene-art {
+  opacity: 0.68 !important;
+  filter: saturate(0.90) contrast(0.96) brightness(0.94) !important;
+}
+
+#appShell.app-shell.staff-mode .staff-scene-art [class*="svg-left"],
+#appShell.app-shell.staff-mode .staff-scene-art [class*="svg-right-detail"],
+#appShell.app-shell.staff-mode .staff-scene-art [class*="svg-crystal"],
+#appShell.app-shell.staff-mode .staff-scene-art [class*="svg-dome"] {
+  opacity: 0.58 !important;
+}
+
+#appShell.app-shell.staff-mode .staff-scene-art [class*="svg-portal"],
+#appShell.app-shell.staff-mode .staff-finish {
+  filter: saturate(1.06) brightness(1.02) !important;
+}
+
+#appShell.app-shell.staff-mode .staff-sky {
+  opacity: 0.44 !important;
+}
+
+#appShell.app-shell.staff-mode .staff-lines,
+#appShell.app-shell.staff-mode .staff-jump-guide,
+#appShell.app-shell.staff-mode .staff-jump-footprints,
+#appShell.app-shell.staff-mode .staff-start,
+#appShell.app-shell.staff-mode .staff-finish,
+#appShell.app-shell.staff-mode .staff-dino-wrap,
+#appShell.app-shell.staff-mode .staff-visual-cue,
+#appShell.app-shell.staff-mode .staff-steps {
+  z-index: 4 !important;
+}
+
+#appShell.app-shell.staff-mode .staff-lines {
+  opacity: 1 !important;
+  filter: saturate(1.10) brightness(1.10) !important;
+}
+
+#appShell.app-shell.staff-mode .staff-lines span {
+  height: 6px !important;
+  border-radius: 999px !important;
+  background:
+    linear-gradient(90deg, transparent 0%, rgba(214, 253, 255, 0.96) 5%, rgba(240, 255, 255, 0.98) 72%, rgba(255, 241, 174, 0.78) 96%, transparent 100%) !important;
+  box-shadow:
+    0 0 6px rgba(161, 239, 255, 0.50),
+    0 0 18px rgba(87, 210, 244, 0.22),
+    0 2px 2px rgba(4, 13, 30, 0.20) !important;
+}
+
+#appShell.app-shell.staff-mode .staff-steps::before {
+  left: 22% !important;
+  right: 17% !important;
+  top: 61% !important;
+  height: 24% !important;
+  opacity: 0.38 !important;
+  background:
+    radial-gradient(circle at var(--staff-target-x, 27%) var(--staff-target-y, 80%), rgba(255, 255, 255, 0.24) 0 2.8%, var(--staff-target-soft, rgba(255, 120, 88, 0.16)) 3% 8%, transparent 17%),
+    linear-gradient(90deg, transparent 0%, rgba(116, 226, 255, 0.10) 10%, rgba(128, 238, 255, 0.19) 32%, rgba(255, 239, 178, 0.14) 76%, transparent 100%) !important;
+}
+
+#appShell.app-shell.staff-mode .staff-steps::after {
+  left: 24% !important;
+  right: 19% !important;
+  top: 83% !important;
+  height: 8px !important;
+  opacity: 0.62 !important;
+}
+
+#appShell.app-shell.staff-mode .staff-step.locked {
+  opacity: 0.34 !important;
+  filter: saturate(0.78) brightness(0.90) !important;
+}
+
+#appShell.app-shell.staff-mode .staff-step.done {
+  opacity: 0.78 !important;
+}
+
+#appShell.app-shell.staff-mode .staff-step.current,
+#appShell.app-shell.staff-mode .staff-step.current.hint {
+  filter:
+    drop-shadow(0 9px 12px rgba(2, 10, 27, 0.24))
+    drop-shadow(0 0 26px var(--note-glow, rgba(255, 126, 94, 0.22))) !important;
+}
+
+#appShell.app-shell.staff-mode .staff-steps .staff-step.current[data-lane] > .staff-note-label > strong,
+#appShell.app-shell.staff-mode .staff-steps .staff-step.current[data-lane].hint > .staff-note-label > strong {
+  top: 39% !important;
+  font-size: clamp(38px, 3.35vw, 50px) !important;
+}
+
+#appShell.app-shell.staff-mode .staff-steps .staff-step.current[data-lane] > .staff-note-label > .staff-note-name {
+  right: 16% !important;
+  bottom: 12% !important;
+  opacity: 0.82 !important;
+}
+
+#appShell.app-shell.staff-mode .staff-steps .staff-step.current[data-lane].hint > .staff-note-label > .staff-note-name,
+#appShell.app-shell.staff-mode .staff-steps .staff-step.current[data-lane][data-revealed="true"] > .staff-note-label > .staff-note-name {
+  opacity: 0 !important;
+}
+
+#appShell.app-shell.staff-mode .staff-steps .staff-step.current[data-lane] > .staff-place,
+#appShell.app-shell.staff-mode .staff-steps .staff-step.current[data-lane].hint > .staff-place,
+#appShell.app-shell.staff-mode .staff-steps .staff-step.current[data-lane][data-revealed="true"] > .staff-place {
+  bottom: -27px !important;
+  height: 18px !important;
+  min-height: 18px !important;
+  padding: 0 9px !important;
+  font-size: 10px !important;
+  line-height: 18px !important;
+}
+
+#appShell.app-shell.staff-mode .staff-dino-wrap {
+  width: clamp(104px, 11.6vw, 130px) !important;
+  height: clamp(104px, 11.6vw, 130px) !important;
+}
+
+#appShell.app-shell.staff-mode .staff-dino-wrap:not(.is-stumbling)::after,
+#appShell.app-shell.staff-mode .staff-dino-wrap[data-place="start"]:not(.is-stumbling)::after,
+#appShell.app-shell.staff-mode .staff-dino-wrap[data-place="pad"]:not(.is-stumbling)::after,
+#appShell.app-shell.staff-mode .staff-dino-wrap[data-place="finish"]:not(.is-stumbling)::after,
+#appShell.app-shell.staff-mode .staff-dino-wrap[data-place="mini-rest"]:not(.is-stumbling)::after {
+  min-width: 76px !important;
+  max-width: 118px !important;
+  padding: 7px 10px !important;
+  border-radius: 16px !important;
+  font-size: 12px !important;
+  box-shadow:
+    0 8px 16px rgba(4, 14, 34, 0.20),
+    0 0 0 2px rgba(255, 255, 255, 0.18),
+    inset 0 -2px 0 rgba(239, 174, 76, 0.18) !important;
+}
+
+#appShell.app-shell.staff-mode .staff-visual-cue {
+  transform: translate(-50%, -50%) scale(0.92) !important;
+  opacity: 0.88 !important;
+}
+
+#appShell.app-shell.staff-mode .keyboard-panel {
+  border-color: rgba(166, 223, 255, 0.30) !important;
+  background:
+    linear-gradient(180deg, rgba(18, 42, 72, 0.88), rgba(7, 18, 38, 0.92)) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.13),
+    0 -8px 18px rgba(0, 0, 0, 0.18) !important;
+}
+
+#appShell.app-shell.staff-mode .keyboard.real-piano .white-key:not(.target):not(.hint):not(.hit-wrong):not(.wrong) .locator-cue.key-locator-mini {
+  opacity: 0 !important;
+  transform: translateX(-50%) translateY(-3px) scale(0.72) !important;
+}
+
+#appShell.app-shell.staff-mode .keyboard.real-piano .white-key:not(.target):not(.hint):not(.hit-wrong):not(.wrong) .key-color-dot {
+  opacity: 0.18 !important;
+}
+
+#appShell.app-shell.staff-mode .keyboard.real-piano .white-key.target .locator-cue.key-locator-mini,
+#appShell.app-shell.staff-mode .keyboard.real-piano .white-key.hint .locator-cue.key-locator-mini,
+#appShell.app-shell.staff-mode .keyboard.real-piano .white-key.hit-wrong .locator-cue.key-locator-mini,
+#appShell.app-shell.staff-mode .keyboard.real-piano .white-key.wrong .locator-cue.key-locator-mini {
+  opacity: 0.96 !important;
+}
+
+#appShell.app-shell.staff-mode .keyboard.real-piano .white-key.hit-wrong:not(.target) .locator-cue.key-locator-mini,
+#appShell.app-shell.staff-mode .keyboard.real-piano .white-key.wrong:not(.target) .locator-cue.key-locator-mini {
+  opacity: 0 !important;
+  transform: translateX(-50%) translateY(-3px) scale(0.72) !important;
+}
+
+#appShell.app-shell.staff-mode .keyboard.real-piano .white-key.hit-wrong:not(.target) .key-content,
+#appShell.app-shell.staff-mode .keyboard.real-piano .white-key.wrong:not(.target) .key-content {
+  bottom: var(--key-label-bottom) !important;
+  min-height: 54px !important;
+  transform: none !important;
+}
+
+#appShell.app-shell.staff-mode .keyboard.real-piano .white-key.hit-wrong:not(.target) .key-content::after,
+#appShell.app-shell.staff-mode .keyboard.real-piano .white-key.wrong:not(.target) .key-content::after {
+  content: none !important;
+  display: none !important;
+}
+
+#appShell.app-shell.staff-mode .keyboard.real-piano .white-key {
+  --key-label-size: 32px;
+  --key-label-bottom: 14px;
+  --key-locator-top: 13px;
+  --key-pin-top: 48px;
+}
+
+#appShell.app-shell.staff-mode .keyboard.real-piano .black-key {
+  filter: drop-shadow(0 10px 9px rgba(4, 11, 24, 0.24)) !important;
+}
+
+#appShell.app-shell.staff-mode .keyboard.real-piano .white-key.reserved-key {
+  opacity: 0.48 !important;
+  filter: saturate(0.45) brightness(0.82) !important;
+}
+
+.note-feedback-burst.staff-note-burst.note-burst-wrong {
+  z-index: 70 !important;
+  transform: translateY(34px) scale(0.72) !important;
+}
+
+.note-feedback-burst.staff-note-burst.note-burst-wrong .note-feedback-particle {
+  min-width: 18px !important;
+  min-height: 18px !important;
+  padding: 3px 5px !important;
+  border-width: 1px !important;
+  font-size: 10px !important;
+  opacity: 0.82 !important;
+  box-shadow:
+    0 0 0 2px rgba(240, 100, 73, 0.10),
+    0 5px 8px rgba(65, 18, 8, 0.10) !important;
+}
+
+@media (max-width: 900px) {
+  #appShell.app-shell.staff-mode .staff-lines span {
+    height: 4px !important;
+  }
+
+  #appShell.app-shell.staff-mode .staff-stage::after {
+    left: 7% !important;
+    right: 7% !important;
+  }
+
+  #appShell.app-shell.staff-mode .staff-dino-wrap {
+    width: clamp(96px, 13vw, 116px) !important;
+    height: clamp(96px, 13vw, 116px) !important;
+  }
+
+  #appShell.app-shell.staff-mode .keyboard.real-piano .white-key {
+    --key-label-size: 30px;
+    --key-label-bottom: 13px;
+  }
+}
+
+/* 320a: parent-gated note-priority audio controls. */
+.parent-card {
+  gap: 14px;
+  padding: 22px;
+}
+
+.parent-card-head h2 {
+  font-size: clamp(30px, 3.4vw, 38px);
+}
+
+.parent-status-grid {
+  gap: 10px;
+}
+
+.parent-status-card {
+  min-height: 96px;
+  padding: 14px 16px;
+  border-radius: 20px;
+}
+
+.parent-status-card strong {
+  font-size: 24px;
+}
+
+.parent-option-list {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.parent-option-list > .parent-option:not(.parent-setting-row) {
+  min-height: 78px;
+  grid-template-columns: 50px minmax(0, 1fr);
+  padding: 12px 14px;
+  border-radius: 20px;
+}
+
+.parent-option-list > .parent-option.passive {
+  grid-column: 1 / -1;
+}
+
+.parent-option-list > .parent-option:not(.parent-setting-row) .parent-option-icon {
+  width: 50px;
+  height: 50px;
+  border-radius: 16px;
+  font-size: 25px;
+}
+
+.parent-option-list > .parent-option:not(.parent-setting-row) strong {
+  font-size: 19px;
+}
+
+.parent-option.parent-audio-setting {
+  grid-column: 1 / -1;
+  grid-template-columns: 56px minmax(0, 1fr) minmax(232px, 270px);
+  cursor: default;
+}
+
+.parent-option.parent-motion-setting {
+  grid-column: 1 / -1;
+  grid-template-columns: 56px minmax(0, 1fr) auto;
+  cursor: default;
+}
+
+.parent-option-icon.sound {
+  background: linear-gradient(180deg, #fff5cf, #71decf);
+}
+
+.parent-option-icon.motion {
+  color: #153548;
+  background: linear-gradient(180deg, #effcff, #8fd7ff);
+}
+
+.parent-audio-controls {
+  display: grid;
+  grid-template-columns: auto minmax(136px, 1fr);
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+}
+
+.parent-audio-toggle {
+  min-width: 74px;
+  height: 44px;
+  display: grid;
+  grid-template-columns: 42px auto;
+  align-items: center;
+  gap: 7px;
+  padding: 5px 9px 5px 5px;
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  border-radius: 22px;
+  color: #ffffff;
+  background: rgba(5, 16, 35, 0.48);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12);
+  font: inherit;
+  font-size: 14px;
+  font-weight: 900;
+  cursor: pointer;
+}
+
+.parent-audio-toggle-track {
+  position: relative;
+  width: 42px;
+  height: 26px;
+  display: block;
+  border-radius: 13px;
+  background: rgba(113, 222, 207, 0.78);
+  box-shadow:
+    inset 0 2px 5px rgba(6, 35, 43, 0.24),
+    0 0 0 1px rgba(255, 255, 255, 0.12);
+}
+
+.parent-audio-toggle-track i {
+  position: absolute;
+  top: 3px;
+  left: 19px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #ffffff;
+  box-shadow: 0 3px 7px rgba(3, 12, 29, 0.28);
+  transition: transform 160ms ease, left 160ms ease;
+}
+
+.parent-audio-toggle[aria-pressed="false"] .parent-audio-toggle-track {
+  background: rgba(126, 143, 163, 0.58);
+}
+
+.parent-audio-toggle[aria-pressed="false"] .parent-audio-toggle-track i {
+  left: 3px;
+}
+
+.parent-volume-control {
+  min-width: 0;
+  display: grid;
+  grid-template-columns: minmax(92px, 1fr) 42px;
+  align-items: center;
+  gap: 8px;
+}
+
+.parent-volume-control input[type="range"] {
+  width: 100%;
+  min-width: 0;
+  accent-color: #ffd166;
+  cursor: pointer;
+}
+
+.parent-volume-control input[type="range"]:disabled {
+  opacity: 0.38;
+  cursor: not-allowed;
+}
+
+.parent-volume-control output {
+  color: #fff5c2;
+  font-size: 14px;
+  font-weight: 900;
+  text-align: right;
+}
+
+.parent-audio-setting.sound-off .parent-option-icon.sound {
+  filter: grayscale(0.72) brightness(0.78);
+}
+
+.parent-motion-setting.motion-reduced .parent-option-icon.motion {
+  color: #1b4254;
+  background: linear-gradient(180deg, #f2feff, #71decf);
+  box-shadow:
+    inset 0 3px 0 rgba(255, 255, 255, 0.58),
+    0 0 0 4px rgba(113, 222, 207, 0.12),
+    0 10px 18px rgba(0, 0, 0, 0.16);
+}
+
+.parent-motion-toggle:disabled {
+  opacity: 1;
+  cursor: not-allowed;
+}
+
+.parent-audio-toggle:focus-visible,
+.parent-volume-control input[type="range"]:focus-visible {
+  outline: 3px solid rgba(255, 209, 102, 0.86);
+  outline-offset: 3px;
+}
+
+@media (max-width: 760px) {
+  .parent-option-list {
+    grid-template-columns: 1fr;
+  }
+
+  .parent-option-list > .parent-option.passive {
+    grid-column: auto;
+  }
+
+  .parent-option.parent-audio-setting {
+    grid-template-columns: 50px minmax(0, 1fr);
+  }
+
+  .parent-option.parent-motion-setting {
+    grid-template-columns: 50px minmax(0, 1fr) auto;
+  }
+
+  .parent-audio-controls {
+    grid-column: 1 / -1;
+    grid-template-columns: auto minmax(150px, 1fr);
+    padding-left: 64px;
+  }
+}
+
+@media (max-width: 520px) {
+  .parent-option.parent-motion-setting {
+    grid-template-columns: 50px minmax(0, 1fr);
+  }
+
+  .parent-motion-toggle {
+    grid-column: 2;
+    justify-self: start;
+  }
+}
+
+/* Overhaul 317a: shared current-screen finish pass.
+   Scope: C4-G4 prototype only. This is visual polish, not new curriculum. */
+
+body.booting .boot-loader {
+  background:
+    radial-gradient(circle at 50% 44%, rgba(54, 148, 203, 0.22), transparent 28%),
+    linear-gradient(180deg, #061932 0%, #07162c 100%) !important;
+}
+
+body.booting .boot-card {
+  width: min(280px, 76vw) !important;
+  padding: 26px 28px 24px !important;
+  border-radius: 26px !important;
+  border: 1px solid rgba(191, 226, 255, 0.22) !important;
+  background:
+    linear-gradient(180deg, rgba(19, 50, 88, 0.82), rgba(6, 20, 43, 0.88)) !important;
+  box-shadow:
+    0 22px 54px rgba(0, 0, 0, 0.28),
+    inset 0 1px 0 rgba(255, 255, 255, 0.16) !important;
+}
+
+body.booting .boot-card strong {
+  letter-spacing: 0 !important;
+}
+
+#appShell.app-shell .topbar {
+  min-height: 56px !important;
+  padding: 7px 10px !important;
+  border: 1px solid rgba(139, 202, 244, 0.22) !important;
+  border-radius: 20px !important;
+  background:
+    linear-gradient(180deg, rgba(15, 42, 75, 0.86), rgba(8, 24, 48, 0.74)) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.12),
+    0 10px 26px rgba(3, 12, 28, 0.18) !important;
+}
+
+#appShell.app-shell .topbar .brand-lockup {
+  gap: 10px !important;
+}
+
+#appShell.app-shell .topbar .brand-mark {
+  width: 42px !important;
+  height: 42px !important;
+  border-radius: 14px !important;
+  box-shadow:
+    inset 0 4px 0 rgba(255, 255, 255, 0.18),
+    0 8px 16px rgba(4, 13, 29, 0.18) !important;
+}
+
+#appShell.app-shell .topbar .eyebrow {
+  margin-bottom: 1px !important;
+  color: rgba(187, 219, 248, 0.70) !important;
+  font-size: 10px !important;
+}
+
+#appShell.app-shell .topbar h1 {
+  color: #fff8df !important;
+  font-size: clamp(24px, 2.4vw, 30px) !important;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.22) !important;
+}
+
+#appShell.app-shell:not(.staff-mode) .progress-map {
+  width: min(462px, 45vw) !important;
+  justify-self: center !important;
+  gap: 6px !important;
+  padding: 5px 9px !important;
+  border-radius: 999px !important;
+  border: 1px solid rgba(156, 210, 247, 0.16) !important;
+  background: rgba(5, 18, 38, 0.30) !important;
+}
+
+#appShell.app-shell:not(.staff-mode) .progress-dot {
+  width: 25px !important;
+  height: 25px !important;
+  border: 1px solid rgba(255, 255, 255, 0.18) !important;
+  border-radius: 50% !important;
+  color: rgba(255, 247, 220, 0.86) !important;
+  background:
+    radial-gradient(circle at 36% 26%, rgba(255, 255, 255, 0.48), transparent 32%),
+    linear-gradient(180deg, rgba(208, 162, 82, 0.70), rgba(93, 66, 37, 0.58)) !important;
+  box-shadow:
+    inset 0 -2px 0 rgba(64, 40, 19, 0.20),
+    0 4px 9px rgba(0, 0, 0, 0.15) !important;
+}
+
+#appShell.app-shell:not(.staff-mode) .progress-dot.active {
+  width: 30px !important;
+  height: 30px !important;
+  color: #fff !important;
+  background:
+    radial-gradient(circle at 36% 24%, rgba(255, 255, 255, 0.56), transparent 28%),
+    linear-gradient(150deg, #ff7b67, #ffc064) !important;
+  box-shadow:
+    0 0 0 3px rgba(255, 201, 117, 0.20),
+    0 8px 18px rgba(219, 92, 67, 0.22) !important;
+}
+
+#appShell.app-shell .map-return,
+#appShell.app-shell .mode-switch,
+#appShell.app-shell .play-parent-gate {
+  min-height: 36px !important;
+  padding: 7px 15px !important;
+  border: 1px solid rgba(255, 255, 255, 0.16) !important;
+  border-radius: 999px !important;
+  font-size: 14px !important;
+  line-height: 1 !important;
+  box-shadow:
+    inset 0 2px 0 rgba(255, 255, 255, 0.16),
+    0 8px 16px rgba(3, 12, 28, 0.18) !important;
+}
+
+#appShell.app-shell .map-return {
+  color: #effaff !important;
+  background: linear-gradient(180deg, #3d9ee0, #1f679e) !important;
+}
+
+#appShell.app-shell .mode-switch {
+  color: #fff7e4 !important;
+  background: linear-gradient(180deg, #8f74e8, #6248bb) !important;
+}
+
+#appShell.app-shell .play-parent-gate {
+  color: #203653 !important;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.94), rgba(218, 229, 241, 0.92)) !important;
+}
+
+#appShell.app-shell.staff-mode .topbar {
+  min-height: 50px !important;
+  grid-template-columns: minmax(240px, auto) 1fr auto auto auto !important;
+  padding: 7px 9px !important;
+}
+
+#appShell.app-shell.staff-mode .topbar .brand-mark {
+  width: 38px !important;
+  height: 38px !important;
+  border-radius: 13px !important;
+}
+
+#appShell.app-shell.staff-mode .topbar h1 {
+  font-size: clamp(20px, 2vw, 25px) !important;
+}
+
+#appShell.app-shell.staff-mode .progress-map {
+  justify-self: center !important;
+  width: min(270px, 33vw) !important;
+  gap: 5px !important;
+  padding: 5px 8px !important;
+  border-radius: 999px !important;
+  background: rgba(5, 18, 38, 0.24) !important;
+}
+
+#appShell.app-shell.staff-mode .progress-dot {
+  width: 11px !important;
+  height: 5px !important;
+  min-width: 0 !important;
+  min-height: 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+  border-radius: 999px !important;
+  color: transparent !important;
+  font-size: 0 !important;
+  background: rgba(185, 222, 251, 0.30) !important;
+  box-shadow: none !important;
+}
+
+#appShell.app-shell.staff-mode .progress-dot.done {
+  background: rgba(255, 212, 122, 0.62) !important;
+}
+
+#appShell.app-shell.staff-mode .progress-dot.active {
+  width: 20px !important;
+  height: 6px !important;
+  transform: none !important;
+  background: linear-gradient(90deg, #ff7b67, #ffd37c) !important;
+  box-shadow: 0 0 12px rgba(255, 179, 102, 0.34) !important;
+}
+
+#appShell.app-shell.staff-mode .staff-stage {
+  background:
+    radial-gradient(circle at 16% 80%, rgba(76, 215, 223, 0.18), transparent 22%),
+    radial-gradient(circle at 83% 48%, rgba(255, 186, 92, 0.18), transparent 25%),
+    linear-gradient(180deg, rgba(9, 28, 58, 0.08), rgba(5, 18, 41, 0.56)) !important;
+}
+
+#appShell.app-shell.staff-mode .staff-stage::after {
+  left: 16% !important;
+  right: 14% !important;
+  top: 22% !important;
+  height: 64% !important;
+  opacity: 0.72 !important;
+  background:
+    linear-gradient(180deg, rgba(187, 240, 255, 0.035), rgba(82, 192, 218, 0.06) 58%, rgba(255, 217, 146, 0.035)),
+    linear-gradient(90deg, transparent 0%, rgba(126, 230, 255, 0.055) 24%, rgba(255, 236, 173, 0.06) 72%, transparent 100%) !important;
+}
+
+#appShell.app-shell.staff-mode .staff-scene-art .svg-staff-line-glows path {
+  opacity: 0.32 !important;
+}
+
+#appShell.app-shell.staff-mode .staff-scene-art .svg-staff-line {
+  opacity: 0.68 !important;
+}
+
+#appShell.app-shell.staff-mode .staff-lines {
+  width: min(720px, 66%) !important;
+  top: 17% !important;
+  bottom: 18% !important;
+  transform: translateX(-50%) perspective(900px) rotateX(6deg) !important;
+}
+
+#appShell.app-shell.staff-mode .staff-lines::before {
+  left: -2% !important;
+  right: -2% !important;
+  border-left-width: 7px !important;
+  border-right-width: 7px !important;
+  opacity: 0.70 !important;
+  box-shadow:
+    0 0 0 2px rgba(255, 255, 255, 0.06),
+    0 16px 30px rgba(0, 0, 0, 0.20),
+    0 0 18px rgba(122, 190, 255, 0.20) !important;
+}
+
+#appShell.app-shell.staff-mode .staff-lines span {
+  height: 5px !important;
+  background:
+    linear-gradient(90deg,
+      rgba(255, 255, 255, 0.05),
+      rgba(235, 252, 255, 0.92) 12%,
+      rgba(190, 231, 255, 0.88) 52%,
+      rgba(255, 238, 180, 0.82) 88%,
+      rgba(255, 255, 255, 0.06)) !important;
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.09),
+    0 0 8px rgba(122, 190, 255, 0.22),
+    0 2px 0 rgba(65, 143, 218, 0.14) !important;
+}
+
+#appShell.app-shell.staff-mode .staff-lines::after {
+  height: 10px !important;
+  opacity: 0.70 !important;
+  box-shadow:
+    0 0 12px rgba(255, 219, 114, 0.14),
+    0 6px 12px rgba(0, 0, 0, 0.10) !important;
+}
+
+#appShell.app-shell.staff-mode .staff-steps::before {
+  opacity: 0.28 !important;
+}
+
+#appShell.app-shell.staff-mode .staff-steps .staff-step.current[data-lane] > .staff-note-label > strong,
+#appShell.app-shell.staff-mode .staff-steps .staff-step.current[data-lane].hint > .staff-note-label > strong {
+  font-size: clamp(36px, 3.05vw, 46px) !important;
+  text-shadow: 0 2px 0 rgba(255, 255, 255, 0.42) !important;
+}
+
+.keyboard.real-piano {
+  --black-key-width: clamp(42px, 7.72%, 76px);
+  background:
+    radial-gradient(ellipse at 50% 0%, rgba(144, 210, 255, 0.12), transparent 52%),
+    linear-gradient(180deg, rgba(9, 20, 39, 0.92) 0 22px, rgba(21, 40, 66, 0.60) 23px, rgba(245, 250, 255, 0.035) 36px),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.10), rgba(255, 255, 255, 0.02)) !important;
+  box-shadow:
+    inset 0 10px 16px rgba(20, 34, 56, 0.10),
+    0 -6px 16px rgba(0, 0, 0, 0.12) !important;
+}
+
+.keyboard.real-piano::before {
+  height: 24px !important;
+  background:
+    linear-gradient(90deg, rgba(79, 173, 255, 0.07), rgba(255, 255, 255, 0.11), rgba(79, 173, 255, 0.07)),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.11), rgba(255, 255, 255, 0.01)) !important;
+}
+
+.keyboard.real-piano::after {
+  top: 24px !important;
+  height: 8px !important;
+  opacity: 0.72 !important;
+}
+
+.keyboard-guide-band {
+  opacity: 0.46 !important;
+}
+
+.keyboard.real-piano .white-key {
+  border-color: rgba(12, 24, 42, 0.16) !important;
+  background:
+    linear-gradient(90deg, rgba(179, 194, 214, 0.38), transparent 7%, transparent 93%, rgba(179, 194, 214, 0.30)),
+    linear-gradient(180deg, #ffffff 0%, #fbfdff 42%, #f5f9ff 68%, #e8f0fa 100%) !important;
+  box-shadow:
+    inset 0 -10px 0 rgba(33, 45, 66, 0.040),
+    inset 0 1px 0 #fff,
+    0 8px 16px rgba(31, 52, 86, 0.08) !important;
+}
+
+.keyboard.real-piano .white-key.target {
+  border-width: 3px !important;
+  box-shadow:
+    inset 0 -9px 0 rgba(33, 45, 66, 0.035),
+    0 0 0 5px var(--target-glow, rgba(240, 100, 73, 0.12)),
+    0 14px 24px var(--target-glow, rgba(240, 100, 73, 0.18)) !important;
+}
+
+.keyboard.real-piano .white-key.pressed,
+.keyboard.real-piano .white-key:active,
+.keyboard.real-piano .white-key.program-press {
+  transform: translateY(8px) scaleY(0.976) !important;
+  box-shadow:
+    inset 0 -4px 0 rgba(33, 45, 66, 0.06),
+    inset 0 7px 16px rgba(31, 52, 86, 0.11),
+    0 3px 8px rgba(31, 52, 86, 0.08),
+    0 0 0 7px var(--press-glow, rgba(58, 134, 255, 0.13)) !important;
+}
+
+.keyboard.real-piano .key strong {
+  color: #091a35 !important;
+  font-size: clamp(30px, 3.15vw, 44px) !important;
+  line-height: 0.95 !important;
+}
+
+.keyboard.real-piano .key span {
+  color: rgba(12, 27, 52, 0.58) !important;
+}
+
+.keyboard.real-piano .black-key {
+  top: 10px !important;
+  height: 54% !important;
+  border-radius: 0 0 12px 12px !important;
+  background:
+    radial-gradient(ellipse at 50% 12%, rgba(255, 255, 255, 0.17), transparent 38%),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.07), transparent 19%, transparent 81%, rgba(255, 255, 255, 0.04)),
+    linear-gradient(180deg, #343d4e 0%, #1d2637 35%, #101725 70%, #060914 100%) !important;
+  box-shadow:
+    inset 0 -9px 0 rgba(0, 0, 0, 0.36),
+    inset 0 1px 0 rgba(255, 255, 255, 0.14),
+    0 10px 16px rgba(0, 0, 0, 0.30) !important;
+}
+
+.keyboard.real-piano .black-key::before {
+  bottom: 9px !important;
+  height: 8px !important;
+  opacity: 0.62 !important;
+}
+
+.keyboard.real-piano .black-key::after {
+  top: 8px !important;
+  height: 34% !important;
+  opacity: 0.70 !important;
+}
+
+.keyboard.real-piano .black-key.pressed,
+.keyboard.real-piano .black-key:active,
+.keyboard.real-piano .black-key.program-press {
+  transform: translateY(5px) !important;
+}
+
+#appShell.app-shell.staff-mode .keyboard-panel {
+  background:
+    linear-gradient(180deg, rgba(16, 39, 68, 0.84), rgba(7, 18, 38, 0.88)) !important;
+}
+
+#appShell.app-shell.staff-mode .keyboard.real-piano .black-key {
+  filter: drop-shadow(0 8px 7px rgba(4, 11, 24, 0.20)) !important;
+}
+
+@media (max-width: 900px) {
+  #appShell.app-shell .topbar {
+    border-radius: 16px !important;
+  }
+
+  #appShell.app-shell.staff-mode .staff-lines {
+    width: min(660px, 72%) !important;
+  }
+
+  #appShell.app-shell.staff-mode .staff-lines span {
+    height: 4px !important;
+  }
+
+  .keyboard.real-piano {
+    --black-key-width: clamp(40px, 7.65%, 72px);
+  }
+}
+
+/* 317a terminal corrections: override older high-specificity staff chrome/SVG rules. */
+
+#appShell.app-shell.staff-mode .topbar .progress-map .progress-dot {
+  width: 11px !important;
+  height: 5px !important;
+  min-width: 0 !important;
+  min-height: 0 !important;
+  padding: 0 !important;
+  border-radius: 999px !important;
+}
+
+#appShell.app-shell.staff-mode .topbar .progress-map .progress-dot.active {
+  width: 20px !important;
+  height: 6px !important;
+  transform: none !important;
+}
+
+#appShell.app-shell.staff-mode .topbar .map-return,
+#appShell.app-shell.staff-mode .topbar .mode-switch,
+#appShell.app-shell.staff-mode .topbar .play-parent-gate {
+  height: 34px !important;
+  min-height: 34px !important;
+  padding: 7px 15px !important;
+}
+
+#appShell.app-shell.staff-mode .staff-scene-art .svg-staff-lines {
+  filter: none !important;
+  opacity: 0.86 !important;
+}
+
+#appShell.app-shell.staff-mode .staff-scene-art .svg-staff-line-glows path {
+  stroke: rgba(142, 220, 246, 0.32) !important;
+  stroke-width: 8px !important;
+  opacity: 0.20 !important;
+}
+
+#appShell.app-shell.staff-mode .staff-scene-art .svg-staff-line-glows .svg-ledger-glow {
+  opacity: 0.16 !important;
+}
+
+#appShell.app-shell.staff-mode .staff-scene-art .svg-staff-line,
+#appShell.app-shell.staff-mode .staff-scene-art .svg-ledger-line {
+  stroke: rgba(218, 248, 255, 0.76) !important;
+  stroke-width: 3.6px !important;
+  opacity: 0.78 !important;
+  filter: none !important;
+}
+
+#appShell.app-shell.staff-mode .staff-scene-art .svg-measure-line {
+  stroke: rgba(221, 248, 255, 0.38) !important;
+  stroke-width: 2.4px !important;
+  opacity: 0.46 !important;
+}
+
+#appShell.app-shell.staff-mode .staff-scene-art .svg-bridge-deck,
+#appShell.app-shell.staff-mode .staff-scene-art .svg-bridge-side,
+#appShell.app-shell.staff-mode .staff-scene-art .svg-bridge-bar-179 {
+  opacity: 0.40 !important;
+  filter: none !important;
+}
+
+/* Overhaul 318a: make S01 read as a physical dino jump, not a pasted UI target. */
+
+#appShell.app-shell.staff-mode .staff-jump-guide {
+  z-index: 9 !important;
+  opacity: 0.94 !important;
+  mix-blend-mode: screen !important;
+  overflow: visible !important;
+}
+
+#appShell.app-shell.staff-mode .staff-jump-guide-shadow {
+  stroke: rgba(3, 12, 28, 0.34) !important;
+  stroke-width: 8px !important;
+  stroke-linecap: round !important;
+  opacity: 0.60 !important;
+  filter: blur(0.4px) !important;
+}
+
+#appShell.app-shell.staff-mode .staff-jump-guide-path {
+  stroke: var(--guide-color, #ffd166) !important;
+  stroke-width: 4.2px !important;
+  stroke-linecap: round !important;
+  stroke-dasharray: 0.8 11 !important;
+  opacity: 0.86 !important;
+  filter:
+    drop-shadow(0 0 5px var(--guide-soft, rgba(255, 209, 102, 0.24)))
+    drop-shadow(0 3px 0 rgba(0, 0, 0, 0.10)) !important;
+  animation: staffJumpGuideFlow318 1.38s linear infinite !important;
+}
+
+#appShell.app-shell.staff-mode .staff-jump-footprints {
+  z-index: 10 !important;
+  mix-blend-mode: screen !important;
+}
+
+#appShell.app-shell.staff-mode .staff-jump-footprints span {
+  width: 25px !important;
+  height: 16px !important;
+  opacity: 0.74 !important;
+  transform:
+    translate(-50%, -50%)
+    rotate(var(--foot-rotation, 0deg))
+    scale(0.70) !important;
+  animation: staffFootprintStep318 1.34s ease-in-out infinite !important;
+  animation-delay: var(--foot-delay, 0ms) !important;
+}
+
+#appShell.app-shell.staff-mode .staff-jump-footprints span::before,
+#appShell.app-shell.staff-mode .staff-jump-footprints span::after {
+  width: 10px !important;
+  height: 14px !important;
+  border-width: 1px !important;
+  border-color: rgba(255, 255, 255, 0.74) !important;
+  background:
+    radial-gradient(circle at 42% 28%, rgba(255, 255, 255, 0.78), transparent 34%),
+    linear-gradient(180deg, var(--guide-color, #ffd166), rgba(255, 255, 255, 0.30)) !important;
+  box-shadow:
+    0 0 0 2px var(--guide-soft, rgba(255, 209, 102, 0.14)),
+    0 5px 7px rgba(4, 24, 42, 0.10),
+    inset 0 -3px 0 rgba(22, 75, 120, 0.08) !important;
+}
+
+#appShell.app-shell.staff-mode .staff-start,
+#appShell.app-shell.staff-mode .staff-finish {
+  min-width: clamp(70px, 6.8vw, 92px) !important;
+  min-height: clamp(34px, 3.4vw, 46px) !important;
+  border-width: 2px !important;
+  opacity: 0.86 !important;
+  filter: saturate(0.95) brightness(0.96) !important;
+  box-shadow:
+    0 8px 14px rgba(0, 0, 0, 0.18),
+    0 0 16px rgba(255, 202, 96, 0.16),
+    inset 0 -6px 0 rgba(90, 56, 45, 0.16) !important;
+}
+
+#appShell.app-shell.staff-mode .staff-start::before,
+#appShell.app-shell.staff-mode .staff-finish::before {
+  width: 38% !important;
+  height: 38% !important;
+  opacity: 0.84 !important;
+}
+
+#appShell.app-shell.staff-mode .staff-start::after,
+#appShell.app-shell.staff-mode .staff-finish::after {
+  bottom: -9px !important;
+  height: 10px !important;
+  opacity: 0.72 !important;
+}
+
+#appShell.app-shell.staff-mode .staff-dino-wrap {
+  width: clamp(96px, 10.6vw, 122px) !important;
+  height: clamp(96px, 10.6vw, 122px) !important;
+  z-index: 12 !important;
+}
+
+#appShell.app-shell.staff-mode .staff-dino {
+  filter:
+    drop-shadow(0 12px 12px rgba(3, 12, 29, 0.24))
+    drop-shadow(0 0 10px rgba(106, 216, 232, 0.12)) !important;
+}
+
+#appShell.app-shell.staff-mode .staff-step.current,
+#appShell.app-shell.staff-mode .staff-step.current.hint {
+  width: clamp(96px, 9.4vw, 108px) !important;
+  height: clamp(82px, 8.2vw, 96px) !important;
+  border-radius: 40% 44% 47% 43% / 48% 50% 42% 44% !important;
+  box-shadow:
+    0 0 0 7px var(--note-glow, rgba(255, 120, 88, 0.18)),
+    0 18px 30px rgba(3, 12, 29, 0.20),
+    inset 0 -9px 0 rgba(33, 45, 66, 0.045) !important;
+}
+
+#appShell.app-shell.staff-mode .staff-step.current::before,
+#appShell.app-shell.staff-mode .staff-step.current.hint::before {
+  opacity: 0.72 !important;
+  filter: blur(0.2px) !important;
+}
+
+#appShell.app-shell.staff-mode .staff-step.current::after,
+#appShell.app-shell.staff-mode .staff-step.current.hint::after {
+  width: clamp(78px, 7.5vw, 96px) !important;
+  height: clamp(16px, 1.5vw, 20px) !important;
+  opacity: 0.44 !important;
+}
+
+#appShell.app-shell.staff-mode .staff-steps .staff-step.current[data-lane] > .staff-note-label > strong,
+#appShell.app-shell.staff-mode .staff-steps .staff-step.current[data-lane].hint > .staff-note-label > strong {
+  top: 41% !important;
+  font-size: clamp(34px, 2.85vw, 43px) !important;
+}
+
+#appShell.app-shell.staff-mode .staff-stage-toast[data-toast-style="event"] {
+  top: 15% !important;
+  right: 5.8% !important;
+  transform: none !important;
+  max-width: 164px !important;
+  opacity: 0.92 !important;
+}
+
+.keyboard.real-piano {
+  --black-key-width: clamp(38px, 7.18%, 70px);
+}
+
+.keyboard.real-piano .black-key {
+  top: 8px !important;
+  height: 49% !important;
+  box-shadow:
+    inset 0 -8px 0 rgba(0, 0, 0, 0.34),
+    inset 0 1px 0 rgba(255, 255, 255, 0.13),
+    0 8px 13px rgba(0, 0, 0, 0.26) !important;
+}
+
+.keyboard.real-piano .white-key {
+  box-shadow:
+    inset 0 -8px 0 rgba(33, 45, 66, 0.034),
+    inset 0 1px 0 #fff,
+    0 6px 13px rgba(31, 52, 86, 0.07) !important;
+}
+
+.keyboard.real-piano .key-content {
+  bottom: 20px !important;
+}
+
+.keyboard.real-piano .key.target .key-content {
+  bottom: 22px !important;
+}
+
+.keyboard.real-piano .key strong {
+  font-size: clamp(30px, 3vw, 42px) !important;
+}
+
+#appShell.app-shell.staff-mode .keyboard.real-piano .white-key {
+  --key-label-size: 30px;
+  --key-label-bottom: 14px;
+  --key-locator-top: 11px;
+  --key-pin-top: 44px;
+}
+
+#appShell.app-shell.staff-mode .keyboard.real-piano .black-key {
+  top: 8px !important;
+  height: 49% !important;
+  filter: drop-shadow(0 6px 6px rgba(4, 11, 24, 0.18)) !important;
+}
+
+@keyframes staffJumpGuideFlow318 {
+  from { stroke-dashoffset: 0; }
+  to { stroke-dashoffset: -23.6; }
+}
+
+@keyframes staffFootprintStep318 {
+  0%, 100% {
+    opacity: 0.36;
+    transform:
+      translate(-50%, -50%)
+      rotate(var(--foot-rotation, 0deg))
+      scale(0.58);
+  }
+  48% {
+    opacity: 0.86;
+    transform:
+      translate(-50%, -50%)
+      rotate(var(--foot-rotation, 0deg))
+      scale(0.78);
+  }
+}
+
+@media (max-width: 900px) {
+  .keyboard.real-piano {
+    --black-key-width: clamp(36px, 7.05%, 66px);
+  }
+
+  #appShell.app-shell.staff-mode .staff-dino-wrap {
+    width: clamp(88px, 12vw, 112px) !important;
+    height: clamp(88px, 12vw, 112px) !important;
+  }
+
+  #appShell.app-shell.staff-mode .staff-step.current,
+  #appShell.app-shell.staff-mode .staff-step.current.hint {
+    width: clamp(88px, 10.5vw, 100px) !important;
+    height: clamp(78px, 9.5vw, 90px) !important;
+  }
+}
+
+/* 321a: user-approved A-G note palette, shown as a stable piano-key edge cue. */
+.keyboard.real-piano .white-key {
+  box-shadow:
+    inset 0 -7px 0 color-mix(in srgb, var(--note-color, #6F8FFE) 88%, #ffffff 12%),
+    inset 0 1px 0 #ffffff,
+    0 6px 13px rgba(31, 52, 86, 0.07) !important;
+}
+
+.keyboard.real-piano .white-key.target {
+  box-shadow:
+    inset 0 -7px 0 color-mix(in srgb, var(--note-color, #6F8FFE) 90%, #ffffff 10%),
+    0 0 0 5px var(--target-glow, rgba(111, 143, 254, 0.14)),
+    0 14px 24px var(--target-glow, rgba(111, 143, 254, 0.20)) !important;
+}
+
+.keyboard.real-piano .white-key.pressed,
+.keyboard.real-piano .white-key:active,
+.keyboard.real-piano .white-key.program-press {
+  box-shadow:
+    inset 0 -4px 0 color-mix(in srgb, var(--note-color, #6F8FFE) 86%, #ffffff 14%),
+    inset 0 7px 16px rgba(31, 52, 86, 0.11),
+    0 3px 8px rgba(31, 52, 86, 0.08),
+    0 0 0 7px var(--press-glow, rgba(111, 143, 254, 0.13)) !important;
+}
+
+.keyboard.real-piano .white-key .key-content span {
+  color: color-mix(in srgb, var(--note-color, #6F8FFE) 76%, #24344d 24%) !important;
+  opacity: 0.94 !important;
+}
+
+.keyboard.real-piano .white-key .key-color-dot {
+  background: var(--note-color, #6F8FFE) !important;
+  border-color: color-mix(in srgb, var(--note-color, #6F8FFE) 72%, #ffffff 28%) !important;
+  opacity: 0.66 !important;
+}
+
+.keyboard.real-piano .white-key.reserved-key,
+#appShell.app-shell.staff-mode .keyboard.real-piano .white-key.reserved-key {
+  opacity: 0.58 !important;
+  filter: saturate(0.68) brightness(0.93) !important;
+  box-shadow:
+    inset 0 -6px 0 color-mix(in srgb, var(--note-color, #6F8FFE) 78%, #ffffff 22%),
+    inset 0 1px 0 rgba(255, 255, 255, 0.72) !important;
+}
+
+.keyboard.real-piano .white-key.reserved-key .key-content strong,
+.keyboard.real-piano .white-key.reserved-key .key-content span {
+  color: color-mix(in srgb, var(--note-color, #6F8FFE) 58%, #445064 42%) !important;
+}
+
+/* Overhaul 322a: parent-controlled reduced motion without removing key identity feedback. */
+
+html[data-motion="reduced"] body,
+html[data-motion="reduced"] body *,
+html[data-motion="reduced"] body *::before,
+html[data-motion="reduced"] body *::after {
+  scroll-behavior: auto !important;
+  transition-duration: 1ms !important;
+  transition-delay: 0ms !important;
+}
+
+html[data-motion="reduced"] body #appShell.app-shell[data-level-id][data-phase][data-scaffold]:not([hidden]):is([data-level-run-mode], [data-staff-run-mode]) *,
+html[data-motion="reduced"] body #appShell.app-shell[data-level-id][data-phase][data-scaffold]:not([hidden]):is([data-level-run-mode], [data-staff-run-mode]) *::before,
+html[data-motion="reduced"] body #appShell.app-shell[data-level-id][data-phase][data-scaffold]:not([hidden]):is([data-level-run-mode], [data-staff-run-mode]) *::after,
+html[data-motion="reduced"] body #mapShell.map-shell:not([hidden]) *,
+html[data-motion="reduced"] body #mapShell.map-shell:not([hidden]) *::before,
+html[data-motion="reduced"] body #mapShell.map-shell:not([hidden]) *::after,
+html[data-motion="reduced"] body .parent-modal *,
+html[data-motion="reduced"] body .parent-modal *::before,
+html[data-motion="reduced"] body .parent-modal *::after,
+html[data-motion="reduced"] body .result-modal *,
+html[data-motion="reduced"] body .result-modal *::before,
+html[data-motion="reduced"] body .result-modal *::after,
+html[data-motion="reduced"] body .boot-loader *,
+html[data-motion="reduced"] body .boot-loader *::before,
+html[data-motion="reduced"] body .boot-loader *::after {
+  animation: none !important;
+  transition-duration: 1ms !important;
+  transition-delay: 0ms !important;
+}
+
+html[data-motion="reduced"] .stage-confetti-effect,
+html[data-motion="reduced"] .staff-confetti-effect,
+html[data-motion="reduced"] .result-confetti-effect,
+html[data-motion="reduced"] .sprite-effect,
+html[data-motion="reduced"] .key-press-label,
+html[data-motion="reduced"] .note-feedback-burst,
+html[data-motion="reduced"] .key-touch-ripple {
+  display: none !important;
+}
+
+/* The parent panel is a focused settings surface, never a stage for lingering feedback. */
+body.parent-panel-open .key-press-label,
+body.parent-panel-open .key-touch-ripple,
+body.parent-panel-open .sprite-effect,
+body.parent-panel-open .note-feedback-burst,
+body.parent-panel-open .music-flight,
+body.parent-panel-open .music-flight-landing,
+body.parent-panel-open .stage-input-toast,
+body.parent-panel-open .staff-stage-toast,
+body.parent-panel-open .stage-confetti-effect,
+body.parent-panel-open .staff-confetti-effect,
+body.parent-panel-open .staff-landing-ripple,
+body.parent-panel-open .flying-part {
+  display: none !important;
+}
+
+html[data-motion="reduced"] #appShell .keyboard.real-piano .key.hit-correct,
+html[data-motion="reduced"] #appShell .keyboard.real-piano .key.program-correct,
+html[data-motion="reduced"] #appShell .keyboard.real-piano .key.correct {
+  outline: 4px solid rgba(42, 191, 118, 0.74) !important;
+  outline-offset: -5px !important;
+}
+
+html[data-motion="reduced"] #appShell .keyboard.real-piano .key.hit-wrong,
+html[data-motion="reduced"] #appShell .keyboard.real-piano .key.program-wrong,
+html[data-motion="reduced"] #appShell .keyboard.real-piano .key.wrong {
+  outline: 4px dashed rgba(190, 67, 55, 0.78) !important;
+  outline-offset: -5px !important;
+}
+
+html[data-motion="reduced"] #appShell .keyboard.real-piano .key.program-hint,
+html[data-motion="reduced"] #appShell .keyboard.real-piano .key.hint {
+  outline: 4px dotted var(--note-color, #6F8FFE) !important;
+  outline-offset: -5px !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html:not([data-motion]) body *,
+  html:not([data-motion]) body *::before,
+  html:not([data-motion]) body *::after {
+    animation: none !important;
+    transition-duration: 1ms !important;
+    transition-delay: 0ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Overhaul 323a: complete pressure-suit Xingya runtime continuity. */
+
+.orientation-dino,
+.result-dino,
+#appShell.app-shell .dino,
+#appShell.app-shell .coach-dino,
+#appShell.app-shell .staff-dino {
+  object-fit: contain !important;
+  object-position: center bottom !important;
+}
+
+#resultModal.result-modal[data-result] .result-card > .result-dino {
+  position: absolute !important;
+  left: auto !important;
+  right: 48px !important;
+  top: 106px !important;
+  width: 124px !important;
+  height: 124px !important;
+  z-index: 3 !important;
+}
+
+.map-shell .node-do {
+  --node-art: url("assets/runtime/xingya-suit-listen.webp") !important;
+}
+
+.map-shell .node-staff-art {
+  --node-art: url("assets/runtime/xingya-suit-good.webp") !important;
+}
+
+#appShell.app-shell[data-level-id="M08"]:not(.staff-mode) .roof-route-dino,
+#appShell.app-shell[data-level-id="M07"]:not(.staff-mode) .memory-route-dino,
+#appShell.app-shell[data-level-id="FG03"]:not(.staff-mode) .fg-route-dino {
+  background-image: url("assets/runtime/xingya-suit-point.webp") !important;
+  background-position: center bottom !important;
+  background-size: contain !important;
+  background-repeat: no-repeat !important;
+}
+
+#appShell.app-shell[data-level-id="M08"]:not(.staff-mode) .roof-route-dino {
+  width: 88px !important;
+  height: 88px !important;
+  transform: translate(-126%, -124%) !important;
+  filter:
+    drop-shadow(0 12px 15px rgba(16, 46, 79, 0.34))
+    drop-shadow(0 0 12px rgba(255, 236, 167, 0.20)) !important;
+}
+
+#appShell.app-shell:not(.staff-mode):not([data-level-id="M07"]):not([data-level-id="M08"]):not([data-level-id="FG03"]) .coach-overlay {
+  display: block !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  pointer-events: none !important;
+  width: 154px !important;
+  min-height: 154px !important;
+  right: 24px !important;
+  bottom: 132px !important;
+  z-index: 29 !important;
+}
+
+#appShell.app-shell:not(.staff-mode):not([data-level-id="M07"]):not([data-level-id="M08"]):not([data-level-id="FG03"]) .coach-dino {
+  position: absolute !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  width: 144px !important;
+  height: 144px !important;
+  z-index: 2 !important;
+  filter:
+    drop-shadow(0 14px 15px rgba(4, 12, 28, 0.30))
+    drop-shadow(0 0 12px rgba(116, 229, 222, 0.18)) !important;
+}
+
+#appShell.app-shell:not(.staff-mode):not([data-level-id="M07"]):not([data-level-id="M08"]):not([data-level-id="FG03"]) .coach-bubble {
+  position: absolute !important;
+  left: auto !important;
+  right: 134px !important;
+  top: -10px !important;
+  bottom: auto !important;
+  width: 116px !important;
+  min-width: 116px !important;
+  max-width: 116px !important;
+  min-height: 0 !important;
+  padding: 7px 9px 8px !important;
+  z-index: 3 !important;
+}
+
+#appShell.app-shell:not(.staff-mode):not([data-level-id="M07"]):not([data-level-id="M08"]):not([data-level-id="FG03"]) .coach-bubble strong {
+  font-size: 26px !important;
+}
+
+@media (max-width: 900px), (max-height: 760px) {
+  #appShell.app-shell:not(.staff-mode):not([data-level-id="M07"]):not([data-level-id="M08"]):not([data-level-id="FG03"]) .coach-overlay {
+    width: 136px !important;
+    min-height: 136px !important;
+    right: 22px !important;
+    bottom: 130px !important;
+  }
+
+  #appShell.app-shell:not(.staff-mode):not([data-level-id="M07"]):not([data-level-id="M08"]):not([data-level-id="FG03"]) .coach-dino {
+    width: 128px !important;
+    height: 128px !important;
+  }
+
+  #appShell.app-shell:not(.staff-mode):not([data-level-id="M07"]):not([data-level-id="M08"]):not([data-level-id="FG03"]) .coach-bubble {
+    right: 120px !important;
+    top: -8px !important;
+    width: 110px !important;
+    min-width: 110px !important;
+    max-width: 110px !important;
+  }
+
+  #resultModal.result-modal[data-result] .result-card > .result-dino {
+    right: 32px !important;
+    top: 98px !important;
+    width: 112px !important;
+    height: 112px !important;
+  }
+}
+
+/* 325a: iPad touch and keyboard-accessibility baseline. */
+
+#appShell.app-shell .topbar .map-return,
+#appShell.app-shell .topbar .mode-switch,
+#appShell.app-shell .topbar .play-parent-gate,
+#appShell.app-shell.staff-mode .topbar .map-return,
+#appShell.app-shell.staff-mode .topbar .mode-switch,
+#appShell.app-shell.staff-mode .topbar .play-parent-gate {
+  height: 44px !important;
+  min-height: 44px !important;
+  align-self: center !important;
+  margin: 0 !important;
+  transform: none !important;
+}
+
+#levelMap .progress-dot {
+  cursor: default !important;
+  user-select: none;
+}
+
+.parent-volume-control input[type="range"] {
+  height: 44px !important;
+  min-height: 44px !important;
+}
+
+:where(button, [role="button"], summary, input, a[href]):focus-visible {
+  outline: 4px solid #ffd166 !important;
+  outline-offset: 3px !important;
+}
+
+.parent-card :where(button, input):focus-visible,
+.result-card button:focus-visible {
+  outline-color: #8ee8ff !important;
+}
+
+/* 325a: listening questions keep note identity neutral until a wrong answer. */
+
+#appShell.app-shell:not(.staff-mode)[data-listening-identity-hidden="true"] .part-note-badge[hidden],
+#appShell.app-shell:not(.staff-mode)[data-listening-identity-hidden="true"] .slot-note-letter[hidden] {
+  display: none !important;
+}
+
+#appShell.app-shell:not(.staff-mode)[data-level-id="M03"] .stage-story-ribbon[hidden],
+#appShell.app-shell:not(.staff-mode)[data-level-id="M03"] .part-note-badge[hidden],
+#appShell.app-shell:not(.staff-mode)[data-level-id="M03"] .slot-note-letter[hidden] {
+  display: none !important;
+}
+
+#appShell.app-shell:not(.staff-mode)[data-level-id="M03"] .hanging-part[data-identity-hidden="true"] {
+  filter:
+    grayscale(1)
+    saturate(0.04)
+    contrast(0.92)
+    drop-shadow(0 14px 16px rgba(4, 18, 38, 0.28)) !important;
+}
+
+#appShell.app-shell:not(.staff-mode)[data-listening-identity-hidden="true"] .story-part-icon,
+#appShell.app-shell:not(.staff-mode)[data-listening-identity-hidden="true"] .reward-brick,
+#appShell.app-shell:not(.staff-mode)[data-listening-identity-hidden="true"] .next-action[data-listening-identity-hidden="true"] .cue-brick,
+#appShell.app-shell:not(.staff-mode)[data-listening-identity-hidden="true"] .build-slot[data-identity-hidden="true"] .slot-art,
+#appShell.app-shell:not(.staff-mode)[data-listening-identity-hidden="true"] .level-intro-card[data-identity-hidden="true"] .intro-part {
+  filter: grayscale(1) saturate(0.04) contrast(0.92) !important;
+}
+
+#appShell.app-shell:not(.staff-mode)[data-listening-identity-hidden="true"] .build-slot[data-identity-hidden="true"] {
+  --part-color: #5f7286 !important;
+  --part-color-soft: rgba(95, 114, 134, 0.24) !important;
+}
+
+/* 326a: S01 wrong repair keeps one scene bubble and one target-key locator. */
+
+#appShell.app-shell.staff-mode[data-staff-repair-state="repair"] .staff-note-card,
+#appShell.app-shell.staff-mode[data-staff-repair-state="repair"] .staff-visual-cue,
+#appShell.app-shell.staff-mode[data-staff-repair-state="repair"] .staff-stage-toast,
+#appShell.app-shell.staff-mode[data-staff-repair-state="repair"] .staff-jump-guide,
+#appShell.app-shell.staff-mode[data-staff-repair-state="repair"] .staff-jump-footprints,
+#appShell.app-shell.staff-mode[data-staff-repair-state="repair"] .staff-landing-ripple,
+#appShell.app-shell.staff-mode[data-staff-repair-state="repair"] .staff-feedback,
+#appShell.app-shell.staff-mode[data-staff-repair-state="repair"] .next-action {
+  display: none !important;
+}
+
+#appShell.app-shell.staff-mode[data-staff-repair-state="repair"] .staff-step.current,
+#appShell.app-shell.staff-mode[data-staff-repair-state="repair"] .staff-step.current.hint {
+  animation: none !important;
+  filter: drop-shadow(0 10px 14px rgba(2, 10, 27, 0.22)) !important;
+  box-shadow:
+    0 0 0 4px rgba(255, 255, 255, 0.82),
+    0 0 0 10px var(--note-soft, rgba(203, 132, 250, 0.18)),
+    0 16px 26px rgba(3, 12, 29, 0.20) !important;
+}
+
+#appShell.app-shell.staff-mode[data-staff-repair-state="repair"] .staff-step.current .staff-note-aura,
+#appShell.app-shell.staff-mode[data-staff-repair-state="repair"] .staff-step.current.hint .staff-note-aura {
+  opacity: 0.22 !important;
+  animation: none !important;
+  filter: none !important;
+}
+
+#appShell.app-shell.staff-mode[data-staff-repair-state="repair"] .staff-step.current::before,
+#appShell.app-shell.staff-mode[data-staff-repair-state="repair"] .staff-step.current::after,
+#appShell.app-shell.staff-mode[data-staff-repair-state="repair"] .staff-step.current.hint::before,
+#appShell.app-shell.staff-mode[data-staff-repair-state="repair"] .staff-step.current.hint::after {
+  animation: none !important;
+  opacity: 0.22 !important;
+}
+
+#appShell.app-shell.staff-mode[data-staff-repair-state="repair"] .staff-dino-wrap:not(.is-stumbling)::after {
+  content: attr(data-tip) !important;
+  left: var(--tip-left, 78%) !important;
+  top: var(--tip-top, -76px) !important;
+  min-width: 138px !important;
+  max-width: 174px !important;
+  min-height: 48px !important;
+  padding: 9px 13px !important;
+  display: grid !important;
+  place-items: center !important;
+  border-radius: var(--tip-radius, 18px 18px 18px 8px) !important;
+  font-size: 15px !important;
+  line-height: 1.12 !important;
+  transform: var(--tip-transform, none) !important;
+  animation: none !important;
+  white-space: normal !important;
+  box-shadow:
+    0 10px 18px rgba(4, 14, 34, 0.24),
+    0 0 0 4px var(--tip-glow, rgba(203, 132, 250, 0.18)),
+    inset 0 -3px 0 rgba(239, 174, 76, 0.16) !important;
+}
+
+#appShell.app-shell.staff-mode[data-staff-repair-state="repair"] .staff-dino-wrap:not(.is-stumbling)::before {
+  left: var(--tip-tail-left, 76%) !important;
+  top: var(--tip-tail-top, -23px) !important;
+}
+
+#appShell.app-shell.staff-mode[data-staff-repair-state="repair"] .staff-dino-wrap:not(.is-stumbling) .staff-dino {
+  animation: none !important;
+  transform: none !important;
+}
+
+@media (max-width: 1080px) {
+  #appShell.app-shell.staff-mode[data-staff-repair-state="repair"] .staff-dino-wrap:not(.is-stumbling)::after {
+    min-width: 126px !important;
+    max-width: 154px !important;
+    min-height: 44px !important;
+    padding: 8px 11px !important;
+    font-size: 14px !important;
+  }
+}
+
+/* 327a session/rest and parent evidence states. */
+.map-session-status {
+  position: absolute;
+  z-index: 8;
+  top: 8px;
+  left: 50%;
+  width: min(430px, 46vw);
+  min-height: 58px;
+  padding: 7px 16px 7px 72px;
+  display: grid;
+  align-items: center;
+  color: #173a53;
+  border: 1px solid rgba(255, 255, 255, 0.74);
+  border-radius: 8px;
+  background: rgba(249, 255, 244, 0.88);
+  box-shadow: 0 10px 24px rgba(24, 79, 92, 0.16), inset 0 1px rgba(255, 255, 255, 0.86);
+  transform: translateX(-50%);
+  backdrop-filter: blur(10px) saturate(1.08);
+}
+
+.map-session-status[hidden] {
+  display: none !important;
+}
+
+.map-session-status[data-state="active"] {
+  background: rgba(239, 250, 255, 0.90);
+}
+
+.map-session-status img {
+  position: absolute;
+  left: 10px;
+  bottom: 0;
+  width: 58px;
+  height: 66px;
+  object-fit: contain;
+  object-position: center bottom;
+  filter: drop-shadow(0 7px 8px rgba(22, 60, 80, 0.18));
+}
+
+.map-session-status span {
+  min-width: 0;
+  display: grid;
+  gap: 3px;
+}
+
+.map-session-status strong {
+  font-size: 17px;
+  line-height: 1.1;
+}
+
+.map-session-status small {
+  color: rgba(23, 58, 83, 0.76);
+  font-size: 12px;
+  font-weight: 800;
+  line-height: 1.2;
+}
+
+.parent-evidence-list {
+  width: 100%;
+  margin-top: 7px;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 5px;
+}
+
+.parent-evidence-chip {
+  min-width: 0;
+  min-height: 28px;
+  padding: 4px 7px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  color: rgba(34, 55, 73, 0.58) !important;
+  border: 1px solid rgba(38, 76, 91, 0.12);
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.48);
+  font-size: 11px !important;
+  font-weight: 850;
+  line-height: 1.15;
+}
+
+.parent-evidence-chip i {
+  flex: 0 0 18px;
+  width: 18px;
+  height: 18px;
+  display: grid;
+  place-items: center;
+  color: rgba(34, 55, 73, 0.46);
+  border-radius: 50%;
+  background: rgba(35, 86, 102, 0.08);
+  font-style: normal;
+}
+
+.parent-evidence-chip.is-active {
+  color: #17654f !important;
+  border-color: rgba(38, 159, 113, 0.28);
+  background: rgba(222, 249, 235, 0.86);
+}
+
+.parent-evidence-chip.is-active i {
+  color: #ffffff;
+  background: #25a873;
+}
+
+/* 331a: keep every parent input option visible across iPad landscape sizes. */
+@media (min-width: 761px) and (max-height: 900px) {
+  .parent-card {
+    gap: 10px;
+    max-height: calc(100svh - 28px);
+    padding: 16px 18px;
+  }
+
+  .parent-card-head {
+    grid-template-columns: 58px minmax(0, 1fr);
+    gap: 10px;
+    padding-right: 48px;
+  }
+
+  .parent-card-head img {
+    width: 58px;
+    height: 58px;
+    border-radius: 18px;
+  }
+
+  .parent-card-head .eyebrow {
+    margin-bottom: 2px;
+    font-size: 12px;
+  }
+
+  .parent-card-head h2 {
+    font-size: 30px;
+  }
+
+  .parent-status-grid {
+    gap: 8px;
+  }
+
+  .parent-status-card {
+    gap: 2px;
+    min-height: 0;
+    padding: 9px 12px;
+    border-radius: 14px;
+  }
+
+  .parent-status-card small {
+    font-size: 11px;
+  }
+
+  .parent-status-card strong {
+    font-size: 21px;
+  }
+
+  .parent-status-card span {
+    font-size: 13px;
+    line-height: 1.14;
+  }
+
+  .parent-status-card .parent-response-record {
+    font-size: 10px;
+    line-height: 1.15;
+  }
+
+  .parent-evidence-list {
+    gap: 3px;
+    margin-top: 3px;
+  }
+
+  .parent-evidence-chip {
+    min-height: 22px;
+    padding: 2px 4px;
+    gap: 3px;
+    border-radius: 5px;
+    font-size: 9px !important;
+  }
+
+  .parent-evidence-chip i {
+    flex-basis: 14px;
+    width: 14px;
+    height: 14px;
+  }
+
+  .parent-option-list {
+    gap: 8px;
+  }
+
+  .parent-option-icon {
+    width: 46px;
+    height: 46px;
+    border-radius: 14px;
+    font-size: 22px;
+  }
+
+  .parent-option.parent-audio-setting,
+  .parent-option.parent-motion-setting {
+    min-height: 70px;
+    padding: 8px 10px;
+    gap: 10px;
+  }
+
+  .parent-option.parent-audio-setting {
+    grid-template-columns: 46px minmax(0, 1fr) minmax(214px, 242px);
+  }
+
+  .parent-option.parent-motion-setting {
+    grid-template-columns: 46px minmax(0, 1fr) auto;
+  }
+
+  .parent-option.parent-setting-row strong,
+  .parent-option-list > .parent-option:not(.parent-setting-row) strong {
+    margin-bottom: 2px;
+    font-size: 16px;
+  }
+
+  .parent-option.parent-setting-row small,
+  .parent-option-list > .parent-option:not(.parent-setting-row) small {
+    font-size: 11px;
+    line-height: 1.18;
+  }
+
+  .parent-option-list > .parent-option:not(.parent-setting-row) {
+    grid-template-columns: 46px minmax(0, 1fr);
+    min-height: 64px;
+    gap: 10px;
+    padding: 8px 10px;
+    border-radius: 14px;
+  }
+
+  .parent-option-list > .parent-option:not(.parent-setting-row) .parent-option-icon {
+    width: 46px;
+    height: 46px;
+    border-radius: 14px;
+    font-size: 22px;
+  }
+}
+
+@media (min-width: 761px) and (min-height: 901px) {
+  .parent-card {
+    max-height: min(840px, 92svh);
+  }
+}
+
+@media (max-width: 1040px) {
+  .map-session-status {
+    width: min(390px, 44vw);
+    min-height: 54px;
+    padding-left: 64px;
+  }
+
+  .map-session-status img {
+    width: 52px;
+    height: 60px;
+  }
+
+  .map-session-status strong {
+    font-size: 15px;
+  }
+}
+
+/* M08 uses the blueprint and roof-world layers; earlier levels keep their physical scene builds. */
+#appShell.app-shell:not(.staff-mode)[data-level-id="M08"] .base,
+#appShell.app-shell:not(.staff-mode)[data-level-id="M08"] .build-pad {
+  display: none !important;
+}
+
+#appShell.app-shell:not(.staff-mode)[data-level-id] .hanging-part .hanging-part-art {
+  display: none !important;
+}
+
+#appShell.app-shell:not(.staff-mode)[data-level-id] .hanging-part .part-note-badge {
+  top: 50% !important;
+  bottom: auto !important;
+  left: 50% !important;
+  min-width: 48px !important;
+  min-height: 48px !important;
+  transform: translate(-50%, -50%) !important;
+}
+
+#appShell.app-shell:not(.staff-mode)[data-level-id] .hanging-part .part-note-badge b {
+  font-size: 28px !important;
+}
+
+#appShell.app-shell:not(.staff-mode)[data-level-id] .coach-overlay {
+  right: 18px !important;
+  bottom: 0 !important;
+  width: clamp(172px, 18vw, 206px) !important;
+  min-height: clamp(172px, 18vw, 206px) !important;
+}
+
+#appShell.app-shell:not(.staff-mode)[data-level-id] .coach-bubble {
+  right: 72% !important;
+  min-width: 132px !important;
+  max-width: 156px !important;
+}
+
+@media (max-width: 1040px) {
+  #appShell.app-shell:not(.staff-mode)[data-level-id] .coach-overlay {
+    width: 164px !important;
+    min-height: 164px !important;
+  }
+}
+
+/* Listening first: the scene can set context, but it must not repeat an instruction or suggest an answer. */
+#appShell.app-shell:not(.staff-mode)[data-level-id="M03"] .hanging-part {
+  display: none !important;
+}
+
+#appShell.app-shell:not(.staff-mode)[data-level-id="M03"][data-listening-identity-hidden="true"] .coach-bubble {
+  display: none !important;
+}
+
+/* 338a final M03 invitation override follows the frozen 335a hiding rule. */
+#appShell.app-shell:not(.staff-mode)[data-level-id="M03"] .coach-bubble,
+#appShell.app-shell:not(.staff-mode)[data-level-id="M03"][data-listening-identity-hidden="true"] .coach-bubble {
+  display: grid !important;
+}
+
+/* 338a M03: one story problem, one replay action, one Xingya invitation. */
+#appShell.app-shell:not(.staff-mode)[data-level-id="M03"] .coach-bubble {
+  top: -112px !important;
+  right: 68% !important;
+  width: 152px !important;
+  min-width: 152px !important;
+  max-width: 152px !important;
+  display: grid !important;
+}
+
+#appShell.app-shell:not(.staff-mode)[data-level-id="M03"] .m03-wheel-replay {
+  position: absolute;
+  z-index: 32;
+  left: 50%;
+  top: 29%;
+  min-width: 154px;
+  min-height: 48px;
+  padding: 7px 16px;
+  display: grid;
+  grid-template-columns: 32px auto;
+  place-items: center;
+  gap: 8px;
+  color: #eafaff;
+  background: rgba(12, 58, 91, 0.92);
+  border: 2px solid rgba(174, 235, 255, 0.78);
+  border-radius: 18px;
+  box-shadow: 0 10px 20px rgba(2, 17, 39, 0.28), inset 0 1px 0 rgba(255, 255, 255, 0.24);
+  transform: translate(-50%, -50%);
+}
+
+#appShell.app-shell:not(.staff-mode)[data-level-id="M03"] .m03-wheel-replay[hidden] {
+  display: none !important;
+}
+
+#appShell.app-shell:not(.staff-mode)[data-level-id="M03"] .m03-wheel-replay span {
+  width: 32px;
+  height: 32px;
+  display: grid;
+  place-items: center;
+  color: #123551;
+  background: #dff8ff;
+  border-radius: 50%;
+  font-size: 20px;
+}
+
+#appShell.app-shell:not(.staff-mode)[data-level-id="M03"] .m03-wheel-replay strong {
+  font-size: 15px;
+  line-height: 1;
+}
+
+#appShell.app-shell:not(.staff-mode)[data-level-id="M03"] .m03-wheel-complete {
+  position: absolute;
+  left: 50%;
+  top: 57%;
+  width: 168px;
+  height: 82px;
+  transform: translate(-50%, -50%);
+  animation: m03CartLock338a 620ms cubic-bezier(.18, .84, .22, 1) both;
+}
+
+#appShell.app-shell:not(.staff-mode)[data-level-id="M03"] .m03-cart-body {
+  position: absolute;
+  left: 18px;
+  right: 18px;
+  top: 12px;
+  height: 44px;
+  display: block;
+  background: linear-gradient(180deg, #c9f2f2, #4da5b8 68%, #27677c);
+  border: 5px solid rgba(238, 253, 255, 0.94);
+  border-radius: 18px 18px 10px 10px;
+  box-shadow: 0 12px 18px rgba(1, 22, 48, 0.32), inset 0 -8px 0 rgba(12, 60, 84, 0.2);
+}
+
+#appShell.app-shell:not(.staff-mode)[data-level-id="M03"] .m03-cart-wheel {
+  position: absolute;
+  top: 48px;
+  width: 34px;
+  height: 34px;
+  display: block;
+  background: radial-gradient(circle, #dffaff 0 22%, #326d85 24% 48%, #122e48 50% 100%);
+  border: 4px solid rgba(238, 253, 255, 0.92);
+  border-radius: 50%;
+  box-shadow: 0 7px 12px rgba(1, 18, 40, 0.32);
+}
+
+#appShell.app-shell:not(.staff-mode)[data-level-id="M03"] .m03-cart-wheel.wheel-left {
+  left: 30px;
+}
+
+#appShell.app-shell:not(.staff-mode)[data-level-id="M03"] .m03-cart-wheel.wheel-right {
+  right: 30px;
+}
+
+#appShell.app-shell:not(.staff-mode)[data-level-id="M03"] .m03-cart-spark {
+  position: absolute;
+  right: 3px;
+  top: -2px;
+  width: 32px;
+  height: 32px;
+  display: grid;
+  place-items: center;
+  color: #194c43;
+  background: #c8ffad;
+  border: 3px solid #f5ffe7;
+  border-radius: 50%;
+  box-shadow: 0 0 18px rgba(171, 255, 173, 0.68);
+  font-style: normal;
+  font-weight: 1000;
+}
+
+@keyframes m03CartLock338a {
+  from { opacity: 0; transform: translate(-74%, -50%) rotate(-4deg); }
+  72% { opacity: 1; transform: translate(-47%, -50%) rotate(1deg); }
+  to { opacity: 1; transform: translate(-50%, -50%) rotate(0); }
+}
+
+/* Parent controls are utility actions, not scene content: keep them in the top bar hit area. */
+#appShell.app-shell:not(.staff-mode)[data-level-id] .topbar {
+  position: relative !important;
+}
+
+#appShell.app-shell:not(.staff-mode)[data-level-id] #playParentGate {
+  position: absolute !important;
+  z-index: 60 !important;
+  top: 10px !important;
+  right: 62px !important;
+  display: grid !important;
+  pointer-events: auto !important;
+}
+
+#appShell.app-shell:not(.staff-mode)[data-level-id] .map-return.icon-tool,
+#appShell.app-shell:not(.staff-mode)[data-level-id] #playParentGate {
+  width: 44px !important;
+  min-width: 44px !important;
+  height: 44px !important;
+  min-height: 44px !important;
+}
+
+@media (max-width: 1040px) {
+  #appShell.app-shell:not(.staff-mode)[data-level-id] #playParentGate {
+    top: 8px !important;
+    right: 60px !important;
+  }
+}
+
+/* M07, M08 and FG03 use the same grounded blueprint language as the early workshop. */
+#appShell.app-shell:not(.staff-mode)[data-level-id="M07"] .memory-star-route,
+#appShell.app-shell:not(.staff-mode)[data-level-id="FG03"] .fg-star-route,
+#appShell.app-shell:not(.staff-mode)[data-level-id="M08"] .roof-scale-route {
+  display: none !important;
+}
+
+#appShell.app-shell:not(.staff-mode)[data-level-id="M07"] .coach-overlay,
+#appShell.app-shell:not(.staff-mode)[data-level-id="FG03"] .coach-overlay,
+#appShell.app-shell:not(.staff-mode)[data-level-id="M08"] .coach-overlay {
+  display: block !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+#appShell.app-shell:not(.staff-mode)[data-level-id="M07"] .coach-bubble,
+#appShell.app-shell:not(.staff-mode)[data-level-id="FG03"] .coach-bubble,
+#appShell.app-shell:not(.staff-mode)[data-level-id="M08"] .coach-bubble {
+  top: -164px !important;
+  right: auto !important;
+  left: 18px !important;
+  width: 124px !important;
+  min-width: 124px !important;
+  max-width: 124px !important;
+}
+
+#appShell.app-shell:not(.staff-mode)[data-level-id] .coach-dino {
+  transform: scale(1.18) !important;
+  transform-origin: center bottom !important;
+}
+
+/* 332a: the star bridge must read as a real five-line staff before any hint. */
+#appShell.app-shell.staff-mode .staff-scene-art {
+  opacity: 0.78 !important;
+  filter: saturate(1.01) contrast(1.04) brightness(1.02) !important;
+}
+
+#appShell.app-shell.staff-mode .staff-scene-art .svg-staff-lines {
+  opacity: 1 !important;
+  filter:
+    drop-shadow(0 0 8px rgba(162, 236, 255, 0.62))
+    drop-shadow(0 6px 10px rgba(0, 0, 0, 0.30)) !important;
+}
+
+#appShell.app-shell.staff-mode .staff-scene-art .svg-staff-lines .svg-staff-line,
+#appShell.app-shell.staff-mode .staff-scene-art .svg-staff-lines .svg-ledger-line {
+  stroke: #e7faff !important;
+  stroke-width: 7px !important;
+  opacity: 0.98 !important;
+}
+
+#appShell.app-shell.staff-mode .staff-scene-art .svg-staff-lines .svg-staff-line-glows {
+  opacity: 0.62 !important;
+}
+
+#appShell.app-shell.staff-mode .staff-scene-art .svg-staff-lines .svg-measure-line {
+  stroke: #d5f5ff !important;
+  stroke-width: 5px !important;
+  opacity: 0.82 !important;
+}
+
+/* 333a: respect device high-contrast preference without changing note identity or answers. */
+html[data-contrast="more"] #mapShell.map-shell::before {
+  background:
+    linear-gradient(180deg, rgba(1, 24, 48, 0.34), rgba(1, 24, 48, 0.08) 34%, rgba(1, 24, 48, 0.40)) !important;
+}
+
+html[data-contrast="more"] .map-brand,
+html[data-contrast="more"] .chapter-pill,
+html[data-contrast="more"] .star-pill,
+html[data-contrast="more"] .parent-gate,
+html[data-contrast="more"] .map-session-status,
+html[data-contrast="more"] .node-title,
+html[data-contrast="more"] .node-note,
+html[data-contrast="more"] .node-action-badge,
+html[data-contrast="more"] #appShell.app-shell .topbar,
+html[data-contrast="more"] #appShell.app-shell .stage-story-ribbon,
+html[data-contrast="more"] #appShell.app-shell .coach-bubble,
+html[data-contrast="more"] #appShell.app-shell .staff-stage-toast,
+html[data-contrast="more"] #appShell.app-shell .staff-note-label,
+html[data-contrast="more"] #appShell.app-shell .staff-place,
+html[data-contrast="more"] .parent-card,
+html[data-contrast="more"] .parent-status-card,
+html[data-contrast="more"] .parent-option,
+html[data-contrast="more"] .result-card {
+  backdrop-filter: none !important;
+  border-color: #ffffff !important;
+  box-shadow:
+    0 0 0 3px rgba(3, 25, 48, 0.82),
+    0 10px 24px rgba(0, 12, 28, 0.56) !important;
+  text-shadow: none !important;
+}
+
+html[data-contrast="more"] .map-brand,
+html[data-contrast="more"] #appShell.app-shell .topbar,
+html[data-contrast="more"] #appShell.app-shell .stage-story-ribbon,
+html[data-contrast="more"] #appShell.app-shell .coach-bubble,
+html[data-contrast="more"] #appShell.app-shell .staff-stage-toast,
+html[data-contrast="more"] .parent-card,
+html[data-contrast="more"] .parent-status-card,
+html[data-contrast="more"] .parent-option,
+html[data-contrast="more"] .result-card {
+  background: #061b35 !important;
+  color: #ffffff !important;
+}
+
+html[data-contrast="more"] .chapter-pill,
+html[data-contrast="more"] .star-pill,
+html[data-contrast="more"] .parent-gate,
+html[data-contrast="more"] .map-session-status,
+html[data-contrast="more"] .node-title,
+html[data-contrast="more"] .node-note,
+html[data-contrast="more"] .node-action-badge,
+html[data-contrast="more"] #appShell.app-shell .staff-note-label,
+html[data-contrast="more"] #appShell.app-shell .staff-place {
+  background: #ffffff !important;
+  color: #061b35 !important;
+}
+
+html[data-contrast="more"] #appShell.app-shell.staff-mode .staff-scene-art {
+  opacity: 0.94 !important;
+  filter: saturate(1.05) contrast(1.14) brightness(1.08) !important;
+}
+
+html[data-contrast="more"] #appShell.app-shell.staff-mode .staff-scene-art .svg-staff-lines .svg-staff-line,
+html[data-contrast="more"] #appShell.app-shell.staff-mode .staff-scene-art .svg-staff-lines .svg-ledger-line {
+  stroke: #ffffff !important;
+  stroke-width: 8px !important;
+  opacity: 1 !important;
+}
+
+html[data-contrast="more"] #appShell.app-shell.staff-mode .staff-scene-art .svg-staff-lines .svg-measure-line {
+  stroke: #ffffff !important;
+  stroke-width: 6px !important;
+  opacity: 0.94 !important;
+}
+
+html[data-contrast="more"] #appShell.app-shell .keyboard.real-piano {
+  border: 3px solid #ffffff !important;
+  box-shadow: 0 0 0 3px rgba(3, 25, 48, 0.86), 0 12px 24px rgba(0, 12, 28, 0.56) !important;
+}
+
+html[data-contrast="more"] #appShell.app-shell .keyboard.real-piano .white-key {
+  border-color: #061b35 !important;
+}
+
+/* 334a: keep the M08 roof-route SVG inside its own climb lane. Its viewBox is square,
+   so an explicit width and height prevents intrinsic sizing from creating a giant diagonal. */
+#appShell.app-shell[data-level-id="M08"]:not(.staff-mode) .roof-route-line {
+  inset: 13% auto auto 0 !important;
+  width: 100% !important;
+  height: 80% !important;
+}
+
+/* 334g: M01 has one story problem, one C identity on the part, the real keyboard,
+   and a larger spoken Do prompt from Xingya. */
+#appShell.app-shell[data-level-id="M01"]:not(.staff-mode) .stage-story-ribbon[data-identity-suppressed="true"] {
+  width: min(250px, 28vw) !important;
+  min-height: 0 !important;
+  padding: 12px 14px !important;
+}
+
+#appShell.app-shell[data-level-id="M01"]:not(.staff-mode) .stage-story-ribbon[data-identity-suppressed="true"] .story-ribbon-main {
+  grid-template-columns: 46px minmax(0, 1fr) !important;
+  gap: 10px !important;
+}
+
+#appShell.app-shell[data-level-id="M01"]:not(.staff-mode) .stage-story-ribbon[data-identity-suppressed="true"] .story-part-icon {
+  width: 46px !important;
+  height: 46px !important;
+}
+
+#appShell.app-shell[data-level-id="M01"]:not(.staff-mode) .stage-story-ribbon[data-identity-suppressed="true"] .story-copy small {
+  font-size: 11px !important;
+}
+
+#appShell.app-shell[data-level-id="M01"]:not(.staff-mode) .stage-story-ribbon[data-identity-suppressed="true"] .story-copy strong {
+  font-size: 20px !important;
+  line-height: 1.12 !important;
+}
+
+#appShell.app-shell[data-level-id="M01"]:not(.staff-mode) #targetNote,
+#appShell.app-shell[data-level-id="M01"]:not(.staff-mode) #stageNoteOrb,
+#appShell.app-shell[data-level-id="M01"]:not(.staff-mode) .build-slot.current .slot-note-letter {
+  display: none !important;
+}
+
+#appShell.app-shell[data-level-id="M01"]:not(.staff-mode):not([data-level-id="M07"]):not([data-level-id="M08"]):not([data-level-id="FG03"]) .coach-overlay {
+  right: 18px !important;
+  bottom: 12px !important;
+  width: clamp(184px, 18vw, 210px) !important;
+  min-height: clamp(184px, 18vw, 210px) !important;
+}
+
+#appShell.app-shell[data-level-id="M01"]:not(.staff-mode):not([data-level-id="M07"]):not([data-level-id="M08"]):not([data-level-id="FG03"]) .coach-dino {
+  width: 164px !important;
+  height: 164px !important;
+}
+
+#appShell.app-shell[data-level-id="M01"]:not(.staff-mode) .coach-bubble {
+  right: 68% !important;
+  top: -4px !important;
+  min-width: 124px !important;
+  max-width: 150px !important;
+  padding: 8px 11px 9px !important;
+}
+
+#appShell.app-shell[data-level-id="M01"]:not(.staff-mode) .coach-bubble strong {
+  font-size: 22px !important;
+}
+
+/* 335a: grounded assembly bay. One object, one destination, one piano action. */
+#appShell.app-shell:not(.staff-mode)[data-level-id] .topbar {
+  grid-template-columns: minmax(176px, 1fr) auto auto !important;
+  min-height: 54px !important;
+  gap: 10px !important;
+  padding: 7px 12px !important;
+  border-radius: 16px !important;
+}
+
+#appShell.app-shell:not(.staff-mode)[data-level-id] .topbar .brand-lockup {
+  min-width: 0 !important;
+}
+
+#appShell.app-shell:not(.staff-mode)[data-level-id] .topbar .brand-mark {
+  width: 36px !important;
+  height: 36px !important;
+  border-radius: 11px !important;
+}
+
+#appShell.app-shell:not(.staff-mode)[data-level-id] .topbar .eyebrow {
+  font-size: 9px !important;
+}
+
+#appShell.app-shell:not(.staff-mode)[data-level-id] .topbar h1 {
+  font-size: clamp(21px, 2.1vw, 27px) !important;
+  line-height: 1 !important;
+}
+
+#appShell.app-shell:not(.staff-mode)[data-level-id] .progress-map {
+  width: auto !important;
+  min-width: 64px !important;
+  min-height: 34px !important;
+  padding: 0 10px !important;
+  display: grid !important;
+  place-items: center !important;
+  color: rgba(232, 246, 255, 0.92) !important;
+  border: 1px solid rgba(182, 223, 255, 0.20) !important;
+  border-radius: 999px !important;
+  background: rgba(5, 27, 57, 0.52) !important;
+  box-shadow: inset 0 1px rgba(255, 255, 255, 0.08) !important;
+}
+
+#appShell.app-shell:not(.staff-mode)[data-level-id] .progress-compact {
+  display: inline-flex !important;
+  align-items: baseline !important;
+  gap: 4px !important;
+  white-space: nowrap !important;
+}
+
+#appShell.app-shell:not(.staff-mode)[data-level-id] .progress-compact b {
+  color: #fff2c0 !important;
+  font-size: 17px !important;
+  font-weight: 950 !important;
+  line-height: 1 !important;
+}
+
+#appShell.app-shell:not(.staff-mode)[data-level-id] .progress-compact small {
+  color: rgba(216, 237, 255, 0.72) !important;
+  font-size: 11px !important;
+  font-weight: 850 !important;
+}
+
+#appShell.app-shell:not(.staff-mode)[data-level-id] .mode-switch,
+#appShell.app-shell:not(.staff-mode)[data-level-id] .badge {
+  display: none !important;
+}
+
+#appShell.app-shell:not(.staff-mode)[data-level-id] .icon-tool {
+  width: 40px !important;
+  min-width: 40px !important;
+  height: 40px !important;
+  min-height: 40px !important;
+  padding: 0 !important;
+  display: grid !important;
+  place-items: center !important;
+  color: #e8f6ff !important;
+  border: 1px solid rgba(197, 229, 255, 0.28) !important;
+  border-radius: 12px !important;
+  background: rgba(17, 62, 108, 0.76) !important;
+  box-shadow: inset 0 1px rgba(255, 255, 255, 0.15), 0 6px 12px rgba(0, 11, 30, 0.18) !important;
+}
+
+#appShell.app-shell:not(.staff-mode)[data-level-id] .icon-tool > span {
+  font-size: 21px !important;
+  font-weight: 900 !important;
+  line-height: 1 !important;
+}
+
+#appShell.app-shell:not(.staff-mode)[data-level-id] .build-panel {
+  padding: 0 !important;
+  border: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+#appShell.app-shell:not(.staff-mode)[data-level-id] .build-panel .panel-head,
+#appShell.app-shell:not(.staff-mode)[data-level-id] .build-panel .earned,
+#appShell.app-shell:not(.staff-mode)[data-level-id] .practice-panel {
+  display: none !important;
+}
+
+#appShell.app-shell:not(.staff-mode)[data-level-id] .moon-yard {
+  overflow: hidden !important;
+  border: 1px solid rgba(187, 225, 255, 0.22) !important;
+  border-radius: 18px !important;
+  box-shadow: inset 0 1px rgba(255, 255, 255, 0.13), 0 10px 22px rgba(0, 10, 28, 0.18) !important;
+}
+
+#appShell.app-shell:not(.staff-mode)[data-level-id] .stage-story-ribbon {
+  z-index: 18 !important;
+  top: 15px !important;
+  left: 16px !important;
+  width: min(230px, 27vw) !important;
+  min-height: 0 !important;
+  padding: 9px 11px !important;
+  border: 1px solid rgba(225, 245, 255, 0.26) !important;
+  border-radius: 12px !important;
+  background: rgba(4, 27, 55, 0.76) !important;
+  box-shadow: 0 7px 16px rgba(0, 8, 24, 0.18) !important;
+  backdrop-filter: blur(8px) saturate(1.04) !important;
+}
+
+#appShell.app-shell:not(.staff-mode)[data-level-id] .stage-story-ribbon .story-ribbon-main {
+  grid-template-columns: 36px minmax(0, 1fr) !important;
+  gap: 8px !important;
+}
+
+#appShell.app-shell:not(.staff-mode)[data-level-id] .stage-story-ribbon .story-part-icon {
+  width: 36px !important;
+  height: 36px !important;
+}
+
+#appShell.app-shell:not(.staff-mode)[data-level-id] .stage-story-ribbon .story-copy small {
+  font-size: 10px !important;
+}
+
+#appShell.app-shell:not(.staff-mode)[data-level-id] .stage-story-ribbon .story-copy strong {
+  font-size: 17px !important;
+  line-height: 1.1 !important;
+}
+
+#appShell.app-shell:not(.staff-mode)[data-level-id] .stage-story-ribbon .story-cue-row {
+  display: none !important;
+}
+
+#appShell.app-shell:not(.staff-mode)[data-level-id] .stage-energy-svg,
+#appShell.app-shell:not(.staff-mode)[data-level-id] .stage-signal-trail,
+#appShell.app-shell:not(.staff-mode)[data-level-id] .stage-note-orb {
+  display: none !important;
+}
+
+#appShell.app-shell:not(.staff-mode)[data-level-id] .hanging-part {
+  z-index: 14 !important;
+  top: auto !important;
+  right: auto !important;
+  bottom: 122px !important;
+  left: 50% !important;
+  width: clamp(132px, 17vw, 176px) !important;
+  min-height: 74px !important;
+  transform: translateX(-50%) !important;
+  border: 2px solid rgba(255, 249, 225, 0.78) !important;
+  border-radius: 14px !important;
+  box-shadow: inset 0 3px rgba(255, 255, 255, 0.36), 0 11px 20px rgba(0, 10, 26, 0.22), 0 0 0 5px var(--part-color-soft, rgba(240, 100, 73, 0.12)) !important;
+}
+
+#appShell.app-shell:not(.staff-mode)[data-level-id] .hanging-part.drop-hint,
+#appShell.app-shell:not(.staff-mode)[data-level-id] .hanging-part.identity-reminder {
+  animation: none !important;
+}
+
+#appShell.app-shell:not(.staff-mode)[data-level-id] .hanging-part::before,
+#appShell.app-shell:not(.staff-mode)[data-level-id] .hanging-part::after {
+  display: none !important;
+}
+
+#appShell.app-shell:not(.staff-mode)[data-level-id] .hanging-part-art {
+  height: 54px !important;
+}
+
+#appShell.app-shell:not(.staff-mode)[data-level-id] .hanging-part > strong {
+  display: none !important;
+}
+
+#appShell.app-shell:not(.staff-mode)[data-level-id] .hanging-part .part-note-badge {
+  top: -18px !important;
+  left: 10px !important;
+  min-width: 34px !important;
+  min-height: 34px !important;
+  padding: 4px 6px !important;
+  border-radius: 10px !important;
+}
+
+#appShell.app-shell:not(.staff-mode)[data-level-id] .hanging-part .part-note-badge b {
+  font-size: 18px !important;
+  line-height: 1 !important;
+}
+
+#appShell.app-shell:not(.staff-mode)[data-level-id] .hanging-part .part-note-badge i {
+  margin-top: 2px !important;
+  font-size: 10px !important;
+  line-height: 1 !important;
+}
+
+#appShell.app-shell:not(.staff-mode)[data-level-id] .base {
+  z-index: 9 !important;
+  bottom: 40px !important;
+  left: 50% !important;
+  width: clamp(266px, 34vw, 370px) !important;
+  height: 118px !important;
+  transform: translateX(-50%) !important;
+}
+
+#appShell.app-shell:not(.staff-mode)[data-level-id] .base::before {
+  opacity: 0.45 !important;
+}
+
+#appShell.app-shell:not(.staff-mode)[data-level-id] .base .build-slot {
+  opacity: 0.14 !important;
+  filter: saturate(0.72) !important;
+}
+
+#appShell.app-shell:not(.staff-mode)[data-level-id] .base .build-slot.placed {
+  opacity: 0.82 !important;
+}
+
+#appShell.app-shell:not(.staff-mode)[data-level-id] .base .build-slot.current {
+  opacity: 1 !important;
+  animation: none !important;
+  box-shadow: 0 0 0 4px var(--part-color-soft, rgba(240, 100, 73, 0.12)), inset 0 2px rgba(255, 255, 255, 0.30) !important;
+}
+
+#appShell.app-shell:not(.staff-mode)[data-level-id] .base .slot-art {
+  opacity: 0.10 !important;
+}
+
+#appShell.app-shell:not(.staff-mode)[data-level-id] .base .build-slot.placed .slot-art {
+  opacity: 0.88 !important;
+}
+
+#appShell.app-shell:not(.staff-mode)[data-level-id] .base .slot-label,
+#appShell.app-shell:not(.staff-mode)[data-level-id] .base .slot-note-letter,
+#appShell.app-shell:not(.staff-mode)[data-level-id] .base .build-slot.current::before,
+#appShell.app-shell:not(.staff-mode)[data-level-id] .base .build-slot.current::after {
+  display: none !important;
+}
+
+#appShell.app-shell:not(.staff-mode)[data-level-id] .build-pad {
+  z-index: 8 !important;
+  bottom: 24px !important;
+  width: clamp(208px, 28vw, 300px) !important;
+  min-width: 0 !important;
+  height: 34px !important;
+  min-height: 0 !important;
+  border: 2px solid rgba(201, 233, 247, 0.34) !important;
+  border-radius: 50% !important;
+  background: radial-gradient(ellipse at 50% 40%, rgba(112, 233, 255, 0.28), rgba(18, 50, 94, 0.20) 45%, rgba(0, 0, 0, 0.28) 72%) !important;
+  box-shadow: inset 0 5px 10px rgba(0, 10, 30, 0.42), 0 8px 18px rgba(0, 0, 0, 0.20) !important;
+  animation: none !important;
+}
+
+#appShell.app-shell:not(.staff-mode)[data-level-id] .coach-overlay {
+  z-index: 19 !important;
+  top: auto !important;
+  right: clamp(16px, 4vw, 54px) !important;
+  bottom: 18px !important;
+  width: clamp(142px, 16vw, 172px) !important;
+  min-height: clamp(142px, 16vw, 172px) !important;
+}
+
+#appShell.app-shell:not(.staff-mode)[data-level-id] .coach-overlay::after {
+  content: "" !important;
+  position: absolute !important;
+  z-index: -1 !important;
+  right: 8% !important;
+  bottom: 3px !important;
+  width: 74% !important;
+  height: 14px !important;
+  display: block !important;
+  border-radius: 50% !important;
+  background: rgba(1, 10, 28, 0.34) !important;
+  filter: blur(4px) !important;
+}
+
+#appShell.app-shell:not(.staff-mode)[data-level-id] .coach-dino {
+  right: 0 !important;
+  bottom: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  object-position: center bottom !important;
+  filter: drop-shadow(0 12px 11px rgba(1, 9, 23, 0.32)) !important;
+}
+
+#appShell.app-shell:not(.staff-mode)[data-level-id] .coach-bubble {
+  top: 4px !important;
+  right: 76% !important;
+  min-width: 116px !important;
+  max-width: 142px !important;
+  padding: 7px 9px 8px !important;
+  border-radius: 13px 13px 5px 13px !important;
+}
+
+#appShell.app-shell:not(.staff-mode)[data-level-id] .coach-bubble small {
+  font-size: 10px !important;
+}
+
+#appShell.app-shell:not(.staff-mode)[data-level-id] .coach-bubble strong {
+  font-size: 20px !important;
+  line-height: 1 !important;
+}
+
+#appShell.app-shell:not(.staff-mode)[data-level-id] .coach-bubble span {
+  font-size: 11px !important;
+  line-height: 1.1 !important;
+}
+
+/* Multi-step scenes keep their objects low and sequential, never as sky platforms. */
+#appShell.app-shell:not(.staff-mode)[data-level-id="M07"] .memory-star-route,
+#appShell.app-shell:not(.staff-mode)[data-level-id="FG03"] .fg-star-route,
+#appShell.app-shell:not(.staff-mode)[data-level-id="M08"] .roof-scale-route {
+  z-index: 17 !important;
+  top: auto !important;
+  bottom: 36px !important;
+  left: 50% !important;
+  width: min(480px, 62vw) !important;
+  height: 118px !important;
+  transform: translateX(-50%) !important;
+}
+
+#appShell.app-shell:not(.staff-mode)[data-level-id="M07"] .memory-route-title,
+#appShell.app-shell:not(.staff-mode)[data-level-id="FG03"] .fg-route-title,
+#appShell.app-shell:not(.staff-mode)[data-level-id="M08"] .roof-route-title,
+#appShell.app-shell:not(.staff-mode)[data-level-id="M07"] .memory-route-line,
+#appShell.app-shell:not(.staff-mode)[data-level-id="FG03"] .fg-route-line {
+  display: none !important;
+}
+
+#appShell.app-shell:not(.staff-mode)[data-level-id="M08"] .roof-route-line {
+  inset: 20% 2% auto !important;
+  width: 96% !important;
+  height: 56% !important;
+  opacity: 0.38 !important;
+}
+
+#appShell.app-shell:not(.staff-mode)[data-level-id="M08"] .roof-route-main,
+#appShell.app-shell:not(.staff-mode)[data-level-id="M08"] .roof-route-glow {
+  stroke-dasharray: none !important;
+}
+
+#appShell.app-shell:not(.staff-mode)[data-level-id="M07"] .memory-route-label,
+#appShell.app-shell:not(.staff-mode)[data-level-id="FG03"] .fg-route-label,
+#appShell.app-shell:not(.staff-mode)[data-level-id="M08"] .roof-route-label {
+  display: none !important;
+}
+
+#appShell.app-shell:not(.staff-mode)[data-level-id="M07"] .memory-route-dino,
+#appShell.app-shell:not(.staff-mode)[data-level-id="FG03"] .fg-route-dino,
+#appShell.app-shell:not(.staff-mode)[data-level-id="M08"] .roof-route-dino {
+  width: 68px !important;
+  height: 68px !important;
+  transform: translate(-50%, -70%) rotate(-3deg) !important;
+}
+
+#appShell.app-shell:not(.staff-mode)[data-level-id="M07"] .base.scene-stars {
+  opacity: 1 !important;
+  filter: none !important;
+}
+
+#appShell.app-shell:not(.staff-mode)[data-level-id="M07"] .base.scene-stars .build-slot,
+#appShell.app-shell:not(.staff-mode)[data-level-id="M07"] .base.scene-stars .build-slot.current {
+  opacity: 0.48 !important;
+  filter: none !important;
+}
+
+#appShell.app-shell:not(.staff-mode)[data-level-id="M07"] .base.scene-stars .build-slot.placed,
+#appShell.app-shell:not(.staff-mode)[data-level-id="M07"] .base.scene-stars .build-slot.current {
+  opacity: 0.9 !important;
+}
+
+#appShell.app-shell:not(.staff-mode)[data-level-id] .keyboard-panel {
+  padding: 7px 10px 9px !important;
+  border: 1px solid rgba(156, 207, 246, 0.25) !important;
+  border-radius: 16px !important;
+  background: linear-gradient(180deg, rgba(8, 27, 53, 0.88), rgba(4, 15, 32, 0.94)) !important;
+  box-shadow: inset 0 1px rgba(255, 255, 255, 0.10), 0 -8px 18px rgba(0, 0, 0, 0.14) !important;
+}
+
+#appShell.app-shell:not(.staff-mode)[data-level-id] .status-row,
+#appShell.app-shell:not(.staff-mode)[data-level-id] .input-tools,
+#appShell.app-shell:not(.staff-mode)[data-level-id] .parent-controls {
+  display: none !important;
+}
+
+#appShell.app-shell:not(.staff-mode)[data-level-id] .keyboard.real-piano {
+  --black-key-width: clamp(32px, 6.1%, 58px) !important;
+  padding-top: 5px !important;
+  border: 1px solid rgba(216, 238, 255, 0.30) !important;
+  border-radius: 12px !important;
+  background: linear-gradient(180deg, rgba(3, 13, 29, 0.94) 0 17px, rgba(20, 44, 74, 0.82) 18px, rgba(244, 250, 255, 0.06) 30px) !important;
+}
+
+#appShell.app-shell:not(.staff-mode)[data-level-id] .keyboard.real-piano::before {
+  height: 18px !important;
+}
+
+#appShell.app-shell:not(.staff-mode)[data-level-id] .keyboard.real-piano::after {
+  top: 18px !important;
+  height: 6px !important;
+}
+
+#appShell.app-shell:not(.staff-mode)[data-level-id] .keyboard.real-piano .black-key {
+  top: 6px !important;
+  height: 51% !important;
+  border-radius: 0 0 8px 8px !important;
+  box-shadow: inset 0 1px rgba(255, 255, 255, 0.18), inset 0 -5px rgba(0, 0, 0, 0.32), 0 8px 11px rgba(0, 0, 0, 0.30) !important;
+}
+
+#appShell.app-shell:not(.staff-mode)[data-level-id] .keyboard.real-piano .key-color-dot {
+  opacity: 0.34 !important;
+  width: 6px !important;
+  height: 6px !important;
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.58) !important;
+}
+
+#appShell.app-shell:not(.staff-mode)[data-level-id] .keyboard-guide-layer,
+#appShell.app-shell:not(.staff-mode)[data-level-id] .key-find-tag,
+#appShell.app-shell:not(.staff-mode)[data-level-id] .key-locator-mini {
+  display: none !important;
+}
+
+#appShell.app-shell:not(.staff-mode)[data-level-id="M03"] .keyboard.real-piano .white-key.target .key-locator-mini,
+#appShell.app-shell:not(.staff-mode)[data-level-id][data-idle-hint="locator"] .keyboard.real-piano .white-key.target .key-locator-mini {
+  display: grid !important;
+}
+
+#appShell.app-shell:not(.staff-mode)[data-level-id] .keyboard.real-piano .key-content {
+  bottom: 12px !important;
+  min-height: 48px !important;
+  gap: 3px !important;
+}
+
+#appShell.app-shell:not(.staff-mode)[data-level-id] .keyboard.real-piano .key-content strong {
+  font-size: clamp(29px, 3vw, 40px) !important;
+  color: #10213e !important;
+}
+
+#appShell.app-shell:not(.staff-mode)[data-level-id] .keyboard.real-piano .key-content span {
+  font-size: 11px !important;
+  color: rgba(14, 38, 71, 0.58) !important;
+}
+
+#appShell.app-shell:not(.staff-mode)[data-level-id] .keyboard.real-piano .white-key.target {
+  border-width: 2px !important;
+  box-shadow: inset 0 -7px 0 var(--target-color, #cb84fa), 0 0 0 3px var(--target-glow, rgba(203, 132, 250, 0.18)), 0 9px 16px rgba(0, 11, 29, 0.12) !important;
+}
+
+#appShell.app-shell:not(.staff-mode)[data-level-id] .keyboard.real-piano .white-key.target .tap-badge {
+  top: 39px !important;
+  left: 10px !important;
+  width: 15px !important;
+  height: 15px !important;
+  opacity: 0.72 !important;
+}
+
+@media (max-width: 1040px) {
+  #appShell.app-shell:not(.staff-mode)[data-level-id] .topbar {
+    grid-template-columns: minmax(156px, 1fr) auto auto !important;
+  }
+
+  #appShell.app-shell:not(.staff-mode)[data-level-id] .topbar h1 {
+    font-size: 22px !important;
+  }
+
+  #appShell.app-shell:not(.staff-mode)[data-level-id] .stage-story-ribbon {
+    width: min(208px, 28vw) !important;
+  }
+
+  #appShell.app-shell:not(.staff-mode)[data-level-id] .hanging-part {
+    bottom: 108px !important;
+  }
+
+  #appShell.app-shell:not(.staff-mode)[data-level-id] .base {
+    bottom: 34px !important;
+    height: 104px !important;
+  }
+
+  #appShell.app-shell:not(.staff-mode)[data-level-id] .coach-overlay {
+    bottom: 12px !important;
+    width: 142px !important;
+    min-height: 142px !important;
+  }
+
+  #appShell.app-shell:not(.staff-mode)[data-level-id] .keyboard.real-piano {
+    --black-key-width: clamp(30px, 6.05%, 52px) !important;
+  }
+}
+
+#appShell.app-shell:not(.staff-mode)[data-level-id="M07"] #memoryStarRoute .memory-route-dino,
+#appShell.app-shell:not(.staff-mode)[data-level-id="FG03"] #fgStarRoute .fg-route-dino,
+#appShell.app-shell:not(.staff-mode)[data-level-id="M08"] #roofScaleRoute .roof-route-dino {
+  z-index: 24 !important;
+  width: 86px !important;
+  height: 86px !important;
+  opacity: 1 !important;
+  filter: drop-shadow(0 12px 10px rgba(1, 10, 28, 0.34)) !important;
+}
+
+/* 335a: the blueprint owns the sequence; the moon yard only shows the current action. */
+#appShell.app-shell:not(.staff-mode)[data-level-id] .build-blueprint {
+  position: absolute !important;
+  z-index: 7 !important;
+  left: 50% !important;
+  bottom: 26px !important;
+  width: min(500px, 57vw) !important;
+  height: min(250px, 51%) !important;
+  transform: translateX(-50%) !important;
+  overflow: hidden !important;
+  border: 1px solid rgba(132, 224, 255, 0.72) !important;
+  border-radius: 8px !important;
+  background:
+    linear-gradient(rgba(118, 225, 255, 0.11) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(118, 225, 255, 0.11) 1px, transparent 1px),
+    linear-gradient(160deg, rgba(17, 119, 177, 0.76), rgba(7, 52, 112, 0.79)) !important;
+  background-size: 22px 22px, 22px 22px, auto !important;
+  box-shadow: inset 0 0 0 2px rgba(201, 248, 255, 0.12), inset 0 0 34px rgba(59, 219, 255, 0.15), 0 11px 22px rgba(0, 10, 33, 0.30) !important;
+}
+
+#appShell.app-shell:not(.staff-mode)[data-level-id]:not([data-level-id="M08"]) .build-blueprint,
+#appShell.app-shell:not(.staff-mode)[data-level-id] .build-blueprint[hidden] {
+  display: none !important;
+}
+
+#appShell.app-shell:not(.staff-mode)[data-level-id] .build-blueprint::before,
+#appShell.app-shell:not(.staff-mode)[data-level-id] .build-blueprint::after {
+  content: "" !important;
+  position: absolute !important;
+  pointer-events: none !important;
+}
+
+#appShell.app-shell:not(.staff-mode)[data-level-id] .build-blueprint::before {
+  inset: 9px !important;
+  border: 1px solid rgba(211, 247, 255, 0.24) !important;
+}
+
+#appShell.app-shell:not(.staff-mode)[data-level-id] .build-blueprint::after {
+  left: 50% !important;
+  bottom: -15px !important;
+  width: 82% !important;
+  height: 26px !important;
+  transform: translateX(-50%) !important;
+  border-radius: 50% !important;
+  background: rgba(0, 7, 24, 0.28) !important;
+  filter: blur(8px) !important;
+}
+
+#appShell.app-shell:not(.staff-mode)[data-level-id] .blueprint-title {
+  position: absolute !important;
+  z-index: 4 !important;
+  top: 8px !important;
+  left: 12px !important;
+  display: flex !important;
+  align-items: baseline !important;
+  gap: 8px !important;
+  color: #e8fbff !important;
+  text-shadow: 0 1px rgba(0, 21, 52, 0.68) !important;
+}
+
+#appShell.app-shell:not(.staff-mode)[data-level-id] .blueprint-title span {
+  font-size: 14px !important;
+  font-weight: 950 !important;
+}
+
+#appShell.app-shell:not(.staff-mode)[data-level-id] .blueprint-title i {
+  color: rgba(222, 249, 255, 0.72) !important;
+  font-size: 10px !important;
+  font-style: normal !important;
+  font-weight: 800 !important;
+}
+
+#appShell.app-shell:not(.staff-mode)[data-level-id] .blueprint-draft {
+  position: absolute !important;
+  inset: 25px 8px 6px !important;
+}
+
+#appShell.app-shell:not(.staff-mode)[data-level-id] .blueprint-outline {
+  position: absolute !important;
+  inset: 5px 7% 0 !important;
+  width: 86% !important;
+  height: 93% !important;
+  color: rgba(220, 250, 255, 0.83) !important;
+  filter: drop-shadow(0 0 4px rgba(113, 234, 255, 0.35)) !important;
+}
+
+#appShell.app-shell:not(.staff-mode)[data-level-id] .blueprint-part {
+  position: absolute !important;
+  z-index: 3 !important;
+  left: var(--blueprint-x) !important;
+  top: var(--blueprint-y) !important;
+  display: grid !important;
+  place-items: center !important;
+  width: 34px !important;
+  height: 34px !important;
+  transform: translate(-50%, -50%) !important;
+  border: 3px solid var(--part-color) !important;
+  border-radius: 8px !important;
+  background: rgba(4, 31, 75, 0.82) !important;
+  box-shadow: 0 0 0 3px rgba(225, 252, 255, 0.18), 0 4px 8px rgba(0, 12, 35, 0.28) !important;
+}
+
+#appShell.app-shell:not(.staff-mode)[data-level-id] .blueprint-part b {
+  color: #f6fdff !important;
+  font-size: 20px !important;
+  font-weight: 950 !important;
+  line-height: 1 !important;
+  text-shadow: 0 1px 2px rgba(0, 15, 40, 0.72) !important;
+}
+
+#appShell.app-shell:not(.staff-mode)[data-level-id] .blueprint-part em {
+  position: absolute !important;
+  z-index: 2 !important;
+  top: -16px !important;
+  right: -15px !important;
+  display: grid !important;
+  place-items: center !important;
+  width: 21px !important;
+  height: 21px !important;
+  border: 2px solid rgba(224, 249, 255, 0.95) !important;
+  border-radius: 50% !important;
+  color: #142f59 !important;
+  background: #f4fbff !important;
+  box-shadow: 0 2px 5px rgba(0, 11, 28, 0.24) !important;
+  font-size: 12px !important;
+  font-style: normal !important;
+  font-weight: 950 !important;
+}
+
+#appShell.app-shell:not(.staff-mode)[data-level-id] .blueprint-part.future {
+  opacity: 0.48 !important;
+  filter: saturate(0.72) !important;
+}
+
+#appShell.app-shell:not(.staff-mode)[data-level-id] .blueprint-part.placed {
+  background: color-mix(in srgb, var(--part-color) 52%, #0b376d) !important;
+  opacity: 0.92 !important;
+}
+
+#appShell.app-shell:not(.staff-mode)[data-level-id] .blueprint-part.current {
+  box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.76), 0 0 0 8px var(--part-color-soft), 0 5px 12px rgba(0, 12, 35, 0.34) !important;
+}
+
+/* The five roof pieces lock into the blueprint itself, rather than becoming loose sky objects. */
+#appShell.app-shell:not(.staff-mode)[data-level-id="M08"] .blueprint-part.just-placed {
+  z-index: 6 !important;
+  animation: roof-blueprint-lock 640ms cubic-bezier(0.18, 0.9, 0.2, 1) both !important;
+}
+
+@keyframes roof-blueprint-lock {
+  0% { transform: translate(-50%, -50%) scale(0.62); filter: brightness(1.65); }
+  56% { transform: translate(-50%, -50%) scale(1.32); filter: brightness(1.32); }
+  100% { transform: translate(-50%, -50%) scale(1); filter: brightness(1); }
+}
+
+#appShell.app-shell:not(.staff-mode)[data-level-id] .build-blueprint[data-identity-hidden="true"] .blueprint-part {
+  border-color: #7892a8 !important;
+  background: rgba(19, 59, 101, 0.66) !important;
+  box-shadow: 0 0 0 3px rgba(211, 244, 255, 0.14) !important;
+}
+
+#appShell.app-shell:not(.staff-mode)[data-level-id] .build-blueprint[data-identity-hidden="true"] .blueprint-part b {
+  color: rgba(227, 246, 255, 0.78) !important;
+}
+
+#appShell.app-shell:not(.staff-mode)[data-level-id] .build-blueprint[data-identity-hidden="true"] .blueprint-part em {
+  display: none !important;
+}
+
+/* This suspended panel is a single current-part hint, not a second route or a physical sky platform. */
+#appShell.app-shell:not(.staff-mode)[data-level-id] .hanging-part {
+  z-index: 16 !important;
+  display: grid !important;
+  place-items: center !important;
+  padding: 7px !important;
+  border: 2px solid rgba(245, 235, 201, 0.92) !important;
+  border-radius: 5px !important;
+  background: linear-gradient(145deg, rgba(250, 249, 235, 0.96), rgba(194, 219, 227, 0.93)) !important;
+  box-shadow: inset 0 0 0 3px rgba(80, 105, 119, 0.12), 0 8px 16px rgba(0, 10, 27, 0.28) !important;
+}
+
+#appShell.app-shell:not(.staff-mode)[data-level-id] .hanging-part::after {
+  display: block !important;
+  content: "" !important;
+  position: absolute !important;
+  top: -40px !important;
+  left: 50% !important;
+  width: 2px !important;
+  height: 40px !important;
+  transform: translateX(-50%) !important;
+  background: rgba(241, 194, 114, 0.8) !important;
+}
+
+#appShell.app-shell:not(.staff-mode)[data-level-id] .hanging-part .hanging-part-art {
+  width: 68px !important;
+  height: 50px !important;
+  opacity: 0.5 !important;
+  filter: saturate(0.72) contrast(0.96) !important;
+}
+
+#appShell.app-shell:not(.staff-mode)[data-level-id] .hanging-part .part-note-badge {
+  top: auto !important;
+  left: 50% !important;
+  bottom: -14px !important;
+  min-width: 42px !important;
+  min-height: 42px !important;
+  padding: 5px !important;
+  transform: translateX(-50%) !important;
+  border: 3px solid var(--note-color, var(--part-color)) !important;
+  border-radius: 9px !important;
+  background: #173d6e !important;
+  box-shadow: 0 3px 8px rgba(0, 9, 28, 0.26) !important;
+}
+
+#appShell.app-shell:not(.staff-mode)[data-level-id] .hanging-part .part-note-badge b {
+  color: #ffffff !important;
+  font-size: 25px !important;
+}
+
+#appShell.app-shell:not(.staff-mode)[data-level-id] .hanging-part .part-note-badge i {
+  display: none !important;
+}
+
+#appShell.app-shell:not(.staff-mode)[data-level-id] .hanging-part .part-studs {
+  display: none !important;
+}
+
+#appShell.app-shell:not(.staff-mode)[data-level-id] .base .build-slot:not(.current):not(.placed) {
+  opacity: 0 !important;
+}
+
+@media (max-width: 1040px) {
+  #appShell.app-shell:not(.staff-mode)[data-level-id] .build-blueprint {
+    width: min(480px, 59vw) !important;
+    height: min(224px, 50%) !important;
+  }
+
+  #appShell.app-shell:not(.staff-mode)[data-level-id] .blueprint-part {
+    width: 31px !important;
+    height: 31px !important;
+  }
+
+  #appShell.app-shell:not(.staff-mode)[data-level-id] .blueprint-part b {
+    font-size: 18px !important;
+  }
+}
+
+/* M08 alone reserves the central area for its blueprint and roof-world layers. */
+#appShell.app-shell:not(.staff-mode)[data-level-id="M08"] .base,
+#appShell.app-shell:not(.staff-mode)[data-level-id="M08"] .build-pad {
+  display: none !important;
+}
+
+#appShell.app-shell:not(.staff-mode)[data-level-id] .hanging-part .hanging-part-art,
+#appShell.app-shell:not(.staff-mode)[data-level-id] .hanging-part .part-studs {
+  display: none !important;
+}
+
+#hangingPartArt {
+  display: none !important;
+}
+
+#appShell.app-shell:not(.staff-mode)[data-level-id] .hanging-part {
+  display: grid !important;
+  place-items: center !important;
+  padding: 7px !important;
+  border: 2px solid rgba(245, 235, 201, 0.92) !important;
+  border-radius: 5px !important;
+  background: linear-gradient(145deg, rgba(250, 249, 235, 0.96), rgba(194, 219, 227, 0.93)) !important;
+  box-shadow: inset 0 0 0 3px rgba(80, 105, 119, 0.12), 0 8px 16px rgba(0, 10, 27, 0.28) !important;
+}
+
+#appShell.app-shell:not(.staff-mode)[data-level-id] .hanging-part::after {
+  display: block !important;
+  content: "" !important;
+  position: absolute !important;
+  top: -40px !important;
+  left: 50% !important;
+  width: 2px !important;
+  height: 40px !important;
+  transform: translateX(-50%) !important;
+  background: rgba(241, 194, 114, 0.8) !important;
+}
+
+#appShell.app-shell:not(.staff-mode)[data-level-id] .hanging-part .part-note-badge {
+  top: 50% !important;
+  right: auto !important;
+  bottom: auto !important;
+  left: 50% !important;
+  min-width: 48px !important;
+  min-height: 48px !important;
+  padding: 5px !important;
+  transform: translate(-50%, -50%) !important;
+  border: 3px solid var(--note-color, var(--part-color)) !important;
+  border-radius: 9px !important;
+  background: #173d6e !important;
+  box-shadow: 0 3px 8px rgba(0, 9, 28, 0.26) !important;
+}
+
+#appShell.app-shell:not(.staff-mode)[data-level-id] .hanging-part .part-note-badge b {
+  color: #ffffff !important;
+  font-size: 28px !important;
+}
+
+#appShell.app-shell:not(.staff-mode)[data-level-id] .hanging-part .part-note-badge i {
+  display: none !important;
+}
+
+#appShell.app-shell:not(.staff-mode)[data-level-id] .coach-overlay {
+  right: 18px !important;
+  bottom: 0 !important;
+  width: clamp(172px, 18vw, 206px) !important;
+  min-height: clamp(172px, 18vw, 206px) !important;
+}
+
+#appShell.app-shell:not(.staff-mode)[data-level-id] .coach-dino {
+  transform: scale(1.18) !important;
+  transform-origin: center bottom !important;
+}
+
+#appShell.app-shell:not(.staff-mode)[data-level-id="M07"] .memory-star-route,
+#appShell.app-shell:not(.staff-mode)[data-level-id="FG03"] .fg-star-route,
+#appShell.app-shell:not(.staff-mode)[data-level-id="M08"] .roof-scale-route {
+  display: none !important;
+}
+
+#appShell.app-shell:not(.staff-mode)[data-level-id="M07"] .coach-overlay,
+#appShell.app-shell:not(.staff-mode)[data-level-id="FG03"] .coach-overlay,
+#appShell.app-shell:not(.staff-mode)[data-level-id="M08"] .coach-overlay {
+  display: block !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+#appShell.app-shell:not(.staff-mode)[data-level-id="M07"] .coach-bubble,
+#appShell.app-shell:not(.staff-mode)[data-level-id="FG03"] .coach-bubble,
+#appShell.app-shell:not(.staff-mode)[data-level-id="M08"] .coach-bubble {
+  top: -164px !important;
+  right: auto !important;
+  left: 18px !important;
+  width: 124px !important;
+  min-width: 124px !important;
+  max-width: 124px !important;
+}
+
+@media (max-width: 1040px) {
+  #appShell.app-shell:not(.staff-mode)[data-level-id] .coach-overlay {
+    width: 164px !important;
+    min-height: 164px !important;
+  }
+}
+
+/* 335a listening-state final rule. This is intentionally below the legacy card rules. */
+#appShell.app-shell:not(.staff-mode)[data-level-id="M03"] .hanging-part {
+  display: none !important;
+}
+
+#appShell.app-shell:not(.staff-mode)[data-level-id="M03"][data-listening-identity-hidden="true"] .coach-bubble {
+  display: none !important;
+}
+
+/* 338a restores one answer-neutral invitation in the listening scene. */
+#appShell.app-shell:not(.staff-mode)[data-level-id="M03"] .coach-bubble,
+#appShell.app-shell:not(.staff-mode)[data-level-id="M03"][data-listening-identity-hidden="true"] .coach-bubble {
+  display: grid !important;
+}

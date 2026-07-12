@@ -1,0 +1,41 @@
+{
+  "version": 1,
+  "description": "Production bundle guardrails for the Star Dino Piano web prototype.",
+  "include": [
+    "index.html",
+    "manifest.webmanifest",
+    "service-worker.js",
+    "app.js",
+    "styles.css",
+    "staff-overrides.css",
+    "play-overrides.css",
+    "keyboard-overrides.css",
+    "map-overrides.css",
+    "quality-overrides.css",
+    "quality-overrides-2.css",
+    "quality-overrides-3.css",
+    "quality-overrides-4.css",
+    "current-overhaul.css",
+    "assets/runtime/**"
+  ],
+  "deny": [
+    "assets/generated/**",
+    "screenshots/**",
+    "chrome-test/**",
+    "screenshot_*",
+    "generated_*contact_sheet*",
+    "ui_design_concept_board.png",
+    "ASSET_MANIFEST.md",
+    "DESIGN_AUDIT_AND_ASSET_PLAN.md"
+  ],
+  "referenceDeny": [
+    "assets/generated/",
+    "chrome-test/",
+    "screenshots/"
+  ],
+  "budgets": {
+    "maxCssBytes": 250000,
+    "maxInitialRuntimeAssetBytes": 8000000
+  },
+  "temporaryExceptions": []
+}

@@ -1,0 +1,155 @@
+# Note Identity Matrix
+
+## Purpose
+
+This is the single planning source for note identity in the current first course and the planned low-register course. Before adding more levels, art, hints, or assessment rules, check this matrix.
+
+The child should gradually connect:
+
+- solfege;
+- letter name;
+- keyboard locator;
+- staff position;
+- heard sound;
+- story consequence.
+
+Color is only an early scaffold. A child should not be able to finish later checks by matching color alone.
+
+## Course 1 Locked Mapping
+
+MVP uses fixed-do:
+
+| Letter | Solfege | MIDI | Keyboard locator | Staff position | Story role | Color role | Common confusion | Repair focus |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| C | Do | 60 | two-black left | ledger line below staff | first floor, start pad | first-exposure scaffold only | D | compare left vs middle in the two-black group |
+| D | Re | 62 | two-black middle | below staff | wheel, middle light | first-exposure scaffold only | C/E | show it between C and E |
+| E | Mi | 64 | two-black right | first line | light, lower star | first-exposure scaffold only | D/F | compare two-black right vs three-black left |
+| F | Fa | 65 | three-black left | first space | landing pad | first-exposure scaffold only | E/G | show it as the first key before the three-black group |
+| G | Sol | 67 | three-black left-middle | second line | star gate | first-exposure scaffold only | F/C leap | compare first and second white keys around the three-black group |
+
+## Register And Keyboard Scope
+
+The first course is middle-C anchored:
+
+- `C4 / MIDI 60` through `G4 / MIDI 67` are the taught notes for the first staff bridge.
+- Staff positions in S01 refer to that register: ledger line below staff through second line.
+- The on-screen keyboard may show neighboring `A/B` for real keyboard geography, but the active child target area should clearly be the middle `C-G` neighborhood.
+- Later MIDI or microphone input must not treat every octave-equivalent `C`, `D`, `E`, `F`, or `G` as staff mastery unless a level explicitly says it is octave-agnostic listening.
+- Parent evidence should record target register before real-keyboard or acoustic-piano mastery is claimed.
+
+Before expanding the keyboard range, define how octave, hand area, and staff position are explained to the child.
+
+## Chapter 4 Planned Low-register Mapping
+
+These rows are locked curriculum targets for `LP01-LP10`, but they are not current runtime targets until Chapter 4 implementation begins.
+
+| Letter | Child label | MIDI / Hz | Keyboard locator | Bass-staff position | Story role | Common confusion | Repair focus |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| C3 | 低音 Do | `48 / 130.81` | lower two-black left | second space | first foundation stone | C4 / D3 | same name, different home; compare low vs middle C |
+| D3 | 低音 Re | `50 / 146.83` | lower two-black middle | middle/third line | tunnel rail | C3 / E3 | show it between low C and E |
+| E3 | 低音 Mi | `52 / 164.81` | lower two-black right | third space | echo crystal | D3 / F3 | compare two-black right with three-black left |
+| F3 | 低音 Fa | `53 / 174.61` | lower three-black left | fourth line | bridge support pad | E3 / G3 | show it as the first white key before three black keys |
+| G3 | 低音 Sol | `55 / 196.00` | lower three-black left-middle | fourth space | main bridge anchor | F3 / G4 | compare first and second white keys around the three-black group; then compare registers |
+
+Register-language contract:
+
+- Child-facing first exposure uses `低音 Do` and `星芽的 Do`/`较高的 Do`, not an abstract octave lecture.
+- Parent/teacher evidence always records `C3` or `C4` explicitly.
+- A correct letter/solfege in the wrong octave is a useful near miss: name what was correct, show the required home, and do not count staff mastery.
+- Color and character identity must not be the only way to distinguish registers.
+- Chapter 4 bass-staff positions refer only to `C3-G3`; Chapter 1-2 treble positions refer only to `C4-G4`.
+
+Two-octave display contract:
+
+- Chapter 4-5 uses a continuous `C3-B4` on-screen keyboard. It shows 14 equal-width white keys plus correctly placed black keys in real `2-black / 3-black` groups.
+- There is no black key between B-C or E-F, and black-key centers must follow the underlying white-key boundaries rather than an evenly spaced decorative grid.
+- Cross-register tasks keep low `C3-G3` and middle `C4-G4` visible at the same time with no horizontal paging. Focus changes through labels, character gaze, or reduced opacity; the keys themselves do not move or resize.
+- Gameplay is landscape-first. At smaller widths, remove secondary text and parent labels before reducing touch targets; do not stack octaves into separate rows because that destroys the keyboard geography being taught.
+- MIDI may accept a wider instrument range, but only the exact target octave counts for register or staff mastery.
+
+## Grand-staff Transition Contract
+
+- `C3` remains low Do on the bass-staff second space. It is never called middle C.
+- `C4` remains middle Do/middle C and keeps the treble ledger-line-below position already learned in S01.
+- In `TH04`, the game may animate `C4` as the meeting landmark between the two maps, but it must not draw `C3` at that meeting point or merge `C3`/`C4` into one mastery id.
+- A full grand staff can write middle `C4` above the bass staff or below the treble staff. Chapter 5 introduces only the already-known treble-ledger form first; the alternate bass-ledger spelling is a later comparison, not a same-screen test.
+- Same-name comparison means `Do is still Do in another home`; it does not mean the pitches, staff positions, or keyboard locations are interchangeable.
+
+## Per-note Teaching Contract
+
+Every first-course level that targets a note must expose at least two identity links:
+
+| Level type | Required links |
+| --- | --- |
+| First exposure | solfege or letter name + keyboard locator |
+| Guided sequence | note identity + key group direction |
+| Reduced-cue check | note identity + key locator, with color delayed or reduced |
+| Staff bridge | staff position + note identity + keyboard locator |
+| Listening seed | across the full model/feedback cycle: heard sound + note identity + key locator; during a hidden call before action: heard sound/replay only |
+
+These links accumulate across the teaching cycle; they do not all have to be visible at the same instant. In particular, a listening check fails if target identity, target color, answer key, or locator appears before the child responds.
+
+## Visual Differentiation
+
+The notes need stable identity, but not five unrelated visual brands.
+
+Allowed:
+
+- subtle note color in early stages;
+- stable letter-first visual label: large `C/D/E/F/G` with `Do/Re/Mi/Fa/Sol` as smaller secondary text when space allows;
+- Xingya's spoken/bubble prompt may reverse that hierarchy and say `Do/Re/Mi/Fa/Sol` first, with the letter name as the secondary confirmation;
+- stable keyboard locator language;
+- stable staff position language;
+- a small story object that explains why the note matters in that level.
+
+Avoid:
+
+- making shape equal note identity across all levels;
+- relying on color as the answer;
+- inventing a new nickname or object rule per level that does not reinforce the music concept.
+
+Course 1 display hierarchy is therefore a deliberate two-channel link, not two competing naming systems:
+
+- keyboard keys, task identity badges, staff pads, route markers, and ordinary object labels use `C/D/E/F/G` as the main visible name;
+- Xingya's child-facing speech and listening gestures use `Do/Re/Mi/Fa/Sol` as the main spoken/character name;
+- action verbs must keep the roles clear: Xingya may "唱 Do", while the child is asked to "弹 C" or "找到 C". Do not use a bare command such as `唱 Re/D` when the expected input is a piano key, and never describe a letter name as something to sing;
+- correct and repair feedback reconnect both names, for example large `C` plus smaller `Do · 两黑左`;
+- hidden listening calls show neither target-specific letter nor solfege before the child responds.
+
+This hierarchy must be consistent across M01-M08, F/G preparation, S01, and Chapter 3. It is not enough to change one keyboard label while duplicate cards continue to present the old hierarchy elsewhere.
+
+## Listening Seed Without Hardware
+
+The first listening loop should work without MIDI or microphone:
+
+1. The app plays one piano note from the active small set.
+2. The child touches the matching on-screen key.
+3. Correct feedback names the heard note and the key locator.
+4. Wrong feedback says what was pressed and replays the target.
+
+MIDI and microphone can later route into the same loop. They should not be required for the first listening-learning proof.
+
+## A/B And A-G Word Mode Gate
+
+The A-G word game remains parked. It must not start until:
+
+- A and B have their own note identity rows;
+- the child can find A and B on the keyboard;
+- the mode is marked as older-child or optional;
+- the core C-D-E-F-G bridge and listening loops are stable.
+
+The word game should train letter names, not replace solfege or staff reading.
+
+Implementation rule: A and B may appear as physical keyboard keys, but they are reserved expansion notes. They must not be selected as level targets, staff targets, listening targets, mastery targets, or word-mode targets until their rows include full staff positions, story roles, repair rules, and entry gates.
+
+## Implementation Status
+
+The current code has a matching Course 1 `noteIdentityMatrix` in `app.js`, and `notes` are generated from that matrix. The planned `C3-G3` rows above are curriculum-only and must not be added to current targets until Chapter 4 implementation is explicitly started. This is the right direction, but it is not yet a fully protected single source of truth.
+
+Before adding broad Chapter 2 content:
+
+- keep note labels, key locators, staff hints, common confusions, and repair focus in sync with `noteIdentityMatrix`;
+- prefer generating child-facing note labels from the matrix instead of duplicating one-off strings;
+- add a lightweight sync check later if this document and the code matrix remain separate;
+- treat A/B rows as reserved expansion until their staff positions, story roles, and teaching gates are complete.
+- when Chapter 4 implementation starts, add register-qualified ids such as `C3`/`C4`; do not key runtime mastery only by letter name.

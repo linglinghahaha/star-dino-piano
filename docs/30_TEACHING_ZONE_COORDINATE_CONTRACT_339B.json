@@ -1,0 +1,2301 @@
+{
+  "coordinateContractStatus": "browser_coordinate_contract_passed_device_unverified",
+  "coordinateContractId": "teaching-zones-overhaul-339b-v1",
+  "contractSha256": "138ca68521fd1a45943ca336b7dfc688e603ea5952cb4eb03c3050b19d8832e5",
+  "contractHashScope": "sha256 of canonical JSON with contractSha256 and generatedAt set to null",
+  "prototypeBaseline": "overhaul-339b",
+  "prototypeTaskId": "019f4aa6-edba-7843-a835-c4b930a388ff",
+  "generatedAt": "2026-07-11T21:26:36.220Z",
+  "sourceMethod": "Playwright DOM getBoundingClientRect measurement; no screenshot, SVG, or CSS-coordinate inference",
+  "geometryMeasurementMotion": "reduced_motion_stable_snapshot",
+  "geometryMeasurementRationale": "Coordinate output freezes nonessential animation; normal-motion behavior remains covered by check:motion.",
+  "sourceFiles": [
+    {
+      "path": "chrome-test/teaching-zone-coordinate-contract.mjs",
+      "bytes": 20441,
+      "sha256": "90a62b135a66a5e04f11f5abbe24f2730ccf89e0e0337fdbd15f617c761dfaf9"
+    },
+    {
+      "path": "index.html",
+      "bytes": 38618,
+      "sha256": "6d340020745e9d7dda130dc2b441b89930cd78f26833ca23276bbe52a72bf6a2"
+    },
+    {
+      "path": "app.js",
+      "bytes": 288189,
+      "sha256": "ffd2a61263bd536f49cd366464d1502f075fa9fae08d67e9458919e53dbe5129"
+    },
+    {
+      "path": "styles.css",
+      "bytes": 228842,
+      "sha256": "a3943755e3f847c5152d74b2ec13259bea71aaa6a16759cd48e9b8bfca873a68"
+    },
+    {
+      "path": "staff-overrides.css",
+      "bytes": 14157,
+      "sha256": "832039daee3155daa3a60065770d328e8773c04d826fe30c465ffcccd169c916"
+    },
+    {
+      "path": "play-overrides.css",
+      "bytes": 7798,
+      "sha256": "58369a0627c2f3e05182baf999427417478249b7775831ae1ecf8504fe00f632"
+    },
+    {
+      "path": "keyboard-overrides.css",
+      "bytes": 4081,
+      "sha256": "e359fc5cc5d002daa33f872d7929deb822db280b445e781ba9dc0575f103e234"
+    },
+    {
+      "path": "map-overrides.css",
+      "bytes": 9806,
+      "sha256": "c8f07757ae3acca7450d45e70c741b068e19e2ca31fcf18c6c4625d745a045ac"
+    },
+    {
+      "path": "quality-overrides.css",
+      "bytes": 219558,
+      "sha256": "dc12dabe582948c74a595ef784379b82ec42ee1780e8c0e6f69ee99669cba4a1"
+    },
+    {
+      "path": "quality-overrides-2.css",
+      "bytes": 219954,
+      "sha256": "aed46c453d0f1e5187be37bd9f9b0a526403fddbc962caf6fafed9431e89cd34"
+    },
+    {
+      "path": "quality-overrides-3.css",
+      "bytes": 219323,
+      "sha256": "9886b6f151efc014f21c94188892ca37a234fa12b6eedd18c649df49eebb4770"
+    },
+    {
+      "path": "quality-overrides-4.css",
+      "bytes": 120471,
+      "sha256": "e0b6856ca0a105abcdd34f3f3a3ea3b6aea597fadc9e4d32916f2c3f4fca90d6"
+    },
+    {
+      "path": "current-overhaul.css",
+      "bytes": 101877,
+      "sha256": "ed4cca0b4e9627bc49ca567e47fdb51a099d22794c987939ff0e2123fcd14373"
+    },
+    {
+      "path": "roof-blueprint-overrides.css",
+      "bytes": 36061,
+      "sha256": "6a6cc5bc4587dd6a0470569e0fa5a22af9cbe7c0dde5063c90c1402a49dfad80"
+    },
+    {
+      "path": "chapter3-visible.css",
+      "bytes": 7954,
+      "sha256": "c22a7459c61ecd1a66cfc4964117ff8a248be66fd54253f182a9eac6bdffe432"
+    }
+  ],
+  "clearanceMarginPx": 24,
+  "alphaThreshold": {
+    "byte": 8,
+    "normalized": 0.03137254901960784,
+    "visibleForegroundRule": "alpha >= 8 counts as foreground"
+  },
+  "viewportPolicy": {
+    "supportedOrientation": "landscape",
+    "portraitBehavior": "orientation blocker; no teaching-media coordinate approval",
+    "realIpadSafariEvidence": "missing",
+    "staleWhen": "any source-file hash, viewport, safe-area inset, breakpoint, or protected-selector geometry changes"
+  },
+  "protectedSelectors": {
+    "staffZone": [
+      ".svg-staff-line",
+      ".staff-step"
+    ],
+    "centralTargetZone": [
+      ".listen-guide",
+      "#buildBlueprint",
+      "#roofWorldBuild",
+      "#hangingPart",
+      "#baseBuild"
+    ],
+    "keyboardZone": [
+      ".keyboard-panel"
+    ],
+    "workshopPersistentUiZones": [
+      ".topbar",
+      ".stage-story-ribbon",
+      ".coach-overlay"
+    ],
+    "staffPersistentUiZones": [
+      ".topbar",
+      ".staff-bottom"
+    ]
+  },
+  "geometryCoverage": {
+    "measuredAllContractViewports": [
+      "M03.initial",
+      "M03.wrong_reveal",
+      "S01.initial",
+      "S01.wrong"
+    ],
+    "primaryViewportBehaviorOnlyNoContractGeometry": [
+      "M03.idle.identity",
+      "M03.idle.locator",
+      "M03.correct_next_target_hidden",
+      "M08.route_idle",
+      "FG03.route_idle",
+      "S01.correct_jump_land",
+      "reduced_motion"
+    ]
+  },
+  "stateCoverage": [
+    {
+      "state": "M03.initial",
+      "geometryStatus": "measured_all_contract_viewports",
+      "behaviorStatus": "passed_primary_1024x768_gate",
+      "evidence": "check:workshop-identity"
+    },
+    {
+      "state": "M03.idle.identity",
+      "geometryStatus": "not_measured_outside_primary",
+      "behaviorStatus": "passed_primary_1024x768_gate",
+      "evidence": "check:workshop-identity"
+    },
+    {
+      "state": "M03.idle.locator",
+      "geometryStatus": "not_measured_outside_primary",
+      "behaviorStatus": "passed_primary_1024x768_gate",
+      "evidence": "check:workshop-identity"
+    },
+    {
+      "state": "M03.wrong_reveal",
+      "geometryStatus": "measured_all_contract_viewports",
+      "behaviorStatus": "passed_primary_1024x768_gate",
+      "evidence": "check:workshop-identity"
+    },
+    {
+      "state": "M03.correct_next_target_hidden",
+      "geometryStatus": "not_measured_outside_primary",
+      "behaviorStatus": "passed_primary_1024x768_gate",
+      "evidence": "check:clean-state"
+    },
+    {
+      "state": "M08.route_idle",
+      "geometryStatus": "no_contract_geometry_primary_only",
+      "behaviorStatus": "passed_primary_1024x768_gate",
+      "evidence": "check:workshop-identity"
+    },
+    {
+      "state": "FG03.route_idle",
+      "geometryStatus": "no_contract_geometry_primary_only",
+      "behaviorStatus": "passed_primary_1024x768_gate",
+      "evidence": "check:workshop-identity"
+    },
+    {
+      "state": "S01.initial",
+      "geometryStatus": "measured_all_contract_viewports",
+      "behaviorStatus": "passed_primary_1024x768_gate",
+      "evidence": "check:xingya-suit"
+    },
+    {
+      "state": "S01.wrong",
+      "geometryStatus": "measured_all_contract_viewports",
+      "behaviorStatus": "passed_1024x768_and_1194x834_gate",
+      "evidence": "check:staff-repair"
+    },
+    {
+      "state": "S01.correct_jump_land",
+      "geometryStatus": "not_measured_outside_primary",
+      "behaviorStatus": "passed_primary_1024x768_gate",
+      "evidence": "check:xingya-suit"
+    },
+    {
+      "state": "reduced_motion",
+      "geometryStatus": "not_part_of_zone_measurement",
+      "behaviorStatus": "passed_primary_and_portrait_parent_gate",
+      "evidence": "check:motion"
+    },
+    {
+      "state": "chapter3.visible_slice",
+      "geometryStatus": "not_part_of_legacy_zone_measurement",
+      "behaviorStatus": "passed_1024x768_and_1194x834_browser_gate",
+      "evidence": "check:chapter3-visible"
+    }
+  ],
+  "gateEvidence": {
+    "workshopIdentity": "36/36",
+    "ipadAccessibility": "43/43",
+    "xingyaSuit": "23/23",
+    "palette": "16/16",
+    "motion": "19/19",
+    "audioSettings": "13/13",
+    "staffMini": "20/20",
+    "staffRepair": "27/27",
+    "roofRoute": "97/97",
+    "cleanState": "124/124",
+    "chapter3Visible": "26/26",
+    "quick": "passed",
+    "strictBundle": "passed"
+  },
+  "runtimeIntegrationAllowed": false,
+  "mediaCandidateStatus": "coordinate_source_only_waiting_for_independent_approval",
+  "deviceEvidence": {
+    "ipadSafari": "missing",
+    "midiHardware": "not_part_of_coordinate_contract",
+    "microphone": "not_part_of_coordinate_contract"
+  },
+  "viewports": [
+    {
+      "viewportId": "ipad-landscape-1024x768-dpr1-browser-gate",
+      "supportStatus": "primary_browser_gate_passed",
+      "width": 1024,
+      "height": 768,
+      "dpr": 1,
+      "physicalPixelWidth": 1024,
+      "physicalPixelHeight": 768,
+      "orientation": "landscape",
+      "safeAreaInsets": {
+        "top": 0,
+        "right": 0,
+        "bottom": 0,
+        "left": 0,
+        "status": "browser_emulation_only_real_ipad_safari_unverified"
+      },
+      "coordinateSpace": {
+        "origin": "viewport_top_left",
+        "unit": "css_px",
+        "xDirection": "right",
+        "yDirection": "down",
+        "physicalPixelScale": 1,
+        "cropRule": "no_crop_inside_viewport",
+        "rounding": "two_decimal_places"
+      },
+      "zones": {
+        "workshop": {
+          "stageRect": {
+            "x": 10,
+            "y": 74,
+            "width": 1004,
+            "height": 476.33,
+            "right": 1014,
+            "bottom": 550.33
+          },
+          "centralTargetZone": {
+            "rect": {
+              "x": 272,
+              "y": 299.33,
+              "width": 480,
+              "height": 224,
+              "right": 752,
+              "bottom": 523.33
+            },
+            "clearanceRect": {
+              "x": 248,
+              "y": 275.33,
+              "width": 528,
+              "height": 272,
+              "right": 776,
+              "bottom": 547.33
+            },
+            "hostLocalRect": {
+              "x": 262,
+              "y": 225.33,
+              "width": 480,
+              "height": 224,
+              "right": 742,
+              "bottom": 449.33
+            },
+            "clearanceHostLocalRect": {
+              "x": 238,
+              "y": 201.33,
+              "width": 528,
+              "height": 272,
+              "right": 766,
+              "bottom": 473.33
+            }
+          },
+          "keyboardZone": {
+            "rect": {
+              "x": 10,
+              "y": 558.33,
+              "width": 1004,
+              "height": 199.67,
+              "right": 1014,
+              "bottom": 758
+            },
+            "clearanceRect": {
+              "x": 0,
+              "y": 534.33,
+              "width": 1024,
+              "height": 233.67,
+              "right": 1024,
+              "bottom": 768
+            },
+            "hostLocalRect": {
+              "x": 0,
+              "y": 484.33,
+              "width": 1004,
+              "height": 199.67,
+              "right": 1004,
+              "bottom": 684
+            },
+            "clearanceHostLocalRect": {
+              "x": -10,
+              "y": 460.33,
+              "width": 1024,
+              "height": 233.67,
+              "right": 1014,
+              "bottom": 694
+            }
+          },
+          "persistentUiZones": [
+            {
+              "id": "topbar",
+              "rect": {
+                "x": 10,
+                "y": 10,
+                "width": 1004,
+                "height": 58,
+                "right": 1014,
+                "bottom": 68
+              },
+              "clearanceRect": {
+                "x": 0,
+                "y": 0,
+                "width": 1024,
+                "height": 92,
+                "right": 1024,
+                "bottom": 92
+              },
+              "hostLocalRect": {
+                "x": 0,
+                "y": -64,
+                "width": 1004,
+                "height": 58,
+                "right": 1004,
+                "bottom": -6
+              },
+              "clearanceHostLocalRect": {
+                "x": -10,
+                "y": -74,
+                "width": 1024,
+                "height": 92,
+                "right": 1014,
+                "bottom": 18
+              }
+            },
+            {
+              "id": "coach-overlay",
+              "rect": {
+                "x": 853.48,
+                "y": 281.81,
+                "width": 135.52,
+                "height": 135.52,
+                "right": 989,
+                "bottom": 417.33
+              },
+              "clearanceRect": {
+                "x": 829.48,
+                "y": 257.81,
+                "width": 183.52,
+                "height": 183.52,
+                "right": 1013,
+                "bottom": 441.33
+              },
+              "hostLocalRect": {
+                "x": 843.48,
+                "y": 207.81,
+                "width": 135.52,
+                "height": 135.52,
+                "right": 979,
+                "bottom": 343.33
+              },
+              "clearanceHostLocalRect": {
+                "x": 819.48,
+                "y": 183.81,
+                "width": 183.52,
+                "height": 183.52,
+                "right": 1003,
+                "bottom": 367.33
+              }
+            }
+          ],
+          "wrongFeedbackZones": []
+        },
+        "staff": {
+          "stageRect": {
+            "x": 18,
+            "y": 66,
+            "width": 988,
+            "height": 459,
+            "right": 1006,
+            "bottom": 525
+          },
+          "staffZone": {
+            "rect": {
+              "x": 245.56,
+              "y": 127.72,
+              "width": 583.06,
+              "height": 381.12,
+              "right": 828.62,
+              "bottom": 508.84
+            },
+            "clearanceRect": {
+              "x": 221.56,
+              "y": 103.72,
+              "width": 631.06,
+              "height": 429.12,
+              "right": 852.62,
+              "bottom": 532.84
+            },
+            "hostLocalRect": {
+              "x": 227.56,
+              "y": 61.72,
+              "width": 583.06,
+              "height": 381.12,
+              "right": 810.62,
+              "bottom": 442.84
+            },
+            "clearanceHostLocalRect": {
+              "x": 203.56,
+              "y": 37.72,
+              "width": 631.06,
+              "height": 429.12,
+              "right": 834.62,
+              "bottom": 466.84
+            }
+          },
+          "keyboardZone": {
+            "rect": {
+              "x": 8,
+              "y": 538,
+              "width": 1008,
+              "height": 222,
+              "right": 1016,
+              "bottom": 760
+            },
+            "clearanceRect": {
+              "x": 0,
+              "y": 514,
+              "width": 1024,
+              "height": 254,
+              "right": 1024,
+              "bottom": 768
+            },
+            "hostLocalRect": {
+              "x": -10,
+              "y": 472,
+              "width": 1008,
+              "height": 222,
+              "right": 998,
+              "bottom": 694
+            },
+            "clearanceHostLocalRect": {
+              "x": -18,
+              "y": 448,
+              "width": 1024,
+              "height": 254,
+              "right": 1006,
+              "bottom": 702
+            }
+          },
+          "persistentUiZones": [
+            {
+              "id": "topbar",
+              "rect": {
+                "x": 8,
+                "y": 8,
+                "width": 1008,
+                "height": 52,
+                "right": 1016,
+                "bottom": 60
+              },
+              "clearanceRect": {
+                "x": 0,
+                "y": 0,
+                "width": 1024,
+                "height": 84,
+                "right": 1024,
+                "bottom": 84
+              },
+              "hostLocalRect": {
+                "x": -10,
+                "y": -58,
+                "width": 1008,
+                "height": 52,
+                "right": 998,
+                "bottom": -6
+              },
+              "clearanceHostLocalRect": {
+                "x": -18,
+                "y": -66,
+                "width": 1024,
+                "height": 84,
+                "right": 1006,
+                "bottom": 18
+              }
+            },
+            {
+              "id": "staff-bottom",
+              "rect": {
+                "x": 417,
+                "y": 474,
+                "width": 190,
+                "height": 46,
+                "right": 607,
+                "bottom": 520
+              },
+              "clearanceRect": {
+                "x": 393,
+                "y": 450,
+                "width": 238,
+                "height": 94,
+                "right": 631,
+                "bottom": 544
+              },
+              "hostLocalRect": {
+                "x": 399,
+                "y": 408,
+                "width": 190,
+                "height": 46,
+                "right": 589,
+                "bottom": 454
+              },
+              "clearanceHostLocalRect": {
+                "x": 375,
+                "y": 384,
+                "width": 238,
+                "height": 94,
+                "right": 613,
+                "bottom": 478
+              }
+            }
+          ],
+          "wrongFeedbackZones": []
+        }
+      },
+      "layoutAudit": {
+        "actualDpr": 1,
+        "workshopHorizontalOverflow": false,
+        "workshopVerticalOverflow": false,
+        "staffHorizontalOverflow": false,
+        "staffVerticalOverflow": false
+      },
+      "screenshotEvidence": {
+        "workshopInitial": "screenshots/teaching_zones_339b_ipad-landscape-1024x768-dpr1-browser-gate_M03_initial.png",
+        "workshopWrong": "screenshots/teaching_zones_339b_ipad-landscape-1024x768-dpr1-browser-gate_M03_wrong.png",
+        "staffInitial": "screenshots/teaching_zones_339b_ipad-landscape-1024x768-dpr1-browser-gate_S01_initial.png",
+        "staffWrong": "screenshots/teaching_zones_339b_ipad-landscape-1024x768-dpr1-browser-gate_S01_wrong.png"
+      }
+    },
+    {
+      "viewportId": "ipad-landscape-1024x768-dpr2-browser-model",
+      "supportStatus": "pixel_density_model_passed",
+      "width": 1024,
+      "height": 768,
+      "dpr": 2,
+      "physicalPixelWidth": 2048,
+      "physicalPixelHeight": 1536,
+      "orientation": "landscape",
+      "safeAreaInsets": {
+        "top": 0,
+        "right": 0,
+        "bottom": 0,
+        "left": 0,
+        "status": "browser_emulation_only_real_ipad_safari_unverified"
+      },
+      "coordinateSpace": {
+        "origin": "viewport_top_left",
+        "unit": "css_px",
+        "xDirection": "right",
+        "yDirection": "down",
+        "physicalPixelScale": 2,
+        "cropRule": "no_crop_inside_viewport",
+        "rounding": "two_decimal_places"
+      },
+      "zones": {
+        "workshop": {
+          "stageRect": {
+            "x": 10,
+            "y": 74,
+            "width": 1004,
+            "height": 476.33,
+            "right": 1014,
+            "bottom": 550.33
+          },
+          "centralTargetZone": {
+            "rect": {
+              "x": 272,
+              "y": 299.33,
+              "width": 480,
+              "height": 224,
+              "right": 752,
+              "bottom": 523.33
+            },
+            "clearanceRect": {
+              "x": 248,
+              "y": 275.33,
+              "width": 528,
+              "height": 272,
+              "right": 776,
+              "bottom": 547.33
+            },
+            "hostLocalRect": {
+              "x": 262,
+              "y": 225.33,
+              "width": 480,
+              "height": 224,
+              "right": 742,
+              "bottom": 449.33
+            },
+            "clearanceHostLocalRect": {
+              "x": 238,
+              "y": 201.33,
+              "width": 528,
+              "height": 272,
+              "right": 766,
+              "bottom": 473.33
+            }
+          },
+          "keyboardZone": {
+            "rect": {
+              "x": 10,
+              "y": 558.33,
+              "width": 1004,
+              "height": 199.67,
+              "right": 1014,
+              "bottom": 758
+            },
+            "clearanceRect": {
+              "x": 0,
+              "y": 534.33,
+              "width": 1024,
+              "height": 233.67,
+              "right": 1024,
+              "bottom": 768
+            },
+            "hostLocalRect": {
+              "x": 0,
+              "y": 484.33,
+              "width": 1004,
+              "height": 199.67,
+              "right": 1004,
+              "bottom": 684
+            },
+            "clearanceHostLocalRect": {
+              "x": -10,
+              "y": 460.33,
+              "width": 1024,
+              "height": 233.67,
+              "right": 1014,
+              "bottom": 694
+            }
+          },
+          "persistentUiZones": [
+            {
+              "id": "topbar",
+              "rect": {
+                "x": 10,
+                "y": 10,
+                "width": 1004,
+                "height": 58,
+                "right": 1014,
+                "bottom": 68
+              },
+              "clearanceRect": {
+                "x": 0,
+                "y": 0,
+                "width": 1024,
+                "height": 92,
+                "right": 1024,
+                "bottom": 92
+              },
+              "hostLocalRect": {
+                "x": 0,
+                "y": -64,
+                "width": 1004,
+                "height": 58,
+                "right": 1004,
+                "bottom": -6
+              },
+              "clearanceHostLocalRect": {
+                "x": -10,
+                "y": -74,
+                "width": 1024,
+                "height": 92,
+                "right": 1014,
+                "bottom": 18
+              }
+            },
+            {
+              "id": "coach-overlay",
+              "rect": {
+                "x": 853.48,
+                "y": 281.81,
+                "width": 135.52,
+                "height": 135.52,
+                "right": 989,
+                "bottom": 417.33
+              },
+              "clearanceRect": {
+                "x": 829.48,
+                "y": 257.81,
+                "width": 183.52,
+                "height": 183.52,
+                "right": 1013,
+                "bottom": 441.33
+              },
+              "hostLocalRect": {
+                "x": 843.48,
+                "y": 207.81,
+                "width": 135.52,
+                "height": 135.52,
+                "right": 979,
+                "bottom": 343.33
+              },
+              "clearanceHostLocalRect": {
+                "x": 819.48,
+                "y": 183.81,
+                "width": 183.52,
+                "height": 183.52,
+                "right": 1003,
+                "bottom": 367.33
+              }
+            }
+          ],
+          "wrongFeedbackZones": []
+        },
+        "staff": {
+          "stageRect": {
+            "x": 18,
+            "y": 66,
+            "width": 988,
+            "height": 459,
+            "right": 1006,
+            "bottom": 525
+          },
+          "staffZone": {
+            "rect": {
+              "x": 245.56,
+              "y": 127.72,
+              "width": 583.06,
+              "height": 381.12,
+              "right": 828.62,
+              "bottom": 508.84
+            },
+            "clearanceRect": {
+              "x": 221.56,
+              "y": 103.72,
+              "width": 631.06,
+              "height": 429.12,
+              "right": 852.62,
+              "bottom": 532.84
+            },
+            "hostLocalRect": {
+              "x": 227.56,
+              "y": 61.72,
+              "width": 583.06,
+              "height": 381.12,
+              "right": 810.62,
+              "bottom": 442.84
+            },
+            "clearanceHostLocalRect": {
+              "x": 203.56,
+              "y": 37.72,
+              "width": 631.06,
+              "height": 429.12,
+              "right": 834.62,
+              "bottom": 466.84
+            }
+          },
+          "keyboardZone": {
+            "rect": {
+              "x": 8,
+              "y": 538,
+              "width": 1008,
+              "height": 222,
+              "right": 1016,
+              "bottom": 760
+            },
+            "clearanceRect": {
+              "x": 0,
+              "y": 514,
+              "width": 1024,
+              "height": 254,
+              "right": 1024,
+              "bottom": 768
+            },
+            "hostLocalRect": {
+              "x": -10,
+              "y": 472,
+              "width": 1008,
+              "height": 222,
+              "right": 998,
+              "bottom": 694
+            },
+            "clearanceHostLocalRect": {
+              "x": -18,
+              "y": 448,
+              "width": 1024,
+              "height": 254,
+              "right": 1006,
+              "bottom": 702
+            }
+          },
+          "persistentUiZones": [
+            {
+              "id": "topbar",
+              "rect": {
+                "x": 8,
+                "y": 8,
+                "width": 1008,
+                "height": 52,
+                "right": 1016,
+                "bottom": 60
+              },
+              "clearanceRect": {
+                "x": 0,
+                "y": 0,
+                "width": 1024,
+                "height": 84,
+                "right": 1024,
+                "bottom": 84
+              },
+              "hostLocalRect": {
+                "x": -10,
+                "y": -58,
+                "width": 1008,
+                "height": 52,
+                "right": 998,
+                "bottom": -6
+              },
+              "clearanceHostLocalRect": {
+                "x": -18,
+                "y": -66,
+                "width": 1024,
+                "height": 84,
+                "right": 1006,
+                "bottom": 18
+              }
+            },
+            {
+              "id": "staff-bottom",
+              "rect": {
+                "x": 417,
+                "y": 474,
+                "width": 190,
+                "height": 46,
+                "right": 607,
+                "bottom": 520
+              },
+              "clearanceRect": {
+                "x": 393,
+                "y": 450,
+                "width": 238,
+                "height": 94,
+                "right": 631,
+                "bottom": 544
+              },
+              "hostLocalRect": {
+                "x": 399,
+                "y": 408,
+                "width": 190,
+                "height": 46,
+                "right": 589,
+                "bottom": 454
+              },
+              "clearanceHostLocalRect": {
+                "x": 375,
+                "y": 384,
+                "width": 238,
+                "height": 94,
+                "right": 613,
+                "bottom": 478
+              }
+            }
+          ],
+          "wrongFeedbackZones": []
+        }
+      },
+      "layoutAudit": {
+        "actualDpr": 2,
+        "workshopHorizontalOverflow": false,
+        "workshopVerticalOverflow": false,
+        "staffHorizontalOverflow": false,
+        "staffVerticalOverflow": false
+      },
+      "screenshotEvidence": {
+        "workshopInitial": "screenshots/teaching_zones_339b_ipad-landscape-1024x768-dpr2-browser-model_M03_initial.png",
+        "workshopWrong": "screenshots/teaching_zones_339b_ipad-landscape-1024x768-dpr2-browser-model_M03_wrong.png",
+        "staffInitial": "screenshots/teaching_zones_339b_ipad-landscape-1024x768-dpr2-browser-model_S01_initial.png",
+        "staffWrong": "screenshots/teaching_zones_339b_ipad-landscape-1024x768-dpr2-browser-model_S01_wrong.png"
+      }
+    },
+    {
+      "viewportId": "ipad-landscape-1180x820-dpr2-browser-model",
+      "supportStatus": "modern_ipad_geometry_model_passed",
+      "width": 1180,
+      "height": 820,
+      "dpr": 2,
+      "physicalPixelWidth": 2360,
+      "physicalPixelHeight": 1640,
+      "orientation": "landscape",
+      "safeAreaInsets": {
+        "top": 0,
+        "right": 0,
+        "bottom": 0,
+        "left": 0,
+        "status": "browser_emulation_only_real_ipad_safari_unverified"
+      },
+      "coordinateSpace": {
+        "origin": "viewport_top_left",
+        "unit": "css_px",
+        "xDirection": "right",
+        "yDirection": "down",
+        "physicalPixelScale": 2,
+        "cropRule": "no_crop_inside_viewport",
+        "rounding": "two_decimal_places"
+      },
+      "zones": {
+        "workshop": {
+          "stageRect": {
+            "x": 10,
+            "y": 74,
+            "width": 1160,
+            "height": 514.81,
+            "right": 1170,
+            "bottom": 588.81
+          },
+          "centralTargetZone": {
+            "rect": {
+              "x": 340,
+              "y": 311.81,
+              "width": 500,
+              "height": 250,
+              "right": 840,
+              "bottom": 561.81
+            },
+            "clearanceRect": {
+              "x": 316,
+              "y": 287.81,
+              "width": 548,
+              "height": 298,
+              "right": 864,
+              "bottom": 585.81
+            },
+            "hostLocalRect": {
+              "x": 330,
+              "y": 237.81,
+              "width": 500,
+              "height": 250,
+              "right": 830,
+              "bottom": 487.81
+            },
+            "clearanceHostLocalRect": {
+              "x": 306,
+              "y": 213.81,
+              "width": 548,
+              "height": 298,
+              "right": 854,
+              "bottom": 511.81
+            }
+          },
+          "keyboardZone": {
+            "rect": {
+              "x": 10,
+              "y": 596.81,
+              "width": 1160,
+              "height": 213.19,
+              "right": 1170,
+              "bottom": 810
+            },
+            "clearanceRect": {
+              "x": 0,
+              "y": 572.81,
+              "width": 1180,
+              "height": 247.19,
+              "right": 1180,
+              "bottom": 820
+            },
+            "hostLocalRect": {
+              "x": 0,
+              "y": 522.81,
+              "width": 1160,
+              "height": 213.19,
+              "right": 1160,
+              "bottom": 736
+            },
+            "clearanceHostLocalRect": {
+              "x": -10,
+              "y": 498.81,
+              "width": 1180,
+              "height": 247.19,
+              "right": 1170,
+              "bottom": 746
+            }
+          },
+          "persistentUiZones": [
+            {
+              "id": "topbar",
+              "rect": {
+                "x": 10,
+                "y": 10,
+                "width": 1160,
+                "height": 58,
+                "right": 1170,
+                "bottom": 68
+              },
+              "clearanceRect": {
+                "x": 0,
+                "y": 0,
+                "width": 1180,
+                "height": 92,
+                "right": 1180,
+                "bottom": 92
+              },
+              "hostLocalRect": {
+                "x": 0,
+                "y": -64,
+                "width": 1160,
+                "height": 58,
+                "right": 1160,
+                "bottom": -6
+              },
+              "clearanceHostLocalRect": {
+                "x": -10,
+                "y": -74,
+                "width": 1180,
+                "height": 92,
+                "right": 1170,
+                "bottom": 18
+              }
+            },
+            {
+              "id": "coach-overlay",
+              "rect": {
+                "x": 1009.48,
+                "y": 320.29,
+                "width": 135.52,
+                "height": 135.52,
+                "right": 1145,
+                "bottom": 455.81
+              },
+              "clearanceRect": {
+                "x": 985.48,
+                "y": 296.29,
+                "width": 183.52,
+                "height": 183.52,
+                "right": 1169,
+                "bottom": 479.81
+              },
+              "hostLocalRect": {
+                "x": 999.48,
+                "y": 246.29,
+                "width": 135.52,
+                "height": 135.52,
+                "right": 1135,
+                "bottom": 381.81
+              },
+              "clearanceHostLocalRect": {
+                "x": 975.48,
+                "y": 222.29,
+                "width": 183.52,
+                "height": 183.52,
+                "right": 1159,
+                "bottom": 405.81
+              }
+            }
+          ],
+          "wrongFeedbackZones": []
+        },
+        "staff": {
+          "stageRect": {
+            "x": 18,
+            "y": 66,
+            "width": 1144,
+            "height": 511,
+            "right": 1162,
+            "bottom": 577
+          },
+          "staffZone": {
+            "rect": {
+              "x": 281.32,
+              "y": 134.54,
+              "width": 675.5,
+              "height": 427.09,
+              "right": 956.82,
+              "bottom": 561.63
+            },
+            "clearanceRect": {
+              "x": 257.32,
+              "y": 110.54,
+              "width": 723.5,
+              "height": 475.09,
+              "right": 980.82,
+              "bottom": 585.63
+            },
+            "hostLocalRect": {
+              "x": 263.32,
+              "y": 68.54,
+              "width": 675.5,
+              "height": 427.09,
+              "right": 938.82,
+              "bottom": 495.63
+            },
+            "clearanceHostLocalRect": {
+              "x": 239.32,
+              "y": 44.54,
+              "width": 723.5,
+              "height": 475.09,
+              "right": 962.82,
+              "bottom": 519.63
+            }
+          },
+          "keyboardZone": {
+            "rect": {
+              "x": 8,
+              "y": 590,
+              "width": 1164,
+              "height": 222,
+              "right": 1172,
+              "bottom": 812
+            },
+            "clearanceRect": {
+              "x": 0,
+              "y": 566,
+              "width": 1180,
+              "height": 254,
+              "right": 1180,
+              "bottom": 820
+            },
+            "hostLocalRect": {
+              "x": -10,
+              "y": 524,
+              "width": 1164,
+              "height": 222,
+              "right": 1154,
+              "bottom": 746
+            },
+            "clearanceHostLocalRect": {
+              "x": -18,
+              "y": 500,
+              "width": 1180,
+              "height": 254,
+              "right": 1162,
+              "bottom": 754
+            }
+          },
+          "persistentUiZones": [
+            {
+              "id": "topbar",
+              "rect": {
+                "x": 8,
+                "y": 8,
+                "width": 1164,
+                "height": 52,
+                "right": 1172,
+                "bottom": 60
+              },
+              "clearanceRect": {
+                "x": 0,
+                "y": 0,
+                "width": 1180,
+                "height": 84,
+                "right": 1180,
+                "bottom": 84
+              },
+              "hostLocalRect": {
+                "x": -10,
+                "y": -58,
+                "width": 1164,
+                "height": 52,
+                "right": 1154,
+                "bottom": -6
+              },
+              "clearanceHostLocalRect": {
+                "x": -18,
+                "y": -66,
+                "width": 1180,
+                "height": 84,
+                "right": 1162,
+                "bottom": 18
+              }
+            },
+            {
+              "id": "staff-bottom",
+              "rect": {
+                "x": 495,
+                "y": 526,
+                "width": 190,
+                "height": 46,
+                "right": 685,
+                "bottom": 572
+              },
+              "clearanceRect": {
+                "x": 471,
+                "y": 502,
+                "width": 238,
+                "height": 94,
+                "right": 709,
+                "bottom": 596
+              },
+              "hostLocalRect": {
+                "x": 477,
+                "y": 460,
+                "width": 190,
+                "height": 46,
+                "right": 667,
+                "bottom": 506
+              },
+              "clearanceHostLocalRect": {
+                "x": 453,
+                "y": 436,
+                "width": 238,
+                "height": 94,
+                "right": 691,
+                "bottom": 530
+              }
+            }
+          ],
+          "wrongFeedbackZones": []
+        }
+      },
+      "layoutAudit": {
+        "actualDpr": 2,
+        "workshopHorizontalOverflow": false,
+        "workshopVerticalOverflow": false,
+        "staffHorizontalOverflow": false,
+        "staffVerticalOverflow": false
+      },
+      "screenshotEvidence": {
+        "workshopInitial": "screenshots/teaching_zones_339b_ipad-landscape-1180x820-dpr2-browser-model_M03_initial.png",
+        "workshopWrong": "screenshots/teaching_zones_339b_ipad-landscape-1180x820-dpr2-browser-model_M03_wrong.png",
+        "staffInitial": "screenshots/teaching_zones_339b_ipad-landscape-1180x820-dpr2-browser-model_S01_initial.png",
+        "staffWrong": "screenshots/teaching_zones_339b_ipad-landscape-1180x820-dpr2-browser-model_S01_wrong.png"
+      }
+    },
+    {
+      "viewportId": "ipad-pro-11-landscape-1194x834-dpr2-browser-model",
+      "supportStatus": "ipad_pro_11_geometry_model_passed",
+      "width": 1194,
+      "height": 834,
+      "dpr": 2,
+      "physicalPixelWidth": 2388,
+      "physicalPixelHeight": 1668,
+      "orientation": "landscape",
+      "safeAreaInsets": {
+        "top": 0,
+        "right": 0,
+        "bottom": 0,
+        "left": 0,
+        "status": "browser_emulation_only_real_ipad_safari_unverified"
+      },
+      "coordinateSpace": {
+        "origin": "viewport_top_left",
+        "unit": "css_px",
+        "xDirection": "right",
+        "yDirection": "down",
+        "physicalPixelScale": 2,
+        "cropRule": "no_crop_inside_viewport",
+        "rounding": "two_decimal_places"
+      },
+      "zones": {
+        "workshop": {
+          "stageRect": {
+            "x": 10,
+            "y": 76,
+            "width": 1174,
+            "height": 514.83,
+            "right": 1184,
+            "bottom": 590.83
+          },
+          "centralTargetZone": {
+            "rect": {
+              "x": 347,
+              "y": 313.83,
+              "width": 500,
+              "height": 250,
+              "right": 847,
+              "bottom": 563.83
+            },
+            "clearanceRect": {
+              "x": 323,
+              "y": 289.83,
+              "width": 548,
+              "height": 298,
+              "right": 871,
+              "bottom": 587.83
+            },
+            "hostLocalRect": {
+              "x": 337,
+              "y": 237.83,
+              "width": 500,
+              "height": 250,
+              "right": 837,
+              "bottom": 487.83
+            },
+            "clearanceHostLocalRect": {
+              "x": 313,
+              "y": 213.83,
+              "width": 548,
+              "height": 298,
+              "right": 861,
+              "bottom": 511.83
+            }
+          },
+          "keyboardZone": {
+            "rect": {
+              "x": 10,
+              "y": 598.83,
+              "width": 1174,
+              "height": 225.17,
+              "right": 1184,
+              "bottom": 824
+            },
+            "clearanceRect": {
+              "x": 0,
+              "y": 574.83,
+              "width": 1194,
+              "height": 259.17,
+              "right": 1194,
+              "bottom": 834
+            },
+            "hostLocalRect": {
+              "x": 0,
+              "y": 522.83,
+              "width": 1174,
+              "height": 225.17,
+              "right": 1174,
+              "bottom": 748
+            },
+            "clearanceHostLocalRect": {
+              "x": -10,
+              "y": 498.83,
+              "width": 1194,
+              "height": 259.17,
+              "right": 1184,
+              "bottom": 758
+            }
+          },
+          "persistentUiZones": [
+            {
+              "id": "topbar",
+              "rect": {
+                "x": 10,
+                "y": 10,
+                "width": 1174,
+                "height": 58,
+                "right": 1184,
+                "bottom": 68
+              },
+              "clearanceRect": {
+                "x": 0,
+                "y": 0,
+                "width": 1194,
+                "height": 92,
+                "right": 1194,
+                "bottom": 92
+              },
+              "hostLocalRect": {
+                "x": 0,
+                "y": -66,
+                "width": 1174,
+                "height": 58,
+                "right": 1174,
+                "bottom": -8
+              },
+              "clearanceHostLocalRect": {
+                "x": -10,
+                "y": -76,
+                "width": 1194,
+                "height": 92,
+                "right": 1184,
+                "bottom": 16
+              }
+            },
+            {
+              "id": "coach-overlay",
+              "rect": {
+                "x": 1005,
+                "y": 303.83,
+                "width": 154,
+                "height": 154,
+                "right": 1159,
+                "bottom": 457.83
+              },
+              "clearanceRect": {
+                "x": 981,
+                "y": 279.83,
+                "width": 202,
+                "height": 202,
+                "right": 1183,
+                "bottom": 481.83
+              },
+              "hostLocalRect": {
+                "x": 995,
+                "y": 227.83,
+                "width": 154,
+                "height": 154,
+                "right": 1149,
+                "bottom": 381.83
+              },
+              "clearanceHostLocalRect": {
+                "x": 971,
+                "y": 203.83,
+                "width": 202,
+                "height": 202,
+                "right": 1173,
+                "bottom": 405.83
+              }
+            }
+          ],
+          "wrongFeedbackZones": []
+        },
+        "staff": {
+          "stageRect": {
+            "x": 21,
+            "y": 68,
+            "width": 1152,
+            "height": 516.83,
+            "right": 1173,
+            "bottom": 584.83
+          },
+          "staffZone": {
+            "rect": {
+              "x": 286.16,
+              "y": 137.31,
+              "width": 680.23,
+              "height": 431.54,
+              "right": 966.39,
+              "bottom": 568.85
+            },
+            "clearanceRect": {
+              "x": 262.16,
+              "y": 113.31,
+              "width": 728.23,
+              "height": 479.54,
+              "right": 990.39,
+              "bottom": 592.85
+            },
+            "hostLocalRect": {
+              "x": 265.16,
+              "y": 69.31,
+              "width": 680.23,
+              "height": 431.54,
+              "right": 945.39,
+              "bottom": 500.85
+            },
+            "clearanceHostLocalRect": {
+              "x": 241.16,
+              "y": 45.31,
+              "width": 728.23,
+              "height": 479.54,
+              "right": 969.39,
+              "bottom": 524.85
+            }
+          },
+          "keyboardZone": {
+            "rect": {
+              "x": 10,
+              "y": 598.83,
+              "width": 1174,
+              "height": 225.17,
+              "right": 1184,
+              "bottom": 824
+            },
+            "clearanceRect": {
+              "x": 0,
+              "y": 574.83,
+              "width": 1194,
+              "height": 259.17,
+              "right": 1194,
+              "bottom": 834
+            },
+            "hostLocalRect": {
+              "x": -11,
+              "y": 530.83,
+              "width": 1174,
+              "height": 225.17,
+              "right": 1163,
+              "bottom": 756
+            },
+            "clearanceHostLocalRect": {
+              "x": -21,
+              "y": 506.83,
+              "width": 1194,
+              "height": 259.17,
+              "right": 1173,
+              "bottom": 766
+            }
+          },
+          "persistentUiZones": [
+            {
+              "id": "topbar",
+              "rect": {
+                "x": 10,
+                "y": 9,
+                "width": 1174,
+                "height": 52,
+                "right": 1184,
+                "bottom": 61
+              },
+              "clearanceRect": {
+                "x": 0,
+                "y": 0,
+                "width": 1194,
+                "height": 85,
+                "right": 1194,
+                "bottom": 85
+              },
+              "hostLocalRect": {
+                "x": -11,
+                "y": -59,
+                "width": 1174,
+                "height": 52,
+                "right": 1163,
+                "bottom": -7
+              },
+              "clearanceHostLocalRect": {
+                "x": -21,
+                "y": -68,
+                "width": 1194,
+                "height": 85,
+                "right": 1173,
+                "bottom": 17
+              }
+            },
+            {
+              "id": "staff-bottom",
+              "rect": {
+                "x": 495,
+                "y": 528.83,
+                "width": 204,
+                "height": 48,
+                "right": 699,
+                "bottom": 576.83
+              },
+              "clearanceRect": {
+                "x": 471,
+                "y": 504.83,
+                "width": 252,
+                "height": 96,
+                "right": 723,
+                "bottom": 600.83
+              },
+              "hostLocalRect": {
+                "x": 474,
+                "y": 460.83,
+                "width": 204,
+                "height": 48,
+                "right": 678,
+                "bottom": 508.83
+              },
+              "clearanceHostLocalRect": {
+                "x": 450,
+                "y": 436.83,
+                "width": 252,
+                "height": 96,
+                "right": 702,
+                "bottom": 532.83
+              }
+            }
+          ],
+          "wrongFeedbackZones": []
+        }
+      },
+      "layoutAudit": {
+        "actualDpr": 2,
+        "workshopHorizontalOverflow": false,
+        "workshopVerticalOverflow": false,
+        "staffHorizontalOverflow": false,
+        "staffVerticalOverflow": false
+      },
+      "screenshotEvidence": {
+        "workshopInitial": "screenshots/teaching_zones_339b_ipad-pro-11-landscape-1194x834-dpr2-browser-model_M03_initial.png",
+        "workshopWrong": "screenshots/teaching_zones_339b_ipad-pro-11-landscape-1194x834-dpr2-browser-model_M03_wrong.png",
+        "staffInitial": "screenshots/teaching_zones_339b_ipad-pro-11-landscape-1194x834-dpr2-browser-model_S01_initial.png",
+        "staffWrong": "screenshots/teaching_zones_339b_ipad-pro-11-landscape-1194x834-dpr2-browser-model_S01_wrong.png"
+      }
+    },
+    {
+      "viewportId": "media-landscape-1280x720-dpr1-browser-smoke",
+      "supportStatus": "technical_preview_canvas_smoke_passed",
+      "width": 1280,
+      "height": 720,
+      "dpr": 1,
+      "physicalPixelWidth": 1280,
+      "physicalPixelHeight": 720,
+      "orientation": "landscape",
+      "safeAreaInsets": {
+        "top": 0,
+        "right": 0,
+        "bottom": 0,
+        "left": 0,
+        "status": "browser_emulation_only_real_ipad_safari_unverified"
+      },
+      "coordinateSpace": {
+        "origin": "viewport_top_left",
+        "unit": "css_px",
+        "xDirection": "right",
+        "yDirection": "down",
+        "physicalPixelScale": 1,
+        "cropRule": "no_crop_inside_viewport",
+        "rounding": "two_decimal_places"
+      },
+      "zones": {
+        "workshop": {
+          "stageRect": {
+            "x": 10,
+            "y": 76,
+            "width": 1260,
+            "height": 430,
+            "right": 1270,
+            "bottom": 506
+          },
+          "centralTargetZone": {
+            "rect": {
+              "x": 390,
+              "y": 260.73,
+              "width": 500,
+              "height": 218.27,
+              "right": 890,
+              "bottom": 479
+            },
+            "clearanceRect": {
+              "x": 366,
+              "y": 236.73,
+              "width": 548,
+              "height": 266.27,
+              "right": 914,
+              "bottom": 503
+            },
+            "hostLocalRect": {
+              "x": 380,
+              "y": 184.73,
+              "width": 500,
+              "height": 218.27,
+              "right": 880,
+              "bottom": 403
+            },
+            "clearanceHostLocalRect": {
+              "x": 356,
+              "y": 160.73,
+              "width": 548,
+              "height": 266.27,
+              "right": 904,
+              "bottom": 427
+            }
+          },
+          "keyboardZone": {
+            "rect": {
+              "x": 10,
+              "y": 514,
+              "width": 1260,
+              "height": 196,
+              "right": 1270,
+              "bottom": 710
+            },
+            "clearanceRect": {
+              "x": 0,
+              "y": 490,
+              "width": 1280,
+              "height": 230,
+              "right": 1280,
+              "bottom": 720
+            },
+            "hostLocalRect": {
+              "x": 0,
+              "y": 438,
+              "width": 1260,
+              "height": 196,
+              "right": 1260,
+              "bottom": 634
+            },
+            "clearanceHostLocalRect": {
+              "x": -10,
+              "y": 414,
+              "width": 1280,
+              "height": 230,
+              "right": 1270,
+              "bottom": 644
+            }
+          },
+          "persistentUiZones": [
+            {
+              "id": "topbar",
+              "rect": {
+                "x": 10,
+                "y": 10,
+                "width": 1260,
+                "height": 58,
+                "right": 1270,
+                "bottom": 68
+              },
+              "clearanceRect": {
+                "x": 0,
+                "y": 0,
+                "width": 1280,
+                "height": 92,
+                "right": 1280,
+                "bottom": 92
+              },
+              "hostLocalRect": {
+                "x": 0,
+                "y": -66,
+                "width": 1260,
+                "height": 58,
+                "right": 1260,
+                "bottom": -8
+              },
+              "clearanceHostLocalRect": {
+                "x": -10,
+                "y": -76,
+                "width": 1280,
+                "height": 92,
+                "right": 1270,
+                "bottom": 16
+              }
+            },
+            {
+              "id": "coach-overlay",
+              "rect": {
+                "x": 1111,
+                "y": 239,
+                "width": 136,
+                "height": 136,
+                "right": 1247,
+                "bottom": 375
+              },
+              "clearanceRect": {
+                "x": 1087,
+                "y": 215,
+                "width": 184,
+                "height": 184,
+                "right": 1271,
+                "bottom": 399
+              },
+              "hostLocalRect": {
+                "x": 1101,
+                "y": 163,
+                "width": 136,
+                "height": 136,
+                "right": 1237,
+                "bottom": 299
+              },
+              "clearanceHostLocalRect": {
+                "x": 1077,
+                "y": 139,
+                "width": 184,
+                "height": 184,
+                "right": 1261,
+                "bottom": 323
+              }
+            }
+          ],
+          "wrongFeedbackZones": []
+        },
+        "staff": {
+          "stageRect": {
+            "x": 21,
+            "y": 68,
+            "width": 1238,
+            "height": 406,
+            "right": 1259,
+            "bottom": 474
+          },
+          "staffZone": {
+            "rect": {
+              "x": 305.87,
+              "y": 122.76,
+              "width": 731.19,
+              "height": 346.9,
+              "right": 1037.06,
+              "bottom": 469.66
+            },
+            "clearanceRect": {
+              "x": 281.87,
+              "y": 98.76,
+              "width": 779.19,
+              "height": 394.9,
+              "right": 1061.06,
+              "bottom": 493.66
+            },
+            "hostLocalRect": {
+              "x": 284.87,
+              "y": 54.76,
+              "width": 731.19,
+              "height": 346.9,
+              "right": 1016.06,
+              "bottom": 401.66
+            },
+            "clearanceHostLocalRect": {
+              "x": 260.87,
+              "y": 30.76,
+              "width": 779.19,
+              "height": 394.9,
+              "right": 1040.06,
+              "bottom": 425.66
+            }
+          },
+          "keyboardZone": {
+            "rect": {
+              "x": 10,
+              "y": 488,
+              "width": 1260,
+              "height": 222,
+              "right": 1270,
+              "bottom": 710
+            },
+            "clearanceRect": {
+              "x": 0,
+              "y": 464,
+              "width": 1280,
+              "height": 256,
+              "right": 1280,
+              "bottom": 720
+            },
+            "hostLocalRect": {
+              "x": -11,
+              "y": 420,
+              "width": 1260,
+              "height": 222,
+              "right": 1249,
+              "bottom": 642
+            },
+            "clearanceHostLocalRect": {
+              "x": -21,
+              "y": 396,
+              "width": 1280,
+              "height": 256,
+              "right": 1259,
+              "bottom": 652
+            }
+          },
+          "persistentUiZones": [
+            {
+              "id": "topbar",
+              "rect": {
+                "x": 10,
+                "y": 9,
+                "width": 1260,
+                "height": 52,
+                "right": 1270,
+                "bottom": 61
+              },
+              "clearanceRect": {
+                "x": 0,
+                "y": 0,
+                "width": 1280,
+                "height": 85,
+                "right": 1280,
+                "bottom": 85
+              },
+              "hostLocalRect": {
+                "x": -11,
+                "y": -59,
+                "width": 1260,
+                "height": 52,
+                "right": 1249,
+                "bottom": -7
+              },
+              "clearanceHostLocalRect": {
+                "x": -21,
+                "y": -68,
+                "width": 1280,
+                "height": 85,
+                "right": 1259,
+                "bottom": 17
+              }
+            },
+            {
+              "id": "staff-bottom",
+              "rect": {
+                "x": 538,
+                "y": 418,
+                "width": 204,
+                "height": 48,
+                "right": 742,
+                "bottom": 466
+              },
+              "clearanceRect": {
+                "x": 514,
+                "y": 394,
+                "width": 252,
+                "height": 96,
+                "right": 766,
+                "bottom": 490
+              },
+              "hostLocalRect": {
+                "x": 517,
+                "y": 350,
+                "width": 204,
+                "height": 48,
+                "right": 721,
+                "bottom": 398
+              },
+              "clearanceHostLocalRect": {
+                "x": 493,
+                "y": 326,
+                "width": 252,
+                "height": 96,
+                "right": 745,
+                "bottom": 422
+              }
+            }
+          ],
+          "wrongFeedbackZones": []
+        }
+      },
+      "layoutAudit": {
+        "actualDpr": 1,
+        "workshopHorizontalOverflow": false,
+        "workshopVerticalOverflow": false,
+        "staffHorizontalOverflow": false,
+        "staffVerticalOverflow": false
+      },
+      "screenshotEvidence": {
+        "workshopInitial": "screenshots/teaching_zones_339b_media-landscape-1280x720-dpr1-browser-smoke_M03_initial.png",
+        "workshopWrong": "screenshots/teaching_zones_339b_media-landscape-1280x720-dpr1-browser-smoke_M03_wrong.png",
+        "staffInitial": "screenshots/teaching_zones_339b_media-landscape-1280x720-dpr1-browser-smoke_S01_initial.png",
+        "staffWrong": "screenshots/teaching_zones_339b_media-landscape-1280x720-dpr1-browser-smoke_S01_wrong.png"
+      }
+    },
+    {
+      "viewportId": "large-ipad-landscape-1366x1024-dpr2-browser-model",
+      "supportStatus": "large_ipad_geometry_model_passed",
+      "width": 1366,
+      "height": 1024,
+      "dpr": 2,
+      "physicalPixelWidth": 2732,
+      "physicalPixelHeight": 2048,
+      "orientation": "landscape",
+      "safeAreaInsets": {
+        "top": 0,
+        "right": 0,
+        "bottom": 0,
+        "left": 0,
+        "status": "browser_emulation_only_real_ipad_safari_unverified"
+      },
+      "coordinateSpace": {
+        "origin": "viewport_top_left",
+        "unit": "css_px",
+        "xDirection": "right",
+        "yDirection": "down",
+        "physicalPixelScale": 2,
+        "cropRule": "no_crop_inside_viewport",
+        "rounding": "two_decimal_places"
+      },
+      "zones": {
+        "workshop": {
+          "stageRect": {
+            "x": 10,
+            "y": 76,
+            "width": 1346,
+            "height": 653.53,
+            "right": 1356,
+            "bottom": 729.53
+          },
+          "centralTargetZone": {
+            "rect": {
+              "x": 433,
+              "y": 452.53,
+              "width": 500,
+              "height": 250,
+              "right": 933,
+              "bottom": 702.53
+            },
+            "clearanceRect": {
+              "x": 409,
+              "y": 428.53,
+              "width": 548,
+              "height": 298,
+              "right": 957,
+              "bottom": 726.53
+            },
+            "hostLocalRect": {
+              "x": 423,
+              "y": 376.53,
+              "width": 500,
+              "height": 250,
+              "right": 923,
+              "bottom": 626.53
+            },
+            "clearanceHostLocalRect": {
+              "x": 399,
+              "y": 352.53,
+              "width": 548,
+              "height": 298,
+              "right": 947,
+              "bottom": 650.53
+            }
+          },
+          "keyboardZone": {
+            "rect": {
+              "x": 10,
+              "y": 737.53,
+              "width": 1346,
+              "height": 276.47,
+              "right": 1356,
+              "bottom": 1014
+            },
+            "clearanceRect": {
+              "x": 0,
+              "y": 713.53,
+              "width": 1366,
+              "height": 310.47,
+              "right": 1366,
+              "bottom": 1024
+            },
+            "hostLocalRect": {
+              "x": 0,
+              "y": 661.53,
+              "width": 1346,
+              "height": 276.47,
+              "right": 1346,
+              "bottom": 938
+            },
+            "clearanceHostLocalRect": {
+              "x": -10,
+              "y": 637.53,
+              "width": 1366,
+              "height": 310.47,
+              "right": 1356,
+              "bottom": 948
+            }
+          },
+          "persistentUiZones": [
+            {
+              "id": "topbar",
+              "rect": {
+                "x": 10,
+                "y": 10,
+                "width": 1346,
+                "height": 58,
+                "right": 1356,
+                "bottom": 68
+              },
+              "clearanceRect": {
+                "x": 0,
+                "y": 0,
+                "width": 1366,
+                "height": 92,
+                "right": 1366,
+                "bottom": 92
+              },
+              "hostLocalRect": {
+                "x": 0,
+                "y": -66,
+                "width": 1346,
+                "height": 58,
+                "right": 1346,
+                "bottom": -8
+              },
+              "clearanceHostLocalRect": {
+                "x": -10,
+                "y": -76,
+                "width": 1366,
+                "height": 92,
+                "right": 1356,
+                "bottom": 16
+              }
+            },
+            {
+              "id": "coach-overlay",
+              "rect": {
+                "x": 1177,
+                "y": 442.53,
+                "width": 154,
+                "height": 154,
+                "right": 1331,
+                "bottom": 596.53
+              },
+              "clearanceRect": {
+                "x": 1153,
+                "y": 418.53,
+                "width": 202,
+                "height": 202,
+                "right": 1355,
+                "bottom": 620.53
+              },
+              "hostLocalRect": {
+                "x": 1167,
+                "y": 366.53,
+                "width": 154,
+                "height": 154,
+                "right": 1321,
+                "bottom": 520.53
+              },
+              "clearanceHostLocalRect": {
+                "x": 1143,
+                "y": 342.53,
+                "width": 202,
+                "height": 202,
+                "right": 1345,
+                "bottom": 544.53
+              }
+            }
+          ],
+          "wrongFeedbackZones": []
+        },
+        "staff": {
+          "stageRect": {
+            "x": 21,
+            "y": 68,
+            "width": 1324,
+            "height": 655.53,
+            "right": 1345,
+            "bottom": 723.53
+          },
+          "staffZone": {
+            "rect": {
+              "x": 325.58,
+              "y": 155.51,
+              "width": 782.16,
+              "height": 537.48,
+              "right": 1107.74,
+              "bottom": 692.99
+            },
+            "clearanceRect": {
+              "x": 301.58,
+              "y": 131.51,
+              "width": 830.16,
+              "height": 585.48,
+              "right": 1131.74,
+              "bottom": 716.99
+            },
+            "hostLocalRect": {
+              "x": 304.58,
+              "y": 87.51,
+              "width": 782.16,
+              "height": 537.48,
+              "right": 1086.74,
+              "bottom": 624.99
+            },
+            "clearanceHostLocalRect": {
+              "x": 280.58,
+              "y": 63.51,
+              "width": 830.16,
+              "height": 585.48,
+              "right": 1110.74,
+              "bottom": 648.99
+            }
+          },
+          "keyboardZone": {
+            "rect": {
+              "x": 10,
+              "y": 737.53,
+              "width": 1346,
+              "height": 276.47,
+              "right": 1356,
+              "bottom": 1014
+            },
+            "clearanceRect": {
+              "x": 0,
+              "y": 713.53,
+              "width": 1366,
+              "height": 310.47,
+              "right": 1366,
+              "bottom": 1024
+            },
+            "hostLocalRect": {
+              "x": -11,
+              "y": 669.53,
+              "width": 1346,
+              "height": 276.47,
+              "right": 1335,
+              "bottom": 946
+            },
+            "clearanceHostLocalRect": {
+              "x": -21,
+              "y": 645.53,
+              "width": 1366,
+              "height": 310.47,
+              "right": 1345,
+              "bottom": 956
+            }
+          },
+          "persistentUiZones": [
+            {
+              "id": "topbar",
+              "rect": {
+                "x": 10,
+                "y": 9,
+                "width": 1346,
+                "height": 52,
+                "right": 1356,
+                "bottom": 61
+              },
+              "clearanceRect": {
+                "x": 0,
+                "y": 0,
+                "width": 1366,
+                "height": 85,
+                "right": 1366,
+                "bottom": 85
+              },
+              "hostLocalRect": {
+                "x": -11,
+                "y": -59,
+                "width": 1346,
+                "height": 52,
+                "right": 1335,
+                "bottom": -7
+              },
+              "clearanceHostLocalRect": {
+                "x": -21,
+                "y": -68,
+                "width": 1366,
+                "height": 85,
+                "right": 1345,
+                "bottom": 17
+              }
+            },
+            {
+              "id": "staff-bottom",
+              "rect": {
+                "x": 581,
+                "y": 667.53,
+                "width": 204,
+                "height": 48,
+                "right": 785,
+                "bottom": 715.53
+              },
+              "clearanceRect": {
+                "x": 557,
+                "y": 643.53,
+                "width": 252,
+                "height": 96,
+                "right": 809,
+                "bottom": 739.53
+              },
+              "hostLocalRect": {
+                "x": 560,
+                "y": 599.53,
+                "width": 204,
+                "height": 48,
+                "right": 764,
+                "bottom": 647.53
+              },
+              "clearanceHostLocalRect": {
+                "x": 536,
+                "y": 575.53,
+                "width": 252,
+                "height": 96,
+                "right": 788,
+                "bottom": 671.53
+              }
+            }
+          ],
+          "wrongFeedbackZones": []
+        }
+      },
+      "layoutAudit": {
+        "actualDpr": 2,
+        "workshopHorizontalOverflow": false,
+        "workshopVerticalOverflow": false,
+        "staffHorizontalOverflow": false,
+        "staffVerticalOverflow": false
+      },
+      "screenshotEvidence": {
+        "workshopInitial": "screenshots/teaching_zones_339b_large-ipad-landscape-1366x1024-dpr2-browser-model_M03_initial.png",
+        "workshopWrong": "screenshots/teaching_zones_339b_large-ipad-landscape-1366x1024-dpr2-browser-model_M03_wrong.png",
+        "staffInitial": "screenshots/teaching_zones_339b_large-ipad-landscape-1366x1024-dpr2-browser-model_S01_initial.png",
+        "staffWrong": "screenshots/teaching_zones_339b_large-ipad-landscape-1366x1024-dpr2-browser-model_S01_wrong.png"
+      }
+    }
+  ],
+  "browserErrors": [],
+  "failures": []
+}

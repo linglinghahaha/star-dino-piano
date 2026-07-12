@@ -1,0 +1,274 @@
+﻿/* Final play scene cleanup loaded after the legacy stylesheet. */
+.app-shell:not(.staff-mode)::before {
+  opacity: 0.30 !important;
+  background:
+    radial-gradient(circle at 18% 18%, rgba(72,176,255,0.18), transparent 26%),
+    radial-gradient(circle at 82% 12%, rgba(255,206,92,0.12), transparent 24%),
+    linear-gradient(180deg, rgba(8,20,45,0.14), rgba(7,15,31,0.34)) !important;
+}
+
+.app-shell:not(.staff-mode) .moon-yard {
+  border-color: rgba(151,206,255,0.22) !important;
+  background:
+    linear-gradient(180deg, rgba(2,12,31,0.04), rgba(0,0,0,0.12)),
+    url("assets/runtime/moon-workshop-bg.webp") center 46% / cover no-repeat !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.14),
+    inset 0 -30px 70px rgba(2,8,20,0.18),
+    0 16px 34px rgba(0,0,0,0.18) !important;
+}
+
+.app-shell:not(.staff-mode) .build-panel .panel-head {
+  left: 18px !important;
+  top: 14px !important;
+  width: auto !important;
+  min-width: 180px !important;
+  max-width: 248px !important;
+  padding: 9px 12px 10px !important;
+  display: inline-grid !important;
+  grid-template-columns: minmax(0, 1fr) !important;
+  gap: 0 !important;
+  border-radius: 18px !important;
+  border-color: rgba(255,255,255,0.16) !important;
+  background:
+    linear-gradient(135deg, rgba(5,14,32,0.62), rgba(27,58,96,0.36)) !important;
+  box-shadow:
+    0 12px 26px rgba(0,0,0,0.20),
+    inset 0 1px 0 rgba(255,255,255,0.14) !important;
+  backdrop-filter: blur(10px);
+  pointer-events: none;
+}
+
+.app-shell:not(.staff-mode) .build-panel .panel-head .eyebrow {
+  margin: 0 0 2px !important;
+  color: rgba(221,240,255,0.72) !important;
+  font-size: 11px !important;
+  line-height: 1 !important;
+}
+
+.app-shell:not(.staff-mode) .build-panel .panel-head h2 {
+  margin: 0 !important;
+  color: #fff !important;
+  font-size: clamp(26px, 2.4vw, 32px) !important;
+  line-height: 1.02 !important;
+  text-shadow:
+    0 3px 0 rgba(0,0,0,0.22),
+    0 0 16px var(--target-glow, rgba(240,100,73,0.18)) !important;
+}
+
+.app-shell:not(.staff-mode) .stage-chip {
+  display: none !important;
+}
+
+.app-shell:not(.staff-mode) .stage-note-orb,
+.app-shell:not(.staff-mode) .stage-energy-svg,
+.app-shell:not(.staff-mode) .stage-signal-trail {
+  display: none !important;
+}
+
+.app-shell:not(.staff-mode) .moon-yard::before {
+  background:
+    radial-gradient(circle at 50% 46%, rgba(255,255,255,0.08), transparent 27%),
+    radial-gradient(circle at 82% 28%, rgba(77,154,255,0.12), transparent 22%),
+    linear-gradient(90deg, rgba(2,8,20,0.20), transparent 24%, transparent 76%, rgba(2,8,20,0.22)) !important;
+}
+
+.app-shell:not(.staff-mode) .moon-yard::after {
+  opacity: 1 !important;
+}
+
+.app-shell:not(.staff-mode) .moon-yard.stage-result-correct::after {
+  animation: buildStageCorrectPulse 820ms ease;
+}
+
+.app-shell:not(.staff-mode) .moon-yard.stage-result-wrong {
+  animation: buildStageWrongNudge 460ms ease;
+}
+
+.app-shell:not(.staff-mode) .hanging-part,
+.app-shell:not(.staff-mode) .flying-part {
+  top: 33% !important;
+  width: 116px !important;
+  min-height: 108px !important;
+}
+
+.app-shell:not(.staff-mode) .hanging-part.drop-hint {
+  animation: partHoverReady 1.45s ease-in-out infinite !important;
+}
+
+.app-shell:not(.staff-mode) .flying-part {
+  animation: partInstallArc 720ms cubic-bezier(.2,.82,.22,1) forwards !important;
+}
+
+.app-shell:not(.staff-mode) .hanging-part-art,
+.app-shell:not(.staff-mode) .flying-part-art {
+  height: 66px !important;
+}
+
+.app-shell:not(.staff-mode) .coach-overlay {
+  right: 24px !important;
+  bottom: 22px !important;
+  width: 102px !important;
+  min-height: 102px !important;
+  z-index: 12 !important;
+}
+
+.app-shell:not(.staff-mode) .coach-bubble {
+  right: 78% !important;
+  top: -6px !important;
+  min-width: 124px !important;
+  max-width: 172px !important;
+  padding: 8px 12px 10px !important;
+  border-width: 2px !important;
+  border-radius: 20px 20px 8px 20px !important;
+}
+
+.app-shell:not(.staff-mode) .coach-bubble small {
+  font-size: 10px !important;
+  line-height: 1 !important;
+}
+
+.app-shell:not(.staff-mode) .coach-bubble strong {
+  font-size: 34px !important;
+  line-height: 0.92 !important;
+}
+
+.app-shell:not(.staff-mode) .coach-bubble span {
+  font-size: 12px !important;
+  line-height: 1.02 !important;
+  white-space: normal !important;
+}
+
+.app-shell:not(.staff-mode) .stage-input-toast {
+  left: auto !important;
+  right: 120px !important;
+  top: auto !important;
+  bottom: 92px !important;
+  min-width: 190px !important;
+  max-width: 260px !important;
+  min-height: 58px !important;
+  grid-template-columns: 46px minmax(0, 1fr) !important;
+  gap: 9px !important;
+  padding: 9px 12px 9px 9px !important;
+  border-radius: 19px 19px 7px 19px !important;
+  transform: translateY(8px) scale(0.94) !important;
+  animation: playToastIn 220ms cubic-bezier(.18,.9,.2,1.1) forwards !important;
+}
+
+.app-shell:not(.staff-mode) .stage-input-toast.is-leaving {
+  animation: playToastOut 220ms ease forwards !important;
+}
+
+.app-shell:not(.staff-mode) .toast-note {
+  width: 44px !important;
+  height: 44px !important;
+  border-radius: 15px !important;
+  font-size: 20px !important;
+}
+
+.app-shell:not(.staff-mode) .toast-copy strong {
+  font-size: 19px !important;
+}
+
+.app-shell:not(.staff-mode) .toast-copy small {
+  font-size: 12px !important;
+}
+
+.app-shell:not(.staff-mode) .build-pad {
+  min-width: 190px !important;
+  min-height: 36px !important;
+  padding: 0 !important;
+  color: transparent !important;
+  font-size: 0 !important;
+  text-shadow: none !important;
+}
+
+.app-shell:not(.staff-mode) .build-pad::before {
+  content: "" !important;
+}
+
+.app-shell:not(.staff-mode) .build-pad::after {
+  content: "" !important;
+}
+
+.app-shell:not(.staff-mode) .build-pad {
+  animation: platformReadyFloat 1.8s ease-in-out infinite;
+}
+
+.app-shell:not(.staff-mode) .keyboard-panel {
+  grid-template-rows: minmax(0, 1fr) !important;
+}
+
+.app-shell:not(.staff-mode) .status-row,
+.app-shell:not(.staff-mode) .input-tools {
+  display: none !important;
+}
+
+@keyframes buildStageCorrectPulse {
+  0% { transform: scale(1); filter: brightness(1); }
+  38% { transform: scale(1.045); filter: brightness(1.22) saturate(1.08); }
+  100% { transform: scale(1); filter: brightness(1); }
+}
+
+@keyframes buildStageWrongNudge {
+  0%, 100% { transform: translateX(0); }
+  24% { transform: translateX(-5px); }
+  52% { transform: translateX(5px); }
+  76% { transform: translateX(-2px); }
+}
+
+@keyframes partHoverReady {
+  0%, 100% { transform: translate(-50%, -50%) translateY(0) rotate(-1deg); }
+  50% { transform: translate(-50%, -50%) translateY(-8px) rotate(1deg); }
+}
+
+@keyframes partInstallArc {
+  0% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(0.92) rotate(-3deg);
+  }
+  52% {
+    opacity: 1;
+    transform: translate(-50%, 30%) scale(0.82) rotate(4deg);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, 78%) scale(0.58) rotate(0deg);
+  }
+}
+
+@keyframes platformReadyFloat {
+  0%, 100% { transform: translateX(-50%) scaleX(1); }
+  50% { transform: translateX(-50%) scaleX(1.04); }
+}
+
+@keyframes playToastIn {
+  from { opacity: 0; transform: translateY(12px) scale(0.92); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@keyframes playToastOut {
+  from { opacity: 1; transform: translateY(0) scale(1); }
+  to { opacity: 0; transform: translateY(10px) scale(0.94); }
+}
+
+@media (max-width: 1180px) and (max-height: 820px) {
+  .app-shell:not(.staff-mode) .build-panel .panel-head {
+    max-width: 226px !important;
+    padding: 8px 11px 9px !important;
+  }
+
+  .app-shell:not(.staff-mode) .build-panel .panel-head h2 {
+    font-size: 28px !important;
+  }
+
+  .app-shell:not(.staff-mode) .coach-overlay {
+    width: 96px !important;
+    min-height: 96px !important;
+  }
+
+  .app-shell:not(.staff-mode) .coach-bubble {
+    min-width: 118px !important;
+    max-width: 162px !important;
+  }
+}
