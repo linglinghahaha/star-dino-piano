@@ -100,7 +100,7 @@ try {
     try {
       await openLevel("M01");
       const m01 = await readScene();
-      record(`${viewport.id}: runs the 340c shell`, m01.version.includes("overhaul-340c"), m01);
+      record(`${viewport.id}: runs the 341a shell`, m01.version.includes("overhaul-341a"), m01);
 
       for (const levelId of nonBlueprintLevels) {
         if (levelId !== "M01") await openLevel(levelId);
