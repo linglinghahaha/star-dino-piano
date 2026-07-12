@@ -47,6 +47,8 @@ These files define the product direction so implementation does not drift:
 - `41_LS04_SUPERVISOR_ACCEPTANCE_CHECKLIST.md`: supervisor-only independent acceptance checklist for the first Chapter 3 hidden Do/Re listening slice; it separates runtime, no-leak, evidence, pacing, media-coordinate, and external-proof decisions.
 - `42_LS04_AUDIO_SUPERVISOR_ACCEPTANCE_CHECKLIST.md`: supervisor-only offline audio acceptance checklist for LS04 C4/D4 A/B review, ducking, pitch-risk, provenance, runtime boundaries, and remaining human/iPad listening evidence.
 - `43_LS05_SUPERVISOR_ACCEPTANCE_CHECKLIST.md`: supervisor-only acceptance checklist for the next C/D/E hidden-listening slice, including 2/2/1 sequencing, candidate coverage, first-response scoring, non-leaking flower progress, bounded repair, and LS05-specific coordinate evidence.
+- `44_LS06_LS07_SUPERVISOR_ACCEPTANCE_CHECKLIST.md`: locked supervisor draft for the later C/G large-distance and E/F adjacent-boundary listening milestones; it defines separate natural rests, visible guide versus hidden check, per-call evidence, no-position-answer rules, and independent contracts, but does not unlock runtime work before LS05 passes.
+- `45_LS08_SUPERVISOR_ACCEPTANCE_CHECKLIST.md`: locked supervisor draft for the later two-note-order milestone; it defines the unscored C-D guide, four fixed check pairs, discrete C-C onsets, whole-pair replay, free timing, the unscored low-echo chapter exit, and the gates that must pass before implementation is authorized.
 
 When changing the app, check the relevant document first. If a requested feature conflicts with the north star, update the plan deliberately rather than letting the product drift.
 
