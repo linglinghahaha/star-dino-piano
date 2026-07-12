@@ -8,7 +8,7 @@ This is the canonical chapter order. Other planning files must use the same numb
 | --- | --- | --- | --- |
 | 1 | 月亮小家 | middle `C4-G4` note identity and keyboard geography | current Web course |
 | 2 | 星星桥 | treble-staff `C4-G4` reading through physical jump pads | current flagship slice |
-| 3 | 会听的小种子 | guided pitch echo, small-set sound-to-key matching, and two-note aural memory | `M03` seed implemented; `LS01-LS08` specified, not implemented |
+| 3 | 会听的小种子 | guided pitch echo, small-set sound-to-key matching, and two-note aural memory | `LS01-LS04` browser implemented; `LS05` active; `LS06-LS08` specified |
 | 4 | 咚咚的低音星球 | high/low contrast, low `C3-G3`, bass staff, left-hand readiness | curriculum specified; not implemented |
 | 5 | 会唱歌的大家园 | hand alternation, simple two-hand coordination, grand staff | curriculum specified; not implemented |
 
@@ -177,13 +177,13 @@ Entry conditions:
 | Level | Child-facing mission | New teaching job | Playable sound task | Story consequence | Cue fade / check |
 | --- | --- | --- | --- | --- | --- |
 | `LS01` | 第一颗会唱种子 | visible sound-to-key echo with known Do | see/hear `C4`, then echo `C4` on the keyboard | the first seed opens one leaf | show Do/key home before the first call; no stable claim |
-| `LS02` | Re 的小芽伸懒腰 | transfer the echo loop to Re | see/hear `D4`, then echo `D4` | a curled stem stretches toward the middle of the two-black group | repeat visible model once after wrong input |
-| `LS03` | Mi 点亮第三片叶 | transfer the echo loop to Mi | see/hear `E4`, then echo `E4` | the third leaf catches a small star light | fade the direct key glow on the second echo |
-| `LS04` | Do 和 Re 找朋友 | discriminate within a two-note known set | hear `C4` or `D4` after one visible Do reference; press the heard key in 4 short calls | two seed pods turn toward their matching flowers | no note name or target glow before each check call; replay remains available |
+| `LS02` | D 的小芽伸懒腰 | transfer the echo loop to Re | see/hear `D4`, then echo `D4` | a curled stem stretches toward the middle of the two-black group | repeat visible model once after wrong input |
+| `LS03` | E 点亮第三片叶 | transfer the echo loop to Mi | see/hear `E4`, then echo `E4` | the third leaf catches a small star light | fade the direct key glow on the second echo |
+| `LS04` | C 和 D 找朋友 | discriminate within a two-note known set | hear `C4` or `D4` after one visible Do reference; press the heard key in 4 short calls | two seed pods turn toward their matching flowers | no note name or target glow before each check call; replay remains available |
 | `LS05` | 花粉铃叫醒三朵花 | expand the known set without adding rhythm | hear one of `C4/D4/E4` after a visible C anchor whose solfege is spoken only by Xingya; press the heard key in 5 calls | the pollen bell is the only pre-response sound source; three flowers stay in fixed arc positions and the scored flower responds only after the answer, then all three reset while a neutral pollen ring records progress; all three open together at the end | replay always remains available; stable requires one fresh five-call run with at least 4 of 5, at least one unassisted correct for each of C/D/E, and at most one child-requested replay; a visual accessibility completion can finish the story but cannot create listening correct/stable evidence |
 | `LS06` | 远远的回声藤 | hear a large contrast before a close contrast | compare/match `C4` and `G4` in 4 calls | a vine reaches across two distant garden stones | first call may show both homes; check uses sound plus stable keyboard geography |
-| `LS07` | 挨着睡的 Mi 和 Fa | discriminate adjacent known keys | compare/match `E4` and `F4` in 4 calls | two tangled flowers separate at the two-black/three-black boundary | wrong input reveals only the E/F boundary map; check target is 3 of 4 |
-| `LS08` | 根须记两声 | first two-note aural memory within C-D-E | echo 4 short pairs from `C4-D4`, `E4-D4`, `C4-C4`, `D4-E4` | roots light in the played direction; after completion, a non-scored `C4 -> C3` low echo travels underground | separate notes may be replayed in guided practice; a stable check allows only whole-pair replay and at most one child-requested replay; target is 3 of 4 pairs; C3 is story exposure only |
+| `LS07` | 挨着睡的 E 和 F | discriminate adjacent known keys | compare/match `E4` and `F4` in 4 calls | two tangled flowers separate at the two-black/three-black boundary | wrong input reveals only the E/F boundary map; check target is 3 of 4 |
+| `LS08` | 根须记两声 | first two-note aural memory within C-D-E | first echo one visible, unscored `C4-D4` guide pair, then answer 4 hidden pairs from `C4-D4`, `E4-D4`, `C4-C4`, `D4-E4` | the guide grows one neutral root bud; scored pairs add neutral root knots, and after story completion an unscored `C4 -> C3` low echo travels underground | enter the four-pair check in the same session only after a smooth guide; otherwise rest and defer it. Stable requires the first complete child response to at least 3 of 4 pairs in one session, no separate-note replay, and at most one child-requested whole-pair replay; resumed fragments finish story only; C3 is story exposure only |
 
 Chapter 3 guardrails:
 
@@ -197,6 +197,7 @@ Chapter 3 guardrails:
 - LS08 introduces no new rhythm notation. It tests order memory in free time; the final low C3 is an unscored story event and cannot create low-register mastery.
 - Any random call list is constrained and balanced: LS04/LS06/LS07 present each candidate twice, LS05 includes all three notes in a 2/2/1 distribution, and LS08 presents each fixed pair once. The session seed may change order, but cannot make frequency, candidate-specific permanent progress, or a repeated animation the answer.
 - LS05 repair state is call-local: a new call resets `wrongCount`, `repairStage`, and the temporary comparison pair while cumulative evidence remains. A modeled or fatigue rest preserves the neutral pollen progress and remaining seeded calls; the next explicit map start may finish those remaining story calls, but evidence split across sessions cannot be combined into a fresh five-call stable pass.
+- LS08's visible guide pair is unscored and outside the four-pair check. A smooth guide may flow into one check in the same session; repeated error, strong help, modeled completion, long wait, or fatigue ends at the guide root bud and defers the check. If a check is later interrupted and resumed across sessions, remaining pairs may finish the root story but cannot combine into stable.
 
 Chapter 3 stable evidence:
 
@@ -205,14 +206,14 @@ Chapter 3 stable evidence:
 - LS04 succeeds on at least 3 of 4 C/D calls without target reveal;
 - LS05 succeeds on at least 4 of 5 C/D/E calls, includes at least one unassisted correct response for each of C, D, and E, and uses at most one child-requested replay;
 - LS06 and LS07 each succeed on at least 3 of 4 comparisons without color/character as the answer;
-- LS08 repeats at least 3 of 4 two-note pairs in order; a qualifying stable check uses no separate-note replay and at most one child-requested whole-pair replay. Additional replay still preserves the story reward but records played/needs-practice rather than stable.
+- LS08 repeats at least 3 of 4 two-note pairs in order in one complete check session; each pair is judged from the first complete two-input child response, so wrong-then-repaired pairs do not backfill qualifying correct. A stable check uses no separate-note replay and at most one child-requested whole-pair replay. Additional replay or cross-session continuation still preserves the story reward but records played/needs-practice rather than stable.
 
 Remediation:
 
 - cannot match one visible model: keep the target key visible, let the child hear target and pressed key alternately, then retry once;
 - confuses C/D/E: return from LS05 to the relevant two-note pair instead of widening the set;
 - confuses E/F: show the two-black-right versus three-black-left boundary and let both keys be auditioned;
-- loses the second note in LS08: shorten to one pair, show two empty sound slots, and keep free timing;
+- loses the second note in LS08: keep the first correct response visible only inside the current repair, replay the whole pair, and keep free timing; if the first note was wrong, restart that pair without treating the later repair as qualifying correct;
 - microphone uncertain/noisy: show `没听清` without a wrong mark and keep touch available;
 - reacts to the final low echo incorrectly: no correction is needed because it is a story reveal, not an assessed target.
 

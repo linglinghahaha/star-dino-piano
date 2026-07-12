@@ -261,13 +261,13 @@ The exact sound tasks, thresholds, and input rules are canonical in `03_CONTENT_
 | ID | Cute title | Visible problem | Correct world change | Reason for the next level |
 | --- | --- | --- | --- | --- |
 | LS01 | 第一颗会唱种子 | one closed seed quietly sings visible Do | the echoed Do opens its first leaf | a second curled stem sings from another key home |
-| LS02 | Re 的小芽伸懒腰 | the middle stem cannot uncurl | echoed Re stretches it toward the middle of the two-black group | a third leaf catches a new sound on the right |
-| LS03 | Mi 点亮第三片叶 | the third leaf has no star light | echoed Mi catches one small light | the first two seeds now sing without showing which one called |
-| LS04 | Do 和 Re 找朋友 | two seed pods face the wrong flowers while a neutral echo core gives the hidden call | C/D sound matching turns each pod toward its partner after the response | a third flower joins the round |
+| LS02 | D 的小芽伸懒腰 | the middle stem cannot uncurl | echoed Re stretches it toward the middle of the two-black group | a third leaf catches a new sound on the right |
+| LS03 | E 点亮第三片叶 | the third leaf has no star light | echoed Mi catches one small light | the first two seeds now sing without showing which one called |
+| LS04 | C 和 D 找朋友 | two seed pods face the wrong flowers while a neutral echo core gives the hidden call | C/D sound matching turns each pod toward its partner after the response | a third flower joins the round |
 | LS05 | 花粉铃叫醒三朵花 | a central pollen bell is the only pre-response source and plays one of three known sounds while all flowers wait still | after scoring, the matching flower opens briefly and resets; a neutral pollen ring records five steps, then all three flowers open together | one vine must reach a flower much farther away |
 | LS06 | 远远的回声藤 | a vine cannot cross two distant stones; a central echo stone gives the call without left/right or near/far motion | C/G comparison grows a long safe arc after the response | two neighboring flowers are still tangled at one key boundary |
-| LS07 | 挨着睡的 Mi 和 Fa | E/F flowers lean into each other while one neutral dew drop gives the call | adjacent-sound comparison separates their stems after the response | the opened flowers blink a two-sound message to Xingya |
-| LS08 | 根须记两声 | the garden roots cannot remember the two-light message; a neutral central source plays two unlabeled piano tones while Xingya uses one invariant listening gesture | four fixed C-D-E echo pairs light roots only after the child's response | after the full set or bounded shared completion, an unscored low C echo travels underground and the ground answers |
+| LS07 | 挨着睡的 E 和 F | E/F flowers lean into each other while one neutral dew drop gives the call | adjacent-sound comparison separates their stems after the response | the opened flowers blink a two-sound message to Xingya |
+| LS08 | 根须记两声 | the garden roots cannot remember the two-light message; a neutral central source first models one unscored pair, then plays hidden pairs while Xingya uses one invariant listening gesture | the guide grows one neutral bud; four fixed C-D-E check pairs add neutral root knots only after the child's response | after the full set or bounded shared completion, an unscored low C echo travels underground and the ground answers |
 
 ## Future Chapter 4 Level Beats
 

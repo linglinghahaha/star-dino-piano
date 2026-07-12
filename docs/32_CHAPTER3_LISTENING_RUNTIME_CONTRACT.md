@@ -30,6 +30,7 @@
 - 触屏键盘是完整核心路线。MIDI 和麦克风只能增加输入方式，不能成为通关前提。
 - 孩子端不显示正确率、倒计时、速度排名、stable、retained、考试失败或退步。
 - 家长端必须按当前 Chapter 3 action 区分：LS01-LS03 是“可见提示下玩过、不计稳定”；LS04-LS08 是小集合听辨，显示真实 played/stable/retained/needsPractice 和输入/重听/混淆证据。LS04 期间及完成后的地图休息态不能继续显示“C-D-E 三片叶/不计稳定”，也不能称绝对音感。
+- LS05 家长证据显示 C/D/E 候选覆盖、主动重听和主要混淆；LS06 只描述 C/G 大距离声音比较，不称高低音或音区掌握；LS07 同时区分 E/F 声音比较与键盘边界帮助；LS08 只描述两个声音的先后记忆、整组重听和离散起音，不称节奏、低 C、低音谱表或双手能力。
 - 颜色、角色位置、植物动作、声源位置和故事物件都不能在孩子作答前指向正确答案。
 
 ## 二、第三章进入过场与装备连续性
@@ -126,13 +127,17 @@ S01 的自然停点先落在地图上的花园入口，不在上一关完成瞬�
 | `LS05` | 每组开始前一次 C4 参照 | 5 次 C4/D4/E4 | 三音都出现；两个音各出现 2 次、一个音 1 次，重复角色跨 session 轮换；同音不得连续超过 2 次 | 完成或温和修复 | 至少 4/5，C/D/E 各至少 1 次无强提示正确，最多 1 次孩子主动重听，无提前揭示 |
 | `LS06` | 第一次可同时看见 C/G 两个键位家 | 4 次 C4/G4 | C、G 各 2 次；声像始终居中 | 完成或温和修复 | 至少 3/4，无方向/距离动画答案 |
 | `LS07` | 第一次可同时看见 E/F 边界 | 4 次 E4/F4 | E、F 各 2 次 | 完成或温和修复 | 至少 3/4，无角色/颜色答案 |
-| `LS08` | 带路练习可分开重听 | 4 组：C-D、E-D、C-C、D-E，各一次 | 四组都出现；顺序由受约束 seed 决定 | 完成或温和修复 | 至少 3/4 整组顺序正确；自由速度；无分音重听，整轮最多 1 次孩子主动整组重听 |
+| `LS08` | 1 组可见、不计分的 C-D 带路回声，可分开重听 | 4 组：C-D、E-D、C-C、D-E，各一次 | 四组都出现；顺序由受约束 seed 决定 | 完成或温和修复 | 同一 check session 内第一次完整回答至少 3/4 整组顺序正确；自由速度；无分音重听，整轮最多 1 次孩子主动整组重听；跨 session 片段不授予 stable |
 
 `LS05` 的“一次主动重听”只影响 stable，不影响故事奖励；即使总数达到 4/5，只要 C/D/E 中任一音没有至少一次无强提示正确，也只能记录 played/needsPractice，不能写 stable。`LS08` 带路练习可以分音重听；少提示检查不得分音重听，孩子主动整组重听超过一次则只记 played/needsPractice，不写 stable。等待系统自动重放、麦克风 uncertain 或无障碍重复播报不得偷偷计为孩子错误；应分开记录来源。
 
 LS05 的 `wrongCount`、`repairStage` 和当前混淆对只属于当前呼叫。进入下一呼叫时这些临时修复字段必须清零，上一题的错误不能让下一题直接进入 assisted；整轮的错音、混淆对计数、重听和输入路线另行累计，供家长证据和后续补教使用。
 
 LS05 因 modeled success、长等待或疲劳到达安全休息时，保留已完成的中性花粉格、原 seeded 序列、当前/剩余呼叫和真实 evidence，并结束当前 session。下一次只能由地图上的明确手势创建 `resumeOfSessionId`，继续同一故事序列中尚未完成的呼叫；不得重做已完成呼叫，也不得因 resume 改变 2/2/1 分布。跨 session 的片段可以共同完成故事，但永远不能拼接成一次 qualifying stable；stable 只能来自后来一次从头开始、同一 session 内完成的全新五呼叫正式运行。
+
+LS08 的可见 C-D 带路回声不计入四组 check。带路顺利时，同一 session 最多自动进入一次四组少提示 check；若带路阶段出现 repeated repair、strong/assisted、modeled、长等待或疲劳，则在一个中性根芽处自然休息，下一次明确手势创建新 session 并从完整四组 check 开始。进入 check 后，地图暂停或刷新可保留同一 session、当前 pair、已收到的第一音和 evidence；若因 modeled/fatigue 结束 session 后只续剩余 pair，跨 session 片段只能完成故事，不能授予 stable。
+
+LS08 每组 qualifying 结果只取第一次完整的两个离散孩子输入；若第一音已错，该组立即失去 qualifying correct，若第一音正确而第二音错误/超时，当前 repair 可以暂存第一音并重放整组，但后续修对同样不能回填。`C-C` 仍必须收到两个离散起音。四组检查中的中性根结不记录音高、方向或 pair 身份。
 
 LS04-LS07 的 `correctCount` 按每次呼叫的第一次有效孩子作答计数。第一次答错后，即使孩子在温和比较或重听后自行修对，该呼叫仍完成故事但不回填为 qualifying correct；否则反复试到正确会把 `3/4` 或 `4/5` 门槛变成虚设。修复后的正确输入、错音和提示仍完整进入 evidence，不能丢失。
 
@@ -143,6 +148,7 @@ LS04-LS07 的 `correctCount` 按每次呼叫的第一次有效孩子作答计数
 - 第三次进入 assisted retry：出现一个候选边界图和正确键短脉冲，标记 strong cue。
 - 第四次仍错或辅助等待超时：执行 modeled success。模型输入必须进入 `modeledInputs`，不能进入 `correctCount`、`firstTry`、touch/MIDI/mic `inputRoutes`。
 - 多呼叫关卡在 modeled success 后不需要伪造剩余全部正确。保留已经打开的花/藤/根，做一个“今天先照顾到这里”的故事安全停点并回地图。
+- LS08 的带路阶段若需要 strong/modeled，直接在中性根芽休息，不自动进入 check；check 中错后修对只推进当前根结，不回填 pair correct。
 - 下一 session 的 opening review 优先返回具体混淆对，而不是重新强迫完整五题。
 
 ## 八、输入路线合同
@@ -248,10 +254,10 @@ LS04-LS07 的 `correctCount` 按每次呼叫的第一次有效孩子作答计数
 
 1. `LS01-LS08` 触屏完整流程、正确、错误、repair、completion、rest。
 2. 每个隐藏呼叫在目标播放和等待回答时，可见 DOM 与 accessibility tree 中都无目标名字、目标颜色、目标 locator、目标植物 active class 或目标专属动画；重听控件名称保持中性。
-3. LS04/06/07 的 4 次序列各候选恰好出现 2 次；LS05 三音都出现且满足 2/2/1；LS04-LS07 的 qualifying correct 只取每次呼叫第一次有效作答，错后修对不回填；LS05 还要验证 4/5 但单次候选答错时不得 stable、4/5 且 C/D/E 各至少一次无强提示正确时才可 stable；LS08 四组各一次。
+3. LS04/06/07 的 4 次序列各候选恰好出现 2 次；LS05 三音都出现且满足 2/2/1；LS04-LS07 的 qualifying correct 只取每次呼叫第一次有效作答，错后修对不回填；LS05 还要验证 4/5 但单次候选答错时不得 stable、4/5 且 C/D/E 各至少一次无强提示正确时才可 stable；LS08 的可见 guide 不计分，四组 check 各一次，每组只取第一次完整两输入，错后修对和跨 session 片段不得回填 stable。
 4. 从一个呼叫进入下一个呼叫时，候选物件恢复同态；持久进度 DOM/画面不暴露已出现目标、剩余频次或下一答案。音符专属反馈只允许出现在上一呼叫已经评分之后。
 5. 目标声播放期间的过早输入不算 wrong/correct；响应窗口打开后输入才评分。
-6. 主动重听、系统重放和麦克风 uncertain 分开统计；LS08 的 guided 分音重听、check 整组重听和稳定资格上限分别验证。
+6. 主动重听、系统重放和麦克风 uncertain 分开统计；LS08 的 guide 分音重听、check 整组重听和稳定资格上限分别验证；guide 出现 repeated help 时不自动开始 check。
 7. wrong-known 先识别孩子音，再重放目标和相关边界；下一题答案保持隐藏。
 8. 连续 repair 最终有界 modeled success，且不污染 child correct、firstTry、inputRoutes、stable、retained。
 9. C3-01 到 C3-07 的自然停点停止 autoplay；没有关闭/下一关弹层。
@@ -276,6 +282,8 @@ LS04-LS07 的 `correctCount` 按每次呼叫的第一次有效孩子作答计数
 28. 家长面板在 LS04 活动和完成后的地图休息态显示 `C/D 小音组听后找键` 及真实 played/stable/retained/needsPractice；不能复用 LS01-LS03 的“可见练习/不计稳定”文案，也不能回退显示旧月球关卡。
 29. LS05 每个新呼叫重置 call-local repair，modeled/疲劳休息后通过新 session 续做同一 seeded 序列的剩余呼叫；跨 session 片段只完成故事，不能合并授予 stable。
 30. LS05 的听力辅助 visual-assist 可完成故事但只写 observation/played/needsPractice；可见模型、无声输入或 accessibility completion 不得进入 listening correct/stable/retained。
+31. LS08 的可见 guide 不计分；guide 需要 repeated help 时不自动进入 check。check 每组只取第一次完整双输入，错后修对和跨 session 续做只推进故事，不回填 stable。
+32. LS05-LS08 家长摘要使用各自真实技能名称和证据字段，不把 C/G 写成音区掌握、不把 E/F 键位帮助写成听辨成功、不把 LS08 或末尾 C3 故事音写成节奏/低音能力。
 
 建议新增独立脚本而不是把所有断言塞入旧测试：
 
