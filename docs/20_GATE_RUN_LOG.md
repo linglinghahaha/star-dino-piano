@@ -2,6 +2,40 @@
 
 This file records concrete pass/fail evidence for UI, teaching, and polish gates. It is not a substitute for the acceptance rules in `15_ACCEPTANCE_GATES.md`; it is the evidence trail.
 
+## 2026-07-12 - Overhaul 341a C3-04 / LS05 Listening Slice
+
+Scope: LS05 only. LS06-LS08, approved media, the LS01-LS04 teaching sequence, Chapter 1/2 mastery semantics and the global visual architecture remain unchanged.
+
+Runtime and teaching evidence:
+
+- An explicit map click creates the sole formal `C3-04` session. Every new or resumed session starts with one visible/audible unscored C4 reference; same-session map pause and refresh preserve the current call without replaying the reference.
+- Each seeded round persists five hidden C4/D4/E4 calls with a strict `2/2/1` quota, all three candidates present and no run longer than two. Three fixed seeds rotate the singleton across C, D and E.
+- Target playback is non-scoring. The focused test atomically injects an early input during actual `target-playing` and proves that only `earlyInputs` changes; call index, correct/wrong totals and scored calls remain unchanged. A later explicit replay from `awaiting-response` increments child replay once without changing those scoring fields.
+- Wrong repair preserves the child's actual MIDI pitch, uses neutral sorted pair comparison for valid C/D/E confusions, routes black-key and wrong-octave repeats to candidate-outside strong repair, and performs one target demonstration before modeled safe rest on the fourth error.
+- Pair-compare, assisted, visual-assist and pending modeled transitions survive map pause and refresh. Modeled rest creates a new session for remaining calls, replays the C reference, preserves old call records under their original session IDs and cannot combine fragments into stable.
+- Per-call records include level/session/bundle IDs, candidates, first valid input and route, qualifying correctness, local replay counts, reveal/strong/modeled/visual/microphone flags, response time and `timingUsedForMastery=false`.
+- Stable requires at least 4/5 first-response correct, eligible C/D/E coverage, at most one successful child replay, and no strong, modeled, visual-assist, experimental microphone or crossed-session evidence. The same session never grants retained; `chapter3.completed` remains false.
+- Sound disabled, volume zero and AudioContext failure remain non-scoring and recover on the same seed/call. Failed replay does not consume the child replay allowance.
+- Correct feedback reconnects D/E to Re/Mi only in the dinosaur bubble. All ordinary child surfaces remain letter-only, and the next hidden call clears the old identity. Feedback states hide the visual-assist control.
+- The parent panel reports first-response evidence, C/D/E coverage, child/system replay, confusion, strong/modeled/microphone/visual-assist and truthful partial-rest practice need without claiming absolute pitch.
+
+Focused and shared gates:
+
+- `check:chapter3-ls05`: `65/65`; the supervisor also reported three consecutive `65/65` runs after the atomic early-input and explicit replay correction.
+- `check:chapter3-ls04`: `39/39`; `check:chapter3-visible`: `74/74`; `check:child-note-names`: `160/160`; PWA: `7/7`.
+- Sessions `72/72`; clean-state `124/124`; M03/garden `32/32`; 339d continuity `14/14`; input `12/12`; audio settings `13/13`; iPad accessibility `43/43`; motion `19/19`; palette `17/17`; contrast `9/9`; Xingya suit `23/23`.
+- Generic teaching-zone regression: six viewports, zero failures and zero browser errors; temporary internal SHA-256 `d633ed61116bff92a4edc3e423c08998eb121b14e0166b9f0ed981d063e6cc03`. Historical 340D contract files were not overwritten.
+- `check:quick` and `check:bundle:strict` passed; strict bundle remains 41 files and 1,641,265 runtime-asset bytes.
+
+LS05 coordinate and screenshot evidence:
+
+- Contract ID `chapter3-ls05-media-zones-overhaul-341a-v1`, baseline `overhaul-341a`, six landscape browser viewports and 11 required states: `garden-entry`, `reference`, `target-playing`, `awaiting-response`, `sound-paused`, `visual-assist`, `wrong-known`, `pair-compare`, `assisted-retry`, `complete`, `reduced-motion`.
+- Three consecutive complete runs produced internal SHA-256 `8dbadee17186763ab78269222362700ff174a7803e400ebb4df5ab7355a0a65f`; final committed JSON file SHA-256 `A4684E42E60377AA4911CCB502545C57701B14F1F4103893E61674AA02C8AC8F`; all runs had zero failures.
+- `screenshots/chapter3_ls05_341a/ls05_reference_1024x768.png`, `ls05_waiting_1024x768.png`, `ls05_wrong_1024x768.png`, `ls05_pair_1024x768.png`, `ls05_assisted_1024x768.png`, `ls05_visual_assist_1194x834.png`, `ls05_visual_assist_feedback_1194x834.png`, `ls05_complete_1366x1024.png` and `ls05_parent_1366x1024.png` are original-size browser evidence.
+- Manual review confirms the visual-assist capture is the real pre-answer phase, feedback has no stale help button, pair cards are equal, assisted and persistent visual-assist are visibly distinct, and all five complete pollen cells have clear neutral filled centers.
+
+Status: browser runtime, evidence and coordinate contract `passed`. Physical iPad Safari, real MIDI hardware, acoustic-piano microphone input, child/teacher testing and external release/media clearance remain `missing`. `runtimeIntegrationAllowed=false`; LS06+ remain locked.
+
 ## 2026-07-12 - Overhaul 340d Chapter 3 Phase Capture V3
 
 Scope: evidence-only follow-up to `aaf0426`; runtime, CSS, curriculum, input, scoring, mastery, sound and media files are unchanged.

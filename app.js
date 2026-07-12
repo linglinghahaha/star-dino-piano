@@ -409,6 +409,8 @@ const CH3_ASSISTED_WAIT_MS = 5200;
 const CH3_LONG_WAIT_MS = 20000;
 const LS04_TARGET_PLAY_MS = 760;
 const LS04_ASSISTED_WAIT_MS = 5200;
+const LS05_TARGET_PLAY_MS = 760;
+const LS05_ASSISTED_WAIT_MS = 5200;
 const chapter3Lessons = {
   LS01: { id: "LS01", midi: 60, letter: "C", solfege: "Do", locator: "两黑键左侧", leaf: 1, prompt: "打开第一片叶" },
   LS02: { id: "LS02", midi: 62, letter: "D", solfege: "Re", locator: "两黑键中间", leaf: 2, prompt: "伸直第二片叶" },
@@ -504,6 +506,13 @@ const preschoolSessionBundles = [
     allowOpeningReview: false,
     actions: [
       { actionId: "LS04-listening", kind: "garden-listening", targetId: "LS04", runMode: "check", reviewableForMastery: true }
+    ]
+  },
+  {
+    bundleId: "C3-04",
+    allowOpeningReview: false,
+    actions: [
+      { actionId: "LS05-listening", kind: "garden-listening", targetId: "LS05", runMode: "check", reviewableForMastery: true }
     ]
   }
 ];
@@ -724,6 +733,7 @@ function loadSessionRuntime() {
       ? parsed.chapter3.lessonEvidence
       : {};
     const ls04Completed = Boolean(lessonEvidence.LS04?.completedAt);
+    const ls05Completed = Boolean(lessonEvidence.LS05?.completedAt);
     return {
       version: SESSION_RUNTIME_VERSION,
       active: parsed.active && parsed.active.status === "active" ? parsed.active : null,
@@ -739,8 +749,11 @@ function loadSessionRuntime() {
         ls03QualifiedInputs: Math.max(0, Math.min(2, Number(parsed.chapter3?.ls03QualifiedInputs) || 0)),
         completed: false,
         ls04Completed,
+        ls05Completed,
+        ls05PartialRest: parsed.chapter3?.ls05PartialRest && typeof parsed.chapter3.ls05PartialRest === "object" ? parsed.chapter3.ls05PartialRest : null,
         visibleSliceCompleted: Boolean(parsed.chapter3?.visibleSliceCompleted || parsed.chapter3?.completed || lessonEvidence.LS03?.completedAt),
-        ls04Attempts: Array.isArray(parsed.chapter3?.ls04Attempts) ? parsed.chapter3.ls04Attempts : []
+        ls04Attempts: Array.isArray(parsed.chapter3?.ls04Attempts) ? parsed.chapter3.ls04Attempts : [],
+        ls05Attempts: Array.isArray(parsed.chapter3?.ls05Attempts) ? parsed.chapter3.ls05Attempts : []
       }
     };
   } catch (error) {
@@ -749,7 +762,7 @@ function loadSessionRuntime() {
       active: null,
       history: [],
       lastRest: null,
-      chapter3: { entryEventId: CH3_ENTRY_AIR_CHECK, equipmentState: "sealed", airCheckComplete: false, leaves: [false, false, false], lessonEvidence: {}, resume: null, ls03QualifiedInputs: 0, completed: false, ls04Completed: false, visibleSliceCompleted: false, ls04Attempts: [] }
+      chapter3: { entryEventId: CH3_ENTRY_AIR_CHECK, equipmentState: "sealed", airCheckComplete: false, leaves: [false, false, false], lessonEvidence: {}, resume: null, ls03QualifiedInputs: 0, completed: false, ls04Completed: false, ls05Completed: false, ls05PartialRest: null, visibleSliceCompleted: false, ls04Attempts: [], ls05Attempts: [] }
     };
   }
 }
@@ -1001,7 +1014,9 @@ const state = {
   gardenAirTimer: null,
   gardenCompletionTimer: null,
   ls04Timer: null,
-  ls04FeedbackTimer: null
+  ls04FeedbackTimer: null,
+  ls05Timer: null,
+  ls05FeedbackTimer: null
 };
 
 function persistLearningStatsSchemaUpgrade() {
@@ -1025,7 +1040,7 @@ function persistSessionRuntimeSchemaUpgrade() {
     const parsed = JSON.parse(raw);
     const normalized = state.sessionRuntime;
     const staleChapterCompletion = Boolean(parsed.chapter3?.completed);
-    if (staleChapterCompletion || !Array.isArray(parsed.chapter3?.ls04Attempts) || !Object.hasOwn(parsed.chapter3 || {}, "visibleSliceCompleted") || !Object.hasOwn(parsed.chapter3 || {}, "ls04Completed")) {
+    if (staleChapterCompletion || !Array.isArray(parsed.chapter3?.ls04Attempts) || !Array.isArray(parsed.chapter3?.ls05Attempts) || !Object.hasOwn(parsed.chapter3 || {}, "visibleSliceCompleted") || !Object.hasOwn(parsed.chapter3 || {}, "ls04Completed") || !Object.hasOwn(parsed.chapter3 || {}, "ls05Completed") || !Object.hasOwn(parsed.chapter3 || {}, "ls05PartialRest")) {
       saveSessionRuntime(normalized);
     }
   } catch (error) {
@@ -1092,7 +1107,10 @@ const els = {
   gardenListening: document.querySelector("#gardenListening"),
   listeningSource: document.querySelector("#listeningSource"),
   listeningCandidates: document.querySelector("#listeningCandidates"),
+  ls05FlowerArc: document.querySelector("#ls05FlowerArc"),
+  ls05Compare: document.querySelector("#ls05Compare"),
   listeningReplay: document.querySelector("#listeningReplay"),
+  ls05VisualAssist: document.querySelector("#ls05VisualAssist"),
   listeningCallProgress: document.querySelector("#listeningCallProgress"),
   listeningResult: document.querySelector("#listeningResult"),
   mapReturn: document.querySelector("#mapReturn"),
@@ -1204,6 +1222,11 @@ function activePart(level = activeLevel()) {
 
 function noteForMidi(midi) {
   return notes.find((note) => note.midi === midi) || null;
+}
+
+function midiFrequency(midi) {
+  const normalized = Math.max(0, Math.min(127, Number(midi)));
+  return 440 * (2 ** ((normalized - 69) / 12));
 }
 
 function isMiniStaffSession() {
@@ -1423,6 +1446,17 @@ function formatResponseTime(milliseconds) {
 }
 
 function currentResponseRecordText() {
+  const listeningLevel = currentListeningParentLevel();
+  if (listeningLevel === "LS05") {
+    const active = currentListeningAction("LS05")?.listeningAttempt;
+    const stored = state.learningStats.levels.LS05?.lastAttempt;
+    const summary = active || stored;
+    if (!summary) return "本轮未按键 · 只记录不限时";
+    const correct = Number(summary.correctCount) || 0;
+    const calls = active?.neutralProgress ?? summary.scoredCalls?.length ?? (summary.completed ? 5 : 0);
+    const replays = Number(summary.replayCountChild) || 0;
+    return `首答 ${correct}/${Math.max(calls, active ? 5 : calls)} · 主动重听 ${replays} · 不限时`;
+  }
   const live = summarizeAttemptResponse();
   const stored = state.screen === "staff"
     ? state.learningStats.staff[staffCourse.id]?.lastResponse
@@ -2087,18 +2121,29 @@ function retainedEvidenceForSkill(skillKey) {
   return state.learningStats.retention.retainedEvents.some((event) => event.skillKey === skillKey);
 }
 
+function currentListeningParentLevel() {
+  const active = currentListeningAction();
+  if (active?.targetId === "LS05") return "LS05";
+  if (active?.targetId === "LS04") return "LS04";
+  if (state.screen !== "map") return null;
+  if (state.chapter3.lessonEvidence.LS05?.completedAt || state.chapter3.ls05Attempts?.length || state.chapter3.resume?.nextTargetId === "LS05") return "LS05";
+  if (state.chapter3.lessonEvidence.LS04?.completedAt || state.chapter3.ls04Attempts?.length) return "LS04";
+  return null;
+}
+
 function usesLs04ParentEvidence() {
-  if (currentListeningAction()) return true;
-  return state.screen === "map" && Boolean(
-    state.chapter3.lessonEvidence.LS04?.completedAt ||
-    state.chapter3.ls04Attempts?.length
-  );
+  return currentListeningParentLevel() === "LS04";
+}
+
+function usesLs05ParentEvidence() {
+  return currentListeningParentLevel() === "LS05";
 }
 
 function currentEvidenceState() {
-  if (usesLs04ParentEvidence()) {
-    const stored = state.learningStats.levels.LS04 || {};
-    const skillKey = evidenceSkillKey("level", "LS04");
+  const listeningLevel = currentListeningParentLevel();
+  if (listeningLevel) {
+    const stored = state.learningStats.levels[listeningLevel] || {};
+    const skillKey = evidenceSkillKey("level", listeningLevel);
     return {
       played: (Number(stored.completions) || 0) > 0,
       stable: (Number(stored.stableCompletions) || 0) > 0 || state.learningStats.retention.stableEvents.some((event) => event.skillKey === skillKey),
@@ -2106,7 +2151,10 @@ function currentEvidenceState() {
       todayNeedsPractice: stored.todayNeedsPractice === true && stored.todayNeedsPracticeDate === localDateKeyAt(),
       lastWrongCount: Number(stored.lastWrongCount) || 0,
       mini: false,
-      ls04: true
+      listening: true,
+      ls04: listeningLevel === "LS04",
+      ls05: listeningLevel === "LS05",
+      partialRest: listeningLevel === "LS05" ? state.chapter3.ls05PartialRest : null
     };
   }
   if (state.screen === "garden") {
@@ -2147,11 +2195,18 @@ function currentEvidenceState() {
 
 function currentMasterySummary() {
   const evidence = currentEvidenceState();
-  if (state.screen === "garden" && !evidence.ls04) {
+  if (state.screen === "garden" && !evidence.listening) {
     return {
       ...evidence,
       status: evidence.played ? "完成本片叶的可见练习" : "正在认识名称与键位",
       detail: "本切片只记录可见提示下的学习过程，不写入稳定或隔日保留。"
+    };
+  }
+  if (evidence.ls05 && evidence.partialRest) {
+    return {
+      ...evidence,
+      status: "本次做到这里",
+      detail: `花粉环保留 ${evidence.partialRest.neutralProgress || 0}/5；今天需要提示。历史稳定与隔日保留记录不会被删除。`
     };
   }
   if (evidence.retained) {
@@ -2285,6 +2340,20 @@ function routeToStaffRemediation(plan = staffRemediationPlan()) {
 }
 
 function currentLearningSummary() {
+  if (usesLs05ParentEvidence()) {
+    const active = currentListeningAction("LS05")?.listeningAttempt;
+    const resume = state.chapter3.resume?.nextTargetId === "LS05" ? state.chapter3.resume.ls05Attempt : null;
+    const last = state.learningStats.levels.LS05?.lastAttempt || state.chapter3.ls05Attempts?.[state.chapter3.ls05Attempts.length - 1] || {};
+    const evidence = active || resume || last;
+    const coverage = evidence.eligibleCoverage || {};
+    const coverageText = ["C", "D", "E"].filter((name) => coverage[name]).join("/") || "暂无";
+    const confusions = Object.entries(evidence.confusionCounts || {}).sort((a, b) => b[1] - a[1]);
+    const mainConfusion = confusions[0]?.[0]?.split("-").map((midi) => noteForMidi(Number(midi))?.name).filter(Boolean).join("/") || "暂无";
+    return {
+      focus: "C/D/E 小音组 · 听后找键",
+      detail: `C = Do，D = Re，E = Mi；首答 ${Number(evidence.correctCount) || 0}/5，覆盖 ${coverageText}，孩子主动重听 ${Number(evidence.replayCountChild) || 0}，系统重听 ${Number(evidence.replayCountSystem) || 0}，主要混淆 ${mainConfusion}；strong ${evidence.strongCueUsed ? "有" : "无"}，modeled ${evidence.modeled ? "有" : "无"}，麦克风 ${evidence.hasExperimentalInput ? "有" : "无"}，视觉帮助 ${evidence.accessibilityVisualAssist ? "有" : "无"}。这是小音组听后找键，不是绝对音感测试。`
+    };
+  }
   if (usesLs04ParentEvidence()) {
     return {
       focus: "C/D 小音组 · 听后找键",
@@ -2746,10 +2815,19 @@ function renderMapScreen() {
         : null;
       if (ls03Done) {
         const ls04Done = Boolean(state.chapter3.ls04Completed || state.chapter3.lessonEvidence.LS04?.completedAt);
-        const callCount = ls04Done ? 4 : Math.min(4, listeningAttempt?.scoredCalls?.length || 0);
-        const listeningState = ls04Done ? "休息" : (activeGarden ? "正在听" : "准备");
-        els.mapStarCount.textContent = `找朋友 ${callCount}/4 · ${listeningState}`;
-        els.mapStarCount.setAttribute("aria-label", `呼吸花园声音配对进度：四个声音已完成 ${callCount} 个，${listeningState}`);
+        const ls05Done = Boolean(state.chapter3.ls05Completed || state.chapter3.lessonEvidence.LS05?.completedAt);
+        if (!ls04Done) {
+          const callCount = Math.min(4, listeningAttempt?.scoredCalls?.length || 0);
+          const listeningState = activeGarden ? "正在听" : "准备";
+          els.mapStarCount.textContent = `找朋友 ${callCount}/4 · ${listeningState}`;
+          els.mapStarCount.setAttribute("aria-label", `呼吸花园声音配对进度：四个声音已完成 ${callCount} 个，${listeningState}`);
+        } else {
+          const lastLs05 = state.chapter3.resume?.ls05Attempt || state.chapter3.ls05Attempts?.[state.chapter3.ls05Attempts.length - 1];
+          const callCount = ls05Done ? 5 : Math.min(5, listeningAttempt?.neutralProgress ?? lastLs05?.neutralProgress ?? lastLs05?.scoredCalls?.length ?? 0);
+          const listeningState = ls05Done ? "休息" : (activeGarden ? "正在听" : (state.chapter3.resume?.nextTargetId === "LS05" ? "继续" : "准备"));
+          els.mapStarCount.textContent = `花粉环 ${callCount}/5 · ${listeningState}`;
+          els.mapStarCount.setAttribute("aria-label", `呼吸花园三音小集合进度：五个花粉格已完成 ${callCount} 个，${listeningState}`);
+        }
       } else {
         const gardenState = activeGarden ? "正在照顾" : (leafCount ? "休息" : "入口");
         els.mapStarCount.textContent = `嫩芽 ${leafCount}/3 · ${gardenState}`;
@@ -2763,7 +2841,7 @@ function renderMapScreen() {
   }
   if (els.gardenRestMarker) {
     els.gardenRestMarker.hidden = !gardenReached;
-    const chapter3Done = Boolean(state.chapter3.ls04Completed || state.chapter3.lessonEvidence.LS04?.completedAt);
+    const chapter3Done = Boolean(state.chapter3.ls05Completed || state.chapter3.lessonEvidence.LS05?.completedAt);
     const activeGarden = state.activeSession?.status === "active" && state.activeSession.bundleId.startsWith("C3-");
     const waitingResume = Boolean(state.chapter3.resume?.nextTargetId);
     const markerCopy = gardenMapMarkerCopy({ chapter3Done, activeGarden, leafCount: state.chapter3.leaves.filter(Boolean).length });
@@ -2825,10 +2903,10 @@ function renderMapScreen() {
 }
 
 function gardenMapMarkerCopy({ chapter3Done, activeGarden, leafCount }) {
-  if (chapter3Done) return { strong: "C/D 找朋友", small: "两边叶子握住啦" };
+  if (chapter3Done) return { strong: "三朵花", small: "花粉铃叫醒三朵花啦" };
   const activeTargetId = activeGarden ? currentSessionAction(state.activeSession)?.targetId : null;
   const resumeTargetId = state.chapter3.resume?.nextTargetId || null;
-  const targetId = activeTargetId || resumeTargetId || (state.chapter3.lessonEvidence.LS03?.completedAt ? "LS04" : (leafCount >= 2 ? "LS03" : (leafCount >= 1 ? "LS02" : null)));
+  const targetId = activeTargetId || resumeTargetId || (state.chapter3.lessonEvidence.LS04?.completedAt ? "LS05" : (state.chapter3.lessonEvidence.LS03?.completedAt ? "LS04" : (leafCount >= 2 ? "LS03" : (leafCount >= 1 ? "LS02" : null))));
   if (targetId === "LS01") return { strong: "第一片叶", small: "继续第一片叶" };
   if (targetId === "LS02") return { strong: "第二片叶", small: "继续第二片叶" };
   if (targetId === "LS03") {
@@ -2836,6 +2914,9 @@ function gardenMapMarkerCopy({ chapter3Done, activeGarden, leafCount }) {
   }
   if (targetId === "LS04") {
     return { strong: "C/D 找朋友", small: activeGarden ? "继续听声音" : "点这里听种核" };
+  }
+  if (targetId === "LS05") {
+    return { strong: "三朵花", small: activeGarden || resumeTargetId === "LS05" ? "继续花粉铃" : "点这里叫醒三朵花" };
   }
   return { strong: "花园入口", small: "点这里走进花园" };
 }
@@ -2977,7 +3058,7 @@ function renderParentPanel() {
     els.parentMasteryDetail.textContent = mastery.detail;
   }
   if (els.parentEvidenceList) {
-    const rows = state.screen === "garden" && !mastery.ls04
+    const rows = state.screen === "garden" && !mastery.listening
       ? [
         ["可见提示下练过", mastery.played],
         ["不计稳定", false],
@@ -2994,8 +3075,16 @@ function renderParentPanel() {
       .join("");
   }
   if (els.parentProgressText) {
-    if (usesLs04ParentEvidence()) {
-      const activeAttempt = currentListeningAction()?.listeningAttempt;
+    if (usesLs05ParentEvidence()) {
+      const activeAttempt = currentListeningAction("LS05")?.listeningAttempt;
+      const resumeAttempt = state.chapter3.resume?.nextTargetId === "LS05" ? state.chapter3.resume.ls05Attempt : null;
+      const lastAttempt = state.chapter3.ls05Attempts?.[state.chapter3.ls05Attempts.length - 1];
+      const count = state.chapter3.lessonEvidence.LS05?.completedAt
+        ? 5
+        : Math.min(5, activeAttempt?.neutralProgress ?? resumeAttempt?.neutralProgress ?? lastAttempt?.scoredCalls?.length ?? 0);
+      els.parentProgressText.textContent = `C/D/E 三朵花 ${count}/5`;
+    } else if (usesLs04ParentEvidence()) {
+      const activeAttempt = currentListeningAction("LS04")?.listeningAttempt;
       const lastAttempt = state.chapter3.ls04Attempts?.[state.chapter3.ls04Attempts.length - 1];
       const count = state.chapter3.lessonEvidence.LS04?.completedAt
         ? 4
@@ -3006,7 +3095,9 @@ function renderParentPanel() {
     }
   }
   if (els.parentStaffState) {
-    els.parentStaffState.textContent = usesLs04ParentEvidence()
+    els.parentStaffState.textContent = usesLs05ParentEvidence()
+      ? (state.chapter3.lessonEvidence.LS05?.completedAt ? "当前切片休息" : "花粉铃进行中")
+      : usesLs04ParentEvidence()
       ? (state.chapter3.lessonEvidence.LS04?.completedAt ? "当前切片休息" : "正在听声音")
       : state.screen === "staff" && state.staffRunMode === "check"
       ? "少提示复读中"
@@ -4645,7 +4736,8 @@ function markAssistedRepairSuccess() {
 function handleInput(midi, source) {
   if (gameplayInputIsBlocked()) return;
   if (state.screen === "garden") {
-    if (currentListeningAction()) handleLs04Input(midi, source);
+    if (currentListeningAction("LS04")) handleLs04Input(midi, source);
+    else if (currentListeningAction("LS05")) handleLs05Input(midi, source);
     else handleGardenInput(midi, source);
     return;
   }
@@ -4759,7 +4851,7 @@ function releaseGardenInput(midi, source) {
 
 function ls04FormalAttempt(attempt) {
   const session = state.activeSession;
-  const action = currentListeningAction();
+  const action = currentListeningAction("LS04");
   return {
     kind: "level",
     id: "LS04",
@@ -4788,7 +4880,7 @@ function ls04FormalAttempt(attempt) {
 
 function recordLs04Outcome({ completed, reason }) {
   const session = state.activeSession;
-  const action = currentListeningAction();
+  const action = currentListeningAction("LS04");
   const attempt = ensureLs04Attempt();
   if (!session || !action || !attempt) return null;
   const completedAt = new Date().toISOString();
@@ -5004,6 +5096,492 @@ function handleLs04Input(midi, source) {
     renderGardenScreen();
     if (attempt.supportStage === "assisted") scheduleLs04AssistedTimeout();
   }, 1250);
+}
+
+function ls05FormalAttempt(attempt) {
+  const session = state.activeSession;
+  const action = currentListeningAction("LS05");
+  return {
+    kind: "level",
+    id: "LS05",
+    runMode: "check",
+    corrects: attempt.correctCount,
+    wrongs: attempt.totalWrongCount,
+    cueStrength: attempt.strongCueUsed || attempt.accessibilityVisualAssist ? "strong" : "soft",
+    strongCueFrames: attempt.strongCueUsed || attempt.accessibilityVisualAssist ? 1 : 0,
+    inputRoutes: { ...attempt.inputRoutes },
+    hasExperimentalInput: attempt.hasExperimentalInput,
+    assistedSuccesses: attempt.strongCueUsed ? 1 : 0,
+    modeledSuccesses: attempt.modeled ? 1 : 0,
+    modeledInputs: attempt.modeledInputs.map((input) => ({ ...input })),
+    formalSession: true,
+    sessionId: session?.sessionId || null,
+    bundleId: session?.bundleId || null,
+    sessionActionId: action?.actionId || null,
+    localDateKey: session?.localDateKey || null,
+    sessionRole: action?.role || "lesson",
+    reviewSkillKey: null,
+    requiredReview: false,
+    sessionStartedAt: session?.startedAt || null,
+    voluntaryReplay: attempt.replayCountChild > 0
+  };
+}
+
+function ls05StableEligible(attempt, completed) {
+  const coverage = attempt.eligibleCoverage || {};
+  return Boolean(completed && attempt.correctCount >= 4 && coverage.C && coverage.D && coverage.E &&
+    attempt.replayCountChild <= 1 && !attempt.targetRevealedBeforeResponse && !attempt.strongCueUsed &&
+    !attempt.modeled && !attempt.hasExperimentalInput && !attempt.accessibilityVisualAssist &&
+    !attempt.crossedSessionBoundary);
+}
+
+function recordLs05Outcome({ completed, reason }) {
+  const session = state.activeSession;
+  const action = currentListeningAction("LS05");
+  const attempt = ensureLs05Attempt();
+  if (!session || !action || !attempt || attempt.outcomeRecorded) return null;
+  const completedAt = new Date().toISOString();
+  const stable = ls05StableEligible(attempt, completed);
+  const formalAttempt = ls05FormalAttempt(attempt);
+  let stableAccepted = false;
+  if (completed) {
+    const existing = state.learningStats.levels.LS05 || {
+      completions: 0,
+      formalCompletions: 0,
+      stableCompletions: 0,
+      needsPractice: false
+    };
+    existing.completions = (Number(existing.completions) || 0) + 1;
+    existing.formalCompletions = (Number(existing.formalCompletions) || 0) + 1;
+    existing.lastCompletedAt = completedAt;
+    existing.lastFormalCompletedAt = completedAt;
+    existing.lastWrongCount = attempt.totalWrongCount;
+    existing.lastRunMode = "check";
+    existing.lastCueStrength = formalAttempt.cueStrength;
+    existing.lastStrongCueFrames = formalAttempt.strongCueFrames;
+    existing.lastInputRoutes = { ...attempt.inputRoutes };
+    existing.lastExperimentalInput = attempt.hasExperimentalInput;
+    existing.lastResponse = `${attempt.correctCount}/5 首答正确`;
+    existing.lastAttempt = {
+      completedAt,
+      completed,
+      reason,
+      correctCount: attempt.correctCount,
+      wrongCount: attempt.totalWrongCount,
+      eligibleCoverage: { ...attempt.eligibleCoverage },
+      replayCountChild: attempt.replayCountChild,
+      replayCountSystem: attempt.replayCountSystem,
+      strongCueUsed: attempt.strongCueUsed,
+      modeled: attempt.modeled,
+      hasExperimentalInput: attempt.hasExperimentalInput,
+      accessibilityVisualAssist: attempt.accessibilityVisualAssist,
+      crossedSessionBoundary: attempt.crossedSessionBoundary,
+      confusionCounts: { ...attempt.confusionCounts },
+      inputRoutes: { ...attempt.inputRoutes }
+    };
+    const evidence = recordRetentionEvidence({
+      kind: "level",
+      id: "LS05",
+      attempt: formalAttempt,
+      stable,
+      priorStableCompletions: 0,
+      completedAt
+    });
+    stableAccepted = stable && evidence.clockValid === true;
+    if (stableAccepted) existing.stableCompletions += 1;
+    existing.needsPractice = !stableAccepted;
+    existing.todayNeedsPractice = !stableAccepted;
+    existing.todayNeedsPracticeDate = localDateKeyAt(completedAt);
+    state.learningStats.levels.LS05 = existing;
+    saveLearningStats();
+  } else {
+    const existing = state.learningStats.levels.LS05 || {
+      completions: 0,
+      formalCompletions: 0,
+      stableCompletions: 0,
+      needsPractice: false
+    };
+    existing.lastWrongCount = attempt.totalWrongCount;
+    existing.lastRunMode = "check";
+    existing.lastCueStrength = formalAttempt.cueStrength;
+    existing.lastStrongCueFrames = formalAttempt.strongCueFrames;
+    existing.lastInputRoutes = { ...attempt.inputRoutes };
+    existing.lastExperimentalInput = attempt.hasExperimentalInput;
+    existing.needsPractice = true;
+    existing.todayNeedsPractice = true;
+    existing.todayNeedsPracticeDate = localDateKeyAt(completedAt);
+    existing.lastAttempt = {
+      completedAt,
+      completed: false,
+      partialRest: true,
+      reason,
+      neutralProgress: attempt.neutralProgress,
+      correctCount: attempt.correctCount,
+      wrongCount: attempt.totalWrongCount,
+      eligibleCoverage: { ...attempt.eligibleCoverage },
+      replayCountChild: attempt.replayCountChild,
+      replayCountSystem: attempt.replayCountSystem,
+      strongCueUsed: attempt.strongCueUsed,
+      modeled: attempt.modeled,
+      hasExperimentalInput: attempt.hasExperimentalInput,
+      accessibilityVisualAssist: attempt.accessibilityVisualAssist,
+      crossedSessionBoundary: attempt.crossedSessionBoundary,
+      confusionCounts: { ...attempt.confusionCounts },
+      inputRoutes: { ...attempt.inputRoutes }
+    };
+    state.learningStats.levels.LS05 = existing;
+    saveLearningStats();
+    state.chapter3.ls05PartialRest = {
+      createdAt: completedAt,
+      sessionId: session.sessionId,
+      reason,
+      neutralProgress: attempt.neutralProgress,
+      wrongCount: attempt.totalWrongCount,
+      modeled: attempt.modeled,
+      strongCueUsed: attempt.strongCueUsed,
+      needsPractice: true
+    };
+  }
+
+  const completion = {
+    actionId: action.actionId,
+    kind: "garden-listening",
+    targetId: "LS05",
+    runMode: "check",
+    reviewableForMastery: true,
+    completedAt,
+    completed,
+    reason,
+    correctCount: attempt.correctCount,
+    wrongCount: attempt.totalWrongCount,
+    eligibleCoverage: { ...attempt.eligibleCoverage },
+    stable: stableAccepted,
+    retained: false,
+    replayCountChild: attempt.replayCountChild,
+    replayCountSystem: attempt.replayCountSystem,
+    strongCueUsed: attempt.strongCueUsed,
+    modeled: attempt.modeled,
+    hasExperimentalInput: attempt.hasExperimentalInput,
+    accessibilityVisualAssist: attempt.accessibilityVisualAssist,
+    crossedSessionBoundary: attempt.crossedSessionBoundary,
+    confusionCounts: { ...attempt.confusionCounts },
+    inputRoutes: { ...attempt.inputRoutes },
+    sequence: attempt.sequence.slice(),
+    scoredCalls: attempt.scoredCalls.map((call) => ({ ...call }))
+  };
+  attempt.outcomeRecorded = true;
+  session.completedActions.push(completion);
+  state.chapter3.ls05Attempts.push({ ...completion, sessionId: session.sessionId });
+  state.chapter3.ls05Attempts = state.chapter3.ls05Attempts.slice(-20);
+  if (completed) {
+    state.chapter3.completed = false;
+    state.chapter3.ls05Completed = true;
+    state.chapter3.ls05PartialRest = null;
+    state.chapter3.resume = null;
+    state.chapter3.lessonEvidence.LS05 = {
+      completedAt,
+      sessionId: session.sessionId,
+      bundleId: session.bundleId,
+      correctCount: attempt.correctCount,
+      wrongCount: attempt.totalWrongCount,
+      eligibleCoverage: { ...attempt.eligibleCoverage },
+      stable: completion.stable,
+      retained: false,
+      strongCueUsed: attempt.strongCueUsed,
+      modeled: attempt.modeled,
+      hasExperimentalInput: attempt.hasExperimentalInput,
+      accessibilityVisualAssist: attempt.accessibilityVisualAssist,
+      crossedSessionBoundary: attempt.crossedSessionBoundary,
+      reviewableForMastery: true
+    };
+  }
+  persistChapter3Progress();
+  persistLs05Attempt();
+  return completion;
+}
+
+function finishLs05Session({ completed, reason }) {
+  const attempt = ensureLs05Attempt();
+  if (!attempt) return;
+  clearLs05Timers();
+  if (completed) attempt.phase = "complete";
+  persistLs05Attempt();
+  recordLs05Outcome({ completed, reason });
+  if (completed) renderGardenScreen();
+  finishActiveSessionAtRest({ reward: completed ? "三朵花开放" : "花粉环休息", reason });
+  state.ls05FeedbackTimer = setTimeout(() => {
+    state.ls05FeedbackTimer = null;
+    showMapScreen();
+  }, completed ? 1550 : 900);
+}
+
+function storeLs05Resume(attempt, reason) {
+  const session = state.activeSession;
+  state.chapter3.resume = {
+    bundleId: "C3-04",
+    nextTargetId: "LS05",
+    endedSessionId: session?.sessionId || null,
+    reason,
+    createdAt: new Date().toISOString(),
+    ls05Attempt: cloneLs05Attempt(attempt)
+  };
+  persistChapter3Progress();
+}
+
+function completeLs05Modeled(reason, { targetAlreadyPlayed = false } = {}) {
+  const attempt = ensureLs05Attempt();
+  const targetMidi = ls05Target(attempt);
+  if (!attempt || targetMidi === null) return;
+  if (attempt.modeledInputs.some((input) => input.callIndex === attempt.callIndex)) return;
+  clearLs05Timers();
+  const played = targetAlreadyPlayed || playPianoNote(noteForMidi(targetMidi).frequency, { gain: 0.13, duration: 0.72 });
+  if (!played) {
+    attempt.soundPauseCount += 1;
+    attempt.phase = "sound-paused";
+    traceLs05Audio(attempt, "audio-unavailable", null, { reason: "modeled", callIndex: attempt.callIndex });
+    persistLs05Attempt();
+    renderGardenScreen();
+    return;
+  }
+  attempt.modeled = true;
+  attempt.strongCueUsed = true;
+  attempt.targetRevealedBeforeResponse = true;
+  attempt.callStrongCueUsed = true;
+  attempt.callTargetRevealedBeforeResponse = true;
+  attempt.modeledInputs.push({ source: "model", targetMidi, callIndex: attempt.callIndex, reason, completedAt: new Date().toISOString() });
+  attempt.pendingModeled = null;
+  attempt.scoredCalls.push(ls05CallRecord(attempt, { targetMidi, modeled: true }));
+  attempt.callIndex += 1;
+  attempt.neutralProgress = attempt.callIndex;
+  attempt.phase = "modeled-success";
+  traceLs05Audio(attempt, "modeled", targetMidi, { reason, callIndex: attempt.callIndex - 1, targetAlreadyPlayed });
+  persistLs05Attempt();
+  renderGardenScreen();
+  if (attempt.callIndex >= attempt.sequence.length) {
+    finishLs05Session({ completed: true, reason: "modeled-final-safe-rest" });
+    return;
+  }
+  storeLs05Resume(attempt, reason);
+  finishLs05Session({ completed: false, reason: "modeled-safe-rest" });
+}
+
+function resetLs05CallRepair(attempt) {
+  attempt.callWrongCount = 0;
+  attempt.callRepairStage = "none";
+  attempt.callConfusionPair = [];
+  attempt.assistedCueVisible = false;
+  attempt.callFirstValidInput = null;
+  attempt.callReplayCountChild = 0;
+  attempt.callReplayCountSystem = 0;
+  attempt.callTargetRevealedBeforeResponse = false;
+  attempt.callStrongCueUsed = false;
+  attempt.callExperimentalInput = false;
+  attempt.callAccessibilityVisualAssist = false;
+  attempt.callResponseStartedAt = null;
+  attempt.callTimingInterrupted = false;
+  attempt.callOutOfCandidateRepair = false;
+  attempt.respondingFlower = null;
+}
+
+function ls05CallRecord(attempt, {
+  targetMidi,
+  inputMidi = null,
+  source = null,
+  firstResponseCorrect = false,
+  modeled = false,
+  visualAssist = false
+} = {}) {
+  const session = state.activeSession;
+  return {
+    levelId: "LS05",
+    sessionId: session?.sessionId || null,
+    bundleId: session?.bundleId || "C3-04",
+    callIndex: attempt.callIndex,
+    targetMidi,
+    candidateMidis: [60, 62, 64],
+    firstValidInput: attempt.callFirstValidInput ? { ...attempt.callFirstValidInput } : null,
+    firstInputMidi: attempt.callFirstValidInput?.midi ?? null,
+    firstInputRoute: attempt.callFirstValidInput?.source ?? null,
+    inputRoute: attempt.callFirstValidInput?.source ?? source ?? null,
+    inputMidi,
+    source,
+    qualifyingCorrect: Boolean(firstResponseCorrect),
+    correct: Boolean(firstResponseCorrect),
+    wrongCount: attempt.callWrongCount,
+    repairStage: attempt.callRepairStage,
+    childReplayCount: attempt.callReplayCountChild,
+    systemReplayCount: attempt.callReplayCountSystem,
+    targetRevealedBeforeResponse: Boolean(attempt.callTargetRevealedBeforeResponse),
+    strongCueUsed: Boolean(attempt.callStrongCueUsed),
+    modeled: Boolean(modeled),
+    visualAssist: Boolean(visualAssist || attempt.callAccessibilityVisualAssist),
+    accessibilityVisualAssist: Boolean(visualAssist || attempt.callAccessibilityVisualAssist),
+    hasExperimentalInput: Boolean(attempt.callExperimentalInput),
+    experimentalInput: Boolean(attempt.callExperimentalInput),
+    microphoneConfidence: attempt.callExperimentalInput ? "confirmed" : null,
+    responseMs: Number.isFinite(attempt.callFirstValidInput?.responseMs) ? attempt.callFirstValidInput.responseMs : null,
+    timingInterrupted: Boolean(attempt.callTimingInterrupted),
+    timingUsedForMastery: false
+  };
+}
+
+function advanceLs05Call(attempt, { targetMidi, inputMidi, source, firstResponseCorrect, visualAssist = false }) {
+  const targetName = noteForMidi(targetMidi)?.name;
+  if (firstResponseCorrect) {
+    attempt.correctCount += 1;
+    if (source !== "麦克风" && attempt.callRepairStage === "none" && !visualAssist && targetName) {
+      attempt.eligibleCoverage[targetName] = true;
+    }
+  }
+  attempt.scoredCalls.push(ls05CallRecord(attempt, { targetMidi, inputMidi, source, firstResponseCorrect, visualAssist }));
+  attempt.respondingFlower = targetName || null;
+  attempt.callIndex += 1;
+  attempt.neutralProgress = attempt.callIndex;
+  attempt.phase = attempt.callIndex >= attempt.sequence.length ? "complete" : "correct-feedback";
+  persistLs05Attempt();
+  renderGardenScreen();
+  if (attempt.callIndex >= attempt.sequence.length) {
+    finishLs05Session({ completed: true, reason: visualAssist ? "visual-assist-complete" : "natural-rest" });
+    return;
+  }
+  resetLs05CallRepair(attempt);
+  persistLs05Attempt();
+  state.ls05FeedbackTimer = setTimeout(() => {
+    state.ls05FeedbackTimer = null;
+    playLs05Target("system-next");
+  }, 720);
+}
+
+function handleLs05Input(midi, source) {
+  const attempt = ensureLs05Attempt();
+  if (!attempt || state.chapter3.equipmentState !== "safe-open") return;
+  const now = new Date().toISOString();
+  if (["reference", "target-playing", "reference-ready", "replay-ready", "sound-paused", "correct-feedback", "wrong-known", "pair-compare", "modeled-playing", "modeled-success"].includes(attempt.phase)) {
+    attempt.earlyInputs.push({ midi, source, phase: attempt.phase, occurredAt: now });
+    persistLs05Attempt();
+    return;
+  }
+  if (!["awaiting-response", "assisted-retry", "visual-assist"].includes(attempt.phase)) return;
+  clearLs05Timers();
+  const targetMidi = ls05Target(attempt);
+  const visualAssist = attempt.phase === "visual-assist";
+  const correct = midi === targetMidi;
+  attempt.inputRoutes[source] = (attempt.inputRoutes[source] || 0) + 1;
+  if (!attempt.callFirstValidInput) {
+    const responseStart = Date.parse(attempt.callResponseStartedAt || "");
+    const responseMs = !attempt.callTimingInterrupted && Number.isFinite(responseStart) ? Math.max(0, Date.now() - responseStart) : null;
+    attempt.callFirstValidInput = { midi, source, occurredAt: now, responseMs };
+  }
+  if (source === "麦克风") {
+    attempt.hasExperimentalInput = true;
+    attempt.callExperimentalInput = true;
+  }
+  attempt.childInputs.push({ midi, source, targetMidi, correct, scored: !visualAssist, callIndex: attempt.callIndex, occurredAt: now });
+  state.lastInputMidi = midi;
+  state.lastInputResult = correct ? "correct" : "wrong";
+  els.inputStatus.textContent = `输入：${source}`;
+  els.heardStatus.textContent = `听到：${noteForMidi(midi)?.name || midi}`;
+
+  if (visualAssist) {
+    attempt.accessibilityVisualAssist = true;
+    attempt.callAccessibilityVisualAssist = true;
+    if (!correct) {
+      persistLs05Attempt();
+      renderGardenScreen();
+      return;
+    }
+    advanceLs05Call(attempt, { targetMidi, inputMidi: midi, source, firstResponseCorrect: false, visualAssist: true });
+    return;
+  }
+
+  if (correct) {
+    const firstResponseCorrect = attempt.callWrongCount === 0;
+    advanceLs05Call(attempt, { targetMidi, inputMidi: midi, source, firstResponseCorrect });
+    return;
+  }
+
+  attempt.callWrongCount += 1;
+  attempt.totalWrongCount += 1;
+  const confusionKey = [midi, targetMidi].sort((a, b) => a - b).join("-");
+  attempt.confusionCounts[confusionKey] = (attempt.confusionCounts[confusionKey] || 0) + 1;
+  attempt.callConfusionPair = [midi, targetMidi];
+  const canShowChildPair = [60, 62, 64].includes(midi) && midi !== targetMidi;
+  const childFrequency = midiFrequency(midi);
+  traceLs05Audio(attempt, "child-input", midi, { callIndex: attempt.callIndex, frequency: childFrequency });
+  if (source !== "屏幕") playPianoNote(childFrequency, { gain: 0.10, duration: 0.42 });
+  const replayed = playPianoNote(noteForMidi(targetMidi).frequency, { gain: 0.13, duration: 0.72, delay: 0.46 });
+  if (!replayed) {
+    attempt.soundPauseCount += 1;
+    attempt.phase = "sound-paused";
+    traceLs05Audio(attempt, "audio-unavailable", null, { reason: "wrong-replay", callIndex: attempt.callIndex });
+    persistLs05Attempt();
+    renderGardenScreen();
+    return;
+  }
+  attempt.replayCountSystem += 1;
+  attempt.callReplayCountSystem += 1;
+  traceLs05Audio(attempt, "target-replay", targetMidi, { callIndex: attempt.callIndex });
+  if (attempt.callWrongCount >= 4) {
+    attempt.phase = "modeled-playing";
+    attempt.pendingModeled = { callIndex: attempt.callIndex, targetMidi, reason: "assisted-retry-wrong", targetAlreadyPlayed: true };
+    persistLs05Attempt();
+    renderGardenScreen();
+    state.ls05FeedbackTimer = setTimeout(() => {
+      state.ls05FeedbackTimer = null;
+      completeLs05Modeled("assisted-retry-wrong", { targetAlreadyPlayed: true });
+    }, 1250);
+    return;
+  }
+  if (attempt.callWrongCount >= 2 && !canShowChildPair) {
+    attempt.strongCueUsed = true;
+    attempt.targetRevealedBeforeResponse = true;
+    attempt.callStrongCueUsed = true;
+    attempt.callTargetRevealedBeforeResponse = true;
+    attempt.callOutOfCandidateRepair = true;
+    attempt.callRepairStage = "candidate-outside";
+    attempt.assistedCueVisible = true;
+    attempt.phase = "assisted-retry";
+  } else if (attempt.callWrongCount >= 3) {
+    attempt.strongCueUsed = true;
+    attempt.targetRevealedBeforeResponse = true;
+    attempt.callStrongCueUsed = true;
+    attempt.callTargetRevealedBeforeResponse = true;
+    attempt.callRepairStage = "assisted";
+    attempt.assistedCueVisible = true;
+    attempt.phase = "assisted-retry";
+  } else if (attempt.callWrongCount === 2) {
+    attempt.callRepairStage = "pair-compare";
+    attempt.phase = "pair-compare";
+  } else {
+    attempt.callRepairStage = "wrong-known";
+    attempt.phase = "wrong-known";
+  }
+  persistLs05Attempt();
+  renderGardenScreen();
+  state.ls05FeedbackTimer = setTimeout(() => {
+    state.ls05FeedbackTimer = null;
+    attempt.phase = ["assisted", "candidate-outside"].includes(attempt.callRepairStage) ? "assisted-retry" : "awaiting-response";
+    if (attempt.phase === "assisted-retry") attempt.assistedCueVisible = false;
+    persistLs05Attempt();
+    renderGardenScreen();
+    if (attempt.phase === "assisted-retry") scheduleLs05AssistedTimeout();
+    else scheduleLs05ResponseTimeout();
+  }, attempt.callWrongCount === 2 ? 1500 : 1250);
+}
+
+function enableLs05VisualAssist() {
+  const attempt = ensureLs05Attempt();
+  if (!attempt) return;
+  const allowed = attempt.phase === "assisted-retry" || (attempt.phase === "sound-paused" && attempt.soundPauseCount >= 2);
+  if (!allowed) return;
+  clearLs05Timers();
+  attempt.accessibilityVisualAssist = true;
+  attempt.targetRevealedBeforeResponse = true;
+  attempt.callAccessibilityVisualAssist = true;
+  attempt.callTargetRevealedBeforeResponse = true;
+  attempt.phase = "visual-assist";
+  persistLs05Attempt();
+  renderGardenScreen();
 }
 
 function handleGardenInput(midi, source) {
@@ -6030,9 +6608,10 @@ function currentGardenLesson() {
   return action?.kind === "garden" ? chapter3Lessons[action.targetId] || null : null;
 }
 
-function currentListeningAction() {
+function currentListeningAction(targetId = null) {
   const action = currentSessionAction();
-  return action?.kind === "garden-listening" && action.targetId === "LS04" ? action : null;
+  if (action?.kind !== "garden-listening") return null;
+  return !targetId || action.targetId === targetId ? action : null;
 }
 
 function ls04SequenceForSession(sessionId) {
@@ -6081,7 +6660,7 @@ function createLs04Attempt(session = state.activeSession) {
 }
 
 function ensureLs04Attempt() {
-  const action = currentListeningAction();
+  const action = currentListeningAction("LS04");
   if (!action) return null;
   if (!action.listeningAttempt || action.listeningAttempt.version !== 1) {
     action.listeningAttempt = createLs04Attempt(state.activeSession);
@@ -6098,7 +6677,7 @@ function clearLs04Timers() {
 }
 
 function persistLs04Attempt() {
-  if (!currentListeningAction()) return;
+  if (!currentListeningAction("LS04")) return;
   persistActiveSession();
 }
 
@@ -6182,6 +6761,277 @@ function resumeLs04Flow() {
   playLs04Target("resume");
 }
 
+function hashSessionSeed(value) {
+  let hash = 2166136261;
+  for (const character of String(value || "C3-04")) {
+    hash ^= character.charCodeAt(0);
+    hash = Math.imul(hash, 16777619);
+  }
+  return hash >>> 0;
+}
+
+function ls05SequenceForSeed(seed) {
+  const tables = [
+    [[62, 64, 62, 60, 64], [64, 62, 60, 64, 62]],
+    [[60, 64, 60, 62, 64], [64, 60, 62, 64, 60]],
+    [[60, 62, 60, 64, 62], [62, 60, 64, 62, 60]]
+  ];
+  const hash = hashSessionSeed(seed);
+  const singletonIndex = hash % 3;
+  return tables[singletonIndex][Math.floor(hash / 3) % 2].slice();
+}
+
+function cloneLs05Attempt(attempt) {
+  return JSON.parse(JSON.stringify(attempt));
+}
+
+function createLs05Attempt(session = state.activeSession, resumeAttempt = null) {
+  if (resumeAttempt?.version === 1 && Array.isArray(resumeAttempt.sequence)) {
+    const resumed = cloneLs05Attempt(resumeAttempt);
+    resumed.phase = "reference-ready";
+    resumed.referencePlayed = false;
+    resumed.originSessionId = resumed.originSessionId || resumed.seed || session?.resumeOfSessionId || "";
+    resumed.resumedFromSessionId = session?.resumeOfSessionId || null;
+    resumed.crossedSessionBoundary = true;
+    resetLs05CallRepair(resumed);
+    return resumed;
+  }
+  const seed = session?.sessionId || "C3-04";
+  return {
+    version: 1,
+    seed,
+    originSessionId: seed,
+    resumedFromSessionId: null,
+    crossedSessionBoundary: false,
+    sequence: ls05SequenceForSeed(seed),
+    phase: "reference-ready",
+    referencePlayed: false,
+    callIndex: 0,
+    scoredCalls: [],
+    neutralProgress: 0,
+    correctCount: 0,
+    eligibleCoverage: { C: false, D: false, E: false },
+    callWrongCount: 0,
+    callRepairStage: "none",
+    callConfusionPair: [],
+    assistedCueVisible: false,
+    callFirstValidInput: null,
+    callReplayCountChild: 0,
+    callReplayCountSystem: 0,
+    callTargetRevealedBeforeResponse: false,
+    callStrongCueUsed: false,
+    callExperimentalInput: false,
+    callAccessibilityVisualAssist: false,
+    callResponseStartedAt: null,
+    callTimingInterrupted: false,
+    callOutOfCandidateRepair: false,
+    totalWrongCount: 0,
+    confusionCounts: {},
+    childInputs: [],
+    earlyInputs: [],
+    inputRoutes: {},
+    replayCountChild: 0,
+    replayCountSystem: 0,
+    soundPauseCount: 0,
+    strongCueUsed: false,
+    modeled: false,
+    modeledInputs: [],
+    hasExperimentalInput: false,
+    accessibilityVisualAssist: false,
+    targetRevealedBeforeResponse: false,
+    respondingFlower: null,
+    audioTrace: []
+  };
+}
+
+function ensureLs05Attempt() {
+  const action = currentListeningAction("LS05");
+  if (!action) return null;
+  if (!action.listeningAttempt || action.listeningAttempt.version !== 1) {
+    action.listeningAttempt = createLs05Attempt(state.activeSession);
+    persistActiveSession();
+  }
+  return action.listeningAttempt;
+}
+
+function persistLs05Attempt() {
+  if (currentListeningAction("LS05")) persistActiveSession();
+}
+
+function clearLs05Timers() {
+  if (state.ls05Timer) clearTimeout(state.ls05Timer);
+  if (state.ls05FeedbackTimer) clearTimeout(state.ls05FeedbackTimer);
+  state.ls05Timer = null;
+  state.ls05FeedbackTimer = null;
+}
+
+function ls05Target(attempt = ensureLs05Attempt()) {
+  return attempt ? attempt.sequence[attempt.callIndex] ?? null : null;
+}
+
+function traceLs05Audio(attempt, kind, midi, extra = {}) {
+  attempt.audioTrace.push({ kind, midi, at: new Date().toISOString(), ...extra });
+  attempt.audioTrace = attempt.audioTrace.slice(-60);
+}
+
+function scheduleLs05ResponseTimeout() {
+  if (state.ls05Timer) clearTimeout(state.ls05Timer);
+  state.ls05Timer = setTimeout(() => {
+    state.ls05Timer = null;
+    const attempt = ensureLs05Attempt();
+    if (!attempt || attempt.phase !== "awaiting-response") return;
+    attempt.strongCueUsed = true;
+    attempt.targetRevealedBeforeResponse = true;
+    attempt.callStrongCueUsed = true;
+    attempt.callTargetRevealedBeforeResponse = true;
+    attempt.callRepairStage = "assisted";
+    attempt.assistedCueVisible = true;
+    attempt.phase = "assisted-retry";
+    persistLs05Attempt();
+    renderGardenScreen();
+    state.ls05FeedbackTimer = setTimeout(() => {
+      state.ls05FeedbackTimer = null;
+      if (attempt.phase !== "assisted-retry") return;
+      attempt.assistedCueVisible = false;
+      persistLs05Attempt();
+      renderGardenScreen();
+    }, 1250);
+    scheduleLs05AssistedTimeout();
+  }, CH3_LONG_WAIT_MS);
+}
+
+function scheduleLs05AssistedTimeout() {
+  if (state.ls05Timer) clearTimeout(state.ls05Timer);
+  state.ls05Timer = setTimeout(() => {
+    state.ls05Timer = null;
+    completeLs05Modeled("assisted-timeout");
+  }, LS05_ASSISTED_WAIT_MS);
+}
+
+function playLs05Reference() {
+  const attempt = ensureLs05Attempt();
+  if (!attempt || state.screen !== "garden") return;
+  clearLs05Timers();
+  attempt.phase = "reference";
+  persistLs05Attempt();
+  renderGardenScreen();
+  const played = playPianoNote(noteForMidi(60).frequency, { gain: 0.13, duration: 0.72 });
+  if (!played) {
+    attempt.referencePlayed = false;
+    attempt.soundPauseCount += 1;
+    attempt.phase = "sound-paused";
+    traceLs05Audio(attempt, "audio-unavailable", null, { reason: "reference" });
+    persistLs05Attempt();
+    renderGardenScreen();
+    return;
+  }
+  attempt.referencePlayed = true;
+  traceLs05Audio(attempt, "reference", 60);
+  persistLs05Attempt();
+  state.ls05Timer = setTimeout(() => {
+    state.ls05Timer = null;
+    playLs05Target("system-first");
+  }, 900);
+}
+
+function playLs05Target(reason = "system") {
+  const attempt = ensureLs05Attempt();
+  const targetMidi = ls05Target(attempt);
+  if (!attempt || targetMidi === null || state.screen !== "garden") return;
+  clearLs05Timers();
+  attempt.respondingFlower = null;
+  attempt.phase = "target-playing";
+  persistLs05Attempt();
+  renderGardenScreen();
+  const played = playPianoNote(noteForMidi(targetMidi).frequency, { gain: 0.13, duration: 0.72 });
+  if (!played) {
+    attempt.soundPauseCount += 1;
+    attempt.phase = "sound-paused";
+    traceLs05Audio(attempt, "audio-unavailable", null, { reason, callIndex: attempt.callIndex });
+    persistLs05Attempt();
+    renderGardenScreen();
+    return;
+  }
+  if (reason === "child-replay") {
+    attempt.replayCountChild += 1;
+    attempt.callReplayCountChild += 1;
+  } else if (["resume", "system-replay"].includes(reason)) {
+    attempt.replayCountSystem += 1;
+    attempt.callReplayCountSystem += 1;
+  }
+  traceLs05Audio(attempt, "target", targetMidi, { reason, callIndex: attempt.callIndex });
+  persistLs05Attempt();
+  state.ls05Timer = setTimeout(() => {
+    state.ls05Timer = null;
+    attempt.phase = ["assisted", "candidate-outside"].includes(attempt.callRepairStage) ? "assisted-retry" : "awaiting-response";
+    if (attempt.phase === "awaiting-response" && !attempt.callFirstValidInput) attempt.callResponseStartedAt = new Date().toISOString();
+    persistLs05Attempt();
+    renderGardenScreen();
+    if (attempt.phase === "assisted-retry") scheduleLs05AssistedTimeout();
+    else scheduleLs05ResponseTimeout();
+  }, LS05_TARGET_PLAY_MS);
+}
+
+function resumeLs05Flow({ fromReload = false } = {}) {
+  const attempt = ensureLs05Attempt();
+  if (!attempt || state.screen !== "garden") return;
+  clearLs05Timers();
+  if (fromReload && !["reference-ready", "reference"].includes(attempt.phase)) {
+    attempt.callTimingInterrupted = true;
+    attempt.callResponseStartedAt = null;
+    persistLs05Attempt();
+  }
+  if (attempt.phase === "modeled-playing" && attempt.pendingModeled) {
+    completeLs05Modeled(attempt.pendingModeled.reason, { targetAlreadyPlayed: true });
+    return;
+  }
+  if (attempt.phase === "visual-assist") {
+    persistLs05Attempt();
+    renderGardenScreen();
+    return;
+  }
+  if (attempt.phase === "pair-compare" || attempt.phase === "wrong-known") {
+    const delay = attempt.phase === "pair-compare" ? 1500 : 1250;
+    persistLs05Attempt();
+    renderGardenScreen();
+    state.ls05FeedbackTimer = setTimeout(() => {
+      state.ls05FeedbackTimer = null;
+      if (!["pair-compare", "wrong-known"].includes(attempt.phase)) return;
+      attempt.phase = "awaiting-response";
+      persistLs05Attempt();
+      renderGardenScreen();
+      scheduleLs05ResponseTimeout();
+    }, delay);
+    return;
+  }
+  if (attempt.phase === "assisted-retry") {
+    attempt.assistedCueVisible = false;
+    persistLs05Attempt();
+    renderGardenScreen();
+    scheduleLs05AssistedTimeout();
+    return;
+  }
+  if (attempt.phase === "sound-paused") {
+    persistLs05Attempt();
+    renderGardenScreen();
+    return;
+  }
+  if (fromReload) {
+    attempt.phase = attempt.referencePlayed ? "replay-ready" : "reference-ready";
+    persistLs05Attempt();
+    renderGardenScreen();
+    return;
+  }
+  if (!state.audioUnlocked) {
+    attempt.phase = attempt.referencePlayed ? "replay-ready" : "reference-ready";
+    persistLs05Attempt();
+    renderGardenScreen();
+    return;
+  }
+  if (!attempt.referencePlayed) playLs05Reference();
+  else playLs05Target("resume");
+}
+
 function persistChapter3Progress() {
   state.sessionRuntime.chapter3 = state.chapter3;
   saveSessionRuntime(state.sessionRuntime);
@@ -6197,6 +7047,7 @@ function clearGardenTimers() {
   state.gardenAssistedTimer = null;
   state.gardenLongWaitTimer = null;
   clearLs04Timers();
+  clearLs05Timers();
 }
 
 function persistGardenPendingAttempt() {
@@ -6342,6 +7193,10 @@ function renderLs04Screen() {
   els.gardenAirCheck.hidden = true;
   els.gardenPlant.hidden = true;
   els.gardenListening.hidden = false;
+  els.listeningCandidates.hidden = false;
+  els.ls05FlowerArc.hidden = true;
+  els.ls05Compare.hidden = true;
+  els.ls05VisualAssist.hidden = true;
   els.gardenSpeech.hidden = false;
   els.gardenSpeechKicker.textContent = copy.kicker;
   els.gardenSpeechMain.textContent = copy.main;
@@ -6377,10 +7232,128 @@ function renderLs04Screen() {
   });
 }
 
+function ls05Copy(attempt) {
+  if (!attempt) return { kicker: "花粉铃", main: "准备叫醒三朵花", support: "按扬声器先听 C，我唱 Do。" };
+  const target = noteForMidi(ls05Target(attempt));
+  const lastInput = attempt.childInputs[attempt.childInputs.length - 1];
+  const heard = noteForMidi(lastInput?.midi);
+  if (attempt.phase === "reference-ready") return { kicker: "先定一个声音", main: "按一下，听 C", support: "我把 C 唱作 Do；这一声不计题。" };
+  if (attempt.phase === "reference") return { kicker: "声音参照", main: "这是 C", support: "我唱 Do；接下来听花粉铃。" };
+  if (attempt.phase === "replay-ready") return { kicker: "回到花粉铃", main: "按一下继续听", support: "题目和花粉格都还在。" };
+  if (attempt.phase === "sound-paused") return { kicker: "声音先休息", main: "请先把声音打开", support: "打开后，按扬声器重听同一声。" };
+  if (attempt.phase === "target-playing") return { kicker: `花粉 ${attempt.callIndex + 1}/5`, main: "先听花粉铃", support: "声音停下后，再弹同一个键。" };
+  if (attempt.phase === "wrong-known") return { kicker: "先比较声音", main: `刚按了 ${heard?.name || "别的键"}`, support: `我先唱刚才的 ${heard?.solfege || "声音"}，再听花粉铃。` };
+  if (attempt.phase === "pair-compare") {
+    const pair = ls05VisibleConfusionPair(attempt).map((midi) => noteForMidi(midi)).filter(Boolean);
+    return { kicker: "两个声音一起听", main: pair.map((note) => note.name).join(" / "), support: "听一听这两个声音，再找和花粉铃相同的键。" };
+  }
+  if (attempt.phase === "assisted-retry") return { kicker: "星芽陪你找", main: `找琴键 ${target?.name || ""}`, support: `我唱 ${target?.solfege || "这个音"}，看${target?.locator || "黑键位置"}。` };
+  if (attempt.phase === "visual-assist") return { kicker: "看着完成这一格", main: `${target?.name || ""} · ${target?.locator || "黑键位置"}`, support: `声音今天休息，我唱 ${target?.solfege || "这个音"}，我们看着找。` };
+  if (attempt.phase === "modeled-playing") return { kicker: "听一次清楚示范", main: "花粉铃正在示范", support: "这一格会保留，随后回地图休息。" };
+  if (attempt.phase === "correct-feedback") {
+    const found = noteForMidi(attempt.sequence[attempt.callIndex - 1]);
+    return { kicker: "花朵醒了一下", main: `${found?.name || "这朵花"} 找到了`, support: `我把它唱作 ${found?.solfege || "这个音"}。下一声会自己响起。` };
+  }
+  if (attempt.phase === "modeled-success") return { kicker: "这一格先安顿好", main: "花粉环会替你保留", support: "下次回来先听 C，再继续剩下的声音。" };
+  if (attempt.phase === "complete") return { kicker: "三朵花都醒啦", main: "花粉环转满了", support: "今天先在花园歇一会儿。" };
+  return { kicker: `花粉 ${Math.min(5, attempt.callIndex + 1)}/5`, main: "弹同样的声音", support: "可以按扬声器重听。" };
+}
+
+function renderLs05Screen() {
+  const attempt = ensureLs05Attempt();
+  const targetMidi = ls05Target(attempt) ?? 60;
+  const target = noteForMidi(targetMidi);
+  const copy = ls05Copy(attempt);
+  const equipmentState = "safe-open";
+  els.mainTitle.textContent = "呼吸花园";
+  els.levelBadge.textContent = "LS05";
+  els.appShell.dataset.levelId = "LS05";
+  els.appShell.dataset.phase = "garden-listening";
+  els.appShell.dataset.chapter3 = "listening-three";
+  els.gardenScene.dataset.airState = equipmentState;
+  els.gardenScene.dataset.lesson = "LS05";
+  els.gardenScene.dataset.listeningPhase = attempt?.phase || "reference-ready";
+  els.gardenScene.dataset.reviewableForMastery = "true";
+  els.gardenScene.dataset.repairStage = attempt?.callRepairStage || "none";
+  els.gardenXingya.dataset.equipment = equipmentState;
+  renderGardenCharacterAsset(equipmentState);
+  els.gardenAirCheck.hidden = true;
+  els.gardenPlant.hidden = true;
+  els.gardenListening.hidden = false;
+  els.listeningCandidates.hidden = true;
+  els.ls05FlowerArc.hidden = false;
+  els.gardenSpeech.hidden = false;
+  els.gardenSpeechKicker.textContent = copy.kicker;
+  els.gardenSpeechMain.textContent = copy.main;
+  els.gardenSpeechSupport.textContent = copy.support;
+  const playing = ["reference", "target-playing", "wrong-known", "pair-compare", "modeled-playing"].includes(attempt?.phase);
+  els.listeningSource.classList.toggle("is-playing", playing);
+  els.listeningSource.classList.toggle("is-sound-paused", attempt?.phase === "sound-paused");
+  const flowerNodes = [...els.ls05FlowerArc.querySelectorAll(".ls05-flower")];
+  flowerNodes.forEach((flower) => flower.classList.remove("is-responding", "is-open"));
+  if (attempt?.phase === "complete" || state.chapter3.ls05Completed) {
+    flowerNodes.forEach((flower) => flower.classList.add("is-open"));
+  } else if (attempt?.phase === "correct-feedback" && attempt.respondingFlower) {
+    const flowerIndex = { C: 0, D: 1, E: 2 }[attempt.respondingFlower];
+    if (Number.isInteger(flowerIndex)) flowerNodes[flowerIndex]?.classList.add("is-responding");
+  }
+  const pairVisible = attempt?.phase === "pair-compare";
+  const assistedVisible = attempt?.phase === "assisted-retry";
+  const visualAssistVisible = attempt?.phase === "visual-assist";
+  els.ls05Compare.hidden = !pairVisible && !assistedVisible && !visualAssistVisible;
+  if (pairVisible) {
+    const pair = ls05VisibleConfusionPair(attempt).map((midi) => noteForMidi(midi)?.name).filter(Boolean);
+    els.ls05Compare.innerHTML = pair.map((name) => `<span>${name}<small>${friendlyKeyLocator(noteForMidi(({ C: 60, D: 62, E: 64 })[name]))}</small></span>`).join("");
+    els.ls05Compare.setAttribute("aria-label", `比较 ${pair.join(" 和 ")}`);
+  } else if (assistedVisible) {
+    els.ls05Compare.innerHTML = ["C", "D", "E"].map((name) => `<span>${name}</span>`).join("");
+    els.ls05Compare.setAttribute("aria-label", "候选琴键 C、D、E");
+  } else if (visualAssistVisible) {
+    els.ls05Compare.innerHTML = `<span class="is-guide">${target?.name || ""}<small>${friendlyKeyLocator(target)}</small></span>`;
+    els.ls05Compare.setAttribute("aria-label", `键位帮助：${target?.name || ""}，${target?.locator || ""}`);
+  } else {
+    els.ls05Compare.innerHTML = "";
+    els.ls05Compare.removeAttribute("aria-label");
+  }
+  els.listeningReplay.disabled = playing || ["correct-feedback", "complete", "modeled-success"].includes(attempt?.phase);
+  els.listeningReplay.hidden = attempt?.phase === "complete";
+  const visualAssistAllowed = attempt?.callRepairStage === "assisted" || (attempt?.phase === "sound-paused" && attempt?.soundPauseCount >= 2);
+  els.ls05VisualAssist.hidden = !visualAssistAllowed || ["visual-assist", "correct-feedback", "modeled-playing", "modeled-success", "complete"].includes(attempt?.phase);
+  els.listeningCallProgress.innerHTML = [0, 1, 2, 3, 4].map((index) => {
+    const done = index < (attempt?.neutralProgress || 0);
+    const active = index === (attempt?.callIndex || 0) && attempt?.phase !== "complete";
+    return `<span class="${done ? "done" : ""}${active ? " active" : ""}" aria-hidden="true"></span>`;
+  }).join("");
+  els.listeningCallProgress.setAttribute("aria-label", `五个花粉格已完成 ${attempt?.neutralProgress || 0} 个`);
+  els.listeningResult.classList.remove("is-complete");
+  els.gardenProgress.innerHTML = "";
+  els.gardenProgress.hidden = true;
+  els.nextAction.textContent = ["reference-ready", "reference"].includes(attempt?.phase)
+    ? "先听 C 的参照音"
+    : (attempt?.phase === "complete" ? "三朵花已经一起开放" : `花粉 ${Math.min(5, (attempt?.callIndex || 0) + 1)}/5`);
+  els.inputStatus.textContent = "输入：屏幕琴键";
+  els.heardStatus.textContent = "听到：-";
+  const showTarget = visualAssistVisible || (assistedVisible && attempt?.assistedCueVisible);
+  renderKeyboard(target, {
+    scaffold: showTarget ? "garden-listening-assisted" : "garden-listening",
+    disableTarget: !showTarget,
+    showTarget,
+    concealTargetIdentity: !showTarget
+  });
+}
+
+function ls05VisibleConfusionPair(attempt) {
+  return [...new Set(attempt?.callConfusionPair || [])].sort((a, b) => a - b);
+}
+
 function renderGardenScreen() {
   if (!els.gardenPanel || state.screen !== "garden") return;
-  if (currentListeningAction()) {
+  if (currentListeningAction("LS04")) {
     renderLs04Screen();
+    return;
+  }
+  if (currentListeningAction("LS05")) {
+    renderLs05Screen();
     return;
   }
   const lesson = currentGardenLesson();
@@ -6665,6 +7638,15 @@ function nextGardenSessionPlan() {
   if (!state.chapter3.lessonEvidence.LS04?.completedAt) {
     return { bundleId: "C3-03", actionIds: ["LS04-listening"], resumeOfSessionId: null };
   }
+  if (!state.chapter3.lessonEvidence.LS05?.completedAt) {
+    const resume = state.chapter3.resume?.nextTargetId === "LS05" ? state.chapter3.resume : null;
+    return {
+      bundleId: "C3-04",
+      actionIds: ["LS05-listening"],
+      resumeOfSessionId: resume?.endedSessionId || null,
+      resumeAttempt: resume?.ls05Attempt || null
+    };
+  }
   return null;
 }
 
@@ -6693,7 +7675,8 @@ function createGardenActiveSession(plan) {
     resumeOfSessionId: plan.resumeOfSessionId || null
   };
   const listeningAction = session.actions.find((action) => action.kind === "garden-listening");
-  if (listeningAction) listeningAction.listeningAttempt = createLs04Attempt(session);
+  if (listeningAction?.targetId === "LS04") listeningAction.listeningAttempt = createLs04Attempt(session);
+  if (listeningAction?.targetId === "LS05") listeningAction.listeningAttempt = createLs05Attempt(session, plan.resumeAttempt);
   return session;
 }
 
@@ -6923,14 +7906,18 @@ function showGardenScreen({ recovery = false } = {}) {
   state.screen = "garden";
   state.lastInputMidi = null;
   state.lastInputResult = null;
-  if (currentListeningAction()) ensureLs04Attempt();
+  if (currentListeningAction("LS04")) ensureLs04Attempt();
+  else if (currentListeningAction("LS05")) ensureLs05Attempt();
   else restoreGardenPendingAttempt();
   state.gardenInputArmed = true;
   history.replaceState(null, "", `?mode=garden${sessionUrlSuffix()}`);
   render();
-  if (currentListeningAction()) {
+  if (currentListeningAction("LS04")) {
     setGardenEquipmentState("safe-open");
     resumeLs04Flow();
+  } else if (currentListeningAction("LS05")) {
+    setGardenEquipmentState("safe-open");
+    resumeLs05Flow();
   } else {
     beginGardenAirCheck({ recovery });
   }
@@ -7022,6 +8009,16 @@ function showSessionCompletion({ kind, id, reward }) {
 }
 
 function showMapScreen() {
+  const pendingModeled = currentListeningAction("LS05")?.listeningAttempt;
+  if (state.screen === "garden" && pendingModeled?.phase === "modeled-playing" && pendingModeled.pendingModeled) {
+    completeLs05Modeled(pendingModeled.pendingModeled.reason, { targetAlreadyPlayed: true });
+    return;
+  }
+  if (state.screen === "garden" && pendingModeled && pendingModeled.phase !== "complete") {
+    pendingModeled.callTimingInterrupted = true;
+    pendingModeled.callResponseStartedAt = null;
+    persistLs05Attempt();
+  }
   if (state.screen === "garden" && state.activeSession?.bundleId === "C3-01") {
     if (!state.chapter3.lessonEvidence.LS01?.completedAt) {
       clearGardenTimers();
@@ -7777,11 +8774,19 @@ els.mapShell.querySelectorAll(".map-node").forEach((node) => {
 els.gardenRestMarker?.addEventListener("click", startGardenFromMap);
 els.listeningReplay?.addEventListener("click", () => {
   unlockChapter3AudioFromGesture();
+  if (currentListeningAction("LS05")) {
+    const attempt = ensureLs05Attempt();
+    if (!attempt) return;
+    if (!attempt.referencePlayed || attempt.phase === "reference-ready") playLs05Reference();
+    else playLs05Target("child-replay");
+    return;
+  }
   const attempt = ensureLs04Attempt();
   if (!attempt) return;
   if (!attempt.referencePlayed || attempt.phase === "reference-ready") playLs04Reference();
   else playLs04Target("child-replay");
 });
+els.ls05VisualAssist?.addEventListener("click", enableLs05VisualAssist);
 els.mapParentGate.addEventListener("click", () => {
   openParentPanel();
 });
@@ -7901,10 +8906,13 @@ applyContrastPreference();
 initSupportState();
 applyAudioSettings();
 if (state.screen === "garden") {
-  if (currentListeningAction()) {
+  if (currentListeningAction("LS04")) {
     const attempt = ensureLs04Attempt();
     attempt.phase = attempt.referencePlayed ? "replay-ready" : "reference-ready";
     persistLs04Attempt();
+  } else if (currentListeningAction("LS05")) {
+    ensureLs05Attempt();
+    setTimeout(() => resumeLs05Flow({ fromReload: true }), 0);
   } else {
     restoreGardenPendingAttempt();
   }
