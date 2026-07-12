@@ -152,7 +152,7 @@
 | --- | --- | --- | --- | --- |
 | 课程故事/主管 | `active / 340d browser baseline passed / LS05 dispatched` | 维护课程合同和成熟 App 总账本；按 `docs/43` 等待并独立复核 LS05 | 不写运行文件或媒体；只在 LS05 交接或 P0/P1 时介入 | LS05 正式交接，或新 P0/P1 |
 | 原型/UI | `active / C3-04 LS05 single milestone` | 只实现三音花粉铃五次隐藏听辨、证据、恢复和独立合同；保持 340d 既有行为 | 不做 LS06+、媒体接入、全局 CSS 重构、新角色资产或课程改写 | LS05 冻结提交、自审与证据正式交接 |
-| 动画/语音/音效 | `idle / LS04 offline audio package passed / coordinate v2 available / runtime forbidden` | 可按 v2 坐标合同制作一个不进入 runtime 的 LS04 source-clearance 视觉候选；保留人工听审 missing | 不接入 runtime、不重做已审音频、不处理家庭录音 | 候选正式交接，或主管另行批准运行集成/合法录音接收时 |
+| 动画/语音/音效 | `idle / LS04 extraction rejected / offline audio package passed / runtime forbidden` | 暂无生产工作；等待 LS05 运行布局和坐标合同先收口，保留人工听审 missing | 不重做已拒绝的 LS04 提取、不接入音频、不处理家庭录音、不抢先做 LS05 素材 | LS05 运行/坐标正式交接后主管另发素材单，或合法录音接收条件满足时 |
 | 用户/真机/儿童证据 | `protocols_ready / participants_and_devices_waiting` | `docs/37` 已锁定教师/儿童观察；`docs/38` 已锁定实体 iPad、MIDI、麦克风和音频测试 | 不要求现在提供私密录音、孩子资料或伪造真机截图；先让运行流程稳定 | 冻结纵切后才请求方向性观察；原生 N0/N1 后才执行真机矩阵；最终候选再做 3-5 名复测 |
 
 工作区当前的已复核浏览器基线是 `340d`。它不是第三章全章基线、媒体集成基线、实体 iPad 基线或 Release 基线；现阶段只能称 `LS01-LS04 browser slice and note-name UI passed`。下一运行改动必须从该行为冻结点启动，不能反向改写 `340d` 已通过事实。
@@ -175,7 +175,7 @@
 | `PARALLEL-MEDIA` | 媒体 | 官方 Grok CLI 的有限图像、参考编辑、文字和图生视频能力矩阵 | `audited_closed`：能力事实部分通过，但宿主读取约束 contradicted、项目视觉方向和交付规格未通过；全部 `runtimeApproval=false`，禁止继续共享宿主调用 |
 | `PARALLEL-ART` | 媒体 | 从已选源概念确定性提取 Chapter 3 garden-mode 星芽 512px 透明候选；不写 runtime、不调用生成服务 | `completed / approved_for_339b_prototype_copy_only / release_not_cleared`；Chapter 4/5 批量概念仍暂缓 |
 | `PARALLEL-AUDIO` | 媒体 | 复核 LS04 现有无音高反馈/Foley 与 C4/D4 教学音并播；只做本地确定性审核资产 | `completed / independently_passed_offline_package / runtime_forbidden / human_listening_missing` |
-| `LATER` | 媒体 | 依据已通过的 Chapter 3 v2 坐标合同制作一个 LS04 source-clearance 视觉候选；用户明确请求并交付授权后才接收家庭录音 | `visual_candidate_unlocked / runtime_locked / recording_closed` |
+| `LATER` | 媒体 | LS05 运行布局和新坐标合同独立通过后，才可按单独工作单制作花粉铃/三朵花 source-clearance 候选；用户明确请求并交付授权后才接收家庭录音 | `waiting_for_ls05_contract / runtime_locked / recording_closed` |
 
 2026-07-11 课程静态审查补充：`docs/24` 已纠正“M03 属于第三章已实现内容”的错误表述，明确 M03 只是第一章的听音预备；`docs/03/17/24/31/33` 已统一 M07 的两段故事作用为“先挂好星串，再让原位星灯记住路线”，第二遍不得拆星重挂，吃力时延期。当前只读代码证据显示 `C1-06` 已有 guided/check 两步，检查标题为“自己接亮”且复用同一组星位，因此没有需要打断 M08 的 P0/P1；但“已安装星串在检查开始时是否视觉持续、第二状态是否足够明显”仍缺独立截图证据，记为后续第一章节奏回归观察项，不扩入当前 M08 或下一轮 M03/S01 窄修。
 
