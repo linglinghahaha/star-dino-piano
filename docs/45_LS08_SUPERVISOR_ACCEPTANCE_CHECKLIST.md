@@ -163,7 +163,7 @@ Stable 必须同时满足：
 4. 再错或长等待：进入 bounded strong assisted；仍失败则 modeled 当前组并到安全休息。
 5. modeled 只推进当前中性根结，不伪造剩余组正确、整轮 completion 或 stable。
 
-地图暂停和刷新保留同一 session、seed、当前 pair、已收到的第一输入、离散起音 armed 状态和真实 evidence。若 modeled/fatigue 结束 session，下一次明确进入创建 `resumeOfSessionId` 并只续剩余 pair；跨 session 片段可以完成根须故事，绝不能拼成 stable。
+地图暂停和刷新保留同一 session、seed、当前 pair、已收到的第一输入、`secondOnsetRequiresFreshRearm` 和真实 evidence，但不能把活动中的 pointer、仍按住的 MIDI note 或未经过安静重置的麦克风状态持久化成“已经重新武装”。若第一输入已经存在，恢复后仍必须观察一次新的释放/中性阶段再接收第二起音：触屏需要新的 pointerdown，MIDI 需要 note-off/velocity-zero 后重新 note-on，麦克风需要有界安静重置。若 modeled/fatigue 结束 session，下一次明确进入创建 `resumeOfSessionId` 并只续剩余 pair；跨 session 片段可以完成根须故事，绝不能拼成 stable。
 
 ## 十、孩子可见音名规则
 
@@ -252,7 +252,7 @@ Stable 必须同时满足：
 6. 第一完整回答冻结；错后修对不回填；`3/4` stable 与资格阻断。
 7. check 只有整组重听；两次孩子重听阻断 stable；失败重听不计额度。
 8. first-wrong、second-wrong/timeout、pair repair、strong、modeled、visual-assist 的证据真实。
-9. 地图/刷新保留第一输入与 armed 状态；跨 session 续剩余 pair 但不拼 stable。
+9. 地图/刷新保留第一输入与 fresh-rearm 要求，但不把活动 pointer/held MIDI/未静音麦克风伪装成已重新武装；跨 session 续剩余 pair 但不拼 stable。
 10. 根结进度中性、下一 pair 前候选恢复、无目标 DOM/ARIA/class/data/动画/声像泄漏。
 11. touch/MIDI/mic、sound-paused、音量 0、AudioContext 失败和麦克风 uncertain。
 12. 章节末低音事件不要求输入、不写 mastery、不自动启动第四章。

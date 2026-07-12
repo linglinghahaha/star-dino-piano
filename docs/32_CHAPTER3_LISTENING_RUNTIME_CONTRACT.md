@@ -135,7 +135,7 @@ LS05 的 `wrongCount`、`repairStage` 和当前混淆对只属于当前呼叫。
 
 LS05 因 modeled success、长等待或疲劳到达安全休息时，保留已完成的中性花粉格、原 seeded 序列、当前/剩余呼叫和真实 evidence，并结束当前 session。下一次只能由地图上的明确手势创建 `resumeOfSessionId`；新 resume session 先进入 `reference-ready`，重新给一次可见/可听但不计分的 C4 定锚，再继续同一故事序列中尚未完成的呼叫。该定锚不增加五题、孩子主动重听或 qualifying evidence；不得重做已完成呼叫，也不得因 resume 改变 2/2/1 分布。同一 session 的地图暂停/刷新不重新定锚，而是恢复原 call/repair 状态。跨 session 的片段可以共同完成故事，但永远不能拼接成一次 qualifying stable；stable 只能来自后来一次从头开始、同一 session 内完成的全新五呼叫正式运行。
 
-LS08 的可见 C-D 带路回声不计入四组 check。带路顺利时，同一 session 最多自动进入一次四组少提示 check；若带路阶段出现 repeated repair、strong/assisted、modeled、长等待或疲劳，则在一个中性根芽处自然休息，下一次明确手势创建新 session 并从完整四组 check 开始。进入 check 后，地图暂停或刷新可保留同一 session、当前 pair、已收到的第一音和 evidence；若因 modeled/fatigue 结束 session 后只续剩余 pair，跨 session 片段只能完成故事，不能授予 stable。
+LS08 的可见 C-D 带路回声不计入四组 check。带路顺利时，同一 session 最多自动进入一次四组少提示 check；若带路阶段出现 repeated repair、strong/assisted、modeled、长等待或疲劳，则在一个中性根芽处自然休息。下一次明确手势创建新 session，先重做一次更短的可见 C-D 带路；只有该次不使用 strong/modeled 完成，才可在同一 session 进入四组 check。连续两个 guide session 仍需要 strong/modeled 时，由 scheduler 路由回 LS05 的 C/D 单音听后找键或等价补教，不得直接开放隐藏双音 check。进入 check 后，地图暂停或刷新可保留同一 session、当前 pair、已收到的第一音和 evidence；若因 modeled/fatigue 结束 session 后只续剩余 pair，跨 session 片段只能完成故事，不能授予 stable。
 
 LS08 每组 qualifying 结果只取第一次完整的两个离散孩子输入；若第一音已错，该组立即失去 qualifying correct，若第一音正确而第二音错误/超时，当前 repair 可以暂存第一音并重放整组，但后续修对同样不能回填。`C-C` 仍必须收到两个离散起音。四组检查中的中性根结不记录音高、方向或 pair 身份。
 

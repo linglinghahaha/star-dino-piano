@@ -22,6 +22,15 @@
 - Chapter 4 公开任务 `LP02` 改为 `低音 C 的家`；Chapter 5 公开任务 `TH01/TH02` 改为 `两个 C 说你好`、`G 回声接力`。角色台词仍可说 Do/Sol，课程音高、顺序、故事结果和掌握阈值未改变。
 - `docs/03/24/34/35` 已同步孩子动作、谱垫、脚印、桥路线、两小节表格和未来自动化门禁。第四、五章仍无运行实现，不能据此宣称浏览器通过。
 
+## 2026-07-13 LS08 解锁前课程合同预审
+
+裁决：`spec_consistency_corrected / runtime_still_locked / LS06_LS07_gate_waiting`。
+
+- 预审发现 `docs/32` 旧段落曾要求 LS08 可见带路困难后，下一 session 直接开始四组隐藏 check；这与 `docs/24/45` 的补教逻辑冲突，也会让最需要教学的孩子跳过带路直接进入考试。
+- `docs/03/32/33/45` 已统一：顺利带路可在同一短课进入一次 check；困难时在中性根芽休息，下次先重做更短的 C-D 可见带路；连续两个 guide session 仍需 strong/modeled 时回到 LS05 C/D 单音补教，不直接开放隐藏双音 check。
+- C-C 跨地图/刷新连续性补充 `secondOnsetRequiresFreshRearm`：保留第一输入和真实证据，但不能把活动 pointer、仍按住的 MIDI note 或未经过安静重置的麦克风持久化成已重新武装；恢复后必须观察新的释放/中性阶段再接收第二起音。
+- 这些修正只提高未来工作单一致性，不解锁 LS08。必须先完成 342a 独立审查、工作树清理和主管明确派发。
+
 ## 2026-07-12 `overhaul-341a` LS05 正式独立裁决
 
 裁决：`passed_browser_baseline / ls05_teaching_contract_passed / ls06_ls07_dispatch_unlocked / release_and_external_evidence_missing`。
