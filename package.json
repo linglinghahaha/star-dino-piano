@@ -33,7 +33,7 @@
     "check:roof-route": "node tools/with-playwright-path.mjs chrome-test/roof-route-visual-check.mjs http://127.0.0.1:4173/ screenshots/roof_route_340c",
     "check:assembly-blueprint": "node tools/with-playwright-path.mjs chrome-test/assembly-blueprint-check.mjs http://127.0.0.1:4173/ screenshots/assembly_blueprint_340c",
     "check:zones": "node tools/with-playwright-path.mjs chrome-test/teaching-zone-coordinate-contract-340d-v2.mjs http://127.0.0.1:4173/ docs/30_TEACHING_ZONE_COORDINATE_CONTRACT_340D_V2.json screenshots/teaching_zones_340d_v2",
-    "check:chapter3-zones": "node tools/with-playwright-path.mjs chrome-test/chapter3-media-zone-contract-340d-v2.mjs http://127.0.0.1:4173/ docs/30_CHAPTER3_MEDIA_ZONE_CONTRACT_340D_V2.json screenshots/chapter3_media_zones_340d_v2",
+    "check:chapter3-zones": "node tools/with-playwright-path.mjs chrome-test/chapter3-media-zone-contract-340d-v3.mjs http://127.0.0.1:4173/ docs/30_CHAPTER3_MEDIA_ZONE_CONTRACT_340D_V3.json screenshots/chapter3_media_zones_340d_v3",
     "check:staff-mini": "node tools/with-playwright-path.mjs chrome-test/staff-mini-observation-check.mjs http://127.0.0.1:4173/ screenshots/staff_mini_latest",
     "check:clean-state": "node tools/with-playwright-path.mjs chrome-test/clean-state-slice-check.mjs http://127.0.0.1:4173/ screenshots/clean_state_latest",
     "build:quality-css-candidate": "node tools/with-playwright-path.mjs tools/css-declaration-dedupe.mjs"

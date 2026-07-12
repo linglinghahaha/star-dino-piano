@@ -2,9 +2,31 @@
 
 This file records concrete pass/fail evidence for UI, teaching, and polish gates. It is not a substitute for the acceptance rules in `15_ACCEPTANCE_GATES.md`; it is the evidence trail.
 
+## 2026-07-12 - Overhaul 340d Chapter 3 Phase Capture V3
+
+Scope: evidence-only follow-up to `aaf0426`; runtime, CSS, curriculum, input, scoring, mastery, sound and media files are unchanged.
+
+Corrections:
+
+- Every Chapter 3 contract state now has an explicit state-to-phase requirement. `playing` requires `target-playing`; `waiting` requires `awaiting-response`; sound-paused, reference, wrong, assisted and complete require their exact runtime phases. Garden entry requires map.
+- Reduced-motion explicitly allows `reference`, `target-playing` or `awaiting-response`; this allowed set is stored in `expectedActualPhases` and repeated in `stateCoverage`.
+- Phase waiting and geometry measurement now happen inside one bounded `page.evaluate` task. This removes the Playwright round-trip where `target-playing` could advance to `awaiting-response` between the phase assertion and geometry read.
+- Contract completeness now fails when the state name exists but `geometry.phase` is outside that state's allowed set.
+- Package, JSON ID and screenshots now use 340D v3. Chapter 3 v1 remains `rejected_navigation_resilience_evidence`; Chapter 3 v2 remains `rejected_phase_capture_nondeterministic_evidence`. Both historical files remain unchanged.
+
+Evidence:
+
+- One cold-directory run followed by two fixed-directory reruns completed with six viewports, nine states, zero failures and zero browser errors.
+- All six `playing` records measured `target-playing`; all six `waiting` records measured `awaiting-response` in every run.
+- All three runs produced internal SHA-256 `063115a50e95d3cd1a5c7b7ef439debfe2ccb18fbeea9d7b6f3ddcc11f1f18c1`; final v3 file SHA-256 `DCA8CD3A0FBAA36F85F64F954A547080CDB24B334F6C7097D2472F98A68B8981`.
+- Generic 340D v2 regression passed with internal SHA-256 `16a7cf0c921d9fcf3cc83d3ce7981446eeebcc2575ed6022b0098b8d4797f67d`.
+- `check:chapter3-visible` `74/74`; `check:chapter3-ls04` `39/39`; child note names `160/160`; PWA `7/7`; quick and strict bundle passed.
+
+Status: v3 browser phase/coordinate evidence `passed`; physical iPad Safari remains `missing`, and `runtimeIntegrationAllowed=false`. LS05 remains locked.
+
 ## 2026-07-12 - Overhaul 340d Coordinate Navigation Resilience V2
 
-Scope: evidence-only follow-up to commit `35e2b43`; runtime, CSS, curriculum, input, scoring, mastery, sound and media files are unchanged.
+Scope: evidence-only follow-up to commit `35e2b43`; runtime, CSS, curriculum, input, scoring, mastery, sound and media files are unchanged. This version is retained as `rejected_phase_capture_nondeterministic_evidence` because a state named `playing` could measure `awaiting-response` without failing.
 
 Corrections:
 
