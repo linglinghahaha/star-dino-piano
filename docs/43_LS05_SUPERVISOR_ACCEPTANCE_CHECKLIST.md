@@ -1,12 +1,12 @@
 # LS05 主管独立验收表
 
-状态：`spec_ready / runtime_work_order_issued / waiting_for_runtime_handoff`
+状态：`passed_browser_baseline / promoted_overhaul_341a / external_evidence_missing`
 
 ## 一、用途和边界
 
 本文件只用于主管独立审查 `C3-04 / LS05` 的 C/D/E 三音小集合听后找键。课程事实仍以 `03_CONTENT_ROADMAP.md`、`09_SCAFFOLD_AND_ASSESSMENT_RULES.md`、`31_SESSION_SCHEDULER_AND_RETENTION_RUNTIME_CONTRACT.md`、`32_CHAPTER3_LISTENING_RUNTIME_CONTRACT.md` 和 `33_GAME_TEACHING_PACING_AND_MOTIVATION_CONTRACT.md` 为准。
 
-当前已通过浏览器基线是 `overhaul-340d`，证据提交为 `0c14cd9fa3cdfe20e1fe22491e1b526c984c3b8e`。主管已独立确认 v3 三次固定目录运行内部哈希一致、54 个状态记录无 phase mismatch，并通过 LS04、音名、会话、PWA、clean-state、quick 和 strict 回归。下一运行里程碑只能新增 LS05，不得顺手实现 LS06-LS08、正式媒体集成、全局 CSS 重构或新角色资产。通过 LS05 仍不等于第三章完成。
+最新已通过浏览器基线是 `overhaul-341a`。运行提交为 `34277625400d1f1a4c60a5b29ed267b1f090bdf0`，版本断言补丁为 `af9293afc5386cc71ac594bec72e0307476ee205`。主管已独立确认 LS05 专项连续三次 `65/65`、六视口十一状态合同三次内部哈希一致、零 phase mismatch，并通过 LS04、音名、会话、PWA、clean-state、输入、音频设置、可访问性、第一二章共享门禁、quick 和 strict 回归。LS05 通过仍不等于第三章完成；LS08、正式媒体集成、真机和发布继续锁定。
 
 ## 二、先验冻结检查
 
@@ -144,6 +144,9 @@ LS05 必须生成新的候选合同，至少覆盖：garden-entry、reference、
 
 ## 十四、裁决状态
 
+- 当前正式裁决：`passed_browser_baseline / promoted_overhaul_341a / runtimeIntegrationAllowed=false`。合同 ID 为 `chapter3-ls05-media-zones-overhaul-341a-v1`，三连内部 SHA-256 为 `8dbadee17186763ab78269222362700ff174a7803e400ebb4df5ab7355a0a65f`，最终 JSON 文件 SHA-256 为 `A4684E42E60377AA4911CCB502545C57701B14F1F4103893E61674AA02C8AC8F`。
+- 浏览器实现已证明 C/D/E `2/2/1`、无泄题、答后唱名回连、同权修复、候选外强帮助、跨 session 不拼 stable、诚实家长证据和自然休息；未发现 P0/P1、contradicted 或 LS06 越界。
+- 实体 iPad Safari、真实 MIDI、原声钢琴麦克风、教师、3-5 名儿童、最终美术/声音来源和外部相似性仍为 `missing`，因此不能宣称教学有效或发布成熟。
 - `passed_browser_baseline`：P0/P1 全关，运行、截图、坐标和回归证据一致；仍保留真机、教师、儿童、来源和发布缺口。
 - `partial`：实现可讨论但缺非阻断证据；不能晋升基线。
 - `missing`：合同要求尚未实现或没有证据。

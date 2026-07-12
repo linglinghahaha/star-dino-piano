@@ -1,6 +1,6 @@
 # Execution Backlog
 
-Current display override, 2026-07-12: child-visible surfaces outside the small-dinosaur dialogue use letter names only. Older milestone bullets below that accurately report `large solfege`, `solfege-only badge`, `Do/C`, or similar historical UI remain evidence of what those versions did; they are not current acceptance criteria and must not be copied into new work. Parent-only evidence and non-leaking ARIA may retain dual identity. The current rule, approved 340d evidence and future regression requirement are tracked in `29_PROJECT_COORDINATION_AND_INDEPENDENT_AUDIT.md`.
+Current display override, 2026-07-12: child-visible surfaces outside the small-dinosaur dialogue use letter names only. Older milestone bullets below that accurately report `large solfege`, `solfege-only badge`, `Do/C`, or similar historical UI remain evidence of what those versions did; they are not current acceptance criteria and must not be copied into new work. Parent-only evidence and non-leaking ARIA may retain dual identity. The current rule, approved 341a evidence and future regression requirement are tracked in `29_PROJECT_COORDINATION_AND_INDEPENDENT_AUDIT.md`.
 
 ## Phase 0: Alignment Files
 
@@ -43,7 +43,7 @@ Tasks:
 - add `phase`, `focus`, `concepts`, and `scaffold` metadata to levels;
 - create a shared note-teaching helper for solfege, letter name, key locator, and staff hint;
 - update normal level prompt, target card, dino bubble, and wrong feedback;
-- make workshop parts carry scaffold-aware note identity: a large `C/D/E/F/G` letter name, smaller solfege when space allows, and a thin note-color edge in guided teaching; Xingya's speech may reverse the hierarchy. Reduce or withhold target-specific cues before action in checks;
+- make workshop parts carry scaffold-aware note identity: a large `C/D/E/F/G` letter name and a thin note-color edge in guided teaching; only Xingya's dialogue bubble may carry solfege. Reduce or withhold target-specific cues before action in checks;
 - add staged no-input coaching through Xingya: gesture first, then the currently allowed note-name clue, then keyboard locator or target replay; every stage must update cue-strength evidence;
 - record response time only as parent/teacher diagnostic data, starting after prompt audio and transition animation settle; never show a child countdown or use speed to deduct stars or decide mastery;
 - keep canonical story sequences in order, and place missed items into a separate spaced review queue only where the curriculum defines a review/check segment; cap retries so the app never loops a child indefinitely;
@@ -278,7 +278,7 @@ Current progress:
 
 ## Phase 2B: Chapter 3 Listening Garden
 
-Status: in progress. Steps 1-5 passed independently through `overhaul-340d`; step 6 is split into gated milestones. `C3-04 / LS05` is the only active runtime milestone, while `LS06-LS08` remain locked.
+Status: in progress. Steps 1-6 passed independently through `overhaul-341a`. `C3-05 / LS06` and `C3-06 / LS07` are the only active runtime milestones under `docs/44`; LS08 remains locked.
 
 Goal: turn the existing M03 listening seed into a staged story course that links heard piano sound, C/D/E/F/G letter name, Xingya's solfege, real keyboard geography, and neutral story consequences without claiming absolute pitch.
 
@@ -291,7 +291,9 @@ Implementation order:
 3. `[completed at 339d]` Implement only `C3-01` (`LS01-LS02`) and `C3-02` (`LS03`). These are introduction-only, write played/observation evidence, and never enter the mastery opening-review queue.
 4. `[completed at 339d]` Stop and audit the visible echo loop, early LS01 rest/resume, letter-first UI, audio priority, touch route, debug isolation, map destination and pending-attempt continuity before adding hidden calls.
 5. `[completed at 340d]` Implement `C3-03` (`LS04`) as the first hidden C/D set. The approved browser baseline proves the neutral source, target-free waiting state, balanced calls, candidate reset, bounded repair, stable/retained separation, sound recovery and phase-bound Chapter 3 media-coordinate contract.
-6. `[active: LS05 only]` Implement `C3-04 / LS05` as a separate five-call C/D/E milestone. Stable requires at least 4/5, at least one unassisted correct for every C/D/E candidate, no strong/modeled/microphone/visual-assist contamination, at most one successful child replay and one complete same-session run. Persistent progress remains note-neutral; modeled/fatigue resume re-anchors with an unscored C4 before continuing remaining calls. `LS06-LS07` and then `LS08` stay locked until LS05 passes independently.
+6. `[completed at 341a]` Implement `C3-04 / LS05` as a separate five-call C/D/E milestone. The approved baseline proves strict `2/2/1`, candidate coverage, first-response scoring, call-local repair, candidate-outside handling, sound recovery, visual-assist isolation, cross-session non-stable completion, honest parent evidence and natural rest.
+7. `[active: LS06-LS07 only]` Implement `C3-05 / LS06` C/G large-distance comparison and, after its natural rest, `C3-06 / LS07` E/F adjacent-boundary comparison. Visible guide is unscored; hidden check uses balanced four-call sets, neutral persistent progress and separate phase-bound contracts. Do not start LS08 or media integration.
+8. `[locked]` Implement `C3-07 / LS08` only after LS06-LS07 pass independently. It remains the two-note-order and Chapter 3 exit milestone under `docs/45`.
 
 Acceptance:
 

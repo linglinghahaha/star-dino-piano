@@ -1,10 +1,10 @@
 # Current Planning Review
 
-Last reviewed: 2026-07-12.
+Last reviewed: 2026-07-13.
 
-Current validated browser baseline: `overhaul-340d` preserves the accepted middle-C `C4-G4` scope, note-priority audio, complete pressure suit, touch/MIDI/experimental microphone paths, short-session scheduler, independent stable/retained events, PWA offline shell, S01 staff behavior, palette, reduced motion, contrast preference and iPad-size accessibility. It retains the full `339d` garden introduction and `340a` LS04 listening behavior, then makes ordinary child-visible note carriers letter-only while the dinosaur dialogue carries solfege. Independent reruns include LS04 `39/39`, child note names `160/160`, sessions `72/72`, clean-state `124/124`, PWA `7/7`, quick/strict bundle, `teaching-zones-overhaul-340d-v2`, and three identical fixed-directory runs of `chapter3-media-zones-overhaul-340d-v3` with state-to-phase integrity. Commit `b431c1ab347dd813ac1aa712a05c5f7ab150cf55` remains the first source/LFS baseline; `0c14cd9fa3cdfe20e1fe22491e1b526c984c3b8e` is the latest approved evidence commit. This remains browser evidence, not physical-iPad, real-audio, teacher or child proof.
+Current validated browser baseline: `overhaul-341a` preserves the accepted middle-C `C4-G4` scope, note-priority audio, complete pressure suit, touch/MIDI/experimental microphone paths, short-session scheduler, independent stable/retained events, PWA offline shell, S01 staff behavior, palette, reduced motion, contrast preference and iPad-size accessibility. It retains the full `340d` behavior and adds the independently accepted LS05 C/D/E small-set listening slice with strict `2/2/1`, first-response scoring, candidate coverage, bounded repair, sound recovery and natural rest. Independent reruns include LS05 three consecutive `65/65`, LS04 `39/39`, child note names `160/160`, sessions `72/72`, clean-state `124/124`, PWA `7/7`, input/audio/accessibility and first-two-chapter gates, quick/strict bundle, generic coordinate regression, and three identical fixed-directory runs of `chapter3-ls05-media-zones-overhaul-341a-v1` with state-to-phase integrity. Commit `b431c1ab347dd813ac1aa712a05c5f7ab150cf55` remains the first source/LFS baseline; `34277625400d1f1a4c60a5b29ed267b1f090bdf0` plus `af9293afc5386cc71ac594bec72e0307476ee205` are the latest approved runtime and assertion commits. This remains browser evidence, not physical-iPad, real-audio, teacher or child proof.
 
-Current runtime decision: `340d` is independently accepted as the browser baseline for Chapters 1-2 plus Chapter 3 `LS01-LS04`. The prototype task may now implement only `C3-04 / LS05` under `docs/32` and `docs/43`. `LS06-LS08`, visual/media runtime integration, new character assets and broad polish remain locked until the LS05 handoff is independently reviewed.
+Current runtime decision: `341a` is independently accepted as the browser baseline for Chapters 1-2 plus Chapter 3 `LS01-LS05`. The prototype task may now implement only `C3-05 / LS06` and `C3-06 / LS07` under `docs/32` and formal work order `docs/44`. `LS08`, visual/media runtime integration, new character assets and broad polish remain locked until the LS06-LS07 handoff is independently reviewed. A separate media task may produce LS05 source-clearance candidates only; it may not write runtime.
 
 Role of this file: this is the single rolling audit source for the current plan. `13`, `21`, and `22` are dated or historical audits; keep their useful findings here and in `08_EXECUTION_BACKLOG.md` instead of treating them as competing checklists. `19` is story/art reference, not the production checklist.
 
@@ -369,7 +369,7 @@ Current measured state:
 | root screenshot/contact-sheet artifacts | 1,200,453,258 bytes |
 | `chrome-test` non-script profile/cache files | 5,370,072 bytes |
 
-Decision: keep production bundle exclusions active and continue semantic CSS cleanup before another broad visual layer. `319a` safely split the former monolith, and `340a` keeps both prototype and strict scans passing after later teaching, M08, M03/S01 and Chapter 3 LS01-LS04. The immediate per-file blocker is resolved, but the roughly `779 KB` four-file override total plus later ownership CSS still need selector ownership and dead-history cleanup before native/release packaging. Do not mix that broad cleanup into the active LS05 behavior milestone.
+Decision: keep production bundle exclusions active and continue semantic CSS cleanup before another broad visual layer. `319a` safely split the former monolith, and `341a` keeps both prototype and strict scans passing after later teaching, M08, M03/S01 and Chapter 3 LS01-LS05. The immediate per-file blocker is resolved, but the roughly `779 KB` four-file override total plus later ownership CSS still need selector ownership and dead-history cleanup before native/release packaging. Do not mix that broad cleanup into the active LS06-LS07 behavior milestones.
 
 ### P2: Acceptance Gates Are Still Too Manual
 
@@ -399,7 +399,7 @@ Still missing implementation or proof:
 - a general session scheduler/rest-state flow beyond the current `S01-mini` observation route;
 - a timestamped or later-session retained-progress record; existing `stable` history must not be migrated into retained evidence automatically;
 - real-child observation threshold: one child for directional signal, 3-5 children before low-age usability claims;
-- real-device verification of the current frozen `340d` sound-off mode and 0-70% volume cap, including iPad speaker/headphone loudness and child comfort;
+- real-device verification of the current frozen `341a` sound-off mode and 0-70% volume cap, including iPad speaker/headphone loudness and child comfort;
 - code-level reduced motion now passes `19/19`; physical-iPad system-setting behavior and real-child comfort remain unproven;
 - automated color-reduced palette robustness now passes; real-child color-vision/accessibility proof is still missing;
 - large touch target minimum;
@@ -456,11 +456,11 @@ Do not add broad new modes yet.
 4. Keep the proof slice centered on `M01`, `M03`, `M08`, `FG03`, and `S01`; include `M02` only for C/D/E geography or full-course smoke.
 5. Keep `LS01-LS03` introduction-only and `reviewableForMastery=false`; visible completion may write played/remediation but must not create stable, retained or opening-review eligibility.
 6. Preserve pre-reading equivalents for every child-facing text clue and make the next S01/M03 proof about task-role clarity rather than another decorative polish pass.
-7. Expand touch-only listening only through the independently staged Chapter 3 sequence. LS04 and the 340d evidence-resilience correction pass; LS05 is the only dispatched extension. LS06-LS08 stay locked until LS05 passes no-leak, repair, evidence and pacing review.
+7. Expand touch-only listening only through the independently staged Chapter 3 sequence. LS04 and LS05 pass independently through `341a`; dispatch only LS06-LS07 under `docs/44`, with separate natural rests and contracts. LS08 stays locked until both milestones pass no-leak, repair, evidence and pacing review.
 8. Continue the visual/audio release ledger in `16_ASSET_MANIFEST.md`; device listening approval, M08 character provenance, external similarity review and unused visual retirement remain open.
 9. Git and private WAV/PDF ignore verification are now valid. Before receiving family recordings or treating assets as release packages, define the initial baseline commit and keep recording intake explicitly closed until files and authorization are provided.
 10. Continue semantic CSS cleanup after the next behavior milestone; strict bundle passes, but the four override segments total `779,306` bytes and later ownership files add further debt.
-11. Validate the current frozen `340d` sound-off, volume, reduced-motion, touch, MIDI and microphone behavior on a real iPad, then complete low-brightness and VoiceOver checks.
+11. Validate the current frozen `341a` sound-off, volume, reduced-motion, touch, MIDI and microphone behavior on a real iPad, then complete low-brightness and VoiceOver checks.
 12. Use `docs/36-39` for native parent gate, local progress migration, physical-device evidence, child/teacher observation, privacy and release originality. None of those specification-ready protocols is implementation evidence yet.
 
 ## Open Decisions Before Native iPad Work

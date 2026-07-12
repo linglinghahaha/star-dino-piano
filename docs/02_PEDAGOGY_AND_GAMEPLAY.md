@@ -43,7 +43,7 @@ The app should not use one reveal rule for every mode. Teaching, listening, and 
 
 Implementation rule: hiding an answer for listening/check mode is not a contradiction of the teaching loop. It is the assessment version of the same loop.
 
-Visual naming rule: outside Xingya's speech/bubble, current Course 1 UI uses `C/D/E/F/G` as the primary visible labels. Solfege remains necessary, but is spoken by Xingya or shown as secondary confirmation. Correct/wrong feedback reconnects both; hidden listening/check states reveal neither target-specific name before action.
+Visual naming rule: outside Xingya's speech/bubble, current Course 1 UI uses only `C/D/E/F/G` as visible note labels. Solfege remains necessary, but it is spoken or shown only inside Xingya's dialogue bubble. Correct/wrong feedback reconnects the two names across those separate carriers; hidden listening/check states reveal neither target-specific name before action.
 
 ## Listening Is Not An Absolute-pitch Test
 

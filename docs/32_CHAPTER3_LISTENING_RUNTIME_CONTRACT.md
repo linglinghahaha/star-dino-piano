@@ -1,6 +1,6 @@
 # Chapter 3 Listening Runtime Contract
 
-状态：`specification_passed / overhaul-340d_ls04_browser_passed / ls05_runtime_dispatched / media_not_approved / device_and_child_evidence_missing`
+状态：`specification_passed / overhaul-341a_ls01_ls05_browser_passed / ls06_ls07_runtime_dispatched / ls08_locked / media_not_approved / device_and_child_evidence_missing`
 
 负责人：课程故事、整体调度与独立审查任务锁定教学语义；原型任务负责运行实现、浏览器门禁和截图；动画/声音任务只生产可追溯候选，未经调度复核不得接入运行时。
 
@@ -312,8 +312,9 @@ LS04-LS07 的 `correctCount` 按每次呼叫的第一次有效孩子作答计数
 - `passed`：第三章故事、音高、短课、无泄题、输入、证据和测试规格已锁定。
 - `passed_browser_visible_slice`：`overhaul-339d` 已由主管独立通过花园入口手势、确定性空气检测回退、`C3-01: LS01-LS02`、独立 `C3-02: LS03`、early-rest、地图五态和 pending-attempt 连续性；这三个 introduction-only level 仍固定 `reviewableForMastery=false`。
 - `passed_browser_ls04`：`overhaul-340d` 保留并由主管复跑通过独立 `C3-03: LS04`、可见 C4 定锚、四次平衡 C/D 隐藏呼叫、无泄题、错误比较、bounded assisted/modeled、`3/4` stable、无声不评分、自然停点和九态 Chapter 3 媒体保护区合同；`chapter3.completed` 仍为 false。
-- `next_runtime_milestone`：当前已派发的独立课程里程碑只实现 `C3-04: LS05` C/D/E 三音小集合，不包含 LS06+。
-- `missing`：`LS06-LS08`、完整 Chapter 3 后续状态机与章节出口。
+- `passed_browser_ls05`：`overhaul-341a` 已由主管独立通过 `C3-04: LS05`、C/D/E 严格 `2/2/1`、五次隐藏呼叫、候选覆盖、首答计分、同权修复、候选外强帮助、声音恢复、跨 session 不拼 stable、答后角色唱名回连、自然停点和六视口十一状态合同；`chapter3.completed` 仍为 false。
+- `next_runtime_milestone`：当前只派发 `C3-05: LS06` C/G 大距离比较与独立自然休息后的 `C3-06: LS07` E/F 相邻边界比较；不得实现 LS08、章节出口或媒体运行集成。
+- `missing`：`LS06-LS07` 正式运行与独立证据、`LS08` 及完整 Chapter 3 后续状态机与章节出口。
 - `missing`：正式空气检测/开盔/收纳动画和批准后的运行媒体。
 - `missing`：真实 iPad、MIDI、原声钢琴麦克风、教师与儿童证据。
 

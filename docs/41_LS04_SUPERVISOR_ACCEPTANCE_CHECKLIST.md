@@ -6,7 +6,7 @@
 
 本文件只用于主管独立审查 `C3-03 / LS04` Do/Re 两音隐藏听辨。课程事实仍以 `03_CONTENT_ROADMAP.md`、`09_SCAFFOLD_AND_ASSESSMENT_RULES.md`、`31_SESSION_SCHEDULER_AND_RETENTION_RUNTIME_CONTRACT.md`、`32_CHAPTER3_LISTENING_RUNTIME_CONTRACT.md` 和 `33_GAME_TEACHING_PACING_AND_MOTIVATION_CONTRACT.md` 为准；本表不重新发明课程规则。
 
-`overhaul-340a` 是最先通过本表的 LS04 基线；当前主管批准浏览器基线为 `overhaul-340d`，并已复跑保留全部 LS04 行为。通过 LS04 不等于第三章完成，也不等于实体 iPad、教师、儿童、版权或发布门禁通过。
+`overhaul-340a` 是最先通过本表的 LS04 基线；当前主管批准浏览器基线为 `overhaul-341a`，并已复跑保留全部 LS04 行为。通过 LS04 不等于第三章完成，也不等于实体 iPad、教师、儿童、版权或发布门禁通过。
 
 ## 独立验收结果
 
