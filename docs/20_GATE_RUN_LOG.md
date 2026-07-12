@@ -2,9 +2,28 @@
 
 This file records concrete pass/fail evidence for UI, teaching, and polish gates. It is not a substitute for the acceptance rules in `15_ACCEPTANCE_GATES.md`; it is the evidence trail.
 
+## 2026-07-12 - Overhaul 340d Coordinate Navigation Resilience V2
+
+Scope: evidence-only follow-up to commit `35e2b43`; runtime, CSS, curriculum, input, scoring, mastery, sound and media files are unchanged.
+
+Corrections:
+
+- Chapter 3 and generic coordinate generators now use bounded 30-second navigation and boot waits instead of direct 12-second `goto` calls. The generic protected surface wait is bounded at 20 seconds.
+- Navigation/reload failures report the target URL, named stage, current URL, `document.readyState`, boot visibility/style, protected-surface geometry where applicable, Service Worker control URL and CacheStorage names. Errors are surfaced immediately; there is no retry loop or swallowed failure.
+- The Chapter 3 check tag is `chapter3-media-zones-340d-v2`; both v2 scripts contain no 340a/340c evidence identity.
+- Current package gates, JSON IDs and screenshot paths use 340D v2. The 340D v1 files from `35e2b43` remain byte-identical and are retained as `rejected_navigation_resilience_evidence`, not overwritten.
+
+Contract evidence:
+
+- Chapter 3 ID: `chapter3-media-zones-overhaul-340d-v2`; six viewports, nine states, zero failures. Three consecutive complete runs produced internal SHA-256 `45098116a6dc5a383d1452abb21b3d953589140f75b0a15db135256b8b8f6b8a`; final file SHA-256 `6CA2006225EC766CECD52B19297FC3B9BB53134650557C4E5599066B466DAE0A`.
+- Generic ID: `teaching-zones-overhaul-340d-v2`; six viewports, zero failures/errors. Two consecutive complete runs produced internal SHA-256 `16a7cf0c921d9fcf3cc83d3ce7981446eeebcc2575ed6022b0098b8d4797f67d`; final file SHA-256 `46A7CAC071BF42FEF9FA59A897E03EC47E53B83D046D608B9512AC43489A8A05`.
+- Historical files remain unchanged: 340A V2 `11299884B8C7837812C5968AD6C75F53A4F169A803C7CBF412A19FA4796E547B`; Chapter 3 340C `248A3A36FB2E92424576ACFC901BCB9F166EB0C504914B7C2D764AE2A4805813`; generic 340C `BE5D74A9765D1B6F3B6BF9E58EE322C204978F29B550ECE1A321459622A360C2`; Chapter 3 340D v1 `6FA71E298B580ED59DFD2B465BBDBD23B56449F3BC438597D03A52FF3BA1C891`; generic 340D v1 `D79E9A84C9D6A904C421AAA424BE3579A770F58AA625BE41D1A0DD7C71B800C5`.
+
+Status: v2 browser coordinate evidence `passed`; physical iPad Safari remains `missing`, and `runtimeIntegrationAllowed=false`. LS05 remains locked.
+
 ## 2026-07-12 - Overhaul 340d Evidence Resilience and Note-Name Boundary
 
-Baseline: follow-up to `af13deb` without changing lesson runtime, pitch, input, scoring, mastery, story or media behavior.
+Baseline: follow-up to `af13deb` without changing lesson runtime, pitch, input, scoring, mastery, story or media behavior. The coordinate v1 produced by this entry is retained for traceability but is superseded as `rejected_navigation_resilience_evidence` by the 340D v2 entry above.
 
 Corrections:
 
