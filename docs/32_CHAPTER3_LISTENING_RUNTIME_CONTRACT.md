@@ -133,7 +133,7 @@ S01 的自然停点先落在地图上的花园入口，不在上一关完成瞬�
 
 LS05 的 `wrongCount`、`repairStage` 和当前混淆对只属于当前呼叫。进入下一呼叫时这些临时修复字段必须清零，上一题的错误不能让下一题直接进入 assisted；整轮的错音、混淆对计数、重听和输入路线另行累计，供家长证据和后续补教使用。
 
-LS05 因 modeled success、长等待或疲劳到达安全休息时，保留已完成的中性花粉格、原 seeded 序列、当前/剩余呼叫和真实 evidence，并结束当前 session。下一次只能由地图上的明确手势创建 `resumeOfSessionId`，继续同一故事序列中尚未完成的呼叫；不得重做已完成呼叫，也不得因 resume 改变 2/2/1 分布。跨 session 的片段可以共同完成故事，但永远不能拼接成一次 qualifying stable；stable 只能来自后来一次从头开始、同一 session 内完成的全新五呼叫正式运行。
+LS05 因 modeled success、长等待或疲劳到达安全休息时，保留已完成的中性花粉格、原 seeded 序列、当前/剩余呼叫和真实 evidence，并结束当前 session。下一次只能由地图上的明确手势创建 `resumeOfSessionId`；新 resume session 先进入 `reference-ready`，重新给一次可见/可听但不计分的 C4 定锚，再继续同一故事序列中尚未完成的呼叫。该定锚不增加五题、孩子主动重听或 qualifying evidence；不得重做已完成呼叫，也不得因 resume 改变 2/2/1 分布。同一 session 的地图暂停/刷新不重新定锚，而是恢复原 call/repair 状态。跨 session 的片段可以共同完成故事，但永远不能拼接成一次 qualifying stable；stable 只能来自后来一次从头开始、同一 session 内完成的全新五呼叫正式运行。
 
 LS08 的可见 C-D 带路回声不计入四组 check。带路顺利时，同一 session 最多自动进入一次四组少提示 check；若带路阶段出现 repeated repair、strong/assisted、modeled、长等待或疲劳，则在一个中性根芽处自然休息，下一次明确手势创建新 session 并从完整四组 check 开始。进入 check 后，地图暂停或刷新可保留同一 session、当前 pair、已收到的第一音和 evidence；若因 modeled/fatigue 结束 session 后只续剩余 pair，跨 session 片段只能完成故事，不能授予 stable。
 
@@ -282,8 +282,9 @@ LS04-LS07 的 `correctCount` 按每次呼叫的第一次有效孩子作答计数
 28. 家长面板在 LS04 活动和完成后的地图休息态显示 `C/D 小音组听后找键` 及真实 played/stable/retained/needsPractice；不能复用 LS01-LS03 的“可见练习/不计稳定”文案，也不能回退显示旧月球关卡。
 29. LS05 每个新呼叫重置 call-local repair，modeled/疲劳休息后通过新 session 续做同一 seeded 序列的剩余呼叫；跨 session 片段只完成故事，不能合并授予 stable。
 30. LS05 的听力辅助 visual-assist 可完成故事但只写 observation/played/needsPractice；可见模型、无声输入或 accessibility completion 不得进入 listening correct/stable/retained。
-31. LS08 的可见 guide 不计分；guide 需要 repeated help 时不自动进入 check。check 每组只取第一次完整双输入，错后修对和跨 session 续做只推进故事，不回填 stable。
-32. LS05-LS08 家长摘要使用各自真实技能名称和证据字段，不把 C/G 写成音区掌握、不把 E/F 键位帮助写成听辨成功、不把 LS08 或末尾 C3 故事音写成节奏/低音能力。
+31. LS05 的新 resume session 在第一道剩余呼叫前重新播放一次不计分 C4 定锚；不重置 seed/call/progress/evidence，不计孩子重听。同 session 暂停/刷新不得重复定锚。
+32. LS08 的可见 guide 不计分；guide 需要 repeated help 时不自动进入 check。check 每组只取第一次完整双输入，错后修对和跨 session 续做只推进故事，不回填 stable。
+33. LS05-LS08 家长摘要使用各自真实技能名称和证据字段，不把 C/G 写成音区掌握、不把 E/F 键位帮助写成听辨成功、不把 LS08 或末尾 C3 故事音写成节奏/低音能力。
 
 建议新增独立脚本而不是把所有断言塞入旧测试：
 

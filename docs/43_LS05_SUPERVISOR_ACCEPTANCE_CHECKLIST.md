@@ -40,7 +40,7 @@
 - 地图暂停和刷新只停止 timer/动画/临时 DOM；重入仍是同一 sessionId、同一序列、同一当前呼叫和同一错误/重听/支架事实。
 - action 完成、modeled safe rest 或 session 结束才清 pending；新 session 不继承旧 attempt。
 - `wrongCount`、`repairStage` 和当前混淆对是 call-local；进入下一呼叫必须清零，整轮累计错音/混淆/重听另存，不能让上一题把下一题直接推入 assisted。
-- modeled、长等待或疲劳安全休息后，保留同一 seeded 序列、已完成的中性花粉格和剩余呼叫；下一次明确点击创建 `resumeOfSessionId` 并只续剩余故事步。resume 不改变 2/2/1，也不重做已完成呼叫；跨 session 片段不得合并授予 stable。
+- modeled、长等待或疲劳安全休息后，保留同一 seeded 序列、已完成的中性花粉格和剩余呼叫；下一次明确点击创建 `resumeOfSessionId`，先重新播放一次不计分 C4 定锚，再只续剩余故事步。resume 定锚不计题/孩子重听，不改变 2/2/1，也不重做已完成呼叫；同 session 暂停/刷新不重复定锚；跨 session 片段不得合并授予 stable。
 
 ## 五、作答前不得泄题
 
