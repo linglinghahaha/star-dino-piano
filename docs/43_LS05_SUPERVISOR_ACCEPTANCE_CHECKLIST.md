@@ -1,12 +1,12 @@
 # LS05 主管独立验收表
 
-状态：`spec_ready / dispatch_ready / waiting_for_runtime_handoff`
+状态：`spec_ready / runtime_work_order_issued / waiting_for_runtime_handoff`
 
 ## 一、用途和边界
 
 本文件只用于主管独立审查 `C3-04 / LS05` 的 C/D/E 三音小集合听后找键。课程事实仍以 `03_CONTENT_ROADMAP.md`、`09_SCAFFOLD_AND_ASSESSMENT_RULES.md`、`31_SESSION_SCHEDULER_AND_RETENTION_RUNTIME_CONTRACT.md`、`32_CHAPTER3_LISTENING_RUNTIME_CONTRACT.md` 和 `33_GAME_TEACHING_PACING_AND_MOTIVATION_CONTRACT.md` 为准。
 
-当前已通过浏览器基线是 `overhaul-340a`。下一运行里程碑只能新增 LS05，不得顺手实现 LS06-LS08、正式媒体集成、全局 CSS 重构或新角色资产。通过 LS05 仍不等于第三章完成。
+当前已通过浏览器基线是 `overhaul-340d`，证据提交为 `0c14cd9fa3cdfe20e1fe22491e1b526c984c3b8e`。主管已独立确认 v3 三次固定目录运行内部哈希一致、54 个状态记录无 phase mismatch，并通过 LS04、音名、会话、PWA、clean-state、quick 和 strict 回归。下一运行里程碑只能新增 LS05，不得顺手实现 LS06-LS08、正式媒体集成、全局 CSS 重构或新角色资产。通过 LS05 仍不等于第三章完成。
 
 ## 二、先验冻结检查
 
@@ -24,9 +24,9 @@
 
 1. 地图当前地点明确是呼吸花园的下一小步，不回退到月球基地或第一章。
 2. 孩子明确点击后创建唯一正式 `C3-04` session。
-3. 开始前只给一次可见、可听的 C4/Do 定锚；它不计正式题。
+3. 开始前只给一次可见、可听的 C4 定锚：普通界面显示 `C`，小恐龙对话框可说 `Do`；它不计正式题，也不得出现普通 `C/Do` 双标。
 4. 正式共有五次隐藏呼叫，候选是 C4/D4/E4；声音播放结束后才开放作答。
-5. 三朵花在作答前完全同态。答后只有匹配花短暂回应，并在下一呼叫前恢复同态。
+5. 三朵花从开场起保持固定弧形位置，作答前完全同态且不按目标移动。答后只有匹配花短暂回应，并在下一呼叫前恢复同态。
 6. 跨呼叫只保留五格中性花粉环，不保留“哪朵花已经出现过”的频次答案。
 7. 五次完成后，三朵花一起永久开放；随后自动回地图自然休息，无结果弹层、关闭、继续或下一关按钮。
 
@@ -39,6 +39,8 @@
 - 同音不得连续超过两次；完整序列、seed、当前呼叫和 evidence 必须持久化。
 - 地图暂停和刷新只停止 timer/动画/临时 DOM；重入仍是同一 sessionId、同一序列、同一当前呼叫和同一错误/重听/支架事实。
 - action 完成、modeled safe rest 或 session 结束才清 pending；新 session 不继承旧 attempt。
+- `wrongCount`、`repairStage` 和当前混淆对是 call-local；进入下一呼叫必须清零，整轮累计错音/混淆/重听另存，不能让上一题把下一题直接推入 assisted。
+- modeled、长等待或疲劳安全休息后，保留同一 seeded 序列、已完成的中性花粉格和剩余呼叫；下一次明确点击创建 `resumeOfSessionId` 并只续剩余故事步。resume 不改变 2/2/1，也不重做已完成呼叫；跨 session 片段不得合并授予 stable。
 
 ## 五、作答前不得泄题
 
@@ -46,16 +48,17 @@
 
 | 状态 | 不得出现 | 允许出现 |
 | --- | --- | --- |
-| `reference` | 把参照计入五题；暗示第一题目标 | 可见 C/Do 定锚、统一声源 |
+| `reference` | 把参照计入五题；暗示第一题目标；普通界面显示 `C/Do` 双标 | 普通界面显示 `C`，小恐龙对话框可说 `Do`，统一声源 |
 | `target-playing` | 目标名/唱名、目标色、目标键、单花动作、方向或声像答案 | 中央同态声源、统一听音动作 |
-| `awaiting-response` | 目标专属 class/data/ARIA、单花高亮/摇摆/张合、键位 pulse | 三朵同态花、中性重听、五格中性环 |
+| `awaiting-response` | 目标专属 class/data/ARIA、单花高亮/摇摆/张合、键位 pulse、常驻“看答案”入口 | 三朵同态花、中性重听、五格中性环 |
 | `wrong-known` | 立刻亮正确键或让正确花持续开放 | 孩子按出的音，再重放目标 |
 | `pair-compare` | 用亮度、大小或方向标出正确者 | 两个混淆候选同权比较 |
 | `assisted-retry` | 把 strong cue 当无提示正确 | 明示支架并记录 strong cue |
 | `sound-paused` | 无声按键计 correct/wrong | 打开声音提示、重听同一题 |
+| `visual-assist` | 继续显示为隐藏听辨、写 correct/firstTry 或宣称听音通过 | 普通界面字母+键位模型、小恐龙一句引导、`accessibilityVisualAssist=true` |
 | `complete` | 结果弹层、下一关按钮、虚构剩余正确 | 三花一起开放、自然休息 |
 
-正常钢琴键仍可显示自己的 C/D/E/F/G 身份；禁止的是把某个键提前标成“当前答案”。
+正常钢琴键以及任务、花朵、花粉环、反馈、结果和地图仍只显示自己的 C/D/E/F/G 字母身份；小恐龙对话框是唯一可见唱名载体。家长端和非泄题 ARIA 可保留双身份。禁止把某个键提前标成“当前答案”，也禁止在普通提示中恢复 `Do/Re/Mi` 或 `C/Do`。
 
 ## 六、计分和掌握证据
 
@@ -88,6 +91,7 @@
 - 教学钢琴音优先；目标起音后的前 540ms 不被语音、环境声、奖励动机或 Foley 遮盖。
 - 声音关闭、音量 0、AudioContext 未解锁/失败或播放中断时进入 `sound-paused/replay-ready`，按键只记 observation。
 - 恢复声音后重播同一目标；不得换题、清错音、清重听或产生无声 completion。
+- 已启用听力辅助、声音在有界恢复后仍不可用，或当前呼叫已进入明确 strong-help 路线时，才允许切到字母+键位 visual-assist 完成当前故事步；正常隐藏等待态不常驻答案按钮。必须记录 `accessibilityVisualAssist=true`，只给 played/needsPractice，不写 listening correct、firstTry、stable 或 retained。
 - C/D/E 使用同一音源、力度、包络、目标时长、混响和中央声像。
 - 所有触控目标至少 44 CSS px；屏幕琴键保持真实黑白键几何。
 
@@ -99,14 +103,14 @@
 - C、D、E 候选覆盖；
 - 主动/系统重听次数；
 - 主要混淆对；
-- strong/modelled/microphone 是否使本轮失去 stable 资格；
+- strong/modeled/microphone/visual-assist 是否使本轮失去 stable 资格；
 - played、stable、retained 和 today-needs-practice。
 
 不得显示绝对音感、速度成绩、旧月球关卡或 LS01-LS03 的“可见练习/不计稳定”模板。
 
 ## 十一、Chapter 3 媒体坐标合同
 
-LS05 必须生成新的候选合同，至少覆盖：garden-entry、reference、target-playing、awaiting-response、sound-paused、wrong-known、pair-compare、assisted-retry、complete、reduced-motion。
+LS05 必须生成新的候选合同，至少覆盖：garden-entry、reference、target-playing、awaiting-response、sound-paused、visual-assist、wrong-known、pair-compare、assisted-retry、complete、reduced-motion。
 
 - 使用真实 DOM 几何、候选构建哈希、24px 安全边距和 alpha 阈值 `>= 8/255`。
 - 保护键盘、星芽/气泡、中央花粉铃、三朵花、重听、五格花粉环、错误/比较反馈。
@@ -117,20 +121,23 @@ LS05 必须生成新的候选合同，至少覆盖：garden-entry、reference、
 ## 十二、主管最小复跑集合
 
 1. 新增独立 `check:chapter3-ls05`，不把全部断言堆入 LS04 或旧 visible 专项。
-2. LS05 专项至少覆盖：三个固定 seed、2/2/1、单次音轮换、无泄题 DOM/ARIA/CSS、花朵重置、中性环、first-response scoring、4/5+候选覆盖、重听上限、错误音/目标音顺序、pair compare、assisted/modeled、sound-paused、touch/MIDI/mic、地图/刷新连续性、家长证据和无 LS06。
-3. 复跑 LS04 `39/39`、Chapter 3 visible、339d continuity、sessions、clean-state、M03/garden、PWA、input、audio settings、iPad a11y、motion、palette/contrast、Xingya suit、第一二章共享门禁。
-4. 复跑 generic zones、LS05 Chapter 3 zones、quick 和 strict bundle。
-5. 人工查看 1024x768、1194x834 DPR2、1366x1024 的 reference/waiting/wrong/pair/assisted/sound-paused/complete 原尺寸截图。
+2. LS05 专项至少覆盖：三个固定 seed、2/2/1、单次音轮换、无泄题 DOM/ARIA/CSS、固定花位与花朵重置、中性环、first-response scoring、4/5+候选覆盖、call-local repair 重置、重听上限、错误音/目标音顺序、pair compare、assisted/modeled、sound-paused、visual-assist 非评分完成、touch/MIDI/mic、地图/刷新连续性、modeled rest 跨 session 续剩余题但不拼 stable、家长证据和无 LS06。
+3. 复用并扩展儿童可见音名门禁：reference、waiting、wrong、pair、assisted、complete 和地图状态中，排除小恐龙对话框与家长区后不得出现 `Do/Re/Mi`、中文音译或 `C/Do` 双标；键盘/目标的合法 ARIA 双身份不能被误判为视觉泄漏。
+4. 复跑 LS04 `39/39`、Chapter 3 visible、339d continuity、sessions、clean-state、M03/garden、PWA、input、audio settings、iPad a11y、motion、palette/contrast、Xingya suit、第一二章共享门禁。
+5. 复跑 generic zones、LS05 Chapter 3 zones、quick 和 strict bundle。
+6. 人工查看 1024x768、1194x834 DPR2、1366x1024 的 reference/waiting/wrong/pair/assisted/sound-paused/visual-assist/complete 原尺寸截图。
 
 ## 十三、立即退回条件
 
 - LS04 完成后自动开始 LS05，或恢复页面无手势创建正式 C3-04/播放目标音；
 - 五题不满足 2/2/1、单次音不轮换、刷新/暂停换题或清 evidence；
 - 作答前任何文字、颜色、花朵动作、方向、DOM、ARIA 或键盘状态泄露目标；
+- 除小恐龙对话框外，儿童可见表面出现唱名、中文唱名音译或 `C/Do` 双标；
 - 目标花的答后状态跨呼叫保留，导致孩子可推算剩余频次；
 - 错后修对回填 qualifying correct；4/5 但缺候选覆盖仍写 stable；
 - strong、modeled、实验麦克风或超过一次主动重听仍写 stable/retained；
 - 声音不可用时仍评分；
+- visual-assist、无声 observation 或跨 session 剩余题被计入 listening correct/stable；
 - modeled 后伪造剩余正确或依靠结果弹层/下一关按钮继续；
 - 开始 LS06+、接入未批准媒体、改写旧章节证据或把 LS05 写成第三章完成。
 
@@ -141,4 +148,3 @@ LS05 必须生成新的候选合同，至少覆盖：garden-entry、reference、
 - `missing`：合同要求尚未实现或没有证据。
 - `contradicted`：实现或证据与课程合同冲突。
 - `rejected_as_baseline`：存在任一 P0/P1，必须发窄修工作单。
-

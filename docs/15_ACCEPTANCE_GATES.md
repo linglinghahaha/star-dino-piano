@@ -50,7 +50,8 @@ For 4-6-year-old readiness, every child-facing text clue needs at least one non-
 
 | Text clue type | Required non-text equivalent |
 | --- | --- |
-| `Do/C`, `Re/D`, note name | large solfege badge, piano sound, or note character action |
+| visible letter name such as `C`, `D`, `E` | piano sound, key geography, staff/route location, or note-character action |
+| dinosaur dialogue solfege such as `Do`, `Re`, `Mi` | the same note's visible letter/key location or a clear musical action |
 | `2黑左`, `3黑左` locator | black-key mini-map or direct keyboard geography highlight |
 | staff position words such as `第一线` | current staff pad glow, landing marker, dino pointing/jump arc |
 | "try again" repair copy | wrong-key wiggle, target pulse, dino gentle stumble, or replayed sound |
@@ -119,7 +120,7 @@ No broad visual polish pass should be called done without a gate-run record.
 
 Current baseline automation: rerun `chrome-test/clean-state-slice-check.mjs` after mastery, reveal-rule, or flow changes. It is the clean-state regression for `M01`, `M03`, `M08`, `FG01-FG04`, and `S01`, but it does not replace real-child observation, audio proof, or release asset/CSS gates.
 
-Current bundle automation: run `node tools/production-bundle-audit.mjs` after asset/reference changes. Prototype policy mode and `node tools/production-bundle-audit.mjs --strict` must both pass for any promoted browser baseline. The last independently validated `334g` baseline passed strict mode; every later draft must rerun it with its own version, sources and runtime references before promotion. A historical exception cannot silently return.
+Current bundle automation: run `node tools/production-bundle-audit.mjs` after asset/reference changes. Prototype policy mode and `node tools/production-bundle-audit.mjs --strict` must both pass for any promoted browser baseline. The current independently validated `overhaul-340d` baseline passes strict mode with 41 runtime files and 1,641,265 runtime bytes; every later draft must rerun it with its own version, sources and runtime references before promotion. A historical exception cannot silently return.
 
 Version-baseline rule: the runtime version query in `index.html` must not be treated as proof by itself. If the app loads a newer version than the latest `20_GATE_RUN_LOG.md` entry, call it a draft. A version becomes the current baseline only after its relevant script checks, screenshots, bundle result, and pass/fail notes are logged.
 
@@ -206,6 +207,8 @@ A pass fails if any of these are true:
 - a prompt or asset imitates a protected franchise, studio, living artist, toy line, anime, movie, or superhero style.
 - A/B or any reserved note appears as a target before its full note-identity row and entry gate exist.
 - the child-facing UI depends on reading `Do/C`, `2-black left`, or staff-position words without an equivalent visual cue.
+- a visible child-facing surface outside the small-dinosaur dialogue bubble shows solfege or a dual label such as `Do/C`; keyboard labels, cards, routes, staff hints, feedback, effects, results, map labels, and garden objects must use letter names only.
+- the letter-only display rule silently removes the solfege objective: each core note's first guided teaching must still connect the visible letter/key home to the dinosaur dialogue's corresponding solfege, while later reduced-cue checks must prove the child can act without that dialogue becoming a permanent answer card.
 - visible child or parent copy is mojibake, stale placeholder text, or an accidental fallback from another mode.
 - the release build keeps multi-megabyte product assets or broad CSS overrides without a documented cleanup decision.
 - a child-facing state presents many simultaneous answer surfaces, such as route labels, target card, coach bubble, toast, staff note card, keyboard glow, and parent-like explanation all at once.

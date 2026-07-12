@@ -107,7 +107,7 @@ Goal: introduce C-D-E, then expand to F-G through short construction missions.
 | FG03 | Mi-Fa-Sol check | compare E-F-G | require a light-scaffold memory pass |
 | FG04 | staff-prep bridge | preview F/G staff positions | connect `first space` and `second line` to keys |
 
-Staff-prep rule: each Chapter 1 level should show a tiny note passport hint when possible, such as `Do/C -> 2-black left`, and later `Do/C -> ledger line -> 2-black left`. This prevents the staff bridge from arriving as a sudden new game.
+Staff-prep rule: each Chapter 1 level should show a tiny letter-name passport hint when possible, such as `C -> 2-black left`, and later `C -> ledger line -> 2-black left`. Xingya's dialogue may say `Do`, but the passport itself does not show `Do/C`. This prevents the staff bridge from arriving as a sudden new game.
 
 ### Required F/G Bridge Before Staff
 
@@ -180,7 +180,7 @@ Entry conditions:
 | `LS02` | Re 的小芽伸懒腰 | transfer the echo loop to Re | see/hear `D4`, then echo `D4` | a curled stem stretches toward the middle of the two-black group | repeat visible model once after wrong input |
 | `LS03` | Mi 点亮第三片叶 | transfer the echo loop to Mi | see/hear `E4`, then echo `E4` | the third leaf catches a small star light | fade the direct key glow on the second echo |
 | `LS04` | Do 和 Re 找朋友 | discriminate within a two-note known set | hear `C4` or `D4` after one visible Do reference; press the heard key in 4 short calls | two seed pods turn toward their matching flowers | no note name or target glow before each check call; replay remains available |
-| `LS05` | 三朵小花轮流唱 | expand the known set without adding rhythm | hear one of `C4/D4/E4` after a visible Do anchor; press the heard key in 5 calls | the scored flower responds only after the answer, then all three reset while a neutral pollen ring records progress; all three open together at the end | light cue only after wrong; stable requires at least 4 of 5, at least one unassisted correct for each of C/D/E, and at most one child-requested replay |
+| `LS05` | 花粉铃叫醒三朵花 | expand the known set without adding rhythm | hear one of `C4/D4/E4` after a visible C anchor whose solfege is spoken only by Xingya; press the heard key in 5 calls | the pollen bell is the only pre-response sound source; three flowers stay in fixed arc positions and the scored flower responds only after the answer, then all three reset while a neutral pollen ring records progress; all three open together at the end | replay always remains available; stable requires one fresh five-call run with at least 4 of 5, at least one unassisted correct for each of C/D/E, and at most one child-requested replay; a visual accessibility completion can finish the story but cannot create listening correct/stable evidence |
 | `LS06` | 远远的回声藤 | hear a large contrast before a close contrast | compare/match `C4` and `G4` in 4 calls | a vine reaches across two distant garden stones | first call may show both homes; check uses sound plus stable keyboard geography |
 | `LS07` | 挨着睡的 Mi 和 Fa | discriminate adjacent known keys | compare/match `E4` and `F4` in 4 calls | two tangled flowers separate at the two-black/three-black boundary | wrong input reveals only the E/F boundary map; check target is 3 of 4 |
 | `LS08` | 根须记两声 | first two-note aural memory within C-D-E | echo 4 short pairs from `C4-D4`, `E4-D4`, `C4-C4`, `D4-E4` | roots light in the played direction; after completion, a non-scored `C4 -> C3` low echo travels underground | separate notes may be replayed in guided practice; a stable check allows only whole-pair replay and at most one child-requested replay; target is 3 of 4 pairs; C3 is story exposure only |
@@ -196,6 +196,7 @@ Chapter 3 guardrails:
 - Parent copy says `能在小音组里听后找键`, not `有绝对音感` or `听音已掌握` from one run.
 - LS08 introduces no new rhythm notation. It tests order memory in free time; the final low C3 is an unscored story event and cannot create low-register mastery.
 - Any random call list is constrained and balanced: LS04/LS06/LS07 present each candidate twice, LS05 includes all three notes in a 2/2/1 distribution, and LS08 presents each fixed pair once. The session seed may change order, but cannot make frequency, candidate-specific permanent progress, or a repeated animation the answer.
+- LS05 repair state is call-local: a new call resets `wrongCount`, `repairStage`, and the temporary comparison pair while cumulative evidence remains. A modeled or fatigue rest preserves the neutral pollen progress and remaining seeded calls; the next explicit map start may finish those remaining story calls, but evidence split across sessions cannot be combined into a fresh five-call stable pass.
 
 Chapter 3 stable evidence:
 

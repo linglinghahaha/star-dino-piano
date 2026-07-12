@@ -8,9 +8,9 @@ This file turns "do not rely on color/glow" into executable rules. Every level m
 
 | Scaffold | Used for | Show before action | Hide or reduce | Show after wrong input |
 | --- | --- | --- | --- | --- |
-| `strong` | first exposure | note glow, color, solfege, letter name, key locator | nothing critical | pulse target key, repeat full clue |
-| `medium` | guided practice | solfege, letter name, key locator, softer glow | reduce object-color matching | pulse target key and repeat locator |
-| `light` | memory check | solfege or letter name, subtle key group cue | no large color cue before action | reveal target glow and full clue |
+| `strong` | first exposure | ordinary UI shows letter name + locator; dinosaur bubble may say solfege; note glow/color may support | nothing critical | pulse target key, repeat the letter/locator and use the dinosaur bubble for any solfege |
+| `medium` | guided practice | ordinary UI shows letter name + locator; softer glow; dinosaur bubble may say solfege | reduce object-color matching | pulse target key and repeat only the necessary clue |
+| `light` | memory check | letter name or a subtle key-group cue; dinosaur solfege only when the check contract permits it | no large color cue before action | reveal target letter/glow and one locator |
 | `staff` | staff bridge | staff position, note label, key locator | future pads quieter | pulse staff pad + target key |
 | `listen` | modeled echo or small-set sound practice | modeled first echo may show note identity + locator; a hidden call shows only the heard-sound/replay prompt | on hidden calls, hide target name, object color, answer key, and locator until the child acts | name the pressed/target notes, replay the target, then show the relevant locator |
 | `hand` | familiar-note hand route | one character/hand icon and the familiar locator | finger-number strings and both-hand clutter | pause, show only the next hand/character and target home |
@@ -20,14 +20,14 @@ For `listen`, the table describes two different moments. A visible modeled echo 
 
 Hidden listening calls also forbid indirect visual answers. The target must come from one neutral sound source whose position, animation, color, and stereo image do not change by note. Candidate plants, characters, route ends, and key homes remain visually equal until the child responds. Their note-specific story motion begins only after the scored input. A balanced candidate map may be taught before the hidden call, but the active target cannot receive a unique label, glow, movement, direction, or color.
 
-Naming hierarchy does not change the reveal threshold. Ordinary visual UI uses letter names `C/D/E/F/G` as the large primary labels; Xingya's speech/bubble uses solfege as the primary child-language prompt. In a teach state both may be connected. In a hidden listen/check state neither the target letter nor target solfege may appear before action.
+Naming hierarchy does not change the reveal threshold. Ordinary visual UI uses only letter names `C/D/E/F/G`; Xingya's dialogue bubble may use solfege as the character-language prompt. In a teach state the two channels may be connected across the UI and the dialogue, but they must not be collapsed into a visible `Do/C` chip. Parent-only evidence and non-leaking accessibility labels may retain both identities. In a hidden listen/check state neither the target letter nor target solfege may appear before action.
 
 ## Child-facing Hint Order
 
 Always prefer this order:
 
-1. Sound or note identity.
-2. Solfege and letter name.
+1. Sound or the current musical action.
+2. Letter name in ordinary UI; solfege only in the dinosaur dialogue when allowed.
 3. Keyboard locator.
 4. Staff position when relevant.
 5. Color only as a secondary cue.
@@ -38,8 +38,9 @@ Bad:
 
 Good:
 
-- `Do/C -> 2-black left`
-- `Do/C -> ledger line -> 2-black left`
+- ordinary UI: `C -> 2-black left`
+- ordinary staff UI: `C -> ledger line -> 2-black left`
+- dinosaur dialogue: `我唱 Do，你来弹 C。`
 
 ## Error Handling
 
@@ -53,8 +54,9 @@ Wrong input should become a teaching moment:
 
 Example:
 
-- `That was Re/D. Target is Do/C: 2-black left.`
-- `Target is Do/C: ledger line, 2-black left.`
+- ordinary UI: `That was D. Target C: 2-black left.`
+- ordinary staff UI: `Target C: ledger line, 2-black left.`
+- dinosaur dialogue may compare: `刚才是 Re；我要 Do，你来弹 C。`
 
 ## Advancement Rules
 
@@ -128,6 +130,8 @@ Use this table as the single threshold source for parent-facing mastery. Other f
 `LS01-LS03` are `reviewableForMastery=false`. Their formal `played` records remain visible to parents, but the session scheduler must not treat them as unfinished stable skills. A later LS04-LS08 repair may reuse their visible model under a remediation role with no stable or retained eligibility.
 
 For LS04-LS08, the numeric threshold and the cue threshold are both required. LS05 additionally requires at least one unassisted correct response for every candidate C/D/E, so a 4/5 total cannot hide a complete miss on the note that appeared once. A plain scored wrong may still leave an otherwise eligible 3/4 or 4/5 stable pass, but any pre-response target reveal, assisted strong cue, modeled success, or experimental/uncertain microphone progression blocks stable and retained for the whole run.
+
+An accessibility visual-assist may reveal the letter and key position so a child who cannot use the audio route can still complete the story. That completion records observation/played/needs-practice only: it is not a listening response, cannot enter first-response correct or candidate coverage, and cannot be combined across sessions into LS04-LS08 stable or retained evidence.
 
 ### Chapter 4-5 Thresholds
 

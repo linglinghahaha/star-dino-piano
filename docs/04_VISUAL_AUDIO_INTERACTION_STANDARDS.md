@@ -37,6 +37,7 @@ If a screen cannot answer these without adult explanation, redesign it.
 
 - White/black key positions must match real piano grouping.
 - `2 black` and `3 black` groups should be visually discoverable.
+- Visible white-key labels use letter names only: `C D E F G` and, when unlocked, `A B`. Solfege may remain in a non-leaking `aria-label`, but not as a second visible key-cap label.
 - The target key may glow, but the key locator must also be shown.
 - Pressed keys need tactile motion: down movement, highlight, sound, and small particle.
 - Wrong key should show a gentle correction, not punishment.
@@ -45,12 +46,12 @@ If a screen cannot answer these without adult explanation, redesign it.
 
 Use short labels:
 
-- `Do/C`
+- ordinary UI: `C`
 - `2-black left`
 - `ledger line`
 - `first line`
 
-Avoid long instructions in the play area. If explanation is needed, put it in the dinosaur bubble or parent view.
+Avoid long instructions in the play area. If solfege or a name-to-name explanation is needed, put it in the dinosaur bubble or gated parent view. Ordinary cards, routes, hints, feedback, effects, and results must not show `Do/C` dual labels.
 
 ## Audio Rules
 

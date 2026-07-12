@@ -169,8 +169,9 @@ Stars can exist as progress indicators, but they should not replace the story co
 - Use one short sentence per child-facing hint.
 - Avoid abstract phrases like "build musical ability."
 - Avoid repeated instruction blocks.
-- Prefer: `Do/C -> 2-black left`.
-- Let the dinosaur bubble carry hints instead of putting instruction text in the top UI.
+- Prefer ordinary UI `C -> 2-black left`.
+- Let the dinosaur bubble carry the solfege connection, for example `我唱 Do，你来弹 C`, instead of putting `Do/C` in the top UI.
+- Keyboard labels, route pads, task cards, staff hints, feedback, effects, results, map labels, and ordinary objects use letter names only.
 
 ## Visual Rules
 

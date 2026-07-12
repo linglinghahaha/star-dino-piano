@@ -1,5 +1,7 @@
 # Execution Backlog
 
+Current display override, 2026-07-12: child-visible surfaces outside the small-dinosaur dialogue use letter names only. Older milestone bullets below that accurately report `large solfege`, `solfege-only badge`, `Do/C`, or similar historical UI remain evidence of what those versions did; they are not current acceptance criteria and must not be copied into new work. Parent-only evidence and non-leaking ARIA may retain dual identity. The current rule, approved 340d evidence and future regression requirement are tracked in `29_PROJECT_COORDINATION_AND_INDEPENDENT_AUDIT.md`.
+
 ## Phase 0: Alignment Files
 
 Status: complete.

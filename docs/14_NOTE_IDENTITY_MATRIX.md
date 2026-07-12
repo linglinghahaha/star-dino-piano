@@ -96,8 +96,9 @@ The notes need stable identity, but not five unrelated visual brands.
 Allowed:
 
 - subtle note color in early stages;
-- stable letter-first visual label: large `C/D/E/F/G` with `Do/Re/Mi/Fa/Sol` as smaller secondary text when space allows;
-- Xingya's spoken/bubble prompt may reverse that hierarchy and say `Do/Re/Mi/Fa/Sol` first, with the letter name as the secondary confirmation;
+- stable ordinary visual labels that show only `C/D/E/F/G`;
+- Xingya's spoken/bubble prompt may say `Do/Re/Mi/Fa/Sol` and may connect it to the required letter in one short sentence;
+- gated parent evidence and non-leaking accessibility labels may show both identities, such as `C / Do`;
 - stable keyboard locator language;
 - stable staff position language;
 - a small story object that explains why the note matters in that level.
@@ -110,13 +111,16 @@ Avoid:
 
 Course 1 display hierarchy is therefore a deliberate two-channel link, not two competing naming systems:
 
-- keyboard keys, task identity badges, staff pads, route markers, and ordinary object labels use `C/D/E/F/G` as the main visible name;
+- keyboard keys, target/task cards, current parts, staff pads/hints, route markers, locators, feedback, effects, results, map labels, garden objects, and ordinary object labels use only `C/D/E/F/G` as the visible note name;
 - Xingya's child-facing speech and listening gestures use `Do/Re/Mi/Fa/Sol` as the main spoken/character name;
 - action verbs must keep the roles clear: Xingya may "唱 Do", while the child is asked to "弹 C" or "找到 C". Do not use a bare command such as `唱 Re/D` when the expected input is a piano key, and never describe a letter name as something to sing;
-- correct and repair feedback reconnect both names, for example large `C` plus smaller `Do · 两黑左`;
+- correct and repair feedback reconnect both names across channels: ordinary UI may show `C · 两黑左`, while Xingya's bubble says `这是 Do，你来弹 C`; do not create an ordinary dual-label badge;
+- parent-only evidence and accessibility descriptions may retain `C / Do`, provided they do not leak a hidden target;
 - hidden listening calls show neither target-specific letter nor solfege before the child responds.
 
 This hierarchy must be consistent across M01-M08, F/G preparation, S01, and Chapter 3. It is not enough to change one keyboard label while duplicate cards continue to present the old hierarchy elsewhere.
+
+Notation such as `Do/C` elsewhere in curriculum documents is adult-facing shorthand for the identity mapping. It must not be copied literally into a child-facing visual label.
 
 ## Listening Seed Without Hardware
 

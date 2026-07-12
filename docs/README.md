@@ -52,10 +52,22 @@ When changing the app, check the relevant document first. If a requested feature
 
 Current-source rule: this `web_star_dino_workshop/docs` directory is the active planning source. Older directories such as `copyright_safe_app_design` are historical reference only. `18_CURRENT_PLANNING_REVIEW.md` is the rolling product audit, while `29_PROJECT_COORDINATION_AND_INDEPENDENT_AUDIT.md` owns the newest cross-task order and pass/return status; neither can override the curriculum ownership rules below.
 
+## Child-facing Note Language
+
+The current display rule is authoritative across every chapter:
+
+- planning notation such as `Do/C` means the teaching relationship between solfege and letter name; it does **not** authorize a literal dual label in the child-facing game;
+- visible keyboard labels, task/target cards, parts, route pads, staff hints, locators, feedback, effects, results, map labels, and garden objects use letter names only: `C D E F G` (later `A B` under their own entry gates);
+- only a small-dinosaur dialogue bubble may visibly use `Do Re Mi Fa Sol`; that dialogue may connect the channels with a sentence such as `我唱 Do，你来弹 C`;
+- gated parent evidence and non-leaking accessibility descriptions may retain dual identity such as `C / Do`;
+- hidden listening/check states override every naming allowance: the current target must not leak through visible text, ARIA, title, alt text, classes, color, motion, or a highlighted key before the child responds.
+
+`14_NOTE_IDENTITY_MATRIX.md` owns this carrier policy. Older screenshots, historical gate logs, or lesson shorthand that contain `Do/C` remain historical evidence, not the current UI specification.
+
 ## Curriculum Ownership
 
 - `03_CONTENT_ROADMAP.md` owns chapter numbers, level ids, note sequences, entry/exit gates, and the order of new concepts.
-- `14_NOTE_IDENTITY_MATRIX.md` owns register-qualified note identity and staff positions.
+- `14_NOTE_IDENTITY_MATRIX.md` owns register-qualified note identity, staff positions, and which child/parent/accessibility carrier may show letter names or solfege.
 - `09_SCAFFOLD_AND_ASSESSMENT_RULES.md` owns played/stable thresholds and evidence wording.
 - `17_STORY_ARC_AND_LEVEL_BEATS.md` owns character motivation, chapter transitions, story problems, and visible consequences.
 - `31_SESSION_SCHEDULER_AND_RETENTION_RUNTIME_CONTRACT.md` owns session identity, natural rests, opening reviews, data migration, retained timing, and the distinction between historical evidence and today's support need.

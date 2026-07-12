@@ -62,10 +62,10 @@ Every reduced-cue call keeps a modeled reference, a visible/heard home note, or 
 
 | Phase | Purpose | UI help level | Example |
 | --- | --- | --- | --- |
-| Explore | child discovers key locations | strong glow, color, name, key clue | `Do/C - 2-black left` |
-| Follow | child follows short patterns | glow + name + locator | `Do Re Mi` build lights |
-| Match | child matches concept to key | less color, stronger letter/solfege | "Find Mi/E" |
-| Read | child reads staff positions | staff bridge + note label | "first line = Mi/E" |
+| Explore | child discovers key locations | strong glow, color, letter name, key clue; Xingya may say the solfege | visible `C - 2-black left`; bubble `Do` |
+| Follow | child follows short patterns | glow + letter name + locator; character voice carries solfege | visible `C D E` build lights; bubble `Do Re Mi` |
+| Match | child matches concept to key | less color, stronger letter identity; optional Xingya solfege | visible `Find E`; bubble may say `Mi` |
+| Read | child reads staff positions | staff bridge + letter label | visible `first line = E` |
 | Check | child proves memory | minimal glow, score through story | dino jumps without large hints |
 
 ## Preschool Cognitive-load Rule
@@ -78,7 +78,7 @@ For 4-6-year-old child-facing states, do not ask the child to decode every ident
 
 Use at most one sentence-level instruction carrier in a play state. The story card states the story problem, the central play area shows an icon/state, and Xingya may own the one short child instruction; do not repeat the same command in all three places.
 
-The full chain `solfege -> letter -> key locator -> staff position -> sound` should accumulate across the level and parent evidence, not appear as five competing instructions in one play state. If a state shows note name, letter, locator words, staff words, color, sequence numbers, multiple bubbles, and parent-like explanation at once, it fails the preschool version even if each clue is individually correct.
+The full chain `solfege -> letter -> key locator -> staff position -> sound` should accumulate across the level and parent evidence, not appear as five competing instructions in one play state. Ordinary child-facing UI uses the letter name; only the dinosaur dialogue bubble may visibly carry solfege. If a state shows both as repeated chips, locator words, staff words, color, sequence numbers, multiple bubbles, and parent-like explanation at once, it fails the preschool version even if each clue is individually correct.
 
 ## Color Policy
 
@@ -105,15 +105,19 @@ Correct feedback must answer: "What did I do right?"
 
 Example:
 
-- `Do/C found. The red floor tile landed.`
-- `Mi/E found on the first line. Dino jumped.`
+- ordinary feedback: `C found. The floor tile landed.`
+- ordinary staff feedback: `E found on the first line. Dino jumped.`
+- dinosaur dialogue may reconnect the names: `这是 Do，你弹对了 C。`
 
 Wrong feedback must answer: "What should I try next?"
 
 Example:
 
-- `That was Re/D. Try Do/C at 2-black left.`
-- `Look lower: Do/C sits on the little ledger line.`
+- ordinary feedback: `That was D. Try C at 2-black left.`
+- ordinary staff feedback: `Look lower: C sits on the little ledger line.`
+- dinosaur dialogue may say: `刚才是 Re；我要 Do，你来弹 C。`
+
+Parent-only evidence and non-leaking accessibility labels may explain `C / Do`. A visible child-facing badge, key, route pad, toast, or result must not use that dual form.
 
 Avoid generic wrong feedback like "press the glowing key" once the child is beyond phase 1.
 

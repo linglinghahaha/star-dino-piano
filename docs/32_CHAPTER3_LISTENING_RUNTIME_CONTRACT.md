@@ -1,6 +1,6 @@
 # Chapter 3 Listening Runtime Contract
 
-状态：`specification_passed / overhaul-340a_ls04_browser_passed / ls05_next_runtime_milestone / media_not_approved / device_and_child_evidence_missing`
+状态：`specification_passed / overhaul-340d_ls04_browser_passed / ls05_runtime_dispatched / media_not_approved / device_and_child_evidence_missing`
 
 负责人：课程故事、整体调度与独立审查任务锁定教学语义；原型任务负责运行实现、浏览器门禁和截图；动画/声音任务只生产可追溯候选，未经调度复核不得接入运行时。
 
@@ -8,7 +8,7 @@
 
 ## 给家长看的简短说明
 
-第三章不是让孩子从安静中猜音名，也不声称训练绝对音感。孩子先看见并听见 Do、Re、Mi，再从刚练过的两个或三个音中听一个、找同一个键，最后记住两个声音的先后。
+第三章不是让孩子从安静中猜音名，也不声称训练绝对音感。孩子先在普通界面看见 C、D、E，同时听星芽把它们说成 Do、Re、Mi，再从刚练过的两个或三个音中听一个、找同一个键，最后记住两个声音的先后。
 
 这一章真正建立四条联系：
 
@@ -57,7 +57,7 @@ S01 的自然停点先落在地图上的花园入口，不在上一关完成瞬�
 | `C3-01` | `LS01 -> LS02` | 看见并模仿 Do、Re | 第一片叶打开，第二根卷茎伸直 | 两片叶保持打开并降为休息亮度，星芽坐到种子旁 |
 | `C3-02` | `LS03` | Mi 的可见模仿到第二次弱化直亮 | 第三片叶接住星光 | 三片叶组成小芽后休息 |
 | `C3-03` | `LS04` | 首次隐藏的 Do/Re 小集合听辨 | 两颗种子转向各自花朵 | 两边叶子握住后停下 |
-| `C3-04` | `LS05` | C/D/E 三音小集合 | 三朵花形成小弧线 | 三朵花保持弧线位置，仅花瓣慢慢合拢成夜间休息态 |
+| `C3-04` | `LS05` | C/D/E 三音小集合 | 固定弧形位置的三朵花一起开放 | 三朵花保持弧线位置，仅花瓣慢慢合拢成夜间休息态 |
 | `C3-05` | `LS06` | C/G 大距离对比 | 长藤跨过远石形成拱门 | 星芽在拱门下听风 |
 | `C3-06` | `LS07` | E/F 相邻音与黑键组边界 | 两株缠绕花分开 | 两朵花各自站稳后停下 |
 | `C3-07` | `LS08` | 两音顺序记忆 | 根须按顺序连到地下 | 播放未计分低音回声并回地图 |
@@ -82,7 +82,7 @@ S01 的自然停点先落在地图上的花园入口，不在上一关完成瞬�
 2. `ready`：中性耳朵/回声图标提示“先听”，候选植物保持相同静止状态。
 3. `target-playing`：播放目标钢琴音；评分输入关闭，过早输入记为 observation，不算错。
 4. `awaiting-response`：目标音结束后才接收触屏/MIDI/已校准麦克风输入；不显示倒计时。
-5. `correct`：先确认孩子的输入音，再以大字字母音名、星芽唱名口语和键位家重新连接身份，随后触发对应故事变化。
+5. `correct`：先确认孩子的输入音，再以普通界面的字母音名、星芽对话框中的唱名和键位家重新连接身份，随后触发对应故事变化；普通界面不得出现双标。
 6. `wrong-known`：说出孩子按的音，播放“孩子音 -> 目标音”或经听审批准的短比较，再显示相关候选边界；不提前照亮下一题。
 7. `uncertain`：只用于麦克风置信度不足、环境过吵或目标回放串音；显示“没听清”，不加 wrong。
 8. `assisted-retry`：同一呼叫连续错误后提供一个明确定位和一次再试。
@@ -107,10 +107,10 @@ S01 的自然停点先落在地图上的花园入口，不在上一关完成瞬�
 
 可见模型与答后反馈仍要建立音名联系：
 
-- 可见模型以大字 `C/D/E` 和黑键组定位为主；星芽口语说 `Do/Re/Mi`，必要时唱名作小字确认。
+- 可见模型只用大字 `C/D/E` 和黑键组定位；星芽对话框可说 `Do/Re/Mi`，唱名不得作为模型、卡片或物件的小字副标。
 - 隐藏呼叫前不得显示目标专属名字、颜色或定位。多个候选若同时出现，必须同权重、中性色、无目标差异。
 - 隐藏目标也不得泄露到无障碍名称：重听按钮只说“重听这个声音”，不能在 `aria-label`、`title`、`alt`、隐藏说明或目标专属 active class 中出现 `C/Do` 等答案。正常钢琴键自身仍可分别标注 C/D/E/F/G；禁止的是把其中一个提前标成“当前目标”。
-- 答对或答错后必须重新连接大字字母名 + 星芽唱名口语 + 键位家；颜色只能作为此时的次级确认。
+- 答对或答错后必须跨载体重新连接：普通界面的大字字母名 + 星芽对话框的唱名 + 键位家；颜色只能作为此时的次级确认，不能生成普通 `Do/C` 双标。
 - 正确故事物件可以按每个音形成稳定记忆形象，但只能在回答后变化：Do 圆叶、Re 卷茎、Mi 星尖叶、Fa 边界双瓣、Sol 长藤。
 
 ## 六、每关精确呼叫与平衡序列
@@ -129,6 +129,10 @@ S01 的自然停点先落在地图上的花园入口，不在上一关完成瞬�
 | `LS08` | 带路练习可分开重听 | 4 组：C-D、E-D、C-C、D-E，各一次 | 四组都出现；顺序由受约束 seed 决定 | 完成或温和修复 | 至少 3/4 整组顺序正确；自由速度；无分音重听，整轮最多 1 次孩子主动整组重听 |
 
 `LS05` 的“一次主动重听”只影响 stable，不影响故事奖励；即使总数达到 4/5，只要 C/D/E 中任一音没有至少一次无强提示正确，也只能记录 played/needsPractice，不能写 stable。`LS08` 带路练习可以分音重听；少提示检查不得分音重听，孩子主动整组重听超过一次则只记 played/needsPractice，不写 stable。等待系统自动重放、麦克风 uncertain 或无障碍重复播报不得偷偷计为孩子错误；应分开记录来源。
+
+LS05 的 `wrongCount`、`repairStage` 和当前混淆对只属于当前呼叫。进入下一呼叫时这些临时修复字段必须清零，上一题的错误不能让下一题直接进入 assisted；整轮的错音、混淆对计数、重听和输入路线另行累计，供家长证据和后续补教使用。
+
+LS05 因 modeled success、长等待或疲劳到达安全休息时，保留已完成的中性花粉格、原 seeded 序列、当前/剩余呼叫和真实 evidence，并结束当前 session。下一次只能由地图上的明确手势创建 `resumeOfSessionId`，继续同一故事序列中尚未完成的呼叫；不得重做已完成呼叫，也不得因 resume 改变 2/2/1 分布。跨 session 的片段可以共同完成故事，但永远不能拼接成一次 qualifying stable；stable 只能来自后来一次从头开始、同一 session 内完成的全新五呼叫正式运行。
 
 LS04-LS07 的 `correctCount` 按每次呼叫的第一次有效孩子作答计数。第一次答错后，即使孩子在温和比较或重听后自行修对，该呼叫仍完成故事但不回填为 qualifying correct；否则反复试到正确会把 `3/4` 或 `4/5` 门槛变成虚设。修复后的正确输入、错音和提示仍完整进入 evidence，不能丢失。
 
@@ -170,7 +174,7 @@ LS04-LS07 的 `correctCount` 按每次呼叫的第一次有效孩子作答计数
 ## 九、音频优先级
 
 - 教学钢琴音是最高优先级。角色语音必须在目标音前结束，目标音起音后的前 `540 ms` 不得被角色语音、环境声、奖励动机或 Foley 遮盖。
-- 隐藏听辨只有在目标钢琴音实际可播放时才可打开评分窗口。声音关闭、音量为 0、AudioContext 未解锁/失败或目标播放被中断时，当前呼叫进入可恢复的 `sound-paused/replay-ready`，孩子按键只记非评分 observation，不算 correct/wrong；恢复声音后必须重播同一目标，不能靠无声猜测获得 completion/stable/retained。
+- 隐藏听辨只有在目标钢琴音实际可播放时才可打开评分窗口。声音关闭、音量为 0、AudioContext 未解锁/失败或目标播放被中断时，当前呼叫进入可恢复的 `sound-paused/replay-ready`，孩子按键只记非评分 observation，不算 correct/wrong；恢复声音后必须重播同一目标，不能靠无声猜测获得 completion/stable/retained。若已启用听力辅助、声音在有界恢复后仍不可用，或当前呼叫已经进入明确 strong-help 路线，才可提供“看着找”；正常 `target-playing/awaiting-response` 不得常驻一个随时揭示答案的按钮。本题转成可见字母与键位模型的 accessibility visual-assist 后，可以推进花园故事并记录 `accessibilityVisualAssist=true`、played/needsPractice，但不得写 listening correct、firstTry、stable 或 retained，也不得伪装成隐藏听辨通过。
 - 隐藏呼叫的 C4-G4 使用同一钢琴音源、力度、包络、目标时长、混响和中央声像；校准后的短时电平建议控制在约 `+/-1.5 dB` 内，再由真机听审确认。允许真实钢琴随音高产生的自然音色差，不允许额外用响度、时长、声像或效果器编码答案。
 - 目标播放期间不触发有稳定音高的植物音效。正确故事 Foley 至少等孩子输入音的主要起音清楚后再进入。
 - 正确/重试提示必须是弱音高或无稳定音高；不能暗示下一题答案。
@@ -198,6 +202,7 @@ LS04-LS07 的 `correctCount` 按每次呼叫的第一次有效孩子作答计数
   "targetRevealedBeforeResponse": false,
   "strongCueUsed": false,
   "modeled": false,
+  "accessibilityVisualAssist": false,
   "microphoneConfidence": null,
   "responseMs": 0,
   "timingUsedForMastery": false
@@ -207,6 +212,7 @@ LS04-LS07 的 `correctCount` 按每次呼叫的第一次有效孩子作答计数
 要求：
 
 - `responseMs` 只作观察，不参与 mastery。
+- `accessibilityVisualAssist=true` 表示该呼叫已退出隐藏听辨，任何随后可见模型输入都只推进故事，不进入 listening correct、firstTry、candidate coverage、stable 或 retained。
 - stable 先检查数值门槛、候选覆盖，再检查整轮资格。LS05 的候选覆盖要求 C/D/E 各至少一次无强提示正确，不能用 4/5 总分掩盖对单次候选的完全失败。普通 wrong 在评分后得到中性比较反馈，不会自动否定其余符合门槛的无提示正确；但只要任一呼叫在作答前 `targetRevealedBeforeResponse=true`、使用 strong cue、进入 modeled success，或由麦克风 uncertain/实验输入推动故事，这一整轮就不能新增 stable/retained。
 - 历史 stable/retained 事件不能被后来困难删除；当天困难单独写 `todayNeedsPractice`。
 - 故事进度可在 played 后继续，不等待 stable 或 retained。
@@ -228,7 +234,7 @@ LS04-LS07 的 `correctCount` 按每次呼叫的第一次有效孩子作答计数
 ## 十二、孩子端界面要求
 
 - 第一视线是中性声源、当前故事问题和可按钢琴，不是说明卡或长段文字。
-- 除星芽口语/气泡外，键盘、任务、谱垫和路线均以 C/D/E/F/G 为主名；同一屏不重复堆叠多个等价身份卡。
+- 除星芽口语/气泡外，键盘、任务、谱垫、路线、反馈、结果、地图和花园物件只显示 C/D/E/F/G；同一屏不重复堆叠多个等价身份卡，也不显示普通 `Do/C` 双标。
 - 重听使用熟悉的扬声器/重播图标，按钮至少 44px，有屏幕阅读标签；不写“听力考试”。
 - 目标音播放时显示统一耳朵/声波状态，所有候选物件保持同态。
 - 候选集合、当前呼叫槽和剩余故事进度尺寸稳定，不因文字或反馈跳动布局。
@@ -268,6 +274,8 @@ LS04-LS07 的 `correctCount` 按每次呼叫的第一次有效孩子作答计数
 26. LS04-LS08 在声音关闭、音量 0、AudioContext 不可用或目标播放中断时不开放评分；无声按键不计对错，恢复声音后重播同一题，不能产生无声 completion/stable/retained。
 27. LS04 完成只写 LS04/当前切片证据；第三章整章 completed 仍为 false，直到 LS08 章节出口。地图停点不得把“声音朋友完成”表达成“第三章完成”。
 28. 家长面板在 LS04 活动和完成后的地图休息态显示 `C/D 小音组听后找键` 及真实 played/stable/retained/needsPractice；不能复用 LS01-LS03 的“可见练习/不计稳定”文案，也不能回退显示旧月球关卡。
+29. LS05 每个新呼叫重置 call-local repair，modeled/疲劳休息后通过新 session 续做同一 seeded 序列的剩余呼叫；跨 session 片段只完成故事，不能合并授予 stable。
+30. LS05 的听力辅助 visual-assist 可完成故事但只写 observation/played/needsPractice；可见模型、无声输入或 accessibility completion 不得进入 listening correct/stable/retained。
 
 建议新增独立脚本而不是把所有断言塞入旧测试：
 
@@ -294,8 +302,8 @@ LS04-LS07 的 `correctCount` 按每次呼叫的第一次有效孩子作答计数
 
 - `passed`：第三章故事、音高、短课、无泄题、输入、证据和测试规格已锁定。
 - `passed_browser_visible_slice`：`overhaul-339d` 已由主管独立通过花园入口手势、确定性空气检测回退、`C3-01: LS01-LS02`、独立 `C3-02: LS03`、early-rest、地图五态和 pending-attempt 连续性；这三个 introduction-only level 仍固定 `reviewableForMastery=false`。
-- `passed_browser_ls04`：`overhaul-340a` 已由主管独立通过独立 `C3-03: LS04`、可见 C4 定锚、四次平衡 C/D 隐藏呼叫、无泄题、错误比较、bounded assisted/modeled、`3/4` stable、无声不评分、自然停点和九态 Chapter 3 媒体保护区合同；`chapter3.completed` 仍为 false。
-- `next_runtime_milestone`：下一独立里程碑只实现 `C3-04: LS05` C/D/E 三音小集合，不包含 LS06+。
+- `passed_browser_ls04`：`overhaul-340d` 保留并由主管复跑通过独立 `C3-03: LS04`、可见 C4 定锚、四次平衡 C/D 隐藏呼叫、无泄题、错误比较、bounded assisted/modeled、`3/4` stable、无声不评分、自然停点和九态 Chapter 3 媒体保护区合同；`chapter3.completed` 仍为 false。
+- `next_runtime_milestone`：当前已派发的独立课程里程碑只实现 `C3-04: LS05` C/D/E 三音小集合，不包含 LS06+。
 - `missing`：`LS06-LS08`、完整 Chapter 3 后续状态机与章节出口。
 - `missing`：正式空气检测/开盔/收纳动画和批准后的运行媒体。
 - `missing`：真实 iPad、MIDI、原声钢琴麦克风、教师与儿童证据。
