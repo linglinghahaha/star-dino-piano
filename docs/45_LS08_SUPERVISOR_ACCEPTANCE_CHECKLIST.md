@@ -61,7 +61,8 @@ LS07 自然休息后，地图显示短字母主名“两声根须”。只有孩
 - 孩子在自由速度下依次回按 C、D；该段允许分别重听单音。
 - 带路是 guided/played，不进入四组 check 分母、stable 或 retained。
 - 带路顺利时，同一 session 最多自动进入一次少提示 check。
-- 若出现 repeated repair、strong、modeled、长等待或明显疲劳，只长出一个中性根芽并回地图休息；下一次明确进入创建新 session，直接从完整四组 check 开始，不把困难带路伪装成 check 通过。
+- 若出现 repeated repair、strong、modeled、长等待或明显疲劳，只长出一个中性根芽并回地图休息；下一次明确进入创建新 session，仍先重做一次更短的可见 C-D 带路。只有孩子在未使用 strong/modeled 的情况下完成带路，才可在同一 session 最多自动进入一次完整四组 check。
+- 若连续两个 session 的可见带路仍需要 strong/modeled，应由 scheduler 安排回到 LS05 的 C/D 单音听后找键或等价补教；不得直接开放隐藏双音 check，也不得把 modeled 带路当作 check 资格。
 
 ### 3. 四组少提示 check
 
@@ -244,7 +245,7 @@ Stable 必须同时满足：
 建议新增独立 `check:chapter3-ls08`，至少覆盖：
 
 1. LS07 完成后才解锁 LS08；地图点击才创建 C3-07。
-2. guide 不计四组 check；顺利 guide 最多进入一次 check；困难 guide 提前休息。
+2. guide 不计四组 check；顺利 guide 最多进入一次 check；困难 guide 提前休息并在下一 session 重做短 guide，连续困难时路由回单音补教，不能直接进入 check。
 3. 四个固定 pair 各一次、seed 可复现、刷新保持顺序。
 4. target-playing 输入只 observation；两个响应窗口按自由速度工作。
 5. C-C 在 touch/MIDI/mic 均要求 release/rearm；长按、repeat、aftertouch、未 note-off、持续音不能填第二格。
