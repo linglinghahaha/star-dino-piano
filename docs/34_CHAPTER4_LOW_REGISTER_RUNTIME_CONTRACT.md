@@ -140,6 +140,7 @@ retained 只能来自 scheduler 选择的 later opening review。普通重玩、
 - 完整通过 LP01-LP10，是核心发布路线。
 - 键盘保持真实 C3-B4 几何；按键必须有即时真实压下和钢琴音。
 - TH/LP 未来多点需求不影响第四章单音路线；滑音或长按重复不能伪造多个输入。
+- 琴键或声音泡泡在输入后发生 DOM 重绘时，pointer 生命周期必须按稳定音符/控件身份保存，不能按已被替换的元素保存。页面其他位置收到 `pointerup/pointercancel`、窗口失焦或辅助激活后都要幂等收口；一次物理触控及其合成 click 只能发一次音、提交一次，并且不能留下永久 pressed 或未重新武装状态。
 
 ### MIDI
 
@@ -208,6 +209,7 @@ retained 只能来自 scheduler 选择的 later opening review。普通重玩、
 24. 家长端区分低音区玩过、低音键位稳定、低音谱位稳定、左手提示过和今天需要提示。
 25. LP01-LP10 的普通孩子表面、可见属性和非角色 ARIA 只使用字母音名；唱名只出现在角色对话，隐藏任务不通过任何身份字段泄题。
 26. target/wrong-repair/modeled 声音事务在地图/刷新下不被绕过；只有 ended 才可推进洞纹、early-rest 或 story completion。C4-01 引导 LP02 不写 stable，later reduced-cue session 才可建立低音 C 键位 stable。
+27. LP01 泡泡和 LP02-LP10 琴键的 pointer 状态跨 DOM 重绘保持稳定身份；同控件重叠触控、页面外 `pointerup/pointercancel`、窗口失焦、纯 click、Enter/Space 和 VoiceOver 各自只有一次音频与一次提交。局部和页面级释放必须幂等，所有活动 pointer 结束后才能重新武装，且有界清除 click 抑制和 pressed 状态。
 
 建议独立脚本：
 

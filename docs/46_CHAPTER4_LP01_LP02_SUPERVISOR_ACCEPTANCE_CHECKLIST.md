@@ -185,7 +185,7 @@ LP02 至少记录 `targetMidi=48`、首次实际 MIDI/琴键、`noteNameCorrect`
 7. LP02 touch C3、MIDI exact C3、C4 同名近似、其它 wrong octave/note、mic assisted-only、uncertain/noisy/bleed、sound-paused、volume 0、AudioContext failure、strong/modeled、地图/刷新连续性。
 8. 无咚咚完整形象、无低音谱表、无 LP03、无结果弹层/下一关按钮、无未批准媒体路径。
 9. LP01 每 1-2 个已解决调用出现中性洞纹进展；困难写 needsPractice/opening-review 队列，LP02 不清除或回填；Chapter 1-3、mastery、retained、音名门禁、PWA 和现有共享回归不变。
-10. 麦克风检测覆盖 simulated confirmed C3，同时把 C4/谐波/低置信/家庭噪声落到正确的近似或不确定状态；不得用扩大频率范围冒充实体 iPad 与原声钢琴通过。LP01 泡泡和 LP02 白键的 pointer、click、键盘/辅助激活各只提交一次，且 child-facing accessibility tree 不泄露目标。
+10. 麦克风检测覆盖 simulated confirmed C3，同时把 C4/谐波/低置信/家庭噪声落到正确的近似或不确定状态；不得用扩大频率范围冒充实体 iPad 与原声钢琴通过。LP01 泡泡和 LP02 白键的 pointer、click、键盘/辅助激活各只提交一次，且 child-facing accessibility tree 不泄露目标。输入后即使重绘泡泡或键盘，pointer 状态仍按稳定控件/音符身份延续；页面其他位置的 `pointerup/pointercancel` 与窗口失焦必须幂等释放，不能靠旧 DOM 节点或等待失焦才解除永久 pressed/rearm。
 11. Story mode 的 direct/debug/刷新不造入口或正式证据；显式教师/审计 direct mode 必须 `formalSession=false` 且对 Chapter 3/4 学习历史零写入。
 12. LP01 target、wrong repair、modeled 的地图/刷新恢复保持原音频事务；`scheduled` 不等于 `ended`，不得提前推进洞纹或故事。C4-01 的引导 LP02 即使首答正确也只写 played，LP02 stable 必须保持 0，等待以后独立 reduced-cue session。
 
