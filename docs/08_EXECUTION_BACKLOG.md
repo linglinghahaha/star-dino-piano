@@ -278,7 +278,7 @@ Current progress:
 
 ## Phase 2B: Chapter 3 Listening Garden
 
-Status: in progress. Steps 1-6 passed independently through `overhaul-341a`. `C3-05 / LS06` and `C3-06 / LS07` are the only active runtime milestones under `docs/44`; LS08 remains locked.
+Status: in progress. Steps 1-7 passed independently through `overhaul-342a`. `C3-07 / LS08` is the only active runtime milestone under `docs/45`; Chapter 4 and media runtime integration remain locked.
 
 Goal: turn the existing M03 listening seed into a staged story course that links heard piano sound, C/D/E/F/G letter name, Xingya's solfege, real keyboard geography, and neutral story consequences without claiming absolute pitch.
 
@@ -292,8 +292,8 @@ Implementation order:
 4. `[completed at 339d]` Stop and audit the visible echo loop, early LS01 rest/resume, letter-first UI, audio priority, touch route, debug isolation, map destination and pending-attempt continuity before adding hidden calls.
 5. `[completed at 340d]` Implement `C3-03` (`LS04`) as the first hidden C/D set. The approved browser baseline proves the neutral source, target-free waiting state, balanced calls, candidate reset, bounded repair, stable/retained separation, sound recovery and phase-bound Chapter 3 media-coordinate contract.
 6. `[completed at 341a]` Implement `C3-04 / LS05` as a separate five-call C/D/E milestone. The approved baseline proves strict `2/2/1`, candidate coverage, first-response scoring, call-local repair, candidate-outside handling, sound recovery, visual-assist isolation, cross-session non-stable completion, honest parent evidence and natural rest.
-7. `[active: LS06-LS07 only]` Implement `C3-05 / LS06` C/G large-distance comparison and, after its natural rest, `C3-06 / LS07` E/F adjacent-boundary comparison. Visible guide is unscored; hidden check uses balanced four-call sets, neutral persistent progress and separate phase-bound contracts. Do not start LS08 or media integration.
-8. `[locked]` Implement `C3-07 / LS08` only after LS06-LS07 pass independently. It remains the two-note-order and Chapter 3 exit milestone under `docs/45`.
+7. `[completed at 342a]` Implement `C3-05 / LS06` C/G large-distance comparison and, after its natural rest, `C3-06 / LS07` E/F adjacent-boundary comparison. The accepted baseline proves unscored visible guide, balanced hidden calls, neutral progress, honest repair/evidence and separate phase-bound contracts.
+8. `[active: LS08 only]` Implement `C3-07 / LS08` as the two-note-order and Chapter 3 exit milestone under `docs/45`. Keep C-C release/rearm, whole-pair evidence, unscored low echo and no automatic Chapter 4 start explicit; do not include media runtime integration or LP01+.
 
 Acceptance:
 

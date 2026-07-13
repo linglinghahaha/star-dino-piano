@@ -48,7 +48,7 @@ Do not call the teaching slice done until all are true:
 | game/teaching integration | `docs/33` phase purpose, meaningful-input budget, world-change frequency, achievement, repair and natural-rest checks for the proof slice; screenshots alone cannot pass this without state/evidence review |
 | CSS/bundle safety | no release bundle includes `assets/generated/raw`; no giant CSS override ships without cleanup decision |
 
-Current last independently validated browser baseline: `overhaul-341a`. It retains the full `340d` regression set, independently passes LS04 `39/39`, LS05 three consecutive `65/65`, child note names `160/160`, sessions `72/72`, clean-state `124/124`, PWA `7/7`, input/audio/accessibility and first-two-chapter gates, quick/strict bundle, generic coordinate regression, and three identical fixed-directory LS05 six-viewport/eleven-state contracts. It remains partial teaching proof: LS06-LS08, physical iPad/MIDI/microphone, teacher review and 3-5 child observations are not yet proven.
+Current last independently validated browser baseline: `overhaul-342a`. It retains the full `341a` regression set, independently passes LS06/LS07 `64/64`, LS05 `65/65`, LS04 `39/39`, child note names `183/183`, sessions `72/72`, clean-state `124/124`, PWA `7/7`, input/audio/accessibility and first-two-chapter gates, quick/strict bundle, generic coordinate regression, and stable fixed-directory LS06/LS07 six-viewport/thirteen-state contracts. It remains partial teaching proof: LS08, physical iPad/MIDI/microphone, teacher review and 3-5 child observations are not yet proven.
 
 ## Evidence Time Scale
 
@@ -106,11 +106,11 @@ Use this table when S01 exposes F/G weakness:
 
 ## Next Implementation Targets
 
-1. Keep `overhaul-341a` as the current browser evidence baseline. It closes the M08/M03/S01 route, visible Chapter 3 introduction, LS04 C/D listening, LS05 C/D/E small-set listening, child-facing note carriers and deterministic phase evidence.
-2. Implement only `C3-05 / LS06` and `C3-06 / LS07` under `docs/32` and the formal `docs/44` work order. They are separate natural-rest milestones: C/G large-distance comparison first, then E/F adjacent-boundary comparison.
-3. Preserve LS05 and all earlier evidence. Visible guide and hidden check remain separate; position, side, color, flower/stone motion and target-specific ARIA cannot reveal answers. Each level needs its own per-call evidence, bounded repair, sound recovery and phase-bound six-viewport contract.
-4. Keep `LS08` locked until LS06-LS07 pass independently. LS08 remains the separate two-note memory and Chapter 3 exit milestone; only a smooth visible guide may flow into check, and difficult guide sessions must re-guide or route to single-note remediation rather than directly opening hidden pair tests.
-5. After the full Chapter 3 route passes, implement the two `docs/34` Chapter 4 observation sessions before the full low-register chapter; LP10 guided crossing and signal check remain separate and neither story entry nor Chapter 5 waits for stable.
+1. Keep `overhaul-342a` as the current browser evidence baseline. It closes the M08/M03/S01 route, visible Chapter 3 introduction, LS04-LS07 listening, child-facing note carriers and deterministic phase evidence.
+2. Implement only `C3-07 / LS08` under `docs/32` and the formal `docs/45` work order. It is the separate two-note memory and Chapter 3 exit milestone.
+3. Preserve LS04-LS07 and all earlier evidence. LS08 guide and hidden check remain separate; pair order, roots, character motion, sound position and target-specific ARIA cannot reveal answers.
+4. Require discrete C-C release/rearm, first-complete response freezing, whole-pair replay evidence, cross-session non-stable completion and an unscored low-echo exit before promoting LS08.
+5. After the full Chapter 3 route passes, unlock only the `docs/46` LP01-LP02 first slice before broader `docs/34` implementation; LP10 guided crossing and signal check remain separate and neither story entry nor Chapter 5 waits for stable.
 6. Only after `docs/34` passes, implement `docs/35`: core relay first, resumable TH05 stages, then optional paired/together routes with identical permanent rewards.
 7. Keep `16_ASSET_MANIFEST.md` as the asset/audio release ledger and keep all current media candidates out of runtime until the latest coordinate, source and audio-priority gates pass.
 8. Measure a frozen candidate on a real iPad speaker/headphones and verify Safari reduced motion, background resume, touch timing and MIDI before treating browser checks as device proof.

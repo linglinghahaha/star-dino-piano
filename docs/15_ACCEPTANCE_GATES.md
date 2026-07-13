@@ -120,7 +120,7 @@ No broad visual polish pass should be called done without a gate-run record.
 
 Current baseline automation: rerun `chrome-test/clean-state-slice-check.mjs` after mastery, reveal-rule, or flow changes. It is the clean-state regression for `M01`, `M03`, `M08`, `FG01-FG04`, and `S01`, but it does not replace real-child observation, audio proof, or release asset/CSS gates.
 
-Current bundle automation: run `node tools/production-bundle-audit.mjs` after asset/reference changes. Prototype policy mode and `node tools/production-bundle-audit.mjs --strict` must both pass for any promoted browser baseline. The current independently validated `overhaul-341a` baseline passes strict mode with 41 runtime files and 1,641,265 runtime bytes; every later draft must rerun it with its own version, sources and runtime references before promotion. A historical exception cannot silently return.
+Current bundle automation: run `node tools/production-bundle-audit.mjs` after asset/reference changes. Prototype policy mode and `node tools/production-bundle-audit.mjs --strict` must both pass for any promoted browser baseline. The current independently validated `overhaul-342a` baseline passes strict mode with 41 runtime files and 1,641,265 runtime bytes; every later draft must rerun it with its own version, sources and runtime references before promotion. A historical exception cannot silently return.
 
 Version-baseline rule: the runtime version query in `index.html` must not be treated as proof by itself. If the app loads a newer version than the latest `20_GATE_RUN_LOG.md` entry, call it a draft. A version becomes the current baseline only after its relevant script checks, screenshots, bundle result, and pass/fail notes are logged.
 

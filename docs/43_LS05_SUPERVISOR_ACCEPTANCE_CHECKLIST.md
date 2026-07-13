@@ -6,7 +6,7 @@
 
 本文件只用于主管独立审查 `C3-04 / LS05` 的 C/D/E 三音小集合听后找键。课程事实仍以 `03_CONTENT_ROADMAP.md`、`09_SCAFFOLD_AND_ASSESSMENT_RULES.md`、`31_SESSION_SCHEDULER_AND_RETENTION_RUNTIME_CONTRACT.md`、`32_CHAPTER3_LISTENING_RUNTIME_CONTRACT.md` 和 `33_GAME_TEACHING_PACING_AND_MOTIVATION_CONTRACT.md` 为准。
 
-最新已通过浏览器基线是 `overhaul-341a`。运行提交为 `34277625400d1f1a4c60a5b29ed267b1f090bdf0`，版本断言补丁为 `af9293afc5386cc71ac594bec72e0307476ee205`。主管已独立确认 LS05 专项连续三次 `65/65`、六视口十一状态合同三次内部哈希一致、零 phase mismatch，并通过 LS04、音名、会话、PWA、clean-state、输入、音频设置、可访问性、第一二章共享门禁、quick 和 strict 回归。LS05 通过仍不等于第三章完成；LS08、正式媒体集成、真机和发布继续锁定。
+`overhaul-341a` 是本表首次通过时的 LS05 基线。运行提交为 `34277625400d1f1a4c60a5b29ed267b1f090bdf0`，版本断言补丁为 `af9293afc5386cc71ac594bec72e0307476ee205`。主管已独立确认 LS05 专项连续三次 `65/65`、六视口十一状态合同三次内部哈希一致、零 phase mismatch，并通过 LS04、音名、会话、PWA、clean-state、输入、音频设置、可访问性、第一二章共享门禁、quick 和 strict 回归。当前总体浏览器基线已推进到 `overhaul-342a`，并复跑保留 LS05；LS05 通过仍不等于第三章完成、真机或发布门禁通过。
 
 ## 二、先验冻结检查
 
