@@ -189,7 +189,7 @@ Purpose:
 
 Story:
 
-对面的星球轻轻震了一下。星芽先听见地底的“咚”，再找到一座圆圆的地下小屋。洞里的剪影慢慢露出眼睛、颈盾和脚印，最后才出现三角龙咚咚。咚咚的家需要更稳、更低的声音来修地基。
+星芽所在的生态星球脚下轻轻震了一下。孩子后来可以把这片温暖地下生态层昵称为“低音星球”，但它不是第三颗新星球。星芽先听见地底的“咚”，再找到一座圆圆的地下小屋。洞里的剪影慢慢露出眼睛、颈盾和脚印，最后才出现三角龙咚咚。咚咚的家需要更稳、更低的声音来修地基。
 
 Player emotion:
 
@@ -276,7 +276,7 @@ The teaching details, notes, register, and gates for these ids are canonical in 
 | ID | Cute title | Visible problem | Correct world change | Reason for the next level |
 | --- | --- | --- | --- | --- |
 | LP01 | 地底传来“咚” | a seed's low echo makes the ground tremble | the child identifies the low call and a cave outline glows | the cave needs the exact low Do key to open |
-| LP02 | 低音 Do 的家 | Xingya finds two Do homes but only one opens the cave | low Do drops the first foundation stone | two more stones are still floating |
+| LP02 | 低音 C 的家 | Xingya finds two Do homes but only one opens the cave | low Do drops the first foundation stone | two more stones are still floating |
 | LP03 | 三块地基石 | three stones have lost their order | low C-D-E locks them left to right | their tunnel sends an echo downward |
 | LP04 | 地洞回声 | the echo is travelling the wrong way | E-D-C guides it down and Dongdong's silhouette answers | footprints appear beside a three-black group |
 | LP05 | 三黑键旁的脚印 | the last two footprints are missing | E-F-G reveals Dongdong fully at the end of the path | a large arch stone is too heavy to move nearby |
