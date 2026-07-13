@@ -11,6 +11,17 @@
 - 从现在起，临时附件失效时不得用同一 Temp 目录中“时间相近”或“画面相似”的其他图片替代。必须通过原附件、当前页面 URL、任务标题、应用角色/场景标识或已登记截图路径确认项目身份；无法确认时只报告附件不可读，并从本项目源码/正式截图证据核查，不能跨项目猜测。
 - 给支线发消息前新增项目身份守卫：消息中的角色、关卡 ID、界面对象、工作目录和证据路径必须全部属于接收任务；若出现 `MidiInputProbe`、`keyboard_captain_*`、琴键小队长、音乐小火车或车厢等另一项目标识，星龙工坊消息必须停止发送并重新核对。
 
+## 2026-07-13 LS06/LS07 garden-art-v3 独立媒体裁决
+
+裁决：`technical_source_package_passed / individual_props_partial / progression_placement_missing / runtime_integration_forbidden / release_clearance_missing`。
+
+- 主管没有沿用媒体任务的自审结论，重新读取 `manifest.json`、`audit.md` 和生成脚本，直接查看 22 件透明接触表、knot3 拒绝证据及 LS06/LS07 的 visible-guide、awaiting-response、complete 原尺寸合成。22 件独立道具的 3D clay 材质、主体完整度和低龄可读性明显优于当前扁平运行占位，可保留为下一轮整合候选；它们仍不是完整场景或发布美术。
+- `ls06-vine-knot-3` 的原始花苞遮住后方藤条，alpha 删除版本又留下硬边洞，独立审图确认应保持 `rejected_visual_occlusion_hole / selected=false / usableInLs06Progression=false`。LS06 只保留 knot0、knot1、knot2、knot4 四步，arch 只用于完成态；LS07 knot0-4 仍是 `unplaced_source_extra`，不得把编号当作已批准的教学语义。
+- 初次按交接建议执行 `build_candidate.py --verify` 时，主管发现该命令实际先删除并重建 manifest/audit/透明件，会把 `repeatBuild=passed/stable/84` 降回 `not_yet_repeat_verified`。媒体任务已修为真正只读验证，并把重建与 `--repeat-verify` 分开。
+- 修正后主管再次独立执行只读验证：前后均为 90 个文件，SHA-256、长度和 UTC 时间戳变化数均为 0；manifest 保持 `repeatBuild=passed / stable=true / verifiedFileCount=84`。脚本 SHA-256 为 `309A614FD1AD87568BCC3428E0993D53554854578172DBC6DB4638593FC86879`，与 manifest 一致；透明门禁 22/22、实际已放置资产几何 156/156、28 张冻结 UI 合成保护区、当前运行引用 0 均通过。
+- 28 张合成只证明中性声源、同权候选对和完成物不会越过冻结保护区；LS06 四个进度藤结和全部 LS07 藤结没有进入真实 UI 进度板。合成仍保留旧白色轨迹圈、浅蓝占位和扁平背景，3D 道具与运行场景材质明显不统一，因此不能证明进度可读、落地、无遮挡、成熟方向或 live runtime 可用。
+- 后续媒体里程碑只能在 343a 冻结后，基于最新冻结截图制作“统一花园场景 + clean props + 移除旧白圈/浅蓝占位 + 明确四步进度”的完整整合板；在该板、逐文件来源/相似性和运行回归通过前，继续保持 `runtimeApproval=false / integrationAllowed=false / releaseCleared=false`，不得复制到 `assets/runtime`。
+
 ## 2026-07-13 `overhaul-342a` LS06/LS07 正式独立裁决
 
 裁决：`passed_browser_baseline / ls06_ls07_teaching_contract_passed / ls08_dispatch_unlocked / release_art_and_external_evidence_missing`。
@@ -256,7 +267,7 @@
 | `PARALLEL-MEDIA` | 媒体 | 官方 Grok CLI 的有限图像、参考编辑、文字和图生视频能力矩阵 | `audited_closed`：能力事实部分通过，但宿主读取约束 contradicted、项目视觉方向和交付规格未通过；全部 `runtimeApproval=false`，禁止继续共享宿主调用 |
 | `PARALLEL-ART` | 媒体 | 从已选源概念确定性提取 Chapter 3 garden-mode 星芽 512px 透明候选；不写 runtime、不调用生成服务 | `completed / approved_for_339b_prototype_copy_only / release_not_cleared`；Chapter 4/5 批量概念仍暂缓 |
 | `PARALLEL-AUDIO` | 媒体 | 复核 LS04 现有无音高反馈/Foley 与 C4/D4 教学音并播；只做本地确定性审核资产 | `completed / independently_passed_offline_package / runtime_forbidden / human_listening_missing` |
-| `PARALLEL-GARDEN-ART` | 媒体 | 只在候选目录收口 LS06/LS07 garden art v3；修正 LS06 crop/碎片/贴边，重建 28 张真实 342a UI 合成，不生成新角色 | `in_progress / source_only / runtime_locked / recording_closed` |
+| `PARALLEL-GARDEN-ART` | 媒体 | LS06/LS07 garden-art-v3 源包已收口并经主管独立审查；22 个透明道具保留为后续整合候选，knot3 拒绝，真实四步进度整合板仍缺失 | `completed_source_package / independently_audited / progression_integration_board_missing / runtime_locked / recording_closed` |
 
 2026-07-11 课程静态审查补充：`docs/24` 已纠正“M03 属于第三章已实现内容”的错误表述，明确 M03 只是第一章的听音预备；`docs/03/17/24/31/33` 已统一 M07 的两段故事作用为“先挂好星串，再让原位星灯记住路线”，第二遍不得拆星重挂，吃力时延期。当前只读代码证据显示 `C1-06` 已有 guided/check 两步，检查标题为“自己接亮”且复用同一组星位，因此没有需要打断 M08 的 P0/P1；但“已安装星串在检查开始时是否视觉持续、第二状态是否足够明显”仍缺独立截图证据，记为后续第一章节奏回归观察项，不扩入当前 M08 或下一轮 M03/S01 窄修。
 
@@ -403,7 +414,7 @@
 | 第三章听音花园 | 花园入口、LS01-LS08、小集合隐藏听辨、重听、音频优先、自然停点和证据阈值全部运行通过 | `342a` 已独立通过入口、装备回退、LS01-LS07、early-rest、地图/刷新连续性和 C/D/E/F/G 听辨；`343a` 正在实现独立 LS08，尚未冻结交接 | `runtime_partial / LS01_LS07_browser_passed / LS08_active_unreviewed` | 原型只做 LS08；正式冻结后由主管独立审查，不提前解锁 Chapter 4 |
 | 第四章低音与低音谱表 | C3-G3 双八度真实键盘、音区、高低比较、低音谱位、左手邀请和咚咚故事运行通过 | 课程/故事脚本存在，无运行闭环 | `missing_runtime` | 第三章听音闭环通过后由主管下发观察切片 |
 | 第五章轮流与合作 | 接力主线、可选同时路线、两小节固定原创曲、同等奖励结局和总谱地图运行通过 | 课程/故事脚本存在，无运行闭环 | `missing_runtime` | 第四章低音/谱表门禁通过后下发 |
-| UI、美术与角色动作 | 地图、关卡、键盘、谱桥、五章场景和角色状态达到统一发布质量；无占位物；来源和版权清楚 | `342a` 第一、二章与第三章 LS01-LS07 的视觉层级、路线音名和辅助模式通过浏览器审查；LS06/LS07 garden-art-v2 的新背景仅通过方向讨论，星芽动作稿因物种漂移和透明碎片被拒绝，花园运行层仍有白圈/占位轨迹和道具材质不统一 | `partial / prototype_visual_passed / media_v2_rejected_for_integration / release_art_missing` | 原型负责运行表现；媒体只做 source-only v3；主管二次审查后才可逐文件集成 |
+| UI、美术与角色动作 | 地图、关卡、键盘、谱桥、五章场景和角色状态达到统一发布质量；无占位物；来源和版权清楚 | `342a` 第一、二章与第三章 LS01-LS07 的视觉层级、路线音名和辅助模式通过浏览器审查；LS06/LS07 garden-art-v3 的 22 个独立 3D clay 道具已通过技术源包审查，knot3 保持拒绝，但四步进度尚未放入真实 UI，现有合成仍含白圈、浅蓝占位和扁平背景，不能代表最终场景 | `partial / prototype_visual_passed / media_v3_source_package_passed / progression_composition_missing / runtime_integration_forbidden / release_art_missing` | 原型负责运行表现；343a 冻结后媒体制作统一花园最终整合板，主管再逐文件审查，未批准前不得复制到 runtime |
 | 钢琴音、音效、过场与角色语音 | 真机上钢琴音清晰；SFX/语音不遮盖；过场可跳过/减少动态；授权和隐私完整 | WebAudio 合同和 7 个原创候选存在；完成动画、角色录音、真机混音缺失 | `partial / recording_gate_closed` | 最新布局安全区稳定后解锁媒体；录音门禁有效后才请求用户 |
 | 输入与设备可靠性 | 按 `docs/38` 证明触屏始终可完成、原生 iPad Core MIDI 可靠、麦克风可选且置信度安全、旋转/中断/恢复可用 | 设备协议已完成；浏览器触屏、桌面 MIDI/实验麦克风和输入自动化存在，无实体测量 | `passed_protocol / runtime_partial / physical_iPad_missing` | Web主线稳定后建立原生 iPad 项目，并按 N0/N1 执行真机矩阵 |
 | 低龄可理解性与教学效果 | 按 `docs/37` 由 3-5 名 4-6 岁儿童分多次完成开始、错误、修复、结果和休息；教师复核目标/阈值；最终美术声音后重复验证 | 观察协议与表格已完成；仍只有自动化和成人截图，无合格儿童/教师记录 | `passed_protocol / external_evidence_missing` | 冻结教学纵切后先做一名儿童方向性观察；最终候选执行 3-5 名复测，不由自动化替代 |
@@ -754,7 +765,7 @@ Chapter 3 媒体保护区合同：
 1. `A -> G2` 已收口：`overhaul-342a` / `e6e27cc1fee57dc0eb2ed4a46f5b6dbb13176ff6` 是当前主管批准浏览器基线；第一、二章与 Chapter 3 LS01-LS07 已独立通过。
 2. `C` 的有效 Git、LFS 与 WAV/PDF 忽略证明已通过；首个源码基线为 `b431c1ab347dd813ac1aa712a05c5f7ab150cf55`，没有远程仓库，也没有接收录音。后续修正必须用新 commit，不得重写该基线。
 3. 当前唯一运行工作是 `G3: overhaul-343a / C3-07 / LS08`，严格服从 `docs/45`；原型任务完成专项、六视口合同、截图、共享回归、选择性提交和正式交接前，342a 仍是批准基线。
-4. 媒体任务只修 LS06/LS07 花园 source-only v2：v1 前景道具保留技术候选，背景方向和实际 UI 合成退回；不得联系原型、复制到 runtime 或顺手制作 LS08/Chapter 4 运行素材。
+4. LS06/LS07 garden-art-v3 源包已完成独立审查：22 个透明道具可保留为整合候选，knot3 拒绝，现有 28 张合成只证明声源/同权候选/完成物保护区；真实四步进度与统一花园整合板仍缺失。媒体任务等待 343a 冻结后再基于最新 UI 制作整合板，不得复制到 runtime 或顺手制作 LS08/Chapter 4 运行素材。
 5. 可在冻结 342a 上准备一次不收集身份、声音或影像的方向性儿童观察；该观察不阻断 LS08 内部开发，也不能外推到未冻结的 LS08、第四章或第五章。最终 3-5 名儿童、教师和真机仍在最终视觉/声音稳定后复测。
 6. 只有 LS08 经主管独立通过并形成第三章自然出口后，才解锁 `docs/46` 的 Chapter 4 LP01-LP02 窄切片；LP03+、完整咚咚揭晓、左手、低音谱表和媒体运行集成继续锁定。
 7. 所有媒体运行集成都必须逐文件哈希、真实 UI 合成、来源/相似性、教学安全和运行回归分别通过；source-clearance、技术预演或生成成功不能自动变成 runtime approved。
