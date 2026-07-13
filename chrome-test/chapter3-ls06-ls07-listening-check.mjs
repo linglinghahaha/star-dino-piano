@@ -322,7 +322,7 @@ await completeRemaining(main.page);
 await main.page.waitForFunction(() => document.body.classList.contains("screen-map"), null, { timeout: 10000 });
 current = await view(main.page);
 record("LS07 3/4 first-response path creates stable after opening guide without hidden boundary help", current.chapter3.lessonEvidence.LS07?.correctCount === 3 && current.chapter3.lessonEvidence.LS07?.openingBoundaryGuideCompleted === true && current.chapter3.lessonEvidence.LS07?.postPromptBoundaryStrongHelpUsed === false && current.learning.levels.LS07?.stableCompletions === 1, current.chapter3.lessonEvidence.LS07);
-record("LS07 completion keeps chapter3 incomplete and creates no LS08", current.chapter3.completed === false && current.markerDisabled && !JSON.stringify(current.runtime).includes("LS08"), current.chapter3);
+record("LS07 completion exposes LS08 without creating C3-07", current.chapter3.completed === false && current.markerDisabled === false && current.marker.includes("两声根须") && !current.runtime.active && !current.runtime.history.some((session) => session.bundleId === "C3-07") && !current.chapter3.lessonEvidence.LS08 && current.chapter3.ls08Attempts.length === 0, current.chapter3);
 record("LS07 map rest announces the boundary-flower result only after LS07", current.runtime.lastRest?.bundleId === "C3-06" && current.runtime.lastRest?.reward === "两株边界花" && current.runtime.lastRest?.reason === "natural-rest" && current.mapSessionDetail === "两株边界花已经安顿好，今天先歇一歇。", { detail: current.mapSessionDetail, lastRest: current.runtime.lastRest });
 await main.page.screenshot({ path: path.join(screenshotDir, "ls07_map_rest_1366x1024.png") });
 await main.page.locator("#mapParentGate").click();

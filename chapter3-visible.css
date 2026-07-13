@@ -603,32 +603,39 @@ html[data-contrast="more"] #appShell[data-chapter3="listening-three"] .listening
 }
 
 #appShell[data-chapter3="listening-echo"] .garden-speech,
-#appShell[data-chapter3="listening-boundary"] .garden-speech {
+#appShell[data-chapter3="listening-boundary"] .garden-speech,
+#appShell[data-chapter3="listening-roots"] .garden-speech {
   left: 14%;
   top: 5%;
   width: min(330px, 33vw);
 }
 #appShell[data-chapter3="listening-echo"] .garden-xingya,
-#appShell[data-chapter3="listening-boundary"] .garden-xingya {
+#appShell[data-chapter3="listening-boundary"] .garden-xingya,
+#appShell[data-chapter3="listening-roots"] .garden-xingya {
   left: 1.5%;
   width: clamp(174px, 20vw, 230px);
 }
 #appShell[data-chapter3="listening-echo"] .listening-source,
-#appShell[data-chapter3="listening-boundary"] .listening-source {
+#appShell[data-chapter3="listening-boundary"] .listening-source,
+#appShell[data-chapter3="listening-roots"] .listening-source {
   left: 59%;
   top: 27%;
 }
 #appShell[data-chapter3="listening-echo"] .listening-replay,
-#appShell[data-chapter3="listening-boundary"] .listening-replay {
+#appShell[data-chapter3="listening-boundary"] .listening-replay,
+#appShell[data-chapter3="listening-roots"] .listening-replay {
   left: calc(59% + 72px);
   top: calc(27% - 24px);
 }
 #appShell[data-chapter3="listening-echo"] .keyboard-guide-layer,
 #appShell[data-chapter3="listening-boundary"] .keyboard-guide-layer,
+#appShell[data-chapter3="listening-roots"] .keyboard-guide-layer,
 #appShell[data-chapter3="listening-echo"] .key-find-tag,
 #appShell[data-chapter3="listening-boundary"] .key-find-tag,
+#appShell[data-chapter3="listening-roots"] .key-find-tag,
 #appShell[data-chapter3="listening-echo"] .key-color-dot,
-#appShell[data-chapter3="listening-boundary"] .key-color-dot { display: none !important; }
+#appShell[data-chapter3="listening-boundary"] .key-color-dot,
+#appShell[data-chapter3="listening-roots"] .key-color-dot { display: none !important; }
 
 .paired-listening-world {
   position: absolute;
@@ -705,18 +712,63 @@ html[data-contrast="more"] #appShell[data-chapter3="listening-three"] .listening
 }
 .paired-listening-world[data-level="LS07"] .paired-listening-link { opacity: .25; }
 .paired-listening-world[data-level="LS07"] .paired-listening-link.is-complete { opacity: 0; }
+.paired-listening-world[data-level="LS08"] .paired-listening-endpoint {
+  width: 108px;
+  height: 82px;
+  border-radius: 50% 50% 42% 42%;
+  background: #4f9369;
+}
+.paired-listening-world[data-level="LS08"] .paired-listening-endpoint::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: -34px;
+  width: 6px;
+  height: 38px;
+  border-radius: 999px;
+  background: #f6ffe9;
+  transform: translateX(-50%);
+  opacity: .82;
+}
+.paired-listening-world[data-level="LS08"] .paired-listening-link {
+  bottom: 20px;
+  height: 54px;
+  border: 6px solid rgba(246,255,229,.88);
+  border-top: 0;
+  border-radius: 0 0 80px 80px;
+  background: transparent;
+  opacity: .62;
+}
+.paired-listening-world[data-level="LS08"] .paired-listening-link.is-complete {
+  height: 92px;
+  opacity: 1;
+  box-shadow: inset 0 -10px 0 rgba(61,126,83,.45);
+}
+.paired-listening-world[data-level="LS08"] .paired-listening-endpoint.has-child-input {
+  background: #8fc77a;
+  transform: translateY(-5px);
+}
+#appShell[data-chapter3="listening-roots"] .listening-call-progress {
+  left: 62%;
+  right: auto;
+  bottom: 2.5%;
+}
 #appShell[data-chapter3="listening-echo"] .listening-call-progress,
-#appShell[data-chapter3="listening-boundary"] .listening-call-progress { right: 4%; bottom: 6%; }
+#appShell[data-chapter3="listening-boundary"] .listening-call-progress,
+#appShell[data-chapter3="listening-roots"] .listening-call-progress { right: 4%; bottom: 6%; }
 #appShell[data-chapter3="listening-echo"] .listening-call-progress span,
-#appShell[data-chapter3="listening-boundary"] .listening-call-progress span { width: 28px; height: 28px; }
+#appShell[data-chapter3="listening-boundary"] .listening-call-progress span,
+#appShell[data-chapter3="listening-roots"] .listening-call-progress span { width: 28px; height: 28px; }
 #appShell[data-chapter3="listening-echo"] .listening-call-progress span.done,
-#appShell[data-chapter3="listening-boundary"] .listening-call-progress span.done {
+#appShell[data-chapter3="listening-boundary"] .listening-call-progress span.done,
+#appShell[data-chapter3="listening-roots"] .listening-call-progress span.done {
   background: #f7ffb0;
   border-color: #fff;
   box-shadow: inset 0 0 0 5px #4b9f68, 0 0 0 2px rgba(24,74,58,.28);
 }
 #appShell[data-chapter3="listening-echo"] .keyboard[data-scaffold="garden-listening-assisted"] .white-key.target,
-#appShell[data-chapter3="listening-boundary"] .keyboard[data-scaffold="garden-listening-assisted"] .white-key.target {
+#appShell[data-chapter3="listening-boundary"] .keyboard[data-scaffold="garden-listening-assisted"] .white-key.target,
+#appShell[data-chapter3="listening-roots"] .keyboard[data-scaffold="garden-listening-assisted"] .white-key.target {
   animation: ls05-assisted-key-pulse .55s ease-in-out 2;
 }
 @media (max-width: 1180px), (max-height: 820px) {

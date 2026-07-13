@@ -1,0 +1,6506 @@
+{
+  "coordinateContractId": "chapter3-ls08-media-zones-overhaul-343a-v1",
+  "prototypeBaseline": "overhaul-343a",
+  "buildIdentity": "overhaul-343a-p1",
+  "runtimeIntegrationAllowed": false,
+  "deviceValidation": "missing",
+  "expectedStates": [
+    "map-entry",
+    "guide-first",
+    "guide-second",
+    "pair-playing",
+    "awaiting-first",
+    "awaiting-second",
+    "wrong-first",
+    "wrong-second",
+    "assisted",
+    "sound-paused",
+    "visual-assist",
+    "complete-roots",
+    "unscored-low-echo",
+    "reduced-motion"
+  ],
+  "expectedActualPhases": {
+    "map-entry": [
+      "map-entry"
+    ],
+    "guide-first": [
+      "guide-first"
+    ],
+    "guide-second": [
+      "guide-second"
+    ],
+    "pair-playing": [
+      "pair-playing"
+    ],
+    "awaiting-first": [
+      "awaiting-first"
+    ],
+    "awaiting-second": [
+      "awaiting-second"
+    ],
+    "wrong-first": [
+      "wrong-first"
+    ],
+    "wrong-second": [
+      "wrong-second"
+    ],
+    "assisted": [
+      "assisted"
+    ],
+    "sound-paused": [
+      "sound-paused"
+    ],
+    "visual-assist": [
+      "visual-assist"
+    ],
+    "complete-roots": [
+      "complete-roots"
+    ],
+    "unscored-low-echo": [
+      "unscored-low-echo"
+    ],
+    "reduced-motion": [
+      "guide-first"
+    ]
+  },
+  "sourceFiles": [
+    {
+      "path": "chrome-test/chapter3-ls08-media-zone-contract-343a-v1.mjs",
+      "bytes": 16718,
+      "sha256": "e185d8b379282b5f5b19f8bfdf8b8bda1ce254eecfec2d55709b5cdc50e2cfa1"
+    },
+    {
+      "path": "index.html",
+      "bytes": 40718,
+      "sha256": "32d0b183aa44321016253ce742ee4aafb2eb81a44f2a48cbeea49d1cc637b7c3"
+    },
+    {
+      "path": "app.js",
+      "bytes": 490606,
+      "sha256": "124919d6913d37a8a28bc4f6d859fb73a487daa67fa32bba41671d2f136d28f9"
+    },
+    {
+      "path": "styles.css",
+      "bytes": 228842,
+      "sha256": "a3943755e3f847c5152d74b2ec13259bea71aaa6a16759cd48e9b8bfca873a68"
+    },
+    {
+      "path": "keyboard-overrides.css",
+      "bytes": 4081,
+      "sha256": "e359fc5cc5d002daa33f872d7929deb822db280b445e781ba9dc0575f103e234"
+    },
+    {
+      "path": "map-overrides.css",
+      "bytes": 9806,
+      "sha256": "c8f07757ae3acca7450d45e70c741b068e19e2ca31fcf18c6c4625d745a045ac"
+    },
+    {
+      "path": "current-overhaul.css",
+      "bytes": 108924,
+      "sha256": "310c3287a9595b278dee969b91349c290351f2903a82cdac9b154c4975bc623e"
+    },
+    {
+      "path": "chapter3-visible.css",
+      "bytes": 26637,
+      "sha256": "7937bbd8409bd16d6848f248089234fab006ccda9b31096e5977feb41efcefd0"
+    }
+  ],
+  "viewports": [
+    {
+      "viewportId": "ipad-1024x768-dpr1",
+      "width": 1024,
+      "height": 768,
+      "dpr": 1,
+      "states": [
+        {
+          "stateName": "map-entry",
+          "expectedActualPhases": [
+            "map-entry"
+          ],
+          "geometry": {
+            "phase": "map-entry",
+            "repairStage": "",
+            "viewport": {
+              "width": 1024,
+              "height": 768,
+              "scrollWidth": 1024,
+              "scrollHeight": 768
+            },
+            "zones": {
+              "map": {
+                "x": 0,
+                "y": 0,
+                "width": 1024,
+                "height": 768
+              },
+              "panel": null,
+              "speech": null,
+              "character": null,
+              "source": null,
+              "world": null,
+              "compare": null,
+              "replay": null,
+              "progress": null,
+              "keyboard": null
+            },
+            "hiddenTargetCarrier": 0,
+            "keyboardCarriers": 0,
+            "slotNotes": [
+              null,
+              null
+            ],
+            "pairIndex": null,
+            "neutralProgress": 0,
+            "reducedMotion": false
+          },
+          "screenshot": "ipad-1024x768-dpr1_map-entry.png"
+        },
+        {
+          "stateName": "guide-first",
+          "expectedActualPhases": [
+            "guide-first"
+          ],
+          "geometry": {
+            "phase": "guide-first",
+            "repairStage": "none",
+            "viewport": {
+              "width": 1024,
+              "height": 768,
+              "scrollWidth": 1024,
+              "scrollHeight": 768
+            },
+            "zones": {
+              "map": null,
+              "panel": {
+                "x": 10,
+                "y": 74,
+                "width": 1004,
+                "height": 476.33
+              },
+              "speech": {
+                "x": 159.91,
+                "y": 106.86,
+                "width": 330,
+                "height": 98
+              },
+              "character": {
+                "x": 37.66,
+                "y": 314.25,
+                "width": 204.8,
+                "height": 208.8
+              },
+              "source": {
+                "x": 552.02,
+                "y": 159.47,
+                "width": 96,
+                "height": 96
+              },
+              "world": {
+                "x": 414.19,
+                "y": 387.33,
+                "width": 537.92,
+                "height": 122
+              },
+              "compare": null,
+              "replay": {
+                "x": 672.02,
+                "y": 183.47,
+                "width": 52,
+                "height": 52
+              },
+              "progress": {
+                "x": 629.36,
+                "y": 485.89,
+                "width": 332.53,
+                "height": 28
+              },
+              "keyboard": {
+                "x": 21,
+                "y": 566.33,
+                "width": 982,
+                "height": 184
+              }
+            },
+            "hiddenTargetCarrier": 0,
+            "keyboardCarriers": 1,
+            "slotNotes": [
+              "C",
+              "D"
+            ],
+            "pairIndex": 0,
+            "neutralProgress": 0,
+            "reducedMotion": false
+          },
+          "screenshot": "ipad-1024x768-dpr1_guide-first.png"
+        },
+        {
+          "stateName": "guide-second",
+          "expectedActualPhases": [
+            "guide-second"
+          ],
+          "geometry": {
+            "phase": "guide-second",
+            "repairStage": "none",
+            "viewport": {
+              "width": 1024,
+              "height": 768,
+              "scrollWidth": 1024,
+              "scrollHeight": 768
+            },
+            "zones": {
+              "map": null,
+              "panel": {
+                "x": 10,
+                "y": 74,
+                "width": 1004,
+                "height": 476.33
+              },
+              "speech": {
+                "x": 159.91,
+                "y": 106.86,
+                "width": 330,
+                "height": 98
+              },
+              "character": {
+                "x": 37.66,
+                "y": 314.25,
+                "width": 204.8,
+                "height": 208.8
+              },
+              "source": {
+                "x": 552.02,
+                "y": 159.47,
+                "width": 96,
+                "height": 96
+              },
+              "world": {
+                "x": 414.19,
+                "y": 387.33,
+                "width": 537.92,
+                "height": 122
+              },
+              "compare": null,
+              "replay": {
+                "x": 672.02,
+                "y": 183.47,
+                "width": 52,
+                "height": 52
+              },
+              "progress": {
+                "x": 629.36,
+                "y": 485.89,
+                "width": 332.53,
+                "height": 28
+              },
+              "keyboard": {
+                "x": 21,
+                "y": 566.33,
+                "width": 982,
+                "height": 184
+              }
+            },
+            "hiddenTargetCarrier": 0,
+            "keyboardCarriers": 1,
+            "slotNotes": [
+              "C",
+              "D"
+            ],
+            "pairIndex": 0,
+            "neutralProgress": 0,
+            "reducedMotion": false
+          },
+          "screenshot": "ipad-1024x768-dpr1_guide-second.png"
+        },
+        {
+          "stateName": "pair-playing",
+          "expectedActualPhases": [
+            "pair-playing"
+          ],
+          "geometry": {
+            "phase": "pair-playing",
+            "repairStage": "none",
+            "viewport": {
+              "width": 1024,
+              "height": 768,
+              "scrollWidth": 1024,
+              "scrollHeight": 768
+            },
+            "zones": {
+              "map": null,
+              "panel": {
+                "x": 10,
+                "y": 74,
+                "width": 1004,
+                "height": 476.33
+              },
+              "speech": {
+                "x": 159.91,
+                "y": 106.86,
+                "width": 330,
+                "height": 98
+              },
+              "character": {
+                "x": 37.66,
+                "y": 314.25,
+                "width": 204.8,
+                "height": 208.8
+              },
+              "source": {
+                "x": 552.02,
+                "y": 159.47,
+                "width": 96,
+                "height": 96
+              },
+              "world": {
+                "x": 414.19,
+                "y": 387.33,
+                "width": 537.92,
+                "height": 122
+              },
+              "compare": null,
+              "replay": {
+                "x": 672.02,
+                "y": 183.47,
+                "width": 52,
+                "height": 52
+              },
+              "progress": {
+                "x": 629.36,
+                "y": 485.89,
+                "width": 332.53,
+                "height": 28
+              },
+              "keyboard": {
+                "x": 21,
+                "y": 566.33,
+                "width": 982,
+                "height": 184
+              }
+            },
+            "hiddenTargetCarrier": 0,
+            "keyboardCarriers": 0,
+            "slotNotes": [
+              null,
+              null
+            ],
+            "pairIndex": 0,
+            "neutralProgress": 0,
+            "reducedMotion": false
+          },
+          "screenshot": "ipad-1024x768-dpr1_pair-playing.png"
+        },
+        {
+          "stateName": "awaiting-first",
+          "expectedActualPhases": [
+            "awaiting-first"
+          ],
+          "geometry": {
+            "phase": "awaiting-first",
+            "repairStage": "none",
+            "viewport": {
+              "width": 1024,
+              "height": 768,
+              "scrollWidth": 1024,
+              "scrollHeight": 768
+            },
+            "zones": {
+              "map": null,
+              "panel": {
+                "x": 10,
+                "y": 74,
+                "width": 1004,
+                "height": 476.33
+              },
+              "speech": {
+                "x": 159.91,
+                "y": 106.86,
+                "width": 330,
+                "height": 98
+              },
+              "character": {
+                "x": 37.66,
+                "y": 314.25,
+                "width": 204.8,
+                "height": 208.8
+              },
+              "source": {
+                "x": 552.02,
+                "y": 159.47,
+                "width": 96,
+                "height": 96
+              },
+              "world": {
+                "x": 414.19,
+                "y": 387.33,
+                "width": 537.92,
+                "height": 122
+              },
+              "compare": null,
+              "replay": {
+                "x": 672.02,
+                "y": 183.47,
+                "width": 52,
+                "height": 52
+              },
+              "progress": {
+                "x": 629.36,
+                "y": 485.89,
+                "width": 332.53,
+                "height": 28
+              },
+              "keyboard": {
+                "x": 21,
+                "y": 566.33,
+                "width": 982,
+                "height": 184
+              }
+            },
+            "hiddenTargetCarrier": 0,
+            "keyboardCarriers": 0,
+            "slotNotes": [
+              null,
+              null
+            ],
+            "pairIndex": 0,
+            "neutralProgress": 0,
+            "reducedMotion": false
+          },
+          "screenshot": "ipad-1024x768-dpr1_awaiting-first.png"
+        },
+        {
+          "stateName": "awaiting-second",
+          "expectedActualPhases": [
+            "awaiting-second"
+          ],
+          "geometry": {
+            "phase": "awaiting-second",
+            "repairStage": "none",
+            "viewport": {
+              "width": 1024,
+              "height": 768,
+              "scrollWidth": 1024,
+              "scrollHeight": 768
+            },
+            "zones": {
+              "map": null,
+              "panel": {
+                "x": 10,
+                "y": 74,
+                "width": 1004,
+                "height": 476.33
+              },
+              "speech": {
+                "x": 159.91,
+                "y": 106.86,
+                "width": 330,
+                "height": 98
+              },
+              "character": {
+                "x": 37.66,
+                "y": 314.25,
+                "width": 204.8,
+                "height": 208.8
+              },
+              "source": {
+                "x": 552.02,
+                "y": 159.47,
+                "width": 96,
+                "height": 96
+              },
+              "world": {
+                "x": 414.19,
+                "y": 387.33,
+                "width": 537.92,
+                "height": 122
+              },
+              "compare": null,
+              "replay": {
+                "x": 672.02,
+                "y": 183.47,
+                "width": 52,
+                "height": 52
+              },
+              "progress": {
+                "x": 629.36,
+                "y": 485.89,
+                "width": 332.53,
+                "height": 28
+              },
+              "keyboard": {
+                "x": 21,
+                "y": 566.33,
+                "width": 982,
+                "height": 184
+              }
+            },
+            "hiddenTargetCarrier": 0,
+            "keyboardCarriers": 0,
+            "slotNotes": [
+              "C",
+              null
+            ],
+            "pairIndex": 0,
+            "neutralProgress": 0,
+            "reducedMotion": false
+          },
+          "screenshot": "ipad-1024x768-dpr1_awaiting-second.png"
+        },
+        {
+          "stateName": "wrong-first",
+          "expectedActualPhases": [
+            "wrong-first"
+          ],
+          "geometry": {
+            "phase": "wrong-first",
+            "repairStage": "wrong-first",
+            "viewport": {
+              "width": 1024,
+              "height": 768,
+              "scrollWidth": 1024,
+              "scrollHeight": 768
+            },
+            "zones": {
+              "map": null,
+              "panel": {
+                "x": 10,
+                "y": 74,
+                "width": 1004,
+                "height": 476.33
+              },
+              "speech": {
+                "x": 159.91,
+                "y": 106.86,
+                "width": 330,
+                "height": 98
+              },
+              "character": {
+                "x": 37.66,
+                "y": 314.25,
+                "width": 204.8,
+                "height": 208.8
+              },
+              "source": {
+                "x": 552.02,
+                "y": 159.47,
+                "width": 96,
+                "height": 96
+              },
+              "world": {
+                "x": 414.19,
+                "y": 387.33,
+                "width": 537.92,
+                "height": 122
+              },
+              "compare": null,
+              "replay": {
+                "x": 672.02,
+                "y": 183.47,
+                "width": 52,
+                "height": 52
+              },
+              "progress": {
+                "x": 629.36,
+                "y": 485.89,
+                "width": 332.53,
+                "height": 28
+              },
+              "keyboard": {
+                "x": 21,
+                "y": 566.33,
+                "width": 982,
+                "height": 184
+              }
+            },
+            "hiddenTargetCarrier": 0,
+            "keyboardCarriers": 0,
+            "slotNotes": [
+              "D",
+              "C"
+            ],
+            "pairIndex": 0,
+            "neutralProgress": 0,
+            "reducedMotion": false
+          },
+          "screenshot": "ipad-1024x768-dpr1_wrong-first.png"
+        },
+        {
+          "stateName": "wrong-second",
+          "expectedActualPhases": [
+            "wrong-second"
+          ],
+          "geometry": {
+            "phase": "wrong-second",
+            "repairStage": "wrong-second",
+            "viewport": {
+              "width": 1024,
+              "height": 768,
+              "scrollWidth": 1024,
+              "scrollHeight": 768
+            },
+            "zones": {
+              "map": null,
+              "panel": {
+                "x": 10,
+                "y": 74,
+                "width": 1004,
+                "height": 476.33
+              },
+              "speech": {
+                "x": 159.91,
+                "y": 106.86,
+                "width": 330,
+                "height": 98
+              },
+              "character": {
+                "x": 37.66,
+                "y": 314.25,
+                "width": 204.8,
+                "height": 208.8
+              },
+              "source": {
+                "x": 552.02,
+                "y": 159.47,
+                "width": 96,
+                "height": 96
+              },
+              "world": {
+                "x": 414.19,
+                "y": 387.33,
+                "width": 537.92,
+                "height": 122
+              },
+              "compare": null,
+              "replay": {
+                "x": 672.02,
+                "y": 183.47,
+                "width": 52,
+                "height": 52
+              },
+              "progress": {
+                "x": 629.36,
+                "y": 485.89,
+                "width": 332.53,
+                "height": 28
+              },
+              "keyboard": {
+                "x": 21,
+                "y": 566.33,
+                "width": 982,
+                "height": 184
+              }
+            },
+            "hiddenTargetCarrier": 0,
+            "keyboardCarriers": 0,
+            "slotNotes": [
+              "C",
+              "D"
+            ],
+            "pairIndex": 0,
+            "neutralProgress": 0,
+            "reducedMotion": false
+          },
+          "screenshot": "ipad-1024x768-dpr1_wrong-second.png"
+        },
+        {
+          "stateName": "assisted",
+          "expectedActualPhases": [
+            "assisted"
+          ],
+          "geometry": {
+            "phase": "assisted",
+            "repairStage": "assisted",
+            "viewport": {
+              "width": 1024,
+              "height": 768,
+              "scrollWidth": 1024,
+              "scrollHeight": 768
+            },
+            "zones": {
+              "map": null,
+              "panel": {
+                "x": 10,
+                "y": 74,
+                "width": 1004,
+                "height": 476.33
+              },
+              "speech": {
+                "x": 159.91,
+                "y": 106.86,
+                "width": 330,
+                "height": 98
+              },
+              "character": {
+                "x": 37.66,
+                "y": 314.25,
+                "width": 204.8,
+                "height": 208.8
+              },
+              "source": {
+                "x": 552.02,
+                "y": 159.47,
+                "width": 96,
+                "height": 96
+              },
+              "world": {
+                "x": 414.19,
+                "y": 387.33,
+                "width": 537.92,
+                "height": 122
+              },
+              "compare": {
+                "x": 463.09,
+                "y": 456.47,
+                "width": 312,
+                "height": 62
+              },
+              "replay": {
+                "x": 672.02,
+                "y": 183.47,
+                "width": 52,
+                "height": 52
+              },
+              "progress": {
+                "x": 629.36,
+                "y": 485.89,
+                "width": 332.53,
+                "height": 28
+              },
+              "keyboard": {
+                "x": 21,
+                "y": 566.33,
+                "width": 982,
+                "height": 184
+              }
+            },
+            "hiddenTargetCarrier": 0,
+            "keyboardCarriers": 1,
+            "slotNotes": [
+              null,
+              null
+            ],
+            "pairIndex": 0,
+            "neutralProgress": 0,
+            "reducedMotion": false
+          },
+          "screenshot": "ipad-1024x768-dpr1_assisted.png"
+        },
+        {
+          "stateName": "sound-paused",
+          "expectedActualPhases": [
+            "sound-paused"
+          ],
+          "geometry": {
+            "phase": "sound-paused",
+            "repairStage": "none",
+            "viewport": {
+              "width": 1024,
+              "height": 768,
+              "scrollWidth": 1024,
+              "scrollHeight": 768
+            },
+            "zones": {
+              "map": null,
+              "panel": {
+                "x": 10,
+                "y": 74,
+                "width": 1004,
+                "height": 476.33
+              },
+              "speech": {
+                "x": 159.91,
+                "y": 106.86,
+                "width": 330,
+                "height": 98
+              },
+              "character": {
+                "x": 37.66,
+                "y": 314.25,
+                "width": 204.8,
+                "height": 208.8
+              },
+              "source": {
+                "x": 552.02,
+                "y": 159.47,
+                "width": 96,
+                "height": 96
+              },
+              "world": {
+                "x": 414.19,
+                "y": 387.33,
+                "width": 537.92,
+                "height": 122
+              },
+              "compare": null,
+              "replay": {
+                "x": 672.02,
+                "y": 183.47,
+                "width": 52,
+                "height": 52
+              },
+              "progress": {
+                "x": 629.36,
+                "y": 485.89,
+                "width": 332.53,
+                "height": 28
+              },
+              "keyboard": {
+                "x": 21,
+                "y": 566.33,
+                "width": 982,
+                "height": 184
+              }
+            },
+            "hiddenTargetCarrier": 0,
+            "keyboardCarriers": 0,
+            "slotNotes": [
+              null,
+              null
+            ],
+            "pairIndex": 0,
+            "neutralProgress": 0,
+            "reducedMotion": false
+          },
+          "screenshot": "ipad-1024x768-dpr1_sound-paused.png"
+        },
+        {
+          "stateName": "visual-assist",
+          "expectedActualPhases": [
+            "visual-assist"
+          ],
+          "geometry": {
+            "phase": "visual-assist",
+            "repairStage": "assisted",
+            "viewport": {
+              "width": 1024,
+              "height": 768,
+              "scrollWidth": 1024,
+              "scrollHeight": 768
+            },
+            "zones": {
+              "map": null,
+              "panel": {
+                "x": 10,
+                "y": 74,
+                "width": 1004,
+                "height": 476.33
+              },
+              "speech": {
+                "x": 159.91,
+                "y": 106.86,
+                "width": 330,
+                "height": 98
+              },
+              "character": {
+                "x": 37.66,
+                "y": 314.25,
+                "width": 204.8,
+                "height": 208.8
+              },
+              "source": {
+                "x": 552.02,
+                "y": 159.47,
+                "width": 96,
+                "height": 96
+              },
+              "world": {
+                "x": 414.19,
+                "y": 387.33,
+                "width": 537.92,
+                "height": 122
+              },
+              "compare": {
+                "x": 463.09,
+                "y": 456.47,
+                "width": 220,
+                "height": 62
+              },
+              "replay": {
+                "x": 672.02,
+                "y": 183.47,
+                "width": 52,
+                "height": 52
+              },
+              "progress": {
+                "x": 629.36,
+                "y": 485.89,
+                "width": 332.53,
+                "height": 28
+              },
+              "keyboard": {
+                "x": 21,
+                "y": 566.33,
+                "width": 982,
+                "height": 184
+              }
+            },
+            "hiddenTargetCarrier": 0,
+            "keyboardCarriers": 1,
+            "slotNotes": [
+              "C",
+              "C"
+            ],
+            "pairIndex": 0,
+            "neutralProgress": 0,
+            "reducedMotion": false
+          },
+          "screenshot": "ipad-1024x768-dpr1_visual-assist.png"
+        },
+        {
+          "stateName": "complete-roots",
+          "expectedActualPhases": [
+            "complete-roots"
+          ],
+          "geometry": {
+            "phase": "complete-roots",
+            "repairStage": "none",
+            "viewport": {
+              "width": 1024,
+              "height": 768,
+              "scrollWidth": 1024,
+              "scrollHeight": 768
+            },
+            "zones": {
+              "map": null,
+              "panel": {
+                "x": 10,
+                "y": 74,
+                "width": 1004,
+                "height": 476.33
+              },
+              "speech": {
+                "x": 159.91,
+                "y": 106.86,
+                "width": 330,
+                "height": 98
+              },
+              "character": {
+                "x": 37.66,
+                "y": 314.25,
+                "width": 204.8,
+                "height": 208.8
+              },
+              "source": {
+                "x": 552.02,
+                "y": 159.47,
+                "width": 96,
+                "height": 96
+              },
+              "world": {
+                "x": 414.19,
+                "y": 387.33,
+                "width": 537.92,
+                "height": 122
+              },
+              "compare": null,
+              "replay": null,
+              "progress": {
+                "x": 629.36,
+                "y": 485.89,
+                "width": 332.53,
+                "height": 28
+              },
+              "keyboard": {
+                "x": 21,
+                "y": 566.33,
+                "width": 982,
+                "height": 184
+              }
+            },
+            "hiddenTargetCarrier": 0,
+            "keyboardCarriers": 0,
+            "slotNotes": [
+              null,
+              null
+            ],
+            "pairIndex": 4,
+            "neutralProgress": 4,
+            "reducedMotion": false
+          },
+          "screenshot": "ipad-1024x768-dpr1_complete-roots.png"
+        },
+        {
+          "stateName": "unscored-low-echo",
+          "expectedActualPhases": [
+            "unscored-low-echo"
+          ],
+          "geometry": {
+            "phase": "unscored-low-echo",
+            "repairStage": "none",
+            "viewport": {
+              "width": 1024,
+              "height": 768,
+              "scrollWidth": 1024,
+              "scrollHeight": 768
+            },
+            "zones": {
+              "map": null,
+              "panel": {
+                "x": 10,
+                "y": 74,
+                "width": 1004,
+                "height": 476.33
+              },
+              "speech": {
+                "x": 159.91,
+                "y": 106.86,
+                "width": 330,
+                "height": 98
+              },
+              "character": {
+                "x": 37.66,
+                "y": 314.25,
+                "width": 204.8,
+                "height": 208.8
+              },
+              "source": {
+                "x": 552.02,
+                "y": 159.47,
+                "width": 96,
+                "height": 96
+              },
+              "world": {
+                "x": 414.19,
+                "y": 387.33,
+                "width": 537.92,
+                "height": 122
+              },
+              "compare": null,
+              "replay": null,
+              "progress": {
+                "x": 629.36,
+                "y": 485.89,
+                "width": 332.53,
+                "height": 28
+              },
+              "keyboard": {
+                "x": 21,
+                "y": 566.33,
+                "width": 982,
+                "height": 184
+              }
+            },
+            "hiddenTargetCarrier": 0,
+            "keyboardCarriers": 0,
+            "slotNotes": [
+              null,
+              null
+            ],
+            "pairIndex": 4,
+            "neutralProgress": 4,
+            "reducedMotion": false
+          },
+          "screenshot": "ipad-1024x768-dpr1_unscored-low-echo.png"
+        },
+        {
+          "stateName": "reduced-motion",
+          "expectedActualPhases": [
+            "guide-first"
+          ],
+          "geometry": {
+            "phase": "guide-first",
+            "repairStage": "none",
+            "viewport": {
+              "width": 1024,
+              "height": 768,
+              "scrollWidth": 1024,
+              "scrollHeight": 768
+            },
+            "zones": {
+              "map": null,
+              "panel": {
+                "x": 10,
+                "y": 74,
+                "width": 1004,
+                "height": 476.33
+              },
+              "speech": {
+                "x": 159.91,
+                "y": 106.86,
+                "width": 330,
+                "height": 98
+              },
+              "character": {
+                "x": 37.66,
+                "y": 314.25,
+                "width": 204.8,
+                "height": 208.8
+              },
+              "source": {
+                "x": 552.02,
+                "y": 159.47,
+                "width": 96,
+                "height": 96
+              },
+              "world": {
+                "x": 414.19,
+                "y": 387.33,
+                "width": 537.92,
+                "height": 122
+              },
+              "compare": null,
+              "replay": {
+                "x": 672.02,
+                "y": 183.47,
+                "width": 52,
+                "height": 52
+              },
+              "progress": {
+                "x": 629.36,
+                "y": 485.89,
+                "width": 332.53,
+                "height": 28
+              },
+              "keyboard": {
+                "x": 21,
+                "y": 566.33,
+                "width": 982,
+                "height": 184
+              }
+            },
+            "hiddenTargetCarrier": 0,
+            "keyboardCarriers": 1,
+            "slotNotes": [
+              "C",
+              "D"
+            ],
+            "pairIndex": 0,
+            "neutralProgress": 0,
+            "reducedMotion": true
+          },
+          "screenshot": "ipad-1024x768-dpr1_reduced-motion.png"
+        }
+      ]
+    },
+    {
+      "viewportId": "ipad-1024x768-dpr2",
+      "width": 1024,
+      "height": 768,
+      "dpr": 2,
+      "states": [
+        {
+          "stateName": "map-entry",
+          "expectedActualPhases": [
+            "map-entry"
+          ],
+          "geometry": {
+            "phase": "map-entry",
+            "repairStage": "",
+            "viewport": {
+              "width": 1024,
+              "height": 768,
+              "scrollWidth": 1024,
+              "scrollHeight": 768
+            },
+            "zones": {
+              "map": {
+                "x": 0,
+                "y": 0,
+                "width": 1024,
+                "height": 768
+              },
+              "panel": null,
+              "speech": null,
+              "character": null,
+              "source": null,
+              "world": null,
+              "compare": null,
+              "replay": null,
+              "progress": null,
+              "keyboard": null
+            },
+            "hiddenTargetCarrier": 0,
+            "keyboardCarriers": 0,
+            "slotNotes": [
+              null,
+              null
+            ],
+            "pairIndex": null,
+            "neutralProgress": 0,
+            "reducedMotion": false
+          },
+          "screenshot": "ipad-1024x768-dpr2_map-entry.png"
+        },
+        {
+          "stateName": "guide-first",
+          "expectedActualPhases": [
+            "guide-first"
+          ],
+          "geometry": {
+            "phase": "guide-first",
+            "repairStage": "none",
+            "viewport": {
+              "width": 1024,
+              "height": 768,
+              "scrollWidth": 1024,
+              "scrollHeight": 768
+            },
+            "zones": {
+              "map": null,
+              "panel": {
+                "x": 10,
+                "y": 74,
+                "width": 1004,
+                "height": 476.33
+              },
+              "speech": {
+                "x": 159.91,
+                "y": 106.86,
+                "width": 330,
+                "height": 98
+              },
+              "character": {
+                "x": 37.66,
+                "y": 314.25,
+                "width": 204.8,
+                "height": 208.8
+              },
+              "source": {
+                "x": 552.02,
+                "y": 159.47,
+                "width": 96,
+                "height": 96
+              },
+              "world": {
+                "x": 414.19,
+                "y": 387.33,
+                "width": 537.92,
+                "height": 122
+              },
+              "compare": null,
+              "replay": {
+                "x": 672.02,
+                "y": 183.47,
+                "width": 52,
+                "height": 52
+              },
+              "progress": {
+                "x": 629.36,
+                "y": 485.89,
+                "width": 332.53,
+                "height": 28
+              },
+              "keyboard": {
+                "x": 21,
+                "y": 566.33,
+                "width": 982,
+                "height": 184
+              }
+            },
+            "hiddenTargetCarrier": 0,
+            "keyboardCarriers": 1,
+            "slotNotes": [
+              "C",
+              "D"
+            ],
+            "pairIndex": 0,
+            "neutralProgress": 0,
+            "reducedMotion": false
+          },
+          "screenshot": "ipad-1024x768-dpr2_guide-first.png"
+        },
+        {
+          "stateName": "guide-second",
+          "expectedActualPhases": [
+            "guide-second"
+          ],
+          "geometry": {
+            "phase": "guide-second",
+            "repairStage": "none",
+            "viewport": {
+              "width": 1024,
+              "height": 768,
+              "scrollWidth": 1024,
+              "scrollHeight": 768
+            },
+            "zones": {
+              "map": null,
+              "panel": {
+                "x": 10,
+                "y": 74,
+                "width": 1004,
+                "height": 476.33
+              },
+              "speech": {
+                "x": 159.91,
+                "y": 106.86,
+                "width": 330,
+                "height": 98
+              },
+              "character": {
+                "x": 37.66,
+                "y": 314.25,
+                "width": 204.8,
+                "height": 208.8
+              },
+              "source": {
+                "x": 552.02,
+                "y": 159.47,
+                "width": 96,
+                "height": 96
+              },
+              "world": {
+                "x": 414.19,
+                "y": 387.33,
+                "width": 537.92,
+                "height": 122
+              },
+              "compare": null,
+              "replay": {
+                "x": 672.02,
+                "y": 183.47,
+                "width": 52,
+                "height": 52
+              },
+              "progress": {
+                "x": 629.36,
+                "y": 485.89,
+                "width": 332.53,
+                "height": 28
+              },
+              "keyboard": {
+                "x": 21,
+                "y": 566.33,
+                "width": 982,
+                "height": 184
+              }
+            },
+            "hiddenTargetCarrier": 0,
+            "keyboardCarriers": 1,
+            "slotNotes": [
+              "C",
+              "D"
+            ],
+            "pairIndex": 0,
+            "neutralProgress": 0,
+            "reducedMotion": false
+          },
+          "screenshot": "ipad-1024x768-dpr2_guide-second.png"
+        },
+        {
+          "stateName": "pair-playing",
+          "expectedActualPhases": [
+            "pair-playing"
+          ],
+          "geometry": {
+            "phase": "pair-playing",
+            "repairStage": "none",
+            "viewport": {
+              "width": 1024,
+              "height": 768,
+              "scrollWidth": 1024,
+              "scrollHeight": 768
+            },
+            "zones": {
+              "map": null,
+              "panel": {
+                "x": 10,
+                "y": 74,
+                "width": 1004,
+                "height": 476.33
+              },
+              "speech": {
+                "x": 159.91,
+                "y": 106.86,
+                "width": 330,
+                "height": 98
+              },
+              "character": {
+                "x": 37.66,
+                "y": 314.25,
+                "width": 204.8,
+                "height": 208.8
+              },
+              "source": {
+                "x": 552.02,
+                "y": 159.47,
+                "width": 96,
+                "height": 96
+              },
+              "world": {
+                "x": 414.19,
+                "y": 387.33,
+                "width": 537.92,
+                "height": 122
+              },
+              "compare": null,
+              "replay": {
+                "x": 672.02,
+                "y": 183.47,
+                "width": 52,
+                "height": 52
+              },
+              "progress": {
+                "x": 629.36,
+                "y": 485.89,
+                "width": 332.53,
+                "height": 28
+              },
+              "keyboard": {
+                "x": 21,
+                "y": 566.33,
+                "width": 982,
+                "height": 184
+              }
+            },
+            "hiddenTargetCarrier": 0,
+            "keyboardCarriers": 0,
+            "slotNotes": [
+              null,
+              null
+            ],
+            "pairIndex": 0,
+            "neutralProgress": 0,
+            "reducedMotion": false
+          },
+          "screenshot": "ipad-1024x768-dpr2_pair-playing.png"
+        },
+        {
+          "stateName": "awaiting-first",
+          "expectedActualPhases": [
+            "awaiting-first"
+          ],
+          "geometry": {
+            "phase": "awaiting-first",
+            "repairStage": "none",
+            "viewport": {
+              "width": 1024,
+              "height": 768,
+              "scrollWidth": 1024,
+              "scrollHeight": 768
+            },
+            "zones": {
+              "map": null,
+              "panel": {
+                "x": 10,
+                "y": 74,
+                "width": 1004,
+                "height": 476.33
+              },
+              "speech": {
+                "x": 159.91,
+                "y": 106.86,
+                "width": 330,
+                "height": 98
+              },
+              "character": {
+                "x": 37.66,
+                "y": 314.25,
+                "width": 204.8,
+                "height": 208.8
+              },
+              "source": {
+                "x": 552.02,
+                "y": 159.47,
+                "width": 96,
+                "height": 96
+              },
+              "world": {
+                "x": 414.19,
+                "y": 387.33,
+                "width": 537.92,
+                "height": 122
+              },
+              "compare": null,
+              "replay": {
+                "x": 672.02,
+                "y": 183.47,
+                "width": 52,
+                "height": 52
+              },
+              "progress": {
+                "x": 629.36,
+                "y": 485.89,
+                "width": 332.53,
+                "height": 28
+              },
+              "keyboard": {
+                "x": 21,
+                "y": 566.33,
+                "width": 982,
+                "height": 184
+              }
+            },
+            "hiddenTargetCarrier": 0,
+            "keyboardCarriers": 0,
+            "slotNotes": [
+              null,
+              null
+            ],
+            "pairIndex": 0,
+            "neutralProgress": 0,
+            "reducedMotion": false
+          },
+          "screenshot": "ipad-1024x768-dpr2_awaiting-first.png"
+        },
+        {
+          "stateName": "awaiting-second",
+          "expectedActualPhases": [
+            "awaiting-second"
+          ],
+          "geometry": {
+            "phase": "awaiting-second",
+            "repairStage": "none",
+            "viewport": {
+              "width": 1024,
+              "height": 768,
+              "scrollWidth": 1024,
+              "scrollHeight": 768
+            },
+            "zones": {
+              "map": null,
+              "panel": {
+                "x": 10,
+                "y": 74,
+                "width": 1004,
+                "height": 476.33
+              },
+              "speech": {
+                "x": 159.91,
+                "y": 106.86,
+                "width": 330,
+                "height": 98
+              },
+              "character": {
+                "x": 37.66,
+                "y": 314.25,
+                "width": 204.8,
+                "height": 208.8
+              },
+              "source": {
+                "x": 552.02,
+                "y": 159.47,
+                "width": 96,
+                "height": 96
+              },
+              "world": {
+                "x": 414.19,
+                "y": 387.33,
+                "width": 537.92,
+                "height": 122
+              },
+              "compare": null,
+              "replay": {
+                "x": 672.02,
+                "y": 183.47,
+                "width": 52,
+                "height": 52
+              },
+              "progress": {
+                "x": 629.36,
+                "y": 485.89,
+                "width": 332.53,
+                "height": 28
+              },
+              "keyboard": {
+                "x": 21,
+                "y": 566.33,
+                "width": 982,
+                "height": 184
+              }
+            },
+            "hiddenTargetCarrier": 0,
+            "keyboardCarriers": 0,
+            "slotNotes": [
+              "E",
+              null
+            ],
+            "pairIndex": 0,
+            "neutralProgress": 0,
+            "reducedMotion": false
+          },
+          "screenshot": "ipad-1024x768-dpr2_awaiting-second.png"
+        },
+        {
+          "stateName": "wrong-first",
+          "expectedActualPhases": [
+            "wrong-first"
+          ],
+          "geometry": {
+            "phase": "wrong-first",
+            "repairStage": "wrong-first",
+            "viewport": {
+              "width": 1024,
+              "height": 768,
+              "scrollWidth": 1024,
+              "scrollHeight": 768
+            },
+            "zones": {
+              "map": null,
+              "panel": {
+                "x": 10,
+                "y": 74,
+                "width": 1004,
+                "height": 476.33
+              },
+              "speech": {
+                "x": 159.91,
+                "y": 106.86,
+                "width": 330,
+                "height": 98
+              },
+              "character": {
+                "x": 37.66,
+                "y": 314.25,
+                "width": 204.8,
+                "height": 208.8
+              },
+              "source": {
+                "x": 552.02,
+                "y": 159.47,
+                "width": 96,
+                "height": 96
+              },
+              "world": {
+                "x": 414.19,
+                "y": 387.33,
+                "width": 537.92,
+                "height": 122
+              },
+              "compare": null,
+              "replay": {
+                "x": 672.02,
+                "y": 183.47,
+                "width": 52,
+                "height": 52
+              },
+              "progress": {
+                "x": 629.36,
+                "y": 485.89,
+                "width": 332.53,
+                "height": 28
+              },
+              "keyboard": {
+                "x": 21,
+                "y": 566.33,
+                "width": 982,
+                "height": 184
+              }
+            },
+            "hiddenTargetCarrier": 0,
+            "keyboardCarriers": 0,
+            "slotNotes": [
+              "C",
+              "D"
+            ],
+            "pairIndex": 0,
+            "neutralProgress": 0,
+            "reducedMotion": false
+          },
+          "screenshot": "ipad-1024x768-dpr2_wrong-first.png"
+        },
+        {
+          "stateName": "wrong-second",
+          "expectedActualPhases": [
+            "wrong-second"
+          ],
+          "geometry": {
+            "phase": "wrong-second",
+            "repairStage": "wrong-second",
+            "viewport": {
+              "width": 1024,
+              "height": 768,
+              "scrollWidth": 1024,
+              "scrollHeight": 768
+            },
+            "zones": {
+              "map": null,
+              "panel": {
+                "x": 10,
+                "y": 74,
+                "width": 1004,
+                "height": 476.33
+              },
+              "speech": {
+                "x": 159.91,
+                "y": 106.86,
+                "width": 330,
+                "height": 98
+              },
+              "character": {
+                "x": 37.66,
+                "y": 314.25,
+                "width": 204.8,
+                "height": 208.8
+              },
+              "source": {
+                "x": 552.02,
+                "y": 159.47,
+                "width": 96,
+                "height": 96
+              },
+              "world": {
+                "x": 414.19,
+                "y": 387.33,
+                "width": 537.92,
+                "height": 122
+              },
+              "compare": null,
+              "replay": {
+                "x": 672.02,
+                "y": 183.47,
+                "width": 52,
+                "height": 52
+              },
+              "progress": {
+                "x": 629.36,
+                "y": 485.89,
+                "width": 332.53,
+                "height": 28
+              },
+              "keyboard": {
+                "x": 21,
+                "y": 566.33,
+                "width": 982,
+                "height": 184
+              }
+            },
+            "hiddenTargetCarrier": 0,
+            "keyboardCarriers": 0,
+            "slotNotes": [
+              "E",
+              "C"
+            ],
+            "pairIndex": 0,
+            "neutralProgress": 0,
+            "reducedMotion": false
+          },
+          "screenshot": "ipad-1024x768-dpr2_wrong-second.png"
+        },
+        {
+          "stateName": "assisted",
+          "expectedActualPhases": [
+            "assisted"
+          ],
+          "geometry": {
+            "phase": "assisted",
+            "repairStage": "assisted",
+            "viewport": {
+              "width": 1024,
+              "height": 768,
+              "scrollWidth": 1024,
+              "scrollHeight": 768
+            },
+            "zones": {
+              "map": null,
+              "panel": {
+                "x": 10,
+                "y": 74,
+                "width": 1004,
+                "height": 476.33
+              },
+              "speech": {
+                "x": 159.91,
+                "y": 106.86,
+                "width": 330,
+                "height": 98
+              },
+              "character": {
+                "x": 37.66,
+                "y": 314.25,
+                "width": 204.8,
+                "height": 208.8
+              },
+              "source": {
+                "x": 552.02,
+                "y": 159.47,
+                "width": 96,
+                "height": 96
+              },
+              "world": {
+                "x": 414.19,
+                "y": 387.33,
+                "width": 537.92,
+                "height": 122
+              },
+              "compare": {
+                "x": 463.09,
+                "y": 456.47,
+                "width": 312,
+                "height": 62
+              },
+              "replay": {
+                "x": 672.02,
+                "y": 183.47,
+                "width": 52,
+                "height": 52
+              },
+              "progress": {
+                "x": 629.36,
+                "y": 485.89,
+                "width": 332.53,
+                "height": 28
+              },
+              "keyboard": {
+                "x": 21,
+                "y": 566.33,
+                "width": 982,
+                "height": 184
+              }
+            },
+            "hiddenTargetCarrier": 0,
+            "keyboardCarriers": 1,
+            "slotNotes": [
+              null,
+              null
+            ],
+            "pairIndex": 0,
+            "neutralProgress": 0,
+            "reducedMotion": false
+          },
+          "screenshot": "ipad-1024x768-dpr2_assisted.png"
+        },
+        {
+          "stateName": "sound-paused",
+          "expectedActualPhases": [
+            "sound-paused"
+          ],
+          "geometry": {
+            "phase": "sound-paused",
+            "repairStage": "none",
+            "viewport": {
+              "width": 1024,
+              "height": 768,
+              "scrollWidth": 1024,
+              "scrollHeight": 768
+            },
+            "zones": {
+              "map": null,
+              "panel": {
+                "x": 10,
+                "y": 74,
+                "width": 1004,
+                "height": 476.33
+              },
+              "speech": {
+                "x": 159.91,
+                "y": 106.86,
+                "width": 330,
+                "height": 98
+              },
+              "character": {
+                "x": 37.66,
+                "y": 314.25,
+                "width": 204.8,
+                "height": 208.8
+              },
+              "source": {
+                "x": 552.02,
+                "y": 159.47,
+                "width": 96,
+                "height": 96
+              },
+              "world": {
+                "x": 414.19,
+                "y": 387.33,
+                "width": 537.92,
+                "height": 122
+              },
+              "compare": null,
+              "replay": {
+                "x": 672.02,
+                "y": 183.47,
+                "width": 52,
+                "height": 52
+              },
+              "progress": {
+                "x": 629.36,
+                "y": 485.89,
+                "width": 332.53,
+                "height": 28
+              },
+              "keyboard": {
+                "x": 21,
+                "y": 566.33,
+                "width": 982,
+                "height": 184
+              }
+            },
+            "hiddenTargetCarrier": 0,
+            "keyboardCarriers": 0,
+            "slotNotes": [
+              null,
+              null
+            ],
+            "pairIndex": 0,
+            "neutralProgress": 0,
+            "reducedMotion": false
+          },
+          "screenshot": "ipad-1024x768-dpr2_sound-paused.png"
+        },
+        {
+          "stateName": "visual-assist",
+          "expectedActualPhases": [
+            "visual-assist"
+          ],
+          "geometry": {
+            "phase": "visual-assist",
+            "repairStage": "assisted",
+            "viewport": {
+              "width": 1024,
+              "height": 768,
+              "scrollWidth": 1024,
+              "scrollHeight": 768
+            },
+            "zones": {
+              "map": null,
+              "panel": {
+                "x": 10,
+                "y": 74,
+                "width": 1004,
+                "height": 476.33
+              },
+              "speech": {
+                "x": 159.91,
+                "y": 106.86,
+                "width": 330,
+                "height": 98
+              },
+              "character": {
+                "x": 37.66,
+                "y": 314.25,
+                "width": 204.8,
+                "height": 208.8
+              },
+              "source": {
+                "x": 552.02,
+                "y": 159.47,
+                "width": 96,
+                "height": 96
+              },
+              "world": {
+                "x": 414.19,
+                "y": 387.33,
+                "width": 537.92,
+                "height": 122
+              },
+              "compare": {
+                "x": 463.09,
+                "y": 456.47,
+                "width": 220,
+                "height": 62
+              },
+              "replay": {
+                "x": 672.02,
+                "y": 183.47,
+                "width": 52,
+                "height": 52
+              },
+              "progress": {
+                "x": 629.36,
+                "y": 485.89,
+                "width": 332.53,
+                "height": 28
+              },
+              "keyboard": {
+                "x": 21,
+                "y": 566.33,
+                "width": 982,
+                "height": 184
+              }
+            },
+            "hiddenTargetCarrier": 0,
+            "keyboardCarriers": 2,
+            "slotNotes": [
+              "E",
+              "D"
+            ],
+            "pairIndex": 0,
+            "neutralProgress": 0,
+            "reducedMotion": false
+          },
+          "screenshot": "ipad-1024x768-dpr2_visual-assist.png"
+        },
+        {
+          "stateName": "complete-roots",
+          "expectedActualPhases": [
+            "complete-roots"
+          ],
+          "geometry": {
+            "phase": "complete-roots",
+            "repairStage": "none",
+            "viewport": {
+              "width": 1024,
+              "height": 768,
+              "scrollWidth": 1024,
+              "scrollHeight": 768
+            },
+            "zones": {
+              "map": null,
+              "panel": {
+                "x": 10,
+                "y": 74,
+                "width": 1004,
+                "height": 476.33
+              },
+              "speech": {
+                "x": 159.91,
+                "y": 106.86,
+                "width": 330,
+                "height": 98
+              },
+              "character": {
+                "x": 37.66,
+                "y": 314.25,
+                "width": 204.8,
+                "height": 208.8
+              },
+              "source": {
+                "x": 552.02,
+                "y": 159.47,
+                "width": 96,
+                "height": 96
+              },
+              "world": {
+                "x": 414.19,
+                "y": 387.33,
+                "width": 537.92,
+                "height": 122
+              },
+              "compare": null,
+              "replay": null,
+              "progress": {
+                "x": 629.36,
+                "y": 485.89,
+                "width": 332.53,
+                "height": 28
+              },
+              "keyboard": {
+                "x": 21,
+                "y": 566.33,
+                "width": 982,
+                "height": 184
+              }
+            },
+            "hiddenTargetCarrier": 0,
+            "keyboardCarriers": 0,
+            "slotNotes": [
+              null,
+              null
+            ],
+            "pairIndex": 4,
+            "neutralProgress": 4,
+            "reducedMotion": false
+          },
+          "screenshot": "ipad-1024x768-dpr2_complete-roots.png"
+        },
+        {
+          "stateName": "unscored-low-echo",
+          "expectedActualPhases": [
+            "unscored-low-echo"
+          ],
+          "geometry": {
+            "phase": "unscored-low-echo",
+            "repairStage": "none",
+            "viewport": {
+              "width": 1024,
+              "height": 768,
+              "scrollWidth": 1024,
+              "scrollHeight": 768
+            },
+            "zones": {
+              "map": null,
+              "panel": {
+                "x": 10,
+                "y": 74,
+                "width": 1004,
+                "height": 476.33
+              },
+              "speech": {
+                "x": 159.91,
+                "y": 106.86,
+                "width": 330,
+                "height": 98
+              },
+              "character": {
+                "x": 37.66,
+                "y": 314.25,
+                "width": 204.8,
+                "height": 208.8
+              },
+              "source": {
+                "x": 552.02,
+                "y": 159.47,
+                "width": 96,
+                "height": 96
+              },
+              "world": {
+                "x": 414.19,
+                "y": 387.33,
+                "width": 537.92,
+                "height": 122
+              },
+              "compare": null,
+              "replay": null,
+              "progress": {
+                "x": 629.36,
+                "y": 485.89,
+                "width": 332.53,
+                "height": 28
+              },
+              "keyboard": {
+                "x": 21,
+                "y": 566.33,
+                "width": 982,
+                "height": 184
+              }
+            },
+            "hiddenTargetCarrier": 0,
+            "keyboardCarriers": 0,
+            "slotNotes": [
+              null,
+              null
+            ],
+            "pairIndex": 4,
+            "neutralProgress": 4,
+            "reducedMotion": false
+          },
+          "screenshot": "ipad-1024x768-dpr2_unscored-low-echo.png"
+        },
+        {
+          "stateName": "reduced-motion",
+          "expectedActualPhases": [
+            "guide-first"
+          ],
+          "geometry": {
+            "phase": "guide-first",
+            "repairStage": "none",
+            "viewport": {
+              "width": 1024,
+              "height": 768,
+              "scrollWidth": 1024,
+              "scrollHeight": 768
+            },
+            "zones": {
+              "map": null,
+              "panel": {
+                "x": 10,
+                "y": 74,
+                "width": 1004,
+                "height": 476.33
+              },
+              "speech": {
+                "x": 159.91,
+                "y": 106.86,
+                "width": 330,
+                "height": 98
+              },
+              "character": {
+                "x": 37.66,
+                "y": 314.25,
+                "width": 204.8,
+                "height": 208.8
+              },
+              "source": {
+                "x": 552.02,
+                "y": 159.47,
+                "width": 96,
+                "height": 96
+              },
+              "world": {
+                "x": 414.19,
+                "y": 387.33,
+                "width": 537.92,
+                "height": 122
+              },
+              "compare": null,
+              "replay": {
+                "x": 672.02,
+                "y": 183.47,
+                "width": 52,
+                "height": 52
+              },
+              "progress": {
+                "x": 629.36,
+                "y": 485.89,
+                "width": 332.53,
+                "height": 28
+              },
+              "keyboard": {
+                "x": 21,
+                "y": 566.33,
+                "width": 982,
+                "height": 184
+              }
+            },
+            "hiddenTargetCarrier": 0,
+            "keyboardCarriers": 1,
+            "slotNotes": [
+              "C",
+              "D"
+            ],
+            "pairIndex": 0,
+            "neutralProgress": 0,
+            "reducedMotion": true
+          },
+          "screenshot": "ipad-1024x768-dpr2_reduced-motion.png"
+        }
+      ]
+    },
+    {
+      "viewportId": "ipad-1180x820-dpr2",
+      "width": 1180,
+      "height": 820,
+      "dpr": 2,
+      "states": [
+        {
+          "stateName": "map-entry",
+          "expectedActualPhases": [
+            "map-entry"
+          ],
+          "geometry": {
+            "phase": "map-entry",
+            "repairStage": "",
+            "viewport": {
+              "width": 1180,
+              "height": 820,
+              "scrollWidth": 1180,
+              "scrollHeight": 820
+            },
+            "zones": {
+              "map": {
+                "x": 0,
+                "y": 0,
+                "width": 1180,
+                "height": 820
+              },
+              "panel": null,
+              "speech": null,
+              "character": null,
+              "source": null,
+              "world": null,
+              "compare": null,
+              "replay": null,
+              "progress": null,
+              "keyboard": null
+            },
+            "hiddenTargetCarrier": 0,
+            "keyboardCarriers": 0,
+            "slotNotes": [
+              null,
+              null
+            ],
+            "pairIndex": null,
+            "neutralProgress": 0,
+            "reducedMotion": false
+          },
+          "screenshot": "ipad-1180x820-dpr2_map-entry.png"
+        },
+        {
+          "stateName": "guide-first",
+          "expectedActualPhases": [
+            "guide-first"
+          ],
+          "geometry": {
+            "phase": "guide-first",
+            "repairStage": "none",
+            "viewport": {
+              "width": 1180,
+              "height": 820,
+              "scrollWidth": 1180,
+              "scrollHeight": 820
+            },
+            "zones": {
+              "map": null,
+              "panel": {
+                "x": 10,
+                "y": 74,
+                "width": 1160,
+                "height": 514.81
+              },
+              "speech": {
+                "x": 181.75,
+                "y": 108.78,
+                "width": 330,
+                "height": 98
+              },
+              "character": {
+                "x": 40,
+                "y": 325.98,
+                "width": 230,
+                "height": 234
+              },
+              "source": {
+                "x": 644.05,
+                "y": 169.86,
+                "width": 96,
+                "height": 96
+              },
+              "world": {
+                "x": 476.59,
+                "y": 423.11,
+                "width": 623.72,
+                "height": 122
+              },
+              "compare": null,
+              "replay": {
+                "x": 764.05,
+                "y": 193.86,
+                "width": 52,
+                "height": 52
+              },
+              "progress": {
+                "x": 726.08,
+                "y": 522.08,
+                "width": 385.56,
+                "height": 28
+              },
+              "keyboard": {
+                "x": 21,
+                "y": 604.81,
+                "width": 1138,
+                "height": 195.19
+              }
+            },
+            "hiddenTargetCarrier": 0,
+            "keyboardCarriers": 1,
+            "slotNotes": [
+              "C",
+              "D"
+            ],
+            "pairIndex": 0,
+            "neutralProgress": 0,
+            "reducedMotion": false
+          },
+          "screenshot": "ipad-1180x820-dpr2_guide-first.png"
+        },
+        {
+          "stateName": "guide-second",
+          "expectedActualPhases": [
+            "guide-second"
+          ],
+          "geometry": {
+            "phase": "guide-second",
+            "repairStage": "none",
+            "viewport": {
+              "width": 1180,
+              "height": 820,
+              "scrollWidth": 1180,
+              "scrollHeight": 820
+            },
+            "zones": {
+              "map": null,
+              "panel": {
+                "x": 10,
+                "y": 74,
+                "width": 1160,
+                "height": 514.81
+              },
+              "speech": {
+                "x": 181.75,
+                "y": 108.78,
+                "width": 330,
+                "height": 98
+              },
+              "character": {
+                "x": 40,
+                "y": 325.98,
+                "width": 230,
+                "height": 234
+              },
+              "source": {
+                "x": 644.05,
+                "y": 169.86,
+                "width": 96,
+                "height": 96
+              },
+              "world": {
+                "x": 476.59,
+                "y": 423.11,
+                "width": 623.72,
+                "height": 122
+              },
+              "compare": null,
+              "replay": {
+                "x": 764.05,
+                "y": 193.86,
+                "width": 52,
+                "height": 52
+              },
+              "progress": {
+                "x": 726.08,
+                "y": 522.08,
+                "width": 385.56,
+                "height": 28
+              },
+              "keyboard": {
+                "x": 21,
+                "y": 604.81,
+                "width": 1138,
+                "height": 195.19
+              }
+            },
+            "hiddenTargetCarrier": 0,
+            "keyboardCarriers": 1,
+            "slotNotes": [
+              "C",
+              "D"
+            ],
+            "pairIndex": 0,
+            "neutralProgress": 0,
+            "reducedMotion": false
+          },
+          "screenshot": "ipad-1180x820-dpr2_guide-second.png"
+        },
+        {
+          "stateName": "pair-playing",
+          "expectedActualPhases": [
+            "pair-playing"
+          ],
+          "geometry": {
+            "phase": "pair-playing",
+            "repairStage": "none",
+            "viewport": {
+              "width": 1180,
+              "height": 820,
+              "scrollWidth": 1180,
+              "scrollHeight": 820
+            },
+            "zones": {
+              "map": null,
+              "panel": {
+                "x": 10,
+                "y": 74,
+                "width": 1160,
+                "height": 514.81
+              },
+              "speech": {
+                "x": 181.75,
+                "y": 108.78,
+                "width": 330,
+                "height": 98
+              },
+              "character": {
+                "x": 40,
+                "y": 325.98,
+                "width": 230,
+                "height": 234
+              },
+              "source": {
+                "x": 644.05,
+                "y": 169.86,
+                "width": 96,
+                "height": 96
+              },
+              "world": {
+                "x": 476.59,
+                "y": 423.11,
+                "width": 623.72,
+                "height": 122
+              },
+              "compare": null,
+              "replay": {
+                "x": 764.05,
+                "y": 193.86,
+                "width": 52,
+                "height": 52
+              },
+              "progress": {
+                "x": 726.08,
+                "y": 522.08,
+                "width": 385.56,
+                "height": 28
+              },
+              "keyboard": {
+                "x": 21,
+                "y": 604.81,
+                "width": 1138,
+                "height": 195.19
+              }
+            },
+            "hiddenTargetCarrier": 0,
+            "keyboardCarriers": 0,
+            "slotNotes": [
+              null,
+              null
+            ],
+            "pairIndex": 0,
+            "neutralProgress": 0,
+            "reducedMotion": false
+          },
+          "screenshot": "ipad-1180x820-dpr2_pair-playing.png"
+        },
+        {
+          "stateName": "awaiting-first",
+          "expectedActualPhases": [
+            "awaiting-first"
+          ],
+          "geometry": {
+            "phase": "awaiting-first",
+            "repairStage": "none",
+            "viewport": {
+              "width": 1180,
+              "height": 820,
+              "scrollWidth": 1180,
+              "scrollHeight": 820
+            },
+            "zones": {
+              "map": null,
+              "panel": {
+                "x": 10,
+                "y": 74,
+                "width": 1160,
+                "height": 514.81
+              },
+              "speech": {
+                "x": 181.75,
+                "y": 108.78,
+                "width": 330,
+                "height": 98
+              },
+              "character": {
+                "x": 40,
+                "y": 325.98,
+                "width": 230,
+                "height": 234
+              },
+              "source": {
+                "x": 644.05,
+                "y": 169.86,
+                "width": 96,
+                "height": 96
+              },
+              "world": {
+                "x": 476.59,
+                "y": 423.11,
+                "width": 623.72,
+                "height": 122
+              },
+              "compare": null,
+              "replay": {
+                "x": 764.05,
+                "y": 193.86,
+                "width": 52,
+                "height": 52
+              },
+              "progress": {
+                "x": 726.08,
+                "y": 522.08,
+                "width": 385.56,
+                "height": 28
+              },
+              "keyboard": {
+                "x": 21,
+                "y": 604.81,
+                "width": 1138,
+                "height": 195.19
+              }
+            },
+            "hiddenTargetCarrier": 0,
+            "keyboardCarriers": 0,
+            "slotNotes": [
+              null,
+              null
+            ],
+            "pairIndex": 0,
+            "neutralProgress": 0,
+            "reducedMotion": false
+          },
+          "screenshot": "ipad-1180x820-dpr2_awaiting-first.png"
+        },
+        {
+          "stateName": "awaiting-second",
+          "expectedActualPhases": [
+            "awaiting-second"
+          ],
+          "geometry": {
+            "phase": "awaiting-second",
+            "repairStage": "none",
+            "viewport": {
+              "width": 1180,
+              "height": 820,
+              "scrollWidth": 1180,
+              "scrollHeight": 820
+            },
+            "zones": {
+              "map": null,
+              "panel": {
+                "x": 10,
+                "y": 74,
+                "width": 1160,
+                "height": 514.81
+              },
+              "speech": {
+                "x": 181.75,
+                "y": 108.78,
+                "width": 330,
+                "height": 98
+              },
+              "character": {
+                "x": 40,
+                "y": 325.98,
+                "width": 230,
+                "height": 234
+              },
+              "source": {
+                "x": 644.05,
+                "y": 169.86,
+                "width": 96,
+                "height": 96
+              },
+              "world": {
+                "x": 476.59,
+                "y": 423.11,
+                "width": 623.72,
+                "height": 122
+              },
+              "compare": null,
+              "replay": {
+                "x": 764.05,
+                "y": 193.86,
+                "width": 52,
+                "height": 52
+              },
+              "progress": {
+                "x": 726.08,
+                "y": 522.08,
+                "width": 385.56,
+                "height": 28
+              },
+              "keyboard": {
+                "x": 21,
+                "y": 604.81,
+                "width": 1138,
+                "height": 195.19
+              }
+            },
+            "hiddenTargetCarrier": 0,
+            "keyboardCarriers": 0,
+            "slotNotes": [
+              "E",
+              null
+            ],
+            "pairIndex": 0,
+            "neutralProgress": 0,
+            "reducedMotion": false
+          },
+          "screenshot": "ipad-1180x820-dpr2_awaiting-second.png"
+        },
+        {
+          "stateName": "wrong-first",
+          "expectedActualPhases": [
+            "wrong-first"
+          ],
+          "geometry": {
+            "phase": "wrong-first",
+            "repairStage": "wrong-first",
+            "viewport": {
+              "width": 1180,
+              "height": 820,
+              "scrollWidth": 1180,
+              "scrollHeight": 820
+            },
+            "zones": {
+              "map": null,
+              "panel": {
+                "x": 10,
+                "y": 74,
+                "width": 1160,
+                "height": 514.81
+              },
+              "speech": {
+                "x": 181.75,
+                "y": 108.78,
+                "width": 330,
+                "height": 98
+              },
+              "character": {
+                "x": 40,
+                "y": 325.98,
+                "width": 230,
+                "height": 234
+              },
+              "source": {
+                "x": 644.05,
+                "y": 169.86,
+                "width": 96,
+                "height": 96
+              },
+              "world": {
+                "x": 476.59,
+                "y": 423.11,
+                "width": 623.72,
+                "height": 122
+              },
+              "compare": null,
+              "replay": {
+                "x": 764.05,
+                "y": 193.86,
+                "width": 52,
+                "height": 52
+              },
+              "progress": {
+                "x": 726.08,
+                "y": 522.08,
+                "width": 385.56,
+                "height": 28
+              },
+              "keyboard": {
+                "x": 21,
+                "y": 604.81,
+                "width": 1138,
+                "height": 195.19
+              }
+            },
+            "hiddenTargetCarrier": 0,
+            "keyboardCarriers": 0,
+            "slotNotes": [
+              "C",
+              "D"
+            ],
+            "pairIndex": 0,
+            "neutralProgress": 0,
+            "reducedMotion": false
+          },
+          "screenshot": "ipad-1180x820-dpr2_wrong-first.png"
+        },
+        {
+          "stateName": "wrong-second",
+          "expectedActualPhases": [
+            "wrong-second"
+          ],
+          "geometry": {
+            "phase": "wrong-second",
+            "repairStage": "wrong-second",
+            "viewport": {
+              "width": 1180,
+              "height": 820,
+              "scrollWidth": 1180,
+              "scrollHeight": 820
+            },
+            "zones": {
+              "map": null,
+              "panel": {
+                "x": 10,
+                "y": 74,
+                "width": 1160,
+                "height": 514.81
+              },
+              "speech": {
+                "x": 181.75,
+                "y": 108.78,
+                "width": 330,
+                "height": 98
+              },
+              "character": {
+                "x": 40,
+                "y": 325.98,
+                "width": 230,
+                "height": 234
+              },
+              "source": {
+                "x": 644.05,
+                "y": 169.86,
+                "width": 96,
+                "height": 96
+              },
+              "world": {
+                "x": 476.59,
+                "y": 423.11,
+                "width": 623.72,
+                "height": 122
+              },
+              "compare": null,
+              "replay": {
+                "x": 764.05,
+                "y": 193.86,
+                "width": 52,
+                "height": 52
+              },
+              "progress": {
+                "x": 726.08,
+                "y": 522.08,
+                "width": 385.56,
+                "height": 28
+              },
+              "keyboard": {
+                "x": 21,
+                "y": 604.81,
+                "width": 1138,
+                "height": 195.19
+              }
+            },
+            "hiddenTargetCarrier": 0,
+            "keyboardCarriers": 0,
+            "slotNotes": [
+              "E",
+              "C"
+            ],
+            "pairIndex": 0,
+            "neutralProgress": 0,
+            "reducedMotion": false
+          },
+          "screenshot": "ipad-1180x820-dpr2_wrong-second.png"
+        },
+        {
+          "stateName": "assisted",
+          "expectedActualPhases": [
+            "assisted"
+          ],
+          "geometry": {
+            "phase": "assisted",
+            "repairStage": "assisted",
+            "viewport": {
+              "width": 1180,
+              "height": 820,
+              "scrollWidth": 1180,
+              "scrollHeight": 820
+            },
+            "zones": {
+              "map": null,
+              "panel": {
+                "x": 10,
+                "y": 74,
+                "width": 1160,
+                "height": 514.81
+              },
+              "speech": {
+                "x": 181.75,
+                "y": 108.78,
+                "width": 330,
+                "height": 98
+              },
+              "character": {
+                "x": 40,
+                "y": 325.98,
+                "width": 230,
+                "height": 234
+              },
+              "source": {
+                "x": 644.05,
+                "y": 169.86,
+                "width": 96,
+                "height": 96
+              },
+              "world": {
+                "x": 476.59,
+                "y": 423.11,
+                "width": 623.72,
+                "height": 122
+              },
+              "compare": {
+                "x": 533.3,
+                "y": 493.03,
+                "width": 312,
+                "height": 62
+              },
+              "replay": {
+                "x": 764.05,
+                "y": 193.86,
+                "width": 52,
+                "height": 52
+              },
+              "progress": {
+                "x": 726.08,
+                "y": 522.08,
+                "width": 385.56,
+                "height": 28
+              },
+              "keyboard": {
+                "x": 21,
+                "y": 604.81,
+                "width": 1138,
+                "height": 195.19
+              }
+            },
+            "hiddenTargetCarrier": 0,
+            "keyboardCarriers": 1,
+            "slotNotes": [
+              null,
+              null
+            ],
+            "pairIndex": 0,
+            "neutralProgress": 0,
+            "reducedMotion": false
+          },
+          "screenshot": "ipad-1180x820-dpr2_assisted.png"
+        },
+        {
+          "stateName": "sound-paused",
+          "expectedActualPhases": [
+            "sound-paused"
+          ],
+          "geometry": {
+            "phase": "sound-paused",
+            "repairStage": "none",
+            "viewport": {
+              "width": 1180,
+              "height": 820,
+              "scrollWidth": 1180,
+              "scrollHeight": 820
+            },
+            "zones": {
+              "map": null,
+              "panel": {
+                "x": 10,
+                "y": 74,
+                "width": 1160,
+                "height": 514.81
+              },
+              "speech": {
+                "x": 181.75,
+                "y": 108.78,
+                "width": 330,
+                "height": 98
+              },
+              "character": {
+                "x": 40,
+                "y": 325.98,
+                "width": 230,
+                "height": 234
+              },
+              "source": {
+                "x": 644.05,
+                "y": 169.86,
+                "width": 96,
+                "height": 96
+              },
+              "world": {
+                "x": 476.59,
+                "y": 423.11,
+                "width": 623.72,
+                "height": 122
+              },
+              "compare": null,
+              "replay": {
+                "x": 764.05,
+                "y": 193.86,
+                "width": 52,
+                "height": 52
+              },
+              "progress": {
+                "x": 726.08,
+                "y": 522.08,
+                "width": 385.56,
+                "height": 28
+              },
+              "keyboard": {
+                "x": 21,
+                "y": 604.81,
+                "width": 1138,
+                "height": 195.19
+              }
+            },
+            "hiddenTargetCarrier": 0,
+            "keyboardCarriers": 0,
+            "slotNotes": [
+              null,
+              null
+            ],
+            "pairIndex": 0,
+            "neutralProgress": 0,
+            "reducedMotion": false
+          },
+          "screenshot": "ipad-1180x820-dpr2_sound-paused.png"
+        },
+        {
+          "stateName": "visual-assist",
+          "expectedActualPhases": [
+            "visual-assist"
+          ],
+          "geometry": {
+            "phase": "visual-assist",
+            "repairStage": "assisted",
+            "viewport": {
+              "width": 1180,
+              "height": 820,
+              "scrollWidth": 1180,
+              "scrollHeight": 820
+            },
+            "zones": {
+              "map": null,
+              "panel": {
+                "x": 10,
+                "y": 74,
+                "width": 1160,
+                "height": 514.81
+              },
+              "speech": {
+                "x": 181.75,
+                "y": 108.78,
+                "width": 330,
+                "height": 98
+              },
+              "character": {
+                "x": 40,
+                "y": 325.98,
+                "width": 230,
+                "height": 234
+              },
+              "source": {
+                "x": 644.05,
+                "y": 169.86,
+                "width": 96,
+                "height": 96
+              },
+              "world": {
+                "x": 476.59,
+                "y": 423.11,
+                "width": 623.72,
+                "height": 122
+              },
+              "compare": {
+                "x": 533.3,
+                "y": 493.03,
+                "width": 220,
+                "height": 62
+              },
+              "replay": {
+                "x": 764.05,
+                "y": 193.86,
+                "width": 52,
+                "height": 52
+              },
+              "progress": {
+                "x": 726.08,
+                "y": 522.08,
+                "width": 385.56,
+                "height": 28
+              },
+              "keyboard": {
+                "x": 21,
+                "y": 604.81,
+                "width": 1138,
+                "height": 195.19
+              }
+            },
+            "hiddenTargetCarrier": 0,
+            "keyboardCarriers": 2,
+            "slotNotes": [
+              "E",
+              "D"
+            ],
+            "pairIndex": 0,
+            "neutralProgress": 0,
+            "reducedMotion": false
+          },
+          "screenshot": "ipad-1180x820-dpr2_visual-assist.png"
+        },
+        {
+          "stateName": "complete-roots",
+          "expectedActualPhases": [
+            "complete-roots"
+          ],
+          "geometry": {
+            "phase": "complete-roots",
+            "repairStage": "none",
+            "viewport": {
+              "width": 1180,
+              "height": 820,
+              "scrollWidth": 1180,
+              "scrollHeight": 820
+            },
+            "zones": {
+              "map": null,
+              "panel": {
+                "x": 10,
+                "y": 74,
+                "width": 1160,
+                "height": 514.81
+              },
+              "speech": {
+                "x": 181.75,
+                "y": 108.78,
+                "width": 330,
+                "height": 98
+              },
+              "character": {
+                "x": 40,
+                "y": 325.98,
+                "width": 230,
+                "height": 234
+              },
+              "source": {
+                "x": 644.05,
+                "y": 169.86,
+                "width": 96,
+                "height": 96
+              },
+              "world": {
+                "x": 476.59,
+                "y": 423.11,
+                "width": 623.72,
+                "height": 122
+              },
+              "compare": null,
+              "replay": null,
+              "progress": {
+                "x": 726.08,
+                "y": 522.08,
+                "width": 385.56,
+                "height": 28
+              },
+              "keyboard": {
+                "x": 21,
+                "y": 604.81,
+                "width": 1138,
+                "height": 195.19
+              }
+            },
+            "hiddenTargetCarrier": 0,
+            "keyboardCarriers": 0,
+            "slotNotes": [
+              null,
+              null
+            ],
+            "pairIndex": 4,
+            "neutralProgress": 4,
+            "reducedMotion": false
+          },
+          "screenshot": "ipad-1180x820-dpr2_complete-roots.png"
+        },
+        {
+          "stateName": "unscored-low-echo",
+          "expectedActualPhases": [
+            "unscored-low-echo"
+          ],
+          "geometry": {
+            "phase": "unscored-low-echo",
+            "repairStage": "none",
+            "viewport": {
+              "width": 1180,
+              "height": 820,
+              "scrollWidth": 1180,
+              "scrollHeight": 820
+            },
+            "zones": {
+              "map": null,
+              "panel": {
+                "x": 10,
+                "y": 74,
+                "width": 1160,
+                "height": 514.81
+              },
+              "speech": {
+                "x": 181.75,
+                "y": 108.78,
+                "width": 330,
+                "height": 98
+              },
+              "character": {
+                "x": 40,
+                "y": 325.98,
+                "width": 230,
+                "height": 234
+              },
+              "source": {
+                "x": 644.05,
+                "y": 169.86,
+                "width": 96,
+                "height": 96
+              },
+              "world": {
+                "x": 476.59,
+                "y": 423.11,
+                "width": 623.72,
+                "height": 122
+              },
+              "compare": null,
+              "replay": null,
+              "progress": {
+                "x": 726.08,
+                "y": 522.08,
+                "width": 385.56,
+                "height": 28
+              },
+              "keyboard": {
+                "x": 21,
+                "y": 604.81,
+                "width": 1138,
+                "height": 195.19
+              }
+            },
+            "hiddenTargetCarrier": 0,
+            "keyboardCarriers": 0,
+            "slotNotes": [
+              null,
+              null
+            ],
+            "pairIndex": 4,
+            "neutralProgress": 4,
+            "reducedMotion": false
+          },
+          "screenshot": "ipad-1180x820-dpr2_unscored-low-echo.png"
+        },
+        {
+          "stateName": "reduced-motion",
+          "expectedActualPhases": [
+            "guide-first"
+          ],
+          "geometry": {
+            "phase": "guide-first",
+            "repairStage": "none",
+            "viewport": {
+              "width": 1180,
+              "height": 820,
+              "scrollWidth": 1180,
+              "scrollHeight": 820
+            },
+            "zones": {
+              "map": null,
+              "panel": {
+                "x": 10,
+                "y": 74,
+                "width": 1160,
+                "height": 514.81
+              },
+              "speech": {
+                "x": 181.75,
+                "y": 108.78,
+                "width": 330,
+                "height": 98
+              },
+              "character": {
+                "x": 40,
+                "y": 325.98,
+                "width": 230,
+                "height": 234
+              },
+              "source": {
+                "x": 644.05,
+                "y": 169.86,
+                "width": 96,
+                "height": 96
+              },
+              "world": {
+                "x": 476.59,
+                "y": 423.11,
+                "width": 623.72,
+                "height": 122
+              },
+              "compare": null,
+              "replay": {
+                "x": 764.05,
+                "y": 193.86,
+                "width": 52,
+                "height": 52
+              },
+              "progress": {
+                "x": 726.08,
+                "y": 522.08,
+                "width": 385.56,
+                "height": 28
+              },
+              "keyboard": {
+                "x": 21,
+                "y": 604.81,
+                "width": 1138,
+                "height": 195.19
+              }
+            },
+            "hiddenTargetCarrier": 0,
+            "keyboardCarriers": 1,
+            "slotNotes": [
+              "C",
+              "D"
+            ],
+            "pairIndex": 0,
+            "neutralProgress": 0,
+            "reducedMotion": true
+          },
+          "screenshot": "ipad-1180x820-dpr2_reduced-motion.png"
+        }
+      ]
+    },
+    {
+      "viewportId": "ipad-pro-11-1194x834-dpr2",
+      "width": 1194,
+      "height": 834,
+      "dpr": 2,
+      "states": [
+        {
+          "stateName": "map-entry",
+          "expectedActualPhases": [
+            "map-entry"
+          ],
+          "geometry": {
+            "phase": "map-entry",
+            "repairStage": "",
+            "viewport": {
+              "width": 1194,
+              "height": 834,
+              "scrollWidth": 1194,
+              "scrollHeight": 834
+            },
+            "zones": {
+              "map": {
+                "x": 0,
+                "y": 0,
+                "width": 1194,
+                "height": 834
+              },
+              "panel": null,
+              "speech": null,
+              "character": null,
+              "source": null,
+              "world": null,
+              "compare": null,
+              "replay": null,
+              "progress": null,
+              "keyboard": null
+            },
+            "hiddenTargetCarrier": 0,
+            "keyboardCarriers": 0,
+            "slotNotes": [
+              null,
+              null
+            ],
+            "pairIndex": null,
+            "neutralProgress": 0,
+            "reducedMotion": false
+          },
+          "screenshot": "ipad-pro-11-1194x834-dpr2_map-entry.png"
+        },
+        {
+          "stateName": "guide-first",
+          "expectedActualPhases": [
+            "guide-first"
+          ],
+          "geometry": {
+            "phase": "guide-first",
+            "repairStage": "none",
+            "viewport": {
+              "width": 1194,
+              "height": 834,
+              "scrollWidth": 1194,
+              "scrollHeight": 834
+            },
+            "zones": {
+              "map": null,
+              "panel": {
+                "x": 10,
+                "y": 76,
+                "width": 1174,
+                "height": 514.83
+              },
+              "speech": {
+                "x": 186.59,
+                "y": 113.53,
+                "width": 330,
+                "height": 98
+              },
+              "character": {
+                "x": 44.09,
+                "y": 326.2,
+                "width": 230,
+                "height": 234
+              },
+              "source": {
+                "x": 643.59,
+                "y": 165.52,
+                "width": 112,
+                "height": 112
+              },
+              "world": {
+                "x": 460.19,
+                "y": 389.66,
+                "width": 627.02,
+                "height": 146
+              },
+              "compare": null,
+              "replay": {
+                "x": 771.59,
+                "y": 197.52,
+                "width": 52,
+                "height": 52
+              },
+              "progress": {
+                "x": 733.8,
+                "y": 522.39,
+                "width": 387.61,
+                "height": 28
+              },
+              "keyboard": {
+                "x": 21,
+                "y": 606.83,
+                "width": 1152,
+                "height": 207.17
+              }
+            },
+            "hiddenTargetCarrier": 0,
+            "keyboardCarriers": 1,
+            "slotNotes": [
+              "C",
+              "D"
+            ],
+            "pairIndex": 0,
+            "neutralProgress": 0,
+            "reducedMotion": false
+          },
+          "screenshot": "ipad-pro-11-1194x834-dpr2_guide-first.png"
+        },
+        {
+          "stateName": "guide-second",
+          "expectedActualPhases": [
+            "guide-second"
+          ],
+          "geometry": {
+            "phase": "guide-second",
+            "repairStage": "none",
+            "viewport": {
+              "width": 1194,
+              "height": 834,
+              "scrollWidth": 1194,
+              "scrollHeight": 834
+            },
+            "zones": {
+              "map": null,
+              "panel": {
+                "x": 10,
+                "y": 76,
+                "width": 1174,
+                "height": 514.83
+              },
+              "speech": {
+                "x": 186.59,
+                "y": 113.53,
+                "width": 330,
+                "height": 98
+              },
+              "character": {
+                "x": 44.09,
+                "y": 326.2,
+                "width": 230,
+                "height": 234
+              },
+              "source": {
+                "x": 643.59,
+                "y": 165.52,
+                "width": 112,
+                "height": 112
+              },
+              "world": {
+                "x": 460.19,
+                "y": 389.66,
+                "width": 627.02,
+                "height": 146
+              },
+              "compare": null,
+              "replay": {
+                "x": 771.59,
+                "y": 197.52,
+                "width": 52,
+                "height": 52
+              },
+              "progress": {
+                "x": 733.8,
+                "y": 522.39,
+                "width": 387.61,
+                "height": 28
+              },
+              "keyboard": {
+                "x": 21,
+                "y": 606.83,
+                "width": 1152,
+                "height": 207.17
+              }
+            },
+            "hiddenTargetCarrier": 0,
+            "keyboardCarriers": 1,
+            "slotNotes": [
+              "C",
+              "D"
+            ],
+            "pairIndex": 0,
+            "neutralProgress": 0,
+            "reducedMotion": false
+          },
+          "screenshot": "ipad-pro-11-1194x834-dpr2_guide-second.png"
+        },
+        {
+          "stateName": "pair-playing",
+          "expectedActualPhases": [
+            "pair-playing"
+          ],
+          "geometry": {
+            "phase": "pair-playing",
+            "repairStage": "none",
+            "viewport": {
+              "width": 1194,
+              "height": 834,
+              "scrollWidth": 1194,
+              "scrollHeight": 834
+            },
+            "zones": {
+              "map": null,
+              "panel": {
+                "x": 10,
+                "y": 76,
+                "width": 1174,
+                "height": 514.83
+              },
+              "speech": {
+                "x": 186.59,
+                "y": 113.53,
+                "width": 330,
+                "height": 98
+              },
+              "character": {
+                "x": 44.09,
+                "y": 326.2,
+                "width": 230,
+                "height": 234
+              },
+              "source": {
+                "x": 643.59,
+                "y": 165.52,
+                "width": 112,
+                "height": 112
+              },
+              "world": {
+                "x": 460.19,
+                "y": 389.66,
+                "width": 627.02,
+                "height": 146
+              },
+              "compare": null,
+              "replay": {
+                "x": 771.59,
+                "y": 197.52,
+                "width": 52,
+                "height": 52
+              },
+              "progress": {
+                "x": 733.8,
+                "y": 522.39,
+                "width": 387.61,
+                "height": 28
+              },
+              "keyboard": {
+                "x": 21,
+                "y": 606.83,
+                "width": 1152,
+                "height": 207.17
+              }
+            },
+            "hiddenTargetCarrier": 0,
+            "keyboardCarriers": 0,
+            "slotNotes": [
+              null,
+              null
+            ],
+            "pairIndex": 0,
+            "neutralProgress": 0,
+            "reducedMotion": false
+          },
+          "screenshot": "ipad-pro-11-1194x834-dpr2_pair-playing.png"
+        },
+        {
+          "stateName": "awaiting-first",
+          "expectedActualPhases": [
+            "awaiting-first"
+          ],
+          "geometry": {
+            "phase": "awaiting-first",
+            "repairStage": "none",
+            "viewport": {
+              "width": 1194,
+              "height": 834,
+              "scrollWidth": 1194,
+              "scrollHeight": 834
+            },
+            "zones": {
+              "map": null,
+              "panel": {
+                "x": 10,
+                "y": 76,
+                "width": 1174,
+                "height": 514.83
+              },
+              "speech": {
+                "x": 186.59,
+                "y": 113.53,
+                "width": 330,
+                "height": 98
+              },
+              "character": {
+                "x": 44.09,
+                "y": 326.2,
+                "width": 230,
+                "height": 234
+              },
+              "source": {
+                "x": 643.59,
+                "y": 165.52,
+                "width": 112,
+                "height": 112
+              },
+              "world": {
+                "x": 460.19,
+                "y": 389.66,
+                "width": 627.02,
+                "height": 146
+              },
+              "compare": null,
+              "replay": {
+                "x": 771.59,
+                "y": 197.52,
+                "width": 52,
+                "height": 52
+              },
+              "progress": {
+                "x": 733.8,
+                "y": 522.39,
+                "width": 387.61,
+                "height": 28
+              },
+              "keyboard": {
+                "x": 21,
+                "y": 606.83,
+                "width": 1152,
+                "height": 207.17
+              }
+            },
+            "hiddenTargetCarrier": 0,
+            "keyboardCarriers": 0,
+            "slotNotes": [
+              null,
+              null
+            ],
+            "pairIndex": 0,
+            "neutralProgress": 0,
+            "reducedMotion": false
+          },
+          "screenshot": "ipad-pro-11-1194x834-dpr2_awaiting-first.png"
+        },
+        {
+          "stateName": "awaiting-second",
+          "expectedActualPhases": [
+            "awaiting-second"
+          ],
+          "geometry": {
+            "phase": "awaiting-second",
+            "repairStage": "none",
+            "viewport": {
+              "width": 1194,
+              "height": 834,
+              "scrollWidth": 1194,
+              "scrollHeight": 834
+            },
+            "zones": {
+              "map": null,
+              "panel": {
+                "x": 10,
+                "y": 76,
+                "width": 1174,
+                "height": 514.83
+              },
+              "speech": {
+                "x": 186.59,
+                "y": 113.53,
+                "width": 330,
+                "height": 98
+              },
+              "character": {
+                "x": 44.09,
+                "y": 326.2,
+                "width": 230,
+                "height": 234
+              },
+              "source": {
+                "x": 643.59,
+                "y": 165.52,
+                "width": 112,
+                "height": 112
+              },
+              "world": {
+                "x": 460.19,
+                "y": 389.66,
+                "width": 627.02,
+                "height": 146
+              },
+              "compare": null,
+              "replay": {
+                "x": 771.59,
+                "y": 197.52,
+                "width": 52,
+                "height": 52
+              },
+              "progress": {
+                "x": 733.8,
+                "y": 522.39,
+                "width": 387.61,
+                "height": 28
+              },
+              "keyboard": {
+                "x": 21,
+                "y": 606.83,
+                "width": 1152,
+                "height": 207.17
+              }
+            },
+            "hiddenTargetCarrier": 0,
+            "keyboardCarriers": 0,
+            "slotNotes": [
+              "C",
+              null
+            ],
+            "pairIndex": 0,
+            "neutralProgress": 0,
+            "reducedMotion": false
+          },
+          "screenshot": "ipad-pro-11-1194x834-dpr2_awaiting-second.png"
+        },
+        {
+          "stateName": "wrong-first",
+          "expectedActualPhases": [
+            "wrong-first"
+          ],
+          "geometry": {
+            "phase": "wrong-first",
+            "repairStage": "wrong-first",
+            "viewport": {
+              "width": 1194,
+              "height": 834,
+              "scrollWidth": 1194,
+              "scrollHeight": 834
+            },
+            "zones": {
+              "map": null,
+              "panel": {
+                "x": 10,
+                "y": 76,
+                "width": 1174,
+                "height": 514.83
+              },
+              "speech": {
+                "x": 186.59,
+                "y": 113.53,
+                "width": 330,
+                "height": 98
+              },
+              "character": {
+                "x": 44.09,
+                "y": 326.2,
+                "width": 230,
+                "height": 234
+              },
+              "source": {
+                "x": 643.59,
+                "y": 165.52,
+                "width": 112,
+                "height": 112
+              },
+              "world": {
+                "x": 460.19,
+                "y": 389.66,
+                "width": 627.02,
+                "height": 146
+              },
+              "compare": null,
+              "replay": {
+                "x": 771.59,
+                "y": 197.52,
+                "width": 52,
+                "height": 52
+              },
+              "progress": {
+                "x": 733.8,
+                "y": 522.39,
+                "width": 387.61,
+                "height": 28
+              },
+              "keyboard": {
+                "x": 21,
+                "y": 606.83,
+                "width": 1152,
+                "height": 207.17
+              }
+            },
+            "hiddenTargetCarrier": 0,
+            "keyboardCarriers": 0,
+            "slotNotes": [
+              "D",
+              "C"
+            ],
+            "pairIndex": 0,
+            "neutralProgress": 0,
+            "reducedMotion": false
+          },
+          "screenshot": "ipad-pro-11-1194x834-dpr2_wrong-first.png"
+        },
+        {
+          "stateName": "wrong-second",
+          "expectedActualPhases": [
+            "wrong-second"
+          ],
+          "geometry": {
+            "phase": "wrong-second",
+            "repairStage": "wrong-second",
+            "viewport": {
+              "width": 1194,
+              "height": 834,
+              "scrollWidth": 1194,
+              "scrollHeight": 834
+            },
+            "zones": {
+              "map": null,
+              "panel": {
+                "x": 10,
+                "y": 76,
+                "width": 1174,
+                "height": 514.83
+              },
+              "speech": {
+                "x": 186.59,
+                "y": 113.53,
+                "width": 330,
+                "height": 98
+              },
+              "character": {
+                "x": 44.09,
+                "y": 326.2,
+                "width": 230,
+                "height": 234
+              },
+              "source": {
+                "x": 643.59,
+                "y": 165.52,
+                "width": 112,
+                "height": 112
+              },
+              "world": {
+                "x": 460.19,
+                "y": 389.66,
+                "width": 627.02,
+                "height": 146
+              },
+              "compare": null,
+              "replay": {
+                "x": 771.59,
+                "y": 197.52,
+                "width": 52,
+                "height": 52
+              },
+              "progress": {
+                "x": 733.8,
+                "y": 522.39,
+                "width": 387.61,
+                "height": 28
+              },
+              "keyboard": {
+                "x": 21,
+                "y": 606.83,
+                "width": 1152,
+                "height": 207.17
+              }
+            },
+            "hiddenTargetCarrier": 0,
+            "keyboardCarriers": 0,
+            "slotNotes": [
+              "C",
+              "D"
+            ],
+            "pairIndex": 0,
+            "neutralProgress": 0,
+            "reducedMotion": false
+          },
+          "screenshot": "ipad-pro-11-1194x834-dpr2_wrong-second.png"
+        },
+        {
+          "stateName": "assisted",
+          "expectedActualPhases": [
+            "assisted"
+          ],
+          "geometry": {
+            "phase": "assisted",
+            "repairStage": "assisted",
+            "viewport": {
+              "width": 1194,
+              "height": 834,
+              "scrollWidth": 1194,
+              "scrollHeight": 834
+            },
+            "zones": {
+              "map": null,
+              "panel": {
+                "x": 10,
+                "y": 76,
+                "width": 1174,
+                "height": 514.83
+              },
+              "speech": {
+                "x": 186.59,
+                "y": 113.53,
+                "width": 330,
+                "height": 98
+              },
+              "character": {
+                "x": 44.09,
+                "y": 326.2,
+                "width": 230,
+                "height": 234
+              },
+              "source": {
+                "x": 643.59,
+                "y": 165.52,
+                "width": 112,
+                "height": 112
+              },
+              "world": {
+                "x": 460.19,
+                "y": 389.66,
+                "width": 627.02,
+                "height": 146
+              },
+              "compare": {
+                "x": 562.8,
+                "y": 483.48,
+                "width": 312,
+                "height": 62
+              },
+              "replay": {
+                "x": 771.59,
+                "y": 197.52,
+                "width": 52,
+                "height": 52
+              },
+              "progress": {
+                "x": 733.8,
+                "y": 522.39,
+                "width": 387.61,
+                "height": 28
+              },
+              "keyboard": {
+                "x": 21,
+                "y": 606.83,
+                "width": 1152,
+                "height": 207.17
+              }
+            },
+            "hiddenTargetCarrier": 0,
+            "keyboardCarriers": 1,
+            "slotNotes": [
+              null,
+              null
+            ],
+            "pairIndex": 0,
+            "neutralProgress": 0,
+            "reducedMotion": false
+          },
+          "screenshot": "ipad-pro-11-1194x834-dpr2_assisted.png"
+        },
+        {
+          "stateName": "sound-paused",
+          "expectedActualPhases": [
+            "sound-paused"
+          ],
+          "geometry": {
+            "phase": "sound-paused",
+            "repairStage": "none",
+            "viewport": {
+              "width": 1194,
+              "height": 834,
+              "scrollWidth": 1194,
+              "scrollHeight": 834
+            },
+            "zones": {
+              "map": null,
+              "panel": {
+                "x": 10,
+                "y": 76,
+                "width": 1174,
+                "height": 514.83
+              },
+              "speech": {
+                "x": 186.59,
+                "y": 113.53,
+                "width": 330,
+                "height": 98
+              },
+              "character": {
+                "x": 44.09,
+                "y": 326.2,
+                "width": 230,
+                "height": 234
+              },
+              "source": {
+                "x": 643.59,
+                "y": 165.52,
+                "width": 112,
+                "height": 112
+              },
+              "world": {
+                "x": 460.19,
+                "y": 389.66,
+                "width": 627.02,
+                "height": 146
+              },
+              "compare": null,
+              "replay": {
+                "x": 771.59,
+                "y": 197.52,
+                "width": 52,
+                "height": 52
+              },
+              "progress": {
+                "x": 733.8,
+                "y": 522.39,
+                "width": 387.61,
+                "height": 28
+              },
+              "keyboard": {
+                "x": 21,
+                "y": 606.83,
+                "width": 1152,
+                "height": 207.17
+              }
+            },
+            "hiddenTargetCarrier": 0,
+            "keyboardCarriers": 0,
+            "slotNotes": [
+              null,
+              null
+            ],
+            "pairIndex": 0,
+            "neutralProgress": 0,
+            "reducedMotion": false
+          },
+          "screenshot": "ipad-pro-11-1194x834-dpr2_sound-paused.png"
+        },
+        {
+          "stateName": "visual-assist",
+          "expectedActualPhases": [
+            "visual-assist"
+          ],
+          "geometry": {
+            "phase": "visual-assist",
+            "repairStage": "assisted",
+            "viewport": {
+              "width": 1194,
+              "height": 834,
+              "scrollWidth": 1194,
+              "scrollHeight": 834
+            },
+            "zones": {
+              "map": null,
+              "panel": {
+                "x": 10,
+                "y": 76,
+                "width": 1174,
+                "height": 514.83
+              },
+              "speech": {
+                "x": 186.59,
+                "y": 113.53,
+                "width": 330,
+                "height": 98
+              },
+              "character": {
+                "x": 44.09,
+                "y": 326.2,
+                "width": 230,
+                "height": 234
+              },
+              "source": {
+                "x": 643.59,
+                "y": 165.52,
+                "width": 112,
+                "height": 112
+              },
+              "world": {
+                "x": 460.19,
+                "y": 389.66,
+                "width": 627.02,
+                "height": 146
+              },
+              "compare": {
+                "x": 562.8,
+                "y": 483.48,
+                "width": 220,
+                "height": 62
+              },
+              "replay": {
+                "x": 771.59,
+                "y": 197.52,
+                "width": 52,
+                "height": 52
+              },
+              "progress": {
+                "x": 733.8,
+                "y": 522.39,
+                "width": 387.61,
+                "height": 28
+              },
+              "keyboard": {
+                "x": 21,
+                "y": 606.83,
+                "width": 1152,
+                "height": 207.17
+              }
+            },
+            "hiddenTargetCarrier": 0,
+            "keyboardCarriers": 1,
+            "slotNotes": [
+              "C",
+              "C"
+            ],
+            "pairIndex": 0,
+            "neutralProgress": 0,
+            "reducedMotion": false
+          },
+          "screenshot": "ipad-pro-11-1194x834-dpr2_visual-assist.png"
+        },
+        {
+          "stateName": "complete-roots",
+          "expectedActualPhases": [
+            "complete-roots"
+          ],
+          "geometry": {
+            "phase": "complete-roots",
+            "repairStage": "none",
+            "viewport": {
+              "width": 1194,
+              "height": 834,
+              "scrollWidth": 1194,
+              "scrollHeight": 834
+            },
+            "zones": {
+              "map": null,
+              "panel": {
+                "x": 10,
+                "y": 76,
+                "width": 1174,
+                "height": 514.83
+              },
+              "speech": {
+                "x": 186.59,
+                "y": 113.53,
+                "width": 330,
+                "height": 98
+              },
+              "character": {
+                "x": 44.09,
+                "y": 326.2,
+                "width": 230,
+                "height": 234
+              },
+              "source": {
+                "x": 643.59,
+                "y": 165.52,
+                "width": 112,
+                "height": 112
+              },
+              "world": {
+                "x": 460.19,
+                "y": 389.66,
+                "width": 627.02,
+                "height": 146
+              },
+              "compare": null,
+              "replay": null,
+              "progress": {
+                "x": 733.8,
+                "y": 522.39,
+                "width": 387.61,
+                "height": 28
+              },
+              "keyboard": {
+                "x": 21,
+                "y": 606.83,
+                "width": 1152,
+                "height": 207.17
+              }
+            },
+            "hiddenTargetCarrier": 0,
+            "keyboardCarriers": 0,
+            "slotNotes": [
+              null,
+              null
+            ],
+            "pairIndex": 4,
+            "neutralProgress": 4,
+            "reducedMotion": false
+          },
+          "screenshot": "ipad-pro-11-1194x834-dpr2_complete-roots.png"
+        },
+        {
+          "stateName": "unscored-low-echo",
+          "expectedActualPhases": [
+            "unscored-low-echo"
+          ],
+          "geometry": {
+            "phase": "unscored-low-echo",
+            "repairStage": "none",
+            "viewport": {
+              "width": 1194,
+              "height": 834,
+              "scrollWidth": 1194,
+              "scrollHeight": 834
+            },
+            "zones": {
+              "map": null,
+              "panel": {
+                "x": 10,
+                "y": 76,
+                "width": 1174,
+                "height": 514.83
+              },
+              "speech": {
+                "x": 186.59,
+                "y": 113.53,
+                "width": 330,
+                "height": 98
+              },
+              "character": {
+                "x": 44.09,
+                "y": 326.2,
+                "width": 230,
+                "height": 234
+              },
+              "source": {
+                "x": 643.59,
+                "y": 165.52,
+                "width": 112,
+                "height": 112
+              },
+              "world": {
+                "x": 460.19,
+                "y": 389.66,
+                "width": 627.02,
+                "height": 146
+              },
+              "compare": null,
+              "replay": null,
+              "progress": {
+                "x": 733.8,
+                "y": 522.39,
+                "width": 387.61,
+                "height": 28
+              },
+              "keyboard": {
+                "x": 21,
+                "y": 606.83,
+                "width": 1152,
+                "height": 207.17
+              }
+            },
+            "hiddenTargetCarrier": 0,
+            "keyboardCarriers": 0,
+            "slotNotes": [
+              null,
+              null
+            ],
+            "pairIndex": 4,
+            "neutralProgress": 4,
+            "reducedMotion": false
+          },
+          "screenshot": "ipad-pro-11-1194x834-dpr2_unscored-low-echo.png"
+        },
+        {
+          "stateName": "reduced-motion",
+          "expectedActualPhases": [
+            "guide-first"
+          ],
+          "geometry": {
+            "phase": "guide-first",
+            "repairStage": "none",
+            "viewport": {
+              "width": 1194,
+              "height": 834,
+              "scrollWidth": 1194,
+              "scrollHeight": 834
+            },
+            "zones": {
+              "map": null,
+              "panel": {
+                "x": 10,
+                "y": 76,
+                "width": 1174,
+                "height": 514.83
+              },
+              "speech": {
+                "x": 186.59,
+                "y": 113.53,
+                "width": 330,
+                "height": 98
+              },
+              "character": {
+                "x": 44.09,
+                "y": 326.2,
+                "width": 230,
+                "height": 234
+              },
+              "source": {
+                "x": 643.59,
+                "y": 165.52,
+                "width": 112,
+                "height": 112
+              },
+              "world": {
+                "x": 460.19,
+                "y": 389.66,
+                "width": 627.02,
+                "height": 146
+              },
+              "compare": null,
+              "replay": {
+                "x": 771.59,
+                "y": 197.52,
+                "width": 52,
+                "height": 52
+              },
+              "progress": {
+                "x": 733.8,
+                "y": 522.39,
+                "width": 387.61,
+                "height": 28
+              },
+              "keyboard": {
+                "x": 21,
+                "y": 606.83,
+                "width": 1152,
+                "height": 207.17
+              }
+            },
+            "hiddenTargetCarrier": 0,
+            "keyboardCarriers": 1,
+            "slotNotes": [
+              "C",
+              "D"
+            ],
+            "pairIndex": 0,
+            "neutralProgress": 0,
+            "reducedMotion": true
+          },
+          "screenshot": "ipad-pro-11-1194x834-dpr2_reduced-motion.png"
+        }
+      ]
+    },
+    {
+      "viewportId": "media-1280x720-dpr1",
+      "width": 1280,
+      "height": 720,
+      "dpr": 1,
+      "states": [
+        {
+          "stateName": "map-entry",
+          "expectedActualPhases": [
+            "map-entry"
+          ],
+          "geometry": {
+            "phase": "map-entry",
+            "repairStage": "",
+            "viewport": {
+              "width": 1280,
+              "height": 720,
+              "scrollWidth": 1280,
+              "scrollHeight": 720
+            },
+            "zones": {
+              "map": {
+                "x": 0,
+                "y": 0,
+                "width": 1280,
+                "height": 720
+              },
+              "panel": null,
+              "speech": null,
+              "character": null,
+              "source": null,
+              "world": null,
+              "compare": null,
+              "replay": null,
+              "progress": null,
+              "keyboard": null
+            },
+            "hiddenTargetCarrier": 0,
+            "keyboardCarriers": 0,
+            "slotNotes": [
+              null,
+              null
+            ],
+            "pairIndex": null,
+            "neutralProgress": 0,
+            "reducedMotion": false
+          },
+          "screenshot": "media-1280x720-dpr1_map-entry.png"
+        },
+        {
+          "stateName": "guide-first",
+          "expectedActualPhases": [
+            "guide-first"
+          ],
+          "geometry": {
+            "phase": "guide-first",
+            "repairStage": "none",
+            "viewport": {
+              "width": 1280,
+              "height": 720,
+              "scrollWidth": 1280,
+              "scrollHeight": 720
+            },
+            "zones": {
+              "map": null,
+              "panel": {
+                "x": 10,
+                "y": 76,
+                "width": 1260,
+                "height": 430
+              },
+              "speech": {
+                "x": 195.75,
+                "y": 106.55,
+                "width": 330,
+                "height": 98
+              },
+              "character": {
+                "x": 41.5,
+                "y": 246.56,
+                "width": 230,
+                "height": 234
+              },
+              "source": {
+                "x": 703.05,
+                "y": 148.97,
+                "width": 96,
+                "height": 96
+              },
+              "world": {
+                "x": 516.59,
+                "y": 346.23,
+                "width": 678.72,
+                "height": 122
+              },
+              "compare": null,
+              "replay": {
+                "x": 823.05,
+                "y": 172.97,
+                "width": 52,
+                "height": 52
+              },
+              "progress": {
+                "x": 788.08,
+                "y": 444.34,
+                "width": 419.56,
+                "height": 28
+              },
+              "keyboard": {
+                "x": 21,
+                "y": 522,
+                "width": 1238,
+                "height": 188
+              }
+            },
+            "hiddenTargetCarrier": 0,
+            "keyboardCarriers": 1,
+            "slotNotes": [
+              "C",
+              "D"
+            ],
+            "pairIndex": 0,
+            "neutralProgress": 0,
+            "reducedMotion": false
+          },
+          "screenshot": "media-1280x720-dpr1_guide-first.png"
+        },
+        {
+          "stateName": "guide-second",
+          "expectedActualPhases": [
+            "guide-second"
+          ],
+          "geometry": {
+            "phase": "guide-second",
+            "repairStage": "none",
+            "viewport": {
+              "width": 1280,
+              "height": 720,
+              "scrollWidth": 1280,
+              "scrollHeight": 720
+            },
+            "zones": {
+              "map": null,
+              "panel": {
+                "x": 10,
+                "y": 76,
+                "width": 1260,
+                "height": 430
+              },
+              "speech": {
+                "x": 195.75,
+                "y": 106.55,
+                "width": 330,
+                "height": 98
+              },
+              "character": {
+                "x": 41.5,
+                "y": 246.56,
+                "width": 230,
+                "height": 234
+              },
+              "source": {
+                "x": 703.05,
+                "y": 148.97,
+                "width": 96,
+                "height": 96
+              },
+              "world": {
+                "x": 516.59,
+                "y": 346.23,
+                "width": 678.72,
+                "height": 122
+              },
+              "compare": null,
+              "replay": {
+                "x": 823.05,
+                "y": 172.97,
+                "width": 52,
+                "height": 52
+              },
+              "progress": {
+                "x": 788.08,
+                "y": 444.34,
+                "width": 419.56,
+                "height": 28
+              },
+              "keyboard": {
+                "x": 21,
+                "y": 522,
+                "width": 1238,
+                "height": 188
+              }
+            },
+            "hiddenTargetCarrier": 0,
+            "keyboardCarriers": 1,
+            "slotNotes": [
+              "C",
+              "D"
+            ],
+            "pairIndex": 0,
+            "neutralProgress": 0,
+            "reducedMotion": false
+          },
+          "screenshot": "media-1280x720-dpr1_guide-second.png"
+        },
+        {
+          "stateName": "pair-playing",
+          "expectedActualPhases": [
+            "pair-playing"
+          ],
+          "geometry": {
+            "phase": "pair-playing",
+            "repairStage": "none",
+            "viewport": {
+              "width": 1280,
+              "height": 720,
+              "scrollWidth": 1280,
+              "scrollHeight": 720
+            },
+            "zones": {
+              "map": null,
+              "panel": {
+                "x": 10,
+                "y": 76,
+                "width": 1260,
+                "height": 430
+              },
+              "speech": {
+                "x": 195.75,
+                "y": 106.55,
+                "width": 330,
+                "height": 98
+              },
+              "character": {
+                "x": 41.5,
+                "y": 246.56,
+                "width": 230,
+                "height": 234
+              },
+              "source": {
+                "x": 703.05,
+                "y": 148.97,
+                "width": 96,
+                "height": 96
+              },
+              "world": {
+                "x": 516.59,
+                "y": 346.23,
+                "width": 678.72,
+                "height": 122
+              },
+              "compare": null,
+              "replay": {
+                "x": 823.05,
+                "y": 172.97,
+                "width": 52,
+                "height": 52
+              },
+              "progress": {
+                "x": 788.08,
+                "y": 444.34,
+                "width": 419.56,
+                "height": 28
+              },
+              "keyboard": {
+                "x": 21,
+                "y": 522,
+                "width": 1238,
+                "height": 188
+              }
+            },
+            "hiddenTargetCarrier": 0,
+            "keyboardCarriers": 0,
+            "slotNotes": [
+              null,
+              null
+            ],
+            "pairIndex": 0,
+            "neutralProgress": 0,
+            "reducedMotion": false
+          },
+          "screenshot": "media-1280x720-dpr1_pair-playing.png"
+        },
+        {
+          "stateName": "awaiting-first",
+          "expectedActualPhases": [
+            "awaiting-first"
+          ],
+          "geometry": {
+            "phase": "awaiting-first",
+            "repairStage": "none",
+            "viewport": {
+              "width": 1280,
+              "height": 720,
+              "scrollWidth": 1280,
+              "scrollHeight": 720
+            },
+            "zones": {
+              "map": null,
+              "panel": {
+                "x": 10,
+                "y": 76,
+                "width": 1260,
+                "height": 430
+              },
+              "speech": {
+                "x": 195.75,
+                "y": 106.55,
+                "width": 330,
+                "height": 98
+              },
+              "character": {
+                "x": 41.5,
+                "y": 246.56,
+                "width": 230,
+                "height": 234
+              },
+              "source": {
+                "x": 703.05,
+                "y": 148.97,
+                "width": 96,
+                "height": 96
+              },
+              "world": {
+                "x": 516.59,
+                "y": 346.23,
+                "width": 678.72,
+                "height": 122
+              },
+              "compare": null,
+              "replay": {
+                "x": 823.05,
+                "y": 172.97,
+                "width": 52,
+                "height": 52
+              },
+              "progress": {
+                "x": 788.08,
+                "y": 444.34,
+                "width": 419.56,
+                "height": 28
+              },
+              "keyboard": {
+                "x": 21,
+                "y": 522,
+                "width": 1238,
+                "height": 188
+              }
+            },
+            "hiddenTargetCarrier": 0,
+            "keyboardCarriers": 0,
+            "slotNotes": [
+              null,
+              null
+            ],
+            "pairIndex": 0,
+            "neutralProgress": 0,
+            "reducedMotion": false
+          },
+          "screenshot": "media-1280x720-dpr1_awaiting-first.png"
+        },
+        {
+          "stateName": "awaiting-second",
+          "expectedActualPhases": [
+            "awaiting-second"
+          ],
+          "geometry": {
+            "phase": "awaiting-second",
+            "repairStage": "none",
+            "viewport": {
+              "width": 1280,
+              "height": 720,
+              "scrollWidth": 1280,
+              "scrollHeight": 720
+            },
+            "zones": {
+              "map": null,
+              "panel": {
+                "x": 10,
+                "y": 76,
+                "width": 1260,
+                "height": 430
+              },
+              "speech": {
+                "x": 195.75,
+                "y": 106.55,
+                "width": 330,
+                "height": 98
+              },
+              "character": {
+                "x": 41.5,
+                "y": 246.56,
+                "width": 230,
+                "height": 234
+              },
+              "source": {
+                "x": 703.05,
+                "y": 148.97,
+                "width": 96,
+                "height": 96
+              },
+              "world": {
+                "x": 516.59,
+                "y": 346.23,
+                "width": 678.72,
+                "height": 122
+              },
+              "compare": null,
+              "replay": {
+                "x": 823.05,
+                "y": 172.97,
+                "width": 52,
+                "height": 52
+              },
+              "progress": {
+                "x": 788.08,
+                "y": 444.34,
+                "width": 419.56,
+                "height": 28
+              },
+              "keyboard": {
+                "x": 21,
+                "y": 522,
+                "width": 1238,
+                "height": 188
+              }
+            },
+            "hiddenTargetCarrier": 0,
+            "keyboardCarriers": 0,
+            "slotNotes": [
+              "C",
+              null
+            ],
+            "pairIndex": 0,
+            "neutralProgress": 0,
+            "reducedMotion": false
+          },
+          "screenshot": "media-1280x720-dpr1_awaiting-second.png"
+        },
+        {
+          "stateName": "wrong-first",
+          "expectedActualPhases": [
+            "wrong-first"
+          ],
+          "geometry": {
+            "phase": "wrong-first",
+            "repairStage": "wrong-first",
+            "viewport": {
+              "width": 1280,
+              "height": 720,
+              "scrollWidth": 1280,
+              "scrollHeight": 720
+            },
+            "zones": {
+              "map": null,
+              "panel": {
+                "x": 10,
+                "y": 76,
+                "width": 1260,
+                "height": 430
+              },
+              "speech": {
+                "x": 195.75,
+                "y": 106.55,
+                "width": 330,
+                "height": 98
+              },
+              "character": {
+                "x": 41.5,
+                "y": 246.56,
+                "width": 230,
+                "height": 234
+              },
+              "source": {
+                "x": 703.05,
+                "y": 148.97,
+                "width": 96,
+                "height": 96
+              },
+              "world": {
+                "x": 516.59,
+                "y": 346.23,
+                "width": 678.72,
+                "height": 122
+              },
+              "compare": null,
+              "replay": {
+                "x": 823.05,
+                "y": 172.97,
+                "width": 52,
+                "height": 52
+              },
+              "progress": {
+                "x": 788.08,
+                "y": 444.34,
+                "width": 419.56,
+                "height": 28
+              },
+              "keyboard": {
+                "x": 21,
+                "y": 522,
+                "width": 1238,
+                "height": 188
+              }
+            },
+            "hiddenTargetCarrier": 0,
+            "keyboardCarriers": 0,
+            "slotNotes": [
+              "D",
+              "D"
+            ],
+            "pairIndex": 0,
+            "neutralProgress": 0,
+            "reducedMotion": false
+          },
+          "screenshot": "media-1280x720-dpr1_wrong-first.png"
+        },
+        {
+          "stateName": "wrong-second",
+          "expectedActualPhases": [
+            "wrong-second"
+          ],
+          "geometry": {
+            "phase": "wrong-second",
+            "repairStage": "wrong-second",
+            "viewport": {
+              "width": 1280,
+              "height": 720,
+              "scrollWidth": 1280,
+              "scrollHeight": 720
+            },
+            "zones": {
+              "map": null,
+              "panel": {
+                "x": 10,
+                "y": 76,
+                "width": 1260,
+                "height": 430
+              },
+              "speech": {
+                "x": 195.75,
+                "y": 106.55,
+                "width": 330,
+                "height": 98
+              },
+              "character": {
+                "x": 41.5,
+                "y": 246.56,
+                "width": 230,
+                "height": 234
+              },
+              "source": {
+                "x": 703.05,
+                "y": 148.97,
+                "width": 96,
+                "height": 96
+              },
+              "world": {
+                "x": 516.59,
+                "y": 346.23,
+                "width": 678.72,
+                "height": 122
+              },
+              "compare": null,
+              "replay": {
+                "x": 823.05,
+                "y": 172.97,
+                "width": 52,
+                "height": 52
+              },
+              "progress": {
+                "x": 788.08,
+                "y": 444.34,
+                "width": 419.56,
+                "height": 28
+              },
+              "keyboard": {
+                "x": 21,
+                "y": 522,
+                "width": 1238,
+                "height": 188
+              }
+            },
+            "hiddenTargetCarrier": 0,
+            "keyboardCarriers": 0,
+            "slotNotes": [
+              "C",
+              "C"
+            ],
+            "pairIndex": 0,
+            "neutralProgress": 0,
+            "reducedMotion": false
+          },
+          "screenshot": "media-1280x720-dpr1_wrong-second.png"
+        },
+        {
+          "stateName": "assisted",
+          "expectedActualPhases": [
+            "assisted"
+          ],
+          "geometry": {
+            "phase": "assisted",
+            "repairStage": "assisted",
+            "viewport": {
+              "width": 1280,
+              "height": 720,
+              "scrollWidth": 1280,
+              "scrollHeight": 720
+            },
+            "zones": {
+              "map": null,
+              "panel": {
+                "x": 10,
+                "y": 76,
+                "width": 1260,
+                "height": 430
+              },
+              "speech": {
+                "x": 195.75,
+                "y": 106.55,
+                "width": 330,
+                "height": 98
+              },
+              "character": {
+                "x": 41.5,
+                "y": 246.56,
+                "width": 230,
+                "height": 234
+              },
+              "source": {
+                "x": 703.05,
+                "y": 148.97,
+                "width": 96,
+                "height": 96
+              },
+              "world": {
+                "x": 516.59,
+                "y": 346.23,
+                "width": 678.72,
+                "height": 122
+              },
+              "compare": {
+                "x": 578.3,
+                "y": 414.45,
+                "width": 312,
+                "height": 62
+              },
+              "replay": {
+                "x": 823.05,
+                "y": 172.97,
+                "width": 52,
+                "height": 52
+              },
+              "progress": {
+                "x": 788.08,
+                "y": 444.34,
+                "width": 419.56,
+                "height": 28
+              },
+              "keyboard": {
+                "x": 21,
+                "y": 522,
+                "width": 1238,
+                "height": 188
+              }
+            },
+            "hiddenTargetCarrier": 0,
+            "keyboardCarriers": 1,
+            "slotNotes": [
+              null,
+              null
+            ],
+            "pairIndex": 0,
+            "neutralProgress": 0,
+            "reducedMotion": false
+          },
+          "screenshot": "media-1280x720-dpr1_assisted.png"
+        },
+        {
+          "stateName": "sound-paused",
+          "expectedActualPhases": [
+            "sound-paused"
+          ],
+          "geometry": {
+            "phase": "sound-paused",
+            "repairStage": "none",
+            "viewport": {
+              "width": 1280,
+              "height": 720,
+              "scrollWidth": 1280,
+              "scrollHeight": 720
+            },
+            "zones": {
+              "map": null,
+              "panel": {
+                "x": 10,
+                "y": 76,
+                "width": 1260,
+                "height": 430
+              },
+              "speech": {
+                "x": 195.75,
+                "y": 106.55,
+                "width": 330,
+                "height": 98
+              },
+              "character": {
+                "x": 41.5,
+                "y": 246.56,
+                "width": 230,
+                "height": 234
+              },
+              "source": {
+                "x": 703.05,
+                "y": 148.97,
+                "width": 96,
+                "height": 96
+              },
+              "world": {
+                "x": 516.59,
+                "y": 346.23,
+                "width": 678.72,
+                "height": 122
+              },
+              "compare": null,
+              "replay": {
+                "x": 823.05,
+                "y": 172.97,
+                "width": 52,
+                "height": 52
+              },
+              "progress": {
+                "x": 788.08,
+                "y": 444.34,
+                "width": 419.56,
+                "height": 28
+              },
+              "keyboard": {
+                "x": 21,
+                "y": 522,
+                "width": 1238,
+                "height": 188
+              }
+            },
+            "hiddenTargetCarrier": 0,
+            "keyboardCarriers": 0,
+            "slotNotes": [
+              null,
+              null
+            ],
+            "pairIndex": 0,
+            "neutralProgress": 0,
+            "reducedMotion": false
+          },
+          "screenshot": "media-1280x720-dpr1_sound-paused.png"
+        },
+        {
+          "stateName": "visual-assist",
+          "expectedActualPhases": [
+            "visual-assist"
+          ],
+          "geometry": {
+            "phase": "visual-assist",
+            "repairStage": "assisted",
+            "viewport": {
+              "width": 1280,
+              "height": 720,
+              "scrollWidth": 1280,
+              "scrollHeight": 720
+            },
+            "zones": {
+              "map": null,
+              "panel": {
+                "x": 10,
+                "y": 76,
+                "width": 1260,
+                "height": 430
+              },
+              "speech": {
+                "x": 195.75,
+                "y": 106.55,
+                "width": 330,
+                "height": 98
+              },
+              "character": {
+                "x": 41.5,
+                "y": 246.56,
+                "width": 230,
+                "height": 234
+              },
+              "source": {
+                "x": 703.05,
+                "y": 148.97,
+                "width": 96,
+                "height": 96
+              },
+              "world": {
+                "x": 516.59,
+                "y": 346.23,
+                "width": 678.72,
+                "height": 122
+              },
+              "compare": {
+                "x": 578.3,
+                "y": 414.45,
+                "width": 220,
+                "height": 62
+              },
+              "replay": {
+                "x": 823.05,
+                "y": 172.97,
+                "width": 52,
+                "height": 52
+              },
+              "progress": {
+                "x": 788.08,
+                "y": 444.34,
+                "width": 419.56,
+                "height": 28
+              },
+              "keyboard": {
+                "x": 21,
+                "y": 522,
+                "width": 1238,
+                "height": 188
+              }
+            },
+            "hiddenTargetCarrier": 0,
+            "keyboardCarriers": 2,
+            "slotNotes": [
+              "C",
+              "D"
+            ],
+            "pairIndex": 0,
+            "neutralProgress": 0,
+            "reducedMotion": false
+          },
+          "screenshot": "media-1280x720-dpr1_visual-assist.png"
+        },
+        {
+          "stateName": "complete-roots",
+          "expectedActualPhases": [
+            "complete-roots"
+          ],
+          "geometry": {
+            "phase": "complete-roots",
+            "repairStage": "none",
+            "viewport": {
+              "width": 1280,
+              "height": 720,
+              "scrollWidth": 1280,
+              "scrollHeight": 720
+            },
+            "zones": {
+              "map": null,
+              "panel": {
+                "x": 10,
+                "y": 76,
+                "width": 1260,
+                "height": 430
+              },
+              "speech": {
+                "x": 195.75,
+                "y": 106.55,
+                "width": 330,
+                "height": 98
+              },
+              "character": {
+                "x": 41.5,
+                "y": 246.56,
+                "width": 230,
+                "height": 234
+              },
+              "source": {
+                "x": 703.05,
+                "y": 148.97,
+                "width": 96,
+                "height": 96
+              },
+              "world": {
+                "x": 516.59,
+                "y": 346.23,
+                "width": 678.72,
+                "height": 122
+              },
+              "compare": null,
+              "replay": null,
+              "progress": {
+                "x": 788.08,
+                "y": 444.34,
+                "width": 419.56,
+                "height": 28
+              },
+              "keyboard": {
+                "x": 21,
+                "y": 522,
+                "width": 1238,
+                "height": 188
+              }
+            },
+            "hiddenTargetCarrier": 0,
+            "keyboardCarriers": 0,
+            "slotNotes": [
+              null,
+              null
+            ],
+            "pairIndex": 4,
+            "neutralProgress": 4,
+            "reducedMotion": false
+          },
+          "screenshot": "media-1280x720-dpr1_complete-roots.png"
+        },
+        {
+          "stateName": "unscored-low-echo",
+          "expectedActualPhases": [
+            "unscored-low-echo"
+          ],
+          "geometry": {
+            "phase": "unscored-low-echo",
+            "repairStage": "none",
+            "viewport": {
+              "width": 1280,
+              "height": 720,
+              "scrollWidth": 1280,
+              "scrollHeight": 720
+            },
+            "zones": {
+              "map": null,
+              "panel": {
+                "x": 10,
+                "y": 76,
+                "width": 1260,
+                "height": 430
+              },
+              "speech": {
+                "x": 195.75,
+                "y": 106.55,
+                "width": 330,
+                "height": 98
+              },
+              "character": {
+                "x": 41.5,
+                "y": 246.56,
+                "width": 230,
+                "height": 234
+              },
+              "source": {
+                "x": 703.05,
+                "y": 148.97,
+                "width": 96,
+                "height": 96
+              },
+              "world": {
+                "x": 516.59,
+                "y": 346.23,
+                "width": 678.72,
+                "height": 122
+              },
+              "compare": null,
+              "replay": null,
+              "progress": {
+                "x": 788.08,
+                "y": 444.34,
+                "width": 419.56,
+                "height": 28
+              },
+              "keyboard": {
+                "x": 21,
+                "y": 522,
+                "width": 1238,
+                "height": 188
+              }
+            },
+            "hiddenTargetCarrier": 0,
+            "keyboardCarriers": 0,
+            "slotNotes": [
+              null,
+              null
+            ],
+            "pairIndex": 4,
+            "neutralProgress": 4,
+            "reducedMotion": false
+          },
+          "screenshot": "media-1280x720-dpr1_unscored-low-echo.png"
+        },
+        {
+          "stateName": "reduced-motion",
+          "expectedActualPhases": [
+            "guide-first"
+          ],
+          "geometry": {
+            "phase": "guide-first",
+            "repairStage": "none",
+            "viewport": {
+              "width": 1280,
+              "height": 720,
+              "scrollWidth": 1280,
+              "scrollHeight": 720
+            },
+            "zones": {
+              "map": null,
+              "panel": {
+                "x": 10,
+                "y": 76,
+                "width": 1260,
+                "height": 430
+              },
+              "speech": {
+                "x": 195.75,
+                "y": 106.55,
+                "width": 330,
+                "height": 98
+              },
+              "character": {
+                "x": 41.5,
+                "y": 246.56,
+                "width": 230,
+                "height": 234
+              },
+              "source": {
+                "x": 703.05,
+                "y": 148.97,
+                "width": 96,
+                "height": 96
+              },
+              "world": {
+                "x": 516.59,
+                "y": 346.23,
+                "width": 678.72,
+                "height": 122
+              },
+              "compare": null,
+              "replay": {
+                "x": 823.05,
+                "y": 172.97,
+                "width": 52,
+                "height": 52
+              },
+              "progress": {
+                "x": 788.08,
+                "y": 444.34,
+                "width": 419.56,
+                "height": 28
+              },
+              "keyboard": {
+                "x": 21,
+                "y": 522,
+                "width": 1238,
+                "height": 188
+              }
+            },
+            "hiddenTargetCarrier": 0,
+            "keyboardCarriers": 1,
+            "slotNotes": [
+              "C",
+              "D"
+            ],
+            "pairIndex": 0,
+            "neutralProgress": 0,
+            "reducedMotion": true
+          },
+          "screenshot": "media-1280x720-dpr1_reduced-motion.png"
+        }
+      ]
+    },
+    {
+      "viewportId": "large-ipad-1366x1024-dpr2",
+      "width": 1366,
+      "height": 1024,
+      "dpr": 2,
+      "states": [
+        {
+          "stateName": "map-entry",
+          "expectedActualPhases": [
+            "map-entry"
+          ],
+          "geometry": {
+            "phase": "map-entry",
+            "repairStage": "",
+            "viewport": {
+              "width": 1366,
+              "height": 1024,
+              "scrollWidth": 1366,
+              "scrollHeight": 1024
+            },
+            "zones": {
+              "map": {
+                "x": 0,
+                "y": 0,
+                "width": 1366,
+                "height": 1024
+              },
+              "panel": null,
+              "speech": null,
+              "character": null,
+              "source": null,
+              "world": null,
+              "compare": null,
+              "replay": null,
+              "progress": null,
+              "keyboard": null
+            },
+            "hiddenTargetCarrier": 0,
+            "keyboardCarriers": 0,
+            "slotNotes": [
+              null,
+              null
+            ],
+            "pairIndex": null,
+            "neutralProgress": 0,
+            "reducedMotion": false
+          },
+          "screenshot": "large-ipad-1366x1024-dpr2_map-entry.png"
+        },
+        {
+          "stateName": "guide-first",
+          "expectedActualPhases": [
+            "guide-first"
+          ],
+          "geometry": {
+            "phase": "guide-first",
+            "repairStage": "none",
+            "viewport": {
+              "width": 1366,
+              "height": 1024,
+              "scrollWidth": 1366,
+              "scrollHeight": 1024
+            },
+            "zones": {
+              "map": null,
+              "panel": {
+                "x": 10,
+                "y": 76,
+                "width": 1346,
+                "height": 653.53
+              },
+              "speech": {
+                "x": 210.67,
+                "y": 120.47,
+                "width": 330,
+                "height": 98
+              },
+              "character": {
+                "x": 46.67,
+                "y": 459.36,
+                "width": 230,
+                "height": 234
+              },
+              "source": {
+                "x": 745.08,
+                "y": 202.97,
+                "width": 112,
+                "height": 112
+              },
+              "world": {
+                "x": 525.55,
+                "y": 515.88,
+                "width": 721.63,
+                "height": 146
+              },
+              "compare": null,
+              "replay": {
+                "x": 873.08,
+                "y": 234.97,
+                "width": 52,
+                "height": 52
+              },
+              "progress": {
+                "x": 840.44,
+                "y": 652.77,
+                "width": 446.09,
+                "height": 28
+              },
+              "keyboard": {
+                "x": 21,
+                "y": 745.53,
+                "width": 1324,
+                "height": 258.47
+              }
+            },
+            "hiddenTargetCarrier": 0,
+            "keyboardCarriers": 1,
+            "slotNotes": [
+              "C",
+              "D"
+            ],
+            "pairIndex": 0,
+            "neutralProgress": 0,
+            "reducedMotion": false
+          },
+          "screenshot": "large-ipad-1366x1024-dpr2_guide-first.png"
+        },
+        {
+          "stateName": "guide-second",
+          "expectedActualPhases": [
+            "guide-second"
+          ],
+          "geometry": {
+            "phase": "guide-second",
+            "repairStage": "none",
+            "viewport": {
+              "width": 1366,
+              "height": 1024,
+              "scrollWidth": 1366,
+              "scrollHeight": 1024
+            },
+            "zones": {
+              "map": null,
+              "panel": {
+                "x": 10,
+                "y": 76,
+                "width": 1346,
+                "height": 653.53
+              },
+              "speech": {
+                "x": 210.67,
+                "y": 120.47,
+                "width": 330,
+                "height": 98
+              },
+              "character": {
+                "x": 46.67,
+                "y": 459.36,
+                "width": 230,
+                "height": 234
+              },
+              "source": {
+                "x": 745.08,
+                "y": 202.97,
+                "width": 112,
+                "height": 112
+              },
+              "world": {
+                "x": 525.55,
+                "y": 515.88,
+                "width": 721.63,
+                "height": 146
+              },
+              "compare": null,
+              "replay": {
+                "x": 873.08,
+                "y": 234.97,
+                "width": 52,
+                "height": 52
+              },
+              "progress": {
+                "x": 840.44,
+                "y": 652.77,
+                "width": 446.09,
+                "height": 28
+              },
+              "keyboard": {
+                "x": 21,
+                "y": 745.53,
+                "width": 1324,
+                "height": 258.47
+              }
+            },
+            "hiddenTargetCarrier": 0,
+            "keyboardCarriers": 1,
+            "slotNotes": [
+              "C",
+              "D"
+            ],
+            "pairIndex": 0,
+            "neutralProgress": 0,
+            "reducedMotion": false
+          },
+          "screenshot": "large-ipad-1366x1024-dpr2_guide-second.png"
+        },
+        {
+          "stateName": "pair-playing",
+          "expectedActualPhases": [
+            "pair-playing"
+          ],
+          "geometry": {
+            "phase": "pair-playing",
+            "repairStage": "none",
+            "viewport": {
+              "width": 1366,
+              "height": 1024,
+              "scrollWidth": 1366,
+              "scrollHeight": 1024
+            },
+            "zones": {
+              "map": null,
+              "panel": {
+                "x": 10,
+                "y": 76,
+                "width": 1346,
+                "height": 653.53
+              },
+              "speech": {
+                "x": 210.67,
+                "y": 120.47,
+                "width": 330,
+                "height": 98
+              },
+              "character": {
+                "x": 46.67,
+                "y": 459.36,
+                "width": 230,
+                "height": 234
+              },
+              "source": {
+                "x": 745.08,
+                "y": 202.97,
+                "width": 112,
+                "height": 112
+              },
+              "world": {
+                "x": 525.55,
+                "y": 515.88,
+                "width": 721.63,
+                "height": 146
+              },
+              "compare": null,
+              "replay": {
+                "x": 873.08,
+                "y": 234.97,
+                "width": 52,
+                "height": 52
+              },
+              "progress": {
+                "x": 840.44,
+                "y": 652.77,
+                "width": 446.09,
+                "height": 28
+              },
+              "keyboard": {
+                "x": 21,
+                "y": 745.53,
+                "width": 1324,
+                "height": 258.47
+              }
+            },
+            "hiddenTargetCarrier": 0,
+            "keyboardCarriers": 0,
+            "slotNotes": [
+              null,
+              null
+            ],
+            "pairIndex": 0,
+            "neutralProgress": 0,
+            "reducedMotion": false
+          },
+          "screenshot": "large-ipad-1366x1024-dpr2_pair-playing.png"
+        },
+        {
+          "stateName": "awaiting-first",
+          "expectedActualPhases": [
+            "awaiting-first"
+          ],
+          "geometry": {
+            "phase": "awaiting-first",
+            "repairStage": "none",
+            "viewport": {
+              "width": 1366,
+              "height": 1024,
+              "scrollWidth": 1366,
+              "scrollHeight": 1024
+            },
+            "zones": {
+              "map": null,
+              "panel": {
+                "x": 10,
+                "y": 76,
+                "width": 1346,
+                "height": 653.53
+              },
+              "speech": {
+                "x": 210.67,
+                "y": 120.47,
+                "width": 330,
+                "height": 98
+              },
+              "character": {
+                "x": 46.67,
+                "y": 459.36,
+                "width": 230,
+                "height": 234
+              },
+              "source": {
+                "x": 745.08,
+                "y": 202.97,
+                "width": 112,
+                "height": 112
+              },
+              "world": {
+                "x": 525.55,
+                "y": 515.88,
+                "width": 721.63,
+                "height": 146
+              },
+              "compare": null,
+              "replay": {
+                "x": 873.08,
+                "y": 234.97,
+                "width": 52,
+                "height": 52
+              },
+              "progress": {
+                "x": 840.44,
+                "y": 652.77,
+                "width": 446.09,
+                "height": 28
+              },
+              "keyboard": {
+                "x": 21,
+                "y": 745.53,
+                "width": 1324,
+                "height": 258.47
+              }
+            },
+            "hiddenTargetCarrier": 0,
+            "keyboardCarriers": 0,
+            "slotNotes": [
+              null,
+              null
+            ],
+            "pairIndex": 0,
+            "neutralProgress": 0,
+            "reducedMotion": false
+          },
+          "screenshot": "large-ipad-1366x1024-dpr2_awaiting-first.png"
+        },
+        {
+          "stateName": "awaiting-second",
+          "expectedActualPhases": [
+            "awaiting-second"
+          ],
+          "geometry": {
+            "phase": "awaiting-second",
+            "repairStage": "none",
+            "viewport": {
+              "width": 1366,
+              "height": 1024,
+              "scrollWidth": 1366,
+              "scrollHeight": 1024
+            },
+            "zones": {
+              "map": null,
+              "panel": {
+                "x": 10,
+                "y": 76,
+                "width": 1346,
+                "height": 653.53
+              },
+              "speech": {
+                "x": 210.67,
+                "y": 120.47,
+                "width": 330,
+                "height": 98
+              },
+              "character": {
+                "x": 46.67,
+                "y": 459.36,
+                "width": 230,
+                "height": 234
+              },
+              "source": {
+                "x": 745.08,
+                "y": 202.97,
+                "width": 112,
+                "height": 112
+              },
+              "world": {
+                "x": 525.55,
+                "y": 515.88,
+                "width": 721.63,
+                "height": 146
+              },
+              "compare": null,
+              "replay": {
+                "x": 873.08,
+                "y": 234.97,
+                "width": 52,
+                "height": 52
+              },
+              "progress": {
+                "x": 840.44,
+                "y": 652.77,
+                "width": 446.09,
+                "height": 28
+              },
+              "keyboard": {
+                "x": 21,
+                "y": 745.53,
+                "width": 1324,
+                "height": 258.47
+              }
+            },
+            "hiddenTargetCarrier": 0,
+            "keyboardCarriers": 0,
+            "slotNotes": [
+              "C",
+              null
+            ],
+            "pairIndex": 0,
+            "neutralProgress": 0,
+            "reducedMotion": false
+          },
+          "screenshot": "large-ipad-1366x1024-dpr2_awaiting-second.png"
+        },
+        {
+          "stateName": "wrong-first",
+          "expectedActualPhases": [
+            "wrong-first"
+          ],
+          "geometry": {
+            "phase": "wrong-first",
+            "repairStage": "wrong-first",
+            "viewport": {
+              "width": 1366,
+              "height": 1024,
+              "scrollWidth": 1366,
+              "scrollHeight": 1024
+            },
+            "zones": {
+              "map": null,
+              "panel": {
+                "x": 10,
+                "y": 76,
+                "width": 1346,
+                "height": 653.53
+              },
+              "speech": {
+                "x": 210.67,
+                "y": 120.47,
+                "width": 330,
+                "height": 98
+              },
+              "character": {
+                "x": 46.67,
+                "y": 459.36,
+                "width": 230,
+                "height": 234
+              },
+              "source": {
+                "x": 745.08,
+                "y": 202.97,
+                "width": 112,
+                "height": 112
+              },
+              "world": {
+                "x": 525.55,
+                "y": 515.88,
+                "width": 721.63,
+                "height": 146
+              },
+              "compare": null,
+              "replay": {
+                "x": 873.08,
+                "y": 234.97,
+                "width": 52,
+                "height": 52
+              },
+              "progress": {
+                "x": 840.44,
+                "y": 652.77,
+                "width": 446.09,
+                "height": 28
+              },
+              "keyboard": {
+                "x": 21,
+                "y": 745.53,
+                "width": 1324,
+                "height": 258.47
+              }
+            },
+            "hiddenTargetCarrier": 0,
+            "keyboardCarriers": 0,
+            "slotNotes": [
+              "D",
+              "D"
+            ],
+            "pairIndex": 0,
+            "neutralProgress": 0,
+            "reducedMotion": false
+          },
+          "screenshot": "large-ipad-1366x1024-dpr2_wrong-first.png"
+        },
+        {
+          "stateName": "wrong-second",
+          "expectedActualPhases": [
+            "wrong-second"
+          ],
+          "geometry": {
+            "phase": "wrong-second",
+            "repairStage": "wrong-second",
+            "viewport": {
+              "width": 1366,
+              "height": 1024,
+              "scrollWidth": 1366,
+              "scrollHeight": 1024
+            },
+            "zones": {
+              "map": null,
+              "panel": {
+                "x": 10,
+                "y": 76,
+                "width": 1346,
+                "height": 653.53
+              },
+              "speech": {
+                "x": 210.67,
+                "y": 120.47,
+                "width": 330,
+                "height": 98
+              },
+              "character": {
+                "x": 46.67,
+                "y": 459.36,
+                "width": 230,
+                "height": 234
+              },
+              "source": {
+                "x": 745.08,
+                "y": 202.97,
+                "width": 112,
+                "height": 112
+              },
+              "world": {
+                "x": 525.55,
+                "y": 515.88,
+                "width": 721.63,
+                "height": 146
+              },
+              "compare": null,
+              "replay": {
+                "x": 873.08,
+                "y": 234.97,
+                "width": 52,
+                "height": 52
+              },
+              "progress": {
+                "x": 840.44,
+                "y": 652.77,
+                "width": 446.09,
+                "height": 28
+              },
+              "keyboard": {
+                "x": 21,
+                "y": 745.53,
+                "width": 1324,
+                "height": 258.47
+              }
+            },
+            "hiddenTargetCarrier": 0,
+            "keyboardCarriers": 0,
+            "slotNotes": [
+              "C",
+              "C"
+            ],
+            "pairIndex": 0,
+            "neutralProgress": 0,
+            "reducedMotion": false
+          },
+          "screenshot": "large-ipad-1366x1024-dpr2_wrong-second.png"
+        },
+        {
+          "stateName": "assisted",
+          "expectedActualPhases": [
+            "assisted"
+          ],
+          "geometry": {
+            "phase": "assisted",
+            "repairStage": "assisted",
+            "viewport": {
+              "width": 1366,
+              "height": 1024,
+              "scrollWidth": 1366,
+              "scrollHeight": 1024
+            },
+            "zones": {
+              "map": null,
+              "panel": {
+                "x": 10,
+                "y": 76,
+                "width": 1346,
+                "height": 653.53
+              },
+              "speech": {
+                "x": 210.67,
+                "y": 120.47,
+                "width": 330,
+                "height": 98
+              },
+              "character": {
+                "x": 46.67,
+                "y": 459.36,
+                "width": 230,
+                "height": 234
+              },
+              "source": {
+                "x": 745.08,
+                "y": 202.97,
+                "width": 112,
+                "height": 112
+              },
+              "world": {
+                "x": 525.55,
+                "y": 515.88,
+                "width": 721.63,
+                "height": 146
+              },
+              "compare": {
+                "x": 643.63,
+                "y": 612.47,
+                "width": 312,
+                "height": 62
+              },
+              "replay": {
+                "x": 873.08,
+                "y": 234.97,
+                "width": 52,
+                "height": 52
+              },
+              "progress": {
+                "x": 840.44,
+                "y": 652.77,
+                "width": 446.09,
+                "height": 28
+              },
+              "keyboard": {
+                "x": 21,
+                "y": 745.53,
+                "width": 1324,
+                "height": 258.47
+              }
+            },
+            "hiddenTargetCarrier": 0,
+            "keyboardCarriers": 1,
+            "slotNotes": [
+              null,
+              null
+            ],
+            "pairIndex": 0,
+            "neutralProgress": 0,
+            "reducedMotion": false
+          },
+          "screenshot": "large-ipad-1366x1024-dpr2_assisted.png"
+        },
+        {
+          "stateName": "sound-paused",
+          "expectedActualPhases": [
+            "sound-paused"
+          ],
+          "geometry": {
+            "phase": "sound-paused",
+            "repairStage": "none",
+            "viewport": {
+              "width": 1366,
+              "height": 1024,
+              "scrollWidth": 1366,
+              "scrollHeight": 1024
+            },
+            "zones": {
+              "map": null,
+              "panel": {
+                "x": 10,
+                "y": 76,
+                "width": 1346,
+                "height": 653.53
+              },
+              "speech": {
+                "x": 210.67,
+                "y": 120.47,
+                "width": 330,
+                "height": 98
+              },
+              "character": {
+                "x": 46.67,
+                "y": 459.36,
+                "width": 230,
+                "height": 234
+              },
+              "source": {
+                "x": 745.08,
+                "y": 202.97,
+                "width": 112,
+                "height": 112
+              },
+              "world": {
+                "x": 525.55,
+                "y": 515.88,
+                "width": 721.63,
+                "height": 146
+              },
+              "compare": null,
+              "replay": {
+                "x": 873.08,
+                "y": 234.97,
+                "width": 52,
+                "height": 52
+              },
+              "progress": {
+                "x": 840.44,
+                "y": 652.77,
+                "width": 446.09,
+                "height": 28
+              },
+              "keyboard": {
+                "x": 21,
+                "y": 745.53,
+                "width": 1324,
+                "height": 258.47
+              }
+            },
+            "hiddenTargetCarrier": 0,
+            "keyboardCarriers": 0,
+            "slotNotes": [
+              null,
+              null
+            ],
+            "pairIndex": 0,
+            "neutralProgress": 0,
+            "reducedMotion": false
+          },
+          "screenshot": "large-ipad-1366x1024-dpr2_sound-paused.png"
+        },
+        {
+          "stateName": "visual-assist",
+          "expectedActualPhases": [
+            "visual-assist"
+          ],
+          "geometry": {
+            "phase": "visual-assist",
+            "repairStage": "assisted",
+            "viewport": {
+              "width": 1366,
+              "height": 1024,
+              "scrollWidth": 1366,
+              "scrollHeight": 1024
+            },
+            "zones": {
+              "map": null,
+              "panel": {
+                "x": 10,
+                "y": 76,
+                "width": 1346,
+                "height": 653.53
+              },
+              "speech": {
+                "x": 210.67,
+                "y": 120.47,
+                "width": 330,
+                "height": 98
+              },
+              "character": {
+                "x": 46.67,
+                "y": 459.36,
+                "width": 230,
+                "height": 234
+              },
+              "source": {
+                "x": 745.08,
+                "y": 202.97,
+                "width": 112,
+                "height": 112
+              },
+              "world": {
+                "x": 525.55,
+                "y": 515.88,
+                "width": 721.63,
+                "height": 146
+              },
+              "compare": {
+                "x": 643.63,
+                "y": 612.47,
+                "width": 220,
+                "height": 62
+              },
+              "replay": {
+                "x": 873.08,
+                "y": 234.97,
+                "width": 52,
+                "height": 52
+              },
+              "progress": {
+                "x": 840.44,
+                "y": 652.77,
+                "width": 446.09,
+                "height": 28
+              },
+              "keyboard": {
+                "x": 21,
+                "y": 745.53,
+                "width": 1324,
+                "height": 258.47
+              }
+            },
+            "hiddenTargetCarrier": 0,
+            "keyboardCarriers": 2,
+            "slotNotes": [
+              "C",
+              "D"
+            ],
+            "pairIndex": 0,
+            "neutralProgress": 0,
+            "reducedMotion": false
+          },
+          "screenshot": "large-ipad-1366x1024-dpr2_visual-assist.png"
+        },
+        {
+          "stateName": "complete-roots",
+          "expectedActualPhases": [
+            "complete-roots"
+          ],
+          "geometry": {
+            "phase": "complete-roots",
+            "repairStage": "none",
+            "viewport": {
+              "width": 1366,
+              "height": 1024,
+              "scrollWidth": 1366,
+              "scrollHeight": 1024
+            },
+            "zones": {
+              "map": null,
+              "panel": {
+                "x": 10,
+                "y": 76,
+                "width": 1346,
+                "height": 653.53
+              },
+              "speech": {
+                "x": 210.67,
+                "y": 120.47,
+                "width": 330,
+                "height": 98
+              },
+              "character": {
+                "x": 46.67,
+                "y": 459.36,
+                "width": 230,
+                "height": 234
+              },
+              "source": {
+                "x": 745.08,
+                "y": 202.97,
+                "width": 112,
+                "height": 112
+              },
+              "world": {
+                "x": 525.55,
+                "y": 515.88,
+                "width": 721.63,
+                "height": 146
+              },
+              "compare": null,
+              "replay": null,
+              "progress": {
+                "x": 840.44,
+                "y": 652.77,
+                "width": 446.09,
+                "height": 28
+              },
+              "keyboard": {
+                "x": 21,
+                "y": 745.53,
+                "width": 1324,
+                "height": 258.47
+              }
+            },
+            "hiddenTargetCarrier": 0,
+            "keyboardCarriers": 0,
+            "slotNotes": [
+              null,
+              null
+            ],
+            "pairIndex": 4,
+            "neutralProgress": 4,
+            "reducedMotion": false
+          },
+          "screenshot": "large-ipad-1366x1024-dpr2_complete-roots.png"
+        },
+        {
+          "stateName": "unscored-low-echo",
+          "expectedActualPhases": [
+            "unscored-low-echo"
+          ],
+          "geometry": {
+            "phase": "unscored-low-echo",
+            "repairStage": "none",
+            "viewport": {
+              "width": 1366,
+              "height": 1024,
+              "scrollWidth": 1366,
+              "scrollHeight": 1024
+            },
+            "zones": {
+              "map": null,
+              "panel": {
+                "x": 10,
+                "y": 76,
+                "width": 1346,
+                "height": 653.53
+              },
+              "speech": {
+                "x": 210.67,
+                "y": 120.47,
+                "width": 330,
+                "height": 98
+              },
+              "character": {
+                "x": 46.67,
+                "y": 459.36,
+                "width": 230,
+                "height": 234
+              },
+              "source": {
+                "x": 745.08,
+                "y": 202.97,
+                "width": 112,
+                "height": 112
+              },
+              "world": {
+                "x": 525.55,
+                "y": 515.88,
+                "width": 721.63,
+                "height": 146
+              },
+              "compare": null,
+              "replay": null,
+              "progress": {
+                "x": 840.44,
+                "y": 652.77,
+                "width": 446.09,
+                "height": 28
+              },
+              "keyboard": {
+                "x": 21,
+                "y": 745.53,
+                "width": 1324,
+                "height": 258.47
+              }
+            },
+            "hiddenTargetCarrier": 0,
+            "keyboardCarriers": 0,
+            "slotNotes": [
+              null,
+              null
+            ],
+            "pairIndex": 4,
+            "neutralProgress": 4,
+            "reducedMotion": false
+          },
+          "screenshot": "large-ipad-1366x1024-dpr2_unscored-low-echo.png"
+        },
+        {
+          "stateName": "reduced-motion",
+          "expectedActualPhases": [
+            "guide-first"
+          ],
+          "geometry": {
+            "phase": "guide-first",
+            "repairStage": "none",
+            "viewport": {
+              "width": 1366,
+              "height": 1024,
+              "scrollWidth": 1366,
+              "scrollHeight": 1024
+            },
+            "zones": {
+              "map": null,
+              "panel": {
+                "x": 10,
+                "y": 76,
+                "width": 1346,
+                "height": 653.53
+              },
+              "speech": {
+                "x": 210.67,
+                "y": 120.47,
+                "width": 330,
+                "height": 98
+              },
+              "character": {
+                "x": 46.67,
+                "y": 459.36,
+                "width": 230,
+                "height": 234
+              },
+              "source": {
+                "x": 745.08,
+                "y": 202.97,
+                "width": 112,
+                "height": 112
+              },
+              "world": {
+                "x": 525.55,
+                "y": 515.88,
+                "width": 721.63,
+                "height": 146
+              },
+              "compare": null,
+              "replay": {
+                "x": 873.08,
+                "y": 234.97,
+                "width": 52,
+                "height": 52
+              },
+              "progress": {
+                "x": 840.44,
+                "y": 652.77,
+                "width": 446.09,
+                "height": 28
+              },
+              "keyboard": {
+                "x": 21,
+                "y": 745.53,
+                "width": 1324,
+                "height": 258.47
+              }
+            },
+            "hiddenTargetCarrier": 0,
+            "keyboardCarriers": 1,
+            "slotNotes": [
+              "C",
+              "D"
+            ],
+            "pairIndex": 0,
+            "neutralProgress": 0,
+            "reducedMotion": true
+          },
+          "screenshot": "large-ipad-1366x1024-dpr2_reduced-motion.png"
+        }
+      ]
+    }
+  ],
+  "failures": [],
+  "browserErrors": [],
+  "generatedAt": "2026-07-13T13:03:59.502Z",
+  "contractSha256": "f155250e2f81a94701634c4442aada851ea4bb8662d9b8010a83fc5cded25ea8",
+  "status": "browser_coordinate_contract_passed_device_unverified"
+}

@@ -2,6 +2,43 @@
 
 This file records concrete pass/fail evidence for UI, teaching, and polish gates. It is not a substitute for the acceptance rules in `15_ACCEPTANCE_GATES.md`; it is the evidence trail.
 
+## 2026-07-13 - Overhaul 343a C3-07 / LS08 Two-Sound Root Memory
+
+Scope: LS08 only, against supervisor work order commit `5d5fd7b`. LS01-LS07 behavior and thresholds, Chapter 4, approved-media integration, curriculum fact sources and the global CSS architecture remain unchanged.
+
+Runtime and evidence semantics:
+
+- LS07 completion only exposes the LS08 map marker. A child map click creates the independent `C3-07` session and unlocks sound; render, refresh and debug URLs do not create sessions or evidence.
+- Every fresh or resumed session performs visible, unscored C then D guide steps. Guide evidence is stored outside the four-pair denominator. Two difficult guide sessions schedule a remediation-only C/D guide; that session records zero scored pairs and cannot enter hidden check.
+- The persisted four-pair sequence contains C-D, E-D, C-C and D-E exactly once. Stable requires at least 3/4 qualifying first-complete responses in one complete session, a clean guide in that session, at most one whole-pair child replay, and no strong, modeled, visual-assist, experimental microphone, reveal or crossed-session evidence.
+- C-C requires two discrete onsets and release/rearm for screen, MIDI and microphone routes. Refresh preserves a first input but clears active route state; continuous microphone quiet records only the first real false-to-true rearm transition.
+- The first complete two-note response, its input route and response time are immutable. Later cross-route repair remains in `inputEvents`, cannot backfill qualifying correctness, and `timingUsedForMastery` is always false.
+- Wrong repair schedules the complete child response before the complete target pair with a neutral gap. System replay is counted only after that transaction ends. Map requests wait for audio end; refresh enters the matching `sound-paused` transaction and requires an explicit recovery gesture without recounting wrong/input evidence.
+- Candidate-outside pairs such as MIDI 61 or wrong octave 72 use strong C/D/E boundary repair instead of a one-answer pair card. Valid lower-to-target and higher-to-target confusions use the same neutral sorted card style, so the target appears in both first and second positions across scenarios.
+- Guide notes, guide soft repair, target pairs, wrong repair, direct modeled pairs and the final low echo all use started-to-ended lifecycles. Map requests queue while audio is active; refresh interrupts to the correct sound-paused context. Modeled evidence/progress and Chapter 3 completion are written only after the relevant sound window ends.
+- Pointer down/up plus the browser click submits one onset. Per-key suppression handles near-simultaneous pointers without a global-key collision. Direct click, Enter/Space and assistive activation each play one child key sound, show press/release feedback and write one onset plus one rearm; two independent activations can complete C-C.
+- Four story pairs complete neutral root knots, then one unscored C4-to-C3 story event plays. The event stores `startedAt`, `endedAt`, playback attempts and `timingUsedForMastery=false`; only an ended event completes LS08 and Chapter 3. No C3 key, low-note teaching, LP01 session or Chapter 4 auto-start is created.
+- Ordinary child-visible text and child-facing ARIA remain letter-only. Dinosaur dialogue may sing Do/Re/Mi; parent evidence may keep adult mappings and octave IDs. M07 remains C-D-E-D-C and M08 remains C-D-E-F-G after a forced Service Worker refresh.
+
+Focused and shared gates:
+
+- `check:chapter3-ls08`: three consecutive `115/115` runs. `check:chapter3-ls06-ls07`: `64/64`; LS05 `65/65`; LS04 isolated final rerun `39/39`; Chapter 3 visible `74/74`; child note names `183/183`.
+- Sessions `72/72`; clean-state `124/124`; M03/garden `32/32`; assembly `39/39`; workshop identity `36/36`; M01 hierarchy `17/17`; roof route `97/97`; staff repair/readability/mini `27/27`, `13/13`, `20/20`; continuity `14/14`.
+- PWA `7/7`; input reliability `12/12`; audio settings `13/13`; iPad accessibility `43/43`; motion `19/19`; palette `17/17`; contrast `9/9`; Xingya suit `23/23`.
+- Generic teaching zones passed six temporary-output viewports with zero failures/errors and internal SHA-256 `cc784618404b82b1d923e1b53c41c17dfb1706494043410b815165be277c383a`. Legacy Chapter 3 zones passed six temporary-output viewports with zero failures/errors and internal SHA-256 `579ddd5ea2bb8a19cfded9cba4442a9c3970108138600144dcb51919bbc3bb24`. Historical contract JSON files were not overwritten.
+- `check:quick` and `check:bundle:strict` passed. Strict bundle remains 41 files and 1,641,265 runtime-asset bytes; runtime references to `concepts/**`, `audio/**` and technical previews remain zero.
+- One shared-batch LS04 fixed five-second phase sample timed out, and a second isolated run reached a later fixed wait before timing out. The final isolated rerun passed `39/39` without runtime or lesson timing changes; this is recorded as evidence-harness load sensitivity, not hidden as a runtime pass.
+
+Coordinate and screenshot evidence:
+
+- Contract ID `chapter3-ls08-media-zones-overhaul-343a-v1`, baseline `overhaul-343a`, build identity `overhaul-343a-p1`, `runtimeIntegrationAllowed=false`.
+- Six landscape browser viewports cover 14 actual-phase-bound states: `map-entry`, `guide-first`, `guide-second`, `pair-playing`, `awaiting-first`, `awaiting-second`, `wrong-first`, `wrong-second`, `assisted`, `sound-paused`, `visual-assist`, `complete-roots`, `unscored-low-echo`, `reduced-motion`.
+- Three consecutive fixed-directory runs produced internal SHA-256 `f155250e2f81a94701634c4442aada851ea4bb8662d9b8010a83fc5cded25ea8`, zero failures, zero browser errors and zero hidden target carriers. Final JSON file SHA-256: `AC5A6D99128EC0A5E8B74EF0D51F0F7470850B9F4808F3445AADE6D10F1EE97B`.
+- Original-size focused evidence is in `screenshots/chapter3_ls08_343a/`; six-viewport state evidence is in `screenshots/chapter3_ls08_media_zones_343a_v1/`. Manual review covered guide, waiting, awaiting-second, wrong, neutral pair, assisted, visual-assist, sound-paused, complete roots, low echo and map rest at 1024x768, 1194x834 DPR2 and 1366x1024.
+- Manual review found no target cue in hidden states, no text/control overlap, clear neutral completed knots, a distinct persistent visual-assist state, and no low C key teaching. `screenshots/child_note_names_340d/ipad-1024x768_M07_forced_refresh.png` visibly shows C-D-E-D-C; Do appears only in the dinosaur bubble.
+
+Status: browser runtime, focused evidence, coordinate contract and shared regression are `passed`. Runtime media integration is intentionally disallowed. Physical iPad Safari, real MIDI hardware, acoustic microphone, teacher review, 3-5 child sessions and external similarity/release clearance remain `missing`. No curriculum, equipment, media or sound-contract contradiction was found.
+
 ## 2026-07-13 - Overhaul 342a C3-05 / LS06 and C3-06 / LS07 Listening Slices
 
 Scope: LS06 and LS07 only, against supervisor fact source commit `99b8c8e`. LS08, the Chapter 3 exit, approved-media integration, LS01-LS05 behavior, Chapter 1/2 semantics and the global CSS architecture remain unchanged.
