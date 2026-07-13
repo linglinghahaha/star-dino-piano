@@ -2,6 +2,34 @@
 
 This file records concrete pass/fail evidence for UI, teaching, and polish gates. It is not a substitute for the acceptance rules in `15_ACCEPTANCE_GATES.md`; it is the evidence trail.
 
+## 2026-07-14 - Overhaul 343a P2 LS08 Same-Key Pointer Release Follow-up
+
+Scope: LS08 pointer lifecycle and evidence identity only, against frozen runtime commit `66a31b4`. No lesson order, sequence, scoring, mastery, audio transaction, other level, curriculum source or runtime media integration changed.
+
+Runtime correction:
+
+- LS08 screen-pointer ownership is stored by stable MIDI plus `pointerToken -> midi`, rather than by replaceable keyboard DOM nodes. The first accepted onset may redraw the keyboard without losing held-pointer identity or pressed feedback.
+- Only the first active pointer on one physical key starts the press animation, ripple, piano sound and `child-key(pointer)` trace. Overlapping pointers on that same key still reach the formal input contract as `not-rearmed` observations but produce no second sound or onset.
+- Pointer-generated clicks consume their own bounded suppression tokens. Direct click, Enter/Space and assistive activation remain independent one-sound, one-onset, one-release paths.
+- Key-local release and document-capture `pointerup` / `pointercancel` share the same idempotent token removal. Releasing over the scene after DOM replacement works; one overlapping pointer cannot rearm the route while another remains held. Window blur remains the full cleanup fallback.
+- Pending click suppression expires after a bounded window. A canceled or externally released pointer cannot leave a permanent MIDI activation entry.
+
+Focused and affected gates:
+
+- Final `check:chapter3-ls08` equivalent run on the isolated local static server passed `118/118`. New cases cover same-key overlap across DOM replacement, a third overlap before final release, document-level pointerup, document-level pointercancel, exactly one pointer sound/onset/final rearm, bounded click suppression and the next independent activation.
+- Input reliability passed `12/12`; PWA shell passed `7/7`; iPad accessibility passed `43/43`; `check:quick` and `check:bundle:strict` passed. Strict bundle remains 41 files and 1,641,265 runtime-asset bytes.
+- Two preliminary runs against the pre-existing port 4173 service ended in non-assertion `page.goto` timeouts while direct HTTP remained 200. Final evidence used a clean static server on port 4174 with unchanged runtime and navigation timeouts; no sleep, retry masking or playback duration change was introduced.
+
+V2 evidence identity:
+
+- Current runtime identity is `overhaul-343a-p2`; PWA cache is `star-dino-pwa-overhaul-343a-v2`. The package LS08 zone gate points to `chapter3-ls08-media-zone-contract-343a-v2.mjs`, V2 JSON and the V2 screenshot directory.
+- Contract ID `chapter3-ls08-media-zones-overhaul-343a-v2`, 6 viewports x 14 actual-phase-bound states, `runtimeIntegrationAllowed=false`, zero failures and zero browser errors.
+- Three consecutive fixed-directory runs produced internal SHA-256 `92ab00d2dec178dd33db2a937eceac1aa0408d4ddbff03be09d5555c0ca0219f`. Final V2 JSON SHA-256: `687E0F7913871BF560F93378D15BB6143F6454090AB47DFBEB1EE12D197CD115`.
+- Historical V1 script and JSON remain unchanged. V1 JSON SHA-256 is still `AC5A6D99128EC0A5E8B74EF0D51F0F7470850B9F4808F3445AADE6D10F1EE97B`.
+- V2 screenshots are in `screenshots/chapter3_ls08_media_zones_343a_v2/`. Of 84 files, 80 are byte-identical to V1; manual original-size comparison of the 4 dynamic-byte differences found no target cue, layout, copy, control, keyboard or state regression.
+
+Status: browser runtime, focused pointer evidence, affected shared gates and V2 coordinate evidence are `passed`. Physical multi-touch iPad Safari, real MIDI hardware, acoustic microphone, teacher review, 3-5 child sessions and release clearance remain `missing`. No curriculum, equipment, media or sound-contract contradiction was found.
+
 ## 2026-07-13 - Overhaul 343a C3-07 / LS08 Two-Sound Root Memory
 
 Scope: LS08 only, against supervisor work order commit `5d5fd7b`. LS01-LS07 behavior and thresholds, Chapter 4, approved-media integration, curriculum fact sources and the global CSS architecture remain unchanged.

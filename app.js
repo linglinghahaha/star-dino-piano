@@ -4681,7 +4681,130 @@ function staffDinoPosition() {
   return { x: 11.4, y: 83.5, place: "start" };
 }
 
-const ls08PointerHandledKeys = new WeakSet();
+const LS08_POINTER_CLICK_SUPPRESSION_MS = 1200;
+const ls08PointerActivations = new Map();
+const ls08PointerMidiByToken = new Map();
+const ls08DocumentReleaseEvents = new WeakSet();
+let ls08FallbackPointerToken = 0;
+
+function ls08PointerToken(event, { createFallback = false } = {}) {
+  const pointerId = Number(event?.pointerId);
+  if (Number.isInteger(pointerId) && pointerId >= 0) return `pointer:${pointerId}`;
+  if (!createFallback) return null;
+  ls08FallbackPointerToken += 1;
+  return `fallback:${ls08FallbackPointerToken}`;
+}
+
+function ensureLs08PointerActivation(midi) {
+  let activation = ls08PointerActivations.get(midi);
+  if (!activation) {
+    activation = {
+      activePointers: new Set(),
+      pendingClicks: new Set(),
+      cleanupTimer: null
+    };
+    ls08PointerActivations.set(midi, activation);
+  }
+  return activation;
+}
+
+function scheduleLs08PointerCleanup(midi, activation) {
+  clearTimeout(activation.cleanupTimer);
+  activation.cleanupTimer = setTimeout(() => {
+    if (activation.activePointers.size) {
+      scheduleLs08PointerCleanup(midi, activation);
+      return;
+    }
+    activation.pendingClicks.clear();
+    ls08PointerActivations.delete(midi);
+  }, LS08_POINTER_CLICK_SUPPRESSION_MS);
+}
+
+function beginLs08PointerActivation(midi, event) {
+  const activation = ensureLs08PointerActivation(midi);
+  const token = ls08PointerToken(event, { createFallback: true });
+  const startsNewKeyPress = activation.activePointers.size === 0;
+  activation.activePointers.add(token);
+  activation.pendingClicks.add(token);
+  ls08PointerMidiByToken.set(token, midi);
+  scheduleLs08PointerCleanup(midi, activation);
+  return startsNewKeyPress;
+}
+
+function endLs08PointerActivation(midi, event) {
+  const activation = ls08PointerActivations.get(midi);
+  if (!activation) return { tracked: false, shouldRelease: false };
+  const token = ls08PointerToken(event);
+  if (!token || !activation.activePointers.delete(token)) {
+    return { tracked: false, removed: false, shouldRelease: false };
+  }
+  ls08PointerMidiByToken.delete(token);
+  scheduleLs08PointerCleanup(midi, activation);
+  return { tracked: true, removed: true, shouldRelease: activation.activePointers.size === 0 };
+}
+
+function consumeLs08PointerClick(midi, event) {
+  const activation = ls08PointerActivations.get(midi);
+  if (!activation?.pendingClicks.size) return false;
+  const token = ls08PointerToken(event);
+  let pendingToken = null;
+  if (token) {
+    if (!activation.pendingClicks.has(token)) return false;
+    pendingToken = token;
+  } else if (Number(event?.detail) > 0) {
+    pendingToken = activation.pendingClicks.values().next().value;
+  }
+  if (!pendingToken) return false;
+  activation.pendingClicks.delete(pendingToken);
+  scheduleLs08PointerCleanup(midi, activation);
+  return true;
+}
+
+function clearAllLs08PointerActivations() {
+  const activeMidis = [];
+  for (const [midi, activation] of ls08PointerActivations) {
+    if (activation.activePointers.size) activeMidis.push(midi);
+    activation.activePointers.forEach((token) => ls08PointerMidiByToken.delete(token));
+    activation.activePointers.clear();
+    scheduleLs08PointerCleanup(midi, activation);
+  }
+  syncLs08RenderedPointerState();
+  activeMidis.forEach((midi) => releaseGardenInput(midi, "屏幕"));
+}
+
+function releaseLs08PointerFromDocument(event) {
+  const token = ls08PointerToken(event);
+  const midi = token ? ls08PointerMidiByToken.get(token) : null;
+  if (!Number.isFinite(midi)) return;
+  const activation = endLs08PointerActivation(midi, event);
+  if (!activation.removed) return;
+  ls08DocumentReleaseEvents.add(event);
+  syncLs08RenderedPointerState();
+  if (activation.shouldRelease) releaseGardenInput(midi, "屏幕");
+}
+
+function ls08MidiHasActivePointer(midi) {
+  return Boolean(ls08PointerActivations.get(midi)?.activePointers.size);
+}
+
+function syncLs08RenderedPointerState() {
+  if (!els.keyboard) return;
+  let hasActivePointer = false;
+  els.keyboard.querySelectorAll(".white-key[data-midi]").forEach((key) => {
+    const active = ls08MidiHasActivePointer(Number(key.dataset.midi));
+    key.classList.toggle("pressed", active);
+    hasActivePointer ||= active;
+  });
+  if (hasActivePointer) {
+    els.keyboard.classList.remove("is-releasing");
+    els.keyboard.classList.add("is-playing");
+    return;
+  }
+  if (!els.keyboard.classList.contains("is-playing")) return;
+  els.keyboard.classList.remove("is-playing");
+  els.keyboard.classList.add("is-releasing");
+  setTimeout(() => els.keyboard?.classList.remove("is-releasing"), 160);
+}
 
 function renderKeyboard(target, options = {}) {
   els.keyboard.innerHTML = "";
@@ -4749,37 +4872,49 @@ function renderKeyboard(target, options = {}) {
       : "";
     key.innerHTML = `${tapBadge}${keyFindTag}${keyLocatorVisual}<span class="key-color-dot" aria-hidden="true"></span><div class="key-content">${keyLabel}</div>`;
     key.addEventListener("pointerdown", (event) => {
-      beginKeyboardPress(key);
+      const isLs08Pointer = state.screen === "garden" && Boolean(currentLs08Action());
+      const startsNewKeyPress = isLs08Pointer ? beginLs08PointerActivation(note.midi, event) : true;
       key.setPointerCapture?.(event.pointerId);
-      showKeyPressRipple(key);
-      const played = playPianoNote(note.frequency, { gain: 0.10, duration: 0.42 });
-      if (state.screen === "garden" && currentLs08Action()) {
-        ls08PointerHandledKeys.add(key);
+      let played = false;
+      if (startsNewKeyPress) {
+        beginKeyboardPress(key);
+        showKeyPressRipple(key);
+        played = playPianoNote(note.frequency, { gain: 0.10, duration: 0.42 });
+      }
+      if (isLs08Pointer) {
         if (played) traceLs08(ensureLs08Attempt(), "child-key", { reason: "pointer", midis: [note.midi], pairIndex: ensureLs08Attempt()?.pairIndex });
         handleInput(note.midi, "屏幕");
       }
       if (state.screen === "play" && !isListeningLevel() && activeLevel()?.id !== "M08") showKeyPressLabel(key, note);
     });
-    key.addEventListener("pointerup", () => {
-      releaseKeyboardPress(key);
-      releaseGardenInput(note.midi, "屏幕");
-      setTimeout(() => {
-        ls08PointerHandledKeys.delete(key);
-      }, 0);
+    key.addEventListener("pointerup", (event) => {
+      if (ls08DocumentReleaseEvents.has(event)) return;
+      const activation = endLs08PointerActivation(note.midi, event);
+      if (activation.tracked && activation.removed) {
+        syncLs08RenderedPointerState();
+        if (activation.shouldRelease) releaseGardenInput(note.midi, "屏幕");
+      } else if (!activation.tracked) {
+        releaseKeyboardPress(key);
+        releaseGardenInput(note.midi, "屏幕");
+      }
     });
-    key.addEventListener("pointerleave", () => releaseKeyboardPress(key));
-    key.addEventListener("pointercancel", () => {
-      releaseKeyboardPress(key);
-      releaseGardenInput(note.midi, "屏幕");
-      ls08PointerHandledKeys.delete(key);
+    key.addEventListener("pointerleave", () => {
+      if (!ls08MidiHasActivePointer(note.midi)) releaseKeyboardPress(key);
     });
-    key.addEventListener("click", () => {
+    key.addEventListener("pointercancel", (event) => {
+      if (ls08DocumentReleaseEvents.has(event)) return;
+      const activation = endLs08PointerActivation(note.midi, event);
+      if (activation.tracked && activation.removed) {
+        syncLs08RenderedPointerState();
+        if (activation.shouldRelease) releaseGardenInput(note.midi, "屏幕");
+      } else if (!activation.tracked) {
+        releaseKeyboardPress(key);
+        releaseGardenInput(note.midi, "屏幕");
+      }
+    });
+    key.addEventListener("click", (event) => {
+      if (consumeLs08PointerClick(note.midi, event)) return;
       if (state.screen === "garden" && currentLs08Action()) {
-        if (ls08PointerHandledKeys.has(key)) {
-          ls08PointerHandledKeys.delete(key);
-          releaseGardenInput(note.midi, "屏幕");
-          return;
-        }
         beginKeyboardPress(key);
         showKeyPressRipple(key);
         const played = playPianoNote(note.frequency, { gain: 0.10, duration: 0.42 });
@@ -4791,9 +4926,15 @@ function renderKeyboard(target, options = {}) {
       }
       handleInput(note.midi, "屏幕");
     });
-    key.addEventListener("blur", () => ls08PointerHandledKeys.delete(key));
+    key.addEventListener("blur", () => {
+      key.classList.remove("pressed");
+      if (ls08PointerActivations.has(note.midi)) syncLs08RenderedPointerState();
+      else releaseKeyboardPress(key);
+    });
     els.keyboard.appendChild(key);
   });
+
+  if (state.screen === "garden" && (currentLs08Action() || ls08PointerActivations.size)) syncLs08RenderedPointerState();
 
   for (const keyDef of [
     ["black-cs", "C#", "14.285714%"],
@@ -11338,6 +11479,9 @@ function registerPwaShell() {
 }
 
 document.addEventListener("pointerdown", unlockAudioFromGesture, { capture: true, passive: true });
+document.addEventListener("pointerup", releaseLs08PointerFromDocument, { capture: true });
+document.addEventListener("pointercancel", releaseLs08PointerFromDocument, { capture: true });
+window.addEventListener("blur", clearAllLs08PointerActivations);
 document.addEventListener("keydown", (event) => {
   if (!event.metaKey && !event.ctrlKey && !event.altKey) unlockAudioFromGesture();
 }, { capture: true });

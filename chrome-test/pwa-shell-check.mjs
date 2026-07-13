@@ -124,7 +124,7 @@ try {
 
   const cacheInventory = await page.evaluate(async () => {
     const cacheNames = await caches.keys();
-    const cacheName = cacheNames.find((name) => name === "star-dino-pwa-overhaul-343a-v1") || "";
+    const cacheName = cacheNames.find((name) => name === "star-dino-pwa-overhaul-343a-v2") || "";
     const requests = cacheName ? await (await caches.open(cacheName)).keys() : [];
     const paths = requests.map((request) => new URL(request.url).pathname + new URL(request.url).search);
     return { cacheNames, cacheName, paths, controlled: Boolean(navigator.serviceWorker.controller) };
@@ -140,7 +140,7 @@ try {
   ];
   record(
     "local cache contains every index runtime stylesheet and script, with no concept or candidate media",
-    cacheInventory.controlled && cacheInventory.cacheName === "star-dino-pwa-overhaul-343a-v1" &&
+    cacheInventory.controlled && cacheInventory.cacheName === "star-dino-pwa-overhaul-343a-v2" &&
       requiredShellPaths.every((item) => cacheInventory.paths.includes(item)) &&
       !cacheInventory.paths.some((item) => /(?:assets\/generated|concepts|audio|chrome-test|screenshots)/i.test(item)),
     { ...cacheInventory, runtimeEntries, requiredShellPaths }

@@ -484,18 +484,131 @@ const multiPair = current.attempt.sequence[0];
 await multiPointerActivation.page.evaluate(({ firstMidi, secondMidi }) => {
   const first = document.querySelector(`#keyboard .white-key[data-midi="${firstMidi}"]`);
   const second = document.querySelector(`#keyboard .white-key[data-midi="${secondMidi}"]`);
+  const dispatch = (key, type, pointerId) => key.dispatchEvent(new PointerEvent(type, { bubbles: true, pointerId, pointerType: "touch", detail: type === "click" ? 1 : 0 }));
   first.setPointerCapture = () => {};
   second.setPointerCapture = () => {};
-  first.dispatchEvent(new PointerEvent("pointerdown", { bubbles: true, pointerId: 11, pointerType: "touch" }));
-  second.dispatchEvent(new PointerEvent("pointerdown", { bubbles: true, pointerId: 12, pointerType: "touch" }));
-  first.dispatchEvent(new PointerEvent("pointerup", { bubbles: true, pointerId: 11, pointerType: "touch" }));
-  first.click();
-  second.dispatchEvent(new PointerEvent("pointerup", { bubbles: true, pointerId: 12, pointerType: "touch" }));
-  second.click();
+  dispatch(first, "pointerdown", 11);
+  dispatch(second, "pointerdown", 12);
+  dispatch(first, "pointerup", 11);
+  dispatch(first, "click", 11);
+  dispatch(second, "pointerup", 12);
+  dispatch(second, "click", 12);
 }, { firstMidi: multiPair[0], secondMidi: multiPair[1] === multiPair[0] ? 62 : multiPair[1] });
 current = await view(multiPointerActivation.page);
 record("Two near-simultaneous pointer sequences use per-key suppression and cannot synthesize a second onset", current.attempt.pairInputs.length === 1 && current.attempt.pairInputEvents.filter((event) => event.event === "onset").length === 1 && current.attempt.observations.some((item) => item.reason === "not-rearmed"), current.attempt);
 await multiPointerActivation.context.close();
+
+const sameKeyMultiPointer = await reachSamePair("屏幕");
+const sameKeyDomLifecycle = await sameKeyMultiPointer.page.evaluate(() => {
+  const dispatch = (key, type, pointerId) => key.dispatchEvent(new PointerEvent(type, { bubbles: true, pointerId, pointerType: "touch", detail: type === "click" ? 1 : 0 }));
+  const snapshot = () => {
+    const runtime = JSON.parse(localStorage.getItem("starDinoSessionRuntime") || "{}");
+    const attempt = runtime.active?.actions?.[runtime.active.actionIndex || 0]?.listeningAttempt;
+    const currentKey = document.querySelector('#keyboard .white-key[data-midi="60"]');
+    return {
+      pairInputs: attempt?.pairInputs?.slice() || [],
+      onsets: attempt?.pairInputEvents?.filter((event) => event.event === "onset").length || 0,
+      releases: attempt?.pairInputEvents?.filter((event) => event.event === "release-rearm").length || 0,
+      pointerSounds: attempt?.audioTrace?.filter((event) => event.kind === "child-key" && event.reason === "pointer").length || 0,
+      accessibleSounds: attempt?.audioTrace?.filter((event) => event.kind === "child-key" && event.reason === "accessible-click").length || 0,
+      notRearmed: attempt?.observations?.some((item) => item.reason === "not-rearmed") || false,
+      pressed: currentKey?.classList.contains("pressed") || false
+    };
+  };
+  const oldKey = document.querySelector('#keyboard .white-key[data-midi="60"]');
+  oldKey.setPointerCapture = () => {};
+  dispatch(oldKey, "pointerdown", 11);
+  const newKey = document.querySelector('#keyboard .white-key[data-midi="60"]');
+  newKey.setPointerCapture = () => {};
+  const replaced = newKey !== oldKey && !oldKey.isConnected && newKey.isConnected;
+  dispatch(newKey, "pointerdown", 12);
+  dispatch(oldKey, "pointerup", 11);
+  dispatch(oldKey, "click", 11);
+  const latestKey = document.querySelector('#keyboard .white-key[data-midi="60"]');
+  latestKey.setPointerCapture = () => {};
+  dispatch(latestKey, "pointerdown", 13);
+  dispatch(latestKey, "pointerup", 13);
+  dispatch(latestKey, "click", 13);
+  const beforeLastRelease = snapshot();
+  dispatch(newKey, "pointerup", 12);
+  dispatch(newKey, "click", 12);
+  return { replaced, oldKeyConnected: oldKey.isConnected, beforeLastRelease, afterLastRelease: snapshot() };
+});
+const sameKeyOverlap = await view(sameKeyMultiPointer.page);
+await sameKeyMultiPointer.page.evaluate(() => {
+  const key = document.querySelector('#keyboard .white-key[data-midi="60"]');
+  const dispatch = (type) => key.dispatchEvent(new PointerEvent(type, { bubbles: true, pointerId: 14, pointerType: "touch", detail: type === "click" ? 1 : 0 }));
+  key.setPointerCapture = () => {};
+  dispatch("pointerdown");
+  dispatch("pointerup");
+  dispatch("click");
+});
+current = await view(sameKeyMultiPointer.page);
+record("Overlapping pointers survive keyboard DOM replacement and cannot synthesize C-C before a later discrete activation", sameKeyDomLifecycle.replaced && sameKeyDomLifecycle.oldKeyConnected === false && sameKeyDomLifecycle.beforeLastRelease.pointerSounds === 1 && sameKeyDomLifecycle.beforeLastRelease.accessibleSounds === 0 && sameKeyDomLifecycle.beforeLastRelease.onsets === 1 && sameKeyDomLifecycle.beforeLastRelease.releases === 0 && sameKeyDomLifecycle.beforeLastRelease.notRearmed && sameKeyDomLifecycle.beforeLastRelease.pressed && sameKeyDomLifecycle.afterLastRelease.pointerSounds === 1 && sameKeyDomLifecycle.afterLastRelease.onsets === 1 && sameKeyDomLifecycle.afterLastRelease.releases === 1 && !sameKeyDomLifecycle.afterLastRelease.pressed && sameKeyOverlap.attempt.pairInputs.join(",") === "60" && current.attempt.audioTrace.filter((event) => event.kind === "child-key" && event.reason === "pointer").length === 2 && current.attempt.scoredPairs.at(-1)?.targetMidis.join(",") === "60,60" && current.attempt.scoredPairs.at(-1)?.discreteOnsets.join(",") === "true,true", { lifecycle: sameKeyDomLifecycle, overlap: sameKeyOverlap.attempt, finalAttempt: current.attempt });
+await sameKeyMultiPointer.context.close();
+
+const externalPointerRelease = await reachSamePair("屏幕");
+const externalReleaseLifecycle = await externalPointerRelease.page.evaluate(() => {
+  const dispatch = (target, type, pointerId) => target.dispatchEvent(new PointerEvent(type, { bubbles: true, pointerId, pointerType: "touch", detail: type === "click" ? 1 : 0 }));
+  const oldKey = document.querySelector('#keyboard .white-key[data-midi="60"]');
+  oldKey.setPointerCapture = () => {};
+  dispatch(oldKey, "pointerdown", 21);
+  const newKey = document.querySelector('#keyboard .white-key[data-midi="60"]');
+  dispatch(document.body, "pointerup", 21);
+  const runtime = JSON.parse(localStorage.getItem("starDinoSessionRuntime") || "{}");
+  const attempt = runtime.active?.actions?.[runtime.active.actionIndex || 0]?.listeningAttempt;
+  return {
+    replaced: newKey !== oldKey && !oldKey.isConnected && newKey.isConnected,
+    pairInputs: attempt?.pairInputs?.slice() || [],
+    onsets: attempt?.pairInputEvents?.filter((event) => event.event === "onset").length || 0,
+    releases: attempt?.pairInputEvents?.filter((event) => event.event === "release-rearm").length || 0,
+    pressed: newKey.classList.contains("pressed")
+  };
+});
+await externalPointerRelease.page.evaluate(() => {
+  const key = document.querySelector('#keyboard .white-key[data-midi="60"]');
+  const dispatch = (type) => key.dispatchEvent(new PointerEvent(type, { bubbles: true, pointerId: 22, pointerType: "touch", detail: type === "click" ? 1 : 0 }));
+  key.setPointerCapture = () => {};
+  dispatch("pointerdown");
+  dispatch("pointerup");
+  dispatch("click");
+});
+current = await view(externalPointerRelease.page);
+record("Document-level pointerup releases a redrawn key once and permits the next independent pointer", externalReleaseLifecycle.replaced && externalReleaseLifecycle.pairInputs.join(",") === "60" && externalReleaseLifecycle.onsets === 1 && externalReleaseLifecycle.releases === 1 && !externalReleaseLifecycle.pressed && current.attempt.scoredPairs.at(-1)?.targetMidis.join(",") === "60,60" && current.attempt.audioTrace.filter((event) => event.kind === "child-key" && event.reason === "pointer").length === 2, { lifecycle: externalReleaseLifecycle, finalAttempt: current.attempt });
+await externalPointerRelease.context.close();
+
+const externalOverlapRelease = await reachSamePair("屏幕");
+const externalOverlapLifecycle = await externalOverlapRelease.page.evaluate(() => {
+  const dispatch = (target, type, pointerId) => target.dispatchEvent(new PointerEvent(type, { bubbles: true, pointerId, pointerType: "touch", detail: type === "click" ? 1 : 0 }));
+  const snapshot = () => {
+    const runtime = JSON.parse(localStorage.getItem("starDinoSessionRuntime") || "{}");
+    const attempt = runtime.active?.actions?.[runtime.active.actionIndex || 0]?.listeningAttempt;
+    return {
+      onsets: attempt?.pairInputEvents?.filter((event) => event.event === "onset").length || 0,
+      releases: attempt?.pairInputEvents?.filter((event) => event.event === "release-rearm").length || 0,
+      pointerSounds: attempt?.audioTrace?.filter((event) => event.kind === "child-key" && event.reason === "pointer").length || 0,
+      pressed: document.querySelector('#keyboard .white-key[data-midi="60"]')?.classList.contains("pressed") || false
+    };
+  };
+  const oldKey = document.querySelector('#keyboard .white-key[data-midi="60"]');
+  oldKey.setPointerCapture = () => {};
+  dispatch(oldKey, "pointerdown", 31);
+  const newKey = document.querySelector('#keyboard .white-key[data-midi="60"]');
+  newKey.setPointerCapture = () => {};
+  dispatch(newKey, "pointerdown", 32);
+  dispatch(document.body, "pointerup", 31);
+  const afterFirstExternalRelease = snapshot();
+  dispatch(document.body, "pointercancel", 32);
+  return { afterFirstExternalRelease, afterFinalExternalCancel: snapshot() };
+});
+await externalOverlapRelease.page.waitForTimeout(1400);
+await externalOverlapRelease.page.evaluate(() => {
+  const key = document.querySelector('#keyboard .white-key[data-midi="60"]');
+  key.dispatchEvent(new PointerEvent("click", { bubbles: true, pointerId: 31, pointerType: "touch", detail: 1 }));
+});
+current = await view(externalOverlapRelease.page);
+record("External overlap release waits for the last pointer and pending click suppression expires", externalOverlapLifecycle.afterFirstExternalRelease.onsets === 1 && externalOverlapLifecycle.afterFirstExternalRelease.releases === 0 && externalOverlapLifecycle.afterFirstExternalRelease.pointerSounds === 1 && externalOverlapLifecycle.afterFirstExternalRelease.pressed && externalOverlapLifecycle.afterFinalExternalCancel.onsets === 1 && externalOverlapLifecycle.afterFinalExternalCancel.releases === 1 && externalOverlapLifecycle.afterFinalExternalCancel.pointerSounds === 1 && !externalOverlapLifecycle.afterFinalExternalCancel.pressed && current.attempt.audioTrace.filter((event) => event.kind === "child-key" && event.reason === "accessible-click").length === 1 && current.attempt.scoredPairs.at(-1)?.targetMidis.join(",") === "60,60", { lifecycle: externalOverlapLifecycle, finalAttempt: current.attempt });
+await externalOverlapRelease.context.close();
 
 const accessibleActivation = await reachSamePair("屏幕");
 let cKey = accessibleActivation.page.locator('#keyboard .white-key[data-midi="60"]');

@@ -29,7 +29,7 @@
     "check:chapter3-ls06-zones": "node tools/with-playwright-path.mjs chrome-test/chapter3-paired-media-zone-contract-342a-v1.mjs http://127.0.0.1:4173/ LS06 docs/30_CHAPTER3_LS06_MEDIA_ZONE_CONTRACT_342A_V1.json screenshots/chapter3_ls06_media_zones_342a_v1",
     "check:chapter3-ls07-zones": "node tools/with-playwright-path.mjs chrome-test/chapter3-paired-media-zone-contract-342a-v1.mjs http://127.0.0.1:4173/ LS07 docs/30_CHAPTER3_LS07_MEDIA_ZONE_CONTRACT_342A_V1.json screenshots/chapter3_ls07_media_zones_342a_v1",
     "check:chapter3-ls08": "node tools/with-playwright-path.mjs chrome-test/chapter3-ls08-listening-check.mjs http://127.0.0.1:4173/ screenshots/chapter3_ls08_343a",
-    "check:chapter3-ls08-zones": "node tools/with-playwright-path.mjs chrome-test/chapter3-ls08-media-zone-contract-343a-v1.mjs http://127.0.0.1:4173/ docs/30_CHAPTER3_LS08_MEDIA_ZONE_CONTRACT_343A_V1.json screenshots/chapter3_ls08_media_zones_343a_v1",
+    "check:chapter3-ls08-zones": "node tools/with-playwright-path.mjs chrome-test/chapter3-ls08-media-zone-contract-343a-v2.mjs http://127.0.0.1:4173/ docs/30_CHAPTER3_LS08_MEDIA_ZONE_CONTRACT_343A_V2.json screenshots/chapter3_ls08_media_zones_343a_v2",
     "check:supervisor-339c": "node tools/with-playwright-path.mjs chrome-test/supervisor-339c-continuity-check.mjs http://127.0.0.1:4173/ screenshots/supervisor_340a",
     "check:staff-repair": "node tools/with-playwright-path.mjs chrome-test/staff-repair-layer-check.mjs http://127.0.0.1:4173/ screenshots/staff_repair_334g",
     "check:staff-readability": "node tools/with-playwright-path.mjs chrome-test/staff-readability-check.mjs http://127.0.0.1:4173/ screenshots/staff_readability_334g",
