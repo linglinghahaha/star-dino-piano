@@ -8,7 +8,7 @@ This is the canonical chapter order. Other planning files must use the same numb
 | --- | --- | --- | --- |
 | 1 | 月亮小家 | middle `C4-G4` note identity and keyboard geography | current Web course |
 | 2 | 星星桥 | treble-staff `C4-G4` reading through physical jump pads | current flagship slice |
-| 3 | 会听的小种子 | guided pitch echo, small-set sound-to-key matching, and two-note aural memory | `LS01-LS05` browser implemented; `LS06-LS07` active; `LS08` specified and locked |
+| 3 | 会听的小种子 | guided pitch echo, small-set sound-to-key matching, and two-note aural memory | `LS01-LS07` browser implemented and independently passed; `LS08` runtime dispatched |
 | 4 | 咚咚的低音星球 | high/low contrast, low `C3-G3`, bass staff, left-hand readiness | curriculum specified; not implemented |
 | 5 | 会唱歌的大家园 | hand alternation, simple two-hand coordination, grand staff | curriculum specified; not implemented |
 
