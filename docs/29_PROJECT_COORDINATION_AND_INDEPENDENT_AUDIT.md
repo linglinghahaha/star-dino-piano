@@ -1,6 +1,19 @@
 # 星龙工坊整体调度与独立审查规则
 
-状态：2026-07-13 调度重排继续生效；`overhaul-341a` 已完成主管独立复核并晋升为最新浏览器实现基线。它在 `340d` 的第一、二章、LS01-LS04、音名-only 和确定性证据基础上，完成独立 `C3-04 / LS05` C/D/E 三音听后找键。当前唯一运行工作为 `C3-05 / LS06` 与 `C3-06 / LS07` 的 `overhaul-342a` 收口；LS08、正式媒体集成、全局重构和第四章继续锁定。LS05 花粉铃/三花方向 C 已通过主管 source-clearance 审图，但仍为 `runtimeApproval=false / releaseCleared=false`；它只可作为后续精修基底，不能替代发布美术。LS04 植物/声源提取包仍为 `rejected_extraction`，现有离线音频仍缺人工耳机/扬声器/iPad 听审。没有远程 Git、真实录音、实体 iPad、教师、儿童、最终来源/外部相似性、原生工程、TestFlight 或商店证据，项目整体未达到发布准备状态。
+状态：2026-07-13 调度重排继续生效；`overhaul-342a` 已完成主管独立复核并晋升为最新浏览器实现基线。它在 `341a` 的 C/D/E 单音听后找键基础上，完成独立 `C3-05 / LS06` C/G 大距离声音比较与 `C3-06 / LS07` E/F 相邻声音和黑键组边界比较。当前唯一运行工作解锁为 `C3-07 / LS08` 两声先后记忆；正式媒体运行集成、全局重构、第三章之后的自动推进和第四章继续锁定。LS05 方向 C 以及后续 LS06/LS07 美术只可进入 source-clearance 生产和审图，不得在未获主管逐哈希批准前复制到 runtime。现有离线音频仍缺人工耳机/扬声器/iPad 听审。没有远程 Git、真实录音、实体 iPad、教师、儿童、最终来源/外部相似性、原生工程、TestFlight 或商店证据，项目整体未达到发布准备状态。
+
+## 2026-07-13 `overhaul-342a` LS06/LS07 正式独立裁决
+
+裁决：`passed_browser_baseline / ls06_ls07_teaching_contract_passed / ls08_dispatch_unlocked / release_art_and_external_evidence_missing`。
+
+- 提交边界通过：冻结提交 `e6e27cc1fee57dc0eb2ed4a46f5b6dbb13176ff6` 只包含 LS06/LS07 运行、专项、坐标合同、PWA/version 断言和 `docs/20`；没有混入 LS08、候选媒体、主管课程文档、语音或音效集成。复核前后工作树均 clean。
+- 主管独立复跑 LS06/LS07 专项为 `64/64`。两次可见带路与四次隐藏呼叫分开；C/G、E/F 各自 `2/2`；首答、错后修复、同权 pair、候选外输入、strong、modeled、visual-assist、touch/MIDI/mic、声音恢复、跨 session、stable 和家长证据均通过。LS06 休息只宣布回声藤结果，LS07 休息才宣布边界花结果，guide-rest 和 modeled-rest 不冒充完成。
+- LS06 固定目录连续三次六视口合同内部 SHA-256 均为 `a94dae4345dfa377f6e58f895907f922f0f79ddcfcb59711cde847258e0b3f03`；LS07 在干净验收服务上连续三次均为 `264c7f71a43419b5cf0dcd74f53db25771f6d005d29171c2280ff6aaa7fb1ed2`。每关为 6 视口 x 13 状态 = 78 个状态记录，`phaseMismatch=0`、隐藏 target carrier=0、隐藏 dynamic key=0、overflow=0、failure=0、browser error=0，`runtimeIntegrationAllowed=false`。
+- 一次 LS07 合同在连续长时共享回归后的旧 `4173` Python 服务上出现首次导航 30 秒超时；该服务已运行三天且本地响应约 0.8-1.0 秒。新启的同目录 `4174` 验收服务响应约 30ms，随后 LS07 固定目录三连完全稳定。该事实记录为审查环境负载警告，不被删除，也不作为运行教学失败。
+- 独立共享回归全部通过：LS05 `65/65`、LS04 `39/39`、Chapter 3 visible `74/74`、儿童音名 `183/183`、sessions `72/72`、clean-state `124/124`、M03/garden `32/32`、PWA `7/7`、input `12/12`、audio settings `13/13`、iPad a11y `43/43`、motion `19/19`、palette `17/17`、contrast `9/9`、Xingya suit `23/23`、M01 `17/17`、assembly `39/39`、workshop `36/36`、roof `97/97`、staff readability `13/13`、staff repair `27/27`、staff mini `20/20`、continuity `14/14`、generic/legacy Chapter 3 zones、quick 与 strict bundle。
+- 人工原图确认可见带路、等待、wrong、pair、assisted、sound-paused、visual-assist、complete 和地图休息的教学层级可用；普通孩子界面只显示音名字母，唱名只在小恐龙气泡。当前花园仍是扁平 CSS/线稿，明显低于地图 3D 美术质量，因此只能通过 browser logic，不能称成熟发布美术。
+- 该裁决只解锁 `docs/45` 的 LS08 单独运行工作单，以及媒体任务依据冻结合同生产 LS06/LS07 source-clearance 候选。LS08 之外的运行、任何候选媒体 runtime 集成、第四章和全局重构继续锁定。
+- 仍为 missing：实体 iPad Safari、真实 MIDI、原声钢琴麦克风、耳机/扬声器/iPad 人工听审、教师、3-5 名儿童、最终素材来源、外部相似性、原生工程、TestFlight 与商店证据。
 
 ## 2026-07-13 LS05 花粉铃/三花方向 C 独立裁决
 
@@ -22,14 +35,14 @@
 - Chapter 4 公开任务 `LP02` 改为 `低音 C 的家`；Chapter 5 公开任务 `TH01/TH02` 改为 `两个 C 说你好`、`G 回声接力`。角色台词仍可说 Do/Sol，课程音高、顺序、故事结果和掌握阈值未改变。
 - `docs/03/24/34/35` 已同步孩子动作、谱垫、脚印、桥路线、两小节表格和未来自动化门禁。第四、五章仍无运行实现，不能据此宣称浏览器通过。
 
-## 2026-07-13 LS08 解锁前课程合同预审
+## 2026-07-13 LS08 解锁前课程合同预审（历史，已由 342a 裁决替代）
 
-裁决：`spec_consistency_corrected / runtime_still_locked / LS06_LS07_gate_waiting`。
+当时裁决：`spec_consistency_corrected / runtime_still_locked / LS06_LS07_gate_waiting`。当前有效状态以上方 `overhaul-342a` 正式独立裁决和 `docs/45` 为准。
 
 - 预审发现 `docs/32` 旧段落曾要求 LS08 可见带路困难后，下一 session 直接开始四组隐藏 check；这与 `docs/24/45` 的补教逻辑冲突，也会让最需要教学的孩子跳过带路直接进入考试。
 - `docs/03/32/33/45` 已统一：顺利带路可在同一短课进入一次 check；困难时在中性根芽休息，下次先重做更短的 C-D 可见带路；连续两个 guide session 仍需 strong/modeled 时回到 LS05 C/D 单音补教，不直接开放隐藏双音 check。
 - C-C 跨地图/刷新连续性补充 `secondOnsetRequiresFreshRearm`：保留第一输入和真实证据，但不能把活动 pointer、仍按住的 MIDI note 或未经过安静重置的麦克风持久化成已重新武装；恢复后必须观察新的释放/中性阶段再接收第二起音。
-- 这些修正只提高未来工作单一致性，不解锁 LS08。必须先完成 342a 独立审查、工作树清理和主管明确派发。
+- 这些修正在当时只提高未来工作单一致性，不解锁 LS08；该前置条件现已由上方 342a 独立审查满足。
 
 ## 2026-07-12 `overhaul-341a` LS05 正式独立裁决
 

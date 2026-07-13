@@ -1,6 +1,6 @@
 # LS06-LS07 主管独立验收与运行工作单
 
-状态：`formal_work_order_issued / LS05_gate_passed / runtime_unlocked_for_ls06_ls07_only`
+状态：`independently_passed / browser_baseline_promoted / ls08_unlocked / media_runtime_locked`
 
 ## 一、用途与解锁条件
 
@@ -242,8 +242,9 @@ LS07 必须显示：
 
 ## 十六、当前裁决
 
-- `formal_work_order_issued`：故事、教学轴、短课节奏、证据和验收边界已通过主管预审，原型任务只可实现 `C3-05 / LS06` 与 `C3-06 / LS07`。
-- `baseline`：当前基线为 `overhaul-341a`，运行提交 `34277625400d1f1a4c60a5b29ed267b1f090bdf0`，版本断言提交 `af9293afc5386cc71ac594bec72e0307476ee205`。
-- `locked`：LS08、第三章出口、正式媒体、语音/音效、全局 CSS 重构和第四章仍不得开始。
-- `missing`：正式运行、专项、坐标合同、原尺寸截图、真机、教师和儿童证据。
-- `not_release_ready`：本文件不构成媒体、iPad 或 App Store 放行。
+- `independently_passed`：LS06/LS07 运行、`64/64` 专项、两份六视口 13 状态合同、原尺寸审图和全部共享回归均已由主管独立通过。
+- `baseline`：当前浏览器基线为 `overhaul-342a`，冻结提交 `e6e27cc1fee57dc0eb2ed4a46f5b6dbb13176ff6`。
+- `unlocked`：只解锁 `docs/45` 的 `C3-07 / LS08` 单独运行工作单；媒体可依据冻结坐标合同生产 source-clearance 候选，但不得接入 runtime。
+- `partial`：浏览器教学逻辑通过；花园仍是原型级 CSS/线稿，不是成熟发布美术。一次旧审查服务导航超时已保留记录，干净验收服务三连稳定。
+- `missing`：实体 iPad、真实 MIDI/原声钢琴麦克风、人工听审、教师、3-5 名儿童、最终来源和外部相似性。
+- `not_release_ready`：本文件不构成媒体、iPad、教学有效性或 App Store 放行。
