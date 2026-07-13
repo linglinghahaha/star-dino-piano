@@ -15,6 +15,23 @@
 - 该裁决只解锁 `docs/45` 的 LS08 单独运行工作单，以及媒体任务依据冻结合同生产 LS06/LS07 source-clearance 候选。LS08 之外的运行、任何候选媒体 runtime 集成、第四章和全局重构继续锁定。
 - 仍为 missing：实体 iPad Safari、真实 MIDI、原声钢琴麦克风、耳机/扬声器/iPad 人工听审、教师、3-5 名儿童、最终素材来源、外部相似性、原生工程、TestFlight 与商店证据。
 
+## 2026-07-13 LS06/LS07 花园美术 v1 独立裁决
+
+裁决：`foreground_source_technical_pass / background_art_direction_partial / actual_ui_composite_missing / runtime_forbidden / v2_returned`。
+
+- 主管直接查看三个背景方向、LS06/LS07 原始 prop sheet、透明棋盘、1024x768 七态合成和被拒的星芽动作表。21 个透明道具的边缘、主体完整度和无洋红残留可保留；两侧候选使用同一透明文件复制，尺寸、亮度和高度同权，未发现 C/G 或 E/F 答案 carrier。
+- 媒体自报的 156/156 只覆盖前景 bbox；manifest 明确把全屏背景写成 `not_scored_full_frame_base_layer`。方向 C 左侧大叶片和岩柱进入角色/气泡背景，右侧橙叶靠近进度区，尚无真实文字、角色轮廓或控件对比证据，因此不能用前景零碰撞证明背景安全。
+- 现有 audit-only 合成只画保护矩形，没有保留 342a 的真实 UI、键盘、星芽、气泡、重听和进度。1024 下中央声源约 61px、左右道具约 105px，花、石和完成拱门缺少清楚地面接触，视觉上像悬浮贴层；该证据不能支持成熟运行集成。
+- 方向 C 比当前扁平 CSS 精细，但仍偏平面纸艺和单一绿青色；透明道具更接近 3D clay，前后景材质语言不统一，也未达到现有月球地图的动画电影/手办成熟度。方向 C 降为 `comparison_candidate_art_direction_partial`，不得继续写 selected runtime source。
+- 星芽动作表是通用红色背刺恐龙，没有三颗可数绿色头芽，虽然带星星背包，仍违反角色身份合同；保持 `rejected_character_identity`，不得裁切或复制到运行目录。
+- 媒体任务已收到 v2 窄修：只在候选目录生成更接近月球地图的 3D clay 空花园方向、真实 342a UI 合成、背景保护区可读性和地面接触证据；可做一次批准模型表参考下的星芽动作重试。运行代码、课程、音频和 `assets/runtime` 继续冻结，所有结果仍为 `runtimeApproval=false`。
+
+## 2026-07-13 观察、设备与录音门禁事实修正
+
+- 项目根是有效 Git 工作树；嵌套 WAV 和授权 PDF 探针均命中当前 `.gitignore:39 private-recordings/**`，`private-recordings/README.md` 退出 1、保持未忽略。技术隔离为 `passed`，录音/授权接收仍为 `closed / not requested`。
+- `docs/36/38` 的 Web 参考已从 338a 更新为冻结的 342a；正在开发的 343a/LS08 不能冒充批准基线，更不能冒充 Core MIDI、麦克风、AVAudioSession、真机时延或 TestFlight 证据。
+- `docs/37` 不再错误声称“没有有效 Git”。342a 可用于一名成人陪同、默认不录音录像和不收集身份的方向性观察；LS08、第四章和第五章仍需各自冻结后才能观察对应内容。最终教师、3-5 名儿童、实体 iPad 和最终美术/声音后的复测仍为发布阻断项。
+
 ## 2026-07-13 LS05 花粉铃/三花方向 C 独立裁决
 
 裁决：`source_clearance_direction_c_passed / runtime_forbidden / release_art_missing / external_similarity_missing / physical_device_missing`。
@@ -723,13 +740,13 @@ Chapter 3 媒体保护区合同：
 
 ## 当前固定实施顺序
 
-1. `A -> G1` 与 341a 证据收口已完成：`341a` 是当前主管批准浏览器基线；第一、二章与 Chapter 3 LS01-LS05 已独立通过。
+1. `A -> G2` 已收口：`overhaul-342a` / `e6e27cc1fee57dc0eb2ed4a46f5b6dbb13176ff6` 是当前主管批准浏览器基线；第一、二章与 Chapter 3 LS01-LS07 已独立通过。
 2. `C` 的有效 Git、LFS 与 WAV/PDF 忽略证明已通过；首个源码基线为 `b431c1ab347dd813ac1aa712a05c5f7ab150cf55`，没有远程仓库，也没有接收录音。后续修正必须用新 commit，不得重写该基线。
-3. `G1` 已在 `overhaul-341a` 完成并独立通过：LS05 成为最新浏览器基线，第三章整章仍未完成。
-4. 上一份 LS04 植物提取已拒绝；媒体现只执行 LS05 花粉铃/三花 source-clearance 工作单，任何候选仍不得自行进入 runtime。
-5. 当前执行 `G2: LS06-LS07`，严格按 `docs/44` 分成两个独立自然停点；不得接入媒体或提前开始 LS08。
-6. `G3: LS08` 继续锁定，作为两音记忆和第三章出口单独审查，不用一次大改制造难以定位的听音、状态和素材回归。
-7. 方向性外部观察放在 Chapter 3 闭环后；最终 3-5 名儿童、教师、真机和合规证据仍在最终视觉/声音稳定后重复。
+3. 当前唯一运行工作是 `G3: overhaul-343a / C3-07 / LS08`，严格服从 `docs/45`；原型任务完成专项、六视口合同、截图、共享回归、选择性提交和正式交接前，342a 仍是批准基线。
+4. 媒体任务只修 LS06/LS07 花园 source-only v2：v1 前景道具保留技术候选，背景方向和实际 UI 合成退回；不得联系原型、复制到 runtime 或顺手制作 LS08/Chapter 4 运行素材。
+5. 可在冻结 342a 上准备一次不收集身份、声音或影像的方向性儿童观察；该观察不阻断 LS08 内部开发，也不能外推到未冻结的 LS08、第四章或第五章。最终 3-5 名儿童、教师和真机仍在最终视觉/声音稳定后复测。
+6. 只有 LS08 经主管独立通过并形成第三章自然出口后，才解锁 `docs/46` 的 Chapter 4 LP01-LP02 窄切片；LP03+、完整咚咚揭晓、左手、低音谱表和媒体运行集成继续锁定。
+7. 所有媒体运行集成都必须逐文件哈希、真实 UI 合成、来源/相似性、教学安全和运行回归分别通过；source-clearance、技术预演或生成成功不能自动变成 runtime approved。
 8. Chapter 4、5、原生 iPad、TestFlight 和最终发布按 `I -> J -> K` 推进。A-G 单词玩法继续保持最后项目，不抢占主线资源。
 
 该顺序不允许两个任务同时修改运行代码，也不允许未批准素材先占位进入发布路径。
@@ -739,7 +756,7 @@ Chapter 3 媒体保护区合同：
 - 孩子的星芽录音尚未提供，也未授权上传或训练声音模型；
 - 用户的咚咚录音尚未提供；
 - Gemini MCP 已通过官方 MCP Inspector 实测；当前工具表没有 Veo、视频生成、轮询、编辑或下载能力，因此本轮 Gemini/Veo 视频成片为 `missing`，三张静态生成稿均为拒绝稿；
-- 项目根已建立有效 Git；`private-recordings/probe.wav` 与 `private-recordings/consent.pdf` 均由 `.gitignore:29 private-recordings/**` 命中，README 保持未忽略。当前仍未创建或接收真实录音/授权文件，录音接收只有在用户明确提供、用途授权和唯一负责人接收流程成立后才可开启；
+- 项目根已建立有效 Git；2026-07-13 复核的 `private-recordings/xingya/raw/test.wav` 与 `private-recordings/consent-private/test.pdf` 均由 `.gitignore:39 private-recordings/**` 命中，README 保持未忽略。当前仍未创建或接收真实录音/授权文件，录音接收只有在用户明确提供、用途授权和唯一负责人接收流程成立后才可开启；
 - `326a` 的 8 条 safety-zone v2 透明候选为 `source_clearance_candidate_unapproved`，不能自动迁移到 `338a`、`339a`、`339b`、`339c`、`339d` 或任何后续布局；
 - Gemini Shot 01 因尾部气密套不完整被拒绝，Shot 05 因咚咚角色漂移为通用四足三角龙被拒绝；两者都只能作动作参考，原 MP4 AAC 也不得进入运行混音；
 - 过场动画尚未作为运行素材集成并在 iPad 验证；

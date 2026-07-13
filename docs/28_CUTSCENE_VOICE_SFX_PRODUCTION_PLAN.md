@@ -11,7 +11,7 @@
 - 六段 2-5 秒技术预演使用既有已审核源概念制作，只提供节奏、格式与构图讨论证据。它们不能证明教学安全区或运行适配，也不是逐帧角色动画或 Gemini/Veo 视频。
 - 七个非语音音效小样已经由本地确定性 DSP 原创合成，具有 WAV 源概念、AAC/Opus 运行候选、资产台账和钢琴并播 A/B 审核页。它们仍是 `runtime_candidate_unapproved`。
 - 没有收到、上传、训练、克隆或发布任何儿童或成人声音。星芽和咚咚的角色语音仍为 `missing`，需要用户另行录音和明确授权。
-- 调度任务已作为唯一写入负责人在根 `.gitignore` 安装 `private-recordings/**` 及两个例外规则。2026-07-12 已在有效 Git 工作树中验证 WAV/PDF 两条路径均命中 `.gitignore:29 private-recordings/**`，忽略门禁为 `passed`；`private-recordings/README.md` 保持未忽略。录音接收仍为 `closed / not requested`，直到用户明确提供文件、授权用途并由唯一负责人执行接收。
+- 调度任务已作为唯一写入负责人在根 `.gitignore` 安装 `private-recordings/**` 及两个例外规则。2026-07-13 已在有效 Git 工作树中复核 WAV/PDF 两条路径均命中 `.gitignore:39 private-recordings/**`，忽略门禁为 `passed`；`private-recordings/README.md` 保持未忽略。录音接收仍为 `closed / not requested`，直到用户明确提供文件、授权用途并由唯一负责人执行接收。
 
 ## 一、不能改变的边界
 
@@ -301,7 +301,7 @@ source, promptOrRecipe, license, sha256, reviewStatus
 | 正确/再试无稳定教学音高 | 自动筛查 `passed`，人工听审 `partial` | 周期性分数均低于阈值；需家长/教师和真机复听 |
 | 钢琴并播保护 | LS04 C4/D4 文件级 A/B 与数字 duck 合同 `passed`，运行/真机 `missing` | 三个 cue 各有四条 A/B 混音；自动证据不替代人工耳机、扬声器或 iPad 听审 |
 | 儿童声音是否上传 | `passed: no` | 没有收到或调用任何声音文件/声音模型服务 |
-| `private-recordings` 忽略门禁 | `passed` | 有效 Git 仓库已建立；WAV/PDF 探针均命中 `.gitignore:29 private-recordings/**`，README 保持未忽略；录音接收仍 `closed / not requested` |
+| `private-recordings` 忽略门禁 | `passed` | 有效 Git 仓库已建立；WAV/PDF 探针均命中 `.gitignore:39 private-recordings/**`，README 保持未忽略；录音接收仍 `closed / not requested` |
 | 儿童授权与录音 | `missing` | 需要用户提供固定台词录音和监护人授权 |
 | 成人咚咚录音 | `missing` | 需要用户录制 |
 | 声音克隆 | `missing / not authorized` | 未执行；需要再次明确同意和高风险门禁 |

@@ -228,5 +228,5 @@
 
 - `passed`：设备、触屏、MIDI、麦克风、音频会话、生命周期、性能、无障碍和证据记录协议已锁定。
 - `missing`：没有原生工程、实体 iPad、USB/BLE MIDI、原声钢琴、真机时延、准确率、混音或长时间压力测试结果。
-- `locked_by_native_environment`：Web M08/Chapter 1-2 已在 `overhaul-338a` 形成独立通过的浏览器基线；当前仍缺 macOS/Xcode、实体 iPad 和原生 N0 工程，因此不得创建伪造的 Core MIDI、麦克风、AVAudioSession、真机时延或 TestFlight 通过记录。
+- `locked_by_native_environment`：Web 第一、二章及第三章至 LS07 已在 `overhaul-342a`（提交 `e6e27cc1fee57dc0eb2ed4a46f5b6dbb13176ff6`）形成独立通过的浏览器基线；正在开发的 `343a / LS08` 尚不是批准证据。当前仍缺 macOS/Xcode、实体 iPad 和原生 N0 工程，因此不得创建伪造的 Core MIDI、麦克风、AVAudioSession、真机时延或 TestFlight 通过记录。
 - `release blocked`：本协议中与实际产品宣传相关的设备路线未形成 authoritative evidence 时，项目不能称为成熟 iPad App。

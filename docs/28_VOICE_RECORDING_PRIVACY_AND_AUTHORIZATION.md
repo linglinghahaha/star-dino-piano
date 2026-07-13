@@ -2,7 +2,7 @@
 
 状态：模板；忽略规则安装和有效 Git 仓库中的 WAV/PDF 命中验证均为 `passed`，录音接收门禁仍为 `closed / not requested`。当前没有任何录音、授权文件或声音模型。
 
-调度任务已在根 `.gitignore` 安装 `private-recordings/**` 和两个例外规则。2026-07-12 已确认有效 Git 工作树；`private-recordings/probe.wav` 与 `private-recordings/consent.pdf` 的 `git check-ignore -v --no-index` 都命中 `.gitignore:29 private-recordings/**`，而 `private-recordings/README.md` 保持未忽略。技术忽略验证已通过，但不授权接收：在用户明确提供文件、授权用途并由唯一负责人执行接收前，不得创建 `private-recordings/`，不得接收、复制、下载、处理或上传任何真实家庭录音及签署授权文件。
+调度任务已在根 `.gitignore` 安装 `private-recordings/**` 和两个例外规则。2026-07-13 已确认有效 Git 工作树；`private-recordings/xingya/raw/test.wav` 与 `private-recordings/consent-private/test.pdf` 的 `git check-ignore -v --no-index` 都命中 `.gitignore:39 private-recordings/**`，而 `private-recordings/README.md` 保持未忽略。技术忽略验证已通过，但不授权接收：在用户明确提供文件、授权用途并由唯一负责人执行接收前，不得创建 `private-recordings/`，不得接收、复制、下载、处理或上传任何真实家庭录音及签署授权文件。
 
 ## 最小台词库
 
@@ -58,7 +58,7 @@ git check-ignore -v --no-index private-recordings/xingya/raw/test.wav
 git check-ignore -v --no-index private-recordings/consent-private/test.pdf
 ```
 
-两条命令都必须输出根 `.gitignore` 中的 `private-recordings/**` 命中规则才算 `passed`。2026-07-12 已在有效 Git 工作树中用 `--no-index` 验证 WAV/PDF 两条探针均命中 `.gitignore:29 private-recordings/**`；README 的 quiet 检查退出 1，保持未忽略可作为规则说明模板。忽略验证为 `passed`，录音接收仍 `closed / not requested`，不是自动接收授权。
+两条命令都必须输出根 `.gitignore` 中的 `private-recordings/**` 命中规则才算 `passed`。2026-07-13 已在有效 Git 工作树中用 `--no-index` 验证 WAV/PDF 两条探针均命中 `.gitignore:39 private-recordings/**`；README 的 quiet 检查退出 1，保持未忽略可作为规则说明模板。忽略验证为 `passed`，录音接收仍 `closed / not requested`，不是自动接收授权。
 
 ## 录音批次记录
 
@@ -121,8 +121,8 @@ git check-ignore -v --no-index private-recordings/consent-private/test.pdf
 | 调度已作为根 `.gitignore` 唯一写入负责人 | `passed` |
 | 根 `.gitignore` 已包含三条 private-recordings 规则 | `passed` |
 | 有效 Git 工作树 | `passed` |
-| `git check-ignore -v --no-index` 验证原始 WAV 路径 | `passed`：`.gitignore:29 private-recordings/**` |
-| `git check-ignore -v --no-index` 验证签署授权 PDF 路径 | `passed`：`.gitignore:29 private-recordings/**` |
+| `git check-ignore -v --no-index` 验证原始 WAV 路径 | `passed`：`.gitignore:39 private-recordings/**` |
+| `git check-ignore -v --no-index` 验证签署授权 PDF 路径 | `passed`：`.gitignore:39 private-recordings/**` |
 | `private-recordings/README.md` quiet 检查 | `passed`：退出 1，保持未忽略 |
 | 录音接收 | `closed / not requested`：等待用户明确文件、用途授权与唯一负责人接收 |
 | 台词属于已确认 Line ID | 待录音时填写 |

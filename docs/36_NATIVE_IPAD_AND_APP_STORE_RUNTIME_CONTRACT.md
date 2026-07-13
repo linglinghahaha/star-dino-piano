@@ -1,6 +1,6 @@
 # 原生 iPad、Core MIDI 与 App Store 运行合同
 
-状态：`specification_passed / web_reference_ready_at_338a / architecture_choice_open / native_runtime_missing / mac_xcode_account_device_store_evidence_missing`
+状态：`specification_passed / web_reference_ready_at_342a / architecture_choice_open / native_runtime_missing / mac_xcode_account_device_store_evidence_missing`
 
 负责人：课程故事、整体调度与独立审查任务锁定行为、教学、隐私和放行证据；未来原生 iPad 任务拥有 Xcode 工程和原生桥接写入权；Web 原型任务只提供已通过的行为参考；媒体任务只交付经批准的运行格式与来源台账。
 
@@ -39,7 +39,7 @@
 
 N0 只证明平台可行性，不建立 App Store 或课程完成声明。没有 Mac 时继续 Web 课程和素材工作，不伪造 Xcode/TestFlight 证据。
 
-2026-07-12 状态：`overhaul-338a` 已满足“至少一个独立通过的 Web 教学参考”前置条件。N0 仍不能开始，因为当前没有可核验的 macOS/Xcode、实体 iPad、签名账号和原生工程环境；等待这些条件不妨碍继续完成 Web 课程、素材和审查。
+2026-07-13 状态：`overhaul-342a`（提交 `e6e27cc1fee57dc0eb2ed4a46f5b6dbb13176ff6`）已形成第一、二章及第三章至 LS07 的独立通过 Web 教学参考；正在开发的 `343a / LS08` 仍不计入批准基线。N0 仍不能开始，因为当前没有可核验的 macOS/Xcode、实体 iPad、签名账号和原生工程环境；等待这些条件不妨碍继续完成 Web 课程、素材和审查。
 
 ### N1 原生纵切
 
