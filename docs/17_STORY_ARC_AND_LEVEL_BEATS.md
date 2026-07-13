@@ -275,7 +275,7 @@ The teaching details, notes, register, and gates for these ids are canonical in 
 
 | ID | Cute title | Visible problem | Correct world change | Reason for the next level |
 | --- | --- | --- | --- | --- |
-| LP01 | 地底传来“咚” | a seed's low echo makes the ground tremble | the child identifies the low call and a cave outline glows | the cave needs the exact low Do key to open |
+| LP01 | 地底传来“咚” | two same-name sounds answer from different heights | each resolved high/low comparison adds one neutral crack; four cracks make the cave outline glow | the cave now needs the exact low C home to open |
 | LP02 | 低音 C 的家 | Xingya finds two Do homes but only one opens the cave | low Do drops the first foundation stone | two more stones are still floating |
 | LP03 | 三块地基石 | three stones have lost their order | low C-D-E locks them left to right | their tunnel sends an echo downward |
 | LP04 | 地洞回声 | the echo is travelling the wrong way | E-D-C guides it down and Dongdong's silhouette answers | footprints appear beside a three-black group |

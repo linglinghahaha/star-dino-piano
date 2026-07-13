@@ -27,7 +27,7 @@
 | 第四章入口 | `passed_spec` | LS08 只发送未计分低音回声；LP01 才开始正式高低教学 |
 | 第四章故事地理 | `passed_spec_corrected` | “低音星球”只是生态星球地下层的音乐昵称，不是第三颗星球；星芽保持花园模式进入地下生态层 |
 | 孩子端身份载体 | `passed_spec` | 普通任务、地图、键盘、谱垫、轨道、反馈和结果使用 `低音 C/中央 C` 等字母音名；Do/Re/Mi/Fa/Sol 只由角色对话承载，C3/C4 只进成人证据 |
-| LP01 与 LP02 分轴 | `passed_spec_corrected` | LP01 只比较 C3/C4 声音泡泡；LP02 才寻找低音 C3 键位。LP01 困难后的下一 session 先重听一组不计分模型，不重做四次 check，也不无听觉重连地直接找键 |
+| LP01 与 LP02 分轴 | `passed_spec_corrected` | LP01 只比较 C3/C4 声音泡泡：模型阶段可自由重听，check 开始后第一次泡泡触摸即提交，不能候选预听；每 1-2 个已解决调用只增加中性洞纹。LP01 困难会保留 needsPractice 并排入 later opening review。LP02 才寻找低音 C3 键位，触屏为核心、精确 MIDI 最多写 played、麦克风最多辅助故事；LP02 成功不得删除或回填 LP01 听辨证据 |
 | 低音键位顺序 | `passed_spec` | C3-D3-E3 -> E3-F3-G3 -> C3-G3-C3，未跳过 Re/Mi/Fa |
 | 左手引入 | `passed_spec` | LP07 才邀请左手；音高事件不能自动证明实际用手 |
 | 低音谱表 | `passed_spec` | LP08 只教 C3-D3-E3，LP09 补 E3-F3-G3，LP10 只整合已学内容 |

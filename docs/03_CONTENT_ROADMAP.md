@@ -258,7 +258,7 @@ Entry conditions:
 
 | Level | Child-facing mission | New teaching job | Playable note task | Story consequence | Cue fade / check |
 | --- | --- | --- | --- | --- | --- |
-| `LP01` | 地底传来“咚” | hear high vs low before hand/clef labels | distinguish `C3` from `C4` in 3-4 short calls | cave door trembles when the low call is found | sound + character motion first; remove character glow in check |
+| `LP01` | 地底传来“咚” | hear high vs low before hand/clef labels | distinguish `C3` from `C4` in 4 short calls after two unscored models | every resolved call adds one neutral cave crack; the fourth opens a cave glow | model bubbles may be replayed before check; once check starts, the first bubble touch commits the response and no character/position/stereo cue gives the answer |
 | `LP02` | 低音 C 的家 | same solfege/letter can live in another register | find `C3` at the lower two-black-left home; compare with `C4` | first foundation stone lands | keep `低音 C` large; `C3` stays parent/teacher detail |
 | `LP03` | 三块地基石 | low two-black-group geography | `C3-D3-E3` | three stones lock left to right | fade direct key glow after one guided run |
 | `LP04` | 地洞回声 | low descending direction plus sound matching | hear/play `E3-D3-C3` | echo lights travel down the cave | hide answer key before sound; reveal locator only after wrong input |
@@ -281,7 +281,7 @@ Chapter 4 guardrails:
 
 Chapter 4 stable evidence:
 
-- high/low comparison succeeds without character/color being the only clue;
+- high/low comparison succeeds on at least 3 of 4 first responses, with at most one whole-target replay and without candidate preview, character/color/position/stereo answers, strong or modeled help;
 - low `C3-G3` keys are found in reduced cue with no more than two wrong inputs;
 - bass-staff `C3-G3` check finishes without strong target-key glow;
 - parent view separates `低音区玩过`, `低音键位稳定`, and `低音谱位稳定`.
@@ -298,10 +298,11 @@ Remediation:
 
 Do not prototype `LP01 -> LP02 -> LP08 -> LP10` as if it were a child course. That skips the `Re/Mi` key lesson and creates a false staff jump.
 
-Use two short sessions instead:
+Use three short sessions instead:
 
-1. Register/key session: `LP01 -> LP02 -> LP03`.
-2. Familiar-route/staff session: `LP07 -> LP08-mini -> LP10-mini`.
+1. Register-listening session: `LP01` only. Stop after the four high/low calls and the cave glow; do not add key finding in the same observation.
+2. Low-key session: `LP02 -> LP03`. Reconnect the two C homes, then introduce only the low C-D-E keyboard neighborhood.
+3. Familiar-route/staff session: `LP07 -> LP08-mini -> LP10-mini`.
 
 `LP08-mini` uses only bass `C3-D3-E3`. `LP10-mini` crosses only those three already-known pads. They are observation tools, not separate curriculum ids, and must not write full `LP08`, `LP10`, `C3-G3`, or bass-bridge mastery. Add `LP05`, `LP09`, and the full `LP10` before testing the complete C3-G3 course.
 

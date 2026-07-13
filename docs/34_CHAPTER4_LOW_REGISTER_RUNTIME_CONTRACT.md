@@ -28,7 +28,7 @@
 
 ## 二、故事入口与角色连续性
 
-Story mode 只有在 `C3-07/LS08` 达到 played 或 bounded assisted 的章节结尾后才出现第四章入口：根须把未计分低 Do 回声送入地下，地面产生波纹，洞穴轮廓出现。
+Story mode 只有在正式 `C3-07/LS08` session 以 clean、bounded assisted 或 modeled story completion 结束，并真实写入未计分 C4 -> C3 地底回声事件后才出现第四章入口：根须把低 Do 回声送入地下，地面产生波纹，洞穴轮廓出现。stable 不是入口条件；debug/direct、刷新或未结束 session 不能伪造入口，入口必须由孩子下次明确点击才创建 `C4-01`。
 
 教师/调试模式可以直接进入第四章，但必须标记为 direct mode，不得伪造 Chapter 3 completion、stable 或 retained。
 
@@ -43,7 +43,7 @@ Story mode 只有在 `C3-07/LS08` 达到 played 或 bounded assisted 的章节�
 
 | Bundle | 运行内容 | 有意义输入预算 | 永久故事结果 | 自然停点/恢复 |
 | --- | --- | --- | --- | --- |
-| `C4-01` | `LP01 -> LP02` | LP01 最多 4 次高低比较；LP02 1-2 次低 C 找家 | 洞门出现缝隙，第一块地基落下 | LP01 吃力时停在发光洞口；下次先重听一组不计分 C4/C3 模型，再续 LP02，不重播整组四次比较 |
+| `C4-01` | `LP01 -> LP02` | LP01 两次不计分模型 + 4 次高低首答；LP02 1-2 次低 C 找家 | 每 1-2 次已解决比较增加中性洞纹，四题点亮洞口；LP02 让第一块地基落下 | LP01 吃力时停在发光洞口并写 needsPractice；下次先重听一组不计分 C4/C3 模型，再续 LP02，不重播整组四次比较，后续 opening review 再取回高低比较 |
 | `C4-02` | `LP03` | 3 次放石；状态顺利时可加 3 个地基接缝检查 | 三块地基石永久就位 | 接缝检查延期时直接在地基路休息 |
 | `C4-03` | `LP04` | 3 个低音下降输入 | 回声光到达洞底，局部剪影出现 | 剪影保持可见，不自动进入脚印关 |
 | `C4-04` | `LP05` | 3 个 E-F-G 脚印 + 最多 3 次已教近邻比较 | 咚咚完整出现并成为朋友 | 咚咚在最后脚印旁坐下 |
@@ -88,17 +88,20 @@ Story mode 只有在 `C3-07/LS08` 达到 played 或 bounded assisted 的章节�
 
 ### LP01 高低 Do
 
-- 模型阶段先让两个固定、同权重的中性声音泡泡分别播放 C4/C3；泡泡外观相同、位置固定，可由孩子重听，不使用星芽/咚咚发光、上下运动或左右声像编码答案。
+- 模型阶段先让两个固定、同权重、同垂直基线的中性声音泡泡分别播放 C4/C3；左右映射由 session seed 固定且整组不交换。泡泡可在模型阶段自由重听，不使用星芽/咚咚发光、上下运动或左右声像编码答案。
 - 正式比较使用 4 次受约束调用，低/高目标各 2 次，顺序可复现且同一目标不连续超过 2 次。
-- 正式目标从中央中性声源播放，孩子点与它相同的固定声音泡泡；响应映射在整组中不交换，未来目标不能通过动画、位置变化或角色视线泄露。
+- 正式目标从中央中性声源播放；check 开始后第一次点任一泡泡即提交首答并播放所选声音，不提供不计分的候选预听。目标可整题重听，但四次调用中超过一次孩子重听会阻断 stable。响应映射在整组中不交换，未来目标不能通过动画、位置变化、角色视线、左右声像或持久世界进度泄露。
 - LP01 全程不要求找 C3/C4 琴键。MIDI/麦克风事件可作为非计分探索观察，但不能评分、写 correct 或形成 LP01 stable；精确键位动作从 LP02 开始。
-- stable：至少 3/4，目标未被角色、颜色、大小、位置或声像泄露。
+- 每个已解决调用增加一个与高低无关的中性洞纹，第二次和第四次形成可见小成就；答后高/低方向反馈必须在下一题前清除，不能成为未来 target carrier。
+- stable：至少 3/4 第一次泡泡选择正确，最多一次孩子整题重听，无候选预听、strong、modeled、visual-assist、实验输入、跨 session 拼接或错后回填。
 
 ### LP02 低音 C 家
 
 - 同时显示正常权重的 C3/C4 两个键家，只有故事门铃说明“寻找地下家”；不能提前脉冲 C3。
 - 中央 C4 是“名字对、家不同”的接近答案，不记作低音正确，也不羞辱。
 - 后续 reduced-cue 首答正确才可形成独立 C3 家证据；引导完成只记 played。
+- 触屏选择 C3 是核心正确路线。精确 MIDI C3 可形成 played，C4 写 `noteNameCorrect=true/registerCorrect=false`；其它音按真实 note/register 修复。实验麦克风 confirmed C3 最多形成 assisted story completion，不能形成 LP02 stable/retained；uncertain/noisy/bleed/octave-ambiguous 不算 wrong，立即保留触屏接管。
+- LP01 困难后续 LP02 不删除 `needsPractice`；scheduler 必须保留一个以后独立的高低 C opening review，而不是把 LP02 找键成功回填为 LP01 stable。
 
 ### LP03-LP07 低音键位
 
@@ -119,8 +122,8 @@ Story mode 只有在 `C3-07/LS08` 达到 played 或 bounded assisted 的章节�
 
 | 技能 | Played | Stable | 禁止结论 |
 | --- | --- | --- | --- |
-| 高低 C 比较 | 完成 LP01 引导/修复 | 4 次中至少 3 次少提示正确，无视觉/声像答案 | “绝对音感”“低音天赋” |
-| 低音 C 家 | 在提示下找到 C3 | later reduced-cue 首答正确，正确八度 | C4 同名按对算低音正确 |
+| 高低 C 比较 | 四次调用均已解决并让洞口亮起；assisted/modeled 仍只写 played + needsPractice | 同一 session 至少 3/4 个第一次完整泡泡选择正确；最多一次孩子整题重听；无候选预听、strong、modeled、visual-assist、实验输入、跨 session 拼接或错后回填 | “绝对音感”“低音天赋”；把修对结果回填为首答正确 |
+| 低音 C 家 | 引导中触屏找到 C3，或精确 MIDI C3 写 played；confirmed 麦克风只能写 experimental assisted story progress | later reduced-cue 的触屏首答找到正确低音 C；无 strong/modeled/visual/mic，且 MIDI/麦克风不在首版建立 stable | C4 同名按对算低音正确；用 LP02 成功删除或回填 LP01 needsPractice |
 | 低音 C3-G3 键位 | 完成相关引导路线 | reduced-cue 路线最多 2 次 wrong，正确 register，无 strong key glow | LP06 远跳一次等于 G 稳定 |
 | 左手邀请 | LP07 提示左手并完成路线 | 只能记录 prompted/observed；需成人确认才有 actual hand evidence | 仅凭低音音高声称左手技术掌握 |
 | 低音谱位 | 完成 LP08-LP10 guided | LP10 later signal check 最多 2 次 wrong，无 strong glow，所有音正确八度 | 故事过桥等于谱位稳定 |
@@ -177,9 +180,9 @@ retained 只能来自 scheduler 选择的 later opening review。普通重玩、
 
 原型任务至少提供：
 
-1. Story mode 只有真实 C3-07 played/bounded-assisted 结尾才能出现 Chapter 4 入口；direct mode 不伪造前章证据。
-2. LP01 四次高低调用平衡；两个固定声音泡泡同权重且模型/重听可用；无位置变化、颜色、角色、声像泄题；MIDI/麦克风不能评分；3/4 阈值正确。
-3. LP02 C4 接近答案写 nameCorrect/registerWrong，不计低音正确。
+1. Story mode 只有真实 C3-07 clean、bounded-assisted 或 modeled story ending 且未计分地底回声结束后才显示 Chapter 4 入口；必须孩子明确点击才创建 C4 session，direct/debug/刷新不伪造前章证据或自动入章。
+2. LP01 四次高低调用平衡；两个固定声音泡泡同权重；模型泡泡只在 check 前可自由重听，check 中第一次点任一泡泡立即提交且不存在候选预听；孩子整题重听最多一次才可能 stable；每 1-2 个已解决调用只增加中性洞纹；MIDI/麦克风不评分；3/4 首次完整回答、needsPractice 与 later opening-review 队列均正确。
+3. LP02 触屏 C3 是核心正确路线；精确 MIDI C3 最多写 played；confirmed 麦克风最多写 experimental assisted story completion 且不能 stable；C4 写 nameCorrect/registerWrong，不计低音正确，也不能删除或回填 LP01 的听辨证据与 needsPractice。
 4. C3-B4 连续键盘在目标 iPad 横屏视口不分页、不滚动、不拆行，黑键几何正确。
 5. LP03 石头安装与接缝检查状态不同；石头不重置。
 6. LP04 目标音播放前输入关闭，答案键不亮；wrong 先识别孩子音再重放目标。
