@@ -388,17 +388,17 @@
 | 领域 | 成熟 App 放行条件 | 当前证据 | 当前状态 | 唯一负责人/下一触发点 |
 | --- | --- | --- | --- | --- |
 | 产品定位与课程合同 | 五章顺序、每短课目标、音符/谱位/音区、提示递减、played/stable/retained、故事因果和原生迁移不漂移 | `00/02/03/09/14/17/24/31/32/33/34/35/36` 已形成合同 | `passed_spec / teacher_evidence_missing / native_runtime_missing` | 主管；运行实现遇到冲突时裁决，正式发布前教师复核 |
-| 第一、二章 Web 教学闭环 | M01-M08、FG01-FG04、S01 的正式 session、错误修复、自然停点、家长证据和离线壳层稳定 | 独立浏览器基线 `341a` 保留全部第一、二章专项、回归、音名规则和人工审图 | `passed_browser / physical_device_teacher_child_evidence_missing` | 主管维持回归；实体 iPad、教师与儿童证据另行补齐 |
-| 第三章听音花园 | 花园入口、LS01-LS08、小集合隐藏听辨、重听、音频优先、自然停点和证据阈值全部运行通过 | `341a` 已独立通过入口、装备回退、LS01-LS03、early-rest、地图/刷新连续性、LS04 C/D 与 LS05 C/D/E 隐藏听辨；LS06-LS07 已派发，LS08 尚无运行实现 | `runtime_partial / LS01_LS05_browser_passed / LS06_LS07_active / LS08_missing` | 原型只做 LS06-LS07；主管通过后才决定 LS08 |
+| 第一、二章 Web 教学闭环 | M01-M08、FG01-FG04、S01 的正式 session、错误修复、自然停点、家长证据和离线壳层稳定 | 当前独立浏览器基线 `342a` 保留全部第一、二章专项、回归、音名规则和人工审图 | `passed_browser / physical_device_teacher_child_evidence_missing` | 主管维持回归；实体 iPad、教师与儿童证据另行补齐 |
+| 第三章听音花园 | 花园入口、LS01-LS08、小集合隐藏听辨、重听、音频优先、自然停点和证据阈值全部运行通过 | `342a` 已独立通过入口、装备回退、LS01-LS07、early-rest、地图/刷新连续性和 C/D/E/F/G 听辨；`343a` 正在实现独立 LS08，尚未冻结交接 | `runtime_partial / LS01_LS07_browser_passed / LS08_active_unreviewed` | 原型只做 LS08；正式冻结后由主管独立审查，不提前解锁 Chapter 4 |
 | 第四章低音与低音谱表 | C3-G3 双八度真实键盘、音区、高低比较、低音谱位、左手邀请和咚咚故事运行通过 | 课程/故事脚本存在，无运行闭环 | `missing_runtime` | 第三章听音闭环通过后由主管下发观察切片 |
 | 第五章轮流与合作 | 接力主线、可选同时路线、两小节固定原创曲、同等奖励结局和总谱地图运行通过 | 课程/故事脚本存在，无运行闭环 | `missing_runtime` | 第四章低音/谱表门禁通过后下发 |
-| UI、美术与角色动作 | 地图、关卡、键盘、谱桥、五章场景和角色状态达到统一发布质量；无占位物；来源和版权清楚 | `341a` 第一、二章与第三章 LS01-LS05 视觉层级、路线音名和辅助模式通过浏览器审查；花园仍是运行骨架，精确角色源链、外部相似性和后三章素材仍不完整 | `partial / prototype_visual_passed / release_art_missing` | 原型负责运行表现；媒体负责经批准的源素材；主管二次审查 |
+| UI、美术与角色动作 | 地图、关卡、键盘、谱桥、五章场景和角色状态达到统一发布质量；无占位物；来源和版权清楚 | `342a` 第一、二章与第三章 LS01-LS07 的视觉层级、路线音名和辅助模式通过浏览器审查；LS06/LS07 garden-art-v2 的新背景仅通过方向讨论，星芽动作稿因物种漂移和透明碎片被拒绝，花园运行层仍有白圈/占位轨迹和道具材质不统一 | `partial / prototype_visual_passed / media_v2_rejected_for_integration / release_art_missing` | 原型负责运行表现；媒体只做 source-only v3；主管二次审查后才可逐文件集成 |
 | 钢琴音、音效、过场与角色语音 | 真机上钢琴音清晰；SFX/语音不遮盖；过场可跳过/减少动态；授权和隐私完整 | WebAudio 合同和 7 个原创候选存在；完成动画、角色录音、真机混音缺失 | `partial / recording_gate_closed` | 最新布局安全区稳定后解锁媒体；录音门禁有效后才请求用户 |
 | 输入与设备可靠性 | 按 `docs/38` 证明触屏始终可完成、原生 iPad Core MIDI 可靠、麦克风可选且置信度安全、旋转/中断/恢复可用 | 设备协议已完成；浏览器触屏、桌面 MIDI/实验麦克风和输入自动化存在，无实体测量 | `passed_protocol / runtime_partial / physical_iPad_missing` | Web主线稳定后建立原生 iPad 项目，并按 N0/N1 执行真机矩阵 |
 | 低龄可理解性与教学效果 | 按 `docs/37` 由 3-5 名 4-6 岁儿童分多次完成开始、错误、修复、结果和休息；教师复核目标/阈值；最终美术声音后重复验证 | 观察协议与表格已完成；仍只有自动化和成人截图，无合格儿童/教师记录 | `passed_protocol / external_evidence_missing` | 冻结教学纵切后先做一名儿童方向性观察；最终候选执行 3-5 名复测，不由自动化替代 |
 | 隐私、版权与家长门禁 | 无受保护 IP；按 `docs/39` 让资产/音乐/声音来源和最终哈希可追溯并通过独立相似性审查；真实家长挑战；隐私政策、数据地图和权限文案与行为一致 | 原创世界、资产台账和版权协议较强；最终来源包、外部相似性/地区法律复核、真实家长挑战和有效录音忽略验证缺失 | `passed_protocol / implementation_and_external_review_partial` | 主管+媒体+专业/地区复核；TestFlight 前必须通过 |
 | 原生 iPad、TestFlight 与 App Store | `docs/36` 的 N0-N3、35 项门禁、Xcode/iPadOS 工程、签名、设备测试、TestFlight、商店素材、隐私披露和审核准备完成 | 原生验收规格已通过；目前只有 Web/PWA 原型，没有原生工程或设备/商店证据 | `passed_spec / architecture_open / runtime_and_external_evidence_missing` | 一个稳定教学纵切通过且可使用 macOS/Xcode、实体 iPad 和开发者账号后，创建独立原生任务；不要求必须自购 Mac |
-| 发布工程与版本可追溯 | 有效 Git、可复现构建、版本/缓存/截图/坐标合同一致、回滚和迁移计划、正式发布包门禁通过 | `341a` 的版本、缓存、截图、通用回归、LS05 十一态合同和 gate log 已一致；项目根 Git、私密录音 ignore 和连续里程碑提交均有效，但仍无远程备份、发布构建和迁移演练 | `partial / browser_evidence_aligned / git_valid / milestone_commits_present / release_pipeline_missing` | 保持里程碑提交边界；原生/TestFlight 前补远程备份、签名构建、迁移与回滚演练 |
+| 发布工程与版本可追溯 | 有效 Git、可复现构建、版本/缓存/截图/坐标合同一致、回滚和迁移计划、正式发布包门禁通过 | `342a` 的版本、缓存、截图、通用回归、LS06/LS07 独立合同和 gate log 已一致；项目根 Git、私密录音 ignore 和连续里程碑提交均有效，`343a` 仍是未提交运行工作；仍无远程备份、发布构建和迁移演练 | `partial / browser_evidence_aligned / git_valid / milestone_commits_present / active_unfrozen_runtime / release_pipeline_missing` | 保持里程碑提交边界；原生/TestFlight 前补远程备份、签名构建、迁移与回滚演练 |
 | A-G 英文单词玩法 | A/B 身份、年龄定位、词库版权/教学意义和独立玩法完成，不抢占主线 | 只有停放计划 | `parked / missing` | 第一至第五章和发布基础稳定后才启动 |
 
 项目整体只有当上述主线必需行均为 `passed`，且可选 A-G 是否纳入首发范围已有明确产品决定时，才可以调用“成熟 App 已完成”。当前不能因为课程合同较完整或浏览器测试通过而提前结束主管目标。
@@ -750,6 +750,16 @@ Chapter 3 媒体保护区合同：
 8. Chapter 4、5、原生 iPad、TestFlight 和最终发布按 `I -> J -> K` 推进。A-G 单词玩法继续保持最后项目，不抢占主线资源。
 
 该顺序不允许两个任务同时修改运行代码，也不允许未批准素材先占位进入发布路径。
+
+### 2026-07-13 LS06/LS07 garden-art-v2 独立审图裁决
+
+媒体任务在 `concepts/runtime-candidates/ls06-ls07-garden-art-v2/` 交付 Direction D 背景、沿用 v1 的 LS06/LS07 前景道具、三张参考图引导星芽动作切图和 28 张冻结 `342a` 真实 UI 审核合成。主管没有采用 manifest 的人工自审，直接打开批准模型表、原始图、透明棋盘和 1024/1194 合成后裁决为：`art_direction_reference_partial / character_source_rejected / runtime_integration_forbidden`。
+
+- Direction D 的 3D clay 深度、地面感、材质和色彩范围明显优于 Direction C，可锁定为下一轮统一花园美术的方向参考；当前背景原图仍是 comparison candidate，不是可复制到 runtime 的批准资产。
+- 星芽动作稿与 `xingya-model-sheet-v1.png` 冲突：批准模型为三枚光滑青绿色头芽/背棘，新稿变成三片大叶加一枚前方小芽，实际形成四个头顶部件，脸型和尾背棘也漂移。三张透明切图还分别出现右侧黄色碎片或左侧红色悬空碎片，因此整组改判 `rejected_source_concept`，不得保留 selected/source-clearance 语义。
+- 28 张合成和 156/156 几何通过只证明坐标不碰保护区。人工画面仍显示新背景与 v1 小道具材质、尺度不统一，白色轨迹圈和浅蓝占位层争抢注意力，道具像贴在场景上而不是长在花园里；这不满足成熟 App 的统一美术门禁。
+- 媒体下一轮只做 source-only v3：以 Direction D 为风格参考重做同材质、低龄可读的大号 LS06 回声石/藤拱和 LS07 水滴/边界花状态；真实 UI 合成必须保留现有运行层一起审。暂不再次生成星芽，先复用批准模型或既有运行姿势作 audit-only 合成。
+- `runtimeApproval=false`、`integrationAllowed=false`、`releaseCleared=false` 和 runtime references `0` 保持不变。v3 正式冻结并经主管逐图、逐哈希审查前，不联系原型任务、不复制文件、不建立运行引用。
 
 ## 当前必须保持未通过的门禁
 
