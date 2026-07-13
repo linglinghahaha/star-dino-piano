@@ -45,6 +45,7 @@
 ### 顺利路线
 
 1. 正式 LS08 clean、bounded assisted 或 modeled story completion 都可在未计分地底回声结束后显示入口；孩子从地图明确点击地下入口，才创建唯一正式 C4-01 session 并解锁声音。stable 不是入口条件，debug/direct/刷新不造入口或 session。
+   - 上述限制指孩子的 Story mode。教师/自动化审计可以使用显式 `directMode=true / formalSession=false` 的隔离入口查看第四章，但不得写 Chapter 3 completion、正式 C4 session、played、stable、retained、地图解锁或孩子历史；普通 URL 深链不能冒充该模式。
 2. LP01 先完成两个固定声音泡泡的可见模型，再做四次高低 C 比较。
 3. 若 LP01 没有 repeated repair、strong、modeled、长等待或疲劳，可在同一短课进入一次 LP02 可见找家。
 4. LP02 找到低音 C 后第一块地基落下，自动回地图自然休息；不自动开始 LP02 少提示检查或 LP03。
@@ -54,6 +55,7 @@
 - LP01 需要 repeated repair、strong、modeled、长等待或出现疲劳时，保留发光洞口并结束旧 session 为 early-rest；不强行进入 LP02。
 - 下一次明确点击创建新 session，`resumeOfSessionId` 指向旧 session；先重听一组不计分的 C4/C3 模型，再进入 LP02。
 - 不重做 LP01 的完整四次 check，不把重听写成 LP01 correct/stable，也不因 LP01 困难阻止故事进入 LP02；旧 session 写 `needsPractice` 并保留以后独立的 LP01 opening review，LP02 成功不能清除或回填它。
+- early-rest 只记录真正呈现过的调用。当前题可由 bounded modeled 帮助解决，尚未出现的调用必须写为 `notPresented`，不能补造 correct、wrong、responseMs 或四条 scored call。洞口可以由星芽帮助点亮并写 `storyResolvedBySupport=true`，但只有四次调用都真实呈现并解决时才写 LP01 `played`；提前收短只写 partial/needsPractice 和以后复习队列。
 - LP02 自身出现 strong/modeled 时仍可让第一块地基在共同帮助下落下并自然休息，但不得写低音 C 键位 stable。
 
 ## 五、LP01：只听高低 C
@@ -73,6 +75,7 @@
 - MIDI 和麦克风只可记录非评分探索 observation，不能形成 correct、wrong、completion 或 stable。
 - 每个已解决调用增加一个不含高低信息的中性洞纹，第二次和第四次形成可见进展；答后高/低反馈在下一题前完全清除。
 - stable 至少 `3/4` 首次有效触摸正确，最多一次孩子目标重听，且无候选预听、提前揭题、strong、modeled、visual-assist、实验输入、跨 session 拼接或错后回填。
+- 若为保护注意力而提前收短，洞口故事可由角色帮助完成，但洞纹不得假装来自四次孩子作答；运行证据必须同时保留 `presentedCallCount`、`resolvedCallCount`、`unpresentedCallCount`、`storyResolvedBySupport` 和 `storyCompletionSource`。这种路线不写 LP01 played/stable。
 
 ## 六、LP02：低音 C 的家
 
@@ -92,6 +95,7 @@
 1. 第一次错误：先播放孩子选择的泡泡，再播放目标；两个泡泡仍同权，不直接点亮答案，也不只处理“选高、目标低”一种方向。
 2. 第二次同一混淆：允许短暂重听两个泡泡，但视觉顺序保持固定中性，记录 strong 前的 repair。
 3. 再错或长等待：进入 bounded strong；仍失败则 modeled 当前题并在发光洞口自然休息，不伪造剩余比较正确。
+4. 地图点击发生在“孩子选择 -> 目标重播”的修复音频中时，只能排队到该事务结束后返回；刷新中断则进入对应 sound-paused 恢复，不能直接 settle、跳过目标重播或重复计错。
 
 ### LP02
 
@@ -108,6 +112,7 @@
 - 教学音起音后的前 540ms 不被角色语音、环境声、奖励动机或 Foley 遮盖。
 - 声音关闭、音量 0、AudioContext 失败或播放中断时不开放评分；恢复后重播同一题。
 - 正确/错误故事反馈必须无稳定音高或足够弱，不与 C3/C4 混淆。
+- target、孩子选择、目标重播和 modeled 都要区分 `scheduled/started/ended`。只有完整播放窗结束后才可推进洞纹、early-rest 或故事完成；地图返回可以排队，刷新中断不得把“已排程”当作“已听完”。
 
 ## 九、证据合同
 
@@ -120,7 +125,10 @@ LP01 每个 check call 至少记录：
   "sessionId": "...",
   "targetRegister": "low",
   "targetMidi": 48,
-  "firstChildBubble": "low",
+  "sessionSeed": "...",
+  "bubbleMapping": { "bubble-1": 48, "bubble-2": 60 },
+  "firstChildBubbleId": "bubble-1",
+  "firstChildSelectedMidi": 48,
   "inputRoute": "touch-bubble",
   "qualifyingCorrect": true,
   "childReplayCount": 0,
@@ -141,6 +149,8 @@ LP02 至少记录 `targetMidi=48`、首次实际 MIDI/琴键、`noteNameCorrect`
 要求：
 
 - LP01 bubble 证据和 LP02 note 证据不能合并为同一种 correct；
+- 每条 LP01 call 只在真实呈现后创建；提前收短的剩余题只进入 `unpresentedCallCount`，不能生成占位 scored call。session 摘要另存 `presentedCallCount/resolvedCallCount/unpresentedCallCount/storyResolvedBySupport/storyCompletionSource`；四题未全部呈现时 LP01 `played=false`。
+- `bubbleMapping` 在同一 session 固定，`firstChildBubbleId`、实际选择的 MIDI/register 和目标必须分字段保存，不能只保存“选了 low/high”而失去物理按钮与 seed 审计能力。
 - 速度只作观察，不判错、不扣奖励、不参与 stable/retained；
 - resume 前后保留各自真实 sessionId；
 - 历史 stable/retained 不因后来困难删除，当天困难单独写 needsPractice。
@@ -157,6 +167,7 @@ LP02 至少记录 `targetMidi=48`、首次实际 MIDI/琴键、`noteNameCorrect`
 家长端必须分开显示：
 
 - `高低 C 声音比较`：四次首答、重听、strong/modeled、touch bubble、played/stable/needsPractice；
+- 若 LP01 提前收短，家长端显示“本次做到 X/4，洞口由星芽帮助打开，高低比较待复习”，不能同时显示四题完成或“已经玩过”；
 - `低音 C 键位`：低音首答、中央 C 近似、wrong octave、route、played/stable/needsPractice；
 - 明确“不是绝对音感测试”，也不把低音键位正确称为左手能力。
 
@@ -168,14 +179,17 @@ LP02 至少记录 `targetMidi=48`、首次实际 MIDI/琴键、`noteNameCorrect`
 2. LP01 模型不计分且可自由重听；check 后首次泡泡触摸即提交、无免费候选预听；四次 C3/C4 各两次；target-playing 输入 observation；首答、最多一次目标重听和 `3/4` stable 正确。
 3. 两泡泡同权、固定映射、无角色/声像/位置/颜色泄题；MIDI/mic 不评分。
 4. LP01 困难 early-rest、新 session resume、不计分模型重连和只续 LP02。
+   - early-rest 只保留真实 presented calls；未呈现调用数正确，`storyResolvedBySupport=true`，LP01 played/stable 均为 false，LP02 后续成功不清除 needsPractice/opening-review。
 5. LP02 连续 14 白键和真实黑键几何；1024x768、1194x834、1366x1024 无分页、双排或溢出。
 6. 普通文字与 child-facing ARIA 只用音名；中央 C 近似和低音 C 正确证据分开。
 7. LP02 touch C3、MIDI exact C3、C4 同名近似、其它 wrong octave/note、mic assisted-only、uncertain/noisy/bleed、sound-paused、volume 0、AudioContext failure、strong/modeled、地图/刷新连续性。
 8. 无咚咚完整形象、无低音谱表、无 LP03、无结果弹层/下一关按钮、无未批准媒体路径。
 9. LP01 每 1-2 个已解决调用出现中性洞纹进展；困难写 needsPractice/opening-review 队列，LP02 不清除或回填；Chapter 1-3、mastery、retained、音名门禁、PWA 和现有共享回归不变。
 10. 麦克风检测覆盖 simulated confirmed C3，同时把 C4/谐波/低置信/家庭噪声落到正确的近似或不确定状态；不得用扩大频率范围冒充实体 iPad 与原声钢琴通过。LP01 泡泡和 LP02 白键的 pointer、click、键盘/辅助激活各只提交一次，且 child-facing accessibility tree 不泄露目标。
+11. Story mode 的 direct/debug/刷新不造入口或正式证据；显式教师/审计 direct mode 必须 `formalSession=false` 且对 Chapter 3/4 学习历史零写入。
+12. LP01 target、wrong repair、modeled 的地图/刷新恢复保持原音频事务；`scheduled` 不等于 `ended`，不得提前推进洞纹或故事。C4-01 的引导 LP02 即使首答正确也只写 played，LP02 stable 必须保持 0，等待以后独立 reduced-cue session。
 
-新增一个 phase-bound 六视口合同，至少覆盖：chapter4-entry、LP01-model、target-playing、awaiting-response、wrong、assisted、sound-paused、LP01-complete、LP01-early-rest、LP02-guide、LP02-middle-C-near-miss、LP02-assisted、LP02-complete、reduced-motion。状态名与实际 phase 必须原子匹配，固定目录三连 internal hash 一致，`runtimeIntegrationAllowed=false`。
+新增一个 phase-bound 六视口合同，至少覆盖：chapter4-entry、LP01-model、target-playing、awaiting-response、wrong、wrong-repair-playing、assisted、sound-paused、LP01-complete、LP01-early-rest、LP01-supported-story-rest、LP02-guide、LP02-middle-C-near-miss、LP02-assisted、LP02-complete、reduced-motion。状态名与实际 phase 必须原子匹配，固定目录三连 internal hash 一致，`runtimeIntegrationAllowed=false`。
 
 ## 十二、人工与真机仍不可替代
 
