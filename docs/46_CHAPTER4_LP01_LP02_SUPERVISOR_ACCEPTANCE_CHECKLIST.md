@@ -83,6 +83,7 @@
 - 低音 C 的 reduced-cue stable 必须来自后续独立短课或 opening review 的首答正确；不得在完成四次 LP01 后继续追加检查把 C4-01 拉成长课。
 - A/B 可以作为真实键盘邻居低调出现，但不能成为当前目标、奖励或未教身份考题。
 - 触屏 C3 是核心正确路线；精确 MIDI C3 可写 played，C4 写同名近似但 register wrong。实验麦克风 confirmed C3 最多作为 assisted story completion，不写 LP02 stable/retained；uncertain/noisy/bleed/octave-ambiguous 不算 wrong。
+- 当前浏览器麦克风估音下限高于 C3；实现 LP02 前必须把检测与音符映射明确扩展到至少 `C3-B4`，并保留八度谐波歧义保护。只有真实判为 confirmed C3 的事件才可辅助故事；把 C4、C3 的二次谐波或不稳定低频猜成 C3 必须落到 `octave-ambiguous/uncertain`，不能写 correct、wrong 或 completion。该扩展不得让第一至第三章把 A/B、低音或未教身份变成新目标。
 
 ## 七、修复与安全停点
 
@@ -151,6 +152,7 @@ LP02 至少记录 `targetMidi=48`、首次实际 MIDI/琴键、`noteNameCorrect`
 - 不显示正确率、倒计时、速度、stable、retained、C3/C4 或“绝对音感”；
 - 非角色可见文本、ARIA、title、alt、伪元素和反馈只用字母音名与必要定位；
 - 三秒内能看出当前是“听两个声音”还是“在长键盘找下面的 C”，两种任务不能同屏竞争。
+- 两个声音泡泡与 14 个白键保持真实可激活控件语义。触屏 pointer 不能造成 click 二次计数；键盘/VoiceOver 等辅助激活必须能完成相同的单次选择，同时不得通过 accessible name 暴露当前高低目标。两个泡泡可使用固定中性的“声音泡泡 1/2”身份，不得都成为无法区分的同名控件。
 
 家长端必须分开显示：
 
@@ -171,6 +173,7 @@ LP02 至少记录 `targetMidi=48`、首次实际 MIDI/琴键、`noteNameCorrect`
 7. LP02 touch C3、MIDI exact C3、C4 同名近似、其它 wrong octave/note、mic assisted-only、uncertain/noisy/bleed、sound-paused、volume 0、AudioContext failure、strong/modeled、地图/刷新连续性。
 8. 无咚咚完整形象、无低音谱表、无 LP03、无结果弹层/下一关按钮、无未批准媒体路径。
 9. LP01 每 1-2 个已解决调用出现中性洞纹进展；困难写 needsPractice/opening-review 队列，LP02 不清除或回填；Chapter 1-3、mastery、retained、音名门禁、PWA 和现有共享回归不变。
+10. 麦克风检测覆盖 simulated confirmed C3，同时把 C4/谐波/低置信/家庭噪声落到正确的近似或不确定状态；不得用扩大频率范围冒充实体 iPad 与原声钢琴通过。LP01 泡泡和 LP02 白键的 pointer、click、键盘/辅助激活各只提交一次，且 child-facing accessibility tree 不泄露目标。
 
 新增一个 phase-bound 六视口合同，至少覆盖：chapter4-entry、LP01-model、target-playing、awaiting-response、wrong、assisted、sound-paused、LP01-complete、LP01-early-rest、LP02-guide、LP02-middle-C-near-miss、LP02-assisted、LP02-complete、reduced-motion。状态名与实际 phase 必须原子匹配，固定目录三连 internal hash 一致，`runtimeIntegrationAllowed=false`。
 
