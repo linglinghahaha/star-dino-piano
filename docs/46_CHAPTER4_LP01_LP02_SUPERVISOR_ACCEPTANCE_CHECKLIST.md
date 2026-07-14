@@ -67,6 +67,7 @@
 - 两个固定声音泡泡外观、大小、亮度、动作、垂直基线和位置权重相同，分别示范 C4 和 C3；左右映射由 session seed 固定，整轮不随目标交换，并在跨孩子/复习 seed 中保持可平衡。
 - 两个泡泡只在模型阶段可由孩子自由重听；模型阶段不计四次 check、stable 或 retained。正式 check 开始后，第一次点泡泡即提交本题首答并播放所选声音，不存在“先试听候选、再决定答案”的免费预听。
 - 声音泡泡和普通说明不显示 `Do/C`、`C3/C4` 或高低答案文字。角色气泡可说“哪个 Do 住得更低”。
+- “哪个 Do 住得更低”只用于模型教学阶段，帮助孩子第一次建立高低概念。四次正式 check 同时包含高目标和低目标，角色必须改用中性问题，例如“刚才是哪一个声音泡泡？”或“听一听，再点同一个声音”；不得继续要求每题都找低音，也不得用“高/低”措辞提前揭示当前目标。
 
 ### 四次比较
 
@@ -178,7 +179,7 @@ LP02 至少记录 `targetMidi=48`、首次实际 MIDI/琴键、`noteNameCorrect`
 新增独立 `check:chapter4-lp01-lp02`，至少覆盖：
 
 1. 只有正式 LS08 clean/assisted/modeled story completion 加未计分地底回声后显示入口；点击才创建 C4-01，stable 不是入口条件，刷新/debug 不自动播放或写证据。
-2. LP01 模型不计分且可自由重听；check 后首次泡泡触摸即提交、无免费候选预听；四次 C3/C4 各两次；target-playing 输入 observation；首答、最多一次目标重听和 `3/4` stable 正确。
+2. LP01 模型不计分且可自由重听；模型阶段才允许角色问“哪个 Do 住得更低”，check 阶段必须使用不含当前高低答案的中性匹配问题；check 后首次泡泡触摸即提交、无免费候选预听；四次 C3/C4 各两次；target-playing 输入 observation；首答、最多一次目标重听和 `3/4` stable 正确。
 3. 两泡泡同权、固定映射、无角色/声像/位置/颜色泄题；MIDI/mic 不评分。
 4. LP01 困难 early-rest、新 session resume、不计分模型重连和只续 LP02。
    - early-rest 只保留真实 presented calls；未呈现调用数正确，`storyResolvedBySupport=true`，LP01 played/stable 均为 false，LP02 后续成功不清除 needsPractice/opening-review。

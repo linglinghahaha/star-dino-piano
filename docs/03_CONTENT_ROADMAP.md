@@ -298,6 +298,8 @@ Remediation:
 
 Do not prototype `LP01 -> LP02 -> LP08 -> LP10` as if it were a child course. That skips the `Re/Mi` key lesson and creates a false staff jump.
 
+The observation sequence below is deliberately stricter than the normal `C4-01` runtime flow. A smooth in-app session may continue from LP01 into one guided LP02 action, as specified in `docs/34` and `docs/46`; the first external observation intentionally stops after LP01 so an observer can tell whether the child understood the sound-bubble comparison before keyboard geography is introduced.
+
 Use three short sessions instead:
 
 1. Register-listening session: `LP01` only. Stop after the four high/low calls and the cave glow; do not add key finding in the same observation.
