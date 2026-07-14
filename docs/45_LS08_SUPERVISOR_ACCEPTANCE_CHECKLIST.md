@@ -1,10 +1,10 @@
 # LS08 主管独立验收与运行工作单
 
-状态：`formal_work_order_issued / 342a_gate_passed / runtime_unlocked_for_ls08_only`
+状态：`accepted_historical_work_order / 343a_p2_browser_passed / chapter3_exit_passed / chapter4_slice_unlocked`
 
 ## 一、用途与解锁条件
 
-本文件锁定 `C3-07 / LS08`“根须记两声”的课程、故事、输入和证据边界。`overhaul-342a` 已通过主管独立审查，因此本文件现为当前唯一运行工作单；它仍不授权第四章、全局重构或未批准媒体集成。
+本文件锁定 `C3-07 / LS08`“根须记两声”的课程、故事、输入和证据边界。该工作单已由 `overhaul-343a-p2` 完成并通过主管独立审查，现保留为历史验收事实源；下一运行工作已转入 `docs/46` 的 `C4-01 / LP01-LP02`。它仍不授权 LP03+、全局重构或未批准媒体集成。
 
 以下解锁条件已经满足，并保留为提交前复核清单：
 
@@ -279,8 +279,9 @@ Stable 必须同时满足：
 
 ## 十七、当前裁决
 
-- `formal_work_order_issued`：LS08 的教学轴、故事、双音状态机、离散起音、证据和出口边界已通过主管预审，原型任务只可实现 `C3-07 / LS08`。
-- `baseline`：当前浏览器基线为 `overhaul-342a`，冻结提交 `e6e27cc1fee57dc0eb2ed4a46f5b6dbb13176ff6`；LS06/LS07 已完成专项、三连合同和共享回归独立验收。
-- `locked`：第四章 LP01+、正式媒体运行集成、语音/音效、全局 CSS 重构、低音键位教学和自动启动下一章仍不得开始。
-- `missing`：LS08 运行、专项、合同、截图、真机、真实输入设备、教师、儿童、媒体与发布清关。
-- `not_release_ready`：本文件只授权下一浏览器切片，不证明第三章、教学有效性或成熟 App 已完成。
+- `passed_browser`：冻结提交 `d218df468aa7458b672fc540bd3996752b81e9ef`、运行身份 `overhaul-343a-p2`、LS08 专项 `118/118`、共享回归、quick/strict bundle 和 PWA 均通过。第一完整回答、C-C 离散起音、整组重听、wrong/assisted/modeled、跨 session、声音恢复、未计分低音回声、家长证据和第三章自然出口均有自动化证据。
+- `passed_contract`：V2 合同为 6 视口 x 14 实际 phase，三连内部 SHA-256 均为 `92ab00d2dec178dd33db2a937eceac1aa0408d4ddbff03be09d5555c0ca0219f`，零 failure、零 browser error、零 hidden target carrier；JSON SHA-256 为 `687E0F7913871BF560F93378D15BB6143F6454090AB47DFBEB1EE12D197CD115`，8 个源文件哈希与当前提交一致。
+- `passed_visual_prototype`：地图进入、带路、等待、错误比较、共同帮助、根须完成、未计分地底回声和地图休息的原尺寸层级可读；普通界面只显示音名字母，唱名只在小恐龙气泡。V1/V2 当前 84 张对应 PNG 像素完全一致；其中 72 张文件字节一致、12 张仅 PNG 编码/元数据不同，旧 gate log 的 80/4 字节统计已过期但不构成像素回归。
+- `unlocked`：`docs/46` 的 `C4-01 / LP01-LP02` 窄切片可作为下一正式运行工作单；LP03+、完整咚咚揭晓、左手、低音谱表、Chapter 5 和媒体运行集成继续锁定。
+- `missing`：当前花园仍是扁平 CSS/线稿原型，明显低于地图 3D 美术；实体 iPad Safari、真实 MIDI、原声钢琴麦克风、耳机/扬声器/iPad 听审、教师、3-5 名儿童、最终素材来源、外部相似性、原生工程、TestFlight 与商店证据仍缺失。
+- `not_release_ready`：本裁决证明第三章浏览器教学闭环，不证明真实儿童已经学会、发布美术完成或成熟 App 已完成。

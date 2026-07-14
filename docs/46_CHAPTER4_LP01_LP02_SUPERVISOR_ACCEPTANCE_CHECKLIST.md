@@ -1,10 +1,10 @@
-# Chapter 4 LP01-LP02 主管独立验收草案
+# Chapter 4 LP01-LP02 主管独立验收与运行工作单
 
-状态：`draft_ready / ls08_gate_waiting / runtime_locked / media_not_approved`
+状态：`formal_work_order_issued / 343a_gate_passed / runtime_unlocked_for_c4_01_lp01_lp02_only / media_not_approved`
 
 ## 一、用途与解锁条件
 
-本文件预先锁定 `C4-01 / LP01-LP02` 的课程、故事、输入、双八度键盘和证据边界。它不是当前运行工作单，不授权原型任务提前实现第四章。
+本文件锁定 `C4-01 / LP01-LP02` 的课程、故事、输入、双八度键盘和证据边界。`overhaul-343a-p2` 已完成第三章自然出口并通过主管独立审查，因此本文件现为下一唯一运行工作单；只授权本文件范围，不授权 LP03+ 或整章铺开。
 
 只有以下条件全部满足，主管才可把本草案晋升为正式工作单：
 
@@ -12,6 +12,8 @@
 2. LS08 的未计分 C4 -> C3 地底回声和第三章自然出口真实通过，没有自动创建第四章 session；
 3. 工作树 clean，只有原型任务作为唯一运行写者，媒体候选没有待集成修改；
 4. 主管明确下发“只做 C4-01 / LP01-LP02”。
+
+上述条件已由 `overhaul-343a-p2`、`docs/45` 的正式裁决和本文件满足。原型任务仍须在开始前读取当前 active turn；若正在完成不改运行的 source-only 审图工作，可先自然收口再切换，不要求中途丢弃有效证据。
 
 事实源：`03_CONTENT_ROADMAP.md`、`09_SCAFFOLD_AND_ASSESSMENT_RULES.md`、`14_NOTE_IDENTITY_MATRIX.md`、`17_STORY_ARC_AND_LEVEL_BEATS.md`、`24_HUMAN_STORY_AND_LESSON_BOOK.md`、`33_GAME_TEACHING_PACING_AND_MOTIVATION_CONTRACT.md`、`34_CHAPTER4_LOW_REGISTER_RUNTIME_CONTRACT.md`、`40_CHAPTER4_5_COURSE_STORY_AND_ART_READINESS_AUDIT.md`。
 
@@ -205,7 +207,8 @@ LP02 至少记录 `targetMidi=48`、首次实际 MIDI/琴键、`noteNameCorrect`
 
 ## 十三、当前裁决
 
-- `draft_ready`：C4-01 的故事地理、LP01/LP02 分轴、困难重连、双八度键盘、证据和门禁已形成解锁前草案。
-- `locked`：LS08 尚未独立通过，不得派发第四章运行实现。
-- `missing`：运行、专项、合同、截图、双八度真机、教师、儿童、媒体与发布清关。
-- `not_release_ready`：本文件不证明第四章或成熟 App 已完成。
+- `formal_work_order_issued`：C4-01 的故事地理、LP01/LP02 分轴、困难重连、双八度键盘、证据和门禁已通过解锁审查；原型任务只可实现 `C4-01 / LP01-LP02`。
+- `in_scope`：孩子明确点击地底入口、LP01 两模型加四次高低 C 比较、LP02 低音 C 找家、early-rest/resume、声音恢复、连续双八度键盘、专项和 phase-bound 六视口合同。
+- `locked`：LP03+、咚咚完整形象、低音谱表、左手、Chapter 5、正式媒体/语音/音效运行集成和全局重构不得开始。
+- `missing`：运行、专项、合同、截图、双八度真机、真实 MIDI/麦克风、教师、儿童、最终媒体来源、外部相似性与发布清关。
+- `not_release_ready`：本工作单只解锁下一浏览器切片，不证明低音教学、设备可靠性或成熟 App 已完成。

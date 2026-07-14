@@ -278,7 +278,7 @@ Current progress:
 
 ## Phase 2B: Chapter 3 Listening Garden
 
-Status: in progress. Steps 1-7 passed independently through `overhaul-342a`. `C3-07 / LS08` is the only active runtime milestone under `docs/45`; Chapter 4 and media runtime integration remain locked.
+Status: completed in browser at `overhaul-343a-p2`. Steps 1-8 passed independent supervisor review. Chapter 4 `C4-01 / LP01-LP02` is now the only unlocked runtime milestone under `docs/46`; media runtime integration remains locked.
 
 Goal: turn the existing M03 listening seed into a staged story course that links heard piano sound, C/D/E/F/G letter name, Xingya's solfege, real keyboard geography, and neutral story consequences without claiming absolute pitch.
 
@@ -293,7 +293,7 @@ Implementation order:
 5. `[completed at 340d]` Implement `C3-03` (`LS04`) as the first hidden C/D set. The approved browser baseline proves the neutral source, target-free waiting state, balanced calls, candidate reset, bounded repair, stable/retained separation, sound recovery and phase-bound Chapter 3 media-coordinate contract.
 6. `[completed at 341a]` Implement `C3-04 / LS05` as a separate five-call C/D/E milestone. The approved baseline proves strict `2/2/1`, candidate coverage, first-response scoring, call-local repair, candidate-outside handling, sound recovery, visual-assist isolation, cross-session non-stable completion, honest parent evidence and natural rest.
 7. `[completed at 342a]` Implement `C3-05 / LS06` C/G large-distance comparison and, after its natural rest, `C3-06 / LS07` E/F adjacent-boundary comparison. The accepted baseline proves unscored visible guide, balanced hidden calls, neutral progress, honest repair/evidence and separate phase-bound contracts.
-8. `[active: LS08 only]` Implement `C3-07 / LS08` as the two-note-order and Chapter 3 exit milestone under `docs/45`. Keep C-C release/rearm, whole-pair evidence, unscored low echo and no automatic Chapter 4 start explicit; do not include media runtime integration or LP01+.
+8. `[completed at 343a-p2]` Implement `C3-07 / LS08` as the two-note-order and Chapter 3 exit milestone under `docs/45`. The accepted browser baseline proves C-C release/rearm, first-complete pair evidence, bounded whole-pair replay, truthful cross-session story completion, the unscored low echo and no automatic Chapter 4 session.
 
 Acceptance:
 
@@ -305,6 +305,18 @@ Acceptance:
 - LS08 `C-C` requires two discrete onsets on touch, MIDI, and experimental microphone routes;
 - all `docs/32` automated gates pass on one frozen browser baseline before any Chapter 4 runtime work begins;
 - real iPad, real MIDI/acoustic piano, teacher review, and 3-5 child observations remain separate release gates.
+
+## Phase 2C: Chapter 4 First Low-Register Slice
+
+Status: unlocked by the `343a-p2` browser ruling; not implemented. The only runtime work order is `docs/46` for `C4-01 / LP01-LP02`.
+
+Scope:
+
+- child-clicked underground entry and one `C4-01` bundle;
+- `LP01` high/low C comparison using fixed sound bubbles, without keyboard-location scoring;
+- `LP02` low C home on one continuous real two-octave keyboard;
+- truthful early-rest/resume, story-help completion and separate LP01/LP02 evidence;
+- no `LP03+`, full Dongdong reveal, bass staff, left-hand tasks, Chapter 5 or media runtime integration.
 
 ## Phase 3: Art And Animation Polish
 
