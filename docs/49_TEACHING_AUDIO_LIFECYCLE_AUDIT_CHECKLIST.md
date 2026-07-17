@@ -131,7 +131,8 @@
 
 ## 八、放行与剩余证据
 
-- 344a 前置条件已由 `overhaul-344a-p3` / `8cea6d46b725c26d2c8272086eab56b271750b18` 满足；`AUDIO-A` 已正式下发给原型任务，范围仅为 M03 与 LS01-LS03。
+- 344a 前置条件已由 `overhaul-344a-p3` / `8cea6d46b725c26d2c8272086eab56b271750b18` 满足；`AUDIO-A` 已在 `overhaul-345b-audio-a` / `84a8f44213893304736d29ea45f7336d0730469d` 独立通过并冻结。它覆盖 M03 与 LS01-LS03，最终专项为 `66/66`，`app.js` SHA-256 为 `6D6E771DDF7EBE6468A2D58064869CF87A9BBFB73074B1C389C745BD42B9F40E`。
+- 下一唯一运行批次为 `AUDIO-B`（LS04-LS05）。必须从 345b 干净提交开始，保持各自 seed、两音/三音候选集合、首答阈值和故事结果，不得夹带 AUDIO-C、LP03、美术、媒体或课程调整。
 - 只有 `AUDIO-A`、`AUDIO-B`、`AUDIO-C` 三批都独立通过并分别冻结提交后，既有 M03/LS01-LS07 浏览器听辨证据才可重新称为 audio-lifecycle verified，并解锁 `docs/47` 的 LP03；AUDIO-A 单批通过不能提前解锁。
 - 不因该浏览器审计声称实体 iPad Safari、扬声器/耳机、蓝牙延迟、真实 MIDI、本地原声钢琴麦克风、教师或儿童观察通过。
 - 原型任务必须选择性提交运行、专项、合同与 gate log；不得暂存主管 docs、`concepts/**`、`audio/**` 或未批准媒体。
