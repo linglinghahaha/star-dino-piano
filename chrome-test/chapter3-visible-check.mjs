@@ -140,6 +140,7 @@ async function snapshot(page) {
       lesson: document.querySelector("#gardenScene")?.dataset.lesson,
       reviewable: document.querySelector("#gardenScene")?.dataset.reviewableForMastery,
       repairStage: document.querySelector("#gardenScene")?.dataset.repairStage,
+      audioPhase: document.querySelector("#gardenScene")?.dataset.teachingAudioPhase || "",
       targetVisible: document.querySelector("#keyboard")?.dataset.targetVisible,
       speech: document.querySelector("#gardenSpeech")?.innerText?.replace(/\s+/g, " ").trim() || "",
       leaves: [...document.querySelectorAll(".garden-leaf")].map((leaf) => leaf.classList.contains("grown")),
@@ -177,6 +178,27 @@ async function waitForAirState(page, expected, timeout = 5000) {
     }));
     throw new Error(`Timed out waiting for air state ${expected}: ${JSON.stringify(diagnostics)}`, { cause: error });
   }
+}
+
+async function waitGardenInputReady(page, lessonId = null, timeout = 10000) {
+  await page.waitForFunction((expectedLesson) => {
+    const scene = document.querySelector("#gardenScene");
+    return scene?.dataset.teachingAudioPhase === "awaiting-response" &&
+      (!expectedLesson || scene.dataset.lesson === expectedLesson);
+  }, lessonId, { timeout });
+}
+
+async function answerGarden(page, midi) {
+  await waitGardenInputReady(page);
+  await page.locator(`.key.white-key[data-midi="${midi}"]`).click();
+  await page.waitForFunction(() => {
+    const phase = document.querySelector("#gardenScene")?.dataset.teachingAudioPhase || "";
+    return !["child-echo-scheduled", "child-echo-playing", "external-input"].includes(phase);
+  }, null, { timeout: 10000 });
+}
+
+async function waitForGardenMap(page, timeout = 10000) {
+  await page.waitForFunction(() => document.body.classList.contains("screen-map"), null, { timeout });
 }
 
 async function airTransitions(page) {
@@ -254,6 +276,7 @@ record("Air check reaches scanning", view.airState === "scanning" && observedAir
 record("Scanning keeps the same sealed-suit bitmap without stacking fake equipment", view.gardenCharacterSrc === sealedCharacterSrc && view.gardenCharacterAssetState === "sealed-suit" && view.fakeEquipmentLayers === 0, view);
 await main.page.screenshot({ path: path.join(screenshotDir, "air_check_scanning_1024x768.png") });
 await waitForAirState(main.page, "safe-open");
+await waitGardenInputReady(main.page, "LS01");
 view = await snapshot(main.page);
 observedAirStates = await airTransitions(main.page);
 record("Air check converges to safe-open before LS01 input", view.airState === "safe-open" && view.lesson === "LS01" && view.targetVisible === "true" && observedAirStates.indexOf("sealed") < observedAirStates.indexOf("scanning") && observedAirStates.indexOf("scanning") < observedAirStates.indexOf("safe-open"), { view, observedAirStates });
@@ -273,18 +296,17 @@ const parentSummary = await main.page.evaluate(() => ({
 record("Parent summary identifies visible teaching without claiming mastery", parentSummary.focus.includes("C / Do") && parentSummary.detail.includes("不进入 mastery") && parentSummary.masteryDetail.includes("不写入稳定或隔日保留"), parentSummary);
 await main.page.locator("#parentClose").click();
 
-await main.page.locator('.key.white-key[data-midi="60"]').click();
-await main.page.waitForTimeout(240);
+await answerGarden(main.page, 60);
 view = await snapshot(main.page);
 record("One qualified C permanently opens leaf one", view.leaves[0] && view.active?.actionIndex === 1, view);
 await main.page.screenshot({ path: path.join(screenshotDir, "LS01_correct_1024x768.png") });
-await main.page.waitForTimeout(900);
+await waitGardenInputReady(main.page, "LS02");
 view = await snapshot(main.page);
 record("C3-01 advances to LS02 in the same session", view.lesson === "LS02" && view.active?.bundleId === "C3-01" && view.leaves[0], view);
 
 const retainedBefore = await main.page.evaluate(() => JSON.parse(localStorage.getItem("starDinoLearningStats") || "{}").retention || {});
-await main.page.locator('.key.white-key[data-midi="62"]').click();
-await main.page.waitForTimeout(1750);
+await answerGarden(main.page, 62);
+await waitForGardenMap(main.page);
 view = await snapshot(main.page);
 record("LS02 straightens leaf two and ends C3-01 at the map", view.leaves[1] && !view.active && view.history.some((item) => item.bundleId === "C3-01" && item.status === "ended"), view);
 record("Two completed leaves point to the third leaf consistently", view.markerStrong === "第三片叶" && view.markerSmall === "点这里唤醒第三片叶" && view.markerAria === "第三片叶，点这里唤醒第三片叶", view);
@@ -293,7 +315,7 @@ const retainedAfter = await main.page.evaluate(() => JSON.parse(localStorage.get
 record("Visible garden lessons create no stable or retained evidence", JSON.stringify(retainedBefore) === JSON.stringify(retainedAfter), { retainedBefore, retainedAfter });
 
 await main.page.locator("#gardenRestMarker").click();
-await main.page.waitForTimeout(160);
+await waitGardenInputReady(main.page, "LS03");
 view = await snapshot(main.page);
 record("A later explicit click creates one C3-02 with LS03 only", view.active?.bundleId === "C3-02" && view.active.actions?.length === 1 && view.lesson === "LS03", view);
 record("C3-02 reuses the already safe equipment state", view.airState === "safe-open", view);
@@ -306,21 +328,24 @@ record("Active LS03 map marker names the third leaf consistently", c302Map.marke
 await c302MapPage.screenshot({ path: path.join(screenshotDir, "map_copy_ls03_active_1024x768.png") });
 await c302MapPage.close();
 await main.page.evaluate(() => window.handleInput(64, "程序测试"));
-await main.page.waitForTimeout(120);
 await main.page.evaluate(() => window.handleInput(64, "程序测试"));
-await main.page.waitForTimeout(120);
+await main.page.waitForFunction(() => {
+  const runtime = JSON.parse(localStorage.getItem("starDinoSessionRuntime") || "{}");
+  return runtime.chapter3?.ls03QualifiedInputs === 1 && document.querySelector("#gardenScene")?.dataset.teachingAudioPhase === "model-ready";
+}, null, { timeout: 10000 });
 view = await snapshot(main.page);
 record("Programmatic repetition without release counts as one E", view.ls03Count === 1 && !view.leaves[2] && view.targetVisible === "false", view);
 await main.page.screenshot({ path: path.join(screenshotDir, "LS03_first_1024x768.png") });
 
 await main.page.evaluate(() => window.releaseGardenInput(64, "程序测试"));
+await waitGardenInputReady(main.page, "LS03");
 await main.page.evaluate(() => window.handleInput(64, "程序测试"));
-await main.page.waitForTimeout(260);
+await main.page.waitForFunction(() => JSON.parse(localStorage.getItem("starDinoSessionRuntime") || "{}").chapter3?.leaves?.[2] === true, null, { timeout: 10000 });
 view = await snapshot(main.page);
 record("A released second E completes leaf three in the garden", view.leaves[2] && !view.active && view.screen.includes("screen-garden"), view);
 record("Chapter 3 completion uses no full-screen result modal", !view.modalVisible, view);
 await main.page.screenshot({ path: path.join(screenshotDir, "LS03_complete_1024x768.png") });
-await main.page.waitForTimeout(1450);
+await waitForGardenMap(main.page);
 view = await snapshot(main.page);
 record("LS03 completion returns to an explicit interactive LS04-ready map marker", view.markerState === "ready" && !view.markerDisabled && view.screen.includes("screen-map"), view);
 record("LS03 completion keeps the Chapter 3 identity and starts LS04 at 0/4", view.mapChapter === "当前章节：呼吸花园" && view.mapProgress.includes("找朋友 0/4") && view.mapProgress.includes("准备") && !view.mapProgress.includes("基地"), view);
@@ -339,7 +364,7 @@ async function runPreLs01ReturnCase(id, expectedState, prepare = async () => {})
   await prepare(probe.page);
   const beforeReturn = await snapshot(probe.page);
   await probe.page.locator("#mapReturn").click();
-  await probe.page.waitForTimeout(180);
+  await waitForGardenMap(probe.page);
   const afterReturn = await snapshot(probe.page);
   const ls01Evidence = afterReturn.chapter3?.lessonEvidence?.LS01 || null;
   const currentAction = afterReturn.active?.actions?.[afterReturn.active?.actionIndex || 0] || null;
@@ -366,50 +391,49 @@ await runPreLs01ReturnCase("sealed", "sealed");
 await runPreLs01ReturnCase("scanning", "scanning");
 await runPreLs01ReturnCase("safe_open_zero_input", "safe-open");
 await runPreLs01ReturnCase("one_wrong", "safe-open", async (page) => {
-  await page.locator('.key.white-key[data-midi="62"]').click();
-  await page.waitForTimeout(120);
+  await answerGarden(page, 62);
 });
 
 const pauseThenCorrect = await makePage();
 await seed(pauseThenCorrect.page, baseRuntime(), chapter12Sentinel);
 await pauseThenCorrect.page.locator("#gardenRestMarker").click();
-await pauseThenCorrect.page.waitForTimeout(1450);
+await waitGardenInputReady(pauseThenCorrect.page, "LS01");
 const pauseCorrectOldSessionId = (await snapshot(pauseThenCorrect.page)).active?.sessionId;
-await pauseThenCorrect.page.locator('.key.white-key[data-midi="62"]').click();
-await pauseThenCorrect.page.waitForTimeout(120);
+await answerGarden(pauseThenCorrect.page, 62);
 await pauseThenCorrect.page.locator("#mapReturn").click();
-await pauseThenCorrect.page.waitForTimeout(180);
+await waitForGardenMap(pauseThenCorrect.page);
 await pauseThenCorrect.page.locator("#gardenRestMarker").click();
-await pauseThenCorrect.page.waitForTimeout(220);
-await pauseThenCorrect.page.locator('.key.white-key[data-midi="60"]').click();
-await pauseThenCorrect.page.waitForTimeout(260);
+await waitGardenInputReady(pauseThenCorrect.page, "LS01");
+await answerGarden(pauseThenCorrect.page, 60);
 view = await snapshot(pauseThenCorrect.page);
 const pauseCorrectEvidence = view.chapter3?.lessonEvidence?.LS01 || {};
 const pauseCorrectFirstAction = view.active?.actions?.find((action) => action.targetId === "LS01");
 record("One wrong before a map pause remains in the final LS01 evidence after child correction", pauseCorrectEvidence.wrongCount === 1 && pauseCorrectEvidence.childCorrectCount === 1 && Object.values(pauseCorrectEvidence.inputRoutes || {}).reduce((sum, count) => sum + count, 0) === 2 && pauseCorrectEvidence.childInputs?.length === 2 && pauseCorrectEvidence.childInputs[0]?.result === "wrong" && pauseCorrectEvidence.childInputs[1]?.result === "correct" && pauseCorrectEvidence.needsPractice === false, pauseCorrectEvidence);
 record("Completed LS01 clears its pending attempt before the active action advances", !pauseCorrectFirstAction?.gardenAttempt && view.active?.actions?.[view.active?.actionIndex || 0]?.targetId === "LS02", view.active);
 await pauseThenCorrect.page.locator("#mapReturn").click();
-await pauseThenCorrect.page.waitForTimeout(1250);
+await waitForGardenMap(pauseThenCorrect.page);
 await pauseThenCorrect.page.locator("#gardenRestMarker").click();
-await pauseThenCorrect.page.waitForTimeout(220);
+await waitGardenInputReady(pauseThenCorrect.page, "LS02");
 view = await snapshot(pauseThenCorrect.page);
-record("A fresh LS02 resume session does not inherit the completed LS01 pending attempt", view.active?.sessionId !== pauseCorrectOldSessionId && view.active?.resumeOfSessionId === pauseCorrectOldSessionId && view.active?.actions?.length === 1 && view.active.actions[0]?.targetId === "LS02" && !view.active.actions[0]?.gardenAttempt && view.repairStage === "none", view);
+const resumedLs02Attempt = view.active?.actions?.[0]?.gardenAttempt;
+record("A fresh LS02 resume session has a clean LS02 audio attempt and no inherited LS01 input", view.active?.sessionId !== pauseCorrectOldSessionId && view.active?.resumeOfSessionId === pauseCorrectOldSessionId && view.active?.actions?.length === 1 && view.active.actions[0]?.targetId === "LS02" && resumedLs02Attempt?.targetId === "LS02" && resumedLs02Attempt?.wrongCount === 0 && resumedLs02Attempt?.childCorrectCount === 0 && resumedLs02Attempt?.childInputs?.length === 0 && Object.keys(resumedLs02Attempt?.inputRoutes || {}).length === 0 && resumedLs02Attempt?.repairStage === "none" && resumedLs02Attempt?.modeledInputs?.length === 0 && resumedLs02Attempt?.audioAttempt?.lessonId === "LS02" && resumedLs02Attempt?.audioAttempt?.phase === "awaiting-response" && view.repairStage === "none", { view, resumedLs02Attempt });
 await pauseThenCorrect.context.close();
 
 const refreshContinuity = await makePage();
 await seed(refreshContinuity.page);
 await refreshContinuity.page.locator("#gardenRestMarker").click();
-await refreshContinuity.page.waitForTimeout(1450);
-await refreshContinuity.page.locator('.key.white-key[data-midi="62"]').click();
-await refreshContinuity.page.waitForTimeout(120);
+await waitGardenInputReady(refreshContinuity.page, "LS01");
+await answerGarden(refreshContinuity.page, 62);
 const refreshSessionId = (await snapshot(refreshContinuity.page)).active?.sessionId;
 await refreshContinuity.page.reload({ waitUntil: "domcontentloaded", timeout: 12000 });
 await refreshContinuity.page.waitForSelector("#bootLoader", { state: "hidden", timeout: 12000 });
 await refreshContinuity.page.waitForTimeout(220);
 view = await snapshot(refreshContinuity.page);
 record("Refreshing the same LS01 action restores its first wrong input", view.active?.sessionId === refreshSessionId && view.active?.actions?.[0]?.gardenAttempt?.wrongCount === 1 && Object.values(view.active?.actions?.[0]?.gardenAttempt?.inputRoutes || {}).reduce((sum, count) => sum + count, 0) === 1, view.active);
+await refreshContinuity.page.locator('.key.white-key[data-midi="60"]').click();
+await waitGardenInputReady(refreshContinuity.page, "LS01");
 await refreshContinuity.page.locator('.key.white-key[data-midi="64"]').click();
-await refreshContinuity.page.waitForTimeout(140);
+await refreshContinuity.page.waitForFunction(() => document.querySelector("#gardenScene")?.dataset.repairStage === "assisted", null, { timeout: 10000 });
 view = await snapshot(refreshContinuity.page);
 record("A second wrong after refresh enters the bounded assisted repair", view.repairStage === "assisted" && view.speech.includes("陪你再试一次") && view.active?.actions?.[0]?.gardenAttempt?.wrongCount === 2 && view.active?.actions?.[0]?.gardenAttempt?.repairStage === "assisted", view);
 await refreshContinuity.context.close();
@@ -417,16 +441,15 @@ await refreshContinuity.context.close();
 const assistedCorrect = await makePage({ width: 1194, height: 834, deviceScaleFactor: 2 });
 await seed(assistedCorrect.page, baseRuntime(), chapter12Sentinel);
 await assistedCorrect.page.locator("#gardenRestMarker").click();
-await assistedCorrect.page.waitForTimeout(1450);
+await waitGardenInputReady(assistedCorrect.page, "LS01");
 const assistedOldSessionId = (await snapshot(assistedCorrect.page)).active?.sessionId;
-await assistedCorrect.page.locator('.key.white-key[data-midi="62"]').click();
-await assistedCorrect.page.waitForTimeout(100);
-await assistedCorrect.page.locator('.key.white-key[data-midi="64"]').click();
-await assistedCorrect.page.waitForTimeout(120);
+await answerGarden(assistedCorrect.page, 62);
+await answerGarden(assistedCorrect.page, 64);
+await waitGardenInputReady(assistedCorrect.page, "LS01");
 view = await snapshot(assistedCorrect.page);
 record("The second LS01 error enters one bounded assisted retry", view.repairStage === "assisted" && view.speech.includes("陪你再试一次"), view);
-await assistedCorrect.page.locator('.key.white-key[data-midi="60"]').click();
-await assistedCorrect.page.waitForTimeout(1250);
+await answerGarden(assistedCorrect.page, 60);
+await waitForGardenMap(assistedCorrect.page);
 view = await snapshot(assistedCorrect.page);
 const assistedEvidence = view.chapter3?.lessonEvidence?.LS01 || {};
 const assistedEnded = view.history.find((session) => session.sessionId === assistedOldSessionId);
@@ -436,7 +459,7 @@ record("Assisted-correct map uses 1/3 Chapter 3 rest identity", view.mapChapter 
 record("LS02 resume marker names the second leaf consistently", view.markerStrong === "第二片叶" && view.markerSmall === "继续第二片叶" && view.markerAria === "第二片叶，继续第二片叶", view);
 await assistedCorrect.page.screenshot({ path: path.join(screenshotDir, "map_copy_ls02_resume_1194x834_dpr2.png") });
 await assistedCorrect.page.locator("#gardenRestMarker").click();
-await assistedCorrect.page.waitForTimeout(180);
+await waitGardenInputReady(assistedCorrect.page, "LS02");
 view = await snapshot(assistedCorrect.page);
 record("Assisted-correct resume creates a new session containing LS02 only", view.active?.sessionId !== assistedOldSessionId && view.active?.resumeOfSessionId === assistedOldSessionId && view.active?.actions?.length === 1 && view.active.actions[0]?.targetId === "LS02" && view.lesson === "LS02" && view.leaves[0], view);
 await assistedCorrect.page.screenshot({ path: path.join(screenshotDir, "LS02_resume_1194x834_dpr2.png") });
@@ -445,14 +468,12 @@ await assistedCorrect.context.close();
 const assistedModeled = await makePage();
 await seed(assistedModeled.page, baseRuntime(), chapter12Sentinel);
 await assistedModeled.page.locator("#gardenRestMarker").click();
-await assistedModeled.page.waitForTimeout(1450);
+await waitGardenInputReady(assistedModeled.page, "LS01");
 const modeledOldSessionId = (await snapshot(assistedModeled.page)).active?.sessionId;
-await assistedModeled.page.locator('.key.white-key[data-midi="62"]').click();
-await assistedModeled.page.waitForTimeout(90);
-await assistedModeled.page.locator('.key.white-key[data-midi="64"]').click();
-await assistedModeled.page.waitForTimeout(90);
-await assistedModeled.page.locator('.key.white-key[data-midi="62"]').click();
-await assistedModeled.page.waitForTimeout(1250);
+await answerGarden(assistedModeled.page, 62);
+await answerGarden(assistedModeled.page, 64);
+await answerGarden(assistedModeled.page, 62);
+await waitForGardenMap(assistedModeled.page);
 view = await snapshot(assistedModeled.page);
 const modeledEvidence = view.chapter3?.lessonEvidence?.LS01 || {};
 const modeledEnded = view.history.find((session) => session.sessionId === modeledOldSessionId);
@@ -460,7 +481,7 @@ record("Assisted retry failure triggers bounded modeled completion and early-res
 record("Modeled input does not enter child input routes or stable/retained", Object.values(modeledEvidence.inputRoutes || {}).reduce((sum, count) => sum + count, 0) === 3 && modeledEvidence.reviewableForMastery === false, modeledEvidence);
 record("Modeled route leaves Chapter 1/2 mastery storage untouched", gardenMasteryIsClean(view) && chapter12SentinelPreserved(view), view.learningStats);
 await assistedModeled.page.locator("#gardenRestMarker").click();
-await assistedModeled.page.waitForTimeout(180);
+await waitGardenInputReady(assistedModeled.page, "LS02");
 view = await snapshot(assistedModeled.page);
 record("Modeled route resumes in a new LS02-only session", view.active?.sessionId !== modeledOldSessionId && view.active?.resumeOfSessionId === modeledOldSessionId && view.active?.actions?.length === 1 && view.active.actions[0]?.targetId === "LS02", view);
 await assistedModeled.context.close();
@@ -468,16 +489,16 @@ await assistedModeled.context.close();
 const longWait = await makePage();
 await seed(longWait.page, baseRuntime(), chapter12Sentinel);
 await longWait.page.locator("#gardenRestMarker").click();
-await longWait.page.waitForTimeout(1450);
+await waitGardenInputReady(longWait.page, "LS01");
 const longWaitOldSessionId = (await snapshot(longWait.page)).active?.sessionId;
 await longWait.page.waitForTimeout(20200);
-await longWait.page.waitForTimeout(1200);
+await waitForGardenMap(longWait.page);
 view = await snapshot(longWait.page);
 const longWaitEvidence = view.chapter3?.lessonEvidence?.LS01 || {};
 record("A wide twenty-second LS01 wait models only the current leaf and ends early", !view.active && view.history.some((session) => session.sessionId === longWaitOldSessionId && session.endReason === "early-rest") && view.leaves[0] && longWaitEvidence.modeled === true && longWaitEvidence.completionSource === "model" && longWaitEvidence.needsPractice === true, { view, longWaitEvidence });
 record("Long-wait route preserves Chapter 1/2 evidence and creates no garden mastery", gardenMasteryIsClean(view) && chapter12SentinelPreserved(view), view.learningStats);
 await longWait.page.locator("#gardenRestMarker").click();
-await longWait.page.waitForTimeout(180);
+await waitGardenInputReady(longWait.page, "LS02");
 view = await snapshot(longWait.page);
 record("Long-wait resume creates a new LS02-only session", view.active?.sessionId !== longWaitOldSessionId && view.active?.resumeOfSessionId === longWaitOldSessionId && view.active?.actions?.length === 1 && view.active.actions[0]?.targetId === "LS02", view);
 await longWait.context.close();
@@ -485,12 +506,11 @@ await longWait.context.close();
 const voluntary = await makePage();
 await seed(voluntary.page, baseRuntime(), chapter12Sentinel);
 await voluntary.page.locator("#gardenRestMarker").click();
-await voluntary.page.waitForTimeout(1450);
+await waitGardenInputReady(voluntary.page, "LS01");
 const voluntaryOldSessionId = (await snapshot(voluntary.page)).active?.sessionId;
-await voluntary.page.locator('.key.white-key[data-midi="60"]').click();
-await voluntary.page.waitForTimeout(180);
+await answerGarden(voluntary.page, 60);
 await voluntary.page.locator("#mapReturn").click();
-await voluntary.page.waitForTimeout(1250);
+await waitForGardenMap(voluntary.page);
 view = await snapshot(voluntary.page);
 record("A voluntary rest after leaf one ends the old session without labeling ordinary pace as difficulty", !view.active && view.history.some((session) => session.sessionId === voluntaryOldSessionId && session.endReason === "early-rest") && view.leaves[0] && view.chapter3?.lessonEvidence?.LS01?.needsPractice === false, view);
 record("A real leaf-one completion is the first voluntary return that points to LS02", view.markerStrong === "第二片叶" && view.markerSmall === "继续第二片叶" && view.markerAria === "第二片叶，继续第二片叶" && view.chapter3?.resume?.nextTargetId === "LS02", view);
@@ -500,7 +520,7 @@ await voluntary.page.waitForSelector("#bootLoader", { state: "hidden", timeout: 
 view = await snapshot(voluntary.page);
 record("Refreshing the early-rest map preserves leaf one and no active session", !view.active && view.chapter3?.leaves?.[0] === true && view.markerState === "resume" && view.mapProgress.includes("嫩芽 1/3"), view);
 await voluntary.page.locator("#gardenRestMarker").click();
-await voluntary.page.waitForTimeout(180);
+await waitGardenInputReady(voluntary.page, "LS02");
 view = await snapshot(voluntary.page);
 record("Voluntary-rest resume creates a fresh LS02-only session", view.active?.sessionId !== voluntaryOldSessionId && view.active?.resumeOfSessionId === voluntaryOldSessionId && view.active?.actions?.length === 1 && view.active.actions[0]?.targetId === "LS02", view);
 await voluntary.context.close();

@@ -1132,7 +1132,8 @@ function createPracticeAttempt(kind, id, runMode = "") {
     sessionStartedAt: null,
     voluntaryReplay: false,
     requiredReview: false,
-    assistedMode: false
+    assistedMode: false,
+    audioAttempt: null
   };
 }
 
@@ -1202,6 +1203,7 @@ const state = {
   gardenAssistedTimer: null,
   gardenLongWaitTimer: null,
   gardenModeledInputs: [],
+  gardenAudioAttempt: null,
   gardenInputArmed: true,
   gardenAirTimer: null,
   gardenCompletionTimer: null,
@@ -3454,7 +3456,10 @@ function setGameSoundEnabled(enabled) {
   state.audioSettings.enabled = Boolean(enabled);
   saveAudioSettings();
   applyAudioSettings();
-  if (!state.audioSettings.enabled) interruptTeachingPianoSequence("audio-disabled");
+  if (!state.audioSettings.enabled) {
+    interruptTeachingPianoSequence("audio-disabled");
+    interruptActiveAudioAExternalInput("audio-disabled");
+  }
 }
 
 function setGameSoundVolume(percent) {
@@ -3463,7 +3468,10 @@ function setGameSoundVolume(percent) {
   state.audioSettings.volume = Math.min(AUDIO_VOLUME_CAP, Math.max(0, normalized));
   saveAudioSettings();
   applyAudioSettings();
-  if (state.audioSettings.volume <= 0) interruptTeachingPianoSequence("volume-muted");
+  if (state.audioSettings.volume <= 0) {
+    interruptTeachingPianoSequence("volume-muted");
+    interruptActiveAudioAExternalInput("volume-muted");
+  }
 }
 
 function systemPrefersReducedMotion() {
@@ -3903,7 +3911,13 @@ function showWorkshopIdleHint(stage) {
   if (isListeningLevel(level)) {
     state.practiceAttempt.idleListenReplays = (state.practiceAttempt.idleListenReplays || 0) + 1;
     markAttemptCue("soft");
-    playListeningPrompt();
+    if (isAudioAM03Active()) {
+      const attempt = ensureM03AudioAttempt();
+      if (attempt?.phase === "awaiting-response") startM03Model(attempt, `idle-${stage}`);
+      else if (attempt?.phase === "sound-paused") recoverAudioAAttempt();
+    } else {
+      playListeningPrompt();
+    }
   } else if (stage === "identity") {
     state.practiceAttempt.idleIdentityHints = (state.practiceAttempt.idleIdentityHints || 0) + 1;
     markAttemptCue("soft");
@@ -5241,7 +5255,11 @@ function renderKeyboard(target, options = {}) {
       if (startsNewKeyPress) {
         beginKeyboardPress(key);
         showKeyPressRipple(key);
-        played = playPianoNote(note.frequency, { gain: 0.10, duration: 0.42 });
+        // AUDIO-A owns the child echo so a screen press cannot schedule a raw note
+        // before its verified input transaction begins on click/keyboard activation.
+        if (!audioATeachingSurfaceIsActive()) {
+          played = playPianoNote(note.frequency, { gain: 0.10, duration: 0.42 });
+        }
       }
       if (isLs08Pointer) {
         if (played) traceLs08(ensureLs08Attempt(), "child-key", { reason: "pointer", midis: [note.midi], pairIndex: ensureLs08Attempt()?.pairIndex });
@@ -5531,6 +5549,10 @@ function handleInput(midi, source) {
     handleStaffInput(midi, source);
     return;
   }
+  if (isAudioAM03Active()) {
+    handleM03AudioInput(midi, source);
+    return;
+  }
   clearWorkshopIdleHints();
   clearLevelIntro();
 
@@ -5631,12 +5653,20 @@ function releaseGardenInput(midi, source) {
     releaseChapter4Input(midi, source);
     return;
   }
+  if (isAudioAM03Active()) {
+    releaseM03AudioInput(midi, source);
+    return;
+  }
   if (state.screen !== "garden") return;
   if (currentLs08Action()) {
     releaseLs08Input(midi, source);
     return;
   }
   if (currentListeningAction()) return;
+  if (isAudioAGardenActive()) {
+    releaseGardenAudioAInput(midi, source);
+    return;
+  }
   const lesson = currentGardenLesson();
   if (!lesson || lesson.midi !== midi) return;
   state.gardenInputArmed = true;
@@ -9993,9 +10023,578 @@ function recoverChapter4Sound() {
   }
 }
 
+function isMicrophoneSource(source) {
+  return source === "麦克风";
+}
+
+function ensureM03ResponseClock() {
+  const stepKey = currentAttemptStepKey();
+  if (state.practiceAttempt?.activeStepRecord?.key !== stepKey) beginPracticeStepClock();
+}
+
+function beginAudioAExternalInput(attempt, pending) {
+  if (!audioAAttemptIsCurrent(attempt)) return false;
+  const now = new Date().toISOString();
+  attempt.pendingInput = { ...pending, acceptedAt: now };
+  attempt.audioTransaction = {
+    context: "external-input",
+    payload: { ...attempt.pendingInput },
+    notes: [{ midi: pending.midi, delayMs: 0, durationMs: 0 }],
+    playbackId: null,
+    scheduledAt: now,
+    startedAt: now,
+    endedAt: null,
+    interruptedAt: null,
+    startAudioTime: null,
+    endAudioTime: null,
+    interruptedAudioTime: null,
+    contextState: "external-input",
+    status: "playing",
+    returnQueued: false,
+    returnQueuedConsumedAt: null,
+    outcomeRecorded: false
+  };
+  attempt.soundPauseContext = null;
+  attempt.phase = "external-input";
+  setAudioAInputArmed(attempt, false);
+  traceAudioAAttempt(attempt, "started", attempt.audioTransaction, { external: true });
+  persistAudioAAttempt(attempt);
+  renderAudioAAttempt(attempt);
+  return true;
+}
+
+function finishAudioAExternalInput(attempt, midi, source, commit) {
+  const transaction = attempt?.audioTransaction;
+  const pending = attempt?.pendingInput;
+  if (!audioAAttemptIsCurrent(attempt) || attempt.phase !== "external-input" || !transaction || !pending) return false;
+  if (pending.source !== source || (Number.isFinite(midi) && pending.midi !== midi)) return false;
+  transaction.endedAt = new Date().toISOString();
+  transaction.contextState = "external-input-quiet";
+  transaction.status = "ended";
+  transaction.outcomeRecorded = true;
+  traceAudioAAttempt(attempt, "ended", transaction, { external: true });
+  commit(pending, transaction, { returnQueued: transaction.returnQueued === true });
+  persistAudioAAttempt(attempt);
+  renderAudioAAttempt(attempt);
+  consumeAudioAQueuedReturn(attempt, transaction);
+  return true;
+}
+
+function startM03Model(attempt = ensureM03AudioAttempt(), reason = "system") {
+  if (!audioAAttemptIsCurrent(attempt) || state.stepIndex >= (activeLevel()?.parts?.length || 0)) return false;
+  const targetMidi = activeTargetMidi();
+  const target = noteForMidi(targetMidi);
+  if (!target) return false;
+  attempt.targetMidi = targetMidi;
+  attempt.pendingInput = null;
+  attempt.modelCount = (Number(attempt.modelCount) || 0) + 1;
+  return Boolean(startAudioATeachingSequence(attempt, {
+    context: "model",
+    notes: [{ midi: target.midi, frequency: target.frequency, gain: 0.13, durationMs: 720, delayMs: 0 }],
+    payload: { targetMidi, reason, stepIndex: state.stepIndex },
+    scheduledPhase: "model-scheduled",
+    playingPhase: "model-playing",
+    onStarted: () => {
+      if (els.heardStatus) els.heardStatus.textContent = "听到：小车轮唱了一声";
+      if (els.feedback) {
+        els.feedback.classList.remove("good", "bad");
+        els.feedback.textContent = "先听一听，声音停下后再弹同样的琴键。";
+      }
+      els.moonYard?.classList.remove("listening-pulse");
+      void els.moonYard?.offsetWidth;
+      els.moonYard?.classList.add("listening-pulse");
+      setDinoMood("listen", 980);
+    },
+    onEnded: (playback, transaction, { returnQueued }) => {
+      if (transaction.payload?.stepIndex !== state.stepIndex) return;
+      attempt.phase = returnQueued ? "model-ready" : "awaiting-response";
+      if (!returnQueued) {
+        const preservesIdleSchedule = typeof reason === "string" && /^idle-(?:identity|locator)$/.test(reason);
+        armAudioAResponse(attempt, { scheduleIdleHints: !preservesIdleSchedule });
+      }
+    }
+  }));
+}
+
+function startM03ChildEcho(attempt, pending, { recovery = false } = {}) {
+  const heard = noteForMidi(pending?.midi);
+  if (!audioAAttemptIsCurrent(attempt) || !heard) return false;
+  attempt.pendingInput = { ...pending, targetMidi: pending.targetMidi ?? activeTargetMidi() };
+  attempt.childEchoCount = (Number(attempt.childEchoCount) || 0) + 1;
+  return Boolean(startAudioATeachingSequence(attempt, {
+    context: "child-echo",
+    notes: [{ midi: heard.midi, frequency: heard.frequency, gain: 0.10, durationMs: 420, delayMs: 0 }],
+    payload: { ...attempt.pendingInput, recovery },
+    scheduledPhase: "child-echo-scheduled",
+    playingPhase: "child-echo-playing",
+    onEnded: (playback, transaction, { returnQueued }) => {
+      transaction.outcomeRecorded = true;
+      commitM03AudioInput(attempt, attempt.pendingInput, { returnQueued });
+    }
+  }));
+}
+
+function startM03WrongRepair(attempt, pending, { recovery = false } = {}) {
+  const heard = noteForMidi(pending?.midi);
+  const target = noteForMidi(pending?.targetMidi ?? activeTargetMidi());
+  if (!audioAAttemptIsCurrent(attempt) || !heard || !target) return false;
+  return Boolean(startAudioATeachingSequence(attempt, {
+    context: "wrong-repair",
+    notes: [{ midi: target.midi, frequency: target.frequency, gain: 0.13, durationMs: 720, delayMs: 0 }],
+    payload: { ...pending, targetMidi: target.midi, recovery },
+    scheduledPhase: "wrong-repair-scheduled",
+    playingPhase: "wrong-repair-playing",
+    onStarted: () => {
+      showInputEffect(pending.midi, "wrong", { showLabel: true });
+      showInputEffect(target.midi, "hint", { showLabel: true });
+    },
+    onEnded: (playback, transaction, { returnQueued }) => {
+      if (returnQueued) {
+        attempt.phase = "awaiting-response";
+        setAudioAInputArmed(attempt, true);
+        return;
+      }
+      if (attempt.pendingModeledReason) {
+        startM03ModeledCompletion(attempt, attempt.pendingModeledReason);
+        return;
+      }
+      attempt.phase = "awaiting-response";
+      armAudioAResponse(attempt);
+    }
+  }));
+}
+
+function startM03ModeledCompletion(attempt, reason) {
+  const target = noteForMidi(activeTargetMidi());
+  if (!audioAAttemptIsCurrent(attempt) || !target) return false;
+  if (state.assistedSuccessTimer) {
+    clearTimeout(state.assistedSuccessTimer);
+    state.assistedSuccessTimer = null;
+  }
+  attempt.pendingModeledReason = reason;
+  return Boolean(startAudioATeachingSequence(attempt, {
+    context: "modeled",
+    notes: [{ midi: target.midi, frequency: target.frequency, gain: 0.13, durationMs: 720, delayMs: 0 }],
+    payload: { targetMidi: target.midi, reason, stepIndex: state.stepIndex },
+    scheduledPhase: "modeled-scheduled",
+    playingPhase: "modeled-playing",
+    onEnded: (playback, transaction, { returnQueued }) => {
+      transaction.outcomeRecorded = true;
+      completeM03ModeledAfterAudio(attempt, reason, { returnQueued });
+    }
+  }));
+}
+
+function beginM03AssistedRepair(attempt, targetMidi) {
+  const stepWrongs = attempt?.activeStepRecord?.wrongs || 0;
+  if (!attempt?.formalSession || stepWrongs < 3) return false;
+  if (attempt.assistedMode) {
+    ensureM03AudioAttempt().pendingModeledReason = "assisted-retry-wrong";
+    return true;
+  }
+  attempt.assistedMode = true;
+  state.assistedSuccessPending = true;
+  markAttemptCue("strong");
+  if (state.activeSession) {
+    state.activeSession.restAfterCurrentLevel = true;
+    persistActiveSession();
+  }
+  const audioAttempt = ensureM03AudioAttempt();
+  audioAttempt.pendingModeledReason = null;
+  if (state.assistedSuccessTimer) clearTimeout(state.assistedSuccessTimer);
+  state.assistedSuccessTimer = setTimeout(() => {
+    state.assistedSuccessTimer = null;
+    if (audioAAttemptIsCurrent(audioAttempt) && audioAttempt.phase === "awaiting-response") {
+      startM03ModeledCompletion(audioAttempt, "assisted-timeout");
+    }
+  }, CH3_ASSISTED_WAIT_MS);
+  return true;
+}
+
+function completeM03ModeledAfterAudio(audioAttempt, reason, { returnQueued = false } = {}) {
+  const attempt = state.practiceAttempt;
+  const targetMidi = activeTargetMidi();
+  const target = noteForMidi(targetMidi);
+  if (!audioAAttemptIsCurrent(audioAttempt) || !attempt || !target) return false;
+  state.assistedSuccessPending = false;
+  attempt.assistedMode = false;
+  attempt.assistedSuccesses = (attempt.assistedSuccesses || 0) + 1;
+  attempt.modeledSuccesses = (attempt.modeledSuccesses || 0) + 1;
+  attempt.modeledInputs.push({
+    source: "model",
+    reason,
+    targetMidi,
+    stepKey: currentAttemptStepKey(),
+    completedAt: new Date().toISOString()
+  });
+  if (attempt.activeStepRecord) {
+    attempt.stepRecords.push({
+      ...attempt.activeStepRecord,
+      inputRoutes: { ...attempt.activeStepRecord.inputRoutes },
+      correctResponseMs: null,
+      modeledSuccess: true
+    });
+    attempt.activeStepRecord = null;
+  }
+  state.lastInputMidi = targetMidi;
+  state.lastInputResult = "correct";
+  state.stepHadWrong = false;
+  audioAttempt.phase = "complete";
+  audioAttempt.pendingModeledReason = null;
+  state.stepIndex = activeLevel().parts.length;
+  renderAudioAAttempt(audioAttempt);
+  flashBuildArea(state.stepIndex - 1, true);
+  if (els.feedback) {
+    els.feedback.classList.remove("bad");
+    els.feedback.classList.add("good");
+    els.feedback.textContent = "小车轮完整示范后，今天先在这里歇一歇。";
+  }
+  if (returnQueued) consumeAudioAQueuedReturn(audioAttempt, audioAttempt.audioTransaction);
+  discardCompletedM03AudioAttempt(audioAttempt);
+  completeLevel("model");
+  return true;
+}
+
+function commitM03AudioInput(attempt, pending, { returnQueued = false } = {}) {
+  if (!audioAAttemptIsCurrent(attempt) || !pending) return false;
+  const targetMidi = pending.targetMidi ?? activeTargetMidi();
+  if (targetMidi !== activeTargetMidi()) return false;
+  const target = noteForMidi(targetMidi);
+  const heard = noteForMidi(pending.midi);
+  if (!target || !heard) return false;
+  attempt.pendingInput = null;
+  clearWorkshopIdleHints();
+  if (pending.midi === targetMidi) {
+    recordPracticeInput({ correct: true, target, heard, source: pending.source });
+    state.lastInputMidi = pending.midi;
+    state.lastInputResult = "correct";
+    const droppedPart = activePart();
+    const finalStep = state.stepIndex === activeLevel().parts.length - 1;
+    if (!finalStep) showFlyingPart(droppedPart);
+    pulseBuildStage("correct");
+    playCorrectSound();
+    state.stepIndex += 1;
+    state.stepHadWrong = false;
+    setRouteJustLocked(activeLevel(), state.stepIndex - 1);
+    renderAudioAAttempt(attempt);
+    const finished = state.stepIndex >= activeLevel().parts.length;
+    flashBuildArea(state.stepIndex - 1, finished);
+    showInputEffect(pending.midi, "correct", { showLabel: !finalStep });
+    if (!finalStep) {
+      showKeySpriteEffect(pending.midi, "correct");
+      showNoteBurst(pending.midi, "correct", heard);
+      showMusicFlight(pending.midi, heard, getPlayFlightTarget(state.stepIndex - 1), "correct");
+    }
+    if (finished) {
+      attempt.phase = "complete";
+      renderM03AudioState();
+      if (returnQueued) consumeAudioAQueuedReturn(attempt, attempt.audioTransaction);
+      discardCompletedM03AudioAttempt(attempt);
+      completeLevel(pending.source);
+      return true;
+    }
+    attempt.phase = "model-ready";
+    setAudioAInputArmed(attempt, false);
+    if (!returnQueued) {
+      clearListeningPrompt();
+      state.listenPromptTimer = setTimeout(() => {
+        state.listenPromptTimer = null;
+        if (audioAAttemptIsCurrent(attempt) && attempt.phase === "model-ready") startM03Model(attempt, "system-next");
+      }, 560);
+    }
+    return true;
+  }
+
+  recordPracticeInput({ correct: false, target, heard, source: pending.source });
+  state.lastInputMidi = pending.midi;
+  state.lastInputResult = "wrong";
+  pulseBuildStage("wrong");
+  if (els.feedback) {
+    els.feedback.classList.remove("good");
+    els.feedback.classList.add("bad");
+    els.feedback.textContent = wrongFeedbackFor(heard, target);
+  }
+  setDinoMood("bad");
+  renderAudioAAttempt(attempt);
+  const assisted = beginM03AssistedRepair(state.practiceAttempt, targetMidi);
+  if (assisted && state.practiceAttempt?.assistedMode && (state.practiceAttempt.activeStepRecord?.wrongs || 0) >= 4) {
+    attempt.pendingModeledReason = "assisted-retry-wrong";
+  }
+  const completedChildTransaction = attempt.audioTransaction;
+  const repairStarted = startM03WrongRepair(attempt, pending);
+  if (returnQueued) handoffAudioAQueuedReturn(attempt, completedChildTransaction);
+  return repairStarted;
+}
+
+function handleM03AudioInput(midi, source) {
+  const attempt = ensureM03AudioAttempt();
+  if (!attempt) return;
+  const retryingInterruptedExternalInput = attempt.phase === "sound-paused" &&
+    (attempt.soundPauseContext || attempt.audioTransaction?.context) === "external-input";
+  if (attempt.phase === "sound-paused") {
+    if (!recoverAudioAAttempt() || !retryingInterruptedExternalInput) {
+      if (source === "MIDI") recordAudioAMidiNoteOn(attempt, midi);
+      recordAudioAObservation(attempt, midi, source);
+      return;
+    }
+  }
+  if (source === "MIDI") {
+    const midiState = recordAudioAMidiNoteOn(attempt, midi);
+    if (midiState.blocked) {
+      recordAudioAObservation(attempt, midi, source, "held-midi");
+      return;
+    }
+  }
+  if (attempt.phase !== "awaiting-response" || !attempt.inputArmed) {
+    recordAudioAObservation(attempt, midi, source);
+    return;
+  }
+  const pending = { midi, source, targetMidi: activeTargetMidi(), occurredAt: new Date().toISOString() };
+  if (isMicrophoneSource(source)) {
+    beginAudioAExternalInput(attempt, pending);
+    return;
+  }
+  startM03ChildEcho(attempt, pending);
+}
+
+function releaseM03AudioInput(midi, source) {
+  const attempt = ensureM03AudioAttempt();
+  if (source === "MIDI") return releaseAudioAMidiInput(attempt, midi);
+  if (!isMicrophoneSource(source)) return false;
+  return finishAudioAExternalInput(attempt, midi, source, (pending, transaction, options) => {
+    commitM03AudioInput(attempt, pending, options);
+  });
+}
+
+function startGardenAudioAModel(attempt = ensureGardenAudioAttempt(), reason = "system") {
+  const lesson = audioAGardenLesson();
+  if (!audioAAttemptIsCurrent(attempt) || !lesson || lesson.id !== attempt.lessonId) return false;
+  const target = noteForMidi(lesson.midi);
+  if (!target) return false;
+  attempt.targetMidi = lesson.midi;
+  attempt.pendingInput = null;
+  attempt.modelCount = (Number(attempt.modelCount) || 0) + 1;
+  return Boolean(startAudioATeachingSequence(attempt, {
+    context: "model",
+    notes: [{ midi: target.midi, frequency: target.frequency, gain: 0.13, durationMs: 720, delayMs: 0 }],
+    payload: { targetMidi: target.midi, lessonId: lesson.id, reason, qualifiedInputs: state.chapter3.ls03QualifiedInputs },
+    scheduledPhase: "model-scheduled",
+    playingPhase: "model-playing",
+    onStarted: () => {
+      if (els.heardStatus) els.heardStatus.textContent = "听到：花园唱了一声";
+    },
+    onEnded: (playback, transaction, { returnQueued }) => {
+      if (transaction.payload?.lessonId !== currentGardenLesson()?.id) return;
+      attempt.phase = returnQueued ? "model-ready" : "awaiting-response";
+      if (!returnQueued) armAudioAResponse(attempt);
+    }
+  }));
+}
+
+function startGardenChildEcho(attempt, pending, { recovery = false } = {}) {
+  const heard = noteForMidi(pending?.midi);
+  if (!audioAAttemptIsCurrent(attempt) || !heard) return false;
+  attempt.pendingInput = { ...pending, targetMidi: pending.targetMidi ?? audioAGardenLesson()?.midi };
+  attempt.childEchoCount = (Number(attempt.childEchoCount) || 0) + 1;
+  return Boolean(startAudioATeachingSequence(attempt, {
+    context: "child-echo",
+    notes: [{ midi: heard.midi, frequency: heard.frequency, gain: 0.10, durationMs: 420, delayMs: 0 }],
+    payload: { ...attempt.pendingInput, recovery },
+    scheduledPhase: "child-echo-scheduled",
+    playingPhase: "child-echo-playing",
+    onEnded: (playback, transaction, { returnQueued }) => {
+      transaction.outcomeRecorded = true;
+      commitGardenAudioAInput(attempt, attempt.pendingInput, { returnQueued });
+    }
+  }));
+}
+
+function startGardenWrongRepair(attempt, pending, { recovery = false } = {}) {
+  const heard = noteForMidi(pending?.midi);
+  const target = noteForMidi(pending?.targetMidi ?? audioAGardenLesson()?.midi);
+  if (!audioAAttemptIsCurrent(attempt) || !heard || !target) return false;
+  return Boolean(startAudioATeachingSequence(attempt, {
+    context: "wrong-repair",
+    notes: [{ midi: target.midi, frequency: target.frequency, gain: 0.13, durationMs: 720, delayMs: 0 }],
+    payload: { ...pending, targetMidi: target.midi, recovery },
+    scheduledPhase: "wrong-repair-scheduled",
+    playingPhase: "wrong-repair-playing",
+    onEnded: (playback, transaction, { returnQueued }) => {
+      if (returnQueued) {
+        attempt.phase = "awaiting-response";
+        setAudioAInputArmed(attempt, true);
+        return;
+      }
+      if (attempt.pendingModeledReason) {
+        startGardenModeledCompletion(attempt, attempt.pendingModeledReason);
+        return;
+      }
+      const lesson = audioAGardenLesson();
+      if (lesson?.id === "LS01" && state.gardenWrongCount >= 2 && state.gardenRepairStage !== "assisted") {
+        beginGardenAssistedRepair();
+        return;
+      }
+      attempt.phase = "awaiting-response";
+      armAudioAResponse(attempt);
+    }
+  }));
+}
+
+function startGardenModeledCompletion(attempt, reason) {
+  const lesson = audioAGardenLesson();
+  const target = noteForMidi(lesson?.midi);
+  if (!audioAAttemptIsCurrent(attempt) || !lesson || !target) return false;
+  clearGardenTimers();
+  attempt.pendingModeledReason = reason;
+  return Boolean(startAudioATeachingSequence(attempt, {
+    context: "modeled",
+    notes: [{ midi: target.midi, frequency: target.frequency, gain: 0.13, durationMs: 720, delayMs: 0 }],
+    payload: { targetMidi: target.midi, lessonId: lesson.id, reason },
+    scheduledPhase: "modeled-scheduled",
+    playingPhase: "modeled-playing",
+    onEnded: (playback, transaction) => {
+      if (transaction.payload?.lessonId !== currentGardenLesson()?.id) return;
+      transaction.outcomeRecorded = true;
+      state.gardenModeledInputs.push({
+        source: "model",
+        reason,
+        targetMidi: lesson.midi,
+        completedAt: new Date().toISOString()
+      });
+      state.lastInputMidi = lesson.midi;
+      state.lastInputResult = "correct";
+      attempt.phase = "complete";
+      attempt.pendingModeledReason = null;
+      persistGardenPendingAttempt();
+      completeGardenLesson(lesson, {
+        childCorrectCount: 0,
+        modeled: true,
+        assisted: state.gardenRepairStage === "assisted",
+        needsPractice: true,
+        completionSource: "model",
+        earlyRest: lesson.id === "LS01",
+        earlyRestReason: reason
+      });
+    }
+  }));
+}
+
+function commitGardenAudioAInput(attempt, pending, { returnQueued = false } = {}) {
+  const lesson = audioAGardenLesson();
+  const heard = noteForMidi(pending?.midi);
+  if (!audioAAttemptIsCurrent(attempt) || !lesson || !heard || pending.targetMidi !== lesson.midi) return false;
+  attempt.pendingInput = null;
+  state.lastInputMidi = pending.midi;
+  if (pending.midi !== lesson.midi) {
+    state.gardenInputRoutes[pending.source] = (state.gardenInputRoutes[pending.source] || 0) + 1;
+    state.gardenChildInputs.push({ midi: pending.midi, source: pending.source, result: "wrong", occurredAt: new Date().toISOString() });
+    state.lastInputResult = "wrong";
+    state.gardenWrongCount += 1;
+    els.gardenScene.classList.remove("garden-correct-pulse", "garden-wrong-pulse");
+    void els.gardenScene.offsetWidth;
+    els.gardenScene.classList.add("garden-wrong-pulse");
+    showInputEffect(pending.midi, "wrong", { showLabel: false });
+    persistGardenPendingAttempt();
+    if (lesson.id === "LS01" && state.gardenRepairStage === "assisted") {
+      attempt.pendingModeledReason = "assisted-retry-wrong";
+    }
+    const completedChildTransaction = attempt.audioTransaction;
+    const repairStarted = startGardenWrongRepair(attempt, pending);
+    if (returnQueued) handoffAudioAQueuedReturn(attempt, completedChildTransaction);
+    return repairStarted;
+  }
+
+  state.gardenInputRoutes[pending.source] = (state.gardenInputRoutes[pending.source] || 0) + 1;
+  state.gardenChildCorrectCount += 1;
+  state.gardenChildInputs.push({ midi: pending.midi, source: pending.source, result: "correct", occurredAt: new Date().toISOString() });
+  state.lastInputResult = "correct";
+  setAudioAInputArmed(attempt, false);
+  els.gardenScene.classList.remove("garden-correct-pulse", "garden-wrong-pulse");
+  void els.gardenScene.offsetWidth;
+  els.gardenScene.classList.add("garden-correct-pulse");
+  showInputEffect(pending.midi, "correct", { showLabel: false });
+  const assisted = state.gardenRepairStage === "assisted";
+  if (assisted) clearGardenTimers();
+  else if (state.gardenLongWaitTimer) {
+    clearTimeout(state.gardenLongWaitTimer);
+    state.gardenLongWaitTimer = null;
+  }
+  if (lesson.id === "LS03") {
+    state.chapter3.ls03QualifiedInputs = Math.min(2, state.chapter3.ls03QualifiedInputs + 1);
+    persistChapter3Progress();
+    if (state.chapter3.ls03QualifiedInputs < 2) {
+      attempt.phase = "model-ready";
+      persistGardenPendingAttempt();
+      if (!returnQueued) {
+        state.gardenCompletionTimer = setTimeout(() => {
+          state.gardenCompletionTimer = null;
+          if (audioAAttemptIsCurrent(attempt) && attempt.phase === "model-ready") startGardenAudioAModel(attempt, "system-next");
+        }, 360);
+      }
+      return true;
+    }
+  }
+  attempt.phase = "complete";
+  persistGardenPendingAttempt();
+  completeGardenLesson(lesson, {
+    childCorrectCount: state.gardenChildCorrectCount,
+    assisted,
+    needsPractice: assisted,
+    completionSource: "child",
+    earlyRest: lesson.id === "LS01" && assisted,
+    earlyRestReason: assisted ? "assisted-repair" : ""
+  });
+  return true;
+}
+
+function handleGardenAudioAInput(midi, source) {
+  const attempt = ensureGardenAudioAttempt();
+  const lesson = audioAGardenLesson();
+  if (!attempt || !lesson || state.chapter3.equipmentState !== "safe-open") return;
+  const retryingInterruptedExternalInput = attempt.phase === "sound-paused" &&
+    (attempt.soundPauseContext || attempt.audioTransaction?.context) === "external-input";
+  if (attempt.phase === "sound-paused") {
+    if (!recoverAudioAAttempt() || !retryingInterruptedExternalInput) {
+      if (source === "MIDI") recordAudioAMidiNoteOn(attempt, midi);
+      recordAudioAObservation(attempt, midi, source);
+      return;
+    }
+  }
+  if (source === "MIDI") {
+    const midiState = recordAudioAMidiNoteOn(attempt, midi);
+    if (midiState.blocked) {
+      recordAudioAObservation(attempt, midi, source, "held-midi");
+      return;
+    }
+  }
+  if (attempt.phase !== "awaiting-response" || !attempt.inputArmed) {
+    recordAudioAObservation(attempt, midi, source);
+    return;
+  }
+  const pending = { midi, source, targetMidi: lesson.midi, occurredAt: new Date().toISOString() };
+  if (isMicrophoneSource(source)) {
+    beginAudioAExternalInput(attempt, pending);
+    return;
+  }
+  startGardenChildEcho(attempt, pending);
+}
+
+function releaseGardenAudioAInput(midi, source) {
+  const attempt = ensureGardenAudioAttempt();
+  if (source === "MIDI") return releaseAudioAMidiInput(attempt, midi);
+  if (!isMicrophoneSource(source)) return false;
+  return finishAudioAExternalInput(attempt, midi, source, (pending, transaction, options) => {
+    commitGardenAudioAInput(attempt, pending, options);
+  });
+}
+
 function handleGardenInput(midi, source) {
   const lesson = currentGardenLesson();
   if (!lesson || state.chapter3.equipmentState !== "safe-open") return;
+  if (isAudioAGardenActive()) {
+    handleGardenAudioAInput(midi, source);
+    return;
+  }
   const heard = noteForMidi(midi);
   state.lastInputMidi = midi;
   els.inputStatus.textContent = `输入：${source}`;
@@ -10991,12 +11590,25 @@ function startBootSequence() {
       loader.hidden = true;
       if (state.screen === "play") {
         showLevelIntro();
-        beginPracticeStepClock();
-        scheduleWorkshopIdleHints(LEVEL_INTRO_RESPONSE_DELAY_MS);
-        if (isListeningLevel()) playListeningPrompt();
+        if (isAudioAM03Active()) {
+          const restored = restoreM03AudioAttempt();
+          const audioAttempt = ensureM03AudioAttempt();
+          renderAudioAAttempt(audioAttempt);
+          if (restored && audioAttempt.phase === "awaiting-response" && audioAttempt.inputArmed) {
+            ensureM03ResponseClock();
+            scheduleWorkshopIdleHints(LEVEL_INTRO_RESPONSE_DELAY_MS);
+          } else if (!restored || audioAttempt.phase === "model-ready") {
+            playListeningPrompt();
+          }
+        } else {
+          beginPracticeStepClock();
+          scheduleWorkshopIdleHints(LEVEL_INTRO_RESPONSE_DELAY_MS);
+          if (isListeningLevel()) playListeningPrompt();
+        }
       } else if (state.screen === "staff") {
         beginPracticeStepClock();
       } else if (state.screen === "garden") {
+        if (isAudioAGardenActive()) restoreGardenPendingAttempt();
         recoverGardenEquipmentState();
       }
     }, 300);
@@ -11471,7 +12083,8 @@ function persistGardenPendingAttempt() {
     childInputs: state.gardenChildInputs.map((input) => ({ ...input })),
     inputRoutes: { ...state.gardenInputRoutes },
     repairStage: state.gardenRepairStage,
-    modeledInputs: state.gardenModeledInputs.map((input) => ({ ...input }))
+    modeledInputs: state.gardenModeledInputs.map((input) => ({ ...input })),
+    audioAttempt: cloneAudioAAttempt(state.gardenAudioAttempt)
   };
   persistActiveSession();
 }
@@ -11487,11 +12100,19 @@ function restoreGardenPendingAttempt() {
   state.gardenInputRoutes = pending?.inputRoutes && typeof pending.inputRoutes === "object" ? { ...pending.inputRoutes } : {};
   state.gardenRepairStage = pending?.repairStage === "assisted" ? "assisted" : "none";
   state.gardenModeledInputs = Array.isArray(pending?.modeledInputs) ? pending.modeledInputs.map((input) => ({ ...input })) : [];
+  state.gardenAudioAttempt = pending?.audioAttempt && pending.audioAttempt.kind === "garden"
+    ? normalizeAudioAAttemptForRecovery(cloneAudioAAttempt(pending.audioAttempt))
+    : null;
+  if (state.gardenAudioAttempt) {
+    setAudioAInputArmed(state.gardenAudioAttempt, state.gardenAudioAttempt.phase === "awaiting-response");
+    persistGardenPendingAttempt();
+  }
 }
 
 function clearGardenPendingAttempt(action = currentSessionAction()) {
   if (!action?.gardenAttempt) return;
   delete action.gardenAttempt;
+  state.gardenAudioAttempt = null;
 }
 
 function setGardenEquipmentState(equipmentState, { persist = true } = {}) {
@@ -11500,6 +12121,15 @@ function setGardenEquipmentState(equipmentState, { persist = true } = {}) {
   if (persist) persistChapter3Progress();
   renderGardenScreen();
   if (equipmentState === "safe-open") {
+    const lesson = audioAGardenLesson();
+    const audioAttempt = lesson && !state.chapter3.leaves[lesson.leaf - 1]
+      ? ensureGardenAudioAttempt()
+      : null;
+    if (audioAttempt) {
+      if (audioAttempt.phase === "model-ready") startGardenAudioAModel(audioAttempt, "system-first");
+      else if (audioAttempt.phase === "awaiting-response") scheduleGardenLongWait();
+      return;
+    }
     if (state.gardenRepairStage === "assisted") scheduleGardenAssistedTimer();
     else scheduleGardenLongWait();
   }
@@ -11532,6 +12162,8 @@ function scheduleGardenLongWait() {
   state.gardenLongWaitTimer = null;
   const lesson = currentGardenLesson();
   if (state.screen !== "garden" || lesson?.id !== "LS01" || state.chapter3.leaves[0]) return;
+  const audioAttempt = ensureGardenAudioAttempt();
+  if (audioAttempt && (audioAttempt.phase !== "awaiting-response" || !audioAttempt.inputArmed)) return;
   state.gardenLongWaitTimer = setTimeout(() => {
     state.gardenLongWaitTimer = null;
     completeGardenModeledSuccess("long-wait");
@@ -11541,6 +12173,24 @@ function scheduleGardenLongWait() {
 function gardenLessonCopy(lesson) {
   const count = lesson?.id === "LS03" ? state.chapter3.ls03QualifiedInputs : 0;
   if (!lesson) return { kicker: "花园休息", main: "三片叶长好啦", support: "星芽在新家园里休息。" };
+  const audioAttempt = state.gardenAudioAttempt;
+  if (audioAttempt?.lessonId === lesson.id) {
+    if (["model-scheduled", "model-playing"].includes(audioAttempt.phase)) {
+      return { kicker: "先听一声", main: "花园正在唱", support: "声音停下后，再弹同样的琴键。" };
+    }
+    if (["child-echo-scheduled", "child-echo-playing"].includes(audioAttempt.phase)) {
+      return { kicker: "这一声还在唱", main: "先听完", support: "声音停下后，花园才会知道这一次。" };
+    }
+    if (["wrong-repair-scheduled", "wrong-repair-playing"].includes(audioAttempt.phase)) {
+      return { kicker: "先听两个声音", main: "刚才的琴键，再听花园", support: "两个声音都停下后，再试一次。" };
+    }
+    if (["modeled-scheduled", "modeled-playing"].includes(audioAttempt.phase)) {
+      return { kicker: "星芽正在示范", main: "先听清楚这一声", support: "声音停下后，叶子才会安顿好。" };
+    }
+    if (audioAttempt.phase === "sound-paused") {
+      return { kicker: "声音先休息", main: "按一次琴键继续听", support: "继续后会从同一片叶和同一个声音重新开始。" };
+    }
+  }
   if (state.gardenRepairStage === "assisted") {
     return {
       kicker: "星芽陪你再试一次",
@@ -12071,6 +12721,9 @@ function renderGardenScreen() {
     return;
   }
   const lesson = currentGardenLesson();
+  const audioAttempt = lesson && ["LS01", "LS02", "LS03"].includes(lesson.id) && !state.chapter3.leaves[lesson.leaf - 1]
+    ? ensureGardenAudioAttempt()
+    : null;
   const equipmentState = state.chapter3.equipmentState || "sealed";
   const copy = gardenLessonCopy(lesson);
   els.mainTitle.textContent = "呼吸花园";
@@ -12084,6 +12737,8 @@ function renderGardenScreen() {
   els.gardenScene.dataset.lesson = lesson?.id || "complete";
   els.gardenScene.dataset.reviewableForMastery = "false";
   els.gardenScene.dataset.repairStage = state.gardenRepairStage;
+  if (audioAttempt) els.gardenScene.dataset.teachingAudioPhase = audioAttempt.phase;
+  else delete els.gardenScene.dataset.teachingAudioPhase;
   els.gardenXingya.dataset.equipment = equipmentState;
   renderGardenCharacterAsset(equipmentState);
   els.gardenAirCheck.hidden = equipmentState === "safe-open";
@@ -12686,6 +13341,15 @@ function completeGardenLesson(lesson, options = {}) {
 function beginGardenAssistedRepair() {
   if (state.gardenRepairStage === "assisted") return;
   state.gardenRepairStage = "assisted";
+  const audioAttempt = ensureGardenAudioAttempt();
+  if (audioAttempt) {
+    audioAttempt.phase = "awaiting-response";
+    setAudioAInputArmed(audioAttempt, true);
+    persistGardenPendingAttempt();
+    renderGardenScreen();
+    if (audioAttempt.inputArmed) scheduleGardenAssistedTimer();
+    return;
+  }
   persistGardenPendingAttempt();
   renderGardenScreen();
   scheduleGardenAssistedTimer();
@@ -12704,6 +13368,8 @@ function scheduleGardenAssistedTimer() {
 function completeGardenModeledSuccess(reason) {
   const lesson = currentGardenLesson();
   if (state.screen !== "garden" || lesson?.id !== "LS01" || state.chapter3.leaves[0]) return false;
+  const audioAttempt = ensureGardenAudioAttempt();
+  if (audioAttempt) return startGardenModeledCompletion(audioAttempt, reason);
   clearGardenTimers();
   state.gardenModeledInputs.push({
     source: "model",
@@ -12754,7 +13420,7 @@ function showGardenScreen({ recovery = false } = {}) {
   else if (currentListeningAction("LS05")) ensureLs05Attempt();
   else if (currentPairedListeningAction()) ensurePairedListeningAttempt();
   else restoreGardenPendingAttempt();
-  state.gardenInputArmed = true;
+  state.gardenInputArmed = state.gardenAudioAttempt ? state.gardenAudioAttempt.inputArmed === true : true;
   history.replaceState(null, "", `?mode=garden${sessionUrlSuffix()}`);
   render();
   if (currentLs08Action()) {
@@ -12771,6 +13437,7 @@ function showGardenScreen({ recovery = false } = {}) {
     resumePairedListeningFlow();
   } else {
     beginGardenAirCheck({ recovery });
+    if (recovery && state.gardenAudioAttempt?.phase === "sound-paused") recoverAudioAAttempt();
   }
 }
 
@@ -12895,6 +13562,14 @@ function showMapScreen() {
     persistChapter4Attempt();
   }
   if (state.screen === "chapter4") clearChapter4Timers();
+  const audioAAttempt = currentAudioAAttempt();
+  if (audioAAttempt && audioAExternalInputIsActive(audioAAttempt)) {
+    interruptAudioAExternalInput(audioAAttempt, "map-external-input");
+  }
+  if (audioAAttempt && audioAPlaybackIsActive(audioAAttempt)) {
+    queueAudioAMapReturn(audioAAttempt);
+    return;
+  }
   const pendingLs08 = currentLs08Action()?.listeningAttempt;
   if (state.screen === "garden" && pendingLs08?.guideAudioPlaying && ["guide-first", "guide-second"].includes(pendingLs08.phase)) {
     queueLs08MapReturn(pendingLs08);
@@ -13249,6 +13924,556 @@ function playTeachingPianoSequence({ notes, reason = "teaching", onStarted, onEn
   return playback;
 }
 
+function isAudioAM03Active() {
+  return state.screen === "play" && activeLevel()?.id === "M03";
+}
+
+function audioAGardenLesson() {
+  const lesson = currentGardenLesson();
+  return ["LS01", "LS02", "LS03"].includes(lesson?.id) ? lesson : null;
+}
+
+function isAudioAGardenActive() {
+  return state.screen === "garden" && Boolean(audioAGardenLesson());
+}
+
+function audioATeachingSurfaceIsActive() {
+  return isAudioAM03Active() || isAudioAGardenActive();
+}
+
+function createAudioAAttempt(kind, targetMidi, lessonId = null) {
+  return {
+    version: 1,
+    kind,
+    lessonId,
+    targetMidi,
+    phase: "model-ready",
+    inputArmed: false,
+    pendingInput: null,
+    pendingModeledReason: null,
+    audioTransaction: null,
+    soundPauseContext: null,
+    observations: [],
+    audioTrace: [],
+    modelCount: 0,
+    childEchoCount: 0,
+    midiHeldMidis: []
+  };
+}
+
+function cloneAudioAAttempt(attempt) {
+  if (!attempt) return null;
+  return JSON.parse(JSON.stringify(attempt));
+}
+
+function ensureM03AudioAttempt() {
+  if (!isAudioAM03Active()) return null;
+  const targetMidi = activeTargetMidi();
+  if (!state.practiceAttempt?.audioAttempt || state.practiceAttempt.audioAttempt.kind !== "m03") {
+    state.practiceAttempt.audioAttempt = createAudioAAttempt("m03", targetMidi);
+  }
+  return state.practiceAttempt.audioAttempt;
+}
+
+function ensureGardenAudioAttempt() {
+  const lesson = audioAGardenLesson();
+  if (!lesson || state.chapter3.leaves[lesson.leaf - 1]) return null;
+  if (!state.gardenAudioAttempt || state.gardenAudioAttempt.kind !== "garden" || state.gardenAudioAttempt.lessonId !== lesson.id) {
+    state.gardenAudioAttempt = createAudioAAttempt("garden", lesson.midi, lesson.id);
+  }
+  return state.gardenAudioAttempt;
+}
+
+function currentAudioAAttempt() {
+  if (isAudioAM03Active()) return ensureM03AudioAttempt();
+  if (isAudioAGardenActive()) return ensureGardenAudioAttempt();
+  return null;
+}
+
+function audioAAttemptIsCurrent(attempt) {
+  if (!attempt) return false;
+  if (attempt.kind === "m03") return isAudioAM03Active() && state.practiceAttempt?.audioAttempt === attempt;
+  return isAudioAGardenActive() && state.gardenAudioAttempt === attempt;
+}
+
+function renderM03AudioState() {
+  if (!isAudioAM03Active()) return;
+  const attempt = ensureM03AudioAttempt();
+  const phase = attempt?.phase || "model-ready";
+  if (els.appShell) els.appShell.dataset.teachingAudioPhase = phase;
+  if (els.moonYard) els.moonYard.dataset.teachingAudioPhase = phase;
+  if (!els.m03InstructionStatus) return;
+  if (phase === "model-scheduled") els.m03InstructionStatus.textContent = "小车轮准备唱一声。";
+  else if (phase === "model-playing") els.m03InstructionStatus.textContent = "小车轮正在唱。";
+  else if (phase === "child-echo-scheduled" || phase === "child-echo-playing") els.m03InstructionStatus.textContent = "这一声还在唱。";
+  else if (phase === "wrong-repair-scheduled" || phase === "wrong-repair-playing") els.m03InstructionStatus.textContent = "先听刚才的琴键，再听小车轮。";
+  else if (phase === "modeled-scheduled" || phase === "modeled-playing") els.m03InstructionStatus.textContent = "小车轮正在清楚示范。";
+  else if (phase === "sound-paused") els.m03InstructionStatus.textContent = "声音先休息，按“再听车轮”继续。";
+  else if (phase === "complete") els.m03InstructionStatus.textContent = "两个车轮都找到了声音，小车准备好了。";
+  else els.m03InstructionStatus.textContent = "小车轮唱完，你弹同样的琴键。";
+}
+
+function renderAudioAAttempt(attempt) {
+  if (!audioAAttemptIsCurrent(attempt)) return;
+  if (attempt.kind === "m03") {
+    render();
+    renderM03AudioState();
+    return;
+  }
+  renderGardenScreen();
+}
+
+function persistM03AudioAttempt() {
+  if (!isAudioAM03Active() || !state.practiceAttempt) return;
+  const action = currentSessionAction();
+  const formalOwner = currentM03FormalSnapshotOwner(action);
+  const snapshot = {
+    version: 1,
+    stepIndex: state.stepIndex,
+    lastInputMidi: state.lastInputMidi,
+    lastInputResult: state.lastInputResult,
+    stepHadWrong: state.stepHadWrong,
+    practiceAttempt: JSON.parse(JSON.stringify(state.practiceAttempt))
+  };
+  if (formalOwner) {
+    snapshot.formalOwner = formalOwner;
+    action.m03AudioAttempt = snapshot;
+    persistActiveSession();
+    return;
+  }
+  try {
+    sessionStorage.setItem("starDinoM03AudioAttempt", JSON.stringify(snapshot));
+  } catch (error) {
+    // Direct M03 previews remain usable when session storage is unavailable.
+  }
+}
+
+function currentM03FormalSnapshotOwner(action = currentSessionAction()) {
+  const session = state.activeSession;
+  if (!session || session.status !== "active" || action?.kind !== "level" || action.targetId !== "M03") return null;
+  return {
+    sessionId: session.sessionId,
+    bundleId: session.bundleId,
+    sessionActionId: action.actionId
+  };
+}
+
+function m03SnapshotMatchesFormalOwner(snapshot, owner) {
+  const attempt = snapshot?.practiceAttempt;
+  const savedOwner = snapshot?.formalOwner || {
+    sessionId: attempt?.sessionId,
+    bundleId: attempt?.bundleId,
+    sessionActionId: attempt?.sessionActionId
+  };
+  return Boolean(
+    owner &&
+    attempt?.formalSession === true &&
+    attempt.kind === "level" &&
+    attempt.id === "M03" &&
+    savedOwner.sessionId === owner.sessionId &&
+    savedOwner.bundleId === owner.bundleId &&
+    savedOwner.sessionActionId === owner.sessionActionId
+  );
+}
+
+function clearM03FormalSnapshot(action = currentSessionAction()) {
+  if (action?.kind !== "level" || action.targetId !== "M03" || !action.m03AudioAttempt) return false;
+  delete action.m03AudioAttempt;
+  persistActiveSession();
+  return true;
+}
+
+function clearM03AudioAttempt(action = currentSessionAction()) {
+  clearM03FormalSnapshot(action);
+  try {
+    sessionStorage.removeItem("starDinoM03AudioAttempt");
+  } catch (error) {
+    // There is nothing else to clear when session storage is unavailable.
+  }
+}
+
+function discardCompletedM03AudioAttempt(attempt) {
+  clearM03AudioAttempt();
+  if (state.practiceAttempt?.audioAttempt === attempt) state.practiceAttempt.audioAttempt = null;
+}
+
+function restoreM03AudioAttempt() {
+  if (!isAudioAM03Active()) return false;
+  const action = currentSessionAction();
+  const formalOwner = currentM03FormalSnapshotOwner(action);
+  let snapshot = formalOwner ? action.m03AudioAttempt : null;
+  if (formalOwner && !m03SnapshotMatchesFormalOwner(snapshot, formalOwner)) {
+    if (snapshot) clearM03FormalSnapshot(action);
+    return false;
+  }
+  if (!formalOwner) {
+    try {
+      snapshot = JSON.parse(sessionStorage.getItem("starDinoM03AudioAttempt") || "null");
+    } catch (error) {
+      snapshot = null;
+    }
+    if (snapshot?.practiceAttempt?.formalSession) return false;
+  }
+  if (!snapshot?.practiceAttempt || !Number.isInteger(snapshot.stepIndex)) return false;
+  if (snapshot.stepIndex >= activeLevel().parts.length || snapshot.practiceAttempt?.audioAttempt?.phase === "complete") {
+    if (formalOwner) clearM03FormalSnapshot(action);
+    else clearM03AudioAttempt(action);
+    return false;
+  }
+  state.stepIndex = Math.max(0, Math.min(activeLevel().parts.length, snapshot.stepIndex));
+  state.lastInputMidi = Number.isFinite(snapshot.lastInputMidi) ? snapshot.lastInputMidi : null;
+  state.lastInputResult = ["correct", "wrong"].includes(snapshot.lastInputResult) ? snapshot.lastInputResult : null;
+  state.stepHadWrong = snapshot.stepHadWrong === true;
+  state.practiceAttempt = stampPracticeAttemptSession({
+    ...createPracticeAttempt("level", "M03", state.levelRunMode),
+    ...JSON.parse(JSON.stringify(snapshot.practiceAttempt))
+  });
+  if (state.practiceAttempt.audioAttempt?.kind === "m03") {
+    normalizeAudioAAttemptForRecovery(state.practiceAttempt.audioAttempt);
+    if (state.practiceAttempt.audioAttempt.phase === "awaiting-response") {
+      setAudioAInputArmed(state.practiceAttempt.audioAttempt, true);
+    }
+    persistM03AudioAttempt();
+  } else {
+    state.practiceAttempt.audioAttempt = createAudioAAttempt("m03", activeTargetMidi());
+  }
+  return true;
+}
+
+function persistAudioAAttempt(attempt) {
+  if (!audioAAttemptIsCurrent(attempt)) return;
+  if (attempt.kind === "m03") persistM03AudioAttempt();
+  else persistGardenPendingAttempt();
+}
+
+function audioAHeldMidiNotes(attempt) {
+  if (!attempt) return [];
+  const held = [...new Set((Array.isArray(attempt.midiHeldMidis) ? attempt.midiHeldMidis : [])
+    .map((midi) => Number(midi))
+    .filter(Number.isFinite))];
+  attempt.midiHeldMidis = held;
+  return held;
+}
+
+function recordAudioAMidiNoteOn(attempt, midi) {
+  const note = Number(midi);
+  const held = audioAHeldMidiNotes(attempt);
+  if (!Number.isFinite(note)) return { blocked: false, wasHeld: false, hadHeld: held.length > 0 };
+  const wasHeld = held.includes(note);
+  const hadHeld = held.length > 0;
+  if (!wasHeld) held.push(note);
+  attempt.midiHeldMidis = held;
+  return { blocked: wasHeld || hadHeld, wasHeld, hadHeld };
+}
+
+function releaseAudioAMidiNote(attempt, midi) {
+  const note = Number(midi);
+  if (!Number.isFinite(note)) return false;
+  const held = audioAHeldMidiNotes(attempt);
+  if (!held.includes(note)) return false;
+  attempt.midiHeldMidis = held.filter((heldMidi) => heldMidi !== note);
+  return true;
+}
+
+function clearAudioAStaleMidiHolds(attempt) {
+  if (!attempt) return false;
+  const hadHeldMidi = audioAHeldMidiNotes(attempt).length > 0;
+  attempt.midiHeldMidis = [];
+  return hadHeldMidi;
+}
+
+function audioAInputCanBeArmed(attempt) {
+  const transaction = attempt?.audioTransaction;
+  return Boolean(
+    audioAAttemptIsCurrent(attempt) &&
+    attempt.phase === "awaiting-response" &&
+    !audioAExternalInputIsActive(attempt) &&
+    audioAHeldMidiNotes(attempt).length === 0 &&
+    (!transaction || transaction.endedAt)
+  );
+}
+
+function setAudioAInputArmed(attempt, armed) {
+  if (!attempt) return false;
+  const next = Boolean(armed) && audioAInputCanBeArmed(attempt);
+  attempt.inputArmed = next;
+  if (attempt.kind === "garden") {
+    state.gardenInputArmed = next;
+    if (els.gardenScene) els.gardenScene.dataset.inputArmed = next ? "true" : "false";
+  }
+  return next;
+}
+
+function armAudioAResponse(attempt, { scheduleIdleHints = true } = {}) {
+  if (!audioAAttemptIsCurrent(attempt)) return false;
+  const wasArmed = attempt.inputArmed === true;
+  const armed = setAudioAInputArmed(attempt, true);
+  if (!armed || wasArmed) return false;
+  if (attempt.kind === "m03") {
+    ensureM03ResponseClock();
+    if (scheduleIdleHints) scheduleWorkshopIdleHints(LEVEL_INTRO_RESPONSE_DELAY_MS);
+  } else if (state.gardenRepairStage === "assisted") {
+    scheduleGardenAssistedTimer();
+  } else {
+    scheduleGardenLongWait();
+  }
+  persistAudioAAttempt(attempt);
+  renderAudioAAttempt(attempt);
+  return true;
+}
+
+function releaseAudioAMidiInput(attempt, midi) {
+  if (!audioAAttemptIsCurrent(attempt) || !releaseAudioAMidiNote(attempt, midi)) return false;
+  if (!armAudioAResponse(attempt)) {
+    persistAudioAAttempt(attempt);
+    renderAudioAAttempt(attempt);
+  }
+  return true;
+}
+
+function normalizeAudioAAttemptForRecovery(attempt) {
+  clearAudioAStaleMidiHolds(attempt);
+  const transaction = attempt?.audioTransaction;
+  if (!transaction || transaction.endedAt || transaction.interruptedAt) return attempt;
+  transaction.interruptedAt = new Date().toISOString();
+  transaction.contextState = "recovered-without-active-playback";
+  attempt.soundPauseContext = transaction.context || null;
+  attempt.phase = "sound-paused";
+  setAudioAInputArmed(attempt, false);
+  return attempt;
+}
+
+function recordAudioAObservation(attempt, midi, source, phase = attempt?.phase) {
+  if (!attempt) return;
+  attempt.observations.push({ midi, source, phase, occurredAt: new Date().toISOString() });
+  attempt.observations = attempt.observations.slice(-24);
+  persistAudioAAttempt(attempt);
+}
+
+function traceAudioAAttempt(attempt, kind, transaction, extra = {}) {
+  if (!attempt) return;
+  attempt.audioTrace.push({
+    kind,
+    context: transaction?.context || null,
+    midis: Array.isArray(transaction?.notes)
+      ? transaction.notes.map((note) => note.midi).filter(Number.isFinite)
+      : (Number.isFinite(transaction?.payload?.midi) ? [transaction.payload.midi] : []),
+    playbackId: transaction?.playbackId || null,
+    scheduledAt: transaction?.scheduledAt || null,
+    startedAt: transaction?.startedAt || null,
+    endedAt: transaction?.endedAt || null,
+    interruptedAt: transaction?.interruptedAt || null,
+    startAudioTime: transaction?.startAudioTime ?? null,
+    endAudioTime: transaction?.endAudioTime ?? null,
+    ...extra
+  });
+  attempt.audioTrace = attempt.audioTrace.slice(-48);
+}
+
+function writeAudioATransaction(transaction, playback, field) {
+  transaction.playbackId = playback.id;
+  transaction.scheduledAt = playback.scheduledAt;
+  transaction.startedAt = playback.startedAt;
+  transaction.endedAt = playback.endedAt;
+  transaction.interruptedAt = playback.interruptedAt;
+  transaction.startAudioTime = playback.startAudioTime;
+  transaction.endAudioTime = playback.endAudioTime;
+  transaction.interruptedAudioTime = playback.interruptedAudioTime;
+  transaction.contextState = playback.contextState;
+  transaction.status = playback.status;
+  if (field) transaction.lastLifecycleField = field;
+}
+
+function consumeAudioAQueuedReturn(attempt, transaction) {
+  if (!transaction?.returnQueued || transaction.returnQueuedConsumedAt) return false;
+  transaction.returnQueued = false;
+  transaction.returnQueuedConsumedAt = new Date().toISOString();
+  persistAudioAAttempt(attempt);
+  setTimeout(() => showMapScreen(), 0);
+  return true;
+}
+
+function handoffAudioAQueuedReturn(attempt, transaction) {
+  const successor = attempt?.audioTransaction;
+  if (!transaction?.returnQueued || !successor || successor === transaction) return false;
+  transaction.returnQueued = false;
+  transaction.returnQueuedHandedOffAt = new Date().toISOString();
+  successor.returnQueued = true;
+  successor.returnQueuedFromPlaybackId = transaction.playbackId || null;
+  persistAudioAAttempt(attempt);
+  if (successor.interruptedAt) consumeAudioAQueuedReturn(attempt, successor);
+  return true;
+}
+
+function startAudioATeachingSequence(attempt, {
+  context,
+  notes,
+  payload = null,
+  scheduledPhase,
+  playingPhase,
+  onStarted,
+  onEnded,
+  onInterrupted
+} = {}) {
+  if (!audioAAttemptIsCurrent(attempt)) return null;
+  const transaction = {
+    context,
+    payload: payload ? JSON.parse(JSON.stringify(payload)) : null,
+    notes: notes.map((note) => ({
+      midi: Number.isFinite(note.midi) ? note.midi : null,
+      delayMs: Number(note.delayMs) || 0,
+      durationMs: Number(note.durationMs) || 0
+    })),
+    playbackId: null,
+    scheduledAt: new Date().toISOString(),
+    startedAt: null,
+    endedAt: null,
+    interruptedAt: null,
+    startAudioTime: null,
+    endAudioTime: null,
+    interruptedAudioTime: null,
+    contextState: "scheduled",
+    status: "scheduled",
+    returnQueued: false,
+    returnQueuedConsumedAt: null,
+    outcomeRecorded: false
+  };
+  attempt.audioTransaction = transaction;
+  attempt.soundPauseContext = null;
+  attempt.phase = scheduledPhase || `${context}-scheduled`;
+  setAudioAInputArmed(attempt, false);
+  persistAudioAAttempt(attempt);
+  renderAudioAAttempt(attempt);
+
+  const playback = playTeachingPianoSequence({
+    notes,
+    reason: `audio-a-${context}`,
+    onStarted: (actualPlayback) => {
+      if (!audioAAttemptIsCurrent(attempt) || attempt.audioTransaction !== transaction) return;
+      writeAudioATransaction(transaction, actualPlayback, "started");
+      attempt.phase = playingPhase || `${context}-playing`;
+      onStarted?.(actualPlayback, transaction);
+      traceAudioAAttempt(attempt, "started", transaction);
+      persistAudioAAttempt(attempt);
+      renderAudioAAttempt(attempt);
+    },
+    onEnded: (actualPlayback) => {
+      if (!audioAAttemptIsCurrent(attempt) || attempt.audioTransaction !== transaction) return;
+      writeAudioATransaction(transaction, actualPlayback, "ended");
+      traceAudioAAttempt(attempt, "ended", transaction);
+      persistAudioAAttempt(attempt);
+      onEnded?.(actualPlayback, transaction, { returnQueued: transaction.returnQueued === true });
+      if (!audioAAttemptIsCurrent(attempt) || attempt.audioTransaction !== transaction) return;
+      persistAudioAAttempt(attempt);
+      renderAudioAAttempt(attempt);
+      consumeAudioAQueuedReturn(attempt, transaction);
+    },
+    onInterrupted: (actualPlayback, reason) => {
+      if (!audioAAttemptIsCurrent(attempt) || attempt.audioTransaction !== transaction) return;
+      writeAudioATransaction(transaction, actualPlayback, "interrupted");
+      attempt.soundPauseContext = context;
+      attempt.phase = "sound-paused";
+      setAudioAInputArmed(attempt, false);
+      traceAudioAAttempt(attempt, "interrupted", transaction, { reason });
+      persistAudioAAttempt(attempt);
+      onInterrupted?.(actualPlayback, transaction, reason);
+      if (!audioAAttemptIsCurrent(attempt) || attempt.audioTransaction !== transaction) return;
+      persistAudioAAttempt(attempt);
+      renderAudioAAttempt(attempt);
+      consumeAudioAQueuedReturn(attempt, transaction);
+    }
+  });
+  if (audioAAttemptIsCurrent(attempt) && attempt.audioTransaction === transaction) {
+    transaction.playbackId ||= playback.id;
+    transaction.scheduledAt = playback.scheduledAt;
+    transaction.status = playback.status;
+    transaction.contextState = playback.contextState || transaction.contextState;
+    persistAudioAAttempt(attempt);
+  }
+  return playback;
+}
+
+function audioAPlaybackIsActive(attempt) {
+  const transaction = attempt?.audioTransaction;
+  const playback = state.teachingPlayback;
+  return Boolean(
+    transaction &&
+    !transaction.endedAt &&
+    !transaction.interruptedAt &&
+    transaction.playbackId &&
+    playback?.id === transaction.playbackId &&
+    ["scheduled", "playing"].includes(playback.status)
+  );
+}
+
+function audioAExternalInputIsActive(attempt) {
+  const transaction = attempt?.audioTransaction;
+  return Boolean(
+    transaction?.context === "external-input" &&
+    !transaction.endedAt &&
+    !transaction.interruptedAt
+  );
+}
+
+function interruptAudioAExternalInput(attempt, reason = "external-interrupted") {
+  if (!audioAAttemptIsCurrent(attempt) || !audioAExternalInputIsActive(attempt)) return false;
+  const transaction = attempt.audioTransaction;
+  transaction.interruptedAt = new Date().toISOString();
+  transaction.contextState = "external-input-interrupted";
+  transaction.status = "interrupted";
+  transaction.interruptReason = reason;
+  attempt.soundPauseContext = "external-input";
+  attempt.phase = "sound-paused";
+  setAudioAInputArmed(attempt, false);
+  traceAudioAAttempt(attempt, "interrupted", transaction, { reason, external: true });
+  persistAudioAAttempt(attempt);
+  renderAudioAAttempt(attempt);
+  consumeAudioAQueuedReturn(attempt, transaction);
+  return true;
+}
+
+function interruptActiveAudioAExternalInput(reason) {
+  const attempt = currentAudioAAttempt();
+  return interruptAudioAExternalInput(attempt, reason);
+}
+
+function queueAudioAMapReturn(attempt) {
+  if (!audioAPlaybackIsActive(attempt)) return false;
+  attempt.audioTransaction.returnQueued = true;
+  persistAudioAAttempt(attempt);
+  renderAudioAAttempt(attempt);
+  return true;
+}
+
+function recoverAudioAAttempt() {
+  const attempt = currentAudioAAttempt();
+  if (!attempt || attempt.phase !== "sound-paused") return false;
+  const transaction = attempt.audioTransaction;
+  const context = attempt.soundPauseContext || transaction?.context;
+  const payload = transaction?.payload || attempt.pendingInput;
+  clearAudioAStaleMidiHolds(attempt);
+  attempt.audioTransaction = null;
+  attempt.soundPauseContext = null;
+  if (context === "external-input") {
+    attempt.pendingInput = null;
+    attempt.phase = "awaiting-response";
+    armAudioAResponse(attempt);
+    persistAudioAAttempt(attempt);
+    renderAudioAAttempt(attempt);
+    return true;
+  }
+  if (attempt.kind === "m03") {
+    if (context === "child-echo" && payload?.midi !== undefined) return startM03ChildEcho(attempt, payload, { recovery: true });
+    if (context === "wrong-repair" && payload?.midi !== undefined) return startM03WrongRepair(attempt, payload, { recovery: true });
+    if (context === "modeled") return startM03ModeledCompletion(attempt, attempt.pendingModeledReason || "sound-recovery");
+    return startM03Model(attempt, "sound-recovery");
+  }
+  if (context === "child-echo" && payload?.midi !== undefined) return startGardenChildEcho(attempt, payload, { recovery: true });
+  if (context === "wrong-repair" && payload?.midi !== undefined) return startGardenWrongRepair(attempt, payload, { recovery: true });
+  if (context === "modeled") return startGardenModeledCompletion(attempt, attempt.pendingModeledReason || "sound-recovery");
+  return startGardenAudioAModel(attempt, "sound-recovery");
+}
+
 function playPianoNote(frequency, options = {}) {
   let sfx = null;
   try {
@@ -13344,6 +14569,16 @@ function clearListeningPrompt() {
 
 function playListeningPrompt() {
   if (state.screen !== "play" || !isListeningLevel()) return;
+  if (isAudioAM03Active()) {
+    const attempt = ensureM03AudioAttempt();
+    if (!attempt) return;
+    if (attempt.phase === "sound-paused") {
+      recoverAudioAAttempt();
+      return;
+    }
+    if (["model-ready", "awaiting-response"].includes(attempt.phase)) startM03Model(attempt, "replay");
+    return;
+  }
   const target = noteForMidi(activeTargetMidi());
   if (!target) return;
   clearListeningPrompt();
@@ -13413,6 +14648,7 @@ function resetLevel(runMode = "guided") {
   state.stepHadWrong = false;
   state.practiceAttempt = stampPracticeAttemptSession(createPracticeAttempt("level", activeLevel().id, state.levelRunMode));
   clearAssistedRepairState();
+  const restoredM03AudioAttempt = activeLevel()?.id === "M03" && restoreM03AudioAttempt();
   clearAutoAdvance();
   clearWorkshopIdleHints();
   clearDinoMoodTimer();
@@ -13431,6 +14667,18 @@ function resetLevel(runMode = "guided") {
   hideResultModal();
   setInstructionFeedback();
   render();
+  if (isAudioAM03Active()) {
+    const audioAttempt = ensureM03AudioAttempt();
+    renderM03AudioState();
+    showLevelIntro();
+    if (restoredM03AudioAttempt && audioAttempt.phase === "awaiting-response" && audioAttempt.inputArmed) {
+      ensureM03ResponseClock();
+      scheduleWorkshopIdleHints(LEVEL_INTRO_RESPONSE_DELAY_MS);
+    } else if (!restoredM03AudioAttempt || audioAttempt.phase === "model-ready") {
+      scheduleListeningPrompt(720);
+    }
+    return;
+  }
   beginPracticeStepClock();
   showLevelIntro();
   scheduleWorkshopIdleHints(LEVEL_INTRO_RESPONSE_DELAY_MS);
@@ -13489,6 +14737,10 @@ function startStaffCheckReplay() {
 }
 
 function goLevel(delta) {
+  if (isAudioAM03Active()) {
+    interruptTeachingPianoSequence("level-change");
+    clearM03AudioAttempt();
+  }
   clearAutoAdvance();
   state.levelIndex = Math.max(0, Math.min(levels.length - 1, state.levelIndex + delta));
   state.screen = "play";
@@ -13500,6 +14752,10 @@ function goLevel(delta) {
 function goToLevelId(levelId) {
   const index = levels.findIndex((level) => level.id === levelId);
   if (index < 0) return;
+  if (isAudioAM03Active()) {
+    interruptTeachingPianoSequence("level-change");
+    clearM03AudioAttempt();
+  }
   clearAutoAdvance();
   state.levelIndex = index;
   state.screen = "play";
@@ -13704,6 +14960,7 @@ async function toggleMicrophone() {
 
 function stopMicrophone() {
   if (!state.audio) return;
+  interruptActiveAudioAExternalInput("microphone-stopped");
   const audio = state.audio;
   cancelAnimationFrame(audio.raf);
   audio.stream.getTracks().forEach((track) => track.stop());
@@ -13736,6 +14993,10 @@ function listenLoop() {
     if (state.screen === "garden" && currentLs08Action() && gateResult.state === "quiet") {
       releaseGardenInput(null, "麦克风");
     } else if (state.screen === "chapter4" && currentChapter4Action("LP02") && gateResult.state === "quiet") {
+      releaseGardenInput(null, "麦克风");
+    } else if (isAudioAM03Active() && gateResult.state === "quiet") {
+      releaseGardenInput(null, "麦克风");
+    } else if (isAudioAGardenActive() && gateResult.state === "quiet") {
       releaseGardenInput(null, "麦克风");
     } else if (state.screen === "garden" && gateResult.state !== "releasing") {
       const lesson = currentGardenLesson();
@@ -14019,12 +15280,17 @@ window.addEventListener("blur", () => {
   clearAllLs08PointerActivations();
   clearAllChapter4BubblePointerActivations();
   interruptTeachingPianoSequence("window-blur");
+  interruptActiveAudioAExternalInput("window-blur");
 });
 document.addEventListener("visibilitychange", () => {
-  if (document.visibilityState === "hidden") interruptTeachingPianoSequence("document-hidden");
+  if (document.visibilityState === "hidden") {
+    interruptTeachingPianoSequence("document-hidden");
+    interruptActiveAudioAExternalInput("document-hidden");
+  }
 });
 window.addEventListener("pagehide", () => {
   interruptTeachingPianoSequence("pagehide");
+  interruptActiveAudioAExternalInput("pagehide");
 });
 document.addEventListener("keydown", (event) => {
   if (!event.metaKey && !event.ctrlKey && !event.altKey) unlockAudioFromGesture();
@@ -14229,7 +15495,10 @@ els.targetNote.addEventListener("keydown", (event) => {
   }
 });
 els.prevLevel.addEventListener("click", () => goLevel(-1));
-els.resetLevel.addEventListener("click", resetLevel);
+els.resetLevel.addEventListener("click", () => {
+  if (isAudioAM03Active()) clearM03AudioAttempt();
+  resetLevel();
+});
 els.nextLevel.addEventListener("click", () => goLevel(1));
 els.modalNext.addEventListener("click", () => {
   const resultKind = els.resultModal.dataset.result;

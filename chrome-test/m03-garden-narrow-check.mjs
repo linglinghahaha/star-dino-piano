@@ -44,6 +44,10 @@ async function waitReady(page, selector) {
   await page.waitForTimeout(200);
 }
 
+async function waitM03AudioPhase(page, phase, timeout = 10000) {
+  await page.waitForFunction((expected) => document.querySelector("#appShell")?.dataset.teachingAudioPhase === expected, phase, { timeout });
+}
+
 async function seedStorage(page, values) {
   await page.goto(url(), { waitUntil: "domcontentloaded", timeout: 12000 });
   await page.evaluate((entries) => {
@@ -142,7 +146,7 @@ const answerCarrierText = (snapshot) => snapshot.surfaces
   .join(" | ");
 
 const initial = await readM03();
-record("M03 runs the 344a shell", initial.version.includes("overhaul-344a"), initial);
+record("M03 runs the 345b AUDIO-A shell", initial.version.includes("overhaul-345b-audio-a"), initial);
 record("M03 uses the wheel identity and removes the seed identity", initial.allVisibleText.includes("会唱小车轮") && !initial.allVisibleText.includes("听音小种子"), initial);
 record("M03 initial state has no duplicate story ribbon or listening guide", !initial.storyVisible && !initial.guideVisible, initial);
 record("M03 initial coach gives one role-correct invitation", initial.coach.includes("小车轮先唱") && initial.coach.includes("你弹同样的键") && !initial.coach.includes("星芽唱"), initial);
@@ -152,30 +156,33 @@ record("M03 visible and ARIA copy has no mixed singing label", !initial.allVisib
 await m03Page.screenshot({ path: path.join(screenshotDir, "M03_initial_1024x768.png") });
 
 await m03Page.locator("#m03WheelReplay").click();
-await m03Page.waitForTimeout(180);
+await waitM03AudioPhase(m03Page, "awaiting-response");
 const replayed = await readM03();
 record("M03 replay keeps the answer hidden", replayed.identityHidden === "true" && replayed.targetVisible === "false" && !/(^|\s)(D|Re)(\s|$)/.test(answerCarrierText(replayed)), replayed);
 
 await m03Page.waitForFunction(() => document.querySelector("#appShell")?.dataset.idleHint === "identity", null, { timeout: 9000 });
 const idle = await readM03();
 record("M03 idle remains a wheel replay without identity or locator", idle.idleStage === "identity" && idle.coach.includes("小车轮再唱") && idle.identityHidden === "true" && idle.targetVisible === "false" && !/(^|\s)(D|Re)(\s|$)/.test(answerCarrierText(idle)), idle);
+await waitM03AudioPhase(m03Page, "awaiting-response");
 
 await m03Page.locator('.key.white-key[data-midi="60"]').click();
-await m03Page.waitForTimeout(280);
+await waitM03AudioPhase(m03Page, "wrong-repair-playing");
 const wrongD = await readM03();
 record("M03 first error names the wheel and piano roles correctly", wrongD.coach.includes("轮子唱 Re") && wrongD.coach.includes("你来弹 D") && !wrongD.coach.includes("星芽") && !wrongD.coach.includes("唱 Re/D"), wrongD);
 record("M03 first error reveals only the repair target key", wrongD.targetVisible === "true" && wrongD.targetKey.includes("D"), wrongD);
 await m03Page.screenshot({ path: path.join(screenshotDir, "M03_wrong_D_1024x768.png") });
+await waitM03AudioPhase(m03Page, "awaiting-response");
 
 await m03Page.locator('.key.white-key[data-midi="62"]').click();
-await m03Page.waitForTimeout(260);
+await waitM03AudioPhase(m03Page, "awaiting-response");
 const afterD = await readM03();
 record("M03 D success advances to a hidden C listening step", afterD.identityHidden === "true" && afterD.targetVisible === "false" && afterD.coach.includes("小车轮先唱") && !afterD.coach.includes("Do") && !afterD.coach.includes("C"), afterD);
 
 await m03Page.locator('.key.white-key[data-midi="62"]').click();
-await m03Page.waitForTimeout(260);
+await waitM03AudioPhase(m03Page, "wrong-repair-playing");
 const wrongC = await readM03();
 record("M03 C repair keeps the same role language", wrongC.coach.includes("轮子唱 Do") && wrongC.coach.includes("你来弹 C") && !wrongC.coach.includes("唱 Do/C"), wrongC);
+await waitM03AudioPhase(m03Page, "awaiting-response");
 
 await m03Page.locator('.key.white-key[data-midi="60"]').click();
 await m03Page.waitForSelector(".m03-wheel-complete", { state: "visible", timeout: 6000 });

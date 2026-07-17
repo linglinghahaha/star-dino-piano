@@ -2,6 +2,39 @@
 
 This file records concrete pass/fail evidence for UI, teaching, and polish gates. It is not a substitute for the acceptance rules in `15_ACCEPTANCE_GATES.md`; it is the evidence trail.
 
+## 2026-07-17 - AUDIO-A 345b Browser Gate Evidence
+
+Baseline and identity:
+
+- Baseline: frozen 344a teaching-audio candidate (`overhaul-344a-p3`); AUDIO-A candidate identity: `overhaul-345b-audio-a`.
+- Final runtime digest: `app.js` SHA-256 `6D6E771DDF7EBE6468A2D58064869CF87A9BBFB73074B1C389C745BD42B9F40E`.
+- The shell loads `app.js?v=overhaul-345b-audio-a`; Service Worker cache `star-dino-pwa-overhaul-345b-audio-a` precaches that same URL. PWA shell evidence passed with the new identity.
+
+Scope and lifecycle evidence:
+
+- AUDIO-A covers only M03 and Chapter 3 LS01-LS03. It reuses the frozen verified teaching-piano sequence contract: actual running/start before presentation, final oscillator end before scoring/world action, and interrupted rather than fabricated completion for mute, rejected resume, suspend, watchdog, navigation, reload, visibility, pagehide, and blur.
+- Held-MIDI P1 is covered by session-local held notes: same or other held note-ons are observation-only, repair/model completion cannot rearm while held, per-note release arms exactly once, and map/reload recovery cannot persist an unobservable stale hold.
+- M03 formal-session P1: a formal `C1-03` action restores only its own owner-stamped snapshot (`sessionId`, `bundleId`, `sessionActionId`). A direct-preview session-storage snapshot cannot seed a new formal action; refresh and map re-entry preserve only matching formal evidence.
+- M03 terminal-return P1: a map request during the final touch or MIDI child echo remains queued until actual ended, consumes once before the attempt is discarded, returns to the map, and clears the M04 auto-advance timer. Completion evidence remains single-write.
+- Final hardening preserves the M03 idle identity-to-locator sequence across audible idle replays and restores M03 wrong/target visual key feedback only after the verified repair target has started. Neither path adds a second child note, score, world action, or teaching sound.
+- No AUDIO-B/C, LP03, C4-R01, UI/art/media work, course-order change, threshold change, or mastery-semantic change was introduced.
+
+Final browser gates (all exit 0 on the final digest):
+
+- `check:audio-a` `66/66`; `check:sessions` `74/74`; `check:m03-garden` `32/32`; `check:chapter3-visible` `74/74`; `check:clean-state` `124/124`.
+- `check:chapter3-ls08` `131/131`; `check:chapter4-lp01-lp02` `137/137`; `check:child-note-names` `224/224`.
+- `check:audio-settings` `13/13`; `check:input-reliability` `12/12`; `check:pwa-shell` `8/8`.
+- `check:assembly-blueprint` `39/39`; `check:m01-hierarchy` `17/17`; `check:roof-route` `97/97`; `check:staff-readability` `13/13`; `check:staff-repair` `27/27`; `check:xingya-suit` `29/29`; `check:workshop-identity` `36/36`.
+- `check:quick` passed syntax, note-matrix, copy, the 22-check audio contract audit, and bundle audit. `check:bundle:strict` passed with 42 runtime files and 1,641,265 runtime-asset bytes.
+- `node --check` passed every modified JS file. `git diff --check` and `git diff --cached --check` passed; the former only emitted Git's non-failing CRLF normalization warning for `index.html`.
+
+Runtime and contract boundaries:
+
+- Runtime files (`app.js`, shell, Service Worker, manifest, and loaded runtime CSS) have zero matches for `concepts/`, `audio/`, Grok/Gemini/Sora, technical preview, and prohibited-project identifiers. Historical docs, developer tools, and older test material may contain non-runtime isolation or planning references; this is not represented as a whole-repository literal-zero claim.
+- Coordinate contracts were not re-signed: AUDIO-A changed no DOM/CSS/layout contract. The existing 344a coordinate contracts remain layout-regression baselines and are not renamed or represented as 345b contracts.
+
+Status: browser/runtime evidence is `passed`; candidate remains uncommitted and awaits supervisor review. Runtime media integration remains disallowed. Physical iPad Safari, real MIDI hardware, acoustic-piano microphone input, teacher review, 3-5 child observation, source/provenance review, external similarity review, and release clearance remain `missing`. No contradiction was found in the available browser evidence.
+
 ## 2026-07-17 - Overhaul 344a Final Browser Gate Evidence
 
 Scope: final browser evidence for the frozen C4-01 / LP01-LP02 and LS08 teaching-audio candidate. No LP03, C4-R01, LP04, media runtime integration, or global UI work was added during this evidence pass.

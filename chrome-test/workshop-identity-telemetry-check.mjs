@@ -259,7 +259,7 @@ try {
       overflowY: document.documentElement.scrollHeight > document.documentElement.clientHeight + 1
     };
   });
-  record("prototype loads the 344a runtime version", m02Initial.version?.includes("overhaul-344a"), m02Initial);
+  record("prototype loads the 345b AUDIO-A runtime version", m02Initial.version?.includes("overhaul-345b-audio-a"), m02Initial);
   record("current workshop part shows C without visible solfege", m02Initial.letter === "C" && !m02Initial.solfege, m02Initial);
   record("part keeps the object label separate from note identity", m02Initial.objectLabel === "小灯", m02Initial);
   record("M02 keeps its original scene without a construction blueprint", m02Initial.blueprintHidden, m02Initial);
@@ -307,6 +307,8 @@ try {
   record("M03 initial target-linked objects use neutral identity styling", m03Initial.hangingColor === "#5F7286" && m03Initial.currentSlotColor === "#5F7286" && m03Initial.hangingFilter.includes("grayscale") && m03Initial.currentSlotArtFilter.includes("grayscale") && m03Initial.storyPartFilter.includes("grayscale"), m03Initial);
   await page.screenshot({ path: `${screenshotPrefix}_M03_initial_hidden.png`, fullPage: false });
 
+  await page.locator("#m03WheelReplay").click();
+  await page.waitForFunction(() => document.querySelector("#appShell")?.dataset.teachingAudioPhase === "awaiting-response", null, { timeout: 10000 });
   await page.waitForFunction(() => document.querySelector("#appShell")?.dataset.idleHint === "identity", null, { timeout: 9000 });
   await page.waitForTimeout(120);
   const m03IdentityIdle = await readM03IdentityState();
@@ -325,7 +327,13 @@ try {
   });
   await page.screenshot({ path: `${screenshotPrefix}_M03_idle_locator_hidden.png`, fullPage: false });
 
-  await tapMidi(60, 420);
+  await page.waitForFunction(() => document.querySelector("#appShell")?.dataset.teachingAudioPhase === "awaiting-response", null, { timeout: 10000 });
+  await tapMidi(60, 0);
+  await page.waitForFunction(() => document.querySelector("#appShell")?.dataset.teachingAudioPhase === "wrong-repair-playing", null, { timeout: 10000 });
+  await page.waitForFunction(() => ["wrong", "hint"].every((kind) => {
+    const label = document.querySelector(`.key-press-label.label-${kind}`);
+    return Boolean(label && Number(getComputedStyle(label).opacity) > 0.1);
+  }), null, { timeout: 3000 });
   const m03Wrong = await readM03IdentityState();
   const m03WrongSceneSurfaces = m03AnswerLeaks(m03Wrong);
   record("M03 wrong answer keeps one role-correct scene repair surface", m03Wrong.identityHidden === "false" && m03WrongSceneSurfaces.length === 1 && m03WrongSceneSurfaces[0]?.selector === "#coachBubble" && m03Wrong.coachText.includes("轮子唱 Re") && m03Wrong.coachText.includes("你来弹 D") && !m03Wrong.coachText.includes("唱 Re/D") && !m03Wrong.coachText.includes("星芽唱"), {

@@ -80,6 +80,10 @@ const tapMidi = async (midi, delay = 760) => {
   await page.waitForTimeout(delay);
 };
 
+const waitM03AudioPhase = async (phase, timeout = 10000) => {
+  await page.waitForFunction((expected) => document.querySelector("#appShell")?.dataset.teachingAudioPhase === expected, phase, { timeout });
+};
+
 const waitResult = async () => {
   await page.waitForFunction(() => !document.querySelector("#resultModal")?.hidden, null, {
     timeout: 8000
@@ -322,7 +326,10 @@ const completeListeningM03 = async (runName) => {
   });
   assertCleanState(initial);
 
-  await tapMidi(62, 840);
+  await page.locator("#m03WheelReplay").click({ timeout: 5000 });
+  await waitM03AudioPhase("awaiting-response");
+  await page.locator('.key.white-key[data-midi="62"]').click({ timeout: 5000 });
+  await waitM03AudioPhase("awaiting-response");
   const step2 = await readState(`M03 ${runName} step2`);
   const step2Leaks = listeningAnswerLeaks(step2, {
     solfege: "Do",
@@ -334,7 +341,7 @@ const completeListeningM03 = async (runName) => {
     leaks: step2Leaks
   });
 
-  await tapMidi(60, 840);
+  await page.locator('.key.white-key[data-midi="60"]').click({ timeout: 5000 });
   await page.waitForSelector(".m03-wheel-complete", { state: "visible", timeout: 6000 });
   await page.waitForTimeout(220);
   const result = await readState(`M03 ${runName} result`);

@@ -100,7 +100,7 @@ try {
     try {
       await openLevel("M01");
       const m01 = await readScene();
-      record(`${viewport.id}: runs the 344a shell`, m01.version.includes("overhaul-344a"), m01);
+      record(`${viewport.id}: runs the 345b AUDIO-A shell`, m01.version.includes("overhaul-345b-audio-a"), m01);
 
       for (const levelId of nonBlueprintLevels) {
         if (levelId !== "M01") await openLevel(levelId);
@@ -133,10 +133,13 @@ try {
         m03Initial.blueprintHidden && m03Initial.blueprintChildCount === 0 && !m03Initial.hangingVisible && m03Initial.targetVisible === "false",
         m03Initial);
       await page.screenshot({ path: `${screenshotPrefix}_${viewport.id}_M03_initial.png`, fullPage: false });
+      await page.locator("#m03WheelReplay").click();
+      await page.waitForFunction(() => document.querySelector("#appShell")?.dataset.teachingAudioPhase === "awaiting-response", null, { timeout: 10000 });
       await page.locator('.key.white-key[data-midi="62"]').click();
-      await page.waitForTimeout(300);
+      await page.waitForFunction(() => state.stepIndex === 1 && document.querySelector("#appShell")?.dataset.teachingAudioPhase === "model-playing", null, { timeout: 10000 });
+      await page.waitForFunction(() => state.stepIndex === 1 && document.querySelector("#appShell")?.dataset.teachingAudioPhase === "awaiting-response", null, { timeout: 10000 });
       await page.locator('.key.white-key[data-midi="60"]').click();
-      await page.waitForSelector("#baseBuild .m03-wheel-complete", { state: "visible", timeout: 6000 });
+      await page.waitForSelector("#baseBuild .m03-wheel-complete", { state: "visible", timeout: 10000 });
       await page.waitForTimeout(220);
       const m03Complete = await readScene();
       record(`${viewport.id}: M03 completion remains a world-scene result without a blueprint`,

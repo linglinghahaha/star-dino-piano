@@ -229,10 +229,89 @@ const tapWrong = async (page, delay = 115) => {
   return true;
 };
 
+const beginM03ModelIfNeeded = async (page) => {
+  const phase = await page.evaluate(() => document.querySelector("#appShell")?.dataset.teachingAudioPhase || "");
+  if (["model-ready", "sound-paused"].includes(phase)) {
+    await page.locator("#m03WheelReplay").click({ timeout: 5000 });
+  }
+};
+
+const waitM03Response = async (page, timeout = 10000) => {
+  await beginM03ModelIfNeeded(page);
+  try {
+    await page.waitForFunction(() => document.querySelector("#appShell")?.dataset.teachingAudioPhase === "awaiting-response", null, { timeout });
+  } catch (error) {
+    const diagnostic = await page.evaluate(() => ({
+      phase: document.querySelector("#appShell")?.dataset.teachingAudioPhase || "",
+      screen: state.screen,
+      stepIndex: state.stepIndex,
+      audioAttempt: state.practiceAttempt?.audioAttempt || null,
+      audioContextState: state.sfx?.ctx?.state || null,
+      replayHidden: document.querySelector("#m03WheelReplay")?.hidden,
+      runtime: JSON.parse(localStorage.getItem("starDinoSessionRuntime") || "null")
+    }));
+    throw new Error(`M03 response did not arm: ${JSON.stringify(diagnostic)}`, { cause: error });
+  }
+};
+
+const completeM03Action = async (page, sessionId, actionIndex, { wrongTaps = 0 } = {}) => {
+  let remainingWrongTaps = wrongTaps;
+  const run = { kind: "M03", sessionId, actionIndex, responses: [], childEchoes: [] };
+  for (let guard = 0; guard < 8; guard += 1) {
+    const runtime = await readRuntime(page);
+    const active = runtime?.active;
+    if (!active || active.sessionId !== sessionId || active.actionIndex !== actionIndex) return run;
+    await waitM03Response(page);
+    run.responses.push(await page.evaluate(() => {
+      const attempt = state.practiceAttempt?.audioAttempt;
+      return {
+        stepIndex: state.stepIndex,
+        modelCount: attempt?.modelCount || 0,
+        childEchoCount: attempt?.childEchoCount || 0,
+        trace: (attempt?.audioTrace || []).map((event) => ({ kind: event.kind, context: event.context, midis: event.midis }))
+      };
+    }));
+    if (remainingWrongTaps > 0) {
+      const tappedWrong = await tapWrong(page, 0);
+      if (!tappedWrong) throw new Error("M03 wrong target was unavailable");
+      remainingWrongTaps -= 1;
+      await waitM03Response(page);
+      continue;
+    }
+    const beforeStepIndex = await page.evaluate(() => state.stepIndex);
+    const tappedTarget = await tapTarget(page, 0);
+    if (!tappedTarget) throw new Error("M03 target was unavailable");
+    await page.waitForFunction(({ expectedSessionId, expectedActionIndex }) => {
+      const runtime = JSON.parse(localStorage.getItem("starDinoSessionRuntime") || "null");
+      const active = runtime?.active;
+      return !active || active.sessionId !== expectedSessionId || active.actionIndex !== expectedActionIndex || document.querySelector("#appShell")?.dataset.teachingAudioPhase === "child-echo-playing";
+    }, { expectedSessionId: sessionId, expectedActionIndex: actionIndex }, { timeout: 10000 });
+    run.childEchoes.push(await page.evaluate(() => {
+      const attempt = state.practiceAttempt?.audioAttempt;
+      return {
+        stepIndex: state.stepIndex,
+        modelCount: attempt?.modelCount || 0,
+        childEchoCount: attempt?.childEchoCount || 0,
+        trace: (attempt?.audioTrace || []).map((event) => ({ kind: event.kind, context: event.context, midis: event.midis }))
+      };
+    }));
+    await page.waitForFunction(({ expectedSessionId, expectedActionIndex, expectedStepIndex }) => {
+      const runtime = JSON.parse(localStorage.getItem("starDinoSessionRuntime") || "null");
+      const active = runtime?.active;
+      return !active || active.sessionId !== expectedSessionId || active.actionIndex !== expectedActionIndex || state.stepIndex > expectedStepIndex;
+    }, { expectedSessionId: sessionId, expectedActionIndex: actionIndex, expectedStepIndex: beforeStepIndex }, { timeout: 10000 });
+    const after = await readRuntime(page);
+    if (!after?.active || after.active.sessionId !== sessionId || after.active.actionIndex !== actionIndex) return run;
+  }
+  throw new Error(`M03 action did not finish: ${sessionId} action ${actionIndex}`);
+};
+
 const completeActiveAction = async (page, { wrongTaps = 0 } = {}) => {
   const initialRuntime = await readRuntime(page);
   const sessionId = initialRuntime?.active?.sessionId;
   const actionIndex = initialRuntime?.active?.actionIndex;
+  const targetId = initialRuntime?.active?.actions?.[actionIndex]?.targetId;
+  if (targetId === "M03") return completeM03Action(page, sessionId, actionIndex, { wrongTaps });
   for (let index = 0; index < wrongTaps; index += 1) await tapWrong(page);
 
   for (let guard = 0; guard < 28; guard += 1) {
@@ -246,6 +325,7 @@ const completeActiveAction = async (page, { wrongTaps = 0 } = {}) => {
 };
 
 const completeSession = async (page, optionsByAction = {}) => {
+  const actionRuns = [];
   for (let guard = 0; guard < 8; guard += 1) {
     const runtime = await readRuntime(page);
     if (!runtime?.active) {
@@ -265,10 +345,11 @@ const completeSession = async (page, optionsByAction = {}) => {
         }));
         throw new Error(`natural rest UI did not appear: ${JSON.stringify(snapshot)}; browserErrors=${JSON.stringify(browserErrors)}`, { cause: error });
       }
-      return;
+      return actionRuns;
     }
     const actionIndex = runtime.active.actionIndex;
-    await completeActiveAction(page, optionsByAction[actionIndex] || {});
+    const actionRun = await completeActiveAction(page, optionsByAction[actionIndex] || {});
+    if (actionRun) actionRuns.push(actionRun);
     const after = await readRuntime(page);
     if (after?.active) await page.waitForTimeout(1650);
     else await page.waitForTimeout(1900);
@@ -886,12 +967,21 @@ try {
     const { context, page } = await openPage();
     try {
       await clickMapNode(page, "M03");
-      await completeSession(page);
+      const firstRuns = await completeSession(page);
       const first = await readStats(page);
+      const firstRuntime = await readRuntime(page);
+      const firstRun = firstRuns.find((run) => run?.kind === "M03");
+      const firstHistory = firstRuntime?.history?.find((session) => session.sessionId === firstRun?.sessionId);
       record("M03 first no-error Re-Do run is played only", first?.levels?.M03?.completions === 1 && first?.retention?.stableEvents?.filter((event) => event.skillKey === "level:M03").length === 0, first);
+      record("Completed M03 history removes its transient audio snapshot before the next session", firstRun?.responses?.length === 2 && firstRun?.childEchoes?.length === 2 && !firstHistory?.actions?.[0]?.m03AudioAttempt && firstHistory?.completedActions?.[0]?.targetId === "M03", { firstRun, firstHistory });
       await clickMapNode(page, "M03");
-      await completeSession(page);
+      const secondStarted = await readRuntime(page);
+      const secondRuns = await completeSession(page);
       const second = await readStats(page);
+      const secondRuntime = await readRuntime(page);
+      const secondRun = secondRuns.find((run) => run?.kind === "M03");
+      const secondHistory = secondRuntime?.history?.find((session) => session.sessionId === secondRun?.sessionId);
+      record("A second M03 session starts fresh and independently plays two models and two child echoes", secondStarted?.active?.sessionId === secondRun?.sessionId && secondRun?.sessionId !== firstRun?.sessionId && secondRun?.responses?.map((item) => item.modelCount).join(",") === "1,2" && secondRun?.childEchoes?.map((item) => item.childEchoCount).join(",") === "1,2" && secondRun?.responses?.[0]?.trace?.filter((event) => event.context === "model").length === 2 && secondRun?.responses?.[0]?.trace?.filter((event) => event.context === "child-echo").length === 0 && !secondHistory?.actions?.[0]?.m03AudioAttempt, { secondStarted, secondRun, secondHistory });
       record("M03 second no-error run creates stable but not retained", second?.retention?.stableEvents?.filter((event) => event.skillKey === "level:M03").length === 1 && second?.retention?.retainedEvents?.filter((event) => event.skillKey === "level:M03").length === 0, second?.retention);
     } finally {
       await context.close();

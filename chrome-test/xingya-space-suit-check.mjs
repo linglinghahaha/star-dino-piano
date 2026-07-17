@@ -181,7 +181,7 @@ try {
   record("approved garden-mode image decodes as a complete transparent 512px character", decodedGardenAsset?.ok && decodedGardenAsset.width === 512 && decodedGardenAsset.height === 512 && decodedGardenAsset.cornerAlpha.every((alpha) => alpha === 0) && decodedGardenAsset.visible >= 70_000, decodedGardenAsset);
 
   const version = await page.evaluate(() => [...document.scripts].map((script) => script.src).find((src) => src.includes("app.js")));
-  record("prototype loads the 344a runtime version", version?.includes("overhaul-344a"), { version });
+  record("prototype loads the 345b AUDIO-A runtime version", version?.includes("overhaul-345b-audio-a"), { version });
 
   const m01Dino = await readImageState(page, "#dinoSvg");
   const m01Coach = await readImageState(page, "#coachDino");
