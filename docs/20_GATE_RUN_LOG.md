@@ -2,6 +2,32 @@
 
 This file records concrete pass/fail evidence for UI, teaching, and polish gates. It is not a substitute for the acceptance rules in `15_ACCEPTANCE_GATES.md`; it is the evidence trail.
 
+## 2026-07-17 - Overhaul 344a Final Browser Gate Evidence
+
+Scope: final browser evidence for the frozen C4-01 / LP01-LP02 and LS08 teaching-audio candidate. No LP03, C4-R01, LP04, media runtime integration, or global UI work was added during this evidence pass.
+
+Runtime identity and focused gates:
+
+- Final runtime digest: `app.js` SHA-256 `58D4D2721FF0EC28BCCA9D0EE86449407E2C8D77A1CC6FD1CE2AD2B61BD21CD3`.
+- `check:chapter3-ls08` passed `131/131`; `check:chapter4-lp01-lp02` passed `137/137`; `check:child-note-names` passed `224/224`.
+- `check:quick` passed, including the 22-check audio contract audit; `check:bundle:strict` passed with 42 files and 1,641,265 runtime-asset bytes.
+- Child text, keyboard labels and ordinary ARIA remain letter-only; character dialogue is the only allowed solfege surface. A runtime scan for `concepts/**`, `audio/**`, Grok/Gemini/Sora, Batch 8/9 and technical-preview references returned zero matches.
+
+Final 344a coordinate contracts:
+
+- Chapter 4: `chapter4-lp01-lp02-media-zones-overhaul-344a-v1`, 6 viewports x 19 states, zero failures and zero browser errors. Three fixed-directory runs were identical: internal SHA-256 `620d9340c182a9efff2a96cc7d1f447ccc5c9bf1494d833abd793cbb6b0a21bc`; JSON SHA-256 `C59C2DBE8953995D5FFD57C5C4BC8DA0B9A345786389B2312FA5429F7D8F43A6`; `docs/30_CHAPTER4_LP01_LP02_MEDIA_ZONE_CONTRACT_344A_V1.json`.
+- LS08: `chapter3-ls08-media-zones-overhaul-344a-v3`, 6 viewports x 14 states, zero failures and zero browser errors. Three fixed-directory runs were identical: internal SHA-256 `7dab39c6068cf1b8d36cb64f37657ef9584f86e1d2fe8e4d134939ad2816aff1`; JSON SHA-256 `629CF9B7E059DE12254FF4EAA819ECA5723FE74E232E614BC436883B2149938E`; `docs/30_CHAPTER3_LS08_MEDIA_ZONE_CONTRACT_344A_V3.json`.
+- Teaching zones: `teaching-zones-overhaul-344a-v1`, 6 viewports with M03/S01 geometry, zero failures and zero browser errors; internal SHA-256 `7f3b3d6d7fbb52d12a29a44f6baa84ea52136f9e02e1f6310e9a5310877f5c28`; JSON SHA-256 `C8E2479565F6832B042F8B2F443B43C264CD795C91AB4FE4A8ADCEA3F81DAF8D`; `docs/30_TEACHING_ZONE_COORDINATE_CONTRACT_344A_V1.json`.
+- Chapter 3 zones: `chapter3-media-zones-overhaul-344a-v1`, 6 viewports x 9 states, zero failures and zero browser errors; internal SHA-256 `52f6a654def39b0e33fe17020788c2a3a6e9ab18432679d709e424b6e97150e3`; JSON SHA-256 `E6867AAC09FD4F510D440338CEDF0D888FF1DC3D81602515B78DF9CA9BF011AD`; `docs/30_CHAPTER3_MEDIA_ZONE_CONTRACT_344A_V1.json`.
+- Every final 344a contract records `prototypeBaseline=overhaul-344a`, `buildIdentity=overhaul-344a-p3`, `runtimeIntegrationAllowed=false`, and the final `app.js` digest. Historical 340d and 343a contracts remain historical and are not cited as 344a evidence.
+
+Original-size review and shared regressions:
+
+- Reviewed current 1024 CSS-pixel C4 evidence: `screenshots/chapter4_lp01_lp02_media_zones_344a_v1/ipad-1024x768-dpr1_lp01-model.png` shows exactly two symmetric bubbles and one start command; `ipad-1024x768-dpr1_lp02-input-playing.png` shows only the neutral pending C state, with no stale wrong-D highlight.
+- Current-candidate shared gates: sessions `72/72`, clean-state `124/124`, M03/garden `32/32`, Chapter 3 visible `74/74`, LS04 `39/39`, LS05 `65/65`, LS06/LS07 `64/64`, input reliability `12/12`, audio settings `13/13`, PWA shell `8/8`, iPad accessibility `43/43`, motion `19/19`, palette `17/17`, contrast `9/9`, Xingya suit `29/29`, workshop identity `36/36`, M01 hierarchy `17/17`, assembly blueprint `39/39`, roof route `97/97`, staff mini `20/20`, staff repair `27/27`, and staff readability `13/13`.
+
+Status: browser candidate evidence is `passed`; runtime media integration remains disallowed. Physical iPad Safari, real MIDI hardware, acoustic-piano microphone input, teacher review, 3-5 child observation, source/provenance review, and external similarity/release clearance remain `missing`.
+
 ## 2026-07-14 - Overhaul 343a P2 LS08 Same-Key Pointer Release Follow-up
 
 Scope: LS08 pointer lifecycle and evidence identity only, against frozen runtime commit `66a31b4`. No lesson order, sequence, scoring, mastery, audio transaction, other level, curriculum source or runtime media integration changed.

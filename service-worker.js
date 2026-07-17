@@ -1,4 +1,4 @@
-const CACHE_NAME = "star-dino-pwa-overhaul-343a-v2";
+const CACHE_NAME = "star-dino-pwa-overhaul-344a-v4";
 
 const APP_SHELL = [
   "./",
@@ -16,7 +16,8 @@ const APP_SHELL = [
   "./current-overhaul.css?v=overhaul-340d-p1",
   "./roof-blueprint-overrides.css?v=overhaul-340c",
   "./chapter3-visible.css?v=overhaul-343a-p1",
-  "./app.js?v=overhaul-343a-p2",
+  "./chapter4-slice.css?v=overhaul-344a-p4",
+  "./app.js?v=overhaul-344a-p3",
   "./assets/runtime/app-icon.png",
   "./assets/runtime/app-icon.webp",
   "./assets/runtime/fx-correct-sparkle.webp",

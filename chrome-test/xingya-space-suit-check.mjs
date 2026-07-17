@@ -1,5 +1,6 @@
 import fs from "node:fs";
 import path from "node:path";
+import crypto from "node:crypto";
 import { createRequire } from "node:module";
 
 const require = createRequire(import.meta.url);
@@ -19,6 +20,8 @@ const runtimeAssets = [
   "xingya-suit-celebrate.webp",
   "xingya-suit-jump.webp"
 ];
+const gardenRuntimeAsset = "xingya-garden-invite-v1.webp";
+const gardenRuntimeSha256 = "1228082D4DF2BF576ED916B16950799296A975279ED6EFC554F6BB9EDDE88EBA";
 
 function record(name, pass, details = {}) {
   checks.push({ name, pass, details });
@@ -47,6 +50,18 @@ async function gotoMode(page, search) {
   await waitReady(page);
 }
 
+async function gotoChapter4(page, lesson) {
+  const url = new URL(rootUrl);
+  url.search = `?mode=chapter4&directMode=true&formalSession=false&lesson=${lesson}&check=xingya-garden-mode-344a`;
+  await page.goto(url.toString(), { waitUntil: "domcontentloaded", timeout: 12000 });
+  await page.waitForSelector("#bootLoader", { state: "hidden", timeout: 10000 });
+  await page.waitForSelector("#chapter4Panel", { state: "visible", timeout: 6000 });
+}
+
+async function waitChapter4Phase(page, phase, timeout = 12000) {
+  await page.waitForFunction((expected) => document.querySelector("#chapter4Scene")?.dataset.chapter4Phase === expected, phase, { timeout });
+}
+
 async function readImageState(page, selector) {
   return page.locator(selector).evaluate((image) => {
     const rect = image.getBoundingClientRect();
@@ -55,6 +70,27 @@ async function readImageState(page, selector) {
       complete: image.complete,
       naturalWidth: image.naturalWidth,
       naturalHeight: image.naturalHeight,
+      rect: { left: rect.left, top: rect.top, right: rect.right, bottom: rect.bottom, width: rect.width, height: rect.height }
+    };
+  });
+}
+
+async function readChapter4CharacterState(page) {
+  return page.locator("#chapter4XingyaImage").evaluate((image) => {
+    const wrapper = image.closest(".chapter4-xingya");
+    const rect = image.getBoundingClientRect();
+    const pseudo = ["::before", "::after"].map((name) => {
+      const style = getComputedStyle(wrapper, name);
+      return { name, content: style.content, backgroundImage: style.backgroundImage, border: style.border };
+    });
+    return {
+      src: image.getAttribute("src") || "",
+      complete: image.complete,
+      naturalWidth: image.naturalWidth,
+      naturalHeight: image.naturalHeight,
+      assetState: document.querySelector("#chapter4Scene")?.dataset.characterAssetState || "",
+      sealedSuitReferences: [...document.querySelectorAll("#chapter4Panel img")].filter((node) => /xingya-suit-/.test(node.getAttribute("src") || "")).length,
+      pseudo,
       rect: { left: rect.left, top: rect.top, right: rect.right, bottom: rect.bottom, width: rect.width, height: rect.height }
     };
   });
@@ -72,7 +108,8 @@ const activeSources = [
   "quality-overrides-2.css",
   "quality-overrides-3.css",
   "quality-overrides-4.css",
-  "current-overhaul.css"
+  "current-overhaul.css",
+  "chapter4-slice.css"
 ];
 const activeText = activeSources.map((file) => fs.readFileSync(file, "utf8")).join("\n");
 record("active bundle no longer references helmet-only dino assets", !/assets\/runtime\/dino-[a-z-]+\.webp/.test(activeText));
@@ -82,6 +119,12 @@ record(
   runtimeAssets.every((file) => fs.statSync(path.join("assets/runtime", file)).size < 100_000),
   Object.fromEntries(runtimeAssets.map((file) => [file, fs.statSync(path.join("assets/runtime", file)).size]))
 );
+const gardenAssetBytes = fs.readFileSync(path.join("assets/runtime", gardenRuntimeAsset));
+record("approved garden-mode runtime asset exists with the frozen SHA-256", fs.existsSync(path.join("assets/runtime", gardenRuntimeAsset)) && crypto.createHash("sha256").update(gardenAssetBytes).digest("hex").toUpperCase() === gardenRuntimeSha256, {
+  file: gardenRuntimeAsset,
+  bytes: gardenAssetBytes.length,
+  sha256: crypto.createHash("sha256").update(gardenAssetBytes).digest("hex").toUpperCase()
+});
 
 const browser = await chromium.launch({
   headless: true,
@@ -129,13 +172,16 @@ try {
       image.src = `assets/runtime/${file}`;
     });
     return Promise.all(files.map(load));
-  }, runtimeAssets);
+  }, [...runtimeAssets, gardenRuntimeAsset]);
 
-  record("all six sealed-suit images decode as 512px transparent assets", decodedAssets.every((asset) => asset.ok && asset.width === 512 && asset.height === 512 && asset.cornerAlpha.every((alpha) => alpha === 0)), decodedAssets);
-  record("all six sealed-suit images contain a substantial nonblank subject", decodedAssets.every((asset) => asset.visible >= 70_000 && asset.partial >= 8_000), decodedAssets);
+  const decodedSuitAssets = decodedAssets.filter((asset) => runtimeAssets.includes(asset.file));
+  const decodedGardenAsset = decodedAssets.find((asset) => asset.file === gardenRuntimeAsset);
+  record("all six sealed-suit images decode as 512px transparent assets", decodedSuitAssets.every((asset) => asset.ok && asset.width === 512 && asset.height === 512 && asset.cornerAlpha.every((alpha) => alpha === 0)), decodedSuitAssets);
+  record("all six sealed-suit images contain a substantial nonblank subject", decodedSuitAssets.every((asset) => asset.visible >= 70_000 && asset.partial >= 8_000), decodedSuitAssets);
+  record("approved garden-mode image decodes as a complete transparent 512px character", decodedGardenAsset?.ok && decodedGardenAsset.width === 512 && decodedGardenAsset.height === 512 && decodedGardenAsset.cornerAlpha.every((alpha) => alpha === 0) && decodedGardenAsset.visible >= 70_000, decodedGardenAsset);
 
   const version = await page.evaluate(() => [...document.scripts].map((script) => script.src).find((src) => src.includes("app.js")));
-  record("prototype loads the 343a runtime version", version?.includes("overhaul-343a"), { version });
+  record("prototype loads the 344a runtime version", version?.includes("overhaul-344a"), { version });
 
   const m01Dino = await readImageState(page, "#dinoSvg");
   const m01Coach = await readImageState(page, "#coachDino");
@@ -231,6 +277,43 @@ try {
   }));
   record("wrong S01 input uses the sealed-suit gentle-stumble pose", staffWrong.src?.endsWith("xingya-suit-try-again.webp") && staffWrong.stumbling, staffWrong);
   await page.screenshot({ path: `${screenshotPrefix}_S01_wrong_1024.png`, fullPage: false });
+
+  await gotoChapter4(page, "LP01");
+  await page.locator("#chapter4StartCheck").click();
+  await waitChapter4Phase(page, "lp01-model");
+  const chapter4Model = await readChapter4CharacterState(page);
+  record("C4 LP01 model uses the approved garden-mode character with no suit or CSS helmet fallback", chapter4Model.src.endsWith(gardenRuntimeAsset) && chapter4Model.assetState === "garden-mode" && chapter4Model.sealedSuitReferences === 0 && chapter4Model.complete && chapter4Model.naturalWidth === 512 && chapter4Model.pseudo.every((item) => ["none", "normal", "\"\"", "''"].includes(item.content) && item.backgroundImage === "none"), chapter4Model);
+  await page.screenshot({ path: `${screenshotPrefix}_C4_LP01_model_1024.png`, fullPage: false });
+
+  await page.locator("#chapter4StartCheck").click();
+  await waitChapter4Phase(page, "awaiting-response");
+  const wrongBubbleId = await page.evaluate(() => {
+    const attempt = ensureChapter4Attempt();
+    const target = attempt.sequence[attempt.callIndex];
+    return Object.entries(attempt.bubbleMapping).find(([, midi]) => midi !== target)?.[0];
+  });
+  await page.locator(`[data-bubble-id="${wrongBubbleId}"]`).click();
+  await waitChapter4Phase(page, "wrong");
+  await waitChapter4Phase(page, "awaiting-response");
+  await page.locator(`[data-bubble-id="${wrongBubbleId}"]`).click();
+  await waitChapter4Phase(page, "pair-compare");
+  await waitChapter4Phase(page, "awaiting-response");
+  await page.locator(`[data-bubble-id="${wrongBubbleId}"]`).click();
+  await waitChapter4Phase(page, "assisted");
+  const chapter4Assisted = await readChapter4CharacterState(page);
+  record("C4 LP01 assisted keeps the same garden-mode equipment", chapter4Assisted.src.endsWith(gardenRuntimeAsset) && chapter4Assisted.assetState === "garden-mode" && chapter4Assisted.sealedSuitReferences === 0, chapter4Assisted);
+  await page.screenshot({ path: `${screenshotPrefix}_C4_LP01_assisted_1024.png`, fullPage: false });
+
+  await gotoChapter4(page, "LP02");
+  await waitChapter4Phase(page, "lp02-guide");
+  const chapter4Lp02Guide = await readChapter4CharacterState(page);
+  record("C4 LP02 guide keeps the approved garden-mode character", chapter4Lp02Guide.src.endsWith(gardenRuntimeAsset) && chapter4Lp02Guide.assetState === "garden-mode" && chapter4Lp02Guide.sealedSuitReferences === 0, chapter4Lp02Guide);
+  await page.screenshot({ path: `${screenshotPrefix}_C4_LP02_guide_1024.png`, fullPage: false });
+  await page.locator('#keyboard .white-key[data-midi="48"]').click();
+  await waitChapter4Phase(page, "lp02-complete");
+  const chapter4Lp02Complete = await readChapter4CharacterState(page);
+  record("C4 LP02 complete keeps three-sprout garden-mode Xingya through natural story completion", chapter4Lp02Complete.src.endsWith(gardenRuntimeAsset) && chapter4Lp02Complete.assetState === "garden-mode" && chapter4Lp02Complete.sealedSuitReferences === 0, chapter4Lp02Complete);
+  await page.screenshot({ path: `${screenshotPrefix}_C4_LP02_complete_1024.png`, fullPage: false });
 
   const finalLayout = await page.evaluate(() => ({
     bodyOverflowX: document.documentElement.scrollWidth > document.documentElement.clientWidth + 1,

@@ -183,7 +183,7 @@ try {
       const planRatio = initial.blueprint.width / initial.yard.width;
       const planHeightRatio = initial.blueprint.height / initial.yard.height;
 
-      record(`${viewport.id}: runs the 343a shell`, initial.runtimeVersion.includes("overhaul-343a"), initial);
+      record(`${viewport.id}: runs the 344a shell`, initial.runtimeVersion.includes("overhaul-344a"), initial);
       record(`${viewport.id}: projected blueprint owns the guided 1/C-5/G sequence`,
         initial.roofMode === "install" && initial.blueprintMode === "install" &&
         initial.parts.map((part) => part.letter).join("") === "CDEFG" &&

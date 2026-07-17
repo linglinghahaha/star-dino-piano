@@ -17,7 +17,9 @@ const states = [
   { id: "FG03", search: "?level=FG03&check=child-note-names" },
   { id: "M08", search: "?level=M08&check=child-note-names" },
   { id: "staff", search: "?mode=staff&session=mini&check=child-note-names" },
-  { id: "garden", search: "?mode=garden&check=child-note-names" }
+  { id: "garden", search: "?mode=garden&check=child-note-names" },
+  { id: "chapter4-lp01", search: "?mode=chapter4&directMode=true&formalSession=false&lesson=LP01&check=child-note-names" },
+  { id: "chapter4-lp02", search: "?mode=chapter4&directMode=true&formalSession=false&lesson=LP02&check=child-note-names" }
 ];
 
 fs.mkdirSync(screenshotDir, { recursive: true });
@@ -54,7 +56,7 @@ try {
     };
 
     const inspect = () => page.evaluate(() => {
-      const allowed = "#coachBubble, .route-idle-dialog, #gardenSpeech, #staffDinoWrap, #parentModal";
+      const allowed = "#coachBubble, .route-idle-dialog, #gardenSpeech, #staffDinoWrap, #chapter4Speech, #parentModal";
       const visible = (element) => {
         if (!element) return false;
         let current = element.nodeType === Node.TEXT_NODE ? element.parentElement : element;
@@ -79,15 +81,26 @@ try {
       while (walker.nextNode()) {
         const node = walker.currentNode;
         const text = node.textContent?.replace(/\s+/g, " ").trim();
-        if (text && visible(node)) textRows.push({ text, tag: node.parentElement?.tagName || "", id: node.parentElement?.id || "", className: node.parentElement?.className || "" });
+        if (text && visible(node)) textRows.push({
+          text,
+          tag: node.parentElement?.tagName || "",
+          id: node.parentElement?.id || "",
+          className: node.parentElement?.className || "",
+          chapter4: Boolean(node.parentElement?.closest("#chapter4Panel, #keyboardPanel"))
+        });
       }
       const tokenPattern = /(^|[^A-Za-z])(Do|Re|Mi|Fa|Sol)(?=$|[^A-Za-z])/;
       const leaks = textRows.filter((row) => tokenPattern.test(row.text) || /法法|索尔/.test(row.text));
-      const pseudoRows = [...document.querySelectorAll("#memoryStarRoute .memory-route-node, #fgStarRoute .fg-route-node")].flatMap((element) =>
+      const pseudoElements = [...document.querySelectorAll("#memoryStarRoute .memory-route-node, #fgStarRoute .fg-route-node, #chapter4Panel *, #keyboardPanel *")]
+        .filter((element) => !element.closest("#chapter4Speech"));
+      const pseudoRows = pseudoElements.flatMap((element) =>
         ["::before", "::after"].map((pseudo) => {
           const style = getComputedStyle(element, pseudo);
           const content = style.content?.replace(/^['\"]|['\"]$/g, "").trim() || "";
           return {
+            id: element.id || "",
+            className: element.className || "",
+            chapter4: Boolean(element.closest("#chapter4Panel, #keyboardPanel")),
             pseudo,
             content,
             visible: content && content !== "none" && content !== "normal" && style.display !== "none" && style.visibility !== "hidden" && Number(style.opacity) > 0.01
@@ -112,8 +125,30 @@ try {
           value: [element.getAttribute("aria-label"), element.getAttribute("title"), element.getAttribute("alt")].filter(Boolean).join(" ")
         }))
         .filter((row) => tokenPattern.test(row.value) || /法法|索尔|Do\s*[/→-]\s*C/.test(row.value));
+      const chapter4TextLeaks = textRows.filter((row) => row.chapter4 && (tokenPattern.test(row.text) || /法法|索尔|\b[A-G][34]\b/.test(row.text)));
+      const chapter4AccessibleLeaks = [...document.querySelectorAll("#chapter4Panel [aria-label], #chapter4Panel [title], #chapter4Panel [alt], #keyboardPanel [aria-label], #keyboardPanel [title], #keyboardPanel [alt]")]
+        .filter((element) => elementVisible(element) && !element.closest(allowed))
+        .map((element) => ({
+          tag: element.tagName,
+          id: element.id || "",
+          className: element.className || "",
+          value: [element.getAttribute("aria-label"), element.getAttribute("title"), element.getAttribute("alt")].filter(Boolean).join(" ")
+        }))
+        .filter((row) => tokenPattern.test(row.value) || /法法|索尔|\b[A-G][34]\b/.test(row.value));
+      const chapter4PseudoLeaks = pseudoRows.filter((row) => row.chapter4 && (tokenPattern.test(row.content) || /法法|索尔|\b[A-G][34]\b/.test(row.content)));
       const keys = [...document.querySelectorAll(".key.white-key:not(.reserved-key)")].map((key) => ({
         text: key.querySelector(".key-content")?.innerText?.replace(/\s+/g, "").trim() || "",
+        aria: key.getAttribute("aria-label") || ""
+      }));
+      const chapter4WhiteKeys = [...document.querySelectorAll("#keyboard.chapter4-keyboard .white-key")].map((key) => ({
+        midi: Number(key.dataset.midi),
+        text: key.innerText?.replace(/\s+/g, " ").trim() || "",
+        aria: key.getAttribute("aria-label") || ""
+      }));
+      const chapter4BlackKeys = [...document.querySelectorAll("#keyboard.chapter4-keyboard .black-key")].map((key) => ({
+        midi: Number(key.dataset.midi),
+        note: key.dataset.note || null,
+        pitchName: key.dataset.pitchName || null,
         aria: key.getAttribute("aria-label") || ""
       }));
       const routeLabelMetrics = [...document.querySelectorAll("#memoryStarRoute:not([hidden]) .memory-route-label strong, #fgStarRoute:not([hidden]) .fg-route-label strong")].map((label) => {
@@ -176,6 +211,13 @@ try {
         accessibleLeaks,
         pseudoLeaks,
         pseudoRows,
+        chapter4TextLeaks,
+        chapter4AccessibleLeaks,
+        chapter4PseudoLeaks,
+        chapter4WhiteKeys,
+        chapter4BlackKeys,
+        chapter4Phase: document.querySelector("#chapter4Scene")?.dataset.chapter4Phase || "",
+        chapter4Speech: document.querySelector("#chapter4Speech")?.innerText?.replace(/\s+/g, " ").trim() || "",
         keys,
         m07: [...document.querySelectorAll("#memoryStarRoute .memory-route-label strong")].map((item) => item.textContent?.trim() || ""),
         fg03: [...document.querySelectorAll("#fgStarRoute .fg-route-label strong")].map((item) => item.textContent?.trim() || ""),
@@ -222,10 +264,28 @@ try {
         }
         const result = await inspect();
         record(`${viewport.id} ${state.id}: child-visible text and accessible labels use note names outside dinosaur bubbles`, result.leaks.length === 0 && result.routeAttributeLeaks.length === 0 && result.accessibleLeaks.length === 0 && result.pseudoLeaks.length === 0, result);
-        record(`${viewport.id} ${state.id}: piano keycaps and ARIA use note names only`,
-          result.keys.map((key) => key.text).join("") === "CDEFG" &&
-          result.keys.every((key, index) => key.aria.startsWith(["C", "D", "E", "F", "G"][index]) && !/(^|[^A-Za-z])(Do|Re|Mi|Fa|Sol)(?=$|[^A-Za-z])/.test(key.aria)),
-          result.keys);
+        if (!state.id.startsWith("chapter4-")) {
+          record(`${viewport.id} ${state.id}: piano keycaps and ARIA use note names only`,
+            result.keys.map((key) => key.text).join("") === "CDEFG" &&
+            result.keys.every((key, index) => key.aria.startsWith(["C", "D", "E", "F", "G"][index]) && !/(^|[^A-Za-z])(Do|Re|Mi|Fa|Sol)(?=$|[^A-Za-z])/.test(key.aria)),
+            result.keys);
+        }
+        if (state.id === "chapter4-lp01") {
+          record(`${viewport.id} LP01: ordinary text, ARIA and pseudo-elements exclude solfege and octave numbers`, result.chapter4TextLeaks.length === 0 && result.chapter4AccessibleLeaks.length === 0 && result.chapter4PseudoLeaks.length === 0, result);
+          record(`${viewport.id} LP01: only the character dialogue may use Do`, result.chapter4Speech.includes("Do") && result.chapter4TextLeaks.length === 0, result.chapter4Speech);
+        }
+        if (state.id === "chapter4-lp02") {
+          const expectedLetters = "CDEFGABCDEFGAB";
+          record(`${viewport.id} LP02: 14 white keys use letter identities without C3/C4 or solfege`,
+            result.chapter4WhiteKeys.length === 14 &&
+            result.chapter4WhiteKeys.map((key) => key.text.charAt(0)).join("") === expectedLetters &&
+            result.chapter4WhiteKeys.every((key) => !/(Do|Re|Mi|Fa|Sol|\b[A-G][34]\b)/.test(`${key.text} ${key.aria}`)),
+            result.chapter4WhiteKeys);
+          record(`${viewport.id} LP02: ten black keys keep neutral black-key accessibility identities`,
+            result.chapter4BlackKeys.length === 10 && result.chapter4BlackKeys.every((key) => key.note === null && key.aria.startsWith("黑键") && !/(Do|Re|Mi|Fa|Sol|\b[A-G][34]\b)/.test(key.aria)),
+            result.chapter4BlackKeys);
+          record(`${viewport.id} LP02: ordinary text, ARIA and pseudo-elements exclude solfege and octave numbers`, result.chapter4TextLeaks.length === 0 && result.chapter4AccessibleLeaks.length === 0 && result.chapter4PseudoLeaks.length === 0, result);
+        }
         record(`${viewport.id} ${state.id}: note-name layout has no page overflow`, !result.overflowX && !result.overflowY, result);
         if (state.id === "M07") {
           record(`${viewport.id}: M07 route labels are C-D-E-D-C`, result.m07.join("") === "CDEDC", result.m07);
@@ -243,6 +303,38 @@ try {
         await page.screenshot({ path: path.join(screenshotDir, `${viewport.id}_${state.id}.png`), fullPage: false });
       }
 
+      await open("?mode=chapter4&directMode=true&formalSession=false&lesson=LP01&check=child-note-names-phases");
+      await page.locator("#chapter4StartCheck").click();
+      await page.waitForFunction(() => document.querySelector("#chapter4Scene")?.dataset.chapter4Phase === "lp01-model", null, { timeout: 12000 });
+      let chapter4Result = await inspect();
+      record(`${viewport.id} LP01 model: character mapping is allowed while ordinary surfaces stay letter-only`, chapter4Result.chapter4Speech.includes("Do") && chapter4Result.chapter4TextLeaks.length === 0 && chapter4Result.chapter4AccessibleLeaks.length === 0 && chapter4Result.chapter4PseudoLeaks.length === 0, chapter4Result);
+      await page.locator("#chapter4StartCheck").click();
+      await page.waitForFunction(() => document.querySelector("#chapter4Scene")?.dataset.chapter4Phase === "awaiting-response", null, { timeout: 12000 });
+      chapter4Result = await inspect();
+      record(`${viewport.id} LP01 check: neutral prompt exposes no high/low or octave identity`, chapter4Result.chapter4TextLeaks.length === 0 && chapter4Result.chapter4AccessibleLeaks.length === 0 && chapter4Result.chapter4PseudoLeaks.length === 0 && !/(低音|中央|高音|C3|C4)/.test(chapter4Result.chapter4Speech), chapter4Result);
+      const wrongBubbleId = await page.evaluate(() => {
+        const attempt = ensureChapter4Attempt();
+        const target = attempt.sequence[attempt.callIndex];
+        return Object.entries(attempt.bubbleMapping).find(([, midi]) => midi !== target)?.[0];
+      });
+      await page.locator(`[data-bubble-id="${wrongBubbleId}"]`).click();
+      await page.waitForFunction(() => document.querySelector("#chapter4Scene")?.dataset.chapter4Phase === "wrong", null, { timeout: 12000 });
+      chapter4Result = await inspect();
+      record(`${viewport.id} LP01 wrong feedback: ordinary child surfaces remain free of solfege and register answers`, chapter4Result.chapter4TextLeaks.length === 0 && chapter4Result.chapter4AccessibleLeaks.length === 0 && chapter4Result.chapter4PseudoLeaks.length === 0, chapter4Result);
+      await page.screenshot({ path: path.join(screenshotDir, `${viewport.id}_chapter4-lp01-wrong.png`), fullPage: false });
+
+      await open("?mode=chapter4&directMode=true&formalSession=false&lesson=LP02&check=child-note-names-phases");
+      await page.locator('#keyboard .black-key[data-midi="49"]').click();
+      await page.waitForFunction(() => document.querySelector("#chapter4Scene")?.dataset.chapter4Phase === "lp02-wrong", null, { timeout: 7000 });
+      chapter4Result = await inspect();
+      record(`${viewport.id} LP02 black-key feedback: black key never becomes a white-key note identity`, chapter4Result.chapter4Speech.includes("黑键") && chapter4Result.chapter4TextLeaks.length === 0 && chapter4Result.chapter4AccessibleLeaks.length === 0 && chapter4Result.chapter4PseudoLeaks.length === 0 && chapter4Result.chapter4BlackKeys.every((key) => key.note === null), chapter4Result);
+      await page.waitForFunction(() => document.querySelector("#chapter4Scene")?.dataset.chapter4Phase === "lp02-guide", null, { timeout: 7000 });
+      await page.locator('#keyboard .white-key[data-midi="48"]').click();
+      await page.waitForFunction(() => document.querySelector("#chapter4Scene")?.dataset.chapter4Phase === "lp02-complete", null, { timeout: 7000 });
+      chapter4Result = await inspect();
+      record(`${viewport.id} LP02 complete: result and keyboard remain letter-only outside the character dialogue`, chapter4Result.chapter4TextLeaks.length === 0 && chapter4Result.chapter4AccessibleLeaks.length === 0 && chapter4Result.chapter4PseudoLeaks.length === 0, chapter4Result);
+      await page.screenshot({ path: path.join(screenshotDir, `${viewport.id}_chapter4-lp02-complete.png`), fullPage: false });
+
       if (viewport.id === "ipad-1024x768") {
         await open("?level=M07&check=child-note-names-forced-refresh");
         await page.evaluate(async () => {
@@ -259,6 +351,10 @@ try {
         const refreshed = await inspect();
         record("ipad-1024x768 M07 forced refresh: route and child ARIA remain letter-only", refreshed.m07.join("") === "CDEDC" && refreshed.routeAria === "星星路线 C D E D C" && refreshed.leaks.length === 0 && refreshed.accessibleLeaks.length === 0 && refreshed.routeAttributeLeaks.length === 0 && refreshed.pseudoLeaks.length === 0, refreshed);
         await page.screenshot({ path: path.join(screenshotDir, "ipad-1024x768_M07_forced_refresh.png"), fullPage: false });
+        await open("?level=M08&check=child-note-names-forced-refresh");
+        const refreshedM08 = await inspect();
+        record("ipad-1024x768 M08 after Service Worker refresh: blueprint and child ARIA remain letter-only", refreshedM08.m08Blueprint.join("") === "CDEFG" && refreshedM08.leaks.length === 0 && refreshedM08.accessibleLeaks.length === 0 && refreshedM08.pseudoLeaks.length === 0, refreshedM08);
+        await page.screenshot({ path: path.join(screenshotDir, "ipad-1024x768_M08_forced_refresh.png"), fullPage: false });
       }
 
       for (const audit of ["color-reduced", "high-contrast"]) {
@@ -287,6 +383,15 @@ try {
           record(`${viewport.id} ${route.id} ${audit}: route remains contained`, !result.overflowX && !result.overflowY, result);
           await page.screenshot({ path: path.join(screenshotDir, `${viewport.id}_${route.id}_${audit}.png`), fullPage: false });
         }
+      }
+
+      for (const audit of ["no-reading", "color-reduced", "high-contrast"]) {
+        await open(`?mode=chapter4&directMode=true&formalSession=false&lesson=LP02&audit=${audit}&check=child-note-names-chapter4-audit`);
+        if (audit === "high-contrast") await page.evaluate(() => { document.documentElement.dataset.contrast = "more"; });
+        const chapter4Audit = await inspect();
+        record(`${viewport.id} LP02 ${audit}: visible text, ARIA and pseudo-elements contain no solfege or octave labels`, chapter4Audit.chapter4TextLeaks.length === 0 && chapter4Audit.chapter4AccessibleLeaks.length === 0 && chapter4Audit.chapter4PseudoLeaks.length === 0, chapter4Audit);
+        record(`${viewport.id} LP02 ${audit}: black keys remain neutral and white keys retain 14 letter identities`, chapter4Audit.chapter4BlackKeys.length === 10 && chapter4Audit.chapter4BlackKeys.every((key) => key.note === null) && chapter4Audit.chapter4WhiteKeys.length === 14, chapter4Audit);
+        await page.screenshot({ path: path.join(screenshotDir, `${viewport.id}_chapter4-lp02_${audit}.png`), fullPage: false });
       }
 
       for (const audit of ["normal", "color-reduced", "high-contrast"]) {

@@ -16,6 +16,7 @@
     "quality-overrides-3.css",
     "quality-overrides-4.css",
     "current-overhaul.css",
+    "chapter4-slice.css",
     "assets/runtime/**"
   ],
   "deny": [

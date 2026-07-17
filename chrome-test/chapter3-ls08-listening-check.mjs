@@ -69,6 +69,43 @@ async function makePage(viewport = { width: 1024, height: 768 }, { failAudioCont
   return { context, page };
 }
 
+async function installReverseOrderAudioContext(page) {
+  await page.evaluate(async () => {
+    if (state.sfx?.ctx && state.sfx.ctx.state !== "closed") await state.sfx.ctx.close();
+    state.sfx = null;
+    const parameter = (value = 0) => ({ value, cancelScheduledValues() {}, setTargetAtTime() {}, setValueAtTime() {}, linearRampToValueAtTime() {}, exponentialRampToValueAtTime() {} });
+    const node = () => ({ connect() {}, disconnect() {} });
+    class ReverseOrderAudioContext {
+      constructor() {
+        this.state = "running";
+        this.destination = {};
+        this._started = performance.now();
+        this._listeners = new Set();
+        this._oscillators = [];
+      }
+      get currentTime() { return (performance.now() - this._started) / 1000; }
+      addEventListener(type, listener) { if (type === "statechange") this._listeners.add(listener); }
+      removeEventListener(type, listener) { if (type === "statechange") this._listeners.delete(listener); }
+      resume() { this.state = "running"; this._emitStatechange(); return Promise.resolve(); }
+      suspend() { this.state = "suspended"; this._emitStatechange(); return Promise.resolve(); }
+      close() { this.state = "closed"; this._emitStatechange(); return Promise.resolve(); }
+      _setStateSilently(nextState) { this.state = nextState; }
+      _emitStatechange() { this._listeners.forEach((listener) => listener()); }
+      _fireOscillatorEnds() { [...this._oscillators].forEach((oscillator) => oscillator.onended?.()); }
+      createGain() { return { ...node(), gain: parameter(1) }; }
+      createDynamicsCompressor() { return { ...node(), threshold: parameter(-24), knee: parameter(20), ratio: parameter(8), attack: parameter(0.006), release: parameter(0.18) }; }
+      createBiquadFilter() { return { ...node(), type: "lowpass", frequency: parameter(0), Q: parameter(0) }; }
+      createOscillator() {
+        const oscillator = { ...node(), type: "sine", frequency: parameter(0), detune: parameter(0), onended: null, start() {}, stop() {} };
+        this._oscillators.push(oscillator);
+        return oscillator;
+      }
+    }
+    window.AudioContext = ReverseOrderAudioContext;
+    window.webkitAudioContext = ReverseOrderAudioContext;
+  });
+}
+
 async function seed(page, runtime = fixture()) {
   await page.goto(url(), { waitUntil: "domcontentloaded", timeout: 30000 });
   await page.evaluate(({ runtimeValue, learningValue }) => {
@@ -101,7 +138,7 @@ async function view(page) {
       .filter((value) => value && token.test(value));
     return {
       runtime, learning, action, attempt,
-      phase: document.body.classList.contains("screen-map") ? "map" : (document.querySelector("#gardenScene")?.dataset.listeningPhase || ""),
+      phase: document.body?.classList.contains("screen-map") ? "map" : (document.querySelector("#gardenScene")?.dataset.listeningPhase || ""),
       speech: document.querySelector("#gardenSpeech")?.innerText?.replace(/\s+/g, " ").trim() || "",
       marker: document.querySelector("#gardenRestMarker")?.innerText?.replace(/\s+/g, " ").trim() || "",
       markerDisabled: document.querySelector("#gardenRestMarker")?.disabled,
@@ -123,11 +160,30 @@ async function view(page) {
 async function waitPhase(page, names, timeout = 16000) {
   const expected = Array.isArray(names) ? names : [names];
   try {
-    await page.waitForFunction((phases) => phases.includes(document.body.classList.contains("screen-map") ? "map" : (document.querySelector("#gardenScene")?.dataset.listeningPhase || "")), expected, { timeout });
+    await page.waitForFunction((phases) => phases.includes(document.body?.classList.contains("screen-map") ? "map" : (document.querySelector("#gardenScene")?.dataset.listeningPhase || "")), expected, { timeout });
   } catch (error) {
     throw new Error(`Timed out waiting for ${expected.join("|")}: ${JSON.stringify(await view(page))}`, { cause: error });
   }
   return view(page);
+}
+
+async function waitForReloadedApp(page) {
+  await page.waitForLoadState("domcontentloaded", { timeout: 30000 });
+  await page.waitForSelector("#bootLoader", { state: "attached", timeout: 30000 });
+  await page.waitForSelector("#bootLoader", { state: "hidden", timeout: 30000 });
+}
+
+async function reloadFromPageBeforeAudioEnds(page, delayMs = 40) {
+  const navigation = page.waitForNavigation({ waitUntil: "domcontentloaded", timeout: 30000 });
+  await page.evaluate((delay) => {
+    window.setTimeout(() => {
+      // Persist the production pagehide interruption before the real reload can race an audio end callback.
+      window.dispatchEvent(new Event("pagehide"));
+      window.location.reload();
+    }, delay);
+  }, delayMs);
+  await navigation;
+  await waitForReloadedApp(page);
 }
 
 async function start(page) {
@@ -206,7 +262,7 @@ async function reachLowEcho(page) {
   return waitPhase(page, "unscored-low-echo");
 }
 
-async function reachDirectModeled(page) {
+async function prepareDirectModeled(page) {
   await start(page);
   await completeGuide(page);
   let current = await waitPhase(page, "awaiting-first");
@@ -217,8 +273,7 @@ async function reachDirectModeled(page) {
     await waitPhase(page, round === 1 ? "wrong-first" : (round === 2 ? "pair-compare" : "assisted"));
     if (round < 3) await waitPhase(page, "awaiting-first");
   }
-  await waitAssistAvailable(page);
-  return waitPhase(page, "modeled-playing", 10000);
+  return waitAssistAvailable(page);
 }
 
 const locked = await makePage();
@@ -278,7 +333,7 @@ record("Final C4 to C3 echo is an unscored story event with no low-key teaching"
 await main.page.screenshot({ path: path.join(screenshotDir, "ls08_unscored_low_echo_1366x1024.png") });
 await waitPhase(main.page, "map", 10000);
 current = await view(main.page);
-record("LS08 completes Chapter 3 and rests without starting Chapter 4", current.runtime.chapter3.completed === true && current.runtime.chapter3.lessonEvidence.LS08?.completed && !current.runtime.active && current.markerDisabled && !JSON.stringify(current.runtime).includes("LP01"), current.runtime.chapter3);
+record("LS08 completes Chapter 3 and exposes the entrance without starting Chapter 4", current.runtime.chapter3.completed === true && current.runtime.chapter3.lessonEvidence.LS08?.completed && !current.runtime.active && !current.markerDisabled && current.marker.includes("地下入口") && !JSON.stringify(current.runtime).includes("\"LP01\""), current.runtime.chapter3);
 record("Clean 4/4 creates stable but not retained", current.learning.levels.LS08?.stableCompletions === 1 && current.learning.retention.stableEvents.some((event) => event.skillKey === "level:LS08") && !current.learning.retention.retainedEvents.some((event) => event.skillKey === "level:LS08"), current.learning);
 await main.page.screenshot({ path: path.join(screenshotDir, "ls08_map_rest_1366x1024.png") });
 await main.page.locator("#mapParentGate").click();
@@ -301,8 +356,7 @@ await guideMapLifecycle.context.close();
 const guideRefreshLifecycle = await makePage();
 await seed(guideRefreshLifecycle.page);
 await start(guideRefreshLifecycle.page);
-await guideRefreshLifecycle.page.reload({ waitUntil: "domcontentloaded", timeout: 30000 });
-await guideRefreshLifecycle.page.waitForSelector("#bootLoader", { state: "hidden", timeout: 30000 });
+await reloadFromPageBeforeAudioEnds(guideRefreshLifecycle.page);
 current = await waitPhase(guideRefreshLifecycle.page, "sound-paused");
 record("Refresh during a guide note pauses that guide transaction without accepting input", current.attempt.soundPauseContext === "guide" && current.attempt.guideEvidence.length === 0 && current.attempt.guideAudioPlaying === false, current.attempt);
 await guideRefreshLifecycle.page.locator("#listeningReplay").click();
@@ -313,14 +367,20 @@ await guideRefreshLifecycle.context.close();
 const guideRepairRefreshLifecycle = await makePage();
 await seed(guideRepairRefreshLifecycle.page);
 await start(guideRepairRefreshLifecycle.page);
-await answerGuideStep(guideRepairRefreshLifecycle.page, 64);
-await guideRepairRefreshLifecycle.page.reload({ waitUntil: "domcontentloaded", timeout: 30000 });
-await guideRepairRefreshLifecycle.page.waitForSelector("#bootLoader", { state: "hidden", timeout: 30000 });
+await waitGuideAwaiting(guideRepairRefreshLifecycle.page);
+const guideRepairNavigation = guideRepairRefreshLifecycle.page.waitForNavigation({ waitUntil: "domcontentloaded", timeout: 30000 });
+await guideRepairRefreshLifecycle.page.evaluate(() => {
+  window.handleInput(64, "屏幕");
+  window.releaseGardenInput(64, "屏幕");
+  window.setTimeout(() => window.location.reload(), 40);
+});
+await guideRepairNavigation;
+await waitForReloadedApp(guideRepairRefreshLifecycle.page);
 current = await waitPhase(guideRepairRefreshLifecycle.page, "sound-paused");
 record("Refresh during guide soft repair preserves one wrong guide record and pauses the same audio transaction", current.attempt.soundPauseContext === "guide-repair" && current.attempt.guideEvidence.length === 1 && current.attempt.guideWrongCount === 1 && current.attempt.pendingGuideWrongMidi === 64, current.attempt);
 await guideRepairRefreshLifecycle.page.locator("#listeningReplay").click();
 current = await waitGuideAwaiting(guideRepairRefreshLifecycle.page);
-record("Explicit guide soft-repair recovery ends without duplicating guide evidence", current.attempt.guideEvidence.length === 1 && current.attempt.guideWrongCount === 1 && current.attempt.guideRepairStage === "soft-replay" && current.attempt.audioTrace.filter((event) => event.kind === "guide-replay").length === 2, current.attempt);
+record("Explicit guide soft-repair recovery ends without duplicating guide evidence", current.attempt.guideEvidence.length === 1 && current.attempt.guideWrongCount === 1 && current.attempt.guideRepairStage === "soft-replay" && current.attempt.audioTrace.filter((event) => event.kind === "guide-repair").length === 2, current.attempt);
 await guideRepairRefreshLifecycle.context.close();
 
 const pairMapLifecycle = await makePage();
@@ -337,6 +397,31 @@ current = await waitPhase(pairMapLifecycle.page, "awaiting-first");
 record("Target-pair map resume opens input only after the original pair ended", current.attempt.audioTrace.filter((event) => event.kind === "target-pair").length === 1 && current.attempt.replayCountSystem === 0 && current.attempt.scoredPairs.length === 0, current.attempt);
 await pairMapLifecycle.context.close();
 
+const pairQueuedInterrupt = await makePage({ width: 1024, height: 768 }, { sessionUuid: "ls08-pair-queued-interrupt" });
+await seed(pairQueuedInterrupt.page);
+await start(pairQueuedInterrupt.page);
+await completeGuide(pairQueuedInterrupt.page);
+await pairQueuedInterrupt.page.waitForFunction(() => {
+  const attempt = JSON.parse(localStorage.getItem("starDinoSessionRuntime") || "{}").active?.actions?.[0]?.listeningAttempt;
+  return attempt?.phase === "pair-playing" && Boolean(attempt.audioTransaction?.startedAt);
+}, null, { timeout: 10000 });
+const pairQueuedSessionId = (await view(pairQueuedInterrupt.page)).runtime.active?.sessionId;
+await pairQueuedInterrupt.page.locator("#mapReturn").click();
+current = await view(pairQueuedInterrupt.page);
+record("LS08 active pair map request records the shared queued-return token before audio ends", current.phase === "pair-playing" && current.attempt.audioTransaction?.returnQueued === true && current.attempt.pairReturnQueued === true && current.attempt.scoredPairs.length === 0, current.attempt);
+await pairQueuedInterrupt.page.evaluate(async () => { if (state.sfx?.ctx?.state === "running") await state.sfx.ctx.suspend(); });
+current = await waitPhase(pairQueuedInterrupt.page, "map");
+await pairQueuedInterrupt.page.waitForTimeout(120);
+current = await view(pairQueuedInterrupt.page);
+record("LS08 queued pair return is consumed once on interruption and reaches the map without a scored response", current.runtime.active?.sessionId === pairQueuedSessionId && current.attempt.phase === "sound-paused" && current.attempt.soundPauseContext === "pair" && Boolean(current.attempt.audioTransaction?.interruptedAt) && current.attempt.audioTransaction?.endedAt === null && current.attempt.audioTransaction?.returnQueued === false && Boolean(current.attempt.audioTransaction?.returnQueuedConsumedAt) && current.attempt.audioTrace.filter((event) => event.kind === "queued-return-consumed").length === 1 && current.attempt.scoredPairs.length === 0 && current.attempt.pairInputs.length === 0, current);
+await pairQueuedInterrupt.page.locator("#gardenRestMarker").click();
+current = await waitPhase(pairQueuedInterrupt.page, "sound-paused");
+await pairQueuedInterrupt.page.evaluate(async () => { if (state.sfx?.ctx?.state === "suspended") await state.sfx.ctx.resume(); });
+await pairQueuedInterrupt.page.locator("#listeningReplay").click();
+current = await waitPhase(pairQueuedInterrupt.page, "awaiting-first");
+record("LS08 queued pair interruption needs one explicit recovery and late callbacks do not submit the old pair", current.runtime.active?.sessionId === pairQueuedSessionId && current.attempt.audioTrace.filter((event) => event.kind === "target-pair").length === 2 && current.attempt.scoredPairs.length === 0 && current.attempt.pairInputs.length === 0, current.attempt);
+await pairQueuedInterrupt.context.close();
+
 const pairRefreshLifecycle = await makePage();
 await seed(pairRefreshLifecycle.page);
 await start(pairRefreshLifecycle.page);
@@ -348,7 +433,7 @@ current = await waitPhase(pairRefreshLifecycle.page, "sound-paused");
 record("Refresh during a target pair requires explicit recovery before any response", current.attempt.soundPauseContext === "pair" && current.attempt.pairIndex === 0 && current.attempt.pairInputs.length === 0 && current.attempt.scoredPairs.length === 0, current.attempt);
 await pairRefreshLifecycle.page.locator("#listeningReplay").click();
 current = await waitPhase(pairRefreshLifecycle.page, "awaiting-first");
-record("Recovered target pair ends once before scoring opens and records one successful system recovery", current.attempt.audioTrace.filter((event) => event.kind === "target-pair").length === 2 && current.attempt.replayCountSystem === 1 && current.attempt.scoredPairs.length === 0, current.attempt);
+record("Recovered target pair ends once before scoring opens and records one successful system recovery", current.attempt.audioTrace.filter((event) => event.kind === "target-pair").length === 2 && current.attempt.audioTransaction?.payload?.replayReason === "sound-recovery" && current.attempt.replayCountSystem === 1 && current.attempt.pairSystemReplayCount === 1 && current.attempt.scoredPairs.length === 0, current.attempt);
 await pairRefreshLifecycle.context.close();
 
 async function reachSamePair(route) {
@@ -660,9 +745,8 @@ await start(guideRest.page);
 await answerGuideStep(guideRest.page, 64);
 current = await view(guideRest.page);
 record("First guide wrong stays unscored and enters soft replay", current.attempt.guideRepairStage === "soft-replay" && current.attempt.scoredPairs.length === 0, current.attempt);
-const guideChildTrace = current.attempt.audioTrace.findLast((event) => event.kind === "guide-child");
-const guideTargetTrace = current.attempt.audioTrace.findLast((event) => event.kind === "guide-replay");
-record("Guide repair schedules the child note before the model note with no overlap", guideChildTrace?.scheduledDelaysMs?.[0] === 0 && guideTargetTrace?.scheduledDelaysMs?.[0] >= 680, { guideChildTrace, guideTargetTrace });
+const guideRepairTrace = current.attempt.audioTrace.findLast((event) => event.kind === "guide-repair");
+record("Guide repair schedules the child note before the model note with no overlap", guideRepairTrace?.midis?.join(",") === "64,60" && guideRepairTrace?.scheduledDelaysMs?.join(",") === "0,680", guideRepairTrace);
 await guideRest.page.screenshot({ path: path.join(screenshotDir, "ls08_guide_soft_replay_1024x768.png") });
 await answerGuideStep(guideRest.page, 64);
 await waitPhase(guideRest.page, "map", 10000);
@@ -716,9 +800,8 @@ current = await waitPhase(wrong.page, "wrong-first");
 const frozen = current.attempt.pairFirstCompleteResponse.join(",");
 const frozenResponseMs = current.attempt.pairFirstCompleteResponseMs;
 record("First complete wrong response is frozen", frozen === wrongResponse.join(",") && current.attempt.correctCount === 0, current.attempt);
-const childWrongTrace = current.attempt.audioTrace.findLast((event) => event.kind === "child-response");
-const targetRepairTrace = current.attempt.audioTrace.findLast((event) => event.kind === "target-replay");
-record("Wrong repair schedules both child notes before both target notes with a neutral gap", childWrongTrace?.scheduledDelaysMs?.join(",") === "0,560" && targetRepairTrace?.scheduledDelaysMs?.join(",") === "1240,1800", { childWrongTrace, targetRepairTrace });
+const wrongRepairTrace = current.attempt.audioTrace.findLast((event) => event.kind === "child-response-then-target");
+record("Wrong repair schedules both child notes before both target notes with a neutral gap", wrongRepairTrace?.midis?.join(",") === [...wrongResponse, ...wrongTarget].join(",") && wrongRepairTrace?.scheduledDelaysMs?.join(",") === "0,560,1240,1800", wrongRepairTrace);
 await wrong.page.screenshot({ path: path.join(screenshotDir, "ls08_wrong_first_1024x768.png") });
 await waitPhase(wrong.page, "awaiting-first");
 await answerPair(wrong.page, wrongTarget, "MIDI");
@@ -939,10 +1022,23 @@ await modeled.context.close();
 
 const modeledMapLifecycle = await makePage();
 await seed(modeledMapLifecycle.page);
-await reachDirectModeled(modeledMapLifecycle.page);
-await modeledMapLifecycle.page.locator("#mapReturn").click();
+await prepareDirectModeled(modeledMapLifecycle.page);
+const modeledMapProbe = await modeledMapLifecycle.page.evaluate(() => new Promise((resolve) => {
+  const act = () => {
+    const runtime = JSON.parse(localStorage.getItem("starDinoSessionRuntime") || "{}");
+    const attempt = runtime.active?.actions?.[runtime.active.actionIndex || 0]?.listeningAttempt || null;
+    if (attempt?.phase === "modeled-playing" && attempt.modeledAudioPlaying === true) {
+      const probe = { phase: attempt.phase, modeledAudioPlaying: attempt.modeledAudioPlaying, modeledInputs: attempt.modeledInputs.length, pairIndex: attempt.pairIndex };
+      document.querySelector("#mapReturn")?.click();
+      resolve(probe);
+      return;
+    }
+    requestAnimationFrame(act);
+  };
+  act();
+}));
 current = await view(modeledMapLifecycle.page);
-record("Map request during direct modeled playback cannot advance before the modeled pair ends", current.phase === "modeled-playing" && current.attempt.modeledAudioPlaying && current.attempt.modeledInputs.length === 0 && current.attempt.pairIndex === 0, current.attempt);
+record("Map request during direct modeled playback cannot advance before the modeled pair ends", modeledMapProbe.phase === "modeled-playing" && modeledMapProbe.modeledAudioPlaying && modeledMapProbe.modeledInputs === 0 && modeledMapProbe.pairIndex === 0 && current.phase === "modeled-playing" && current.attempt.modeledInputs.length === 0, { probe: modeledMapProbe, attempt: current.attempt });
 await waitPhase(modeledMapLifecycle.page, "map", 10000);
 current = await view(modeledMapLifecycle.page);
 record("Direct modeled map flow finalizes one modeled pair at the required safe rest", current.runtime.chapter3.resume?.ls08Attempt?.modeledInputs.length === 1 && current.runtime.chapter3.resume?.ls08Attempt?.pairIndex === 1 && current.runtime.chapter3.ls08Attempts.at(-1)?.modeled === true, current.runtime.chapter3);
@@ -950,11 +1046,34 @@ await modeledMapLifecycle.context.close();
 
 const modeledRefreshLifecycle = await makePage();
 await seed(modeledRefreshLifecycle.page);
-await reachDirectModeled(modeledRefreshLifecycle.page);
-await modeledRefreshLifecycle.page.reload({ waitUntil: "domcontentloaded", timeout: 30000 });
-await modeledRefreshLifecycle.page.waitForSelector("#bootLoader", { state: "hidden", timeout: 30000 });
+await prepareDirectModeled(modeledRefreshLifecycle.page);
+await Promise.all([
+  modeledRefreshLifecycle.page.waitForEvent("framenavigated", {
+    predicate: (frame) => frame === modeledRefreshLifecycle.page.mainFrame(),
+    timeout: 30000
+  }),
+  modeledRefreshLifecycle.page.evaluate(() => {
+    sessionStorage.removeItem("ls08RefreshModeledProbe");
+    // Start the same modeled transaction, then put reload ahead of its 1320 ms
+    // completion timer on the page event loop. Polling from Node can arrive after
+    // a busy renderer has already run the modeled completion callback.
+    window.completeLs08Modeled("refresh-modeled-probe");
+    const runtime = JSON.parse(localStorage.getItem("starDinoSessionRuntime") || "{}");
+    const attempt = runtime.active?.actions?.[runtime.active.actionIndex || 0]?.listeningAttempt || null;
+    sessionStorage.setItem("ls08RefreshModeledProbe", JSON.stringify({
+      phase: attempt?.phase || null,
+      modeledAudioPlaying: attempt?.modeledAudioPlaying === true,
+      modeledInputs: attempt?.modeledInputs?.length || 0,
+      pairIndex: attempt?.pairIndex ?? null,
+      completionTimerPending: attempt?.phase === "modeled-playing" && attempt?.modeledAudioPlaying === true
+    }));
+    setTimeout(() => location.reload(), 60);
+  })
+]);
+await waitForReloadedApp(modeledRefreshLifecycle.page);
 current = await waitPhase(modeledRefreshLifecycle.page, "sound-paused");
-record("Refresh during direct modeled playback preserves the transaction without progress", current.attempt.soundPauseContext === "modeled" && current.attempt.modeledInputs.length === 0 && current.attempt.pairIndex === 0 && current.attempt.scoredPairs.length === 0, current.attempt);
+const modeledRefreshProbe = await modeledRefreshLifecycle.page.evaluate(() => JSON.parse(sessionStorage.getItem("ls08RefreshModeledProbe") || "null"));
+record("Refresh during direct modeled playback preserves the transaction without progress", modeledRefreshProbe?.phase === "modeled-playing" && modeledRefreshProbe.modeledAudioPlaying === true && modeledRefreshProbe.completionTimerPending === true && modeledRefreshProbe.modeledInputs === 0 && modeledRefreshProbe.pairIndex === 0 && current.attempt.soundPauseContext === "modeled" && current.attempt.modeledInputs.length === 0 && current.attempt.pairIndex === 0 && current.attempt.scoredPairs.length === 0, { probe: modeledRefreshProbe, attempt: current.attempt });
 await modeledRefreshLifecycle.page.locator("#listeningReplay").click();
 await waitPhase(modeledRefreshLifecycle.page, "map", 10000);
 current = await view(modeledRefreshLifecycle.page);
@@ -998,7 +1117,7 @@ await wrongSound.page.waitForSelector("#bootLoader", { state: "hidden", timeout:
 await wrongSound.page.locator("#listeningReplay").click();
 await waitPhase(wrongSound.page, "wrong-first");
 current = await waitPhase(wrongSound.page, "awaiting-first");
-record("Sound recovery replays the original wrong transaction once without recounting the response", current.attempt.pairWrongCount === wrongSoundFrozen.wrongCount && current.attempt.pairInputEvents.length === wrongSoundFrozen.events && current.attempt.pairFirstCompleteResponse.join(",") === wrongSoundFrozen.response && current.attempt.replayCountSystem === 1 && current.attempt.pairSystemReplayCount === 1, current.attempt);
+record("Sound recovery replays the original wrong transaction once without recounting the response", current.attempt.pairWrongCount === wrongSoundFrozen.wrongCount && current.attempt.pairInputEvents.length === wrongSoundFrozen.events && current.attempt.pairFirstCompleteResponse.join(",") === wrongSoundFrozen.response && current.attempt.replayCountSystem === 1 && current.attempt.pairSystemReplayCount === 1 && current.attempt.routeArmed["屏幕"] === true && current.attempt.routeHeldMidi["屏幕"] === null, current.attempt);
 await answerPair(wrongSound.page, wrongSoundTarget);
 current = await view(wrongSound.page);
 record("Recovered wrong audio remains non-qualifying and cannot increase stable evidence", current.attempt.scoredPairs[0]?.qualifyingCorrect === false && current.attempt.correctCount === 0, current.attempt.scoredPairs[0]);
@@ -1042,19 +1161,186 @@ current = await view(mapEcho.page);
 record("Map navigation after low echo end completes one ended story event", !current.runtime.active && current.runtime.history.at(-1)?.bundleId === "C3-07" && current.runtime.history.at(-1)?.endReason === "natural-rest" && current.runtime.chapter3.completed === true && current.runtime.chapter3.ls08Attempts.at(-1)?.storyEvents.length === 1 && Boolean(current.runtime.chapter3.ls08Attempts.at(-1)?.storyEvents[0]?.endedAt) && !JSON.stringify(current.runtime).includes("LP01"), current.runtime);
 await mapEcho.context.close();
 
+const lowEchoQueuedInterrupt = await makePage({ width: 1024, height: 768 }, { sessionUuid: "ls08-low-echo-queued-interrupt" });
+await seed(lowEchoQueuedInterrupt.page);
+await reachLowEcho(lowEchoQueuedInterrupt.page);
+await lowEchoQueuedInterrupt.page.waitForFunction(() => {
+  const attempt = JSON.parse(localStorage.getItem("starDinoSessionRuntime") || "{}").active?.actions?.[0]?.listeningAttempt;
+  return attempt?.phase === "unscored-low-echo" && Boolean(attempt.audioTransaction?.startedAt);
+}, null, { timeout: 10000 });
+const lowEchoQueuedSessionId = (await view(lowEchoQueuedInterrupt.page)).runtime.active?.sessionId;
+await lowEchoQueuedInterrupt.page.locator("#mapReturn").click();
+current = await view(lowEchoQueuedInterrupt.page);
+record("LS08 low-echo map request records the shared queued-return token while the story sound is active", current.phase === "unscored-low-echo" && current.attempt.audioTransaction?.returnQueued === true && current.attempt.lowEchoReturnQueued === true && current.attempt.lowEchoCompleted === false, current.attempt);
+await lowEchoQueuedInterrupt.page.evaluate(async () => { if (state.sfx?.ctx?.state === "running") await state.sfx.ctx.suspend(); });
+current = await waitPhase(lowEchoQueuedInterrupt.page, "map");
+await lowEchoQueuedInterrupt.page.waitForTimeout(120);
+current = await view(lowEchoQueuedInterrupt.page);
+record("LS08 interrupted queued low echo returns to the map once without completing Chapter 3 or unlocking Chapter 4", current.runtime.active?.sessionId === lowEchoQueuedSessionId && current.attempt.phase === "sound-paused" && current.attempt.soundPauseContext === "low-echo" && Boolean(current.attempt.audioTransaction?.interruptedAt) && current.attempt.audioTransaction?.endedAt === null && current.attempt.audioTransaction?.returnQueued === false && Boolean(current.attempt.audioTransaction?.returnQueuedConsumedAt) && current.attempt.audioTrace.filter((event) => event.kind === "queued-return-consumed").length === 1 && current.attempt.lowEchoCompleted === false && !current.attempt.storyEvents[0]?.endedAt && current.runtime.chapter3.completed === false && !current.runtime.active?.actions?.some((action) => action.targetId === "LP01"), current);
+await lowEchoQueuedInterrupt.page.locator("#gardenRestMarker").click();
+current = await waitPhase(lowEchoQueuedInterrupt.page, "sound-paused");
+await lowEchoQueuedInterrupt.page.evaluate(async () => { if (state.sfx?.ctx?.state === "suspended") await state.sfx.ctx.resume(); });
+await lowEchoQueuedInterrupt.page.locator("#listeningReplay").click();
+await waitPhase(lowEchoQueuedInterrupt.page, "unscored-low-echo");
+await waitPhase(lowEchoQueuedInterrupt.page, "map", 10000);
+current = await view(lowEchoQueuedInterrupt.page);
+record("LS08 low-echo map recovery needs one explicit replay and later writes exactly one ended story event", !current.runtime.active && current.runtime.chapter3.completed === true && current.runtime.chapter3.ls08Attempts.at(-1)?.storyEvents.length === 1 && Boolean(current.runtime.chapter3.ls08Attempts.at(-1)?.storyEvents[0]?.endedAt) && current.runtime.chapter3.ls08Attempts.at(-1)?.storyEvents[0]?.playbackAttempts === 2 && current.learning.levels.LS08?.completions === 1, current.runtime);
+await lowEchoQueuedInterrupt.context.close();
+
 const refreshEcho = await makePage();
 await seed(refreshEcho.page);
-await reachLowEcho(refreshEcho.page);
-await refreshEcho.page.reload({ waitUntil: "domcontentloaded", timeout: 30000 });
-await refreshEcho.page.waitForSelector("#bootLoader", { state: "hidden", timeout: 30000 });
+await start(refreshEcho.page);
+await completeGuide(refreshEcho.page);
+await completeClean(refreshEcho.page);
+await waitPhase(refreshEcho.page, "complete-roots");
+await Promise.all([
+  refreshEcho.page.waitForEvent("framenavigated", {
+    predicate: (frame) => frame === refreshEcho.page.mainFrame(),
+    timeout: 30000
+  }),
+  refreshEcho.page.evaluate(() => {
+    sessionStorage.removeItem("ls08RefreshLowEchoProbe");
+    // The low echo starts at about 900 ms and ends another 1320 ms later.
+    // Scheduling reload on the page event loop preserves that ordering even under host load.
+    setTimeout(() => {
+      const runtime = JSON.parse(localStorage.getItem("starDinoSessionRuntime") || "{}");
+      const attempt = runtime.active?.actions?.[runtime.active.actionIndex || 0]?.listeningAttempt || null;
+      const storyEvent = attempt?.storyEvents?.find((event) => event.eventType === "storyEvent" && event.phaseRole === "unscored") || null;
+      sessionStorage.setItem("ls08RefreshLowEchoProbe", JSON.stringify({
+        phase: attempt?.phase || null,
+        lowEchoStarted: attempt?.lowEchoStarted === true,
+        lowEchoCompleted: attempt?.lowEchoCompleted === true,
+        endedAt: storyEvent?.endedAt || null
+      }));
+      location.reload();
+    }, 1050);
+  })
+]);
+await waitForReloadedApp(refreshEcho.page);
 current = await waitPhase(refreshEcho.page, "sound-paused");
-record("Refresh interrupts the low echo without silently completing Chapter 3", current.attempt.soundPauseContext === "low-echo" && current.attempt.lowEchoCompleted === false && current.runtime.chapter3.completed === false && current.attempt.storyEvents.length === 1 && !current.attempt.storyEvents[0].endedAt, current.attempt);
+const refreshEchoProbe = await refreshEcho.page.evaluate(() => JSON.parse(sessionStorage.getItem("ls08RefreshLowEchoProbe") || "null"));
+record("Refresh interrupts the low echo without silently completing Chapter 3", refreshEchoProbe?.phase === "unscored-low-echo" && refreshEchoProbe.lowEchoStarted === true && refreshEchoProbe.lowEchoCompleted === false && refreshEchoProbe.endedAt === null && current.attempt.soundPauseContext === "low-echo" && current.attempt.lowEchoCompleted === false && current.runtime.chapter3.completed === false && current.attempt.storyEvents.length === 1 && !current.attempt.storyEvents[0].endedAt, { probe: refreshEchoProbe, attempt: current.attempt });
 await refreshEcho.page.locator("#listeningReplay").click();
 await waitPhase(refreshEcho.page, "unscored-low-echo");
 await waitPhase(refreshEcho.page, "map", 10000);
 current = await view(refreshEcho.page);
 record("Explicit low-echo recovery ends the original event once without creating Chapter 4", !current.runtime.active && current.runtime.history.at(-1)?.bundleId === "C3-07" && current.runtime.chapter3.completed === true && current.runtime.chapter3.ls08Attempts.at(-1)?.storyEvents.length === 1 && Boolean(current.runtime.chapter3.ls08Attempts.at(-1)?.storyEvents[0]?.endedAt) && current.runtime.chapter3.ls08Attempts.at(-1)?.storyEvents[0]?.playbackAttempts === 2 && current.learning.levels.LS08?.completions === 1 && !JSON.stringify(current.runtime).includes("LP01"), current.runtime);
 await refreshEcho.context.close();
+
+const pairSuspend = await makePage({ width: 1024, height: 768 }, { sessionUuid: "ls08-pair-suspend" });
+await seed(pairSuspend.page);
+await start(pairSuspend.page);
+await completeGuide(pairSuspend.page);
+await pairSuspend.page.waitForFunction(() => {
+  const runtime = JSON.parse(localStorage.getItem("starDinoSessionRuntime") || "{}");
+  const attempt = runtime.active?.actions?.[runtime.active.actionIndex || 0]?.listeningAttempt;
+  return attempt?.phase === "pair-playing" && Boolean(attempt.audioTransaction?.startedAt);
+}, null, { timeout: 10000 });
+await pairSuspend.page.evaluate(async () => { if (state.sfx?.ctx?.state === "running") await state.sfx.ctx.suspend(); });
+current = await waitPhase(pairSuspend.page, "sound-paused");
+record("LS08 pair suspended after actual oscillator start cannot end or open a scored response", current.attempt.soundPauseContext === "pair" && Boolean(current.attempt.audioTransaction?.startedAt) && current.attempt.audioTransaction?.endedAt === null && Boolean(current.attempt.audioTransaction?.interruptedAt) && current.attempt.pairIndex === 0 && current.attempt.scoredPairs.length === 0 && current.attempt.pairInputs.length === 0, current.attempt);
+await pairSuspend.page.evaluate(async () => { if (state.sfx?.ctx?.state === "suspended") await state.sfx.ctx.resume(); });
+await pairSuspend.page.locator("#listeningReplay").click();
+current = await waitPhase(pairSuspend.page, "awaiting-first");
+record("LS08 pair recovery records one real end timeline before reopening input", Boolean(current.attempt.audioTransaction?.playbackId) && Boolean(current.attempt.audioTransaction?.scheduledAt) && Boolean(current.attempt.audioTransaction?.startedAt) && Boolean(current.attempt.audioTransaction?.endedAt) && Number.isFinite(current.attempt.audioTransaction?.startAudioTime) && Number.isFinite(current.attempt.audioTransaction?.endAudioTime) && current.attempt.audioTransaction.endAudioTime >= current.attempt.audioTransaction.startAudioTime && current.attempt.scoredPairs.length === 0, current.attempt);
+await pairSuspend.context.close();
+
+const blurLifecycle = await makePage({ width: 1024, height: 768 }, { sessionUuid: "ls08-window-blur" });
+await seed(blurLifecycle.page);
+await start(blurLifecycle.page);
+await completeGuide(blurLifecycle.page);
+await blurLifecycle.page.waitForFunction(() => ensureLs08Attempt()?.audioTransaction?.startedAt, null, { timeout: 10000 });
+await blurLifecycle.page.evaluate(() => window.dispatchEvent(new Event("blur")));
+current = await waitPhase(blurLifecycle.page, "sound-paused");
+record("Window blur interrupts an active LS08 teaching pair without a late response window", current.attempt.soundPauseContext === "pair" && Boolean(current.attempt.audioTransaction?.interruptedAt) && current.attempt.audioTransaction?.endedAt === null && current.attempt.scoredPairs.length === 0 && current.attempt.audioTrace.some((event) => event.kind === "audio-paused" && event.reason === "teaching-window-blur"), current.attempt);
+await blurLifecycle.context.close();
+
+const lowEchoRejectedResume = await makePage({ width: 1024, height: 768 }, { sessionUuid: "ls08-low-echo-reject" });
+await seed(lowEchoRejectedResume.page);
+await start(lowEchoRejectedResume.page);
+await completeGuide(lowEchoRejectedResume.page);
+await completeClean(lowEchoRejectedResume.page);
+await waitPhase(lowEchoRejectedResume.page, "complete-roots");
+await lowEchoRejectedResume.page.evaluate(async () => {
+  const ctx = state.sfx?.ctx;
+  if (!ctx) throw new Error("missing LS08 AudioContext");
+  if (ctx.state === "running") await ctx.suspend();
+  const originalResume = ctx.resume.bind(ctx);
+  ctx.resume = () => Promise.reject(new Error("controlled LS08 resume rejection"));
+  window.__ls08RejectedResume = { ctx, originalResume };
+});
+current = await waitPhase(lowEchoRejectedResume.page, "sound-paused", 6000);
+record("LS08 low echo rejected resume cannot write started/ended story evidence, complete Chapter 3 or unlock Chapter 4", current.attempt.soundPauseContext === "low-echo" && current.attempt.lowEchoStarted === false && current.attempt.lowEchoCompleted === false && current.attempt.storyEvents.length === 1 && current.attempt.storyEvents[0]?.startedAt === null && current.attempt.storyEvents[0]?.endedAt === null && current.runtime.chapter3.completed === false && !current.runtime.chapter3.lessonEvidence.LS08 && !current.runtime.active?.actions?.some((action) => action.targetId === "LP01"), current);
+await lowEchoRejectedResume.page.evaluate(async () => {
+  const pending = window.__ls08RejectedResume;
+  pending.ctx.resume = pending.originalResume;
+  state.sfx.resumePromise = null;
+  await pending.originalResume();
+});
+await lowEchoRejectedResume.page.locator("#listeningReplay").click();
+await waitPhase(lowEchoRejectedResume.page, "unscored-low-echo");
+await waitPhase(lowEchoRejectedResume.page, "map", 10000);
+current = await view(lowEchoRejectedResume.page);
+record("Recovered LS08 low echo reaches exactly one real ended story event before Chapter 4 becomes available", current.runtime.chapter3.completed === true && current.runtime.chapter3.ls08Attempts.at(-1)?.storyEvents.length === 1 && Boolean(current.runtime.chapter3.ls08Attempts.at(-1)?.storyEvents[0]?.startedAt) && Boolean(current.runtime.chapter3.ls08Attempts.at(-1)?.storyEvents[0]?.endedAt) && current.runtime.chapter3.ls08Attempts.at(-1)?.storyEvents[0]?.playbackAttempts === 1 && current.learning.levels.LS08?.completions === 1, current.runtime);
+await lowEchoRejectedResume.context.close();
+
+const lowEchoWatchdog = await makePage({ width: 1024, height: 768 }, { sessionUuid: "ls08-low-echo-watchdog" });
+await seed(lowEchoWatchdog.page);
+await start(lowEchoWatchdog.page);
+await completeGuide(lowEchoWatchdog.page);
+await completeClean(lowEchoWatchdog.page);
+await waitPhase(lowEchoWatchdog.page, "complete-roots");
+await lowEchoWatchdog.page.evaluate(async () => {
+  if (state.sfx?.ctx?.state !== "closed") await state.sfx.ctx.close();
+  state.sfx = null;
+  const parameter = (value = 0) => ({ value, cancelScheduledValues() {}, setTargetAtTime() {}, setValueAtTime() {}, linearRampToValueAtTime() {}, exponentialRampToValueAtTime() {} });
+  const node = () => ({ connect() {}, disconnect() {} });
+  class WatchdogAudioContext {
+    constructor() {
+      this.state = "running";
+      this.destination = {};
+      this._started = performance.now();
+      this._listeners = new Set();
+    }
+    get currentTime() { return (performance.now() - this._started) / 1000; }
+    addEventListener(type, listener) { if (type === "statechange") this._listeners.add(listener); }
+    removeEventListener(type, listener) { if (type === "statechange") this._listeners.delete(listener); }
+    resume() { this.state = "running"; return Promise.resolve(); }
+    suspend() { this.state = "suspended"; this._listeners.forEach((listener) => listener()); return Promise.resolve(); }
+    close() { this.state = "closed"; this._listeners.forEach((listener) => listener()); return Promise.resolve(); }
+    createGain() { return { ...node(), gain: parameter(1) }; }
+    createDynamicsCompressor() { return { ...node(), threshold: parameter(-24), knee: parameter(20), ratio: parameter(8), attack: parameter(0.006), release: parameter(0.18) }; }
+    createBiquadFilter() { return { ...node(), type: "lowpass", frequency: parameter(0), Q: parameter(0) }; }
+    createOscillator() { return { ...node(), type: "sine", frequency: parameter(0), detune: parameter(0), onended: null, start() {}, stop() {} }; }
+  }
+  window.AudioContext = WatchdogAudioContext;
+  window.webkitAudioContext = WatchdogAudioContext;
+});
+current = await waitPhase(lowEchoWatchdog.page, "sound-paused", 6000);
+record("LS08 low-echo watchdog interrupts without ending the event, chapter or Chapter 4 entrance", current.attempt.soundPauseContext === "low-echo" && Boolean(current.attempt.audioTransaction?.startedAt) && current.attempt.audioTransaction?.endedAt === null && Boolean(current.attempt.audioTransaction?.interruptedAt) && current.attempt.storyEvents.length === 1 && Boolean(current.attempt.storyEvents[0]?.startedAt) && current.attempt.storyEvents[0]?.endedAt === null && current.attempt.lowEchoCompleted === false && current.runtime.chapter3.completed === false && !current.runtime.chapter3.lessonEvidence.LS08 && current.attempt.audioTrace.some((event) => event.kind === "audio-paused" && event.reason === "teaching-watchdog-timeout"), current);
+await lowEchoWatchdog.context.close();
+
+const reverseLowEchoAudio = await makePage({ width: 1024, height: 768 }, { sessionUuid: "ls08-reverse-onended" });
+await seed(reverseLowEchoAudio.page);
+await start(reverseLowEchoAudio.page);
+await completeGuide(reverseLowEchoAudio.page);
+await completeClean(reverseLowEchoAudio.page);
+await waitPhase(reverseLowEchoAudio.page, "complete-roots");
+await installReverseOrderAudioContext(reverseLowEchoAudio.page);
+await reverseLowEchoAudio.page.waitForFunction(() => ensureLs08Attempt()?.phase === "unscored-low-echo" && ensureLs08Attempt()?.audioTransaction?.startedAt && state.sfx?.ctx?._oscillators?.length === 8, null, { timeout: 10000 });
+await reverseLowEchoAudio.page.locator("#mapReturn").click();
+await reverseLowEchoAudio.page.evaluate(() => {
+  const ctx = state.sfx?.ctx;
+  ctx?._setStateSilently("closed");
+  ctx?._fireOscillatorEnds();
+  ctx?._emitStatechange();
+  ctx?._fireOscillatorEnds();
+});
+current = await waitPhase(reverseLowEchoAudio.page, "map");
+await reverseLowEchoAudio.page.waitForTimeout(50);
+current = await view(reverseLowEchoAudio.page);
+record("Reverse-order closed LS08 oscillator ends consume one queued map return without ending Chapter 3 or unlocking Chapter 4", current.attempt.soundPauseContext === "low-echo" && current.attempt.audioTransaction?.contextState === "closed" && Boolean(current.attempt.audioTransaction?.startedAt) && current.attempt.audioTransaction?.endedAt === null && Boolean(current.attempt.audioTransaction?.interruptedAt) && current.attempt.audioTransaction?.returnQueued === false && Boolean(current.attempt.audioTransaction?.returnQueuedConsumedAt) && current.attempt.audioTrace.filter((event) => event.kind === "queued-return-consumed").length === 1 && current.attempt.storyEvents.length === 1 && Boolean(current.attempt.storyEvents[0]?.startedAt) && current.attempt.storyEvents[0]?.endedAt === null && current.attempt.lowEchoCompleted === false && current.runtime.chapter3.completed === false && !current.runtime.chapter3.lessonEvidence.LS08 && !current.runtime.active?.actions?.some((action) => action.targetId === "LP01"), current);
+await reverseLowEchoAudio.context.close();
 
 record("Runtime adds no unapproved media path", !/concepts\/|assets\/generated|audio\/|technical.preview|grok|gemini|sora/i.test(`${fs.readFileSync("app.js", "utf8")} ${fs.readFileSync("index.html", "utf8")} ${fs.readFileSync("chapter3-visible.css", "utf8")}`));
 record("Browser console remains clean", errors.length === 0, errors);

@@ -29,6 +29,7 @@ const volumeCap = Number(appSource.match(/const AUDIO_VOLUME_CAP = ([0-9.]+);/)?
 const effectGain = Number(appSource.match(/const AUDIO_EFFECT_GAIN = ([0-9.]+);/)?.[1]);
 const getSfxBusSource = functionSource("getSfxBus");
 const pianoSource = functionSource("playPianoNote");
+const pianoVoiceSource = functionSource("createPianoVoice");
 const listeningSource = functionSource("playListeningPrompt");
 const correctSource = functionSource("playCorrectSound");
 const wrongSource = functionSource("playWrongSound");
@@ -52,7 +53,7 @@ check(Number.isFinite(volumeCap) && volumeCap <= 0.7, "game volume cap is at mos
 check(Number.isFinite(effectGain) && effectGain <= 0.4, "effect bus gain is at most 40% of note bus");
 check(getSfxBusSource.includes("noteBus.connect(master)"), "note bus connects separately to master");
 check(getSfxBusSource.includes("effectBus.connect(master)"), "effect bus connects separately to master");
-check(pianoSource.includes('options.bus === "effect" ? effectBus : noteBus'), "piano generator supports explicit note/effect routing");
+check(pianoVoiceSource.includes('options.bus === "effect" ? effectBus : noteBus') && pianoSource.includes("createPianoVoice(sfx, frequency, options)"), "piano generator supports explicit note/effect routing");
 check(listeningSource.includes("playPianoNote(target.frequency"), "listening prompt plays the exact target piano frequency");
 check(!listeningSource.includes("playBellPing") && !listeningSource.includes("playSoftNoiseHit"), "listening prompt contains no masking feedback layer");
 check(correctSource.includes("playSoftNoiseHit"), "correct feedback uses a quiet non-teaching texture");

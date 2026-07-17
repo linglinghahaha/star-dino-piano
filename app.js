@@ -122,6 +122,36 @@ const noteIdentityMatrix = {
 };
 
 const notes = Object.entries(noteIdentityMatrix).map(([name, identity]) => ({ name, ...identity }));
+const chapter4WhiteMidis = [48, 50, 52, 53, 55, 57, 59, 60, 62, 64, 65, 67, 69, 71];
+const chapter4BlackMidis = [49, 51, 54, 56, 58, 61, 63, 66, 68, 70];
+const chapter4PitchNames = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
+const chapter4WhiteLocators = {
+  C: "两黑键左边",
+  D: "两黑键中间",
+  E: "两黑键右边",
+  F: "三黑键左边",
+  G: "三黑键左中",
+  A: "三黑键中间",
+  B: "三黑键右边"
+};
+
+function chapter4NoteForMidi(midi) {
+  const numeric = Number(midi);
+  if (!Number.isInteger(numeric) || numeric < 48 || numeric > 71) return null;
+  const pitchName = chapter4PitchNames[((numeric % 12) + 12) % 12];
+  const isBlack = pitchName.includes("#");
+  const name = isBlack ? null : pitchName;
+  const octave = Math.floor(numeric / 12) - 1;
+  return {
+    midi: numeric,
+    pitchName,
+    name,
+    octave,
+    isBlack,
+    frequency: 440 * (2 ** ((numeric - 69) / 12)),
+    locator: isBlack ? `${octave === 3 ? "下面" : "上面"}一组黑键` : chapter4WhiteLocators[name]
+  };
+}
 
 function isReservedNote(note) {
   return note?.courseStatus === "reserved";
@@ -352,6 +382,8 @@ const gardenCharacterAssets = {
   safeOpen: runtimeAsset("xingya-garden-invite-v1.webp")
 };
 
+const chapter4CharacterAsset = gardenCharacterAssets.safeOpen;
+
 const effectImages = {
   correct: runtimeAsset("fx-correct-sparkle.webp"),
   wrong: runtimeAsset("fx-try-again-puff.webp"),
@@ -420,6 +452,15 @@ const LS08_NOTE_DURATION_MS = 500;
 const LS08_REPAIR_GAP_MS = 180;
 const LS08_ASSISTED_WAIT_MS = 5200;
 const LS08_GUIDE_WAIT_MS = 12000;
+const LP01_TARGET_PLAY_MS = 760;
+const LP01_NOTE_DURATION_MS = 500;
+const LP01_REPAIR_GAP_MS = 180;
+const LP01_ASSISTED_WAIT_MS = 5200;
+const LP01_LONG_WAIT_MS = 20000;
+const LP02_ASSISTED_WAIT_MS = 5200;
+const LP02_LONG_WAIT_MS = 20000;
+const LP02_CHILD_NOTE_DURATION_MS = 440;
+const LP02_EXTERNAL_INPUT_MAX_MS = 2400;
 const chapter3Lessons = {
   LS01: { id: "LS01", midi: 60, letter: "C", solfege: "Do", locator: "两黑键左侧", leaf: 1, prompt: "打开第一片叶" },
   LS02: { id: "LS02", midi: 62, letter: "D", solfege: "Re", locator: "两黑键中间", leaf: 2, prompt: "伸直第二片叶" },
@@ -470,6 +511,23 @@ const ls08Config = {
   pairs: [[60, 62], [64, 62], [60, 60], [62, 64]],
   reward: "地底根系",
   parentFocus: "两个声音的先后记忆"
+};
+
+const chapter4Config = {
+  bundleId: "C4-01",
+  lp01: {
+    levelId: "LP01",
+    actionId: "LP01-register-listening",
+    candidates: [48, 60],
+    callCount: 4,
+    parentFocus: "高低 C 声音比较"
+  },
+  lp02: {
+    levelId: "LP02",
+    actionId: "LP02-low-c-home",
+    targetMidi: 48,
+    parentFocus: "低音 C 键位"
+  }
 };
 
 const preschoolSessionBundles = [
@@ -589,6 +647,14 @@ const preschoolSessionBundles = [
     allowOpeningReview: false,
     actions: [
       { actionId: "LS08-listening", kind: "garden-listening", targetId: "LS08", runMode: "check", reviewableForMastery: true }
+    ]
+  },
+  {
+    bundleId: "C4-01",
+    allowOpeningReview: false,
+    actions: [
+      { actionId: "LP01-register-listening", kind: "chapter4-listening", targetId: "LP01", runMode: "check", reviewableForMastery: true },
+      { actionId: "LP02-low-c-home", kind: "chapter4-keyboard", targetId: "LP02", runMode: "guided", reviewableForMastery: false }
     ]
   }
 ];
@@ -766,10 +832,23 @@ function nextPlayableLevelIndex(completed = loadCompletedLevels()) {
 
 function initialScreen() {
   const params = new URLSearchParams(window.location.search);
+  if (isExplicitChapter4DirectMode(params)) return "chapter4";
   if (params.get("mode") === "staff") return "staff";
   if (params.get("screen") === "map") return "map";
   if (!params.get("level") && !window.location.hash) return "map";
   return "play";
+}
+
+function isExplicitChapter4DirectMode(params = new URLSearchParams(window.location.search)) {
+  return params.get("mode") === "chapter4" &&
+    params.get("directMode") === "true" &&
+    params.get("formalSession") === "false" &&
+    ["LP01", "LP02"].includes(params.get("lesson") || "LP01");
+}
+
+function initialChapter4DirectLesson() {
+  const params = new URLSearchParams(window.location.search);
+  return isExplicitChapter4DirectMode(params) ? (params.get("lesson") || "LP01") : null;
 }
 
 function initialAuditMode() {
@@ -800,6 +879,18 @@ function isoTimeMs(value) {
 function createSessionId(bundleId) {
   const random = window.crypto?.randomUUID?.() || `${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 10)}`;
   return `${bundleId}-${random}`;
+}
+
+function normalizeChapter4Runtime(source = {}) {
+  const lessonEvidence = source.lessonEvidence && typeof source.lessonEvidence === "object" ? source.lessonEvidence : {};
+  return {
+    completedSlice: Boolean(source.completedSlice && lessonEvidence.LP02?.completedAt),
+    lessonEvidence,
+    resume: source.resume && typeof source.resume === "object" ? source.resume : null,
+    openingReviewQueue: Array.isArray(source.openingReviewQueue) ? source.openingReviewQueue : [],
+    lp01Attempts: Array.isArray(source.lp01Attempts) ? source.lp01Attempts : [],
+    lp02Attempts: Array.isArray(source.lp02Attempts) ? source.lp02Attempts : []
+  };
 }
 
 function loadSessionRuntime() {
@@ -844,7 +935,8 @@ function loadSessionRuntime() {
         ls06Attempts: Array.isArray(parsed.chapter3?.ls06Attempts) ? parsed.chapter3.ls06Attempts : [],
         ls07Attempts: Array.isArray(parsed.chapter3?.ls07Attempts) ? parsed.chapter3.ls07Attempts : [],
         ls08Attempts: Array.isArray(parsed.chapter3?.ls08Attempts) ? parsed.chapter3.ls08Attempts : []
-      }
+      },
+      chapter4: normalizeChapter4Runtime(parsed.chapter4)
     };
   } catch (error) {
     return {
@@ -852,7 +944,8 @@ function loadSessionRuntime() {
       active: null,
       history: [],
       lastRest: null,
-      chapter3: { entryEventId: CH3_ENTRY_AIR_CHECK, equipmentState: "sealed", airCheckComplete: false, leaves: [false, false, false], lessonEvidence: {}, resume: null, ls03QualifiedInputs: 0, completed: false, ls04Completed: false, ls05Completed: false, ls06Completed: false, ls07Completed: false, ls08Completed: false, ls05PartialRest: null, ls06PartialRest: null, ls07PartialRest: null, ls08PartialRest: null, ls08GuideDifficultyStreak: 0, ls08RemediationRequired: false, visibleSliceCompleted: false, ls04Attempts: [], ls05Attempts: [], ls06Attempts: [], ls07Attempts: [], ls08Attempts: [] }
+      chapter3: { entryEventId: CH3_ENTRY_AIR_CHECK, equipmentState: "sealed", airCheckComplete: false, leaves: [false, false, false], lessonEvidence: {}, resume: null, ls03QualifiedInputs: 0, completed: false, ls04Completed: false, ls05Completed: false, ls06Completed: false, ls07Completed: false, ls08Completed: false, ls05PartialRest: null, ls06PartialRest: null, ls07PartialRest: null, ls08PartialRest: null, ls08GuideDifficultyStreak: 0, ls08RemediationRequired: false, visibleSliceCompleted: false, ls04Attempts: [], ls05Attempts: [], ls06Attempts: [], ls07Attempts: [], ls08Attempts: [] },
+      chapter4: normalizeChapter4Runtime()
     };
   }
 }
@@ -1047,10 +1140,15 @@ const initialSessionRuntime = loadSessionRuntime();
 const initialActiveSession = activeSessionFromUrl(initialSessionRuntime);
 const initialActiveAction = initialActiveSession?.actions?.[initialActiveSession.actionIndex] || null;
 const initialActiveSessionStartsOnMap = Boolean(initialActiveSession && isMapResumeLocation());
+const initialDirectChapter4Lesson = initialChapter4DirectLesson();
 
 const state = {
   screen: initialActiveAction && !initialActiveSessionStartsOnMap
-    ? (initialActiveAction.kind === "staff" ? "staff" : (["garden", "garden-listening"].includes(initialActiveAction.kind) ? "garden" : "play"))
+    ? (initialActiveAction.kind === "staff"
+      ? "staff"
+      : (["garden", "garden-listening"].includes(initialActiveAction.kind)
+        ? "garden"
+        : (initialActiveAction.kind.startsWith("chapter4") ? "chapter4" : "play")))
     : initialScreen(),
   auditMode: initialAuditMode(),
   levelIndex: initialActiveAction?.kind === "level"
@@ -1092,6 +1190,10 @@ const state = {
   workshopIdleIdentityTimer: null,
   workshopIdleLocatorTimer: null,
   chapter3: initialSessionRuntime.chapter3,
+  chapter4: initialSessionRuntime.chapter4,
+  chapter4DirectMode: Boolean(initialDirectChapter4Lesson),
+  chapter4DirectAction: null,
+  chapter4RestView: null,
   gardenWrongCount: 0,
   gardenChildCorrectCount: 0,
   gardenChildInputs: [],
@@ -1110,10 +1212,18 @@ const state = {
   pairedListeningTimer: null,
   pairedListeningFeedbackTimer: null,
   ls08Timer: null,
-  ls08FeedbackTimer: null
+  ls08FeedbackTimer: null,
+  chapter4Timer: null,
+  chapter4FeedbackTimer: null,
+  teachingPlayback: null
 };
 
+if (initialDirectChapter4Lesson) {
+  state.chapter4DirectAction = createDirectChapter4Action(initialDirectChapter4Lesson);
+}
+
 function persistLearningStatsSchemaUpgrade() {
+  if (state.chapter4DirectMode) return;
   try {
     const raw = localStorage.getItem("starDinoLearningStats");
     if (!raw) return;
@@ -1128,13 +1238,14 @@ function persistLearningStatsSchemaUpgrade() {
 persistLearningStatsSchemaUpgrade();
 
 function persistSessionRuntimeSchemaUpgrade() {
+  if (state.chapter4DirectMode) return;
   try {
     const raw = localStorage.getItem(SESSION_RUNTIME_KEY);
     if (!raw) return;
     const parsed = JSON.parse(raw);
     const normalized = state.sessionRuntime;
     const staleChapterCompletion = Boolean(parsed.chapter3?.completed);
-    if (staleChapterCompletion || !Array.isArray(parsed.chapter3?.ls04Attempts) || !Array.isArray(parsed.chapter3?.ls05Attempts) || !Array.isArray(parsed.chapter3?.ls06Attempts) || !Array.isArray(parsed.chapter3?.ls07Attempts) || !Array.isArray(parsed.chapter3?.ls08Attempts) || !Object.hasOwn(parsed.chapter3 || {}, "visibleSliceCompleted") || !Object.hasOwn(parsed.chapter3 || {}, "ls04Completed") || !Object.hasOwn(parsed.chapter3 || {}, "ls05Completed") || !Object.hasOwn(parsed.chapter3 || {}, "ls06Completed") || !Object.hasOwn(parsed.chapter3 || {}, "ls07Completed") || !Object.hasOwn(parsed.chapter3 || {}, "ls08Completed") || !Object.hasOwn(parsed.chapter3 || {}, "ls05PartialRest") || !Object.hasOwn(parsed.chapter3 || {}, "ls06PartialRest") || !Object.hasOwn(parsed.chapter3 || {}, "ls07PartialRest") || !Object.hasOwn(parsed.chapter3 || {}, "ls08PartialRest")) {
+    if (staleChapterCompletion || !Array.isArray(parsed.chapter3?.ls04Attempts) || !Array.isArray(parsed.chapter3?.ls05Attempts) || !Array.isArray(parsed.chapter3?.ls06Attempts) || !Array.isArray(parsed.chapter3?.ls07Attempts) || !Array.isArray(parsed.chapter3?.ls08Attempts) || !Object.hasOwn(parsed.chapter3 || {}, "visibleSliceCompleted") || !Object.hasOwn(parsed.chapter3 || {}, "ls04Completed") || !Object.hasOwn(parsed.chapter3 || {}, "ls05Completed") || !Object.hasOwn(parsed.chapter3 || {}, "ls06Completed") || !Object.hasOwn(parsed.chapter3 || {}, "ls07Completed") || !Object.hasOwn(parsed.chapter3 || {}, "ls08Completed") || !Object.hasOwn(parsed.chapter3 || {}, "ls05PartialRest") || !Object.hasOwn(parsed.chapter3 || {}, "ls06PartialRest") || !Object.hasOwn(parsed.chapter3 || {}, "ls07PartialRest") || !Object.hasOwn(parsed.chapter3 || {}, "ls08PartialRest") || !parsed.chapter4 || !Array.isArray(parsed.chapter4.lp01Attempts) || !Array.isArray(parsed.chapter4.lp02Attempts)) {
       saveSessionRuntime(normalized);
     }
   } catch (error) {
@@ -1185,6 +1296,23 @@ const els = {
   mapSessionTitle: document.querySelector("#mapSessionTitle"),
   mapSessionDetail: document.querySelector("#mapSessionDetail"),
   gardenRestMarker: document.querySelector("#gardenRestMarker"),
+  chapter4Panel: document.querySelector("#chapter4Panel"),
+  chapter4Scene: document.querySelector("#chapter4Scene"),
+  chapter4CaveRings: document.querySelector("#chapter4CaveRings"),
+  chapter4SoundSource: document.querySelector("#chapter4SoundSource"),
+  chapter4Bubbles: document.querySelector("#chapter4Bubbles"),
+  chapter4Foundation: document.querySelector("#chapter4Foundation"),
+  chapter4XingyaImage: document.querySelector("#chapter4XingyaImage"),
+  chapter4Speech: document.querySelector("#chapter4Speech"),
+  chapter4SpeechKicker: document.querySelector("#chapter4SpeechKicker"),
+  chapter4SpeechMain: document.querySelector("#chapter4SpeechMain"),
+  chapter4SpeechSupport: document.querySelector("#chapter4SpeechSupport"),
+  chapter4Replay: document.querySelector("#chapter4Replay"),
+  chapter4StartCheck: document.querySelector("#chapter4StartCheck"),
+  chapter4VisualAssist: document.querySelector("#chapter4VisualAssist"),
+  chapter4CallProgress: document.querySelector("#chapter4CallProgress"),
+  chapter4Status: document.querySelector("#chapter4Status"),
+  keyboardPanel: document.querySelector("#keyboardPanel"),
   gardenPanel: document.querySelector("#gardenPanel"),
   gardenScene: document.querySelector("#gardenScene"),
   gardenAirCheck: document.querySelector("#gardenAirCheck"),
@@ -1544,6 +1672,19 @@ function formatResponseTime(milliseconds) {
 }
 
 function currentResponseRecordText() {
+  const chapter4Level = currentChapter4ParentLevel();
+  if (chapter4Level === "LP01") {
+    const active = currentChapter4Action("LP01")?.chapter4Attempt;
+    const stored = state.chapter4.lessonEvidence.LP01 || state.chapter4.lp01Attempts.at(-1);
+    const summary = active || stored;
+    return summary ? `声音首答 ${Number(summary.correctCount) || 0}/4 · 主动重听 ${Number(summary.replayCountChild) || 0} · 不限时` : "本轮未点泡泡 · 只记录不限时";
+  }
+  if (chapter4Level === "LP02") {
+    const active = currentChapter4Action("LP02")?.chapter4Attempt;
+    const stored = state.chapter4.lessonEvidence.LP02 || state.chapter4.lp02Attempts.at(-1);
+    const summary = active || stored;
+    return summary ? `低音 C 找家 · 路线 ${summary.firstInputRoute || summary.inputRoute || "未记录"} · 不限时` : "本轮未按键 · 只记录不限时";
+  }
   const listeningLevel = currentListeningParentLevel();
   if (listeningLevel === "LS08") {
     const active = currentLs08Action()?.listeningAttempt;
@@ -2267,7 +2408,38 @@ function usesLs08ParentEvidence() {
   return currentListeningParentLevel() === "LS08";
 }
 
+function chapter4HasPendingLp01Review() {
+  return state.chapter4.openingReviewQueue.includes("LP01");
+}
+
+function currentChapter4ParentLevel() {
+  const active = currentChapter4Action();
+  if (active?.targetId) return active.targetId;
+  if (state.screen !== "map") return null;
+  if (chapter4HasPendingLp01Review()) return "LP01";
+  if (state.chapter4.resume?.nextTargetId === "LP02" || state.chapter4.lessonEvidence.LP02?.completedAt || state.chapter4.lp02Attempts.length) return "LP02";
+  if (state.chapter4.lessonEvidence.LP01?.completedAt || state.chapter4.lp01Attempts.length) return "LP01";
+  return null;
+}
+
 function currentEvidenceState() {
+  const chapter4Level = currentChapter4ParentLevel();
+  if (chapter4Level) {
+    const stored = state.learningStats.levels[chapter4Level] || {};
+    const skillKey = evidenceSkillKey("level", chapter4Level);
+    const partial = chapter4Level === "LP01" ? state.chapter4.lessonEvidence.LP01 : null;
+    return {
+      played: (Number(stored.completions) || 0) > 0,
+      stable: chapter4Level === "LP01" && ((Number(stored.stableCompletions) || 0) > 0 || state.learningStats.retention.stableEvents.some((event) => event.skillKey === skillKey)),
+      retained: retainedEvidenceForSkill(skillKey),
+      todayNeedsPractice: stored.todayNeedsPractice === true && stored.todayNeedsPracticeDate === localDateKeyAt(),
+      lastWrongCount: Number(stored.lastWrongCount) || 0,
+      mini: false,
+      chapter4: true,
+      chapter4Level,
+      partial
+    };
+  }
   const listeningLevel = currentListeningParentLevel();
   if (listeningLevel) {
     const stored = state.learningStats.levels[listeningLevel] || {};
@@ -2327,6 +2499,22 @@ function currentEvidenceState() {
 
 function currentMasterySummary() {
   const evidence = currentEvidenceState();
+  if (evidence.chapter4Level === "LP01" && evidence.partial?.played === false) {
+    return {
+      ...evidence,
+      status: "本次做到这里",
+      detail: `本次真实完成 ${evidence.partial.resolvedCallCount || 0}/4；洞口由星芽帮助打开，高低比较待复习。不是绝对音感测试。`
+    };
+  }
+  if (evidence.chapter4Level === "LP02") {
+    return {
+      ...evidence,
+      status: evidence.played ? "在可见找家里玩过" : "正在找低音 C 的家",
+      detail: evidence.played
+        ? "低音 C 已在可见引导中找到家；之后还会在更少提示下再找一次。"
+        : "低音 C 还要找家；先跟着可见引导完成这一步。"
+    };
+  }
   if (state.screen === "garden" && !evidence.listening) {
     return {
       ...evidence,
@@ -2486,6 +2674,32 @@ function routeToStaffRemediation(plan = staffRemediationPlan()) {
 }
 
 function currentLearningSummary() {
+  const chapter4Level = currentChapter4ParentLevel();
+  if (chapter4Level === "LP01") {
+    const active = currentChapter4Action("LP01")?.chapter4Attempt;
+    const evidence = active || state.chapter4.lessonEvidence.LP01 || state.chapter4.lp01Attempts.at(-1) || {};
+    const pendingReview = chapter4HasPendingLp01Review();
+    const lp02Status = state.chapter4.lessonEvidence.LP02?.completedAt
+      ? "低音 C 已在可见引导中找到家；这不会把高低 C 比较自动算作会了。"
+      : state.chapter4.resume?.nextTargetId === "LP02"
+      ? "低音 C 还要找家；高低 C 比较也会在以后再复习。"
+      : "";
+    return {
+      focus: chapter4Config.lp01.parentFocus,
+      detail: `四次首次泡泡选择 ${Number(evidence.correctCount) || 0}/4，真实呈现 ${Number(evidence.presentedCallCount) || 0}/4，真实解决 ${Number(evidence.resolvedCallCount) || 0}/4，孩子重听 ${Number(evidence.replayCountChild) || 0}，系统重播 ${Number(evidence.replayCountSystem) || 0}，强提示 ${evidence.strongCueUsed ? "有" : "无"}，示范带做 ${evidence.modeled ? "有" : "无"}，视觉帮助 ${evidence.accessibilityVisualAssist ? "有" : "无"}。${evidence.storyResolvedBySupport ? "洞口由星芽帮助打开，高低比较保留待复习。" : "这是已知两个 C 的高低比较，不是绝对音感测试。"}${pendingReview && lp02Status ? ` ${lp02Status}` : ""}`
+    };
+  }
+  if (chapter4Level === "LP02") {
+    const active = currentChapter4Action("LP02")?.chapter4Attempt;
+    const evidence = active || state.chapter4.lessonEvidence.LP02 || state.chapter4.lp02Attempts.at(-1) || {};
+    const reviewNote = chapter4HasPendingLp01Review()
+      ? "高低 C 比较仍会在以后复习，不会因为这次找家自动算作会了。"
+      : "这次是可见引导找家，之后还会在更少提示下再找一次。";
+    return {
+      focus: chapter4Config.lp02.parentFocus,
+      detail: `要找的是低音 C；第一次按到 ${evidence.firstPitchName || evidence.firstChildMidi || "暂无"}，输入方式 ${evidence.firstInputRoute || evidence.inputRoute || "暂无"}，音名字母正确 ${evidence.noteNameCorrect ? "是" : "否"}，高低位置正确 ${evidence.registerCorrect ? "是" : "否"}，是否按到另一个 C ${evidence.wrongOctave ? "是" : "否"}，强提示 ${evidence.strongCueUsed ? "有" : "无"}，示范带做 ${evidence.modeled ? "有" : "无"}，麦克风尝试 ${evidence.experimentalInput ? evidence.microphoneConfidence || "有" : "无"}。${reviewNote}`
+    };
+  }
   if (usesLs08ParentEvidence()) {
     const active = currentLs08Action()?.listeningAttempt;
     const resume = state.chapter3.resume?.nextTargetId === "LS08" ? state.chapter3.resume.ls08Attempt : null;
@@ -2640,6 +2854,12 @@ function render() {
 
   if (state.screen === "garden") {
     renderGardenScreen();
+    refreshParentPanelIfOpen();
+    return;
+  }
+
+  if (state.screen === "chapter4") {
+    renderChapter4Screen();
     refreshParentPanelIfOpen();
     return;
   }
@@ -2950,6 +3170,7 @@ function renderShellMode() {
   document.body.classList.toggle("screen-play", state.screen === "play");
   document.body.classList.toggle("screen-staff", state.screen === "staff");
   document.body.classList.toggle("screen-garden", state.screen === "garden");
+  document.body.classList.toggle("screen-chapter4", state.screen === "chapter4");
   if (state.auditMode) {
     document.body.dataset.audit = state.auditMode;
   } else {
@@ -2959,7 +3180,13 @@ function renderShellMode() {
   if (els.appShell) {
     els.appShell.hidden = state.screen === "map";
     els.appShell.classList.toggle("staff-mode", state.screen === "staff");
+    els.appShell.classList.toggle("chapter4-mode", state.screen === "chapter4");
     if (state.screen !== "garden") delete els.appShell.dataset.chapter3;
+    if (state.screen !== "chapter4") {
+      delete els.appShell.dataset.chapter4Lesson;
+      delete els.appShell.dataset.chapter4Phase;
+      delete els.appShell.dataset.chapter4Formal;
+    }
     if (state.auditMode) {
       els.appShell.dataset.audit = state.auditMode;
     } else {
@@ -2968,6 +3195,7 @@ function renderShellMode() {
   }
   if (els.staffPanel) els.staffPanel.hidden = state.screen !== "staff";
   if (els.gardenPanel) els.gardenPanel.hidden = state.screen !== "garden";
+  if (els.chapter4Panel) els.chapter4Panel.hidden = state.screen !== "chapter4";
   document.querySelector(".build-panel")?.toggleAttribute("hidden", state.screen !== "play");
   document.querySelector(".practice-panel")?.toggleAttribute("hidden", state.screen !== "play");
   if (els.staffModeButton) {
@@ -2978,11 +3206,13 @@ function renderShellMode() {
 function renderMapScreen() {
   if (!els.mapShell) return;
   const gardenReached = hasReachedGardenEntrance();
+  const chapter4Entrance = hasFormalChapter4EntranceEvidence();
+  const activeChapter4 = state.activeSession?.status === "active" && state.activeSession.bundleId === chapter4Config.bundleId;
   const baseComplete = levels.every((level) => state.completed.has(level.id));
   const staffReadiness = fgBridgeReadiness();
   const shouldFocusStaff = !gardenReached && state.screen === "map" && baseComplete && !state.staffComplete && staffReadiness.ready;
   if (els.mapChapterLabel) {
-    els.mapChapterLabel.textContent = gardenReached ? "当前章节：呼吸花园" : "当前章节：月球基地";
+    els.mapChapterLabel.textContent = chapter4Entrance ? "当前章节：地下回声洞" : (gardenReached ? "当前章节：呼吸花园" : "当前章节：月球基地");
   }
   if (els.mapStarCount) {
     if (gardenReached) {
@@ -3043,14 +3273,35 @@ function renderMapScreen() {
     els.mapStarCount.textContent = `两声根须 ${count}/4 · ${listeningState}`;
     els.mapStarCount.setAttribute("aria-label", `两个声音先后记忆进度：四个中性根结已完成 ${count} 个，${listeningState}`);
   }
+  if (els.mapStarCount && chapter4Entrance) {
+    const lp01Done = Boolean(state.chapter4.lessonEvidence.LP01?.completedAt || state.chapter4.lessonEvidence.LP01?.storyResolvedBySupport);
+    const lp02Done = Boolean(state.chapter4.lessonEvidence.LP02?.completedAt);
+    const action = activeChapter4 ? currentSessionAction(state.activeSession) : null;
+    const attempt = action?.chapter4Attempt || state.chapter4.resume?.lp01Summary || state.chapter4.lp01Attempts.at(-1) || null;
+    if (!lp01Done || action?.targetId === "LP01") {
+      const resolved = Math.min(4, attempt?.resolvedCallCount ?? attempt?.scoredCalls?.length ?? 0);
+      const listeningState = activeChapter4 ? "正在听" : (state.chapter4.resume ? "继续" : "准备");
+      els.mapStarCount.textContent = `四次回声 ${resolved}/4 · ${listeningState}`;
+      els.mapStarCount.setAttribute("aria-label", `地下回声洞进度：四次声音比较已解决 ${resolved} 次，${listeningState}`);
+    } else {
+      const homeState = lp02Done ? "休息" : (activeChapter4 ? "正在找" : (state.chapter4.resume ? "继续" : "准备"));
+      els.mapStarCount.textContent = `低音 C 的家 · ${homeState}`;
+      els.mapStarCount.setAttribute("aria-label", `地下回声洞低音 C 找家，${homeState}`);
+    }
+  }
   if (els.gardenRestMarker) {
     els.gardenRestMarker.hidden = !gardenReached;
     const chapter3Done = Boolean(state.chapter3.ls08Completed || state.chapter3.lessonEvidence.LS08?.completedAt);
     const activeGarden = state.activeSession?.status === "active" && state.activeSession.bundleId.startsWith("C3-");
     const waitingResume = Boolean(state.chapter3.resume?.nextTargetId);
-    const markerCopy = gardenMapMarkerCopy({ chapter3Done, activeGarden, leafCount: state.chapter3.leaves.filter(Boolean).length });
-    els.gardenRestMarker.disabled = chapter3Done;
+    const markerCopy = chapter4Entrance
+      ? chapter4MapMarkerCopy({ activeChapter4 })
+      : gardenMapMarkerCopy({ chapter3Done, activeGarden, leafCount: state.chapter3.leaves.filter(Boolean).length });
+    els.gardenRestMarker.disabled = chapter4Entrance ? Boolean(state.chapter4.completedSlice && !activeChapter4 && !state.chapter4.resume) : chapter3Done;
     els.gardenRestMarker.dataset.chapter3State = chapter3Done ? "complete" : ((activeGarden || waitingResume) ? "resume" : "ready");
+    els.gardenRestMarker.dataset.chapter4State = chapter4Entrance
+      ? (state.chapter4.completedSlice ? "complete" : ((activeChapter4 || state.chapter4.resume) ? "resume" : "entry"))
+      : "locked";
     els.gardenRestMarker.setAttribute("aria-label", `${markerCopy.strong}，${markerCopy.small}`);
     const markerStrong = els.gardenRestMarker.querySelector("strong");
     const markerSmall = els.gardenRestMarker.querySelector("small");
@@ -3059,6 +3310,7 @@ function renderMapScreen() {
     if (gardenReached) els.gardenRestMarker.setAttribute("aria-current", "location");
     else els.gardenRestMarker.removeAttribute("aria-current");
   }
+  els.mapShell.dataset.chapter4Phase = chapter4Entrance && !state.chapter4.completedSlice ? "chapter4-entry" : "locked";
   els.mapShell.querySelectorAll(".garden-branch").forEach((path) => {
     path.hidden = !gardenReached;
   });
@@ -3106,6 +3358,13 @@ function renderMapScreen() {
   renderParentPanel();
 }
 
+function chapter4MapMarkerCopy({ activeChapter4 = false } = {}) {
+  if (state.chapter4.completedSlice) return { strong: "第一块地基", small: "低音 C 已经找到家" };
+  if (activeChapter4) return { strong: "地下回声洞", small: "继续刚才的声音" };
+  if (state.chapter4.resume?.nextTargetId === "LP02") return { strong: "低音 C 的家", small: "点这里继续找家" };
+  return { strong: "地下入口", small: "点这里听两个声音泡泡" };
+}
+
 function mapRestDetailCopy(rest) {
   if (!rest) return "这一小段已经安顿好，地图可以慢慢选。";
   const completedReward = rest.bundleId === "C3-05"
@@ -3117,11 +3376,13 @@ function mapRestDetailCopy(rest) {
   if (rest.bundleId === "C3-06") return "边界花先歇一歇，刚才找到的声音都留着。";
   if (rest.bundleId === "C3-07" && rest.reward === ls08Config.reward) return "根须已经连到地下，今天在入口歇一歇。";
   if (rest.bundleId === "C3-07") return "两声根须先歇一歇，已经长出的根结都留着。";
+  if (rest.bundleId === "C4-01" && rest.reward === "第一块地基") return "低音 C 已经找到家，第一块地基稳稳落下。";
+  if (rest.bundleId === "C4-01") return "发光洞口先歇一歇，已经听过的声音都留着。";
   return `${rest.reward || "这一小段"}已经安顿好，地图可以慢慢选。`;
 }
 
 function gardenMapMarkerCopy({ chapter3Done, activeGarden, leafCount }) {
-  if (chapter3Done && state.chapter3.lessonEvidence.LS08?.completedAt) return { strong: "地底入口", small: "根须已经连到地下" };
+  if (chapter3Done && state.chapter3.lessonEvidence.LS08?.completedAt) return { strong: "根须休息", small: "地底回声还没有完整安顿" };
   if (chapter3Done) return { strong: "三朵花", small: "花粉铃叫醒三朵花啦" };
   const activeTargetId = activeGarden ? currentSessionAction(state.activeSession)?.targetId : null;
   const resumeTargetId = state.chapter3.resume?.nextTargetId || null;
@@ -3193,6 +3454,7 @@ function setGameSoundEnabled(enabled) {
   state.audioSettings.enabled = Boolean(enabled);
   saveAudioSettings();
   applyAudioSettings();
+  if (!state.audioSettings.enabled) interruptTeachingPianoSequence("audio-disabled");
 }
 
 function setGameSoundVolume(percent) {
@@ -3201,6 +3463,7 @@ function setGameSoundVolume(percent) {
   state.audioSettings.volume = Math.min(AUDIO_VOLUME_CAP, Math.max(0, normalized));
   saveAudioSettings();
   applyAudioSettings();
+  if (state.audioSettings.volume <= 0) interruptTeachingPianoSequence("volume-muted");
 }
 
 function systemPrefersReducedMotion() {
@@ -3302,7 +3565,17 @@ function renderParentPanel() {
       .join("");
   }
   if (els.parentProgressText) {
-    if (usesLs08ParentEvidence()) {
+    const chapter4Level = currentChapter4ParentLevel();
+    if (chapter4Level === "LP01") {
+      const activeAttempt = currentChapter4Action("LP01")?.chapter4Attempt;
+      const stored = state.chapter4.lessonEvidence.LP01 || state.chapter4.lp01Attempts.at(-1);
+      const count = Math.min(4, activeAttempt?.resolvedCallCount ?? stored?.resolvedCallCount ?? 0);
+      els.parentProgressText.textContent = chapter4HasPendingLp01Review()
+        ? `四次声音比较 ${count}/4 · 高低 C 待复习`
+        : `四次声音比较 ${count}/4`;
+    } else if (chapter4Level === "LP02") {
+      els.parentProgressText.textContent = state.chapter4.lessonEvidence.LP02?.completedAt ? "低音 C 已找家" : "低音 C 找家中";
+    } else if (usesLs08ParentEvidence()) {
       const activeAttempt = currentLs08Action()?.listeningAttempt;
       const resumeAttempt = state.chapter3.resume?.nextTargetId === "LS08" ? state.chapter3.resume.ls08Attempt : null;
       const lastAttempt = state.chapter3.ls08Attempts?.at(-1);
@@ -3339,7 +3612,12 @@ function renderParentPanel() {
     }
   }
   if (els.parentStaffState) {
-    els.parentStaffState.textContent = usesLs08ParentEvidence()
+    const chapter4Level = currentChapter4ParentLevel();
+    els.parentStaffState.textContent = chapter4Level === "LP01"
+      ? (chapter4HasPendingLp01Review() ? "高低 C 比较待复习" : (state.chapter4.lessonEvidence.LP01?.played ? "四次声音比较已完成" : "四次声音比较进行中"))
+      : chapter4Level === "LP02"
+      ? (state.chapter4.lessonEvidence.LP02?.completedAt ? "第一块地基休息" : "低音 C 找家中")
+      : usesLs08ParentEvidence()
       ? (state.chapter3.lessonEvidence.LS08?.completedAt ? "第三章故事休息" : "两声先后进行中")
       : usesPairedListeningParentEvidence()
       ? (state.chapter3.lessonEvidence[currentListeningParentLevel()]?.completedAt ? "当前切片休息" : "四次声音进行中")
@@ -4790,7 +5068,7 @@ function ls08MidiHasActivePointer(midi) {
 function syncLs08RenderedPointerState() {
   if (!els.keyboard) return;
   let hasActivePointer = false;
-  els.keyboard.querySelectorAll(".white-key[data-midi]").forEach((key) => {
+  els.keyboard.querySelectorAll(".white-key[data-midi], .black-key[data-midi]").forEach((key) => {
     const active = ls08MidiHasActivePointer(Number(key.dataset.midi));
     key.classList.toggle("pressed", active);
     hasActivePointer ||= active;
@@ -4804,6 +5082,90 @@ function syncLs08RenderedPointerState() {
   els.keyboard.classList.remove("is-playing");
   els.keyboard.classList.add("is-releasing");
   setTimeout(() => els.keyboard?.classList.remove("is-releasing"), 160);
+}
+
+const chapter4BubblePointerActivations = new Map();
+const chapter4BubbleByPointerToken = new Map();
+const chapter4BubbleDocumentReleaseEvents = new WeakSet();
+
+function ensureChapter4BubblePointerActivation(bubbleId) {
+  let activation = chapter4BubblePointerActivations.get(bubbleId);
+  if (!activation) {
+    activation = { activePointers: new Set(), pendingClicks: new Set(), cleanupTimer: null };
+    chapter4BubblePointerActivations.set(bubbleId, activation);
+  }
+  return activation;
+}
+
+function scheduleChapter4BubblePointerCleanup(bubbleId, activation) {
+  clearTimeout(activation.cleanupTimer);
+  activation.cleanupTimer = setTimeout(() => {
+    if (activation.activePointers.size) {
+      scheduleChapter4BubblePointerCleanup(bubbleId, activation);
+      return;
+    }
+    activation.pendingClicks.clear();
+    chapter4BubblePointerActivations.delete(bubbleId);
+  }, LS08_POINTER_CLICK_SUPPRESSION_MS);
+}
+
+function beginChapter4BubblePointerActivation(bubbleId, event) {
+  const activation = ensureChapter4BubblePointerActivation(bubbleId);
+  const token = ls08PointerToken(event, { createFallback: true });
+  const startsNewPress = activation.activePointers.size === 0;
+  activation.activePointers.add(token);
+  activation.pendingClicks.add(token);
+  chapter4BubbleByPointerToken.set(token, bubbleId);
+  scheduleChapter4BubblePointerCleanup(bubbleId, activation);
+  syncChapter4BubblePointerState();
+  return startsNewPress;
+}
+
+function endChapter4BubblePointerActivation(bubbleId, event) {
+  const activation = chapter4BubblePointerActivations.get(bubbleId);
+  if (!activation) return { tracked: false, removed: false };
+  const token = ls08PointerToken(event);
+  if (!token || !activation.activePointers.delete(token)) return { tracked: false, removed: false };
+  chapter4BubbleByPointerToken.delete(token);
+  scheduleChapter4BubblePointerCleanup(bubbleId, activation);
+  syncChapter4BubblePointerState();
+  return { tracked: true, removed: true };
+}
+
+function consumeChapter4BubblePointerClick(bubbleId, event) {
+  const activation = chapter4BubblePointerActivations.get(bubbleId);
+  if (!activation?.pendingClicks.size) return false;
+  const token = ls08PointerToken(event);
+  let pendingToken = null;
+  if (token && activation.pendingClicks.has(token)) pendingToken = token;
+  else if (Number(event?.detail) > 0) pendingToken = activation.pendingClicks.values().next().value;
+  if (!pendingToken) return false;
+  activation.pendingClicks.delete(pendingToken);
+  scheduleChapter4BubblePointerCleanup(bubbleId, activation);
+  return true;
+}
+
+function syncChapter4BubblePointerState() {
+  els.chapter4Bubbles?.querySelectorAll(".chapter4-bubble[data-bubble-id]").forEach((bubble) => {
+    bubble.classList.toggle("pressed", Boolean(chapter4BubblePointerActivations.get(bubble.dataset.bubbleId)?.activePointers.size));
+  });
+}
+
+function releaseChapter4BubblePointerFromDocument(event) {
+  const token = ls08PointerToken(event);
+  const bubbleId = token ? chapter4BubbleByPointerToken.get(token) : null;
+  if (!bubbleId) return;
+  const result = endChapter4BubblePointerActivation(bubbleId, event);
+  if (result.removed) chapter4BubbleDocumentReleaseEvents.add(event);
+}
+
+function clearAllChapter4BubblePointerActivations() {
+  for (const [bubbleId, activation] of chapter4BubblePointerActivations) {
+    activation.activePointers.forEach((token) => chapter4BubbleByPointerToken.delete(token));
+    activation.activePointers.clear();
+    scheduleChapter4BubblePointerCleanup(bubbleId, activation);
+  }
+  syncChapter4BubblePointerState();
 }
 
 function renderKeyboard(target, options = {}) {
@@ -5153,6 +5515,10 @@ function markAssistedRepairSuccess() {
 
 function handleInput(midi, source) {
   if (gameplayInputIsBlocked()) return;
+  if (state.screen === "chapter4") {
+    handleChapter4Input(midi, source);
+    return;
+  }
   if (state.screen === "garden") {
     if (currentLs08Action()) handleLs08Input(midi, source);
     else if (currentListeningAction("LS04")) handleLs04Input(midi, source);
@@ -5261,6 +5627,10 @@ function handleInput(midi, source) {
 }
 
 function releaseGardenInput(midi, source) {
+  if (state.screen === "chapter4") {
+    releaseChapter4Input(midi, source);
+    return;
+  }
   if (state.screen !== "garden") return;
   if (currentLs08Action()) {
     releaseLs08Input(midi, source);
@@ -6953,6 +7323,7 @@ function createLs08Attempt(session = state.activeSession, resumeAttempt = null) 
     resumed.resumedFromSessionId = session?.resumeOfSessionId || null;
     resumed.crossedSessionBoundary = true;
     resumed.soundPauseContext = null;
+    resumed.audioTransaction = null;
     delete resumed.outcomeRecorded;
     resetLs08Pair(resumed);
     return resumed;
@@ -7001,6 +7372,7 @@ function createLs08Attempt(session = state.activeSession, resumeAttempt = null) 
     targetRevealedBeforeResponse: false,
     soundPauseCount: 0,
     soundPauseContext: null,
+    audioTransaction: null,
     storyEvents: [],
     lowEchoStarted: false,
     lowEchoCompleted: false,
@@ -7042,32 +7414,174 @@ function traceLs08(attempt, kind, extra = {}) {
   attempt.audioTrace = attempt.audioTrace.slice(-100);
 }
 
-function playLs08Notes(midis, { kind, reason, child = false, startDelayMs = 0 } = {}) {
-  const attempt = ensureLs08Attempt();
-  if (!attempt || !Array.isArray(midis) || midis.length === 0) return false;
-  const scheduledDelaysMs = midis.map((_, index) => startDelayMs + (index * LS08_PAIR_GAP_MS));
-  const played = midis.every((midi, index) => playPianoNote(midiFrequency(midi), {
-    gain: child ? 0.10 : 0.13,
-    duration: LS08_NOTE_DURATION_MS / 1000,
-    delay: scheduledDelaysMs[index] / 1000
-  }));
-  if (played) traceLs08(attempt, kind || "pair", { reason, midis: midis.slice(), pairIndex: attempt.pairIndex, scheduledDelaysMs });
-  return played;
-}
-
 function ls08SequenceDurationMs(midis) {
   return LS08_NOTE_DURATION_MS + (Math.max(0, (midis?.length || 1) - 1) * LS08_PAIR_GAP_MS);
 }
 
-function playLs08RepairSequence(childMidis, targetMidis, { childKind, targetKind, childReason, targetReason } = {}) {
-  const targetStartMs = ls08SequenceDurationMs(childMidis) + LS08_REPAIR_GAP_MS;
-  const childPlayed = playLs08Notes(childMidis, { kind: childKind, reason: childReason, child: true });
-  const targetPlayed = childPlayed && playLs08Notes(targetMidis, { kind: targetKind, reason: targetReason, startDelayMs: targetStartMs });
-  return {
-    played: Boolean(childPlayed && targetPlayed),
-    durationMs: targetStartMs + ls08SequenceDurationMs(targetMidis),
-    targetStartMs
+function beginLs08AudioTransaction(attempt, { context, kind, reason, notes, payload = null, phase = null, scheduledAt = new Date().toISOString() } = {}) {
+  if (!attempt) return null;
+  attempt.audioTransaction = {
+    context,
+    kind,
+    reason,
+    midis: notes.map((note) => note.midi),
+    scheduledAt,
+    startedAt: null,
+    endedAt: null,
+    interruptedAt: null,
+    playbackId: null,
+    startAudioTime: null,
+    endAudioTime: null,
+    interruptedAudioTime: null,
+    contextState: state.sfx?.ctx?.state || "unavailable",
+    payload,
+    returnQueued: false,
+    returnQueuedConsumedAt: null
   };
+  if (phase) attempt.phase = phase;
+  persistLs08Attempt();
+  renderGardenScreen();
+  return attempt.audioTransaction;
+}
+
+function queueLs08MapReturn(attempt) {
+  if (!attempt) return false;
+  const transaction = attempt.audioTransaction;
+  if (transaction && !transaction.endedAt && !transaction.interruptedAt) transaction.returnQueued = true;
+  const context = transaction?.context;
+  if (context === "guide" || context === "guide-repair") attempt.guideReturnQueued = true;
+  else if (context === "pair") {
+    attempt.pairReturnQueued = true;
+    attempt.pairTimingInterrupted = true;
+  } else if (context === "wrong-repair") {
+    attempt.repairReturnQueued = true;
+    attempt.pairTimingInterrupted = true;
+  } else if (context === "modeled") {
+    attempt.pairTimingInterrupted = true;
+  } else if (context === "low-echo") {
+    attempt.lowEchoReturnQueued = true;
+  }
+  traceLs08(attempt, "return-queued", { context: context || "unknown" });
+  persistLs08Attempt();
+  renderGardenScreen();
+  return true;
+}
+
+function consumeLs08QueuedReturn(attempt, transaction = attempt?.audioTransaction) {
+  const queued = transaction?.returnQueued === true || attempt?.guideReturnQueued === true || attempt?.pairReturnQueued === true || attempt?.repairReturnQueued === true || attempt?.lowEchoReturnQueued === true;
+  if (!queued || transaction?.returnQueuedConsumedAt) return false;
+  if (transaction) {
+    transaction.returnQueued = false;
+    transaction.returnQueuedConsumedAt = new Date().toISOString();
+  }
+  attempt.guideReturnQueued = false;
+  attempt.pairReturnQueued = false;
+  attempt.repairReturnQueued = false;
+  attempt.lowEchoReturnQueued = false;
+  traceLs08(attempt, "queued-return-consumed", {
+    context: transaction?.context || "unknown",
+    interruption: Boolean(transaction?.interruptedAt)
+  });
+  persistLs08Attempt();
+  if (state.screen === "garden") showMapScreen();
+  return true;
+}
+
+function finishLs08AudioTransaction(attempt, onEnded, endedAt = null) {
+  const transaction = attempt?.audioTransaction;
+  if (!transaction || transaction.endedAt || transaction.interruptedAt) return;
+  transaction.endedAt = endedAt || new Date().toISOString();
+  traceLs08(attempt, "transaction-ended", { context: transaction.context, sequenceKind: transaction.kind });
+  persistLs08Attempt();
+  const returnQueued = transaction.returnQueued === true;
+  onEnded?.(transaction);
+  if (returnQueued) consumeLs08QueuedReturn(attempt, transaction);
+}
+
+function enterLs08SoundPause(attempt, context, reason = "audio-unavailable", { increment = true } = {}) {
+  if (!attempt) return;
+  const transaction = attempt.audioTransaction;
+  const returnQueued = transaction?.returnQueued === true;
+  if (increment) attempt.soundPauseCount += 1;
+  if (attempt.audioTransaction && !attempt.audioTransaction.endedAt && !attempt.audioTransaction.interruptedAt) {
+    attempt.audioTransaction.interruptedAt = new Date().toISOString();
+  }
+  attempt.soundPauseContext = context;
+  attempt.phase = "sound-paused";
+  traceLs08(attempt, "audio-paused", { context, reason });
+  persistLs08Attempt();
+  renderGardenScreen();
+  if (returnQueued) consumeLs08QueuedReturn(attempt, transaction);
+}
+
+function startLs08TeachingSequence(attempt, {
+  context,
+  kind,
+  reason,
+  notes,
+  payload = null,
+  phase = null,
+  onStarted,
+  onEnded,
+  onInterrupted
+} = {}) {
+  if (!attempt || !Array.isArray(notes) || notes.length === 0) return null;
+  const normalizedNotes = notes
+    .filter((note) => Number.isFinite(note?.midi))
+    .map((note) => ({
+      midi: note.midi,
+      delayMs: Number(note.delayMs) || 0,
+      child: Boolean(note.child)
+    }));
+  if (normalizedNotes.length === 0) return null;
+  const transaction = beginLs08AudioTransaction(attempt, { context, kind, reason, notes: normalizedNotes, payload, phase });
+  const playback = playTeachingPianoSequence({
+    reason: `${context}:${reason}`,
+    notes: normalizedNotes.map((note) => ({
+      frequency: midiFrequency(note.midi),
+      gain: note.child ? 0.10 : 0.13,
+      durationMs: LS08_NOTE_DURATION_MS,
+      delayMs: note.delayMs
+    })),
+    onStarted: (handle) => {
+      if (attempt.audioTransaction !== transaction || transaction.endedAt || transaction.interruptedAt) return;
+      transaction.scheduledAt = handle.scheduledAt || transaction.scheduledAt;
+      transaction.startedAt = handle.startedAt;
+      transaction.playbackId = handle.id;
+      transaction.startAudioTime = handle.startAudioTime;
+      transaction.contextState = handle.contextState;
+      traceLs08(attempt, kind || "pair", {
+        reason,
+        midis: normalizedNotes.map((note) => note.midi),
+        scheduledDelaysMs: normalizedNotes.map((note) => note.delayMs),
+        scheduledAt: transaction.scheduledAt,
+        startedAt: transaction.startedAt,
+        pairIndex: attempt.pairIndex
+      });
+      onStarted?.(transaction, handle);
+      persistLs08Attempt();
+      renderGardenScreen();
+    },
+    onEnded: (handle) => {
+      if (attempt.audioTransaction !== transaction) return;
+      transaction.scheduledAt = handle.scheduledAt || transaction.scheduledAt;
+      transaction.endAudioTime = handle.endAudioTime;
+      transaction.contextState = handle.contextState;
+      finishLs08AudioTransaction(attempt, onEnded, handle.endedAt);
+    },
+    onInterrupted: (handle, interruptionReason) => {
+      if (attempt.audioTransaction !== transaction || transaction.endedAt) return;
+      transaction.scheduledAt = handle.scheduledAt || transaction.scheduledAt;
+      transaction.interruptedAt = handle.interruptedAt || new Date().toISOString();
+      transaction.playbackId = handle.id;
+      transaction.interruptedAudioTime = handle.interruptedAudioTime;
+      transaction.contextState = handle.contextState;
+      onInterrupted?.(transaction, handle, interruptionReason);
+      enterLs08SoundPause(attempt, context, `teaching-${interruptionReason}`);
+    }
+  });
+  transaction.playbackId = playback.id;
+  return { playback, transaction };
 }
 
 function playLs08Guide({ replay = false } = {}) {
@@ -7082,34 +7596,28 @@ function playLs08Guide({ replay = false } = {}) {
   persistLs08Attempt();
   renderGardenScreen();
   const midi = ls08Config.guideMidis[attempt.guideIndex];
-  const played = playLs08Notes([midi], { kind: "guide-note", reason: replay ? "child-guide-replay" : "guide" });
-  if (!played) {
-    attempt.soundPauseCount += 1;
-    attempt.soundPauseContext = "guide";
-    attempt.phase = "sound-paused";
-    attempt.guideAudioPlaying = false;
-    persistLs08Attempt();
-    renderGardenScreen();
-    return;
-  }
-  persistLs08Attempt();
-  state.ls08Timer = setTimeout(() => {
-    state.ls08Timer = null;
-    if (!attempt || !["guide-first", "guide-second"].includes(attempt.phase)) return;
-    attempt.guideAudioPlaying = false;
-    attempt.guideAwaitingInput = true;
-    if (attempt.pendingGuideReplay) attempt.guideReplayCount += 1;
-    attempt.pendingGuideReplay = false;
-    persistLs08Attempt();
-    renderGardenScreen();
-    if (attempt.guideReturnQueued) {
-      attempt.guideReturnQueued = false;
+  startLs08TeachingSequence(attempt, {
+    context: "guide",
+    kind: "guide-note",
+    reason: replay ? "child-guide-replay" : "guide",
+    notes: [{ midi, delayMs: 0 }],
+    phase: attempt.phase,
+    payload: { replay, guideIndex: attempt.guideIndex },
+    onEnded: () => {
+      if (!attempt || !["guide-first", "guide-second"].includes(attempt.phase)) return;
+      attempt.guideAudioPlaying = false;
+      attempt.guideAwaitingInput = true;
+      if (attempt.pendingGuideReplay) attempt.guideReplayCount += 1;
+      attempt.pendingGuideReplay = false;
       persistLs08Attempt();
-      showMapScreen();
-      return;
+      renderGardenScreen();
+      state.ls08Timer = setTimeout(() => finishLs08GuideRest("guide-timeout"), LS08_GUIDE_WAIT_MS);
+    },
+    onInterrupted: () => {
+      attempt.guideAudioPlaying = false;
+      attempt.guideAwaitingInput = false;
     }
-    state.ls08Timer = setTimeout(() => finishLs08GuideRest("guide-timeout"), LS08_GUIDE_WAIT_MS);
-  }, LS08_NOTE_DURATION_MS);
+  });
 }
 
 function startLs08GuideRepairPlayback(attempt) {
@@ -7119,41 +7627,33 @@ function startLs08GuideRepairPlayback(attempt) {
   clearLs08Timers();
   attempt.guideAudioPlaying = true;
   attempt.guideAwaitingInput = false;
-  const playback = playLs08RepairSequence([childMidi], [targetMidi], {
-    childKind: "guide-child",
-    targetKind: "guide-replay",
-    childReason: "guide-wrong",
-    targetReason: "guide-soft-replay"
-  });
-  if (!playback.played) {
-    attempt.soundPauseCount += 1;
-    attempt.soundPauseContext = "guide-repair";
-    attempt.guideAudioPlaying = false;
-    attempt.phase = "sound-paused";
-    persistLs08Attempt();
-    renderGardenScreen();
-    return false;
-  }
   attempt.soundPauseContext = null;
-  persistLs08Attempt();
-  renderGardenScreen();
-  state.ls08Timer = setTimeout(() => {
-    state.ls08Timer = null;
-    if (!attempt || !["guide-first", "guide-second"].includes(attempt.phase)) return;
-    attempt.guideAudioPlaying = false;
-    attempt.guideAwaitingInput = true;
-    attempt.pendingGuideWrongMidi = null;
-    persistLs08Attempt();
-    renderGardenScreen();
-    if (attempt.guideReturnQueued) {
-      attempt.guideReturnQueued = false;
+  const targetStartMs = ls08SequenceDurationMs([childMidi]) + LS08_REPAIR_GAP_MS;
+  const playback = startLs08TeachingSequence(attempt, {
+    context: "guide-repair",
+    kind: "guide-repair",
+    reason: "guide-wrong-then-target",
+    notes: [
+      { midi: childMidi, delayMs: 0, child: true },
+      { midi: targetMidi, delayMs: targetStartMs }
+    ],
+    phase: attempt.phase,
+    payload: { childMidi, targetMidi, guideIndex: attempt.guideIndex },
+    onEnded: () => {
+      if (!attempt || !["guide-first", "guide-second"].includes(attempt.phase)) return;
+      attempt.guideAudioPlaying = false;
+      attempt.guideAwaitingInput = true;
+      attempt.pendingGuideWrongMidi = null;
       persistLs08Attempt();
-      showMapScreen();
-      return;
+      renderGardenScreen();
+      state.ls08Timer = setTimeout(() => finishLs08GuideRest("guide-timeout"), LS08_GUIDE_WAIT_MS);
+    },
+    onInterrupted: () => {
+      attempt.guideAudioPlaying = false;
+      attempt.guideAwaitingInput = false;
     }
-    state.ls08Timer = setTimeout(() => finishLs08GuideRest("guide-timeout"), LS08_GUIDE_WAIT_MS);
-  }, playback.durationMs + 120);
-  return true;
+  });
+  return Boolean(playback);
 }
 
 function storeLs08GuideRun(attempt, { completed, reason }) {
@@ -7213,42 +7713,34 @@ function playLs08Pair(reason = "system-first") {
   state.lastInputResult = null;
   persistLs08Attempt();
   renderGardenScreen();
-  const played = playLs08Notes(pair, { kind: "target-pair", reason });
-  if (!played) {
-    attempt.soundPauseCount += 1;
-    attempt.soundPauseContext = "pair";
-    attempt.pairAudioPlaying = false;
-    attempt.pendingPairReplayReason = null;
-    attempt.phase = "sound-paused";
-    traceLs08(attempt, "audio-unavailable", { reason, pairIndex: attempt.pairIndex });
-    persistLs08Attempt();
-    renderGardenScreen();
-    return;
-  }
-  persistLs08Attempt();
-  state.ls08Timer = setTimeout(() => {
-    state.ls08Timer = null;
-    attempt.pairAudioPlaying = false;
-    if (attempt.pendingPairReplayReason === "child-replay") {
-      attempt.replayCountChild += 1;
-      attempt.pairChildReplayCount += 1;
-    } else if (["system-replay", "sound-recovery"].includes(attempt.pendingPairReplayReason)) {
-      attempt.replayCountSystem += 1;
-      attempt.pairSystemReplayCount += 1;
-    }
-    attempt.pendingPairReplayReason = null;
-    attempt.phase = attempt.pairInputs.length === 1 ? "awaiting-second" : "awaiting-first";
-    if (!attempt.pairResponseStartedAt) attempt.pairResponseStartedAt = new Date().toISOString();
-    persistLs08Attempt();
-    renderGardenScreen();
-    if (attempt.pairReturnQueued) {
-      attempt.pairReturnQueued = false;
+  startLs08TeachingSequence(attempt, {
+    context: "pair",
+    kind: "target-pair",
+    reason,
+    notes: pair.map((midi, index) => ({ midi, delayMs: index * LS08_PAIR_GAP_MS })),
+    phase: "pair-playing",
+    payload: { replayReason: reason, pairIndex: attempt.pairIndex },
+    onEnded: () => {
+      attempt.pairAudioPlaying = false;
+      if (attempt.pendingPairReplayReason === "child-replay") {
+        attempt.replayCountChild += 1;
+        attempt.pairChildReplayCount += 1;
+      } else if (["system-replay", "sound-recovery"].includes(attempt.pendingPairReplayReason)) {
+        attempt.replayCountSystem += 1;
+        attempt.pairSystemReplayCount += 1;
+      }
+      attempt.pendingPairReplayReason = null;
+      attempt.phase = attempt.pairInputs.length === 1 ? "awaiting-second" : "awaiting-first";
+      if (!attempt.pairResponseStartedAt) attempt.pairResponseStartedAt = new Date().toISOString();
       persistLs08Attempt();
-      showMapScreen();
-      return;
+      renderGardenScreen();
+      scheduleLs08ResponseTimeout();
+    },
+    onInterrupted: () => {
+      attempt.pairAudioPlaying = false;
+      attempt.pairTimingInterrupted = true;
     }
-    scheduleLs08ResponseTimeout();
-  }, LS08_PAIR_PLAY_MS);
+  });
 }
 
 function scheduleLs08ResponseTimeout() {
@@ -7416,40 +7908,47 @@ function completeLs08LowEcho() {
   }
   clearLs08Timers();
   attempt.phase = "unscored-low-echo";
-  const played = playLs08Notes([60, 48], { kind: "story-event", reason: "unscored-low-echo" });
-  if (!played) {
-    attempt.soundPauseCount += 1;
-    attempt.soundPauseContext = "low-echo";
-    attempt.lowEchoStarted = false;
-    attempt.phase = "sound-paused";
-    persistLs08Attempt();
-    renderGardenScreen();
-    return;
-  }
-  const startedAt = new Date().toISOString();
   let event = attempt.storyEvents.find((item) => item.eventType === "storyEvent" && item.phaseRole === "unscored" && item.endedAt == null);
   if (!event) {
-    event = { eventType: "storyEvent", phaseRole: "unscored", midis: [60, 48], scored: false, timingUsedForMastery: false, occurredAt: startedAt, startedAt, endedAt: null, playbackAttempts: 0 };
+    const scheduledAt = new Date().toISOString();
+    event = { eventType: "storyEvent", phaseRole: "unscored", midis: [60, 48], scored: false, timingUsedForMastery: false, occurredAt: scheduledAt, scheduledAt, startedAt: null, endedAt: null, interruptedAt: null, playbackAttempts: 0 };
     attempt.storyEvents.push(event);
   }
-  event.startedAt = startedAt;
-  event.interruptedAt = null;
-  event.playbackAttempts = (Number(event.playbackAttempts) || 0) + 1;
-  attempt.lowEchoStarted = true;
-  attempt.lowEchoEndedAt = null;
   attempt.soundPauseContext = null;
-  persistLs08Attempt();
-  renderGardenScreen();
-  state.ls08FeedbackTimer = setTimeout(() => {
-    state.ls08FeedbackTimer = null;
-    const endedAt = new Date().toISOString();
-    event.endedAt = endedAt;
-    attempt.lowEchoCompleted = true;
-    attempt.lowEchoEndedAt = endedAt;
-    persistLs08Attempt();
-    renderGardenScreen();
-    scheduleLs08NaturalRestAfterEcho(attempt.lowEchoReturnQueued ? 0 : 350);
-  }, LS08_PAIR_PLAY_MS);
+  startLs08TeachingSequence(attempt, {
+    context: "low-echo",
+    kind: "story-event",
+    reason: "unscored-low-echo",
+    notes: [
+      { midi: 60, delayMs: 0 },
+      { midi: 48, delayMs: LS08_PAIR_GAP_MS }
+    ],
+    phase: "unscored-low-echo",
+    payload: { storyEventIndex: attempt.storyEvents.indexOf(event) },
+    onStarted: (transaction) => {
+      event.scheduledAt = transaction.scheduledAt;
+      event.startedAt = transaction.startedAt;
+      event.interruptedAt = null;
+      event.playbackAttempts = (Number(event.playbackAttempts) || 0) + 1;
+      attempt.lowEchoStarted = true;
+      attempt.lowEchoEndedAt = null;
+    },
+    onEnded: (transaction) => {
+      event.endedAt = transaction.endedAt;
+      attempt.lowEchoStarted = false;
+      attempt.lowEchoCompleted = true;
+      attempt.lowEchoEndedAt = transaction.endedAt;
+      persistLs08Attempt();
+      renderGardenScreen();
+      scheduleLs08NaturalRestAfterEcho(transaction.returnQueued ? 0 : 350);
+    },
+    onInterrupted: (transaction) => {
+      event.interruptedAt = transaction.interruptedAt;
+      attempt.lowEchoStarted = false;
+      attempt.lowEchoCompleted = false;
+      attempt.lowEchoReturnQueued = false;
+    }
+  });
 }
 
 function advanceLs08Pair({ modeled = false, visualAssist = false } = {}) {
@@ -7507,25 +8006,22 @@ function completeLs08Modeled(reason) {
     finalizeLs08Modeled(reason);
     return;
   }
-  const played = playLs08Notes(pair, { kind: "modeled-pair", reason });
-  if (!played) {
-    attempt.soundPauseCount += 1;
-    attempt.soundPauseContext = "modeled";
-    attempt.phase = "sound-paused";
-    persistLs08Attempt();
-    renderGardenScreen();
-    return;
-  }
   attempt.soundPauseContext = null;
   attempt.modeledAudioPlaying = true;
   attempt.pendingModeledReason = reason;
-  attempt.phase = "modeled-playing";
-  persistLs08Attempt();
-  renderGardenScreen();
-  state.ls08FeedbackTimer = setTimeout(() => {
-    state.ls08FeedbackTimer = null;
-    finalizeLs08Modeled(attempt.pendingModeledReason || reason);
-  }, LS08_PAIR_PLAY_MS);
+  startLs08TeachingSequence(attempt, {
+    context: "modeled",
+    kind: "modeled-pair",
+    reason,
+    notes: pair.map((midi, index) => ({ midi, delayMs: index * LS08_PAIR_GAP_MS })),
+    phase: "modeled-playing",
+    payload: { reason, pairIndex: attempt.pairIndex },
+    onEnded: () => finalizeLs08Modeled(attempt.pendingModeledReason || reason),
+    onInterrupted: () => {
+      attempt.modeledAudioPlaying = false;
+      attempt.pairTimingInterrupted = true;
+    }
+  });
 }
 
 function settleLs08WrongFeedback(attempt, { fromReload = false } = {}) {
@@ -7533,12 +8029,16 @@ function settleLs08WrongFeedback(attempt, { fromReload = false } = {}) {
   const target = ls08TargetPair(attempt);
   const wrongAt = Number.isInteger(attempt.pendingWrongAt) ? attempt.pendingWrongAt : (attempt.phase === "wrong-second" ? 1 : 0);
   const wrongRoute = attempt.pendingWrongRoute;
-  const returnToMap = attempt.repairReturnQueued === true;
   attempt.repairAudioPlaying = false;
   attempt.repairReturnQueued = false;
   attempt.pendingWrongAt = null;
   attempt.pendingWrongRoute = null;
   attempt.pairCurrentResponseRoute = null;
+  const hasHeldRoute = Object.values(attempt.routeHeldMidi || {}).some((midi) => midi !== null);
+  if (!hasHeldRoute) {
+    Object.keys(attempt.routeArmed).forEach((route) => { attempt.routeArmed[route] = true; });
+    attempt.secondOnsetRequiresFreshRearm = false;
+  }
   if (attempt.pairWrongCount >= 3 || attempt.phase === "assisted") {
     attempt.pairInputs = [];
     attempt.assistedCueVisible = attempt.pairRepairStage !== "candidate-outside";
@@ -7561,10 +8061,6 @@ function settleLs08WrongFeedback(attempt, { fromReload = false } = {}) {
   }
   persistLs08Attempt();
   renderGardenScreen();
-  if (returnToMap) {
-    showMapScreen();
-    return true;
-  }
   if (attempt.phase === "assisted") scheduleLs08AssistedTimeout();
   else scheduleLs08ResponseTimeout();
   return true;
@@ -7587,38 +8083,13 @@ function startLs08WrongRepairPlayback(attempt) {
   const response = attempt?.pairConfusion?.slice(0, 2) || [];
   if (!attempt || !target || response.length !== 2) return false;
   clearLs08Timers();
-  const repairPlayback = playLs08RepairSequence(response, target, {
-    childKind: "child-response",
-    targetKind: "target-replay",
-    childReason: "wrong",
-    targetReason: "wrong-repair"
-  });
-  if (!repairPlayback.played) {
-    attempt.soundPauseCount += 1;
-    attempt.soundPauseContext = "wrong-repair";
-    attempt.repairAudioPlaying = false;
-    attempt.phase = "sound-paused";
-    traceLs08(attempt, "audio-unavailable", { reason: "wrong-repair", pairIndex: attempt.pairIndex });
-    persistLs08Attempt();
-    renderGardenScreen();
-    return false;
-  }
   attempt.soundPauseContext = null;
   attempt.pendingRepairReplayCounted = false;
   attempt.repairAudioPlaying = true;
   if (attempt.pairWrongCount >= 4) {
     attempt.phase = "modeled-playing";
     attempt.pendingModeledTargetPlayed = true;
-    persistLs08Attempt();
-    renderGardenScreen();
-    state.ls08FeedbackTimer = setTimeout(() => {
-      state.ls08FeedbackTimer = null;
-      markLs08WrongRepairPlaybackComplete(attempt);
-      completeLs08Modeled("fourth-wrong");
-    }, repairPlayback.durationMs + 120);
-    return true;
-  }
-  if (attempt.pairWrongCount >= 3) {
+  } else if (attempt.pairWrongCount >= 3) {
     attempt.strongCueUsed = true;
     attempt.pairStrongCueUsed = true;
     attempt.targetRevealedBeforeResponse = true;
@@ -7643,14 +8114,31 @@ function startLs08WrongRepairPlayback(attempt) {
     attempt.pairRepairStage = attempt.pendingWrongAt === 0 ? "wrong-first" : "wrong-second";
     attempt.phase = attempt.pendingWrongAt === 0 ? "wrong-first" : "wrong-second";
   }
-  persistLs08Attempt();
-  renderGardenScreen();
-  state.ls08FeedbackTimer = setTimeout(() => {
-    state.ls08FeedbackTimer = null;
-    markLs08WrongRepairPlaybackComplete(attempt);
-    settleLs08WrongFeedback(attempt);
-  }, repairPlayback.durationMs + 120);
-  return true;
+  const targetStartMs = ls08SequenceDurationMs(response) + LS08_REPAIR_GAP_MS;
+  const playback = startLs08TeachingSequence(attempt, {
+    context: "wrong-repair",
+    kind: "child-response-then-target",
+    reason: "wrong-repair",
+    notes: [
+      ...response.map((midi, index) => ({ midi, delayMs: index * LS08_PAIR_GAP_MS, child: true })),
+      ...target.map((midi, index) => ({ midi, delayMs: targetStartMs + (index * LS08_PAIR_GAP_MS) }))
+    ],
+    phase: attempt.phase,
+    payload: { response: response.slice(), target: target.slice(), pairIndex: attempt.pairIndex, wrongAt: attempt.pendingWrongAt },
+    onEnded: () => {
+      markLs08WrongRepairPlaybackComplete(attempt);
+      if (attempt.pairWrongCount >= 4) {
+        completeLs08Modeled("fourth-wrong");
+        return;
+      }
+      settleLs08WrongFeedback(attempt);
+    },
+    onInterrupted: () => {
+      attempt.repairAudioPlaying = false;
+      attempt.pairTimingInterrupted = true;
+    }
+  });
+  return Boolean(playback);
 }
 
 function processLs08CompleteResponse(attempt, source) {
@@ -7803,6 +8291,39 @@ function resumeLs08Flow({ fromReload = false } = {}) {
   const attempt = ensureLs08Attempt();
   if (!attempt || state.screen !== "garden") return;
   clearLs08Timers();
+  if (fromReload && attempt.audioTransaction && !attempt.audioTransaction.endedAt) {
+    const context = attempt.audioTransaction.context || "pair";
+    attempt.audioTransaction.interruptedAt ||= new Date().toISOString();
+    attempt.audioTransaction.contextState = "page-reload";
+    if (context === "guide" || context === "guide-repair") {
+      attempt.guideAudioPlaying = false;
+      attempt.guideAwaitingInput = false;
+      attempt.guideReturnQueued = false;
+    } else if (context === "pair") {
+      attempt.pairAudioPlaying = false;
+      attempt.pairReturnQueued = false;
+      attempt.pairTimingInterrupted = true;
+    } else if (context === "modeled") {
+      attempt.modeledAudioPlaying = false;
+      attempt.pairTimingInterrupted = true;
+    } else if (context === "wrong-repair") {
+      attempt.repairAudioPlaying = false;
+      attempt.repairReturnQueued = false;
+      attempt.pendingRepairReplayCounted = false;
+      Object.keys(attempt.routeArmed).forEach((route) => { attempt.routeArmed[route] = false; });
+      Object.keys(attempt.routeHeldMidi).forEach((route) => { attempt.routeHeldMidi[route] = null; });
+      attempt.secondOnsetRequiresFreshRearm = true;
+      attempt.pairTimingInterrupted = true;
+    } else if (context === "low-echo") {
+      const event = attempt.storyEvents.find((item) => item.eventType === "storyEvent" && item.phaseRole === "unscored" && item.endedAt == null);
+      if (event) event.interruptedAt = attempt.audioTransaction.interruptedAt;
+      attempt.lowEchoStarted = false;
+      attempt.lowEchoCompleted = false;
+      attempt.lowEchoReturnQueued = false;
+    }
+    enterLs08SoundPause(attempt, context, "refresh-interrupted", { increment: false });
+    return;
+  }
   if (fromReload && attempt.guideAudioPlaying && ["guide-first", "guide-second"].includes(attempt.phase)) {
     attempt.guideAudioPlaying = false;
     attempt.guideAwaitingInput = false;
@@ -7907,6 +8428,1569 @@ function resumeLs08Flow({ fromReload = false } = {}) {
   }
   if (!attempt.guideCompleted) playLs08Guide();
   else playLs08Pair("sound-recovery");
+}
+
+function currentChapter4Action(targetId = null) {
+  const action = state.chapter4DirectMode
+    ? state.chapter4DirectAction
+    : (currentSessionAction(state.activeSession) || (state.screen === "chapter4" ? state.chapter4RestView : null));
+  if (!action || !["chapter4-listening", "chapter4-keyboard"].includes(action.kind)) return null;
+  if (targetId && action.targetId !== targetId) return null;
+  return action;
+}
+
+function createDirectChapter4Action(levelId) {
+  const targetId = levelId === "LP02" ? "LP02" : "LP01";
+  const action = {
+    actionId: targetId === "LP01" ? chapter4Config.lp01.actionId : chapter4Config.lp02.actionId,
+    kind: targetId === "LP01" ? "chapter4-listening" : "chapter4-keyboard",
+    targetId,
+    runMode: targetId === "LP01" ? "check" : "guided",
+    formalSession: false,
+    directMode: true
+  };
+  action.chapter4Attempt = targetId === "LP01"
+    ? createLp01Attempt(null, { formalSession: false, directMode: true })
+    : createLp02Attempt(null, { formalSession: false, directMode: true });
+  return action;
+}
+
+function lp01BubbleMappingForSeed(seed) {
+  const mappingSeed = hashSessionSeed(`LP01|bubble-mapping|${seed}`);
+  const lowFirst = mappingSeed % 2 === 0;
+  return lowFirst
+    ? { "bubble-1": 48, "bubble-2": 60 }
+    : { "bubble-1": 60, "bubble-2": 48 };
+}
+
+function lp01SequenceForSeed(seed) {
+  const tables = [
+    [48, 60, 48, 60],
+    [60, 48, 60, 48],
+    [48, 60, 60, 48],
+    [60, 48, 48, 60]
+  ];
+  const sequenceSeed = hashSessionSeed(`LP01|target-sequence|${seed}`);
+  return tables[(sequenceSeed >>> 8) % tables.length].slice();
+}
+
+function resetLp01Call(attempt) {
+  attempt.callWrongCount = 0;
+  attempt.callRepairStage = "none";
+  attempt.callFirstBubbleId = null;
+  attempt.callFirstSelectedMidi = null;
+  attempt.callFirstInputRoute = null;
+  attempt.callFirstResponseMs = null;
+  attempt.callChildReplayCount = 0;
+  attempt.callSystemReplayCount = 0;
+  attempt.callTargetRevealedBeforeResponse = false;
+  attempt.callStrongCueUsed = false;
+  attempt.callAccessibilityVisualAssist = false;
+  attempt.callExperimentalInput = false;
+  attempt.callResponseStartedAt = null;
+  attempt.callTimingInterrupted = false;
+  attempt.callPresentedAt = null;
+  attempt.callResolvedByModel = false;
+  attempt.callInputEvents = [];
+  attempt.pendingSelectedBubbleId = null;
+  attempt.pendingSelectedMidi = null;
+  attempt.pendingSelectedRoute = null;
+  attempt.pendingWrongRepair = null;
+  attempt.pendingModeledReason = null;
+  attempt.pendingLp01TargetReason = null;
+}
+
+function createLp01Attempt(session = state.activeSession, options = {}) {
+  const seed = session?.sessionId || options.seed || "C4-01-direct-LP01";
+  const attempt = {
+    version: 1,
+    levelId: "LP01",
+    bundleId: chapter4Config.bundleId,
+    sessionId: session?.sessionId || null,
+    formalSession: options.formalSession ?? Boolean(session),
+    directMode: Boolean(options.directMode),
+    seed,
+    sessionSeed: seed,
+    bubbleMapping: lp01BubbleMappingForSeed(seed),
+    lowSideSeed: null,
+    sequence: lp01SequenceForSeed(seed),
+    phase: "lp01-model-ready",
+    modelIndex: 0,
+    modelCompleted: false,
+    modelActiveBubbleId: null,
+    modelEvents: [],
+    modelReplayCount: 0,
+    checkEntered: false,
+    callIndex: 0,
+    scoredCalls: [],
+    presentedCallCount: 0,
+    resolvedCallCount: 0,
+    unpresentedCallCount: 4,
+    correctCount: 0,
+    totalWrongCount: 0,
+    replayCountChild: 0,
+    replayCountSystem: 0,
+    strongCueUsed: false,
+    modeled: false,
+    accessibilityVisualAssist: false,
+    hasExperimentalInput: false,
+    targetRevealedBeforeResponse: false,
+    crossedSessionBoundary: false,
+    storyResolvedBySupport: false,
+    storyCompletionSource: null,
+    needsPractice: false,
+    openingReviewRequired: false,
+    observations: [],
+    audioTrace: [],
+    audioTransaction: null,
+    outcomeRecorded: false
+  };
+  attempt.lowSideSeed = Object.entries(attempt.bubbleMapping).find(([, midi]) => midi === 48)?.[0] || "bubble-1";
+  resetLp01Call(attempt);
+  return attempt;
+}
+
+function createLp02Attempt(session = state.activeSession, options = {}) {
+  return {
+    version: 1,
+    levelId: "LP02",
+    bundleId: chapter4Config.bundleId,
+    sessionId: session?.sessionId || null,
+    formalSession: options.formalSession ?? Boolean(session),
+    directMode: Boolean(options.directMode),
+    phase: options.reconnectRequired ? "lp02-reconnect-ready" : "lp02-guide",
+    reconnectRequired: Boolean(options.reconnectRequired),
+    reconnectCompleted: !options.reconnectRequired,
+    targetMidi: 48,
+    firstChildMidi: null,
+    firstInputRoute: null,
+    firstResponseMs: null,
+    firstNoteNameCorrect: null,
+    firstRegisterCorrect: null,
+    firstWrongOctave: null,
+    responseStartedAt: new Date().toISOString(),
+    timingInterrupted: false,
+    wrongCount: 0,
+    lastWrongInput: null,
+    noteNameCorrect: false,
+    registerCorrect: false,
+    wrongOctave: false,
+    strongCueUsed: false,
+    modeled: false,
+    accessibilityVisualAssist: false,
+    experimentalInput: false,
+    microphoneConfidence: null,
+    completionSource: null,
+    inputEvents: [],
+    observations: [],
+    audioTrace: [],
+    audioTransaction: null,
+    pendingLp02Input: null,
+    routeArmed: { "屏幕": true, MIDI: true, "麦克风": true },
+    routeHeldMidi: { "屏幕": null, MIDI: null, "麦克风": null },
+    outcomeRecorded: false
+  };
+}
+
+function ensureChapter4Attempt() {
+  const action = currentChapter4Action();
+  if (!action) return null;
+  if (!action.chapter4Attempt) {
+    action.chapter4Attempt = action.targetId === "LP01"
+      ? createLp01Attempt(state.activeSession, { formalSession: !state.chapter4DirectMode, directMode: state.chapter4DirectMode })
+      : createLp02Attempt(state.activeSession, { formalSession: !state.chapter4DirectMode, directMode: state.chapter4DirectMode });
+    persistChapter4Attempt();
+  }
+  return action.chapter4Attempt;
+}
+
+function persistChapter4Progress() {
+  if (state.chapter4DirectMode) return;
+  state.sessionRuntime.chapter4 = state.chapter4;
+  saveSessionRuntime(state.sessionRuntime);
+}
+
+function persistChapter4Attempt() {
+  if (state.chapter4DirectMode) return;
+  if (currentChapter4Action()) persistActiveSession();
+}
+
+function clearChapter4Timers() {
+  if (state.chapter4Timer) clearTimeout(state.chapter4Timer);
+  if (state.chapter4FeedbackTimer) clearTimeout(state.chapter4FeedbackTimer);
+  state.chapter4Timer = null;
+  state.chapter4FeedbackTimer = null;
+}
+
+function chapter4TargetMidi(attempt = ensureChapter4Attempt()) {
+  if (!attempt) return null;
+  if (attempt.levelId === "LP02") return 48;
+  return attempt.sequence[attempt.callIndex] ?? null;
+}
+
+function traceChapter4(attempt, kind, extra = {}) {
+  if (!attempt) return;
+  attempt.audioTrace.push({ kind, at: new Date().toISOString(), ...extra });
+  attempt.audioTrace = attempt.audioTrace.slice(-120);
+}
+
+function beginChapter4AudioTransaction(attempt, { context, kind, reason, midis, durationMs, payload = null, phase, scheduledAt = new Date().toISOString(), startedAt = null }) {
+  attempt.audioTransaction = {
+    context,
+    kind,
+    reason,
+    midis: midis.slice(),
+    durationMs,
+    payload,
+    scheduledAt,
+    startedAt,
+    endedAt: null,
+    interruptedAt: null,
+    playbackId: null,
+    startAudioTime: null,
+    endAudioTime: null,
+    interruptedAudioTime: null,
+    contextState: state.sfx?.ctx?.state || "unavailable",
+    returnQueued: false,
+    returnQueuedConsumedAt: null
+  };
+  if (phase) attempt.phase = phase;
+  persistChapter4Attempt();
+  renderChapter4Screen();
+  return attempt.audioTransaction;
+}
+
+function consumeChapter4QueuedReturn(attempt, transaction = attempt?.audioTransaction) {
+  if (!transaction || transaction.returnQueued !== true || transaction.returnQueuedConsumedAt) return false;
+  transaction.returnQueued = false;
+  transaction.returnQueuedConsumedAt = new Date().toISOString();
+  traceChapter4(attempt, "queued-return-consumed", {
+    context: transaction.context,
+    interruption: Boolean(transaction.interruptedAt)
+  });
+  persistChapter4Attempt();
+  if (state.screen === "chapter4") showMapScreen();
+  return true;
+}
+
+function finishChapter4AudioTransaction(attempt, onEnded, endedAt = null) {
+  const transaction = attempt?.audioTransaction;
+  if (!transaction || transaction.endedAt || transaction.interruptedAt) return;
+  transaction.endedAt = endedAt || new Date().toISOString();
+  traceChapter4(attempt, "transaction-ended", { context: transaction.context, sequenceKind: transaction.kind });
+  persistChapter4Attempt();
+  const returnQueued = transaction.returnQueued === true;
+  onEnded?.(transaction);
+  if (returnQueued) consumeChapter4QueuedReturn(attempt, transaction);
+}
+
+function enterChapter4SoundPause(attempt, context, reason = "audio-unavailable") {
+  const transaction = attempt?.audioTransaction;
+  const returnQueued = transaction?.returnQueued === true;
+  attempt.phaseBeforeSoundPause = attempt.phase;
+  attempt.soundPauseContext = context;
+  attempt.phase = "sound-paused";
+  if (attempt.audioTransaction && !attempt.audioTransaction.endedAt) {
+    attempt.audioTransaction.interruptedAt = new Date().toISOString();
+  }
+  traceChapter4(attempt, "audio-paused", { context, reason });
+  persistChapter4Attempt();
+  renderChapter4Screen();
+  if (returnQueued) consumeChapter4QueuedReturn(attempt, transaction);
+}
+
+function startChapter4TeachingSequence(attempt, {
+  context,
+  kind,
+  reason,
+  midis,
+  payload = null,
+  phase,
+  child = false,
+  gapMs = 0,
+  noteDurationMs = LP01_NOTE_DURATION_MS,
+  traceKind = kind,
+  onStarted,
+  onEnded
+} = {}) {
+  if (!attempt || !Array.isArray(midis) || midis.length === 0) return null;
+  const effectiveGap = gapMs || (noteDurationMs + LP01_REPAIR_GAP_MS);
+  const delaysMs = midis.map((_, index) => index * effectiveGap);
+  const durationMs = delaysMs.at(-1) + noteDurationMs;
+  const transaction = beginChapter4AudioTransaction(attempt, {
+    context,
+    kind,
+    reason,
+    midis,
+    durationMs,
+    payload,
+    phase
+  });
+  const playback = playTeachingPianoSequence({
+    reason: `${context}:${reason}`,
+    notes: midis.map((midi, index) => ({
+      frequency: chapter4NoteForMidi(midi)?.frequency || midiFrequency(midi),
+      gain: child ? 0.10 : 0.12,
+      durationMs: noteDurationMs,
+      delayMs: delaysMs[index]
+    })),
+    onStarted: (handle) => {
+      if (attempt.audioTransaction !== transaction || transaction.endedAt || transaction.interruptedAt) return;
+      transaction.scheduledAt = handle.scheduledAt || transaction.scheduledAt;
+      transaction.startedAt = handle.startedAt;
+      transaction.playbackId = handle.id;
+      transaction.startAudioTime = handle.startAudioTime;
+      transaction.contextState = handle.contextState;
+      traceChapter4(attempt, traceKind || "chapter4-note", {
+        reason,
+        midis: midis.slice(),
+        delaysMs,
+        durationMs,
+        scheduledAt: transaction.scheduledAt,
+        startedAt: transaction.startedAt
+      });
+      onStarted?.(transaction, handle);
+      persistChapter4Attempt();
+      renderChapter4Screen();
+    },
+    onEnded: (handle) => {
+      if (attempt.audioTransaction !== transaction) return;
+      transaction.scheduledAt = handle.scheduledAt || transaction.scheduledAt;
+      transaction.endAudioTime = handle.endAudioTime;
+      transaction.contextState = handle.contextState;
+      finishChapter4AudioTransaction(attempt, onEnded, handle.endedAt);
+    },
+    onInterrupted: (handle, interruptionReason) => {
+      if (attempt.audioTransaction !== transaction || transaction.endedAt) return;
+      transaction.scheduledAt = handle.scheduledAt || transaction.scheduledAt;
+      transaction.interruptedAt = handle.interruptedAt || new Date().toISOString();
+      transaction.playbackId = handle.id;
+      transaction.interruptedAudioTime = handle.interruptedAudioTime;
+      transaction.contextState = handle.contextState;
+      attempt.timingInterrupted = true;
+      enterChapter4SoundPause(attempt, context, `teaching-${interruptionReason}`);
+    }
+  });
+  transaction.playbackId = playback.id;
+  return { playback, transaction, durationMs, delaysMs };
+}
+
+function lp01BubbleIdForMidi(attempt, midi) {
+  return Object.entries(attempt.bubbleMapping).find(([, mappedMidi]) => mappedMidi === midi)?.[0] || null;
+}
+
+function startLp01ModelStep(index, { replay = false } = {}) {
+  const attempt = ensureChapter4Attempt();
+  if (!attempt || attempt.levelId !== "LP01" || state.screen !== "chapter4") return false;
+  clearChapter4Timers();
+  const bubbleId = replay ? (attempt.modelActiveBubbleId || "bubble-1") : (index === 0 ? "bubble-1" : "bubble-2");
+  const midi = attempt.bubbleMapping[bubbleId];
+  attempt.modelIndex = index;
+  attempt.modelActiveBubbleId = bubbleId;
+  const playback = startChapter4TeachingSequence(attempt, {
+    context: "lp01-model",
+    kind: "model-note",
+    reason: replay ? "child-model-replay" : `model-${index + 1}`,
+    midis: [midi],
+    payload: { index, replay, bubbleId },
+    phase: "lp01-model-playing",
+    onEnded: (transaction) => {
+      attempt.modelEvents.push({ phaseRole: "model", bubbleId, midi, replay, endedAt: new Date().toISOString(), scored: false });
+      if (replay) attempt.modelReplayCount += 1;
+      if (!replay && index === 0) {
+        if (transaction.returnQueued) {
+          attempt.modelIndex = 1;
+          attempt.phase = "lp01-model-ready";
+          persistChapter4Attempt();
+          renderChapter4Screen();
+          return;
+        }
+        persistChapter4Attempt();
+        state.chapter4FeedbackTimer = setTimeout(() => startLp01ModelStep(1), 320);
+        return;
+      }
+      attempt.modelCompleted = true;
+      attempt.phase = "lp01-model";
+      attempt.modelActiveBubbleId = null;
+      persistChapter4Attempt();
+      renderChapter4Screen();
+    }
+  });
+  return Boolean(playback);
+}
+
+function beginLp01Check() {
+  const attempt = ensureChapter4Attempt();
+  if (!attempt || attempt.levelId !== "LP01" || !attempt.modelCompleted || attempt.checkEntered) return;
+  attempt.checkEntered = true;
+  persistChapter4Attempt();
+  playLp01Target("system-first");
+}
+
+function playLp01Target(reason = "system-first") {
+  const attempt = ensureChapter4Attempt();
+  const targetMidi = chapter4TargetMidi(attempt);
+  if (!attempt || attempt.levelId !== "LP01" || !Number.isFinite(targetMidi)) return false;
+  clearChapter4Timers();
+  const previousTransactionReason = attempt.audioTransaction?.context === "lp01-target" && !attempt.audioTransaction.endedAt
+    ? (attempt.audioTransaction.payload?.sourceReason || attempt.audioTransaction.payload?.reason)
+    : null;
+  const sourceReason = reason === "sound-recovery"
+    ? (previousTransactionReason || attempt.pendingLp01TargetReason || "system-first")
+    : reason;
+  const recoveringInterruptedTarget = reason === "sound-recovery";
+  attempt.pendingLp01TargetReason = sourceReason;
+  const wasPresented = Boolean(attempt.callPresentedAt);
+  const playback = startChapter4TeachingSequence(attempt, {
+    context: "lp01-target",
+    kind: "target",
+    reason: sourceReason,
+    midis: [targetMidi],
+    payload: { sourceReason, recoveringInterruptedTarget },
+    phase: "target-playing",
+    onStarted: () => {
+      if (!attempt.callPresentedAt) {
+        attempt.callPresentedAt = new Date().toISOString();
+        attempt.presentedCallCount += 1;
+        attempt.unpresentedCallCount = Math.max(0, 4 - attempt.presentedCallCount);
+      }
+    },
+    onEnded: () => {
+      if (sourceReason === "child-replay") {
+        attempt.replayCountChild += 1;
+        attempt.callChildReplayCount += 1;
+        if (attempt.replayCountChild > 1) {
+          attempt.needsPractice = true;
+          attempt.openingReviewRequired = true;
+        }
+      } else if (sourceReason === "system-replay" || (recoveringInterruptedTarget && wasPresented)) {
+        attempt.replayCountSystem += 1;
+        attempt.callSystemReplayCount += 1;
+      }
+      attempt.pendingLp01TargetReason = null;
+      attempt.phase = "awaiting-response";
+      attempt.soundPauseContext = null;
+      if (!attempt.callResponseStartedAt) attempt.callResponseStartedAt = new Date().toISOString();
+      persistChapter4Attempt();
+      renderChapter4Screen();
+      scheduleLp01ResponseTimeout();
+    }
+  });
+  return Boolean(playback);
+}
+
+function scheduleLp01ResponseTimeout() {
+  if (state.chapter4Timer) clearTimeout(state.chapter4Timer);
+  state.chapter4Timer = setTimeout(() => {
+    state.chapter4Timer = null;
+    const attempt = ensureChapter4Attempt();
+    if (!attempt || attempt.levelId !== "LP01" || attempt.phase !== "awaiting-response") return;
+    attempt.strongCueUsed = true;
+    attempt.callStrongCueUsed = true;
+    attempt.targetRevealedBeforeResponse = true;
+    attempt.callTargetRevealedBeforeResponse = true;
+    attempt.callRepairStage = "assisted";
+    attempt.needsPractice = true;
+    attempt.phase = "assisted";
+    persistChapter4Attempt();
+    renderChapter4Screen();
+    scheduleLp01AssistedTimeout();
+  }, LP01_LONG_WAIT_MS);
+}
+
+function scheduleLp01AssistedTimeout() {
+  if (state.chapter4Timer) clearTimeout(state.chapter4Timer);
+  state.chapter4Timer = setTimeout(() => completeLp01Modeled("assisted-timeout"), LP01_ASSISTED_WAIT_MS);
+}
+
+function renderChapter4Progress(attempt) {
+  if (!els.chapter4CallProgress) return;
+  const total = attempt?.levelId === "LP01" ? 4 : 1;
+  const done = attempt?.levelId === "LP01" ? attempt.resolvedCallCount : (attempt?.phase === "lp02-complete" ? 1 : 0);
+  els.chapter4CallProgress.innerHTML = Array.from({ length: total }, (_, index) => `<span class="${index < done ? "done" : ""}" aria-hidden="true"></span>`).join("");
+  els.chapter4CallProgress.setAttribute("aria-label", attempt?.levelId === "LP01" ? `声音泡泡进度，四次声音比较已解决 ${done} 次` : `低音 C 找家${done ? "已完成" : "进行中"}`);
+}
+
+function chapter4SpeechCopy(attempt) {
+  if (!attempt) return { kicker: "地下入口", main: "洞口在等你", support: "点入口再出发。" };
+  if (attempt.levelId === "LP02") {
+    if (attempt.phase === "lp02-reconnect-ready" || attempt.phase === "lp02-reconnect-playing") return { kicker: "先重连两个声音", main: "听听两个 C", support: "我唱 Do。听完再去找下面的 C。" };
+    if (attempt.phase === "lp02-middle-c-near-miss") return { kicker: "名字一样", main: "这是中央 C", support: "我也唱 Do，再找下面那个 C 的家。" };
+    if (attempt.phase === "lp02-wrong") return attempt.lastWrongInput?.isBlack
+      ? { kicker: "换一格找找", main: "刚才按到黑键", support: "再找下面那组两黑键左边的 C。" }
+      : { kicker: "换一格找找", main: `刚才是 ${attempt.lastWrongInput?.name || "另一个白键"}`, support: "再找下面那组两黑键左边的 C。" };
+    if (attempt.phase === "lp02-assisted") return { kicker: "两黑键帮忙", main: "找下面的 C", support: "我唱 Do。看看下面那组两黑键左边。" };
+    if (attempt.phase === "lp02-input-playing") return { kicker: "听琴键唱完", main: "这一声还在唱", support: "等声音停稳，再继续找家。" };
+    if (attempt.phase === "lp02-modeled-playing") return { kicker: "星芽一起找", main: "下面的 C 在这里", support: "我唱 Do，第一块地基一起落下。" };
+    if (attempt.phase === "lp02-complete") return { kicker: "第一块地基", main: "低音 C 找到家了", support: "我唱 Do。今天先在洞口歇一歇。" };
+    if (attempt.phase === "sound-paused") return { kicker: "声音先停住", main: "点重听再继续", support: "刚才的位置和记录都留着。" };
+    return { kicker: "低音 C 的家", main: "找下面的 C", support: "两个都叫 Do。找到下面那个 C，按一下。" };
+  }
+  if (["lp01-model-ready", "lp01-model-playing", "lp01-model"].includes(attempt.phase)) {
+    return { kicker: "先听两个声音", main: "声音泡泡住在固定位置", support: "哪个 Do 住得更低？" };
+  }
+  if (attempt.phase === "target-playing") return { kicker: "听这个声音", main: "等它唱完", support: "唱完再点同一个声音泡泡。" };
+  if (attempt.phase === "awaiting-response") return { kicker: "轮到你", main: "刚才是哪一个声音泡泡？", support: "点一下你听到的那个。" };
+  if (attempt.phase === "wrong-repair-playing") return { kicker: "再听清楚", main: "先听你选的，再听刚才的", support: "两个泡泡位置都不变。" };
+  if (attempt.phase === "pair-compare") return { kicker: "听一听", main: "比较这两个声音泡泡", support: "再找和刚才同一个声音。" };
+  if (attempt.phase === "assisted") return { kicker: "星芽轻轻帮忙", main: "看一眼，再听一听", support: "找到和刚才同一个声音泡泡。" };
+  if (attempt.phase === "visual-assist") return { kicker: "看着找", main: "这个声音泡泡留在这里", support: "听一听，再点同一个声音。" };
+  if (attempt.phase === "correct-feedback") return { kicker: "洞纹亮了一格", main: "这个声音找到了", support: "下一声会重新藏好。" };
+  if (attempt.phase === "lp01-complete") return { kicker: "洞口亮起来了", main: "四次回声都安顿好", support: "接着去找低音 C 的家。" };
+  if (attempt.phase === "lp01-early-rest" || attempt.phase === "lp01-supported-story-rest") return { kicker: "洞口先亮着", main: "今天做到这里", support: "星芽把洞口安顿好，下次先听一组再找家。" };
+  if (attempt.phase === "sound-paused") return { kicker: "声音先停住", main: "点重听再继续", support: "刚才的题和记录都留着。" };
+  return { kicker: "地下回声", main: "听一听，再点同一个声音", support: "两个声音泡泡一直住在固定位置。" };
+}
+
+function renderChapter4Screen() {
+  if (!els.chapter4Panel || state.screen !== "chapter4") return;
+  const action = currentChapter4Action();
+  const attempt = ensureChapter4Attempt();
+  if (!action || !attempt) return;
+  const lessonId = action.targetId;
+  const phase = attempt.phase;
+  if (els.mainTitle) els.mainTitle.textContent = lessonId === "LP01" ? "地下回声洞" : "低音 C 的家";
+  if (els.levelBadge) els.levelBadge.textContent = state.chapter4DirectMode ? `${lessonId}·审` : lessonId;
+  if (els.appShell) {
+    els.appShell.dataset.chapter4Lesson = lessonId;
+    els.appShell.dataset.chapter4Phase = phase;
+    els.appShell.dataset.chapter4Formal = attempt.formalSession ? "true" : "false";
+    els.appShell.dataset.levelId = lessonId;
+    els.appShell.dataset.phase = "chapter4";
+    els.appShell.dataset.scaffold = phase.includes("assisted") || phase.includes("modeled") ? "strong" : "soft";
+  }
+  if (els.chapter4Scene) {
+    els.chapter4Scene.dataset.chapter4Phase = phase;
+    els.chapter4Scene.dataset.audioPlaying = attempt.audioTransaction && !attempt.audioTransaction.endedAt ? "true" : "false";
+    els.chapter4Scene.dataset.repairStage = attempt.callRepairStage || (attempt.strongCueUsed ? "assisted" : "none");
+  }
+  const copy = chapter4SpeechCopy(attempt);
+  if (els.chapter4SpeechKicker) els.chapter4SpeechKicker.textContent = copy.kicker;
+  if (els.chapter4SpeechMain) els.chapter4SpeechMain.textContent = copy.main;
+  if (els.chapter4SpeechSupport) els.chapter4SpeechSupport.textContent = copy.support;
+  if (els.chapter4XingyaImage && els.chapter4XingyaImage.getAttribute("src") !== chapter4CharacterAsset) {
+    els.chapter4XingyaImage.setAttribute("src", chapter4CharacterAsset);
+  }
+  if (els.chapter4Scene) els.chapter4Scene.dataset.characterAssetState = "garden-mode";
+  if (els.chapter4CaveRings) {
+    const done = attempt.levelId === "LP01" ? attempt.resolvedCallCount : (state.chapter4.lessonEvidence.LP01?.resolvedCallCount || 0);
+    els.chapter4CaveRings.innerHTML = Array.from({ length: 4 }, (_, index) => `<span class="${index < done ? "done" : ""}" style="--ring-index:${index}" aria-hidden="true"></span>`).join("");
+  }
+  if (els.chapter4Foundation) {
+    const installed = attempt.levelId === "LP02" && attempt.phase === "lp02-complete";
+    els.chapter4Foundation.dataset.installed = installed ? "true" : "false";
+    els.chapter4Foundation.dataset.foundationState = installed ? "installed" : "landing-place";
+  }
+  if (els.chapter4SoundSource) {
+    const sourcePhases = new Set([
+      "target-playing", "awaiting-response", "response-playing", "wrong", "wrong-repair-playing",
+      "pair-compare", "assisted", "visual-assist", "modeled-playing", "correct-feedback"
+    ]);
+    const recoverySource = phase === "sound-paused" && attempt.soundPauseContext !== "lp01-model";
+    els.chapter4SoundSource.hidden = !(attempt.levelId === "LP01" && (sourcePhases.has(phase) || recoverySource));
+  }
+  renderChapter4Progress(attempt);
+  const bubbles = [...(els.chapter4Bubbles?.querySelectorAll(".chapter4-bubble") || [])];
+  bubbles.forEach((bubble) => {
+    const bubbleId = bubble.dataset.bubbleId;
+    bubble.classList.remove("model-active", "assisted-target", "visual-target");
+    const targetBubble = attempt.levelId === "LP01" ? lp01BubbleIdForMidi(attempt, chapter4TargetMidi(attempt)) : null;
+    if (attempt.levelId === "LP01" && attempt.modelActiveBubbleId === bubbleId && attempt.phase === "lp01-model-playing") bubble.classList.add("model-active");
+    if (attempt.levelId === "LP01" && attempt.phase === "assisted" && targetBubble === bubbleId) bubble.classList.add("assisted-target");
+    if (attempt.levelId === "LP01" && attempt.phase === "visual-assist" && targetBubble === bubbleId) bubble.classList.add("visual-target");
+    bubble.disabled = attempt.levelId !== "LP01" || ["response-playing", "wrong-repair-playing", "modeled-playing", "correct-feedback", "lp01-complete", "lp01-early-rest", "lp01-supported-story-rest", "sound-paused"].includes(phase);
+    bubble.setAttribute("aria-label", `声音泡泡 ${bubbleId === "bubble-1" ? "1" : "2"}`);
+  });
+  if (els.chapter4Replay) {
+    const wholeTargetReplay = attempt.levelId === "LP01" && ["awaiting-response", "assisted", "visual-assist"].includes(phase);
+    const soundRecovery = phase === "sound-paused";
+    els.chapter4Replay.hidden = !(wholeTargetReplay || soundRecovery);
+    els.chapter4Replay.disabled = wholeTargetReplay && Boolean(attempt.audioTransaction && !attempt.audioTransaction.endedAt);
+  }
+  if (els.chapter4StartCheck) {
+    const lp01Start = attempt.levelId === "LP01" && ["lp01-model-ready", "lp01-model"].includes(phase);
+    const lp02ReconnectStart = attempt.levelId === "LP02" && phase === "lp02-reconnect-ready";
+    els.chapter4StartCheck.hidden = !(lp01Start || lp02ReconnectStart);
+    els.chapter4StartCheck.textContent = lp02ReconnectStart ? "听两个 C" : (phase === "lp01-model-ready" ? "听两个声音" : "开始听");
+  }
+  if (els.chapter4VisualAssist) els.chapter4VisualAssist.hidden = !(attempt.levelId === "LP01" && phase === "assisted");
+  if (els.chapter4Status) els.chapter4Status.textContent = copy.main;
+  if (els.keyboardPanel) els.keyboardPanel.hidden = lessonId !== "LP02";
+  if (lessonId === "LP02") renderChapter4Keyboard(attempt);
+  else if (els.keyboard) els.keyboard.innerHTML = "";
+}
+
+function resumeChapter4Flow({ fromReload = false } = {}) {
+  const attempt = ensureChapter4Attempt();
+  if (!attempt || state.screen !== "chapter4") return;
+  clearChapter4Timers();
+  if (fromReload && attempt.audioTransaction && !attempt.audioTransaction.endedAt) {
+    attempt.audioTransaction.interruptedAt = new Date().toISOString();
+    attempt.callTimingInterrupted = true;
+    attempt.timingInterrupted = true;
+    enterChapter4SoundPause(attempt, attempt.audioTransaction.context, "refresh-interrupted");
+    return;
+  }
+  renderChapter4Screen();
+  if (attempt.phase === "sound-paused") return;
+  if (attempt.levelId === "LP01") {
+    if (attempt.phase === "lp01-model-ready") {
+      if (!state.chapter4DirectMode && state.audioUnlocked) startLp01ModelStep(attempt.modelIndex || 0);
+      return;
+    }
+    if (["wrong", "pair-compare"].includes(attempt.phase)) {
+      settleLp01Repair(attempt);
+      return;
+    }
+    if (attempt.phase === "correct-feedback") {
+      continueLp01AfterCorrectFeedback(attempt);
+      return;
+    }
+    if (attempt.phase === "lp01-complete") {
+      settleLp01Completion(attempt);
+      return;
+    }
+    if (attempt.phase === "awaiting-response") scheduleLp01ResponseTimeout();
+    else if (attempt.phase === "assisted") scheduleLp01AssistedTimeout();
+    return;
+  }
+  if (attempt.phase === "lp02-reconnect-ready") {
+    if (!state.chapter4DirectMode && state.audioUnlocked) startLp02Reconnect();
+    return;
+  }
+  if (["lp02-middle-c-near-miss", "lp02-wrong"].includes(attempt.phase)) {
+    attempt.phase = "lp02-guide";
+    persistChapter4Attempt();
+    renderChapter4Screen();
+    scheduleLp02ResponseTimeout();
+    return;
+  }
+  if (attempt.phase === "lp02-guide") scheduleLp02ResponseTimeout();
+  else if (attempt.phase === "lp02-assisted") scheduleLp02AssistedTimeout();
+}
+
+function handleChapter4BubbleActivation(bubbleId, route = "touch-bubble") {
+  const attempt = ensureChapter4Attempt();
+  if (!attempt || attempt.levelId !== "LP01") return;
+  const occurredAt = new Date().toISOString();
+  if (attempt.phase === "lp01-model-ready") {
+    startLp01ModelStep(attempt.modelIndex || 0);
+    return;
+  }
+  if (attempt.phase === "lp01-model") {
+    attempt.modelActiveBubbleId = bubbleId;
+    startLp01ModelStep(bubbleId === "bubble-1" ? 0 : 1, { replay: true });
+    return;
+  }
+  if (attempt.phase === "target-playing") {
+    attempt.observations.push({ event: "early-bubble", bubbleId, route, phase: attempt.phase, occurredAt });
+    persistChapter4Attempt();
+    return;
+  }
+  if (!["awaiting-response", "assisted", "visual-assist", "pair-compare", "wrong"].includes(attempt.phase)) return;
+  clearChapter4Timers();
+  const selectedMidi = attempt.bubbleMapping[bubbleId];
+  const targetMidi = chapter4TargetMidi(attempt);
+  if (!Number.isFinite(selectedMidi) || !Number.isFinite(targetMidi)) return;
+  if (!attempt.callFirstBubbleId) {
+    attempt.callFirstBubbleId = bubbleId;
+    attempt.callFirstSelectedMidi = selectedMidi;
+    attempt.callFirstInputRoute = route;
+    const started = Date.parse(attempt.callResponseStartedAt || "");
+    attempt.callFirstResponseMs = !attempt.callTimingInterrupted && Number.isFinite(started) ? Math.max(0, Date.now() - started) : null;
+  }
+  attempt.callInputEvents.push({ event: "bubble-submit", bubbleId, selectedMidi, route, occurredAt });
+  attempt.pendingSelectedBubbleId = bubbleId;
+  attempt.pendingSelectedMidi = selectedMidi;
+  attempt.pendingSelectedRoute = route;
+  if (selectedMidi === targetMidi) {
+    startLp01CorrectResponsePlayback(attempt);
+    return;
+  }
+  attempt.callWrongCount += 1;
+  attempt.totalWrongCount += 1;
+  attempt.pendingWrongRepair = { bubbleId, selectedMidi, targetMidi, route, wrongCount: attempt.callWrongCount };
+  if (attempt.callWrongCount >= 2) {
+    attempt.needsPractice = true;
+    attempt.openingReviewRequired = true;
+  }
+  startLp01WrongRepairPlayback(attempt);
+}
+
+function startLp01CorrectResponsePlayback(attempt) {
+  const selectedMidi = attempt.pendingSelectedMidi;
+  const playback = startChapter4TeachingSequence(attempt, {
+    context: "lp01-response",
+    kind: "child-selection",
+    traceKind: "lp01-child-selection",
+    reason: "bubble-submit",
+    midis: [selectedMidi],
+    payload: { selectedMidi, bubbleId: attempt.pendingSelectedBubbleId, route: attempt.pendingSelectedRoute },
+    phase: "response-playing",
+    child: true,
+    onEnded: () => resolveLp01Call(attempt, { modeled: false })
+  });
+  return Boolean(playback);
+}
+
+function startLp01WrongRepairPlayback(attempt) {
+  const repair = attempt?.pendingWrongRepair;
+  if (!repair) return false;
+  clearChapter4Timers();
+  const playback = startChapter4TeachingSequence(attempt, {
+    kind: "lp01-wrong-repair",
+    context: "lp01-wrong-repair",
+    reason: "child-then-target",
+    midis: [repair.selectedMidi, repair.targetMidi],
+    child: true,
+    gapMs: LP01_NOTE_DURATION_MS + LP01_REPAIR_GAP_MS,
+    payload: { ...repair },
+    phase: "wrong-repair-playing",
+    onEnded: () => {
+      attempt.replayCountSystem += 1;
+      attempt.callSystemReplayCount += 1;
+      if (attempt.callWrongCount >= 4) {
+        completeLp01Modeled("fourth-wrong", { targetAlreadyPlayed: true });
+        return;
+      }
+      if (attempt.callWrongCount >= 3) {
+        attempt.strongCueUsed = true;
+        attempt.callStrongCueUsed = true;
+        attempt.targetRevealedBeforeResponse = true;
+        attempt.callTargetRevealedBeforeResponse = true;
+        attempt.callRepairStage = "assisted";
+        attempt.phase = "assisted";
+        persistChapter4Attempt();
+        renderChapter4Screen();
+        scheduleLp01AssistedTimeout();
+        return;
+      }
+      attempt.callRepairStage = attempt.callWrongCount === 2 ? "pair-compare" : "wrong";
+      attempt.phase = attempt.callWrongCount === 2 ? "pair-compare" : "wrong";
+      persistChapter4Attempt();
+      renderChapter4Screen();
+      state.chapter4FeedbackTimer = setTimeout(() => settleLp01Repair(attempt), attempt.callWrongCount === 2 ? 900 : 650);
+    }
+  });
+  return Boolean(playback);
+}
+
+function settleLp01Repair(attempt) {
+  if (!attempt || !["wrong", "pair-compare"].includes(attempt.phase)) return;
+  attempt.phase = "awaiting-response";
+  persistChapter4Attempt();
+  renderChapter4Screen();
+  scheduleLp01ResponseTimeout();
+}
+
+function completeLp01Modeled(reason, { targetAlreadyPlayed = false } = {}) {
+  const attempt = ensureChapter4Attempt();
+  const targetMidi = chapter4TargetMidi(attempt);
+  if (!attempt || attempt.levelId !== "LP01" || !Number.isFinite(targetMidi)) return;
+  clearChapter4Timers();
+  attempt.needsPractice = true;
+  attempt.openingReviewRequired = true;
+  attempt.callStrongCueUsed = true;
+  attempt.strongCueUsed = true;
+  attempt.pendingModeledReason = reason;
+  if (targetAlreadyPlayed) {
+    attempt.modeled = true;
+    attempt.callResolvedByModel = true;
+    resolveLp01Call(attempt, { modeled: true, reason });
+    return;
+  }
+  startChapter4TeachingSequence(attempt, {
+    context: "lp01-modeled",
+    kind: "modeled-target",
+    reason,
+    midis: [targetMidi],
+    payload: { reason },
+    phase: "modeled-playing",
+    onEnded: () => {
+      attempt.modeled = true;
+      attempt.callResolvedByModel = true;
+      resolveLp01Call(attempt, { modeled: true, reason });
+    }
+  });
+}
+
+function lp01CallRecord(attempt, { modeled = false } = {}) {
+  const session = state.activeSession;
+  const targetMidi = chapter4TargetMidi(attempt);
+  const firstCorrect = attempt.callFirstSelectedMidi === targetMidi;
+  const resolvedProgressCount = attempt.resolvedCallCount + 1;
+  return {
+    levelId: "LP01",
+    bundleId: chapter4Config.bundleId,
+    sessionId: attempt.formalSession ? (session?.sessionId || attempt.sessionId) : null,
+    callIndex: attempt.callIndex,
+    targetRegister: targetMidi === 48 ? "low" : "middle",
+    targetMidi,
+    sessionSeed: attempt.sessionSeed,
+    bubbleMapping: { ...attempt.bubbleMapping },
+    firstChildBubbleId: attempt.callFirstBubbleId,
+    firstChildSelectedMidi: attempt.callFirstSelectedMidi,
+    inputRoute: attempt.callFirstInputRoute,
+    qualifyingCorrect: Boolean(!modeled && firstCorrect && attempt.callWrongCount === 0 && !attempt.callStrongCueUsed && !attempt.callAccessibilityVisualAssist && !attempt.callExperimentalInput),
+    childReplayCount: attempt.callChildReplayCount,
+    candidatePreviewUsed: false,
+    lowSideSeed: attempt.lowSideSeed === "bubble-1" ? "left" : "right",
+    resolvedProgressCount,
+    systemReplayCount: attempt.callSystemReplayCount,
+    targetRevealedBeforeResponse: Boolean(attempt.callTargetRevealedBeforeResponse),
+    strongCueUsed: Boolean(attempt.callStrongCueUsed),
+    modeled: Boolean(modeled),
+    accessibilityVisualAssist: Boolean(attempt.callAccessibilityVisualAssist),
+    experimentalInput: Boolean(attempt.callExperimentalInput),
+    responseMs: !attempt.callTimingInterrupted ? attempt.callFirstResponseMs : null,
+    timingInterrupted: Boolean(attempt.callTimingInterrupted),
+    timingUsedForMastery: false,
+    wrongCount: attempt.callWrongCount,
+    repairStage: attempt.callRepairStage,
+    inputEvents: attempt.callInputEvents.map((event) => ({ ...event }))
+  };
+}
+
+function resolveLp01Call(attempt, { modeled = false } = {}) {
+  if (!attempt || attempt.levelId !== "LP01" || attempt.callIndex >= attempt.sequence.length) return;
+  clearChapter4Timers();
+  const record = lp01CallRecord(attempt, { modeled });
+  attempt.scoredCalls.push(record);
+  attempt.resolvedCallCount += 1;
+  if (record.qualifyingCorrect) attempt.correctCount += 1;
+  attempt.callIndex += 1;
+  attempt.unpresentedCallCount = Math.max(0, 4 - attempt.presentedCallCount);
+  const shouldRestEarly = attempt.callIndex < 4 && (attempt.callWrongCount >= 2 || attempt.callStrongCueUsed || modeled || attempt.callAccessibilityVisualAssist);
+  if (shouldRestEarly) {
+    finishLp01EarlyRest(attempt, modeled ? "modeled-safe-rest" : "repeated-repair");
+    return;
+  }
+  if (attempt.callIndex >= attempt.sequence.length) {
+    finishLp01Completed(attempt);
+    return;
+  }
+  attempt.phase = "correct-feedback";
+  persistChapter4Attempt();
+  renderChapter4Screen();
+  state.chapter4FeedbackTimer = setTimeout(() => {
+    state.chapter4FeedbackTimer = null;
+    continueLp01AfterCorrectFeedback(attempt);
+  }, 680);
+}
+
+function continueLp01AfterCorrectFeedback(attempt) {
+  if (!attempt || attempt.levelId !== "LP01" || attempt.phase !== "correct-feedback") return false;
+  clearChapter4Timers();
+  resetLp01Call(attempt);
+  persistChapter4Attempt();
+  if (!state.audioUnlocked) {
+    enterChapter4SoundPause(attempt, "lp01-target", "resume-target-needs-gesture");
+    return false;
+  }
+  return playLp01Target("system-first");
+}
+
+function lp01StableEligible(attempt) {
+  return Boolean(attempt.correctCount >= 3 && attempt.replayCountChild <= 1 && !attempt.strongCueUsed && !attempt.modeled &&
+    !attempt.accessibilityVisualAssist && !attempt.hasExperimentalInput && !attempt.targetRevealedBeforeResponse &&
+    !attempt.crossedSessionBoundary && !attempt.needsPractice && !attempt.openingReviewRequired &&
+    attempt.presentedCallCount === 4 && attempt.resolvedCallCount === 4);
+}
+
+function recordLp01Outcome(attempt, { reason, storyResolvedBySupport = false } = {}) {
+  if (!attempt || attempt.outcomeRecorded) return null;
+  const completedAt = new Date().toISOString();
+  const played = attempt.presentedCallCount === 4 && attempt.resolvedCallCount === 4;
+  const stableCandidate = played && lp01StableEligible(attempt);
+  let stable = false;
+  if (attempt.formalSession && !state.chapter4DirectMode) {
+    const session = state.activeSession;
+    const action = currentChapter4Action("LP01");
+    const formalAttempt = {
+      kind: "level", id: "LP01", runMode: "check", corrects: attempt.correctCount, wrongs: attempt.totalWrongCount,
+      cueStrength: attempt.strongCueUsed || attempt.accessibilityVisualAssist ? "strong" : "soft",
+      strongCueFrames: attempt.strongCueUsed || attempt.accessibilityVisualAssist ? 1 : 0,
+      inputRoutes: { "touch-bubble": attempt.scoredCalls.filter((call) => call.inputRoute?.includes("bubble")).length },
+      hasExperimentalInput: attempt.hasExperimentalInput,
+      assistedSuccesses: attempt.strongCueUsed ? 1 : 0,
+      modeledSuccesses: attempt.modeled ? 1 : 0,
+      formalSession: true,
+      sessionId: session?.sessionId,
+      bundleId: chapter4Config.bundleId,
+      sessionActionId: action?.actionId,
+      localDateKey: session?.localDateKey,
+      sessionRole: action?.role || "lesson",
+      reviewSkillKey: null,
+      requiredReview: false,
+      sessionStartedAt: session?.startedAt,
+      voluntaryReplay: attempt.replayCountChild > 0
+    };
+    const existing = state.learningStats.levels.LP01 || { completions: 0, formalCompletions: 0, stableCompletions: 0 };
+    if (played) {
+      existing.completions = (Number(existing.completions) || 0) + 1;
+      existing.formalCompletions = (Number(existing.formalCompletions) || 0) + 1;
+      const retention = recordRetentionEvidence({ kind: "level", id: "LP01", attempt: formalAttempt, stable: stableCandidate, priorStableCompletions: existing.stableCompletions, completedAt });
+      stable = stableCandidate && retention.clockValid === true;
+      if (stable) existing.stableCompletions = (Number(existing.stableCompletions) || 0) + 1;
+      existing.lastCompletedAt = completedAt;
+      existing.lastFormalCompletedAt = completedAt;
+    }
+    existing.needsPractice = !stable;
+    existing.todayNeedsPractice = !stable;
+    existing.todayNeedsPracticeDate = localDateKeyAt(completedAt);
+    existing.lastWrongCount = attempt.totalWrongCount;
+    existing.lastResponse = played ? `${attempt.correctCount}/4 首答正确` : `本次做到 ${attempt.resolvedCallCount}/4`;
+    existing.lastAttempt = { completedAt, played, stable, reason, scoredCalls: attempt.scoredCalls.map((call) => ({ ...call })) };
+    state.learningStats.levels.LP01 = existing;
+    saveLearningStats();
+  }
+  const summary = {
+    levelId: "LP01",
+    bundleId: chapter4Config.bundleId,
+    sessionId: attempt.formalSession ? (state.activeSession?.sessionId || attempt.sessionId) : null,
+    completedAt,
+    played,
+    stable,
+    retained: false,
+    reason,
+    correctCount: attempt.correctCount,
+    wrongCount: attempt.totalWrongCount,
+    replayCountChild: attempt.replayCountChild,
+    replayCountSystem: attempt.replayCountSystem,
+    strongCueUsed: attempt.strongCueUsed,
+    modeled: attempt.modeled,
+    accessibilityVisualAssist: attempt.accessibilityVisualAssist,
+    hasExperimentalInput: attempt.hasExperimentalInput,
+    presentedCallCount: attempt.presentedCallCount,
+    resolvedCallCount: attempt.resolvedCallCount,
+    unpresentedCallCount: Math.max(0, 4 - attempt.presentedCallCount),
+    storyResolvedBySupport: Boolean(storyResolvedBySupport),
+    storyCompletionSource: storyResolvedBySupport ? "xingya-support" : "child-resolved-calls",
+    needsPractice: !stable,
+    openingReviewRequired: !stable,
+    bubbleMapping: { ...attempt.bubbleMapping },
+    sequence: attempt.sequence.slice(),
+    scoredCalls: attempt.scoredCalls.map((call) => ({ ...call }))
+  };
+  attempt.storyResolvedBySupport = summary.storyResolvedBySupport;
+  attempt.storyCompletionSource = summary.storyCompletionSource;
+  attempt.outcomeRecorded = true;
+  if (attempt.formalSession && !state.chapter4DirectMode) {
+    state.chapter4.lessonEvidence.LP01 = summary;
+    state.chapter4.lp01Attempts.push(summary);
+    state.chapter4.lp01Attempts = state.chapter4.lp01Attempts.slice(-20);
+    if (!stable && !state.chapter4.openingReviewQueue.includes("LP01")) state.chapter4.openingReviewQueue.push("LP01");
+    const session = state.activeSession;
+    if (session) session.completedActions.push({ actionId: chapter4Config.lp01.actionId, kind: "chapter4-listening", targetId: "LP01", ...summary });
+    persistChapter4Progress();
+    persistChapter4Attempt();
+  }
+  return summary;
+}
+
+function finishLp01Completed(attempt) {
+  recordLp01Outcome(attempt, { reason: "lp01-complete", storyResolvedBySupport: false });
+  attempt.phase = "lp01-complete";
+  persistChapter4Attempt();
+  renderChapter4Screen();
+  if (state.chapter4DirectMode) return;
+  const needsRest = attempt.needsPractice || attempt.strongCueUsed || attempt.modeled || attempt.accessibilityVisualAssist;
+  state.chapter4FeedbackTimer = setTimeout(() => {
+    state.chapter4FeedbackTimer = null;
+    settleLp01Completion(attempt, { needsRest });
+  }, 900);
+}
+
+function settleLp01Completion(attempt, { needsRest = null } = {}) {
+  if (!attempt || attempt.levelId !== "LP01" || attempt.phase !== "lp01-complete" || state.chapter4DirectMode) return false;
+  clearChapter4Timers();
+  const shouldRest = needsRest ?? Boolean(attempt.needsPractice || attempt.strongCueUsed || attempt.modeled || attempt.accessibilityVisualAssist);
+  if (shouldRest) finishLp01EarlyRest(attempt, "lp01-difficult-complete", { alreadyRecorded: true });
+  else advanceChapter4ToLp02();
+  return true;
+}
+
+function finishLp01EarlyRest(attempt, reason, { alreadyRecorded = false } = {}) {
+  if (!attempt || state.chapter4DirectMode) {
+    if (attempt) {
+      attempt.phase = "lp01-supported-story-rest";
+      renderChapter4Screen();
+    }
+    return;
+  }
+  clearChapter4Timers();
+  attempt.storyResolvedBySupport = true;
+  attempt.storyCompletionSource = "xingya-support";
+  attempt.needsPractice = true;
+  attempt.openingReviewRequired = true;
+  if (!alreadyRecorded) recordLp01Outcome(attempt, { reason, storyResolvedBySupport: true });
+  else {
+    const summary = state.chapter4.lessonEvidence.LP01;
+    if (summary) {
+      summary.storyResolvedBySupport = true;
+      summary.storyCompletionSource = "xingya-support";
+      summary.needsPractice = true;
+      summary.openingReviewRequired = true;
+      summary.stable = false;
+      summary.reason = reason;
+    }
+    const sessionId = state.activeSession?.sessionId || attempt.sessionId || null;
+    const skillKey = evidenceSkillKey("level", "LP01");
+    const staleStableEvents = state.learningStats.retention.stableEvents.filter((event) => event.skillKey === skillKey && event.sessionId === sessionId);
+    if (staleStableEvents.length) {
+      state.learningStats.retention.stableEvents = state.learningStats.retention.stableEvents.filter((event) => !(event.skillKey === skillKey && event.sessionId === sessionId));
+      state.learningStats.retention.retainedEvents = state.learningStats.retention.retainedEvents.filter((event) => !(event.skillKey === skillKey && event.sessionId === sessionId));
+    }
+    const existing = state.learningStats.levels.LP01;
+    if (existing) {
+      if (staleStableEvents.length) existing.stableCompletions = Math.max(0, (Number(existing.stableCompletions) || 0) - staleStableEvents.length);
+      existing.needsPractice = true;
+      existing.todayNeedsPractice = true;
+      existing.todayNeedsPracticeDate = localDateKeyAt();
+      if (existing.lastAttempt) {
+        existing.lastAttempt.stable = false;
+        existing.lastAttempt.needsPractice = true;
+        existing.lastAttempt.reason = reason;
+      }
+      saveLearningStats();
+    }
+    if (!state.chapter4.openingReviewQueue.includes("LP01")) state.chapter4.openingReviewQueue.push("LP01");
+    const completedAction = state.activeSession?.completedActions.find((action) => action.targetId === "LP01" && (!sessionId || action.sessionId === sessionId));
+    if (completedAction && summary) {
+      Object.assign(completedAction, {
+        ...summary,
+        stable: false,
+        needsPractice: true,
+        openingReviewRequired: true,
+        storyResolvedBySupport: true,
+        storyCompletionSource: "xingya-support",
+        reason
+      });
+    }
+  }
+  attempt.phase = attempt.presentedCallCount < 4 ? "lp01-supported-story-rest" : "lp01-early-rest";
+  state.chapter4.resume = {
+    bundleId: chapter4Config.bundleId,
+    nextTargetId: "LP02",
+    endedSessionId: state.activeSession?.sessionId || null,
+    reconnectRequired: true,
+    createdAt: new Date().toISOString(),
+    lp01Summary: { ...state.chapter4.lessonEvidence.LP01 }
+  };
+  persistChapter4Progress();
+  persistChapter4Attempt();
+  const action = currentChapter4Action();
+  state.chapter4RestView = action ? { ...action, chapter4Attempt: JSON.parse(JSON.stringify(attempt)) } : null;
+  finishActiveSessionAtRest({ reward: "发光洞口", reason: "lp01-early-rest" });
+  renderChapter4Screen();
+  state.chapter4FeedbackTimer = setTimeout(() => showMapScreen(), 1000);
+}
+
+function advanceChapter4ToLp02() {
+  if (state.chapter4DirectMode) return;
+  const session = state.activeSession;
+  if (!session || session.bundleId !== chapter4Config.bundleId) return;
+  const nextIndex = session.actions.findIndex((action) => action.targetId === "LP02");
+  if (nextIndex < 0) return;
+  session.actionIndex = nextIndex;
+  const action = session.actions[nextIndex];
+  action.chapter4Attempt = createLp02Attempt(session);
+  persistActiveSession();
+  state.chapter4RestView = null;
+  showChapter4Screen();
+}
+
+function startLp02Reconnect() {
+  const attempt = ensureChapter4Attempt();
+  if (!attempt || attempt.levelId !== "LP02") return false;
+  clearChapter4Timers();
+  const playback = startChapter4TeachingSequence(attempt, {
+    context: "lp02-reconnect",
+    kind: "unscored-reconnect",
+    reason: "resume-unscored-model",
+    midis: [60, 48],
+    gapMs: LP01_NOTE_DURATION_MS + LP01_REPAIR_GAP_MS,
+    phase: "lp02-reconnect-playing",
+    onEnded: () => {
+      attempt.reconnectCompleted = true;
+      attempt.phase = "lp02-guide";
+      attempt.responseStartedAt = new Date().toISOString();
+      persistChapter4Attempt();
+      renderChapter4Screen();
+      scheduleLp02ResponseTimeout();
+    }
+  });
+  return Boolean(playback);
+}
+
+function renderChapter4Keyboard(attempt) {
+  if (!els.keyboard) return;
+  els.keyboard.innerHTML = "";
+  els.keyboard.className = "keyboard chapter4-keyboard";
+  els.keyboard.dataset.targetVisible = ["lp02-assisted", "lp02-modeled-playing"].includes(attempt.phase) ? "true" : "false";
+  const assistTarget = ["lp02-assisted", "lp02-modeled-playing"].includes(attempt.phase);
+  const pendingMidi = attempt.phase === "lp02-input-playing" ? Number(attempt.pendingLp02Input?.midi) : null;
+  const showCommittedWrong = attempt.phase !== "lp02-input-playing" && state.lastInputResult === "wrong";
+  chapter4WhiteMidis.forEach((midi, index) => {
+    const note = chapter4NoteForMidi(midi);
+    const key = document.createElement("button");
+    key.className = "white-key";
+    key.type = "button";
+    key.dataset.midi = String(midi);
+    key.dataset.note = note.name;
+    key.style.left = `${(index / 14) * 100}%`;
+    if (assistTarget && midi === 48) key.classList.add("lp02-assist-target");
+    if (midi === pendingMidi) key.classList.add("lp02-current-playing");
+    if (showCommittedWrong && midi === state.lastInputMidi) key.classList.add("hit-wrong");
+    const label = midi === 48 ? "低音 C" : (midi === 60 ? "中央 C" : note.name);
+    key.setAttribute("aria-label", `${label}，${note.locator}`);
+    key.innerHTML = `<span><strong>${note.name}</strong>${midi === 48 ? "<small>低音</small>" : (midi === 60 ? "<small>中央</small>" : "")}</span>`;
+    bindChapter4KeyboardKey(key, note);
+    els.keyboard.appendChild(key);
+  });
+  chapter4BlackMidis.forEach((midi) => {
+    const note = chapter4NoteForMidi(midi);
+    const lowerWhiteIndex = chapter4WhiteMidis.filter((whiteMidi) => whiteMidi < midi).length;
+    const key = document.createElement("button");
+    key.className = "black-key";
+    key.type = "button";
+    key.dataset.midi = String(midi);
+    key.style.left = `${(lowerWhiteIndex / 14) * 100}%`;
+    if (midi === pendingMidi) key.classList.add("lp02-current-playing");
+    if (showCommittedWrong && midi === state.lastInputMidi) key.classList.add("hit-wrong");
+    key.setAttribute("aria-label", `黑键，${note.locator}`);
+    bindChapter4KeyboardKey(key, note);
+    els.keyboard.appendChild(key);
+  });
+  syncLs08RenderedPointerState();
+}
+
+function bindChapter4KeyboardKey(key, note) {
+  key.addEventListener("pointerdown", (event) => {
+    const startsNewPress = beginLs08PointerActivation(note.midi, event);
+    try { key.setPointerCapture?.(event.pointerId); } catch (error) { /* Document-level release remains authoritative. */ }
+    if (startsNewPress) {
+      beginKeyboardPress(key);
+      showKeyPressRipple(key);
+    }
+    handleChapter4Input(note.midi, "屏幕", { activation: "pointer", startsNewPress });
+  });
+  key.addEventListener("pointerup", (event) => {
+    if (ls08DocumentReleaseEvents.has(event)) return;
+    const activation = endLs08PointerActivation(note.midi, event);
+    if (activation.tracked && activation.removed) {
+      syncLs08RenderedPointerState();
+      if (activation.shouldRelease) releaseGardenInput(note.midi, "屏幕");
+    }
+  });
+  key.addEventListener("pointercancel", (event) => {
+    if (ls08DocumentReleaseEvents.has(event)) return;
+    const activation = endLs08PointerActivation(note.midi, event);
+    if (activation.tracked && activation.removed) {
+      syncLs08RenderedPointerState();
+      if (activation.shouldRelease) releaseGardenInput(note.midi, "屏幕");
+    }
+  });
+  key.addEventListener("click", (event) => {
+    if (consumeLs08PointerClick(note.midi, event)) return;
+    beginKeyboardPress(key);
+    showKeyPressRipple(key);
+    handleChapter4Input(note.midi, "屏幕", { activation: "accessible-click", startsNewPress: true });
+    releaseGardenInput(note.midi, "屏幕");
+    releaseKeyboardPress(key);
+  });
+}
+
+function scheduleLp02ResponseTimeout() {
+  if (state.chapter4Timer) clearTimeout(state.chapter4Timer);
+  state.chapter4Timer = setTimeout(() => {
+    state.chapter4Timer = null;
+    const attempt = ensureChapter4Attempt();
+    if (!attempt || attempt.levelId !== "LP02" || attempt.phase !== "lp02-guide") return;
+    attempt.strongCueUsed = true;
+    attempt.phase = "lp02-assisted";
+    persistChapter4Attempt();
+    renderChapter4Screen();
+    scheduleLp02AssistedTimeout();
+  }, LP02_LONG_WAIT_MS);
+}
+
+function scheduleLp02AssistedTimeout() {
+  if (state.chapter4Timer) clearTimeout(state.chapter4Timer);
+  state.chapter4Timer = setTimeout(() => completeLp02Modeled("assisted-timeout"), LP02_ASSISTED_WAIT_MS);
+}
+
+function createLp02PendingInput(attempt, midi, source, meta, occurredAt) {
+  const responseStartedAt = Date.parse(attempt.responseStartedAt || "");
+  return {
+    midi,
+    source,
+    activation: meta.activation || null,
+    phase: attempt.phase,
+    occurredAt,
+    responseMs: !attempt.timingInterrupted && Number.isFinite(responseStartedAt)
+      ? Math.max(0, Date.now() - responseStartedAt)
+      : null,
+    onsetRecorded: false,
+    external: source === "麦克风"
+  };
+}
+
+function recordLp02InputOnset(attempt, pending, startedAt = new Date().toISOString()) {
+  if (!attempt || !pending || pending.onsetRecorded) return;
+  const note = chapter4NoteForMidi(pending.midi);
+  attempt.inputEvents.push({
+    event: "onset",
+    midi: pending.midi,
+    pitchName: note?.pitchName || null,
+    isBlack: Boolean(note?.isBlack),
+    route: pending.source,
+    occurredAt: pending.occurredAt,
+    audioStartedAt: startedAt
+  });
+  pending.onsetRecorded = true;
+}
+
+function commitLp02PendingInput(attempt) {
+  const pending = attempt?.pendingLp02Input;
+  if (!attempt || !pending || attempt.outcomeRecorded) return;
+  attempt.pendingLp02Input = null;
+  const { midi, source, occurredAt, responseMs } = pending;
+  const note = chapter4NoteForMidi(midi);
+  const firstScoredInput = !attempt.firstInputRoute && source !== "麦克风";
+  if (firstScoredInput) {
+    attempt.firstChildMidi = midi;
+    attempt.firstInputRoute = source;
+    attempt.firstResponseMs = responseMs;
+  }
+  state.lastInputMidi = midi;
+  if (source === "麦克风") {
+    attempt.experimentalInput = true;
+    attempt.microphoneConfidence = midi === 48 ? "confirmed" : (midi === 60 ? "octave-ambiguous" : "uncertain");
+    if (midi === 48) {
+      attempt.firstChildMidi ??= midi;
+      attempt.firstInputRoute ??= source;
+      if (attempt.firstResponseMs === null) attempt.firstResponseMs = responseMs;
+      if (attempt.firstNoteNameCorrect === null) {
+        attempt.firstNoteNameCorrect = true;
+        attempt.firstRegisterCorrect = true;
+        attempt.firstWrongOctave = false;
+      }
+      attempt.noteNameCorrect = true;
+      attempt.registerCorrect = true;
+      attempt.strongCueUsed = true;
+      finalizeLp02Completion(attempt, { source: "microphone-assisted", modeled: false });
+    } else {
+      attempt.phase = pending.phase === "lp02-assisted" ? "lp02-assisted" : "lp02-guide";
+      attempt.observations.push({ event: "microphone-unscored", midi, classification: attempt.microphoneConfidence, occurredAt });
+      persistChapter4Attempt();
+      renderChapter4Screen();
+      if (attempt.phase === "lp02-assisted") scheduleLp02AssistedTimeout();
+      else scheduleLp02ResponseTimeout();
+    }
+    return;
+  }
+  if (midi === 48) {
+    if (firstScoredInput) {
+      attempt.firstNoteNameCorrect = true;
+      attempt.firstRegisterCorrect = true;
+      attempt.firstWrongOctave = false;
+    }
+    attempt.noteNameCorrect = true;
+    attempt.registerCorrect = true;
+    attempt.wrongOctave = false;
+    state.lastInputResult = "correct";
+    finalizeLp02Completion(attempt, { source, modeled: false });
+    return;
+  }
+  state.lastInputResult = "wrong";
+  attempt.wrongCount += 1;
+  attempt.noteNameCorrect = Boolean(!note?.isBlack && note?.name === "C");
+  attempt.registerCorrect = false;
+  attempt.wrongOctave = midi === 60;
+  attempt.lastWrongInput = { midi, pitchName: note?.pitchName || null, name: note?.name || null, isBlack: Boolean(note?.isBlack), locator: note?.locator || "" };
+  if (firstScoredInput) {
+    attempt.firstNoteNameCorrect = attempt.noteNameCorrect;
+    attempt.firstRegisterCorrect = false;
+    attempt.firstWrongOctave = attempt.wrongOctave;
+  }
+  attempt.inputEvents.push({
+    event: "wrong-home",
+    midi,
+    pitchName: note?.pitchName || null,
+    isBlack: Boolean(note?.isBlack),
+    childIdentity: note?.isBlack ? "黑键" : note?.name,
+    noteNameCorrect: attempt.noteNameCorrect,
+    registerCorrect: false,
+    occurredAt
+  });
+  if (attempt.wrongCount >= 3) {
+    attempt.strongCueUsed = true;
+    completeLp02Modeled("repeated-repair");
+    return;
+  }
+  if (attempt.wrongCount >= 2) {
+    attempt.strongCueUsed = true;
+    attempt.phase = "lp02-assisted";
+    persistChapter4Attempt();
+    renderChapter4Screen();
+    scheduleLp02AssistedTimeout();
+    return;
+  }
+  attempt.phase = midi === 60 ? "lp02-middle-c-near-miss" : "lp02-wrong";
+  persistChapter4Attempt();
+  renderChapter4Screen();
+  state.chapter4FeedbackTimer = setTimeout(() => {
+    state.chapter4FeedbackTimer = null;
+    attempt.phase = "lp02-guide";
+    persistChapter4Attempt();
+    renderChapter4Screen();
+    scheduleLp02ResponseTimeout();
+  }, 900);
+}
+
+function beginLp02InputTransaction(attempt, pending, { recovery = false } = {}) {
+  if (!attempt || !pending) return false;
+  clearChapter4Timers();
+  attempt.pendingLp02Input = pending;
+  const traceReason = pending.source === "MIDI"
+    ? (recovery ? "midi-local-monitor-recovery" : "midi-local-monitor")
+    : (recovery ? "sound-recovery-child-key" : (pending.activation || "screen"));
+  const playback = startChapter4TeachingSequence(attempt, {
+    context: "lp02-child-input",
+    kind: "child-key",
+    reason: traceReason,
+    midis: [pending.midi],
+    payload: { ...pending },
+    phase: "lp02-input-playing",
+    child: true,
+    noteDurationMs: LP02_CHILD_NOTE_DURATION_MS,
+    onStarted: (transaction) => {
+      if (recovery || pending.releaseRequested) {
+        attempt.routeArmed[pending.source] = true;
+        attempt.routeHeldMidi[pending.source] = null;
+      } else {
+        attempt.routeArmed[pending.source] = false;
+        attempt.routeHeldMidi[pending.source] = pending.midi;
+      }
+      recordLp02InputOnset(attempt, pending, transaction.startedAt);
+    },
+    onEnded: () => commitLp02PendingInput(attempt)
+  });
+  return Boolean(playback);
+}
+
+function beginLp02ExternalInputTransaction(attempt, pending) {
+  if (!attempt || !pending) return false;
+  clearChapter4Timers();
+  attempt.pendingLp02Input = pending;
+  attempt.routeArmed[pending.source] = false;
+  attempt.routeHeldMidi[pending.source] = pending.midi;
+  const occurredAt = new Date().toISOString();
+  beginChapter4AudioTransaction(attempt, {
+    context: "lp02-external-input",
+    kind: "external-child-key",
+    reason: "microphone-gate-accepted",
+    midis: [pending.midi],
+    durationMs: LP02_EXTERNAL_INPUT_MAX_MS,
+    payload: { ...pending, requiresQuietEnd: true },
+    phase: "lp02-input-playing",
+    scheduledAt: occurredAt,
+    startedAt: occurredAt
+  });
+  state.chapter4Timer = setTimeout(() => {
+    state.chapter4Timer = null;
+    const transaction = attempt.audioTransaction;
+    if (!transaction || transaction.endedAt || transaction.context !== "lp02-external-input") return;
+    attempt.timingInterrupted = true;
+    enterChapter4SoundPause(attempt, "lp02-external-input", "external-input-release-timeout");
+  }, LP02_EXTERNAL_INPUT_MAX_MS);
+  return true;
+}
+
+function handleChapter4Input(midi, source, meta = {}) {
+  const attempt = ensureChapter4Attempt();
+  if (!attempt) return;
+  const now = new Date().toISOString();
+  if (attempt.levelId === "LP01") {
+    attempt.observations.push({ event: "non-scoring-note", midi, source, phase: attempt.phase, occurredAt: now });
+    if (source === "麦克风" || source === "MIDI") {
+      attempt.hasExperimentalInput = true;
+      attempt.callExperimentalInput = true;
+    }
+    persistChapter4Attempt();
+    return;
+  }
+  if (meta.startsNewPress === false) {
+    attempt.observations.push({ event: "not-rearmed", midi, source, phase: attempt.phase, occurredAt: now });
+    persistChapter4Attempt();
+    return;
+  }
+  if (!["lp02-guide", "lp02-middle-c-near-miss", "lp02-wrong", "lp02-assisted"].includes(attempt.phase)) {
+    attempt.observations.push({ event: "input-blocked", midi, source, phase: attempt.phase, occurredAt: now });
+    persistChapter4Attempt();
+    return;
+  }
+  if (attempt.routeArmed[source] === false) {
+    attempt.observations.push({ event: "not-rearmed", midi, source, phase: attempt.phase, occurredAt: now });
+    persistChapter4Attempt();
+    return;
+  }
+  const pending = createLp02PendingInput(attempt, midi, source, meta, now);
+  if (source === "麦克风") beginLp02ExternalInputTransaction(attempt, pending);
+  else beginLp02InputTransaction(attempt, pending);
+}
+
+function releaseChapter4Input(midi, source) {
+  const attempt = ensureChapter4Attempt();
+  if (!attempt || attempt.levelId !== "LP02") return;
+  const held = attempt.routeHeldMidi[source];
+  if (attempt.routeArmed[source] !== false && held === null) {
+    if (attempt.phase === "lp02-input-playing" && attempt.pendingLp02Input?.source === source && !attempt.audioTransaction?.startedAt) {
+      attempt.pendingLp02Input.releaseRequested = true;
+      persistChapter4Attempt();
+    }
+    return;
+  }
+  if (source !== "麦克风" && held !== null && Number.isFinite(Number(midi)) && Number(midi) !== Number(held)) return;
+  attempt.routeHeldMidi[source] = null;
+  attempt.routeArmed[source] = true;
+  attempt.inputEvents.push({ event: "release-rearm", midi: source === "麦克风" ? null : midi, route: source, occurredAt: new Date().toISOString() });
+  if (source === "麦克风" && attempt.phase === "lp02-input-playing" && attempt.audioTransaction?.context === "lp02-external-input" && !attempt.audioTransaction.endedAt && !attempt.audioTransaction.interruptedAt) {
+    if (state.chapter4Timer) clearTimeout(state.chapter4Timer);
+    state.chapter4Timer = null;
+    recordLp02InputOnset(attempt, attempt.pendingLp02Input, attempt.audioTransaction.startedAt);
+    finishChapter4AudioTransaction(attempt, () => commitLp02PendingInput(attempt));
+    return;
+  }
+  persistChapter4Attempt();
+}
+
+function completeLp02Modeled(reason) {
+  const attempt = ensureChapter4Attempt();
+  if (!attempt || attempt.levelId !== "LP02") return;
+  clearChapter4Timers();
+  attempt.strongCueUsed = true;
+  startChapter4TeachingSequence(attempt, {
+    context: "lp02-modeled",
+    kind: "modeled-low-c",
+    reason,
+    midis: [48],
+    payload: { reason },
+    phase: "lp02-modeled-playing",
+    onEnded: () => {
+      attempt.modeled = true;
+      finalizeLp02Completion(attempt, { source: "model", modeled: true });
+    }
+  });
+}
+
+function lp02EvidenceRecord(attempt, { source, modeled = false } = {}) {
+  const firstNote = chapter4NoteForMidi(attempt.firstChildMidi);
+  return {
+    levelId: "LP02",
+    bundleId: chapter4Config.bundleId,
+    sessionId: attempt.formalSession ? (state.activeSession?.sessionId || attempt.sessionId) : null,
+    targetMidi: 48,
+    firstChildMidi: attempt.firstChildMidi,
+    firstPitchName: firstNote?.pitchName || null,
+    firstInputRoute: attempt.firstInputRoute,
+    inputRoute: attempt.firstInputRoute,
+    noteNameCorrect: Boolean(attempt.firstNoteNameCorrect),
+    registerCorrect: Boolean(attempt.firstRegisterCorrect),
+    wrongOctave: Boolean(attempt.firstWrongOctave),
+    strongCueUsed: Boolean(attempt.strongCueUsed),
+    modeled: Boolean(modeled || attempt.modeled),
+    accessibilityVisualAssist: Boolean(attempt.accessibilityVisualAssist),
+    experimentalInput: Boolean(attempt.experimentalInput),
+    microphoneConfidence: attempt.microphoneConfidence,
+    completionSource: source,
+    responseMs: !attempt.timingInterrupted ? attempt.firstResponseMs : null,
+    timingInterrupted: Boolean(attempt.timingInterrupted),
+    timingUsedForMastery: false,
+    inputEvents: attempt.inputEvents.map((event) => ({ ...event }))
+  };
+}
+
+function finalizeLp02Completion(attempt, { source, modeled = false } = {}) {
+  if (!attempt || attempt.outcomeRecorded) return;
+  clearChapter4Timers();
+  const completedAt = new Date().toISOString();
+  const evidence = lp02EvidenceRecord(attempt, { source, modeled });
+  attempt.outcomeRecorded = true;
+  attempt.completionSource = source;
+  attempt.phase = "lp02-complete";
+  if (attempt.formalSession && !state.chapter4DirectMode) {
+    const existing = state.learningStats.levels.LP02 || { completions: 0, formalCompletions: 0, stableCompletions: 0 };
+    existing.completions = (Number(existing.completions) || 0) + 1;
+    existing.formalCompletions = (Number(existing.formalCompletions) || 0) + 1;
+    existing.stableCompletions = Number(existing.stableCompletions) || 0;
+    existing.needsPractice = Boolean(modeled || attempt.strongCueUsed || attempt.experimentalInput);
+    existing.todayNeedsPractice = existing.needsPractice;
+    existing.todayNeedsPracticeDate = existing.needsPractice ? localDateKeyAt(completedAt) : existing.todayNeedsPracticeDate;
+    existing.lastCompletedAt = completedAt;
+    existing.lastFormalCompletedAt = completedAt;
+    existing.lastAttempt = { completedAt, played: true, stable: false, evidence };
+    state.learningStats.levels.LP02 = existing;
+    saveLearningStats();
+    const summary = { ...evidence, completedAt, played: true, stable: false, retained: false, needsPractice: existing.needsPractice };
+    state.chapter4.lessonEvidence.LP02 = summary;
+    state.chapter4.lp02Attempts.push(summary);
+    state.chapter4.lp02Attempts = state.chapter4.lp02Attempts.slice(-20);
+    state.chapter4.completedSlice = true;
+    state.chapter4.resume = null;
+    const session = state.activeSession;
+    if (session) session.completedActions.push({ actionId: chapter4Config.lp02.actionId, kind: "chapter4-keyboard", targetId: "LP02", ...summary });
+    persistChapter4Progress();
+    persistChapter4Attempt();
+  }
+  renderChapter4Screen();
+  if (state.chapter4DirectMode) return;
+  const action = currentChapter4Action();
+  state.chapter4RestView = action ? { ...action, chapter4Attempt: JSON.parse(JSON.stringify(attempt)) } : null;
+  finishActiveSessionAtRest({ reward: "第一块地基", reason: "natural-rest" });
+  state.chapter4FeedbackTimer = setTimeout(() => showMapScreen(), 1050);
+}
+
+function recoverChapter4Sound() {
+  const attempt = ensureChapter4Attempt();
+  if (!attempt || attempt.phase !== "sound-paused") return;
+  const interrupted = attempt.audioTransaction;
+  const context = attempt.soundPauseContext || interrupted?.context;
+  attempt.audioTransaction = null;
+  attempt.soundPauseContext = null;
+  if (context === "lp01-model") {
+    const payload = interrupted?.payload;
+    startLp01ModelStep(payload?.index ?? attempt.modelIndex, { replay: Boolean(payload?.replay) });
+  } else if (context === "lp01-target") {
+    playLp01Target("sound-recovery");
+  } else if (context === "lp01-response") {
+    startLp01CorrectResponsePlayback(attempt);
+  } else if (context === "lp01-wrong-repair") {
+    startLp01WrongRepairPlayback(attempt);
+  } else if (context === "lp01-modeled") {
+    completeLp01Modeled(attempt.pendingModeledReason || "sound-recovery-modeled");
+  } else if (context === "lp02-reconnect") {
+    startLp02Reconnect();
+  } else if (context === "lp02-modeled") {
+    completeLp02Modeled("sound-recovery-modeled");
+  } else if (context === "lp02-child-input") {
+    const pending = attempt.pendingLp02Input || interrupted?.payload;
+    if (!pending) return;
+    beginLp02InputTransaction(attempt, pending, { recovery: true });
+  } else if (context === "lp02-external-input") {
+    const pending = attempt.pendingLp02Input || interrupted?.payload;
+    attempt.pendingLp02Input = null;
+    attempt.audioTransaction = null;
+    attempt.routeHeldMidi["麦克风"] = null;
+    attempt.routeArmed["麦克风"] = true;
+    attempt.phase = pending?.phase === "lp02-assisted" ? "lp02-assisted" : "lp02-guide";
+    attempt.observations.push({ event: "external-input-retry-required", midi: pending?.midi ?? null, source: "麦克风", occurredAt: new Date().toISOString() });
+    persistChapter4Attempt();
+    renderChapter4Screen();
+    if (attempt.phase === "lp02-assisted") scheduleLp02AssistedTimeout();
+    else scheduleLp02ResponseTimeout();
+  }
 }
 
 function handleGardenInput(midi, source) {
@@ -10059,6 +12143,7 @@ function completedTargetForAction(action) {
   if (!action) return false;
   if (action.kind === "garden") return Boolean(state.chapter3.lessonEvidence[action.targetId]?.completedAt);
   if (action.kind === "garden-listening") return Boolean(state.chapter3.lessonEvidence[action.targetId]?.completedAt);
+  if (action.kind === "chapter4-listening" || action.kind === "chapter4-keyboard") return Boolean(state.chapter4.lessonEvidence[action.targetId]?.completedAt);
   if (action.kind === "staff") {
     if (action.sessionMode === "mini") return false;
     if (action.runMode === "check") return hasVerifiedStableStaff();
@@ -10084,6 +12169,24 @@ function hasReachedGardenEntrance() {
     session.completedActions.some((action) =>
       action?.actionId === "S01-check" && action?.kind === "staff" && action?.targetId === staffCourse.id
     )
+  );
+}
+
+function hasFormalChapter4EntranceEvidence() {
+  const evidence = state.chapter3.lessonEvidence.LS08;
+  if (!state.chapter3.completed || !evidence?.completedAt || evidence.completed !== true) return false;
+  const endedEcho = Array.isArray(evidence.storyEvents) && evidence.storyEvents.some((event) =>
+    event?.eventType === "storyEvent" &&
+    event?.phaseRole === "unscored" &&
+    Array.isArray(event.midis) &&
+    event.midis.join(",") === "60,48" &&
+    Boolean(event.endedAt)
+  );
+  if (!endedEcho || !evidence.sessionId) return false;
+  return state.sessionRuntime.history.some((session) =>
+    session?.sessionId === evidence.sessionId &&
+    session?.bundleId === "C3-07" &&
+    session?.status === "ended"
   );
 }
 
@@ -10223,6 +12326,11 @@ function startActiveSessionAction(actionIndex = state.activeSession?.actionIndex
     return;
   }
 
+  if (action.kind === "chapter4-listening" || action.kind === "chapter4-keyboard") {
+    showChapter4Screen();
+    return;
+  }
+
   const index = levels.findIndex((level) => level.id === action.targetId);
   if (index < 0) return;
   clearAutoAdvance();
@@ -10342,13 +12450,9 @@ function createGardenActiveSession(plan) {
 
 function unlockChapter3AudioFromGesture() {
   unlockAudioFromGesture();
-  try {
-    const bus = getSfxBus();
-    if (bus?.ctx?.state === "suspended") bus.ctx.resume().catch(() => {});
+  requestSfxBusRunning().then((bus) => {
     document.documentElement.dataset.chapter3AudioGesture = bus ? "unlocked" : "unavailable";
-  } catch (error) {
-    document.documentElement.dataset.chapter3AudioGesture = "unavailable";
-  }
+  });
 }
 
 function startGardenFromMap() {
@@ -10364,6 +12468,69 @@ function startGardenFromMap() {
   if (!state.activeSession) return;
   if (plan.resumeOfSessionId) state.chapter3.resume = null;
   persistChapter3Progress();
+  persistActiveSession();
+  startActiveSessionAction(0);
+}
+
+function nextChapter4SessionPlan() {
+  if (!hasFormalChapter4EntranceEvidence() || state.chapter4.completedSlice) return null;
+  const resume = state.chapter4.resume?.nextTargetId === "LP02" ? state.chapter4.resume : null;
+  return resume
+    ? { actionIds: [chapter4Config.lp02.actionId], resumeOfSessionId: resume.endedSessionId || null, reconnectRequired: true }
+    : { actionIds: [chapter4Config.lp01.actionId, chapter4Config.lp02.actionId], resumeOfSessionId: null, reconnectRequired: false };
+}
+
+function createChapter4ActiveSession(plan) {
+  const bundle = sessionBundleById.get(chapter4Config.bundleId);
+  if (!bundle || !plan) return null;
+  const now = new Date();
+  const session = {
+    sessionId: createSessionId(chapter4Config.bundleId),
+    bundleId: chapter4Config.bundleId,
+    startedAt: now.toISOString(),
+    localDateKey: localDateKeyAt(now),
+    reviewSkillKey: null,
+    voluntaryReplay: false,
+    formalSession: true,
+    status: "active",
+    actionIndex: 0,
+    actions: bundle.actions.filter((action) => plan.actionIds.includes(action.actionId)).map((action) => ({
+      ...action,
+      role: plan.resumeOfSessionId ? "lesson-resume" : "lesson",
+      requiredReview: false,
+      reviewSkillKey: null
+    })),
+    completedActions: [],
+    restAfterCurrentLevel: false,
+    resumeOfSessionId: plan.resumeOfSessionId || null
+  };
+  const action = session.actions[0];
+  if (action?.targetId === "LP01") action.chapter4Attempt = createLp01Attempt(session);
+  if (action?.targetId === "LP02") action.chapter4Attempt = createLp02Attempt(session, { reconnectRequired: plan.reconnectRequired });
+  return session;
+}
+
+function unlockChapter4AudioFromGesture() {
+  unlockAudioFromGesture();
+  requestSfxBusRunning().then((bus) => {
+    document.documentElement.dataset.chapter4AudioGesture = bus ? "unlocked" : "unavailable";
+  });
+}
+
+function startChapter4FromMap() {
+  if (!hasFormalChapter4EntranceEvidence()) return;
+  unlockChapter4AudioFromGesture();
+  if (state.activeSession?.status === "active") {
+    if (state.activeSession.bundleId === chapter4Config.bundleId) startActiveSessionAction(state.activeSession.actionIndex);
+    return;
+  }
+  const plan = nextChapter4SessionPlan();
+  if (!plan) return;
+  state.activeSession = createChapter4ActiveSession(plan);
+  if (!state.activeSession) return;
+  state.chapter4RestView = null;
+  if (plan.resumeOfSessionId) state.chapter4.resume = null;
+  persistChapter4Progress();
   persistActiveSession();
   startActiveSessionAction(0);
 }
@@ -10559,6 +12726,21 @@ function completeGardenModeledSuccess(reason) {
   return true;
 }
 
+function showChapter4Screen() {
+  clearAutoAdvance();
+  clearGardenTimers();
+  clearLs08Timers();
+  clearChapter4Timers();
+  hideResultModal();
+  state.screen = "chapter4";
+  state.lastInputMidi = null;
+  state.lastInputResult = null;
+  ensureChapter4Attempt();
+  if (!state.chapter4DirectMode) history.replaceState(null, "", `?mode=chapter4${sessionUrlSuffix()}`);
+  render();
+  resumeChapter4Flow();
+}
+
 function showGardenScreen({ recovery = false } = {}) {
   clearAutoAdvance();
   clearGardenTimers();
@@ -10679,37 +12861,59 @@ function showSessionCompletion({ kind, id, reward }) {
 }
 
 function showMapScreen() {
+  const pendingChapter4 = currentChapter4Action()?.chapter4Attempt;
+  const chapter4Playback = state.teachingPlayback;
+  const chapter4ExternalInputIsActive = Boolean(
+    pendingChapter4?.audioTransaction?.context === "lp02-external-input" &&
+    !pendingChapter4.audioTransaction.endedAt &&
+    !pendingChapter4.audioTransaction.interruptedAt
+  );
+  const chapter4AudioIsActive = Boolean(
+    pendingChapter4?.audioTransaction &&
+    !pendingChapter4.audioTransaction.endedAt &&
+    !pendingChapter4.audioTransaction.interruptedAt &&
+    pendingChapter4.audioTransaction.playbackId &&
+    chapter4Playback?.id === pendingChapter4.audioTransaction.playbackId &&
+    ["scheduled", "playing"].includes(chapter4Playback.status)
+  );
+  if (state.screen === "chapter4" && chapter4ExternalInputIsActive) {
+    clearChapter4Timers();
+    pendingChapter4.timingInterrupted = true;
+    enterChapter4SoundPause(pendingChapter4, "lp02-external-input", "map-external-input");
+  }
+  if (state.screen === "chapter4" && chapter4AudioIsActive) {
+    pendingChapter4.audioTransaction.returnQueued = true;
+    pendingChapter4.callTimingInterrupted = true;
+    pendingChapter4.timingInterrupted = true;
+    persistChapter4Attempt();
+    renderChapter4Screen();
+    return;
+  }
+  if (state.screen === "chapter4" && pendingChapter4 && !["lp01-complete", "lp01-early-rest", "lp01-supported-story-rest", "lp02-complete"].includes(pendingChapter4.phase)) {
+    pendingChapter4.callTimingInterrupted = true;
+    pendingChapter4.timingInterrupted = true;
+    persistChapter4Attempt();
+  }
+  if (state.screen === "chapter4") clearChapter4Timers();
   const pendingLs08 = currentLs08Action()?.listeningAttempt;
   if (state.screen === "garden" && pendingLs08?.guideAudioPlaying && ["guide-first", "guide-second"].includes(pendingLs08.phase)) {
-    pendingLs08.guideReturnQueued = true;
-    persistLs08Attempt();
-    renderGardenScreen();
+    queueLs08MapReturn(pendingLs08);
     return;
   }
   if (state.screen === "garden" && pendingLs08?.pairAudioPlaying && pendingLs08.phase === "pair-playing") {
-    pendingLs08.pairReturnQueued = true;
-    pendingLs08.pairTimingInterrupted = true;
-    persistLs08Attempt();
-    renderGardenScreen();
+    queueLs08MapReturn(pendingLs08);
     return;
   }
   if (state.screen === "garden" && pendingLs08?.modeledAudioPlaying && pendingLs08.phase === "modeled-playing") {
-    pendingLs08.pairTimingInterrupted = true;
-    persistLs08Attempt();
-    renderGardenScreen();
+    queueLs08MapReturn(pendingLs08);
     return;
   }
   if (state.screen === "garden" && pendingLs08?.repairAudioPlaying && ["wrong-first", "wrong-second", "pair-compare", "assisted", "modeled-playing"].includes(pendingLs08.phase)) {
-    pendingLs08.repairReturnQueued = true;
-    pendingLs08.pairTimingInterrupted = true;
-    persistLs08Attempt();
-    renderGardenScreen();
+    queueLs08MapReturn(pendingLs08);
     return;
   }
-  if (state.screen === "garden" && pendingLs08?.phase === "unscored-low-echo" && pendingLs08.lowEchoStarted && !pendingLs08.lowEchoCompleted) {
-    pendingLs08.lowEchoReturnQueued = true;
-    persistLs08Attempt();
-    renderGardenScreen();
+  if (state.screen === "garden" && pendingLs08?.phase === "unscored-low-echo" && !pendingLs08.audioTransaction?.interruptedAt && (pendingLs08.lowEchoStarted || (pendingLs08.audioTransaction?.context === "low-echo" && !pendingLs08.audioTransaction.endedAt)) && !pendingLs08.lowEchoCompleted) {
+    queueLs08MapReturn(pendingLs08);
     return;
   }
   if (state.screen === "garden" && pendingLs08?.phase === "unscored-low-echo" && pendingLs08.lowEchoCompleted) {
@@ -10761,12 +12965,14 @@ function showMapScreen() {
   }
   clearAutoAdvance();
   clearGardenTimers();
+  clearChapter4Timers();
   clearAssistedRepairState();
   clearWorkshopIdleHints();
   clearLevelIntro();
   clearListeningPrompt();
   hideResultModal();
   state.screen = "map";
+  state.chapter4RestView = null;
   history.replaceState(null, "", `?screen=map${sessionUrlSuffix()}`);
   render();
 }
@@ -10815,11 +13021,32 @@ function getSfxBus() {
     applyAudioSettings();
   }
 
-  if (state.sfx.ctx.state === "suspended") {
-    state.sfx.ctx.resume().catch(() => {});
-  }
-
   return state.sfx;
+}
+
+function requestSfxBusRunning() {
+  let sfx = null;
+  try {
+    sfx = getSfxBus();
+  } catch (error) {
+    return Promise.resolve(null);
+  }
+  if (!sfx) return Promise.resolve(null);
+  if (sfx.ctx.state === "running") return Promise.resolve(sfx);
+  if (sfx.ctx.state !== "suspended") return Promise.resolve(null);
+  if (!sfx.resumePromise) {
+    try {
+      sfx.resumePromise = Promise.resolve(sfx.ctx.resume())
+        .then(() => (sfx.ctx.state === "running" ? sfx : null))
+        .catch(() => null)
+        .finally(() => {
+          if (state.sfx === sfx) sfx.resumePromise = null;
+        });
+    } catch (error) {
+      return Promise.resolve(null);
+    }
+  }
+  return sfx.resumePromise;
 }
 
 function envelopeParam(param, start, duration, peak, attack = 0.012, decay = 0.12, sustain = 0.18) {
@@ -10831,14 +13058,7 @@ function envelopeParam(param, start, duration, peak, attack = 0.012, decay = 0.1
   param.exponentialRampToValueAtTime(0.0001, start + duration);
 }
 
-function playPianoNote(frequency, options = {}) {
-  let sfx = null;
-  try {
-    sfx = getSfxBus();
-  } catch (error) {
-    return false;
-  }
-  if (!sfx) return false;
+function createPianoVoice(sfx, frequency, options = {}, onPartialEnded = null) {
   const { ctx, noteBus, effectBus } = sfx;
   const start = ctx.currentTime + (options.delay || 0);
   const duration = options.duration || 0.46;
@@ -10859,7 +13079,7 @@ function playPianoNote(frequency, options = {}) {
     { ratio: 3, gain: 0.10, type: "sine", detune: -5 },
     { ratio: 4, gain: 0.045, type: "sine", detune: 0 }
   ];
-
+  const oscillators = [];
   partials.forEach((partial) => {
     const osc = ctx.createOscillator();
     const partialGain = ctx.createGain();
@@ -10869,9 +13089,175 @@ function playPianoNote(frequency, options = {}) {
     partialGain.gain.value = partial.gain;
     osc.connect(partialGain);
     partialGain.connect(toneFilter);
+    if (onPartialEnded) osc.onended = onPartialEnded;
     osc.start(start);
     osc.stop(start + duration + 0.04);
+    oscillators.push(osc);
   });
+  return { oscillators, startTime: start, endTime: start + duration + 0.04 };
+}
+
+function interruptTeachingPianoSequence(reason = "interrupted") {
+  state.teachingPlayback?.interrupt?.(reason);
+}
+
+function playTeachingPianoSequence({ notes, reason = "teaching", onStarted, onEnded, onInterrupted, watchdogMs } = {}) {
+  const sequence = Array.isArray(notes) ? notes.filter((note) => Number.isFinite(note?.frequency)) : [];
+  const scheduledAt = new Date().toISOString();
+  const playback = {
+    id: `teaching-${Date.now()}-${Math.random().toString(16).slice(2)}`,
+    reason,
+    scheduledAt,
+    startedAt: null,
+    endedAt: null,
+    interruptedAt: null,
+    startAudioTime: null,
+    endAudioTime: null,
+    interruptedAudioTime: null,
+    contextState: null,
+    status: "scheduled",
+    interrupt: null
+  };
+  let settled = false;
+  let stateChangeHandler = null;
+  let startTimer = null;
+  let watchdogTimer = null;
+  let oscillators = [];
+  const clearPlaybackListeners = (ctx = null) => {
+    if (startTimer) clearTimeout(startTimer);
+    if (watchdogTimer) clearTimeout(watchdogTimer);
+    startTimer = null;
+    watchdogTimer = null;
+    if (ctx && stateChangeHandler) ctx.removeEventListener?.("statechange", stateChangeHandler);
+    stateChangeHandler = null;
+  };
+  const interrupt = (interruptReason = "interrupted", ctx = null) => {
+    if (settled) return;
+    settled = true;
+    playback.status = "interrupted";
+    playback.interruptedAt = new Date().toISOString();
+    playback.interruptedAudioTime = Number.isFinite(ctx?.currentTime) ? ctx.currentTime : null;
+    playback.contextState = ctx?.state || playback.contextState || "unavailable";
+    clearPlaybackListeners(ctx);
+    oscillators.forEach((osc) => {
+      osc.onended = null;
+      try { osc.stop(); } catch (error) { /* The oscillator may already have ended. */ }
+    });
+    oscillators = [];
+    if (state.teachingPlayback === playback) state.teachingPlayback = null;
+    onInterrupted?.(playback, interruptReason);
+  };
+  playback.interrupt = (interruptReason) => interrupt(interruptReason, playback.ctx || null);
+  if (sequence.length === 0) {
+    interrupt("empty-sequence");
+    return playback;
+  }
+  if (state.teachingPlayback && state.teachingPlayback !== playback) state.teachingPlayback.interrupt?.("superseded");
+  state.teachingPlayback = playback;
+
+  const begin = (sfx) => {
+    const { ctx } = sfx || {};
+    if (settled || state.teachingPlayback !== playback) return;
+    if (!ctx || ctx.state !== "running" || !state.audioSettings.enabled || state.audioSettings.volume <= 0) {
+      interrupt("context-not-running", ctx || null);
+      return;
+    }
+    playback.ctx = ctx;
+    playback.contextState = ctx.state;
+    let remainingPartials = 0;
+    const finishWhenAllPartialsEnd = () => {
+      if (settled) return;
+      remainingPartials -= 1;
+      if (remainingPartials > 0) return;
+      if (state.teachingPlayback !== playback) {
+        interrupt("superseded", ctx);
+        return;
+      }
+      if (ctx.state !== "running") {
+        interrupt(`context-${ctx.state || "unavailable"}`, ctx);
+        return;
+      }
+      if (!playback.startedAt) {
+        interrupt("ended-before-start", ctx);
+        return;
+      }
+      settled = true;
+      playback.status = "ended";
+      playback.endedAt = new Date().toISOString();
+      playback.endAudioTime = ctx.currentTime;
+      playback.contextState = ctx.state;
+      clearPlaybackListeners(ctx);
+      oscillators = [];
+      if (state.teachingPlayback === playback) state.teachingPlayback = null;
+      onEnded?.(playback);
+    };
+    stateChangeHandler = () => {
+      if (!settled && ctx.state !== "running") interrupt(`context-${ctx.state || "unavailable"}`, ctx);
+    };
+    ctx.addEventListener?.("statechange", stateChangeHandler);
+    try {
+      sequence.forEach((note) => {
+        remainingPartials += 4;
+        const voice = createPianoVoice(sfx, note.frequency, {
+          gain: note.gain,
+          duration: note.durationMs / 1000,
+          delay: note.delayMs / 1000,
+          bus: note.bus,
+          detune: note.detune
+        }, finishWhenAllPartialsEnd);
+        oscillators.push(...voice.oscillators);
+      });
+    } catch (error) {
+      interrupt("oscillator-schedule-failed", ctx);
+      return;
+    }
+    const firstDelayMs = Math.max(0, Math.min(...sequence.map((note) => Number(note.delayMs) || 0)));
+    const markStarted = () => {
+      if (settled) return;
+      if (ctx.state !== "running") {
+        interrupt(`context-${ctx.state || "unavailable"}`, ctx);
+        return;
+      }
+      playback.status = "playing";
+      playback.startedAt = new Date().toISOString();
+      playback.startAudioTime = ctx.currentTime;
+      playback.contextState = ctx.state;
+      onStarted?.(playback);
+    };
+    if (firstDelayMs <= 1) markStarted();
+    else startTimer = setTimeout(markStarted, firstDelayMs);
+    const expectedDurationMs = Math.max(...sequence.map((note) => (Number(note.delayMs) || 0) + (Number(note.durationMs) || 0) + 40));
+    watchdogTimer = setTimeout(() => {
+      if (!settled) interrupt("watchdog-timeout", ctx);
+    }, Math.max(expectedDurationMs + 1000, Number(watchdogMs) || 0));
+  };
+
+  let existingSfx = null;
+  try {
+    existingSfx = getSfxBus();
+  } catch (error) {
+    interrupt("context-unavailable");
+    return playback;
+  }
+  if (existingSfx?.ctx?.state === "running") begin(existingSfx);
+  else {
+    requestSfxBusRunning().then((sfx) => {
+      if (!sfx) interrupt("resume-rejected");
+      else begin(sfx);
+    });
+  }
+  return playback;
+}
+
+function playPianoNote(frequency, options = {}) {
+  let sfx = null;
+  try {
+    sfx = getSfxBus();
+  } catch (error) {
+    return false;
+  }
+  if (!sfx || sfx.ctx.state !== "running") return false;
+  createPianoVoice(sfx, frequency, options);
   return true;
 }
 
@@ -11153,6 +13539,14 @@ const MIC_MIN_STABLE_FRAMES = 3;
 const MIC_SIGNAL_RMS = 0.012;
 const MIC_SILENCE_RMS = 0.008;
 const MIC_SILENCE_REARM_MS = 140;
+const MIC_ESTIMATOR_MIN_FREQUENCY = 110;
+const MIC_ESTIMATOR_MAX_FREQUENCY = 540;
+const MIC_ESTIMATOR_FFT_SIZE = 8192;
+const MIC_ESTIMATOR_MAX_SAMPLES = 4096;
+const MIC_ESTIMATOR_MIN_CYCLES = 5;
+const MIC_ESTIMATOR_MIN_WINDOW_MS = 80;
+const MIC_YIN_THRESHOLD = 0.18;
+const MIC_MIN_HARMONIC_COVERAGE = 0.58;
 
 function createMicrophoneGate() {
   return {
@@ -11224,12 +13618,33 @@ function setMicrophoneUi(audio, inputText, heardText) {
   refreshParentPanelIfOpen();
 }
 
-function microphonePitchFromFrequency(frequency, confidence) {
-  if (confidence < MIC_ACCEPT_CONFIDENCE) return null;
+function microphonePitchFromFrequency(frequencyOrEstimate, confidence) {
+  const estimate = typeof frequencyOrEstimate === "object" && frequencyOrEstimate
+    ? frequencyOrEstimate
+    : { frequency: frequencyOrEstimate, confidence };
+  if ((Number(estimate.confidence) || 0) < MIC_ACCEPT_CONFIDENCE) return null;
+  const frequency = Number(estimate.frequency);
   const pitch = frequencyToPitch(frequency);
   if (!pitch || Math.abs(pitch.cents) > MIC_ACCEPT_CENTS) return null;
+  if (state.screen === "chapter4" && currentChapter4Action("LP02")) {
+    if (pitch.midi === 48 && estimate.octaveAmbiguous) return null;
+    const chapter4Note = chapter4NoteForMidi(pitch.midi);
+    return chapter4Note ? {
+      ...pitch,
+      note: chapter4Note,
+      confidence: estimate.confidence,
+      octaveAmbiguous: Boolean(estimate.octaveAmbiguous),
+      harmonicCoverage: estimate.harmonicCoverage ?? null
+    } : null;
+  }
   const note = noteForMidi(pitch.midi);
-  return note && !isReservedNote(note) ? { ...pitch, note, confidence } : null;
+  return note && !isReservedNote(note) ? {
+    ...pitch,
+    note,
+    confidence: estimate.confidence,
+    octaveAmbiguous: Boolean(estimate.octaveAmbiguous),
+    harmonicCoverage: estimate.harmonicCoverage ?? null
+  } : null;
 }
 
 async function toggleMicrophone() {
@@ -11260,7 +13675,7 @@ async function toggleMicrophone() {
     if (ctx.state === "suspended") await ctx.resume();
     const source = ctx.createMediaStreamSource(stream);
     const analyser = ctx.createAnalyser();
-    analyser.fftSize = 4096;
+    analyser.fftSize = MIC_ESTIMATOR_FFT_SIZE;
     analyser.smoothingTimeConstant = 0;
     source.connect(analyser);
 
@@ -11320,6 +13735,8 @@ function listenLoop() {
     const gateResult = updateMicrophoneGate(audio, { now, rmsValue, detectedPitch: null });
     if (state.screen === "garden" && currentLs08Action() && gateResult.state === "quiet") {
       releaseGardenInput(null, "麦克风");
+    } else if (state.screen === "chapter4" && currentChapter4Action("LP02") && gateResult.state === "quiet") {
+      releaseGardenInput(null, "麦克风");
     } else if (state.screen === "garden" && gateResult.state !== "releasing") {
       const lesson = currentGardenLesson();
       if (lesson) releaseGardenInput(lesson.midi, "麦克风");
@@ -11335,19 +13752,19 @@ function listenLoop() {
 
   const pitch = estimatePitch(audio.samples, audio.ctx.sampleRate);
   const detectedPitch = pitch
-    ? microphonePitchFromFrequency(pitch.frequency, pitch.confidence)
+    ? microphonePitchFromFrequency(pitch)
     : null;
   const gateResult = updateMicrophoneGate(audio, { now, rmsValue, detectedPitch });
 
   if (!detectedPitch) {
     setMicrophoneUi(audio, "输入：麦克风试听", "听到：再弹清楚一点");
   } else if (gateResult.state === "accepted") {
-    setMicrophoneUi(audio, "输入：麦克风", `听到：${detectedPitch.note.name}`);
+    setMicrophoneUi(audio, "输入：麦克风", `听到：${detectedPitch.note.name || "黑键"}`);
     handleInput(detectedPitch.note.midi, "麦克风");
   } else if (gateResult.state === "held") {
-    setMicrophoneUi(audio, "输入：麦克风听音", `听到：${detectedPitch.note.name} · 等琴音停一下`);
+    setMicrophoneUi(audio, "输入：麦克风听音", `听到：${detectedPitch.note.name || "黑键"} · 等琴音停一下`);
   } else {
-    setMicrophoneUi(audio, "输入：麦克风试听", `听到：${detectedPitch.note.name} · 稳一稳`);
+    setMicrophoneUi(audio, "输入：麦克风试听", `听到：${detectedPitch.note.name || "黑键"} · 稳一稳`);
   }
 
   audio.raf = requestAnimationFrame(listenLoop);
@@ -11361,41 +13778,156 @@ function rms(samples) {
   return Math.sqrt(sum / samples.length);
 }
 
+function microphoneSpectralAmplitude(samples, sampleRate, frequency) {
+  if (!Number.isFinite(frequency) || frequency <= 0 || frequency >= sampleRate / 2) return 0;
+  let real = 0;
+  let imaginary = 0;
+  let weightSum = 0;
+  const angularStep = (2 * Math.PI * frequency) / sampleRate;
+  const lastIndex = samples.length - 1;
+  for (let index = 0; index < samples.length; index += 1) {
+    const weight = lastIndex > 0 ? 0.5 - 0.5 * Math.cos((2 * Math.PI * index) / lastIndex) : 1;
+    const value = samples[index] * weight;
+    const angle = angularStep * index;
+    real += value * Math.cos(angle);
+    imaginary -= value * Math.sin(angle);
+    weightSum += weight;
+  }
+  return weightSum > 0 ? (2 * Math.hypot(real, imaginary)) / weightSum : 0;
+}
+
+function microphoneHarmonicProfile(samples, sampleRate, frequency, signalPower) {
+  const amplitudes = [];
+  let harmonicPower = 0;
+  for (let harmonic = 1; harmonic <= 6; harmonic += 1) {
+    const harmonicFrequency = frequency * harmonic;
+    if (harmonicFrequency >= sampleRate / 2) break;
+    const amplitude = microphoneSpectralAmplitude(samples, sampleRate, harmonicFrequency);
+    amplitudes.push(amplitude);
+    harmonicPower += (amplitude * amplitude) / 2;
+  }
+  return {
+    amplitudes,
+    coverage: signalPower > 0 ? Math.min(1, harmonicPower / signalPower) : 0
+  };
+}
+
+function microphoneLowOctaveEvidence(profile, signalRms) {
+  const fundamental = profile?.amplitudes?.[0] || 0;
+  const second = profile?.amplitudes?.[1] || 0;
+  const third = profile?.amplitudes?.[2] || 0;
+  const componentFloor = Math.max(0.004, signalRms * 0.10);
+  if (fundamental < componentFloor) return "absent";
+  const fundamentalDominant = fundamental >= second * 0.62;
+  const thirdSupportsFundamental = third >= Math.max(componentFloor, fundamental * 0.32, second * 0.14);
+  if (fundamentalDominant || thirdSupportsFundamental) return "supported";
+  if (second >= fundamental * 1.25) return "ambiguous";
+  return "supported";
+}
+
 function estimatePitch(samples, sampleRate) {
-  const minFrequency = 180;
-  const maxFrequency = 540;
-  const minLag = Math.max(1, Math.floor(sampleRate / maxFrequency));
-  const maxLag = Math.min(Math.floor(samples.length / 2), Math.floor(sampleRate / minFrequency));
-  let bestLag = 0;
-  let bestScore = 0;
+  if (!samples?.length || !Number.isFinite(sampleRate) || sampleRate <= 0) return null;
+  const minimumSamples = Math.max(
+    Math.ceil((sampleRate / MIC_ESTIMATOR_MIN_FREQUENCY) * MIC_ESTIMATOR_MIN_CYCLES),
+    Math.ceil((sampleRate * MIC_ESTIMATOR_MIN_WINDOW_MS) / 1000)
+  );
+  if (samples.length < minimumSamples) return null;
 
-  for (let lag = minLag; lag <= maxLag; lag += 1) {
-    let dot = 0;
-    let leftEnergy = 0;
-    let rightEnergy = 0;
-    const limit = samples.length - lag;
+  const stride = Math.max(1, Math.floor(samples.length / MIC_ESTIMATOR_MAX_SAMPLES));
+  const sampleCount = Math.min(MIC_ESTIMATOR_MAX_SAMPLES, Math.floor(samples.length / stride));
+  const prepared = new Float64Array(sampleCount);
+  let mean = 0;
+  for (let index = 0; index < sampleCount; index += 1) {
+    let value = 0;
+    for (let offset = 0; offset < stride; offset += 1) value += Number(samples[index * stride + offset]) || 0;
+    prepared[index] = value / stride;
+    mean += prepared[index];
+  }
+  mean /= sampleCount;
+  let signalPower = 0;
+  for (let index = 0; index < sampleCount; index += 1) {
+    prepared[index] -= mean;
+    signalPower += prepared[index] * prepared[index];
+  }
+  signalPower /= sampleCount;
+  const signalRms = Math.sqrt(signalPower);
+  if (!Number.isFinite(signalRms) || signalRms < MIC_SIGNAL_RMS) return null;
 
-    for (let index = 0; index < limit; index += 1) {
-      const left = samples[index];
-      const right = samples[index + lag];
-      dot += left * right;
-      leftEnergy += left * left;
-      rightEnergy += right * right;
+  const estimatorSampleRate = sampleRate / stride;
+  const minLag = Math.max(2, Math.floor(estimatorSampleRate / MIC_ESTIMATOR_MAX_FREQUENCY));
+  const maxLag = Math.min(
+    Math.floor(sampleCount / 2),
+    Math.ceil(estimatorSampleRate / MIC_ESTIMATOR_MIN_FREQUENCY)
+  );
+  const comparisonLength = sampleCount - maxLag;
+  if (comparisonLength <= maxLag) return null;
+
+  const difference = new Float64Array(maxLag + 1);
+  const normalizedDifference = new Float64Array(maxLag + 1);
+  normalizedDifference[0] = 1;
+  let runningDifference = 0;
+  for (let lag = 1; lag <= maxLag; lag += 1) {
+    let sum = 0;
+    for (let index = 0; index < comparisonLength; index += 1) {
+      const delta = prepared[index] - prepared[index + lag];
+      sum += delta * delta;
     }
+    difference[lag] = sum;
+    runningDifference += sum;
+    normalizedDifference[lag] = runningDifference > 0 ? (sum * lag) / runningDifference : 1;
+  }
 
-    const denom = Math.sqrt(leftEnergy * rightEnergy);
-    if (denom <= 0) continue;
-    const score = dot / denom;
-    if (score > bestScore) {
-      bestScore = score;
-      bestLag = lag;
+  let candidateLag = 0;
+  let bestLag = minLag;
+  for (let lag = minLag; lag <= maxLag; lag += 1) {
+    if (normalizedDifference[lag] < normalizedDifference[bestLag]) bestLag = lag;
+    if (normalizedDifference[lag] >= MIC_YIN_THRESHOLD) continue;
+    while (lag + 1 <= maxLag && normalizedDifference[lag + 1] < normalizedDifference[lag]) lag += 1;
+    candidateLag = lag;
+    break;
+  }
+  if (!candidateLag) candidateLag = bestLag;
+  const yinConfidence = 1 - normalizedDifference[candidateLag];
+  if (yinConfidence < MIC_DETECT_CONFIDENCE) return null;
+
+  let refinedLag = candidateLag;
+  if (candidateLag > minLag && candidateLag < maxLag) {
+    const left = normalizedDifference[candidateLag - 1];
+    const center = normalizedDifference[candidateLag];
+    const right = normalizedDifference[candidateLag + 1];
+    const denominator = left - (2 * center) + right;
+    if (Math.abs(denominator) > 1e-9) {
+      refinedLag += Math.max(-0.5, Math.min(0.5, (0.5 * (left - right)) / denominator));
     }
   }
 
-  if (bestScore < MIC_DETECT_CONFIDENCE || bestLag <= 0) return null;
+  let frequency = estimatorSampleRate / refinedLag;
+  let profile = microphoneHarmonicProfile(prepared, estimatorSampleRate, frequency, signalPower);
+  let octaveAmbiguous = false;
+  if (frequency / 2 >= MIC_ESTIMATOR_MIN_FREQUENCY) {
+    const lowerFrequency = frequency / 2;
+    const lowerProfile = microphoneHarmonicProfile(prepared, estimatorSampleRate, lowerFrequency, signalPower);
+    const lowerEvidence = microphoneLowOctaveEvidence(lowerProfile, signalRms);
+    if (lowerEvidence === "supported" && lowerProfile.coverage >= MIC_MIN_HARMONIC_COVERAGE) {
+      frequency = lowerFrequency;
+      profile = lowerProfile;
+    } else if (lowerEvidence === "ambiguous") {
+      octaveAmbiguous = true;
+    }
+  }
+  const resolvedLowEvidence = microphoneLowOctaveEvidence(profile, signalRms);
+  if (resolvedLowEvidence === "ambiguous") octaveAmbiguous = true;
+  if (profile.coverage < MIC_MIN_HARMONIC_COVERAGE) return null;
+
   return {
-    frequency: sampleRate / bestLag,
-    confidence: bestScore
+    frequency,
+    confidence: Math.min(0.99, (yinConfidence * 0.72) + (profile.coverage * 0.28)),
+    octaveAmbiguous,
+    harmonicCoverage: profile.coverage,
+    sampleCount: samples.length,
+    analysisWindowMs: (samples.length / sampleRate) * 1000,
+    minFrequency: MIC_ESTIMATOR_MIN_FREQUENCY,
+    maxFrequency: MIC_ESTIMATOR_MAX_FREQUENCY
   };
 }
 
@@ -11481,7 +14013,19 @@ function registerPwaShell() {
 document.addEventListener("pointerdown", unlockAudioFromGesture, { capture: true, passive: true });
 document.addEventListener("pointerup", releaseLs08PointerFromDocument, { capture: true });
 document.addEventListener("pointercancel", releaseLs08PointerFromDocument, { capture: true });
-window.addEventListener("blur", clearAllLs08PointerActivations);
+document.addEventListener("pointerup", releaseChapter4BubblePointerFromDocument, { capture: true });
+document.addEventListener("pointercancel", releaseChapter4BubblePointerFromDocument, { capture: true });
+window.addEventListener("blur", () => {
+  clearAllLs08PointerActivations();
+  clearAllChapter4BubblePointerActivations();
+  interruptTeachingPianoSequence("window-blur");
+});
+document.addEventListener("visibilitychange", () => {
+  if (document.visibilityState === "hidden") interruptTeachingPianoSequence("document-hidden");
+});
+window.addEventListener("pagehide", () => {
+  interruptTeachingPianoSequence("pagehide");
+});
 document.addEventListener("keydown", (event) => {
   if (!event.metaKey && !event.ctrlKey && !event.altKey) unlockAudioFromGesture();
 }, { capture: true });
@@ -11507,7 +14051,72 @@ els.mapShell.querySelectorAll(".map-node").forEach((node) => {
     if (bundle) startSessionBundleFromMap(bundle.bundleId, node.dataset.level);
   });
 });
-els.gardenRestMarker?.addEventListener("click", startGardenFromMap);
+els.gardenRestMarker?.addEventListener("click", () => {
+  if (hasFormalChapter4EntranceEvidence()) startChapter4FromMap();
+  else startGardenFromMap();
+});
+els.chapter4Bubbles?.querySelectorAll(".chapter4-bubble[data-bubble-id]").forEach((bubble) => {
+  bubble.addEventListener("pointerdown", (event) => {
+    const startsNewPress = beginChapter4BubblePointerActivation(bubble.dataset.bubbleId, event);
+    try { bubble.setPointerCapture?.(event.pointerId); } catch (error) { /* Document-level release remains authoritative. */ }
+    if (startsNewPress) handleChapter4BubbleActivation(bubble.dataset.bubbleId, "touch-bubble");
+    else {
+      const attempt = ensureChapter4Attempt();
+      attempt?.observations?.push({ event: "overlap-bubble", bubbleId: bubble.dataset.bubbleId, phase: attempt.phase, occurredAt: new Date().toISOString() });
+      persistChapter4Attempt();
+    }
+  });
+  bubble.addEventListener("pointerup", (event) => {
+    if (chapter4BubbleDocumentReleaseEvents.has(event)) return;
+    endChapter4BubblePointerActivation(bubble.dataset.bubbleId, event);
+  });
+  bubble.addEventListener("pointercancel", (event) => {
+    if (chapter4BubbleDocumentReleaseEvents.has(event)) return;
+    endChapter4BubblePointerActivation(bubble.dataset.bubbleId, event);
+  });
+  bubble.addEventListener("click", (event) => {
+    if (consumeChapter4BubblePointerClick(bubble.dataset.bubbleId, event)) return;
+    handleChapter4BubbleActivation(bubble.dataset.bubbleId, "accessible-bubble");
+  });
+});
+els.chapter4StartCheck?.addEventListener("click", () => {
+  unlockChapter4AudioFromGesture();
+  const attempt = ensureChapter4Attempt();
+  if (!attempt) return;
+  if (attempt.levelId === "LP02" && attempt.phase === "lp02-reconnect-ready") {
+    startLp02Reconnect();
+    return;
+  }
+  if (attempt.levelId !== "LP01") return;
+  if (attempt.phase === "lp01-model-ready") startLp01ModelStep(attempt.modelIndex || 0);
+  else beginLp01Check();
+});
+els.chapter4Replay?.addEventListener("click", () => {
+  unlockChapter4AudioFromGesture();
+  const attempt = ensureChapter4Attempt();
+  if (!attempt) return;
+  if (attempt.phase === "sound-paused") recoverChapter4Sound();
+  else if (attempt.levelId === "LP01" && attempt.phase === "lp01-model") {
+    attempt.modelActiveBubbleId = "bubble-1";
+    startLp01ModelStep(0, { replay: true });
+  } else if (attempt.levelId === "LP01" && ["awaiting-response", "assisted", "visual-assist"].includes(attempt.phase)) {
+    playLp01Target("child-replay");
+  }
+});
+els.chapter4VisualAssist?.addEventListener("click", () => {
+  const attempt = ensureChapter4Attempt();
+  if (!attempt || attempt.levelId !== "LP01" || attempt.phase !== "assisted") return;
+  clearChapter4Timers();
+  attempt.accessibilityVisualAssist = true;
+  attempt.callAccessibilityVisualAssist = true;
+  attempt.targetRevealedBeforeResponse = true;
+  attempt.callTargetRevealedBeforeResponse = true;
+  attempt.needsPractice = true;
+  attempt.openingReviewRequired = true;
+  attempt.phase = "visual-assist";
+  persistChapter4Attempt();
+  renderChapter4Screen();
+});
 els.listeningReplay?.addEventListener("click", () => {
   unlockChapter3AudioFromGesture();
   if (currentLs08Action()) {
@@ -11522,6 +14131,11 @@ els.listeningReplay?.addEventListener("click", () => {
       startLs08GuideRepairPlayback(attempt);
     }
     else if (attempt.phase === "sound-paused" && attempt.soundPauseContext === "guide") playLs08Guide({ replay: Boolean(attempt.pendingGuideReplay) });
+    else if (attempt.phase === "sound-paused" && attempt.soundPauseContext === "pair") {
+      const interruptedReplayReason = attempt.audioTransaction?.payload?.replayReason || attempt.pendingPairReplayReason;
+      const replayReason = interruptedReplayReason === "child-replay" ? "child-replay" : "sound-recovery";
+      playLs08Pair(replayReason);
+    }
     else if (!attempt.guideCompleted || ["guide-ready", "guide-first", "guide-second"].includes(attempt.phase)) playLs08Guide({ replay: true });
     else playLs08Pair(attempt.phase === "sound-paused" ? "sound-recovery" : "child-replay");
     return;
@@ -11685,6 +14299,9 @@ if (state.screen === "garden") {
   } else {
     restoreGardenPendingAttempt();
   }
+} else if (state.screen === "chapter4") {
+  ensureChapter4Attempt();
+  setTimeout(() => resumeChapter4Flow({ fromReload: !state.chapter4DirectMode }), 0);
 }
 render();
 setInstructionFeedback();
