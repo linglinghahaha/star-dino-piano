@@ -2,9 +2,12 @@
 
 状态：`curriculum_story_static_passed / art_package_partial / chapter5_scene_contradicted / runtime_missing / teacher_child_device_evidence_missing`
 
-日期：2026-07-13
+初版日期：2026-07-13
+调度政策复核：2026-07-17
 
 负责人：课程故事、整体调度与独立审查任务。本文只裁决课程、故事和概念素材是否足以进入后续生产，不批准任何素材进入 runtime。
+
+调度政策说明：本文初版时对共享 Administrator 宿主上的 Grok 调用采取全面关闭。后续经过独立能力、会话、原件、哈希和目录边界核验，现行政策已由 `docs/29_PROJECT_COORDINATION_AND_INDEPENDENT_AUDIT.md` 与对应 Grok 批次 manifest 取代旧禁令。Grok 只允许由“星龙工坊媒体候选”任务在明确批次内逐镜头调用，保存 prompt、参考源、会话与原件哈希，并始终保持 `runtimeApproval=false / integrationAllowed=false / releaseCleared=false`。工具可调用、账号可登录或视频生成成功，均不能替代逐帧质量审查、来源清关、外部相似性审查或运行集成批准。
 
 ## 给普通人看的结论
 
@@ -188,7 +191,7 @@
 6. 核对咚咚准确三只角、四足低姿、圆润颈盾和无额外角状尖刺；
 7. 不把琴键、五线谱、音符、音名、唱名或答案烘焙成正式素材；
 8. 不修改 app.js、HTML、CSS、runtime 资产、课程音序、掌握或 session 规则；
-9. 不使用当前共享 Administrator 宿主调用 Grok；
+9. Grok 只可由星龙工坊媒体候选任务按主管当前批次合同调用：固定项目与来源边界、每镜头一次、串行、保留完整 prompt/session/toolCallId/输入输出哈希；遇到认证、消费限制或停止条件立即冻结，不得换号绕过、混入其他项目或直接接入 runtime；
 10. 未经主管独立审查，不向原型任务发送集成建议。
 
 ## 五、仍然缺少的发布证据
