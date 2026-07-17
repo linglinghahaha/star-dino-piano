@@ -1,12 +1,12 @@
 # Chapter 4 LP01-LP02 主管独立验收与运行工作单
 
-状态：`formal_work_order_issued / 343a_gate_passed / runtime_unlocked_for_c4_01_lp01_lp02_only / media_not_approved`
+状态：`accepted_browser_baseline / overhaul_344a_p3 / commit_8cea6d46 / media_not_approved / external_evidence_missing`
 
 ## 一、用途与解锁条件
 
-本文件锁定 `C4-01 / LP01-LP02` 的课程、故事、输入、双八度键盘和证据边界。`overhaul-343a-p2` 已完成第三章自然出口并通过主管独立审查，因此本文件现为下一唯一运行工作单；只授权本文件范围，不授权 LP03+ 或整章铺开。
+本文件锁定 `C4-01 / LP01-LP02` 的课程、故事、输入、双八度键盘和证据边界，并保存其主管验收事实。该切片已在 `overhaul-344a-p3` / `8cea6d46b725c26d2c8272086eab56b271750b18` 独立通过并晋升浏览器基线；本文件不授权 LP03+ 或整章铺开，下一唯一运行工作转为 `docs/49` 的 `AUDIO-A`。
 
-只有以下条件全部满足，主管才可把本草案晋升为正式工作单：
+以下是本工作单当时的解锁条件，现均已满足并保留作历史审计：
 
 1. `C3-07 / LS08` 有冻结提交、独立专项、稳定六视口合同、原尺寸审图和共享回归；
 2. LS08 的未计分 C4 -> C3 地底回声和第三章自然出口真实通过，没有自动创建第四章 session；
@@ -65,6 +65,7 @@
 ### 可见模型
 
 - 两个固定声音泡泡外观、大小、亮度、动作、垂直基线和位置权重相同，分别示范 C4 和 C3；左右映射由 session seed 固定，整轮不随目标交换，并在跨孩子/复习 seed 中保持可平衡。
+- 泡泡左右映射与四题目标顺序必须从可复现但相互独立的 seed 状态派生，不能共用同一哈希低位形成固定答案位置前缀。跨一组确定性 session seed 时，第一题和第二题都必须实际出现 `bubble-1` 与 `bubble-2` 两种答案位置，并覆盖左右映射 x 首题目标的四种组合；孩子不能靠“第一题总点 1、第二题总点 2”通过。
 - 两个泡泡只在模型阶段可由孩子自由重听；模型阶段不计四次 check、stable 或 retained。正式 check 开始后，第一次点泡泡即提交本题首答并播放所选声音，不存在“先试听候选、再决定答案”的免费预听。
 - 声音泡泡和普通说明不显示 `Do/C`、`C3/C4` 或高低答案文字。角色气泡可说“哪个 Do 住得更低”。
 - “哪个 Do 住得更低”只用于模型教学阶段，帮助孩子第一次建立高低概念。四次正式 check 同时包含高目标和低目标，角色必须改用中性问题，例如“刚才是哪一个声音泡泡？”或“听一听，再点同一个声音”；不得继续要求每题都找低音，也不得用“高/低”措辞提前揭示当前目标。
@@ -89,7 +90,7 @@
 - 低音 C 的 reduced-cue stable 必须来自后续独立短课或 opening review 的首答正确；不得在完成四次 LP01 后继续追加检查把 C4-01 拉成长课。
 - A/B 可以作为真实键盘邻居低调出现，但不能成为当前目标、奖励或未教身份考题。
 - 触屏 C3 是核心正确路线；精确 MIDI C3 可写 played，C4 写同名近似但 register wrong。实验麦克风 confirmed C3 最多作为 assisted story completion，不写 LP02 stable/retained；uncertain/noisy/bleed/octave-ambiguous 不算 wrong。
-- 当前浏览器麦克风估音下限高于 C3；实现 LP02 前必须把检测与音符映射明确扩展到至少 `C3-B4`，并保留八度谐波歧义保护。只有真实判为 confirmed C3 的事件才可辅助故事；把 C4、C3 的二次谐波或不稳定低频猜成 C3 必须落到 `octave-ambiguous/uncertain`，不能写 correct、wrong 或 completion。该扩展不得让第一至第三章把 A/B、低音或未教身份变成新目标。
+- 本项目按 MIDI 标准使用 `C3=MIDI 48≈130.81 Hz`、`C4=MIDI 60≈261.63 Hz`；原浏览器估音下限 `110 Hz` 在数值上已经覆盖 C3，但既有门禁没有证明真实 `estimator -> mapper -> gate -> LP02` 路径，也没有充分证明强二次谐波和八度歧义安全。实现 LP02 前必须明确验证 `C3-B4` 音域并保留八度谐波歧义保护。只有真实判为 confirmed C3 的事件才可辅助故事；把 C4、C3 的二次谐波或不稳定低频猜成 C3 必须落到 `octave-ambiguous/uncertain`，不能写 correct、wrong 或 completion。该验证不得把 `C2≈65.41 Hz` 误称为 C3，也不得让第一至第三章把 A/B、低音或未教身份变成新目标。
 
 ## 七、修复与安全停点
 
@@ -181,6 +182,7 @@ LP02 至少记录 `targetMidi=48`、首次实际 MIDI/琴键、`noteNameCorrect`
 1. 只有正式 LS08 clean/assisted/modeled story completion 加未计分地底回声后显示入口；点击才创建 C4-01，stable 不是入口条件，刷新/debug 不自动播放或写证据。
 2. LP01 模型不计分且可自由重听；模型阶段才允许角色问“哪个 Do 住得更低”，check 阶段必须使用不含当前高低答案的中性匹配问题；check 后首次泡泡触摸即提交、无免费候选预听；四次 C3/C4 各两次；target-playing 输入 observation；首答、最多一次目标重听和 `3/4` stable 正确。
 3. 两泡泡同权、固定映射、无角色/声像/位置/颜色泄题；MIDI/mic 不评分。
+   - 跨至少 16 个确定性 session seed 验证 mapping 与 sequence 独立：第一题、第二题的答案位置都不是常量，`bubble-1/bubble-2` 数量平衡或最多差 1，并覆盖左右映射 x 首题目标四种组合。
 4. LP01 困难 early-rest、新 session resume、不计分模型重连和只续 LP02。
    - early-rest 只保留真实 presented calls；未呈现调用数正确，`storyResolvedBySupport=true`，LP01 played/stable 均为 false，LP02 后续成功不清除 needsPractice/opening-review。
 5. LP02 连续 14 白键和真实黑键几何；1024x768、1194x834、1366x1024 无分页、双排或溢出。
@@ -190,9 +192,12 @@ LP02 至少记录 `targetMidi=48`、首次实际 MIDI/琴键、`noteNameCorrect`
 9. LP01 每 1-2 个已解决调用出现中性洞纹进展；困难写 needsPractice/opening-review 队列，LP02 不清除或回填；Chapter 1-3、mastery、retained、音名门禁、PWA 和现有共享回归不变。
 10. 麦克风检测覆盖 simulated confirmed C3，同时把 C4/谐波/低置信/家庭噪声落到正确的近似或不确定状态；不得用扩大频率范围冒充实体 iPad 与原声钢琴通过。LP01 泡泡和 LP02 白键的 pointer、click、键盘/辅助激活各只提交一次，且 child-facing accessibility tree 不泄露目标。输入后即使重绘泡泡或键盘，pointer 状态仍按稳定控件/音符身份延续；页面其他位置的 `pointerup/pointercancel` 与窗口失焦必须幂等释放，不能靠旧 DOM 节点或等待失焦才解除永久 pressed/rearm。
 11. Story mode 的 direct/debug/刷新不造入口或正式证据；显式教师/审计 direct mode 必须 `formalSession=false` 且对 Chapter 3/4 学习历史零写入。
-12. LP01 target、wrong repair、modeled 的地图/刷新恢复保持原音频事务；`scheduled` 不等于 `ended`，不得提前推进洞纹或故事。C4-01 的引导 LP02 即使首答正确也只写 played，LP02 stable 必须保持 0，等待以后独立 reduced-cue session。
+12. LP01 target、孩子选择、wrong repair、modeled 的地图/刷新恢复保持原音频事务；`scheduled` 不等于 `started`，`started` 也不等于 `ended`。教学音根本未启动时，`presentedCallCount`、resolved、scored call 和洞纹必须保持不变；声音恢复后只能计一次。C4-01 的引导 LP02 即使首答正确也只写 played，LP02 stable 必须保持 0，等待以后独立 reduced-cue session。
+13. LP01 `correct-feedback` 和 `lp01-complete` 在回地图、排队回地图和刷新后由持久 phase 幂等恢复：前者只进入下一目标一次，后者只在 early-rest 或 LP02 之间推进一次，不重复 scoredCalls、洞纹、session history 或 LP02 attempt。
+14. LP01 仍在 opening-review 队列时，map 家长区必须优先显示“高低 C 待复习”，同时用普通家长能懂的语言补充低音 C 待找家/已找家；不得显示 `LP01`、`LP02`、`played`、`stable` 等内部代码，也不得让 LP02 的故事完成遮住 LP01 needsPractice。
+15. 正式 LP02 resume 若刷新落在 `lp02-reconnect-ready`，孩子表面必须提供明确的“听两个 C/继续听”手势入口；该重连只播放未计分 C4/C3 模型，不写 LP01/LP02 correct、played、stable 或 retained。
 
-新增一个 phase-bound 六视口合同，至少覆盖：chapter4-entry、LP01-model、target-playing、awaiting-response、wrong、wrong-repair-playing、assisted、sound-paused、LP01-complete、LP01-early-rest、LP01-supported-story-rest、LP02-guide、LP02-middle-C-near-miss、LP02-assisted、LP02-complete、reduced-motion。状态名与实际 phase 必须原子匹配，固定目录三连 internal hash 一致，`runtimeIntegrationAllowed=false`。
+新增一个 phase-bound 六视口合同，至少覆盖：chapter4-entry、LP01-model、target-playing、awaiting-response、wrong、wrong-repair-playing、pair-compare、assisted、visual-assist、sound-paused、LP01-complete、LP01-early-rest、LP01-supported-story-rest、LP02-guide、`lp02-input-playing`、LP02-middle-C-near-miss、LP02-assisted、LP02-complete、reduced-motion。`lp02-input-playing` 必须捕获真实 started、未 ended 且地基尚未安装的 440ms 教学音窗口；当前 `pendingLp02Input.midi` 只能显示中性的 current-playing/pressed 状态，旧 `hit-wrong` 必须清除，ended 前不得提前显示正确或错误结论。状态名与实际 phase 必须原子匹配，固定目录三连 internal hash 一致，`runtimeIntegrationAllowed=false`。
 
 ## 十二、人工与真机仍不可替代
 
@@ -208,8 +213,10 @@ LP02 至少记录 `targetMidi=48`、首次实际 MIDI/琴键、`noteNameCorrect`
 
 ## 十三、当前裁决
 
-- `formal_work_order_issued`：C4-01 的故事地理、LP01/LP02 分轴、困难重连、双八度键盘、证据和门禁已通过解锁审查；原型任务只可实现 `C4-01 / LP01-LP02`。
+- `accepted_browser_baseline`：C4-01 的故事地理、LP01/LP02 分轴、困难重连、双八度键盘、证据和门禁已在冻结提交 `8cea6d46b725c26d2c8272086eab56b271750b18` 晋升；运行身份为 `overhaul-344a-p3`。
+- `audio_P0_and_final_gate_passed`：最终 `app.js` SHA-256 为 `58D4D2721FF0EC28BCCA9D0EE86449407E2C8D77A1CC6FD1CE2AD2B61BD21CD3`；主管完整通过 LS08 `131/131`、C4 `137/137`、音名 `224/224`、audio contract `22/22`、quick/strict bundle，并通过 LP02 外部麦克风地图中断、同 session 显式恢复、排队返回中断单次兑现和反序迟到回调源审。
+- `passed_contract`：C4 合同 `chapter4-lp01-lp02-media-zones-overhaul-344a-v1` 为 6 视口 x 19 状态，三连内部 SHA-256 `620d9340c182a9efff2a96cc7d1f447ccc5c9bf1494d833abd793cbb6b0a21bc`，零 failure、零 browser error，JSON SHA-256 `C59C2DBE8953995D5FFD57C5C4BC8DA0B9A345786389B2312FA5429F7D8F43A6`。
 - `in_scope`：孩子明确点击地底入口、LP01 两模型加四次高低 C 比较、LP02 低音 C 找家、early-rest/resume、声音恢复、连续双八度键盘、专项和 phase-bound 六视口合同。
 - `locked`：LP03+、咚咚完整形象、低音谱表、左手、Chapter 5、正式媒体/语音/音效运行集成和全局重构不得开始。
-- `missing`：运行、专项、合同、截图、双八度真机、真实 MIDI/麦克风、教师、儿童、最终媒体来源、外部相似性与发布清关。
+- `missing`：双八度真机、真实 MIDI/麦克风、教师、儿童、最终媒体来源、外部相似性与发布清关。
 - `not_release_ready`：本工作单只解锁下一浏览器切片，不证明低音教学、设备可靠性或成熟 App 已完成。

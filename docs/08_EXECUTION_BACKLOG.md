@@ -278,7 +278,7 @@ Current progress:
 
 ## Phase 2B: Chapter 3 Listening Garden
 
-Status: completed in browser at `overhaul-343a-p2`. Steps 1-8 passed independent supervisor review. Chapter 4 `C4-01 / LP01-LP02` is now the only unlocked runtime milestone under `docs/46`; media runtime integration remains locked.
+Status: the approved `overhaul-344a-p3` baseline retains the independently reviewed Chapter 3 session, story, input, repair, layout and evidence-shape results and replaces LS08's old timing proxy with the verified teaching-audio lifecycle. M03 and LS01-LS07 still require the staged `docs/49` migration; `AUDIO-A` (M03 and LS01-LS03) is the only current runtime work. Media runtime integration remains locked.
 
 Goal: turn the existing M03 listening seed into a staged story course that links heard piano sound, C/D/E/F/G letter name, Xingya's solfege, real keyboard geography, and neutral story consequences without claiming absolute pitch.
 
@@ -308,7 +308,7 @@ Acceptance:
 
 ## Phase 2C: Chapter 4 First Low-Register Slice
 
-Status: unlocked by the `343a-p2` browser ruling; not implemented. The only runtime work order is `docs/46` for `C4-01 / LP01-LP02`.
+Status: `C4-01 / LP01-LP02` is independently accepted in the `overhaul-344a-p3` browser baseline under `docs/46`. `LP03+` is not unlocked: the only current runtime work is `docs/49` `AUDIO-A`, followed in order by `AUDIO-B` and `AUDIO-C`.
 
 Scope:
 

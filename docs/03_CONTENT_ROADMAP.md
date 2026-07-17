@@ -8,8 +8,8 @@ This is the canonical chapter order. Other planning files must use the same numb
 | --- | --- | --- | --- |
 | 1 | 月亮小家 | middle `C4-G4` note identity and keyboard geography | current Web course |
 | 2 | 星星桥 | treble-staff `C4-G4` reading through physical jump pads | current flagship slice |
-| 3 | 会听的小种子 | guided pitch echo, small-set sound-to-key matching, and two-note aural memory | `LS01-LS08` browser implemented and independently passed at `overhaul-343a-p2` |
-| 4 | 咚咚的低音星球 | high/low contrast, low `C3-G3`, bass staff, left-hand readiness | `LP01-LP02` formal browser work order issued; runtime not implemented |
+| 3 | 会听的小种子 | guided pitch echo, small-set sound-to-key matching, and two-note aural memory | `LS01-LS08` browser behavior is in the approved `overhaul-344a-p3` baseline; LS08 now uses the verified teaching-audio lifecycle, while `LS01-LS07` remain in the staged `docs/49` migration |
+| 4 | 咚咚的低音星球 | high/low contrast, low `C3-G3`, bass staff, left-hand readiness | `overhaul-344a-p3` independently passes the `LP01-LP02` browser slice; `LP03+` remains locked until `AUDIO-A`, `AUDIO-B`, and `AUDIO-C` all pass |
 | 5 | 会唱歌的大家园 | hand alternation, simple two-hand coordination, grand staff | curriculum specified; not implemented |
 
 `音符护照` is a cross-chapter collection/review system, not a numbered chapter. Its child-facing collection is icon-led and records places, helpers and story accomplishments; parent-facing played/stable/retained evidence remains separate, so collection count cannot imply mastery. The A-G word game remains a later optional project.
@@ -59,8 +59,8 @@ The reduced-cue retrieval may move to the next session when the child needed rep
 | `C3-05` | `LS06` | large C/G sound contrast | long vine reaches the far stone |
 | `C3-06` | `LS07` | close E/F sound and keyboard-boundary contrast | tangled flowers separate |
 | `C3-07` | `LS08` | two-note order memory in free time | roots carry the unscored low echo underground |
-| `C4-01` | `LP01-LP02` | high/low C contrast and the low C3 home | cave opens and first foundation stone lands |
-| `C4-02` | `LP03` | low C3-D3-E3 keyboard geography | three stones lock left to right |
+| `C4-01` | `LP01-LP02` | high/low C contrast and the low C3 home | cave opens and the permanent C anchor stone lands |
+| `C4-02` | `LP03` | low C3-D3-E3 keyboard geography | the existing C anchor wakes; D and E join it to complete the three-stone path |
 | `C4-03` | `LP04` | low descending sound-to-key route | cave echo travels downward |
 | `C4-04` | `LP05` | low E3-F3-G3 neighborhood | broad footprints reach the support |
 | `C4-05` | `LP06` | low C-G-C leap preview | arch stone rolls into place |
@@ -259,8 +259,8 @@ Entry conditions:
 | Level | Child-facing mission | New teaching job | Playable note task | Story consequence | Cue fade / check |
 | --- | --- | --- | --- | --- | --- |
 | `LP01` | 地底传来“咚” | hear high vs low before hand/clef labels | distinguish `C3` from `C4` in 4 short calls after two unscored models | every resolved call adds one neutral cave crack; the fourth opens a cave glow | model bubbles may be replayed before check; once check starts, the first bubble touch commits the response and no character/position/stereo cue gives the answer |
-| `LP02` | 低音 C 的家 | same solfege/letter can live in another register | find `C3` at the lower two-black-left home; compare with `C4` | first foundation stone lands | keep `低音 C` large; `C3` stays parent/teacher detail |
-| `LP03` | 三块地基石 | low two-black-group geography | `C3-D3-E3` | three stones lock left to right | fade direct key glow after one guided run |
+| `LP02` | 低音 C 的家 | same solfege/letter can live in another register | find `C3` at the lower two-black-left home; compare with `C4` | the permanent C anchor stone lands beside the cave door | keep `低音 C` large; `C3` stays parent/teacher detail |
+| `LP03` | 三块地基石 | low two-black-group geography | press `C3` to wake/relock the existing anchor, then place `D3-E3` | C stays in place while D and E lock to its right | fade direct key glow after the guided route; never re-float or re-drop C |
 | `LP04` | 地洞回声 | low descending direction plus sound matching | hear/play `E3-D3-C3` | echo lights travel down the cave | hide answer key before sound; reveal locator only after wrong input |
 | `LP05` | 三黑键旁的脚印 | isolate low `F3/G3` and compare `E3-F3-G3` | `E3-F3-G3`, then short random comparison | Dongdong's footprints reach the bridge support | reduce color and future-note labels in check |
 | `LP06` | 咚咚搬大石 | first low-register leap, not hand stretch | sequential `C3-G3-C3` | one heavy arch stone rolls into place | strong locator on first run; no stable claim from this preview alone |
@@ -274,6 +274,7 @@ Chapter 4 guardrails:
 - Exact taught register is `C3-G3` (`MIDI 48-55`). Do not count octave-equivalent notes as bass-staff mastery.
 - Chapter 4-5 play uses one continuous, non-scrolling two-octave keyboard from `C3` through `B4`, so `C3-G3` and `C4-G4` keep their real spatial relationship. Black keys follow real 2/3 groups and key widths never change between levels.
 - Ordinary child copy uses `低音 C/D/E/F/G`, `下面的 C`, or a black-key locator. Only dinosaur dialogue may say `低音 Do/Re/Mi/Fa/Sol`; parent/teacher evidence records `C3/D3/...`.
+- LP02's C foundation stone is a permanent world result. LP03 must render it already seated, use the first C response only to wake or lock that anchor, and add only the D and E stones; refresh, rest, repair, or later checks must never suspend or drop C again.
 - The left hand is introduced in `LP07`, after location and sound are familiar. Before that, high/low is a musical contrast, not a hand test.
 - Do not require a small child to hold a five-key span or play legato. Single-note taps and repositioning are valid; fingering is a support layer, not the answer.
 - Microphone may experimentally support the single-note key-response tasks in `LP02-LP06`, but it is not a scored response route for the touch-only high/low comparison in `LP01` and cannot prove hand use or simultaneous coordination.

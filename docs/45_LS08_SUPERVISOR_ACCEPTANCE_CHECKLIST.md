@@ -1,10 +1,10 @@
 # LS08 主管独立验收与运行工作单
 
-状态：`accepted_historical_work_order / 343a_p2_browser_passed / chapter3_exit_passed / chapter4_slice_unlocked`
+状态：`accepted_browser_baseline / 343a_p2_structure_historical / 344a_audio_lifecycle_passed / external_evidence_missing`
 
 ## 一、用途与解锁条件
 
-本文件锁定 `C3-07 / LS08`“根须记两声”的课程、故事、输入和证据边界。该工作单已由 `overhaul-343a-p2` 完成并通过主管独立审查，现保留为历史验收事实源；下一运行工作已转入 `docs/46` 的 `C4-01 / LP01-LP02`。它仍不授权 LP03+、全局重构或未批准媒体集成。
+本文件锁定 `C3-07 / LS08`“根须记两声”的课程、故事、输入和证据边界。`overhaul-343a-p2` 保留为 session、故事、输入、离散起音、错误修复、布局和出口状态的历史结构事实源；2026-07-16 发现的排程/墙钟音频证据问题，已由 `overhaul-344a-p3` 的共享受控句柄、真实最后 `onended`、interrupted/sound-paused、恢复和反序回调门禁重新建立浏览器证据。当前仍不授权 LP03+、全局重构或未批准媒体集成；下一运行范围是 `docs/49` 的 `AUDIO-A`。
 
 以下解锁条件已经满足，并保留为提交前复核清单：
 
@@ -279,9 +279,11 @@ Stable 必须同时满足：
 
 ## 十七、当前裁决
 
-- `passed_browser`：冻结提交 `d218df468aa7458b672fc540bd3996752b81e9ef`、运行身份 `overhaul-343a-p2`、LS08 专项 `118/118`、共享回归、quick/strict bundle 和 PWA 均通过。第一完整回答、C-C 离散起音、整组重听、wrong/assisted/modeled、跨 session、声音恢复、未计分低音回声、家长证据和第三章自然出口均有自动化证据。
-- `passed_contract`：V2 合同为 6 视口 x 14 实际 phase，三连内部 SHA-256 均为 `92ab00d2dec178dd33db2a937eceac1aa0408d4ddbff03be09d5555c0ca0219f`，零 failure、零 browser error、零 hidden target carrier；JSON SHA-256 为 `687E0F7913871BF560F93378D15BB6143F6454090AB47DFBEB1EE12D197CD115`，8 个源文件哈希与当前提交一致。
+- `passed_browser_structure`：冻结提交 `d218df468aa7458b672fc540bd3996752b81e9ef`、运行身份 `overhaul-343a-p2`、原 LS08 专项 `118/118`、共享回归、quick/strict bundle 和 PWA 证明了第一完整回答、C-C 离散起音、整组重听、wrong/assisted/modeled、跨 session、家长证据、普通音名和页面状态。该计数不能再证明教学音真实 started/ended、声音恢复或低回声完成。
+- `historical_contradicted_audio_evidence_resolved_at_344a`：343a 的部分路径以 oscillator 排程和 wall-clock 计时推进声音事务，旧声音结论继续禁止引用；344a 已用共享受控句柄、真实最后 `onended`、interrupted/sound-paused、恢复和反序事件保护重建同一范围的浏览器生命周期证据。
+- `passed_344a_audio_lifecycle`：冻结提交 `8cea6d46b725c26d2c8272086eab56b271750b18`、`app.js` SHA-256 `58D4D2721FF0EC28BCCA9D0EE86449407E2C8D77A1CC6FD1CE2AD2B61BD21CD3`；主管独立复跑 LS08 `131/131`、C4 `137/137`、音名 `224/224`、audio contract `22/22`、quick/strict bundle 均通过。该结论仍是浏览器可审计代理，不证明实体扬声器实际可闻。
+- `passed_344a_contract`：`chapter3-ls08-media-zones-overhaul-344a-v3` 为 6 视口 x 14 实际 phase，三连内部 SHA-256 均为 `7dab39c6068cf1b8d36cb64f37657ef9584f86e1d2fe8e4d134939ad2816aff1`，零 failure、零 browser error；JSON SHA-256 为 `629CF9B7E059DE12254FF4EAA819ECA5723FE74E232E614BC436883B2149938E`，记录最终源码摘要与 `runtimeIntegrationAllowed=false`。
 - `passed_visual_prototype`：地图进入、带路、等待、错误比较、共同帮助、根须完成、未计分地底回声和地图休息的原尺寸层级可读；普通界面只显示音名字母，唱名只在小恐龙气泡。V1/V2 当前 84 张对应 PNG 像素完全一致；其中 72 张文件字节一致、12 张仅 PNG 编码/元数据不同，旧 gate log 的 80/4 字节统计已过期但不构成像素回归。
-- `unlocked`：`docs/46` 的 `C4-01 / LP01-LP02` 窄切片可作为下一正式运行工作单；LP03+、完整咚咚揭晓、左手、低音谱表、Chapter 5 和媒体运行集成继续锁定。
+- `current_baseline`：LS08 与 `docs/46` 的 `C4-01 / LP01-LP02` 已共同进入 344a 获批浏览器基线。LP03+、完整咚咚揭晓、左手、低音谱表、Chapter 5 和媒体运行集成继续锁定；先完成 `docs/49` 三批迁移。
 - `missing`：当前花园仍是扁平 CSS/线稿原型，明显低于地图 3D 美术；实体 iPad Safari、真实 MIDI、原声钢琴麦克风、耳机/扬声器/iPad 听审、教师、3-5 名儿童、最终素材来源、外部相似性、原生工程、TestFlight 与商店证据仍缺失。
 - `not_release_ready`：本裁决证明第三章浏览器教学闭环，不证明真实儿童已经学会、发布美术完成或成熟 App 已完成。
