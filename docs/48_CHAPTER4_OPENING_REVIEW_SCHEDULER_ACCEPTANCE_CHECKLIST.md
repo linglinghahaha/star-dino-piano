@@ -26,6 +26,8 @@
 
 同一优先级使用最早未处理的合格证据。调度迁移时，LP01 读取现有 `openingReviewQueue` 与证据，LP02 从 `needsPractice` 或 played-but-not-stable 证据创建独立候选；迁移必须幂等，刷新或重复启动不能生成重复项。`LP01` 和 `LP02` 都形成候选时，先处理 LP01 的听辨缺口；LP02 的键位复习保留到以后，不在同一 session 连做两个 review。
 
+优先级不能变成“同一个困难技能永久霸占开场”。一次 review 若用了 repeated repair、strong、modeled、visual-assist 或因长等待收短，该候选仍保留，但写入 `cooldownAfterSessionId=<本次 review sessionId>`。在 session 历史中出现至少一个**后来结束的、不同 sessionId 的正式孩子 session**之前，它暂时不参与选择；调度器可以选择下一条合格候选，也可以让新故事正常开始。这个冷却只用于控制枯燥度，不删除 needsPractice、不降低证据优先级，也不依赖设备墙钟。刷新、崩溃恢复、debug/direct 和未结束 session 都不能消耗冷却。顺利补教转入 `nextMode=reduced-cue` 时仍只允许下一次独立 session 再检查，不能在同一 session 追加考试。
+
 调度器必须保存明确的 `reviewSkillKey`：
 
 - LP01：沿用已落盘的 `level:LP01`，其语义只代表同名 C 的高低音区听辨；
@@ -83,10 +85,11 @@ LP02 opening review 使用当前已冻结的连续 `C3-B4` 单排键盘和真实
 
 ## 六、状态与队列
 
-- 队列项至少保存 `skillKey`、source session、reason、priority、`nextMode`、`remediationPreparedAt`、createdAt、lastAttemptAt 和状态。
+- 队列项至少保存 `skillKey`、source session、reason、priority、`nextMode`、`remediationPreparedAt`、createdAt、lastAttemptAt、`lastAttemptSessionId`、`cooldownAfterSessionId` 和状态。
 - 创建 review session 后不能立即删除队列项；只有对应 review 真实 ended 后才按结果更新。
 - `passed stable/retained` 可关闭相应队列项；困难结果更新 `needsPractice` 并保留下一次资格，但不得在同一 session 再排第二遍。
 - 队列迁移与每次 review 收口必须幂等：刷新不得把 `nextMode=reduced-cue` 降回 remediation，也不得因技能摘要仍为 needsPractice 生成第二个 LP01 候选。
+- 困难结果的冷却按正式 ended session 历史顺序消费：同一困难候选不能连续霸占两个孩子 session；冷却期间其它候选或新故事可以前进。不得用 `Date.now()`、刷新次数、地图往返或 debug session 假装已经间隔一节。
 - 刷新、地图暂停、PWA 恢复和浏览器崩溃恢复保持同一 review sessionId、call/action index、声音事务和已解决进度。
 - 调试/direct、普通自愿重玩、同日重复和课程内自动演示都不能冒充 opening-review 身份。
 
@@ -108,12 +111,13 @@ LP02 opening review 使用当前已冻结的连续 `C3-B4` 单排键盘和真实
 4. LP02 exact C3、C4 same-name wrong register、其它白键、黑键、MIDI、mic ambiguous 分轴正确。
 5. 同一 session 最多一个 review；困难 review 后新课不自动开始。
 6. review session 创建、刷新、地图暂停、恢复、ended 和队列更新幂等；覆盖“技能 needsPractice 仍为 true，但队列 nextMode 已为 reduced-cue”时不会形成补教死循环或重复候选。
-7. 普通 replay/direct/debug/同日或不足 8 小时均不能 retained。
-8. stable/retained 历史不因后来困难删除；todayNeedsPractice 可同时存在。
-9. LP01/LP02 review 不改变 C 锚石、D/E 石头、LP03 阶段观察或前章证据。
-10. 孩子界面不出现 stable、retained、倒计时、速度、C3/C4 数字或两个 review 清单。
-11. 六视口、辅助激活、pointer/MIDI 生命周期、声音 started/ended、PWA、session、clean-state、quick 和 strict bundle 通过。
-12. `concepts/**`、`audio/**` 和未批准生成视频运行引用为 0。
+7. 困难 review 写入 `cooldownAfterSessionId`；刷新、debug、未结束 session 不消耗冷却，一个后来结束的不同正式 session 才使其重新合格。冷却期间下一候选或新故事可运行，同一困难技能不能连续霸占两个孩子 session。
+8. 普通 replay/direct/debug/同日或不足 8 小时均不能 retained。
+9. stable/retained 历史不因后来困难删除；todayNeedsPractice 可同时存在。
+10. LP01/LP02 review 不改变 C 锚石、D/E 石头、LP03 阶段观察或前章证据。
+11. 孩子界面不出现 stable、retained、倒计时、速度、C3/C4 数字或两个 review 清单。
+12. 六视口、辅助激活、pointer/MIDI 生命周期、声音 started/ended、PWA、session、clean-state、quick 和 strict bundle 通过。
+13. `concepts/**`、`audio/**` 和未批准生成视频运行引用为 0。
 
 ## 九、放行顺序
 

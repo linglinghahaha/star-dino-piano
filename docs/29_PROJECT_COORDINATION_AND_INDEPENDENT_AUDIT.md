@@ -2,6 +2,12 @@
 
 状态：2026-07-18 调度重排继续生效；最新获批浏览器实现基线为 `overhaul-345d-audio-c` / `2405734`，`app.js` SHA-256 为 `DAA50F00F4CCFD8A408631AE934BB39D8B6FB02EB064A99063475C751CD692C6`。它使 M03、LS01-LS08 与第四章 LP01-LP02 的浏览器教学音生命周期完成总回归，并修正 LS06/LS07 第一颗带路音跨地图后第二颗未呈现就开放作答的问题。`docs/49` 现已完成，下一唯一运行工作是按 `docs/47` 实现 `C4-02 / LP03`；LP04+、完整咚咚揭晓、左手、低音谱表、Chapter 5、正式媒体运行集成和全局重构继续锁定。用户要求抢占 Grok 可用窗口后，Batch18 已用一个全新 CH3-A ID 真实触发一次 `image_to_video`；CLI 登录与 `grok-4.5` 可见，但外层 `402`、视频工具 `403 personal-team-blocked:spending-limit`，raw MP4=0，其余七项立即停发。所有媒体候选继续 `runtimeApproval=false / integrationAllowed=false / releaseCleared=false`。现有花园仍是原型级美术，离线音频仍缺人工耳机/扬声器/iPad 听审；远程 Git、真实录音、实体 iPad、教师、儿童、最终来源/外部相似性、原生工程、TestFlight 和商店证据仍缺失，项目整体未达到发布准备状态。
 
+## 2026-07-18 C4-R01 防枯燥调度修正
+
+- 主管复核 `docs/48` 时发现原优先级缺少困难候选的轮换条件：持续 `needsPractice` 的 LP01 可能每个 session 都抢在 LP02 和新故事前，形成补教死循环并破坏 3-5 分钟儿童短课节奏。
+- 现改为基于正式 session 历史的单次冷却。一次 review 使用 repeated repair、strong、modeled、visual-assist 或长等待收短后，保留证据与原优先级，但写 `cooldownAfterSessionId`；至少一个后来结束的不同正式孩子 session 出现前，该候选暂不参选。期间可轮到其它合格 review 或新故事，刷新、debug/direct、地图往返和未结束 session 都不能消耗冷却。
+- `docs/09` 的通用支架规则和 `docs/48` 的字段、状态、自动化清单已经同步。该修正仍是 `prepared_not_dispatched` 规划，不触碰当前 LP03 运行实现，也不提前解锁 C4-R01 或 LP04。
+
 ## 2026-07-18 `overhaul-345d-audio-c` 正式晋升与 LP03 解锁
 
 - 冻结提交：`2405734`；运行身份：`overhaul-345d-audio-c`；最终 `app.js` SHA-256：`DAA50F00F4CCFD8A408631AE934BB39D8B6FB02EB064A99063475C751CD692C6`。提交只包含运行、AUDIO-C/主管专项、共享回归编排、版本断言和 `docs/20`，没有混入主管规划、媒体候选、CSS、美术、课程音序或阈值。

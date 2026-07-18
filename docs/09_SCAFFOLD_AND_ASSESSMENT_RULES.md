@@ -103,6 +103,7 @@ Rules:
 - A wrong first retrieval does not erase earlier progress. Reveal the locator, complete one repair, and schedule that skill sooner.
 - Review order prioritizes `needs practice`, then `played but not stable`, then the oldest stable skill without retained evidence.
 - Schedule at most one required retained/review item in a normal 3-5 minute session. Additional due items remain in the parent-visible queue and cannot turn the child session into a drill list.
+- A difficult review must not monopolize every opening. If a required review ends with repeated repair, strong/modelled help, visual assist, or a long-wait rest, keep its evidence and priority but defer that same item until at least one later, different formal child session has ended. During that history-based cooldown, another eligible review or new story may run. Refresh, debug/direct play, map navigation, and unfinished sessions do not consume the cooldown.
 - Child-facing language never says `考试失败` or `退步`. Parent copy may say `今天需要提示` and `下次再找一次`.
 - Even with the separate retained event now present in the browser runtime, ordinary stable reports must still say `本次减提示完成`; only a qualifying later-session event may say `隔日再次减提示完成`, and neither may say `永久掌握`.
 
