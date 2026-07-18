@@ -1,6 +1,6 @@
 # 星龙工坊整体调度与独立审查规则
 
-状态：2026-07-18 调度重排继续生效；最新获批浏览器实现基线为 `overhaul-345c-audio-b` / `2a8a17529aeffd47a8666f21e175ba822d48347f`，`app.js` SHA-256 为 `E59D9F99C3C1A1406A180D3E88A899EEBD5846A0BCB43E3919973E77D9C3E74D`。它继承 345b 的 AUDIO-A，并使 LS04-LS05 的 target、child replay、wrong repair、modeled、恢复和排队返回通过 AUDIO-B。下一唯一运行工作是 `AUDIO-C`（LS06-LS07）；它与全课程音频生命周期总回归通过前，LP03+、完整咚咚揭晓、左手、低音谱表、Chapter 5、正式媒体运行集成和全局重构继续锁定。Grok Batch15 已执行一次获授权的正式生产尝试，但在 `image_to_video` 前返回 `402 Payment Required: Grok Build usage balance exhausted`；`productionAttemptCount=1`、`videoCallCount=0`、raw MP4=0，Batch16 未创建。所有媒体候选继续 `runtimeApproval=false / integrationAllowed=false / releaseCleared=false`。现有花园仍是原型级美术，离线音频仍缺人工耳机/扬声器/iPad 听审；远程 Git、真实录音、实体 iPad、教师、儿童、最终来源/外部相似性、原生工程、TestFlight 和商店证据仍缺失，项目整体未达到发布准备状态。
+状态：2026-07-18 调度重排继续生效；最新获批浏览器实现基线为 `overhaul-345c-audio-b` / `2a8a17529aeffd47a8666f21e175ba822d48347f`，`app.js` SHA-256 为 `E59D9F99C3C1A1406A180D3E88A899EEBD5846A0BCB43E3919973E77D9C3E74D`。它继承 345b 的 AUDIO-A，并使 LS04-LS05 的 target、child replay、wrong repair、modeled、恢复和排队返回通过 AUDIO-B。下一唯一运行工作是 `AUDIO-C`（LS06-LS07）；它与全课程音频生命周期总回归通过前，LP03+、完整咚咚揭晓、左手、低音谱表、Chapter 5、正式媒体运行集成和全局重构继续锁定。Grok Batch15 已执行一次获授权的正式生产尝试，但在 `image_to_video` 前返回 `402 Payment Required: Grok Build usage balance exhausted`；`productionAttemptCount=1`、`videoCallCount=0`、raw MP4=0。Batch16 现已完成主管独立复核并冻结为 6 项去重队列，其中仅 2 项可在官方非消耗证据确认余额恢复或用户明确确认充值后调用；当前仍为 0 调用/0 新原件。所有媒体候选继续 `runtimeApproval=false / integrationAllowed=false / releaseCleared=false`。现有花园仍是原型级美术，离线音频仍缺人工耳机/扬声器/iPad 听审；远程 Git、真实录音、实体 iPad、教师、儿童、最终来源/外部相似性、原生工程、TestFlight 和商店证据仍缺失，项目整体未达到发布准备状态。
 
 ## 2026-07-18 `overhaul-345c-audio-b` 正式晋升与 `AUDIO-C` 解锁
 
@@ -8,6 +8,14 @@
 - 主管独立复跑通过：AUDIO-B `46/46`、LS04 `39/39`、LS05 `66/66`、AUDIO-A `66/66`、sessions `74/74`、孩子端音名 `224/224`、LS08 `131/131`、Chapter 4 LP01-LP02 `137/137`、PWA `8/8`、音频设置 `13/13`、输入可靠性 `12/12`、quick 与 strict bundle；严格包为 42 个运行文件、1,641,265 bytes，禁止项目/媒体运行引用为 0。
 - 主管额外直接证明 LS04 与 LS05 的最后一次正确 child echo 只有真实 `ended` 后才完成，只消费一次排队地图返回，只回地图一次，且不会自动创建 LS05/LS06。临时探针未进入提交。
 - AUDIO-B 只晋升 LS04-LS05 的浏览器音频生命周期，不证明 LS06-LS07、实体扬声器可闻性、iPad Safari、真实 MIDI/麦克风或儿童学习效果。下一唯一运行工作为 AUDIO-C；不得混入 LP03、UI、美术、媒体或课程调整。
+
+## 2026-07-18 Grok Batch16 离线准备与主管独立裁决
+
+- 媒体任务在不发送新 Grok 请求的前提下索引 Batch1-Batch14 共 `146` 条 raw MP4，并冻结 `concepts/grok-cli-video-capture-2026-07-18-batch16/`。主管没有沿用支线自评，已独立解析 manifest/queue/shortlist，核对 12 条原片 SHA-256、12 个静音审核流和两份参考图哈希，并直接打开 2x6 接触表。
+- 12 条短清单裁决为 `7 passed_source_only / 2 partial_source_only / 3 rejected_source_only`。洞穴、花园边缘、侧探针、完整屋顶和气闸离开只可作受限 source-only；桥只作物理接缝参考；咚咚 03 只作三角身份参考。咚咚头脸消失、脸感舱门和中央目标轮廓继续 rejected，不能因进入新清单而升级。
+- Batch16 队列共 6 项：2 项 `call_when_authorized`，2 项 `deterministic_derive`，1 项 `existing_partial_no_call`，1 项 `source_gated`。可调用项仅为非方向性洞穴微震/边缘尘粒和使用干净三角咚咚裁切的右侧倾听微动作；两份来源 SHA 与 queue 完全一致。Batch16 当前 `videoCallCount=0`、`successfulOriginals=0`、raw MP4=0。
+- `grok 0.2.93` 仍显示已登录且 `grok-4.5` 可见，但官方 CLI 无非消耗余额/用量查询命令；最后已知 provider 状态仍是 Batch15 的 `402 Grok Build usage balance exhausted`。不得用视频调用探测余额、重试 Batch15-03、换号或绕过消费限制。
+- 主管独立扫描确认 Batch16 跨项目标识 0、运行引用 0；`runtimeApproval=false / integrationAllowed=false / releaseCleared=false`。本裁决只通过离线清单和未来调用准备，不批准生成结果、运行集成、版权来源或发布清关。
 
 ## 2026-07-17 `overhaul-345b-audio-a` 正式晋升与 `AUDIO-B` 解锁
 
@@ -376,7 +384,7 @@
 | --- | --- | --- | --- | --- |
 | 课程故事/主管 | `active / 345c AUDIO-B approved / AUDIO-C dispatching` | 维护课程、故事、成熟 App 总账本与唯一放行裁决；冻结 AUDIO-C 合同并复核媒体额度事实 | 不写运行文件或媒体；只在会虚构教学证据、串项目、改课程或污染来源的 P0/P1 时介入；普通建议等里程碑交接 | AUDIO-C 冻结回执；额度恢复或新的 Grok 停止证据 |
 | 原型/UI | `idle / approved runtime 345c / waiting AUDIO-C` | 下一轮只迁移 LS06-LS07 guide、hidden pair、whole-pair replay、repair/model 与恢复来源 | 不做 LP03、UI/美术、媒体接入、课程或阈值修改；AUDIO-C 独立审查前不提交其它运行工作 | 主管下发 AUDIO-C 窄合同后开始；完成时给新 SHA 与全门禁 |
-| 动画/语音/音效 | `active_offline / Batch15 quota_failed_before_media_tool` | 优先整理 Batch1-Batch14 已有 Grok 原件、去重审核并冻结余额恢复后的新镜头队列 | 不改 runtime/课程/主管文档，不上传录音或个人资料，不生成琴键/谱表/答案 UI，不重试 Batch15-03 或用付费调用探测余额 | 官方非消耗证据确认余额恢复，或用户明确告知已充值后，才用新批次串行生成 |
+| 动画/语音/音效 | `idle_ready / Batch16 offline queue independently passed / quota blocked` | 保持 146 条原件索引、12 条短清单和 6 项去重队列；只有 2 项可在余额恢复后调用 | 不改 runtime/课程/主管文档，不上传录音或个人资料，不生成琴键/谱表/答案 UI，不重试 Batch15-03 或用付费调用探测余额 | 官方非消耗证据确认余额恢复，或用户明确告知已充值后，才按 Batch16 串行生成 |
 | 用户/真机/儿童证据 | `protocols_ready / participants_and_devices_waiting` | `docs/37` 已锁定教师/儿童观察；`docs/38` 已锁定实体 iPad、MIDI、麦克风和音频测试 | 不要求现在提供私密录音、孩子资料或伪造真机截图；先让运行流程稳定 | 冻结纵切后才请求方向性观察；原生 N0/N1 后才执行真机矩阵；最终候选再做 3-5 名复测 |
 
 工作区当前的已复核浏览器基线是 `overhaul-345c-audio-b`，冻结提交为 `2a8a17529aeffd47a8666f21e175ba822d48347f`。它保留第一、二章、第三章 `LS01-LS08` 与第四章 LP01-LP02 的课程、session、输入、错误修复、故事和布局结构，并证明 LS08/C4、AUDIO-A 的 M03/LS01-LS03 以及 AUDIO-B 的 LS04-LS05 受控教学音生命周期；LS06-LS07 仍须按 `docs/49` 完成 AUDIO-C。它不是媒体集成、实体 iPad、真实学习效果或 Release 基线。任何 source-only 视频或后续未冻结运行都不能冒充新基线。
@@ -386,7 +394,7 @@
 | 顺序 | 所有者 | 指令 | 当前动作 |
 | --- | --- | --- | --- |
 | `NOW-RUNTIME` | 原型/UI | 按 `docs/49` 只做 `AUDIO-C`：LS06-LS07 的 guide、hidden pair、whole-pair replay、repair/model、地图/刷新和来源保持 | `dispatch_ready / 345c_clean_baseline / do_not_merge` |
-| `NOW-MEDIA` | 媒体 | Batch15 已在媒体工具前以 402 余额失败冻结；离线筛选已有原件并准备新批次，禁止重试 03 或用视频调用探测额度 | `quota_failed_before_image_to_video / offline_review_active / runtime_and_release_forbidden` |
+| `NOW-MEDIA` | 媒体 | Batch16 已独立通过离线清单审查：6 项中仅 2 项待授权调用；等待余额恢复证据，禁止重试 Batch15-03 或用视频调用探测额度 | `batch16_offline_queue_passed / quota_clearance_missing / runtime_and_release_forbidden` |
 | `NEXT-RUNTIME` | 主管 -> 原型/UI | AUDIO-C 独立通过并单独提交后执行全课程音频生命周期总回归；全部通过才解锁 LP03 | `strictly_sequenced / do_not_merge` |
 | `NEXT-LP03` | 主管 -> 原型/UI | 只有 `docs/49` 全课程迁移独立通过后，才按 `docs/47` 实现 LP03 | `runtime_locked / do_not_dispatch` |
 | `NEXT-AUDIO-AUDIT` | 主管 | 现有离线 LS04 包只保持历史通过；等待真人耳机/扬声器/iPad 听审，不能用自动响度与哈希冒充听感 | `offline_package_passed / runtime_forbidden / human_and_ipad_listening_missing` |
@@ -398,7 +406,7 @@
 | `EXTERNAL-EVIDENCE` | 主管/教师/家长 | 按 `docs/37` 执行教师复核、方向性儿童观察和最终 3-5 名复测 | `protocol_ready / observations_locked_by_frozen_build` |
 | `DEVICE-EVIDENCE` | 未来原生任务/主管 | 按 `docs/38` 执行实体 iPad、触屏、USB/BLE MIDI、麦克风、音频会话、生命周期和压力矩阵 | `protocol_ready / native_and_hardware_evidence_missing` |
 | `IP-EVIDENCE` | 主管/媒体/外部专业人员 | 按 `docs/39` 收齐来源包、最终哈希、独立视觉/音乐相似性复核和发布地区专业意见 | `protocol_ready / final_assets_and_external_clearance_missing` |
-| `PARALLEL-MEDIA` | 媒体 | Batch13 为 12 调用/12 原件，Batch14 为 5 调用/4 原件并以 402/403 spending-limit 停止；Batch15 一次正式尝试在媒体工具前以 402 余额耗尽停止，0 视频调用/0 原件 | `batch13_14_frozen / batch15_quota_failed_before_media_tool / offline_review_active / runtime_and_release_forbidden` |
+| `PARALLEL-MEDIA` | 媒体 | Batch13 为 12 调用/12 原件，Batch14 为 5 调用/4 原件；Batch15 一次正式尝试在媒体工具前以 402 停止；Batch16 已索引 146 条历史原件并冻结 6 项队列，当前 0 调用/0 新原件 | `batch13_14_frozen / batch15_quota_failed / batch16_offline_queue_passed / runtime_and_release_forbidden` |
 | `PARALLEL-ART` | 媒体 | 从已选源概念确定性提取 Chapter 3 garden-mode 星芽 512px 透明候选；不写 runtime、不调用生成服务 | `completed / approved_for_339b_prototype_copy_only / release_not_cleared`；Chapter 4/5 批量概念仍暂缓 |
 | `PARALLEL-AUDIO` | 媒体 | 复核 LS04 现有无音高反馈/Foley 与 C4/D4 教学音并播；只做本地确定性审核资产 | `completed / independently_passed_offline_package / runtime_forbidden / human_listening_missing` |
 | `PARALLEL-GARDEN-ART` | 媒体 | LS06/LS07 garden-art-v3 源包已收口并经主管独立审查；22 个透明道具保留为后续整合候选，knot3 拒绝，真实四步进度整合板仍缺失 | `completed_source_package / independently_audited / progression_integration_board_missing / runtime_locked / recording_closed` |
@@ -899,7 +907,7 @@ Chapter 3 媒体保护区合同：
 1. `overhaul-345c-audio-b` / `2a8a17529aeffd47a8666f21e175ba822d48347f` 是当前获批浏览器基线；它继承 345b 的第一至第三章结构、LS08 与第四章 LP01-LP02，并使 LS04-LS05 通过 AUDIO-B。LS06-LS07 仍不能写成声音整体通过。
 2. `C` 的有效 Git、LFS 与 WAV/PDF 忽略证明已通过；首个源码基线为 `b431c1ab347dd813ac1aa712a05c5f7ab150cf55`，没有远程仓库，也没有接收录音。后续修正必须用新 commit，不得重写该基线。
 3. 当前唯一运行工作是 `docs/49` 的 `AUDIO-C`（LS06-LS07）。它独立通过并提交后必须执行全课程音频生命周期总回归；不得混入 UI、美术、媒体、LP03 或课程阈值。
-4. Chapter 3 source-only 美术已有多个候选和整合板；Grok Batch13/14 已冻结，Batch15 的一次正式尝试在 `image_to_video` 前因余额耗尽停止。媒体现在只离线筛选既有原件并准备新批次；额度恢复后的新结果仍须逐帧去重并做真实 UI 合成审查，禁止复制到 runtime、改课程或打断 AUDIO-C。
+4. Chapter 3 source-only 美术已有多个候选和整合板；Grok Batch13/14 已冻结，Batch15 的一次正式尝试在 `image_to_video` 前因余额耗尽停止。Batch16 的 146 条历史原件索引、12 条短清单和 6 项去重队列已独立通过，当前仅 2 项可在余额恢复后调用；任何新结果仍须逐帧去重并做真实 UI 合成审查，禁止复制到 runtime、改课程或打断 AUDIO-C。
 5. 可在冻结 `345c` 上准备不收集身份、声音或影像的非音频方向性观察；M03/LS01-LS05 听音方向性观察可引用 AUDIO-A/B，LS06-LS07 要等 AUDIO-C 通过。任何早期观察都不能外推到 LP03+、第五章或最终发布。
 6. `docs/46` 已成为 Chapter 4 `C4-01 / LP01-LP02` 的历史通过记录；LP03+、完整咚咚揭晓、左手、低音谱表、Chapter 5 和媒体运行集成继续锁定。
 7. 所有媒体运行集成都必须逐文件哈希、真实 UI 合成、来源/相似性、教学安全和运行回归分别通过；source-clearance、技术预演或生成成功不能自动变成 runtime approved。
