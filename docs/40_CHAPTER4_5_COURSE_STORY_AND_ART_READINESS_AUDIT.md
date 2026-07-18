@@ -1,6 +1,6 @@
 # Chapter 4-5 Course, Story, and Art Readiness Audit
 
-状态：`curriculum_story_static_passed / art_package_partial / chapter5_scene_contradicted / runtime_missing / teacher_child_device_evidence_missing`
+状态：`curriculum_story_static_passed / chapter4_lp01_lp02_browser_runtime_passed / chapter4_lp03_lp10_runtime_missing / chapter5_runtime_missing / art_package_partial / chapter5_scene_contradicted / teacher_child_device_evidence_missing`
 
 初版日期：2026-07-13
 调度政策复核：2026-07-17
@@ -13,7 +13,7 @@
 
 第四、第五章的教学路线现在是合理且连贯的：孩子先听出同名 C 的高低差别，角色在对话框里把它们都唱作 Do；再找到低音键位，之后才邀请左手；等低音位置熟悉后再读低音谱表。第五章先做一问一答和左右轮流，不会同时弹的孩子也能完成完整故事；同时弹和两小节双层演奏只是可选体验，不会得到更好的结局或奖励。
 
-目前真正未准备好的是美术生产包。已有图片可以帮助讨论角色气质和材质，但不足以直接实现第四、第五章：
+目前 LP01-LP02 已经是可运行、已独立验收的浏览器首切片，但这不等于第四章完成。LP03-LP10、第五章全部运行内容以及成熟美术生产包都还未准备好。已有图片可以帮助讨论角色气质和材质，但不足以直接实现第四、第五章剩余内容：
 
 - 第四章缺少“只听见声音 -> 洞中剪影 -> 局部出现 -> LP05 完整见面”的连续场景状态；
 - 第四章缺少 LP08-LP10 地下谱线、五个准确谱位、桥支撑和六个信号锚的可分层世界状态；
@@ -21,7 +21,7 @@
 - 第五章缺少 TH05 的“两桥墩 -> 两组各四颗星灯 -> 两小节接力桥完成”精确阶段图；
 - 所有现有生成图仍是 source concept，没有最终透明切图、完整来源包、外部相似性清关和真机教学安全区证据。
 
-因此结论不是“第四、第五章要重写”，而是“课程可以保留，美术需要按课程重新补齐”。
+因此结论不是“第四、第五章要重写”，而是“课程可以保留；LP01-LP02 运行首切片已通过，LP03-LP10 与第五章仍需按课程逐段实现，美术需要同步重新补齐”。
 
 ## 一、课程与故事交叉审查
 
@@ -196,11 +196,11 @@
 
 ## 五、仍然缺少的发布证据
 
-- Chapter 4/5 运行实现与自动化；
+- Chapter 4 LP03-LP10 与 Chapter 5 全部运行实现和自动化；LP01-LP02 已是已接受的浏览器运行，不再列为 missing；
 - 真实 iPad 双八度键盘、触屏多点、MIDI 和麦克风证据；
 - 幼儿钢琴教师审查；
 - 3-5 名儿童分短 session 观察；
 - 最终素材来源包、外部相似性和发布地区专业意见；
 - 原生 iPad 工程、TestFlight 和 App Store 审核证据。
 
-在这些证据补齐前，只能说“第四、第五章课程故事规格已静态通过，概念美术部分准备”，不能说成熟 App 已完成。
+在这些证据补齐前，只能说“第四、第五章课程故事规格已静态通过，第四章 LP01-LP02 浏览器首切片已通过，剩余运行与概念美术部分准备”，不能说成熟 App 已完成。
