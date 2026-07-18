@@ -146,7 +146,7 @@ const answerCarrierText = (snapshot) => snapshot.surfaces
   .join(" | ");
 
 const initial = await readM03();
-record("M03 runs the 345c AUDIO-B shell", initial.version.includes("overhaul-345c-audio-b"), initial);
+record("M03 runs the 345d AUDIO-C shell", initial.version.includes("overhaul-345d-audio-c"), initial);
 record("M03 uses the wheel identity and removes the seed identity", initial.allVisibleText.includes("会唱小车轮") && !initial.allVisibleText.includes("听音小种子"), initial);
 record("M03 initial state has no duplicate story ribbon or listening guide", !initial.storyVisible && !initial.guideVisible, initial);
 record("M03 initial coach gives one role-correct invitation", initial.coach.includes("小车轮先唱") && initial.coach.includes("你弹同样的键") && !initial.coach.includes("星芽唱"), initial);

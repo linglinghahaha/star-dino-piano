@@ -100,7 +100,7 @@ try {
     try {
       await openLevel("M01");
       const m01 = await readScene();
-      record(`${viewport.id}: runs the 345c AUDIO-B shell`, m01.version.includes("overhaul-345c-audio-b"), m01);
+      record(`${viewport.id}: runs the 345d AUDIO-C shell`, m01.version.includes("overhaul-345d-audio-c"), m01);
 
       for (const levelId of nonBlueprintLevels) {
         if (levelId !== "M01") await openLevel(levelId);

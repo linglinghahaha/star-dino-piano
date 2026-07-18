@@ -166,6 +166,16 @@ async function waitPhase(page, phases, timeout = 15000) {
   return view(page);
 }
 
+async function waitGuideInputArmed(page, timeout = 12000) {
+  await page.waitForFunction(() => {
+    const runtime = JSON.parse(localStorage.getItem("starDinoSessionRuntime") || "{}");
+    const attempt = runtime.active?.actions?.[runtime.active.actionIndex || 0]?.listeningAttempt;
+    return attempt?.phase === "visible-guide" && attempt.guideInputArmed === true &&
+      Boolean(attempt.audioTransaction?.endedAt) && !state.teachingPlayback;
+  }, null, { timeout });
+  return view(page);
+}
+
 async function start(page, levelId) {
   await page.locator("#gardenRestMarker").click();
   try {
@@ -173,11 +183,14 @@ async function start(page, levelId) {
   } catch (error) {
     throw new Error(`Failed to start ${levelId}: ${JSON.stringify(await view(page))}; browserErrors=${JSON.stringify(errors)}`, { cause: error });
   }
-  return view(page);
+  return waitGuideInputArmed(page);
 }
 
 async function press(page, midi, source = "屏幕") {
-  await page.evaluate(({ note, route }) => window.handleInput(note, route), { note: midi, route: source });
+  await page.evaluate(({ note, route }) => {
+    window.handleInput(note, route);
+    window.releaseGardenInput(note, route);
+  }, { note: midi, route: source });
 }
 
 function hiddenKeyboardIsNeutral(snapshot, targetMidi, allowedWrongMidi = null) {
@@ -225,7 +238,7 @@ async function hiddenDirectionEvidence(levelId, targetMidi) {
 
 async function completeGuide(page, source = "屏幕") {
   for (let step = 0; step < 2; step += 1) {
-    const snapshot = await view(page);
+    const snapshot = await waitGuideInputArmed(page);
     const candidates = snapshot.attempt.levelId === "LS06" ? [60, 67] : [64, 65];
     const guideIndex = snapshot.attempt.guideIndex;
     await press(page, candidates[guideIndex], source);
@@ -245,7 +258,11 @@ async function completeRemaining(page, source = "屏幕") {
     await press(page, waiting.attempt.sequence[waiting.attempt.callIndex], source);
     const after = await view(page);
     if (!after.active || after.attempt?.callIndex >= 4) return;
-    await waitPhase(page, ["correct-feedback", "target-playing", "awaiting-response"]);
+    await page.waitForFunction(() => {
+      const runtime = JSON.parse(localStorage.getItem("starDinoSessionRuntime") || "{}");
+      const attempt = runtime.active?.actions?.[runtime.active.actionIndex || 0]?.listeningAttempt;
+      return !runtime.active || ["correct-feedback", "target-playing", "awaiting-response"].includes(attempt?.phase);
+    }, null, { timeout: 15000 });
   }
 }
 
@@ -262,6 +279,7 @@ await main.page.waitForFunction(() => {
   const active = JSON.parse(localStorage.getItem("starDinoSessionRuntime") || "{}").active;
   return active?.actions?.[active.actionIndex || 0]?.listeningAttempt?.guideIndex === 1;
 }, null, { timeout: 8000 });
+await waitGuideInputArmed(main.page);
 current = await view(main.page);
 record("LS06 second guide aligns G, Sol, and the unique G keyboard target", current.speech.includes("这是 G") && current.speech.includes("我唱 Sol") && current.speech.includes("琴键上的 G，按一下") && current.targetMidis.join(",") === "67" && !/不计题|隐藏|check|明确进入/i.test(`${current.speech} ${current.childSurface}`), current);
 await press(main.page, 67);
@@ -302,6 +320,7 @@ await main.page.waitForFunction(() => {
   const active = JSON.parse(localStorage.getItem("starDinoSessionRuntime") || "{}").active;
   return active?.actions?.[active.actionIndex || 0]?.listeningAttempt?.guideIndex === 1;
 }, null, { timeout: 8000 });
+await waitGuideInputArmed(main.page);
 current = await view(main.page);
 record("LS07 second guide aligns F, Fa, three-black-key locator, and keyboard", current.speech.includes("这是 F") && current.speech.includes("我唱 Fa") && current.speech.includes("三颗黑键左边的 F，按一下") && current.targetMidis.join(",") === "65" && !/不计题|隐藏|check|明确进入/i.test(`${current.speech} ${current.childSurface}`), current);
 await press(main.page, 65);
@@ -352,8 +371,14 @@ await seed(guideRest.page);
 current = await start(guideRest.page, "LS06");
 const guideSessionId = current.active.sessionId;
 await press(guideRest.page, 62);
+await guideRest.page.waitForFunction(() => {
+  const runtime = JSON.parse(localStorage.getItem("starDinoSessionRuntime") || "{}");
+  const attempt = runtime.active?.actions?.[runtime.active.actionIndex || 0]?.listeningAttempt;
+  return attempt?.guideRepairStage === "soft-replay" && attempt?.audioTransaction?.context === "guide-repair" && Boolean(attempt.audioTransaction?.startedAt);
+}, null, { timeout: 12000 });
 current = await view(guideRest.page);
-record("First guide wrong stays unscored and gives one soft equal-position repair", current.phase === "visible-guide" && current.attempt.guideRepairStage === "soft-replay" && current.attempt.guideEvidence.length === 1 && current.attempt.scoredCalls.length === 0 && current.endpoints.every((item) => item.note), current);
+record("First guide wrong stays unscored and gives one soft equal-position repair", current.phase === "visible-guide" && current.attempt.guideInputArmed === false && current.attempt.guideRepairStage === "soft-replay" && current.attempt.guideEvidence.length === 1 && current.attempt.scoredCalls.length === 0 && current.endpoints.every((item) => item.note), current);
+await waitGuideInputArmed(guideRest.page);
 await press(guideRest.page, 62);
 await guideRest.page.waitForFunction(() => document.body.classList.contains("screen-map"), null, { timeout: 10000 });
 current = await view(guideRest.page);

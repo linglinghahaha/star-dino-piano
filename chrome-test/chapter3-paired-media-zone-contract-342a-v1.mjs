@@ -229,13 +229,33 @@ async function press(page, midi) {
   await key.click({ timeout: 12000 });
 }
 
+async function waitForGuideInputArm(page, guideIndex) {
+  await page.waitForFunction((expectedGuideIndex) => {
+    const runtime = JSON.parse(localStorage.getItem("starDinoSessionRuntime") || "{}");
+    const attempt = runtime.active?.actions?.[runtime.active.actionIndex || 0]?.listeningAttempt;
+    return attempt?.phase === "visible-guide" && attempt.guideIndex === expectedGuideIndex &&
+      attempt.guideInputArmed === true && Boolean(attempt.audioTransaction?.endedAt);
+  }, guideIndex, { timeout: 12000 });
+}
+
+async function waitForResponseInputArm(page) {
+  await page.waitForFunction(() => {
+    const runtime = JSON.parse(localStorage.getItem("starDinoSessionRuntime") || "{}");
+    const attempt = runtime.active?.actions?.[runtime.active.actionIndex || 0]?.listeningAttempt;
+    return ["awaiting-response", "assisted-retry", "visual-assist"].includes(attempt?.phase) &&
+      attempt.inputArmed === true && Boolean(attempt.audioTransaction?.endedAt);
+  }, null, { timeout: 12000 });
+}
+
 async function geometry(page, stateName, allowedPhases = expectedActualPhases[stateName], timeout = 12000) {
-  return page.evaluate(async ({ stateName, margin, allowedPhases, timeout }) => {
+  const allowedRepairStages = expectedRepairStages[stateName] || null;
+  return page.evaluate(async ({ stateName, margin, allowedPhases, allowedRepairStages, timeout }) => {
     const currentPhase = () => document.querySelector("#gardenScene")?.dataset.listeningPhase || "map";
     const attemptPhase = () => {
       const runtime = JSON.parse(localStorage.getItem("starDinoSessionRuntime") || "{}");
       return runtime.active?.actions?.[runtime.active.actionIndex || 0]?.listeningAttempt?.phase || "";
     };
+    const repairStage = () => document.querySelector("#gardenScene")?.dataset.repairStage || "none";
     const phaseReady = () => {
       const domPhase = currentPhase();
       if (!allowedPhases.includes(domPhase)) return false;
@@ -246,6 +266,7 @@ async function geometry(page, stateName, allowedPhases = expectedActualPhases[st
         return Boolean(panel && !panel.hidden && panelRect && panelRect.width > 0 && panelRect.height > 0);
       }
       if (!allowedPhases.includes(attemptPhase())) return false;
+      if (allowedRepairStages && !allowedRepairStages.includes(repairStage())) return false;
       return true;
     };
     const deadline = Date.now() + timeout;
@@ -254,8 +275,10 @@ async function geometry(page, stateName, allowedPhases = expectedActualPhases[st
         throw new Error(JSON.stringify({
           stateName,
           allowedPhases,
+          allowedRepairStages,
           domPhase: currentPhase(),
           attemptPhase: attemptPhase(),
+          repairStage: repairStage(),
           url: location.href
         }));
       }
@@ -325,7 +348,7 @@ async function geometry(page, stateName, allowedPhases = expectedActualPhases[st
       overflow: { horizontal: document.documentElement.scrollWidth > innerWidth + 1, vertical: document.documentElement.scrollHeight > innerHeight + 1 },
       keyboardEvidence: { targetCarriers: keyboardTargetCarriers, dynamicKeyCount: keyboardDynamicKeyCount }
     };
-  }, { stateName, margin: clearanceMarginPx, allowedPhases, timeout });
+  }, { stateName, margin: clearanceMarginPx, allowedPhases, allowedRepairStages, timeout });
 }
 
 async function maybeScreenshot(page, spec, stateName) {
@@ -352,13 +375,12 @@ try {
     const guideGeometry = geometry(page, "visible-guide");
     await page.locator("#gardenRestMarker").click();
     states.push({ geometry: await guideGeometry, screenshot: await maybeScreenshot(page, spec, "visible-guide") });
+    await waitForGuideInputArm(page, 0);
     await press(page, levelConfig.candidates[1]);
     states.push({ geometry: await geometry(page, "visible-guide-soft-replay"), screenshot: await maybeScreenshot(page, spec, "visible-guide-soft-replay") });
+    await waitForGuideInputArm(page, 0);
     await press(page, levelConfig.candidates[0]);
-    await page.waitForFunction(() => {
-      const runtime = JSON.parse(localStorage.getItem("starDinoSessionRuntime") || "{}");
-      return runtime.active?.actions?.[0]?.listeningAttempt?.guideIndex === 1;
-    }, null, { timeout: 12000 });
+    await waitForGuideInputArm(page, 1);
     await press(page, levelConfig.candidates[1]);
     states.push({ geometry: await geometry(page, "target-playing"), screenshot: await maybeScreenshot(page, spec, "target-playing") });
     states.push({ geometry: await geometry(page, "awaiting-response"), screenshot: await maybeScreenshot(page, spec, "awaiting-response") });
@@ -373,24 +395,28 @@ try {
     await page.locator("#parentClose").click();
     await page.locator("#listeningReplay").click();
     await phase(page, "awaiting-response");
+    await waitForResponseInputArm(page);
 
     let active = await attempt(page);
     let wrongMidi = active.sequence[active.callIndex] === levelConfig.candidates[0] ? levelConfig.candidates[1] : levelConfig.candidates[0];
     await press(page, wrongMidi);
     states.push({ geometry: await geometry(page, "wrong-known"), screenshot: await maybeScreenshot(page, spec, "wrong-known") });
     await phase(page, "awaiting-response");
+    await waitForResponseInputArm(page);
     await press(page, wrongMidi);
     states.push({ geometry: await geometry(page, "pair-compare"), screenshot: await maybeScreenshot(page, spec, "pair-compare") });
     await phase(page, "awaiting-response");
+    await waitForResponseInputArm(page);
     await press(page, wrongMidi);
     states.push({ geometry: await geometry(page, "assisted-retry"), screenshot: await maybeScreenshot(page, spec, "assisted-retry") });
     await page.locator("#ls05VisualAssist").click();
     states.push({ geometry: await geometry(page, "visual-assist"), screenshot: await maybeScreenshot(page, spec, "visual-assist") });
+    await waitForResponseInputArm(page);
     active = await attempt(page);
     await press(page, active.sequence[active.callIndex]);
     let completedGeometry = null;
     while ((active = await attempt(page))?.callIndex < 4) {
-      await phase(page, "awaiting-response");
+      await waitForResponseInputArm(page);
       active = await attempt(page);
       const completeObserved = active.callIndex === 3 ? geometry(page, "complete") : null;
       await press(page, active.sequence[active.callIndex]);
@@ -408,7 +434,9 @@ try {
     await seed(guideRestPage);
     await guideRestPage.locator("#gardenRestMarker").click();
     await phase(guideRestPage, "visible-guide");
+    await waitForGuideInputArm(guideRestPage, 0);
     await press(guideRestPage, levelConfig.candidates[1]);
+    await waitForGuideInputArm(guideRestPage, 0);
     const guideRestGeometry = geometry(guideRestPage, "guide-rest");
     await press(guideRestPage, levelConfig.candidates[1]);
     states.push({ geometry: await guideRestGeometry, screenshot: await maybeScreenshot(guideRestPage, spec, "guide-rest") });

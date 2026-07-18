@@ -5255,7 +5255,7 @@ function renderKeyboard(target, options = {}) {
         showKeyPressRipple(key);
         // AUDIO-A owns the child echo so a screen press cannot schedule a raw note
         // before its verified input transaction begins on click/keyboard activation.
-        if (!audioATeachingSurfaceIsActive() && !audioBTeachingSurfaceIsActive()) {
+        if (!audioATeachingSurfaceIsActive() && !audioBTeachingSurfaceIsActive() && !audioCTeachingSurfaceIsActive()) {
           played = playPianoNote(note.frequency, { gain: 0.10, duration: 0.42 });
         }
       }
@@ -5303,6 +5303,9 @@ function renderKeyboard(target, options = {}) {
         return;
       }
       handleInput(note.midi, "屏幕");
+      if (state.screen === "garden" && currentPairedListeningAction()) {
+        releaseGardenInput(note.midi, "屏幕");
+      }
     });
     key.addEventListener("blur", () => {
       key.classList.remove("pressed");
@@ -5539,7 +5542,7 @@ function handleInput(midi, source) {
     if (currentLs08Action()) handleLs08Input(midi, source);
     else if (currentListeningAction("LS04")) handleLs04Input(midi, source);
     else if (currentListeningAction("LS05")) handleLs05Input(midi, source);
-    else if (currentPairedListeningAction()) handlePairedListeningInput(midi, source);
+    else if (currentPairedListeningAction()) handleAudioCPairedListeningInput(midi, source);
     else handleGardenInput(midi, source);
     return;
   }
@@ -5662,6 +5665,10 @@ function releaseGardenInput(midi, source) {
   }
   if (currentListeningAction("LS04") || currentListeningAction("LS05")) {
     releaseAudioBInput(midi, source);
+    return;
+  }
+  if (currentPairedListeningAction()) {
+    releaseAudioCInput(midi, source);
     return;
   }
   if (currentListeningAction()) return;
@@ -6523,6 +6530,9 @@ function resetPairedListeningCall(attempt) {
   attempt.callTimingInterrupted = false;
   attempt.callOutOfCandidateRepair = false;
   attempt.respondingCandidate = null;
+  attempt.pendingInput = null;
+  attempt.inputArmed = false;
+  attempt.screenInputHeld = false;
 }
 
 function createPairedListeningAttempt(session = state.activeSession, resumeAttempt = null) {
@@ -6536,6 +6546,7 @@ function createPairedListeningAttempt(session = state.activeSession, resumeAttem
     resumed.guideIndex = 0;
     resumed.guideWrongCount = 0;
     resumed.guideRepairStage = "none";
+    resumed.pendingGuidePresentation = null;
     resumed.guideEvidence = [];
     resumed.openingBoundaryGuideCompleted = false;
     resumed.soundPauseContext = null;
@@ -6560,6 +6571,7 @@ function createPairedListeningAttempt(session = state.activeSession, resumeAttem
     guideIndex: 0,
     guideWrongCount: 0,
     guideRepairStage: "none",
+    pendingGuidePresentation: null,
     guidedInputs: [],
     guideEvidence: [],
     guideRuns: [],
@@ -6567,6 +6579,15 @@ function createPairedListeningAttempt(session = state.activeSession, resumeAttem
     openingBoundaryGuideCompleted: false,
     postPromptBoundaryStrongHelpUsed: false,
     soundPauseContext: null,
+    soundPauseCount: 0,
+    audioTransaction: null,
+    pendingInput: null,
+    inputArmed: false,
+    guideInputArmed: false,
+    screenInputHeld: false,
+    midiHeldMidis: [],
+    observations: [],
+    audioLifecycle: [],
     callIndex: 0,
     scoredCalls: [],
     neutralProgress: 0,
@@ -6612,7 +6633,7 @@ function ensurePairedListeningAttempt() {
     action.listeningAttempt = createPairedListeningAttempt(state.activeSession);
     persistActiveSession();
   }
-  return action.listeningAttempt;
+  return ensureAudioCPairedAttemptState(action.listeningAttempt);
 }
 
 function persistPairedListeningAttempt() {
@@ -6624,6 +6645,476 @@ function clearPairedListeningTimers() {
   if (state.pairedListeningFeedbackTimer) clearTimeout(state.pairedListeningFeedbackTimer);
   state.pairedListeningTimer = null;
   state.pairedListeningFeedbackTimer = null;
+}
+
+function ensureAudioCPairedAttemptState(attempt) {
+  if (!attempt) return attempt;
+  if (!Object.hasOwn(attempt, "audioTransaction")) attempt.audioTransaction = null;
+  if (!Object.hasOwn(attempt, "guideTargetTransition")) attempt.guideTargetTransition = null;
+  if (!Object.hasOwn(attempt, "pendingGuidePresentation")) attempt.pendingGuidePresentation = null;
+  if (!Object.hasOwn(attempt, "pendingInput")) attempt.pendingInput = null;
+  if (!Object.hasOwn(attempt, "inputArmed")) attempt.inputArmed = false;
+  if (!Object.hasOwn(attempt, "guideInputArmed")) attempt.guideInputArmed = false;
+  if (!Object.hasOwn(attempt, "screenInputHeld")) attempt.screenInputHeld = false;
+  if (!Array.isArray(attempt.midiHeldMidis)) attempt.midiHeldMidis = [];
+  if (!Array.isArray(attempt.observations)) attempt.observations = [];
+  if (!Array.isArray(attempt.audioLifecycle)) attempt.audioLifecycle = [];
+  if (!Object.hasOwn(attempt, "soundPauseCount")) attempt.soundPauseCount = 0;
+  return attempt;
+}
+
+function currentAudioCAttempt() {
+  const action = currentPairedListeningAction();
+  return ensureAudioCPairedAttemptState(action?.listeningAttempt || null);
+}
+
+function audioCAttemptIsCurrent(attempt) {
+  const action = currentPairedListeningAction();
+  return Boolean(
+    state.screen === "garden" &&
+    action &&
+    ["LS06", "LS07"].includes(action.targetId) &&
+    action.listeningAttempt === attempt
+  );
+}
+
+function audioCTeachingSurfaceIsActive() {
+  return state.screen === "garden" && Boolean(currentPairedListeningAction());
+}
+
+function persistAudioCAttempt(attempt) {
+  if (!audioCAttemptIsCurrent(attempt)) return;
+  persistPairedListeningAttempt();
+}
+
+function renderAudioCAttempt(attempt) {
+  if (!audioCAttemptIsCurrent(attempt)) return;
+  renderGardenScreen();
+}
+
+function traceAudioCLifecycle(attempt, kind, transaction, extra = {}) {
+  if (!attempt) return;
+  attempt.audioLifecycle.push({
+    kind,
+    context: transaction?.context || null,
+    sequenceKind: transaction?.kind || null,
+    reason: transaction?.reason || null,
+    midis: Array.isArray(transaction?.notes)
+      ? transaction.notes.map((note) => note.midi).filter(Number.isFinite)
+      : (Number.isFinite(transaction?.payload?.midi) ? [transaction.payload.midi] : []),
+    playbackId: transaction?.playbackId || null,
+    scheduledAt: transaction?.scheduledAt || null,
+    startedAt: transaction?.startedAt || null,
+    endedAt: transaction?.endedAt || null,
+    interruptedAt: transaction?.interruptedAt || null,
+    startAudioTime: transaction?.startAudioTime ?? null,
+    endAudioTime: transaction?.endAudioTime ?? null,
+    interruptedAudioTime: transaction?.interruptedAudioTime ?? null,
+    contextState: transaction?.contextState || null,
+    ...extra
+  });
+  attempt.audioLifecycle = attempt.audioLifecycle.slice(-96);
+}
+
+function audioCHeldMidiNotes(attempt) {
+  if (!attempt) return [];
+  const held = [...new Set((attempt.midiHeldMidis || [])
+    .map((midi) => Number(midi))
+    .filter(Number.isFinite))];
+  attempt.midiHeldMidis = held;
+  return held;
+}
+
+function recordAudioCMidiNoteOn(attempt, midi) {
+  const note = Number(midi);
+  const held = audioCHeldMidiNotes(attempt);
+  if (!Number.isFinite(note)) return { blocked: false, wasHeld: false, hadHeld: held.length > 0 };
+  const wasHeld = held.includes(note);
+  const hadHeld = held.length > 0;
+  if (!wasHeld) held.push(note);
+  attempt.midiHeldMidis = held;
+  return { blocked: wasHeld || hadHeld, wasHeld, hadHeld };
+}
+
+function releaseAudioCMidiNote(attempt, midi) {
+  const note = Number(midi);
+  if (!Number.isFinite(note)) return false;
+  const held = audioCHeldMidiNotes(attempt);
+  if (!held.includes(note)) return false;
+  attempt.midiHeldMidis = held.filter((heldMidi) => heldMidi !== note);
+  return true;
+}
+
+function clearAudioCStaleInputHolds(attempt) {
+  if (!attempt) return false;
+  const hadHeld = audioCHeldMidiNotes(attempt).length > 0 || attempt.screenInputHeld === true;
+  attempt.midiHeldMidis = [];
+  attempt.screenInputHeld = false;
+  return hadHeld;
+}
+
+function audioCExternalInputIsActive(attempt) {
+  const transaction = attempt?.audioTransaction;
+  return Boolean(
+    transaction?.context === "external-input" &&
+    !transaction.endedAt &&
+    !transaction.interruptedAt
+  );
+}
+
+function audioCPlaybackIsActive(attempt) {
+  const transaction = attempt?.audioTransaction;
+  const playback = state.teachingPlayback;
+  return Boolean(
+    transaction &&
+    !transaction.endedAt &&
+    !transaction.interruptedAt &&
+    transaction.playbackId &&
+    playback?.id === transaction.playbackId &&
+    ["scheduled", "playing"].includes(playback.status)
+  );
+}
+
+function audioCResponsePhaseAllows(attempt) {
+  return ["awaiting-response", "assisted-retry", "visual-assist"].includes(attempt?.phase);
+}
+
+function audioCInputCanBeArmed(attempt) {
+  const transaction = attempt?.audioTransaction;
+  return Boolean(
+    audioCAttemptIsCurrent(attempt) &&
+    audioCResponsePhaseAllows(attempt) &&
+    !audioCExternalInputIsActive(attempt) &&
+    !attempt.screenInputHeld &&
+    audioCHeldMidiNotes(attempt).length === 0 &&
+    (!transaction || Boolean(transaction.endedAt || transaction.interruptedAt))
+  );
+}
+
+function audioCGuideInputCanBeArmed(attempt) {
+  const transaction = attempt?.audioTransaction;
+  return Boolean(
+    audioCAttemptIsCurrent(attempt) &&
+    attempt.phase === "visible-guide" &&
+    !audioCExternalInputIsActive(attempt) &&
+    !attempt.screenInputHeld &&
+    audioCHeldMidiNotes(attempt).length === 0 &&
+    Boolean(transaction?.endedAt)
+  );
+}
+
+function setAudioCInputArmed(attempt, armed) {
+  if (!attempt) return false;
+  const next = Boolean(armed) && audioCInputCanBeArmed(attempt);
+  attempt.inputArmed = next;
+  if (audioCAttemptIsCurrent(attempt)) {
+    state.gardenInputArmed = next;
+    if (els.gardenScene) els.gardenScene.dataset.inputArmed = next ? "true" : "false";
+  }
+  return next;
+}
+
+function setAudioCGuideInputArmed(attempt, armed) {
+  if (!attempt) return false;
+  const next = Boolean(armed) && audioCGuideInputCanBeArmed(attempt);
+  attempt.guideInputArmed = next;
+  if (audioCAttemptIsCurrent(attempt)) {
+    state.gardenInputArmed = next;
+    if (els.gardenScene) els.gardenScene.dataset.inputArmed = next ? "true" : "false";
+  }
+  return next;
+}
+
+function armAudioCResponse(attempt) {
+  const wasArmed = attempt?.inputArmed === true;
+  const armed = setAudioCInputArmed(attempt, true);
+  if (armed && wasArmed) return true;
+  if (!armed) {
+    persistAudioCAttempt(attempt);
+    renderAudioCAttempt(attempt);
+    return false;
+  }
+  if (attempt.phase === "assisted-retry") schedulePairedListeningAssistedTimeout();
+  else schedulePairedListeningResponseTimeout();
+  persistAudioCAttempt(attempt);
+  renderAudioCAttempt(attempt);
+  return true;
+}
+
+function armAudioCGuideInput(attempt) {
+  const wasArmed = attempt?.guideInputArmed === true;
+  const armed = setAudioCGuideInputArmed(attempt, true);
+  if (armed && wasArmed) return true;
+  if (!armed) {
+    persistAudioCAttempt(attempt);
+    renderAudioCAttempt(attempt);
+    return false;
+  }
+  schedulePairedGuideTimeout();
+  persistAudioCAttempt(attempt);
+  renderAudioCAttempt(attempt);
+  return true;
+}
+
+function recordAudioCObservation(attempt, midi, source, phase = attempt?.phase, extra = {}) {
+  if (!attempt) return;
+  attempt.observations.push({ midi, source, phase, occurredAt: new Date().toISOString(), ...extra });
+  attempt.observations = attempt.observations.slice(-40);
+  attempt.earlyInputs.push({ midi, source, phase, occurredAt: new Date().toISOString(), observation: true, ...extra });
+  attempt.earlyInputs = attempt.earlyInputs.slice(-40);
+  persistAudioCAttempt(attempt);
+}
+
+function writeAudioCTransaction(transaction, playback, field) {
+  transaction.playbackId = playback.id;
+  transaction.scheduledAt = playback.scheduledAt;
+  transaction.startedAt = playback.startedAt;
+  transaction.endedAt = playback.endedAt;
+  transaction.interruptedAt = playback.interruptedAt;
+  transaction.startAudioTime = playback.startAudioTime;
+  transaction.endAudioTime = playback.endAudioTime;
+  transaction.interruptedAudioTime = playback.interruptedAudioTime;
+  transaction.contextState = playback.contextState;
+  transaction.status = playback.status;
+  if (field) transaction.lastLifecycleField = field;
+}
+
+function queueAudioCMapReturn(attempt) {
+  if (!audioCPlaybackIsActive(attempt)) return false;
+  attempt.audioTransaction.returnQueued = true;
+  persistAudioCAttempt(attempt);
+  renderAudioCAttempt(attempt);
+  return true;
+}
+
+function markAudioCQueuedReturnConsumed(attempt, transaction = attempt?.audioTransaction) {
+  if (!transaction?.returnQueued || transaction.returnQueuedConsumedAt) return false;
+  transaction.returnQueued = false;
+  transaction.returnQueuedConsumedAt = new Date().toISOString();
+  traceAudioCLifecycle(attempt, "queued-return-consumed", transaction, {
+    interruption: Boolean(transaction.interruptedAt)
+  });
+  persistAudioCAttempt(attempt);
+  return true;
+}
+
+function consumeAudioCQueuedReturn(attempt, transaction = attempt?.audioTransaction) {
+  if (!markAudioCQueuedReturnConsumed(attempt, transaction)) return false;
+  setTimeout(() => {
+    if (state.screen === "garden") showMapScreen();
+  }, 0);
+  return true;
+}
+
+function handoffAudioCQueuedReturn(attempt, transaction) {
+  const successor = attempt?.audioTransaction;
+  if (!transaction?.returnQueued || !successor || successor === transaction) return false;
+  transaction.returnQueued = false;
+  transaction.returnQueuedHandedOffAt = new Date().toISOString();
+  successor.returnQueued = true;
+  successor.returnQueuedFromPlaybackId = transaction.playbackId || null;
+  persistAudioCAttempt(attempt);
+  if (successor.interruptedAt) consumeAudioCQueuedReturn(attempt, successor);
+  return true;
+}
+
+function enterAudioCSoundPause(attempt, context, reason = "audio-unavailable", { increment = true } = {}) {
+  if (!attempt) return;
+  clearPairedListeningTimers();
+  const transaction = attempt.audioTransaction;
+  const returnQueued = transaction?.returnQueued === true;
+  if (increment) attempt.soundPauseCount += 1;
+  if (transaction && !transaction.endedAt && !transaction.interruptedAt) {
+    transaction.interruptedAt = new Date().toISOString();
+    transaction.status = "interrupted";
+  }
+  attempt.soundPauseContext = context;
+  attempt.phase = "sound-paused";
+  setAudioCInputArmed(attempt, false);
+  setAudioCGuideInputArmed(attempt, false);
+  traceAudioCLifecycle(attempt, "interrupted", transaction, { interruptionReason: reason });
+  persistAudioCAttempt(attempt);
+  renderAudioCAttempt(attempt);
+  if (returnQueued) consumeAudioCQueuedReturn(attempt, transaction);
+}
+
+function startAudioCTeachingSequence(attempt, {
+  context,
+  kind,
+  reason,
+  notes,
+  payload = null,
+  scheduledPhase,
+  playingPhase,
+  onStarted,
+  onEnded,
+  onInterrupted
+} = {}) {
+  if (!audioCAttemptIsCurrent(attempt) || !Array.isArray(notes) || notes.length === 0) return null;
+  const normalizedNotes = notes
+    .filter((note) => Number.isFinite(note?.midi))
+    .map((note) => ({
+      midi: Number(note.midi),
+      delayMs: Math.max(0, Number(note.delayMs) || 0),
+      durationMs: Math.max(1, Number(note.durationMs) || 720),
+      child: Boolean(note.child)
+    }));
+  if (normalizedNotes.length === 0) return null;
+  const transaction = {
+    context,
+    kind,
+    reason,
+    payload: payload ? JSON.parse(JSON.stringify(payload)) : null,
+    notes: normalizedNotes,
+    playbackId: null,
+    scheduledAt: new Date().toISOString(),
+    startedAt: null,
+    endedAt: null,
+    interruptedAt: null,
+    startAudioTime: null,
+    endAudioTime: null,
+    interruptedAudioTime: null,
+    contextState: "scheduled",
+    status: "scheduled",
+    returnQueued: false,
+    returnQueuedConsumedAt: null,
+    outcomeRecorded: false
+  };
+  attempt.audioTransaction = transaction;
+  attempt.soundPauseContext = null;
+  attempt.phase = scheduledPhase || `${context}-scheduled`;
+  setAudioCInputArmed(attempt, false);
+  setAudioCGuideInputArmed(attempt, false);
+  persistAudioCAttempt(attempt);
+  renderAudioCAttempt(attempt);
+
+  const playback = playTeachingPianoSequence({
+    reason: `audio-c-${context}:${reason}`,
+    notes: normalizedNotes.map((note) => ({
+      frequency: noteForMidi(note.midi)?.frequency || midiFrequency(note.midi),
+      gain: note.child ? 0.10 : 0.13,
+      durationMs: note.durationMs,
+      delayMs: note.delayMs
+    })),
+    onStarted: (handle) => {
+      if (!audioCAttemptIsCurrent(attempt) || attempt.audioTransaction !== transaction) return;
+      writeAudioCTransaction(transaction, handle, "started");
+      attempt.phase = playingPhase || scheduledPhase || `${context}-playing`;
+      traceAudioCLifecycle(attempt, "started", transaction);
+      onStarted?.(transaction, handle);
+      persistAudioCAttempt(attempt);
+      renderAudioCAttempt(attempt);
+    },
+    onEnded: (handle) => {
+      if (!audioCAttemptIsCurrent(attempt) || attempt.audioTransaction !== transaction) return;
+      writeAudioCTransaction(transaction, handle, "ended");
+      traceAudioCLifecycle(attempt, "ended", transaction);
+      persistAudioCAttempt(attempt);
+      onEnded?.(transaction, handle, { returnQueued: transaction.returnQueued === true });
+      if (!audioCAttemptIsCurrent(attempt) || attempt.audioTransaction !== transaction) return;
+      persistAudioCAttempt(attempt);
+      renderAudioCAttempt(attempt);
+      consumeAudioCQueuedReturn(attempt, transaction);
+    },
+    onInterrupted: (handle, interruptionReason) => {
+      if (!audioCAttemptIsCurrent(attempt) || attempt.audioTransaction !== transaction || transaction.endedAt) return;
+      writeAudioCTransaction(transaction, handle, "interrupted");
+      onInterrupted?.(transaction, handle, interruptionReason);
+      enterAudioCSoundPause(attempt, context, `teaching-${interruptionReason}`);
+    }
+  });
+  if (audioCAttemptIsCurrent(attempt) && attempt.audioTransaction === transaction) {
+    transaction.playbackId ||= playback.id;
+    transaction.scheduledAt = playback.scheduledAt || transaction.scheduledAt;
+    transaction.status = playback.status;
+    transaction.contextState = playback.contextState || transaction.contextState;
+    persistAudioCAttempt(attempt);
+  }
+  return { playback, transaction };
+}
+
+function beginAudioCExternalInput(attempt, pending) {
+  if (!audioCAttemptIsCurrent(attempt) || !pending) return false;
+  clearPairedListeningTimers();
+  const now = new Date().toISOString();
+  attempt.pendingInput = { ...pending, acceptedAt: now };
+  attempt.audioTransaction = {
+    context: "external-input",
+    kind: "external-input",
+    reason: "microphone-onset",
+    payload: { ...attempt.pendingInput },
+    notes: [{ midi: pending.midi, delayMs: 0, durationMs: 0 }],
+    playbackId: null,
+    scheduledAt: now,
+    startedAt: now,
+    endedAt: null,
+    interruptedAt: null,
+    startAudioTime: null,
+    endAudioTime: null,
+    interruptedAudioTime: null,
+    contextState: "external-input",
+    status: "playing",
+    returnQueued: false,
+    returnQueuedConsumedAt: null,
+    outcomeRecorded: false
+  };
+  attempt.soundPauseContext = null;
+  attempt.phase = "external-input";
+  setAudioCInputArmed(attempt, false);
+  setAudioCGuideInputArmed(attempt, false);
+  traceAudioCLifecycle(attempt, "started", attempt.audioTransaction, { external: true });
+  persistAudioCAttempt(attempt);
+  renderAudioCAttempt(attempt);
+  return true;
+}
+
+function finishAudioCExternalInput(attempt, midi, source, commit) {
+  const transaction = attempt?.audioTransaction;
+  const pending = attempt?.pendingInput;
+  if (!audioCAttemptIsCurrent(attempt) || attempt.phase !== "external-input" || !transaction || !pending) return false;
+  if (pending.source !== source || (Number.isFinite(midi) && pending.midi !== midi)) return false;
+  transaction.endedAt = new Date().toISOString();
+  transaction.contextState = "external-input-quiet";
+  transaction.status = "ended";
+  transaction.outcomeRecorded = true;
+  traceAudioCLifecycle(attempt, "ended", transaction, { external: true });
+  commit(pending, transaction, { returnQueued: transaction.returnQueued === true, external: true });
+  if (!audioCAttemptIsCurrent(attempt) || attempt.audioTransaction !== transaction) return true;
+  persistAudioCAttempt(attempt);
+  renderAudioCAttempt(attempt);
+  consumeAudioCQueuedReturn(attempt, transaction);
+  return true;
+}
+
+function interruptAudioCExternalInput(attempt, reason = "external-interrupted") {
+  if (!audioCAttemptIsCurrent(attempt) || !audioCExternalInputIsActive(attempt)) return false;
+  const transaction = attempt.audioTransaction;
+  transaction.interruptedAt = new Date().toISOString();
+  transaction.contextState = "external-input-interrupted";
+  transaction.status = "interrupted";
+  transaction.interruptReason = reason;
+  enterAudioCSoundPause(attempt, "external-input", reason);
+  return true;
+}
+
+function interruptActiveAudioCExternalInput(reason) {
+  return interruptAudioCExternalInput(currentAudioCAttempt(), reason);
+}
+
+function normalizeAudioCAttemptForRecovery(attempt, { clearHeldInput = true } = {}) {
+  if (!attempt) return attempt;
+  if (clearHeldInput) clearAudioCStaleInputHolds(attempt);
+  const transaction = attempt.audioTransaction;
+  if (!transaction || transaction.endedAt || transaction.interruptedAt) return attempt;
+  transaction.interruptedAt = new Date().toISOString();
+  transaction.contextState = "recovered-without-active-playback";
+  transaction.status = "interrupted";
+  attempt.soundPauseContext = transaction.context || null;
+  attempt.phase = "sound-paused";
+  setAudioCInputArmed(attempt, false);
+  setAudioCGuideInputArmed(attempt, false);
+  traceAudioCLifecycle(attempt, "interrupted", transaction, { interruptionReason: "reload-without-active-playback" });
+  return attempt;
 }
 
 function pairedListeningTarget(attempt = ensurePairedListeningAttempt()) {
@@ -6861,7 +7352,7 @@ function storePairedListeningResume(attempt, config, reason) {
   persistChapter3Progress();
 }
 
-function finishPairedListeningSession({ completed, reason }) {
+function finishPairedListeningSession({ completed, reason, returnQueued = false } = {}) {
   const attempt = ensurePairedListeningAttempt();
   const config = pairedListeningConfig(attempt?.levelId);
   if (!attempt || !config) return;
@@ -6873,30 +7364,18 @@ function finishPairedListeningSession({ completed, reason }) {
   }
   persistPairedListeningAttempt();
   recordPairedListeningOutcome({ completed, reason });
+  if (returnQueued) markAudioCQueuedReturnConsumed(attempt, attempt.audioTransaction);
   if (completed) renderGardenScreen();
   finishActiveSessionAtRest({ reward: completed ? config.reward : `${config.progressLabel}休息`, reason });
   state.pairedListeningFeedbackTimer = setTimeout(() => {
     state.pairedListeningFeedbackTimer = null;
     showMapScreen();
-  }, completed ? 1550 : 900);
+  }, returnQueued ? 0 : (completed ? 1550 : 900));
 }
 
-function completePairedListeningModeled(reason, { targetAlreadyPlayed = false } = {}) {
-  const attempt = ensurePairedListeningAttempt();
-  const config = pairedListeningConfig(attempt?.levelId);
-  const targetMidi = pairedListeningTarget(attempt);
-  if (!attempt || !config || targetMidi === null || attempt.modeledInputs.some((input) => input.callIndex === attempt.callIndex)) return;
+function settlePairedListeningModeled(attempt, config, targetMidi, reason, { targetAlreadyPlayed = false, returnQueued = false } = {}) {
+  if (!audioCAttemptIsCurrent(attempt) || !config || targetMidi === null || attempt.modeledInputs.some((input) => input.callIndex === attempt.callIndex)) return false;
   clearPairedListeningTimers();
-  const played = targetAlreadyPlayed || playPianoNote(midiFrequency(targetMidi), { gain: 0.13, duration: 0.72 });
-  if (!played) {
-    attempt.soundPauseCount += 1;
-    attempt.soundPauseContext = "modeled";
-    attempt.phase = "sound-paused";
-    tracePairedListeningAudio(attempt, "audio-unavailable", null, { reason: "modeled", callIndex: attempt.callIndex });
-    persistPairedListeningAttempt();
-    renderGardenScreen();
-    return;
-  }
   attempt.modeled = true;
   attempt.strongCueUsed = true;
   attempt.targetRevealedBeforeResponse = true;
@@ -6912,11 +7391,39 @@ function completePairedListeningModeled(reason, { targetAlreadyPlayed = false } 
   persistPairedListeningAttempt();
   renderGardenScreen();
   if (attempt.callIndex >= attempt.sequence.length) {
-    finishPairedListeningSession({ completed: true, reason: "modeled-final-safe-rest" });
-    return;
+    finishPairedListeningSession({ completed: true, reason: "modeled-final-safe-rest", returnQueued });
+    return true;
   }
   storePairedListeningResume(attempt, config, reason);
-  finishPairedListeningSession({ completed: false, reason: "modeled-safe-rest" });
+  finishPairedListeningSession({ completed: false, reason: "modeled-safe-rest", returnQueued });
+  return true;
+}
+
+function completePairedListeningModeled(reason, { targetAlreadyPlayed = false, returnQueued = false } = {}) {
+  const attempt = ensurePairedListeningAttempt();
+  const config = pairedListeningConfig(attempt?.levelId);
+  const targetMidi = pairedListeningTarget(attempt);
+  if (!attempt || !config || targetMidi === null || attempt.modeledInputs.some((input) => input.callIndex === attempt.callIndex)) return null;
+  clearPairedListeningTimers();
+  if (targetAlreadyPlayed) {
+    return settlePairedListeningModeled(attempt, config, targetMidi, reason, { targetAlreadyPlayed: true, returnQueued });
+  }
+  attempt.pendingModeled = { targetMidi, callIndex: attempt.callIndex, reason };
+  return startAudioCTeachingSequence(attempt, {
+    context: "modeled",
+    kind: "modeled",
+    reason,
+    notes: [{ midi: targetMidi, durationMs: 720, delayMs: 0 }],
+    payload: { targetMidi, callIndex: attempt.callIndex, reason },
+    scheduledPhase: "modeled-playing",
+    playingPhase: "modeled-playing",
+    onStarted: () => tracePairedListeningAudio(attempt, "modeled-started", targetMidi, { reason, callIndex: attempt.callIndex }),
+    onEnded: (transaction, playback, options) => {
+      if (transaction.outcomeRecorded) return;
+      transaction.outcomeRecorded = true;
+      settlePairedListeningModeled(attempt, config, targetMidi, reason, { returnQueued: options.returnQueued });
+    }
+  });
 }
 
 function schedulePairedListeningResponseTimeout() {
@@ -6971,7 +7478,7 @@ function storePairedGuideRun(attempt, config, { completed, reason }) {
   return run;
 }
 
-function finishPairedGuideRest(reason) {
+function finishPairedGuideRest(reason, { returnQueued = false } = {}) {
   const attempt = ensurePairedListeningAttempt();
   const config = pairedListeningConfig(attempt?.levelId);
   if (!attempt || !config) return;
@@ -6983,7 +7490,7 @@ function finishPairedGuideRest(reason) {
   storePairedListeningResume(attempt, config, reason);
   persistPairedListeningAttempt();
   renderGardenScreen();
-  finishPairedListeningSession({ completed: false, reason: "guide-rest" });
+  finishPairedListeningSession({ completed: false, reason: "guide-rest", returnQueued });
 }
 
 function schedulePairedGuideTimeout() {
@@ -6995,7 +7502,7 @@ function schedulePairedGuideTimeout() {
   }, PAIRED_LISTENING_GUIDE_WAIT_MS);
 }
 
-function playPairedListeningGuide({ reset = false } = {}) {
+function playPairedListeningGuide({ reset = false, recovery = false } = {}) {
   const attempt = ensurePairedListeningAttempt();
   const config = pairedListeningConfig(attempt?.levelId);
   if (!attempt || !config || state.screen !== "garden") return;
@@ -7004,73 +7511,136 @@ function playPairedListeningGuide({ reset = false } = {}) {
     attempt.guideIndex = 0;
     attempt.guideWrongCount = 0;
     attempt.guideRepairStage = "none";
+    attempt.pendingGuidePresentation = null;
     attempt.guideEvidence = [];
   }
-  attempt.phase = "visible-guide";
-  attempt.soundPauseContext = null;
-  persistPairedListeningAttempt();
-  renderGardenScreen();
+  // A queued map return may leave the next visible guide unpresented. Starting
+  // this controlled sequence is the only point that consumes that marker.
+  attempt.pendingGuidePresentation = null;
   const midi = config.candidates[attempt.guideIndex];
-  const played = playPianoNote(midiFrequency(midi), { gain: 0.13, duration: 0.72 });
-  if (!played) {
-    attempt.guidePlayed = false;
-    attempt.soundPauseCount += 1;
-    attempt.soundPauseContext = "guide";
-    attempt.phase = "sound-paused";
-    tracePairedListeningAudio(attempt, "audio-unavailable", null, { reason: "guide", guideIndex: attempt.guideIndex });
-    persistPairedListeningAttempt();
-    renderGardenScreen();
-    return;
-  }
-  attempt.guidedAudioTrace.push({ midi, guideIndex: attempt.guideIndex, at: new Date().toISOString(), phaseRole: "guide" });
-  persistPairedListeningAttempt();
-  renderGardenScreen();
-  schedulePairedGuideTimeout();
+  return startAudioCTeachingSequence(attempt, {
+    context: "guide",
+    kind: "guide",
+    reason: recovery ? "recovery" : "guide",
+    notes: [{ midi, durationMs: 720, delayMs: 0 }],
+    payload: { midi, guideIndex: attempt.guideIndex, recovery },
+    scheduledPhase: "visible-guide",
+    playingPhase: "visible-guide",
+    onStarted: () => {
+      attempt.guidedAudioTrace.push({ midi, guideIndex: attempt.guideIndex, at: new Date().toISOString(), phaseRole: "guide", recovery });
+      attempt.guidedAudioTrace = attempt.guidedAudioTrace.slice(-32);
+      tracePairedListeningAudio(attempt, "guide", midi, { guideIndex: attempt.guideIndex, recovery });
+    },
+    onEnded: (transaction, playback, { returnQueued }) => {
+      if (returnQueued) return;
+      armAudioCGuideInput(attempt);
+    }
+  });
 }
 
-function playPairedListeningTarget(reason = "system") {
+function playPairedListeningTarget(reason = "system", { recovery = false, presentationCounted = false, guideTransition = null } = {}) {
   const attempt = ensurePairedListeningAttempt();
   const targetMidi = pairedListeningTarget(attempt);
   if (!attempt || targetMidi === null || state.screen !== "garden") return;
+  if (guideTransition) {
+    const transition = attempt.guideTargetTransition;
+    if (reason !== "system-first" || attempt.phase !== "guide-target-pending" ||
+      transition?.token !== guideTransition.token ||
+      transition?.playbackId !== guideTransition.transaction?.playbackId ||
+      attempt.audioTransaction !== guideTransition.transaction ||
+      !guideTransition.transaction?.endedAt || guideTransition.transaction.interruptedAt) return null;
+    attempt.guideTargetTransition = null;
+  } else if (attempt.phase === "guide-target-pending") {
+    if (reason !== "resume") return null;
+    attempt.guideTargetTransition = null;
+  }
   clearPairedListeningTimers();
   attempt.respondingCandidate = null;
-  attempt.soundPauseContext = null;
-  attempt.phase = "target-playing";
   state.lastInputMidi = null;
   state.lastInputResult = null;
-  persistPairedListeningAttempt();
-  renderGardenScreen();
-  const played = playPianoNote(midiFrequency(targetMidi), { gain: 0.13, duration: 0.72 });
-  if (!played) {
-    attempt.soundPauseCount += 1;
-    attempt.soundPauseContext = "target";
-    attempt.phase = "sound-paused";
-    tracePairedListeningAudio(attempt, "audio-unavailable", null, { reason, callIndex: attempt.callIndex });
-    persistPairedListeningAttempt();
-    renderGardenScreen();
-    return;
-  }
-  if (reason === "child-replay") {
-    attempt.replayCountChild += 1;
-    attempt.callReplayCountChild += 1;
-  } else if (["resume", "system-replay"].includes(reason)) {
-    attempt.replayCountSystem += 1;
-    attempt.callReplayCountSystem += 1;
-  }
-  tracePairedListeningAudio(attempt, "target", targetMidi, { reason, callIndex: attempt.callIndex });
-  persistPairedListeningAttempt();
-  state.pairedListeningTimer = setTimeout(() => {
-    state.pairedListeningTimer = null;
-    attempt.phase = ["assisted", "candidate-outside"].includes(attempt.callRepairStage) ? "assisted-retry" : "awaiting-response";
-    if (attempt.phase === "awaiting-response" && !attempt.callFirstValidInput) attempt.callResponseStartedAt = new Date().toISOString();
-    persistPairedListeningAttempt();
-    renderGardenScreen();
-    if (attempt.phase === "assisted-retry") schedulePairedListeningAssistedTimeout();
-    else schedulePairedListeningResponseTimeout();
-  }, PAIRED_LISTENING_TARGET_PLAY_MS);
+  return startAudioCTeachingSequence(attempt, {
+    context: "target",
+    kind: "target",
+    reason,
+    notes: [{ midi: targetMidi, durationMs: 720, delayMs: 0 }],
+    payload: { targetMidi, callIndex: attempt.callIndex, originalReason: reason, recovery, presentationCounted },
+    scheduledPhase: "target-playing",
+    playingPhase: "target-playing",
+    onStarted: (transaction) => {
+      if (!transaction.payload?.presentationCounted) {
+        if (reason === "child-replay") {
+          attempt.replayCountChild += 1;
+          attempt.callReplayCountChild += 1;
+        } else if (["resume", "system-replay"].includes(reason)) {
+          attempt.replayCountSystem += 1;
+          attempt.callReplayCountSystem += 1;
+        }
+        if (transaction.payload) transaction.payload.presentationCounted = true;
+      }
+      tracePairedListeningAudio(attempt, "target", targetMidi, { reason, callIndex: attempt.callIndex, recovery });
+    },
+    onEnded: (transaction, playback, { returnQueued }) => {
+      attempt.phase = ["assisted", "candidate-outside"].includes(attempt.callRepairStage) ? "assisted-retry" : "awaiting-response";
+      if (attempt.phase === "awaiting-response" && !attempt.callFirstValidInput) attempt.callResponseStartedAt = new Date().toISOString();
+      persistPairedListeningAttempt();
+      renderGardenScreen();
+      if (!returnQueued) armAudioCResponse(attempt);
+    }
+  });
 }
 
-function advancePairedListeningCall(attempt, config, { targetMidi, inputMidi, source, firstResponseCorrect, visualAssist = false }) {
+function playPairedListeningWholePairReplay({ recovery = false, presentationCounted = false } = {}) {
+  const attempt = ensurePairedListeningAttempt();
+  const config = pairedListeningConfig(attempt?.levelId);
+  const targetMidi = pairedListeningTarget(attempt);
+  if (!attempt || !config || targetMidi === null || state.screen !== "garden" || (!recovery && !audioCResponsePhaseAllows(attempt))) return null;
+  clearPairedListeningTimers();
+  attempt.respondingCandidate = null;
+  state.lastInputMidi = null;
+  state.lastInputResult = null;
+  return startAudioCTeachingSequence(attempt, {
+    context: "whole-pair-replay",
+    kind: "whole-pair-replay",
+    reason: "child-replay",
+    notes: config.candidates.map((midi, index) => ({
+      midi,
+      durationMs: 720,
+      delayMs: index * 840
+    })),
+    payload: {
+      targetMidi,
+      callIndex: attempt.callIndex,
+      originalReason: "child-replay",
+      pairMidis: config.candidates.slice(),
+      recovery,
+      presentationCounted
+    },
+    scheduledPhase: "target-playing",
+    playingPhase: "target-playing",
+    onStarted: (transaction) => {
+      if (!transaction.payload?.presentationCounted) {
+        attempt.replayCountChild += 1;
+        attempt.callReplayCountChild += 1;
+        if (transaction.payload) transaction.payload.presentationCounted = true;
+      }
+      tracePairedListeningAudio(attempt, "whole-pair-replay", targetMidi, {
+        callIndex: attempt.callIndex,
+        pairMidis: config.candidates.slice(),
+        recovery,
+        playbackId: transaction.playbackId || null
+      });
+    },
+    onEnded: (transaction, playback, { returnQueued }) => {
+      attempt.phase = ["assisted", "candidate-outside"].includes(attempt.callRepairStage) ? "assisted-retry" : "awaiting-response";
+      if (attempt.phase === "awaiting-response" && !attempt.callFirstValidInput) attempt.callResponseStartedAt = new Date().toISOString();
+      persistAudioCAttempt(attempt);
+      renderAudioCAttempt(attempt);
+      if (!returnQueued) armAudioCResponse(attempt);
+    }
+  });
+}
+
+function advancePairedListeningCall(attempt, config, { targetMidi, inputMidi, source, firstResponseCorrect, visualAssist = false, returnQueued = false }) {
   const targetName = noteForMidi(targetMidi)?.name;
   if (firstResponseCorrect) {
     attempt.correctCount += 1;
@@ -7084,170 +7654,396 @@ function advancePairedListeningCall(attempt, config, { targetMidi, inputMidi, so
   persistPairedListeningAttempt();
   renderGardenScreen();
   if (attempt.callIndex >= attempt.sequence.length) {
-    finishPairedListeningSession({ completed: true, reason: visualAssist ? "visual-assist-complete" : "natural-rest" });
-    return;
+    finishPairedListeningSession({ completed: true, reason: visualAssist ? "visual-assist-complete" : "natural-rest", returnQueued });
+    return true;
   }
   resetPairedListeningCall(attempt);
   persistPairedListeningAttempt();
-  state.pairedListeningFeedbackTimer = setTimeout(() => {
-    state.pairedListeningFeedbackTimer = null;
-    playPairedListeningTarget("system-next");
-  }, 720);
+  if (!returnQueued) {
+    state.pairedListeningFeedbackTimer = setTimeout(() => {
+      state.pairedListeningFeedbackTimer = null;
+      if (audioCAttemptIsCurrent(attempt) && attempt.phase === "correct-feedback") playPairedListeningTarget("system-next");
+    }, 720);
+  }
+  return true;
 }
 
-function handlePairedListeningInput(midi, source) {
-  const attempt = ensurePairedListeningAttempt();
+function audioCPendingMatchesCurrentState(attempt, pending) {
   const config = pairedListeningConfig(attempt?.levelId);
-  if (!attempt || !config || state.chapter3.equipmentState !== "safe-open") return;
-  const now = new Date().toISOString();
-  if (attempt.phase === "guide-ready") {
-    attempt.guidedInputs.push({ midi, source, phaseRole: "guide", scored: false, observationOnly: true, occurredAt: now });
-    persistPairedListeningAttempt();
-    return;
+  if (!attempt || !pending || !config) return false;
+  if (pending.phaseRole === "guide") {
+    return pending.guideIndex === attempt.guideIndex && pending.targetMidi === config.candidates[attempt.guideIndex];
   }
-  if (attempt.phase === "visible-guide") {
-    clearPairedListeningTimers();
-    const targetMidi = config.candidates[attempt.guideIndex];
-    const correct = midi === targetMidi;
-    const session = state.activeSession;
-    const evidence = {
-      levelId: config.levelId,
-      bundleId: session?.bundleId || config.bundleId,
-      sessionId: session?.sessionId || null,
+  return pending.callIndex === attempt.callIndex && pending.targetMidi === pairedListeningTarget(attempt);
+}
+
+function recordAudioCInputPresentation(midi, source, correct) {
+  state.lastInputMidi = midi;
+  state.lastInputResult = correct ? "correct" : "wrong";
+  if (els.inputStatus) els.inputStatus.textContent = `输入：${source}`;
+  if (els.heardStatus) els.heardStatus.textContent = `听到：${noteForMidi(midi)?.name || midi}`;
+}
+
+function traceAudioCChildEchoStarted(attempt, pending, transaction, extra = {}) {
+  tracePairedListeningAudio(attempt, "child-input", pending.midi, {
+    phaseRole: pending.phaseRole,
+    callIndex: pending.callIndex ?? null,
+    guideIndex: pending.guideIndex ?? null,
+    targetMidi: pending.targetMidi,
+    source: pending.source,
+    frequency: noteForMidi(pending.midi)?.frequency || midiFrequency(pending.midi),
+    playbackId: transaction?.playbackId || null,
+    ...extra
+  });
+}
+
+function startAudioCChildEcho(attempt, pending, { recovery = false } = {}) {
+  if (!audioCAttemptIsCurrent(attempt) || !audioCPendingMatchesCurrentState(attempt, pending)) return null;
+  attempt.pendingInput = { ...pending };
+  return startAudioCTeachingSequence(attempt, {
+    context: "child-echo",
+    kind: "child-echo",
+    reason: recovery ? "recovery" : "child-input",
+    notes: [{ midi: pending.midi, durationMs: 420, delayMs: 0, child: true }],
+    payload: { ...pending, recovery },
+    scheduledPhase: "child-echo-playing",
+    playingPhase: "child-echo-playing",
+    onStarted: (transaction) => traceAudioCChildEchoStarted(attempt, pending, transaction, { recovery }),
+    onEnded: (transaction, playback, options) => {
+      if (transaction.outcomeRecorded) return;
+      transaction.outcomeRecorded = true;
+      if (pending.phaseRole === "guide") {
+        commitAudioCGuideInput(attempt, pending, transaction, options);
+      } else {
+        commitAudioCInput(attempt, pending, transaction, { ...options, external: false });
+      }
+    }
+  });
+}
+
+function beginAudioCGuideInput(attempt, midi, source) {
+  const config = pairedListeningConfig(attempt?.levelId);
+  const targetMidi = config?.candidates?.[attempt.guideIndex];
+  if (!Number.isFinite(targetMidi)) return false;
+  clearPairedListeningTimers();
+  const pending = {
+    phaseRole: "guide",
+    midi,
+    source,
+    targetMidi,
+    guideIndex: attempt.guideIndex,
+    occurredAt: new Date().toISOString(),
+    correct: midi === targetMidi
+  };
+  if (source === "屏幕") attempt.screenInputHeld = true;
+  if (isMicrophoneSource(source)) return beginAudioCExternalInput(attempt, pending);
+  return Boolean(startAudioCChildEcho(attempt, pending));
+}
+
+function beginAudioCInput(attempt, midi, source) {
+  const targetMidi = pairedListeningTarget(attempt);
+  if (!Number.isFinite(targetMidi)) return false;
+  clearPairedListeningTimers();
+  const pending = {
+    phaseRole: "check",
+    midi,
+    source,
+    targetMidi,
+    callIndex: attempt.callIndex,
+    occurredAt: new Date().toISOString(),
+    correct: midi === targetMidi,
+    visualAssist: attempt.phase === "visual-assist"
+  };
+  if (source === "屏幕") attempt.screenInputHeld = true;
+  if (isMicrophoneSource(source)) return beginAudioCExternalInput(attempt, pending);
+  return Boolean(startAudioCChildEcho(attempt, pending));
+}
+
+function scheduleAudioCFeedbackTransition(attempt, transaction, phase, delayMs) {
+  state.pairedListeningFeedbackTimer = setTimeout(() => {
+    state.pairedListeningFeedbackTimer = null;
+    if (!audioCAttemptIsCurrent(attempt) || attempt.audioTransaction !== transaction) return;
+    if (attempt.phase !== phase || transaction.endedAt === null || transaction.interruptedAt) return;
+    attempt.phase = "awaiting-response";
+    attempt.callResponseStartedAt = new Date().toISOString();
+    persistAudioCAttempt(attempt);
+    renderAudioCAttempt(attempt);
+    armAudioCResponse(attempt);
+  }, delayMs);
+}
+
+function scheduleAudioCSystemFirstTarget(attempt, transaction) {
+  if (!audioCAttemptIsCurrent(attempt) || attempt.audioTransaction !== transaction || !transaction?.endedAt || transaction.interruptedAt) return false;
+  const token = `${transaction.playbackId || "guide"}:${transaction.endedAt}`;
+  attempt.guideTargetTransition = {
+    token,
+    playbackId: transaction.playbackId || null,
+    scheduledAt: new Date().toISOString()
+  };
+  attempt.phase = "guide-target-pending";
+  persistAudioCAttempt(attempt);
+  renderAudioCAttempt(attempt);
+  state.pairedListeningFeedbackTimer = setTimeout(() => {
+    state.pairedListeningFeedbackTimer = null;
+    const transition = attempt.guideTargetTransition;
+    if (!audioCAttemptIsCurrent(attempt) || attempt.phase !== "guide-target-pending" ||
+      transition?.token !== token || transition.playbackId !== transaction.playbackId ||
+      attempt.audioTransaction !== transaction || !transaction.endedAt || transaction.interruptedAt) return;
+    playPairedListeningTarget("system-first", { guideTransition: { token, transaction } });
+  }, 720);
+  return true;
+}
+
+function startAudioCGuideRepair(attempt, pending, { recovery = false, finishRest = false } = {}) {
+  if (!audioCAttemptIsCurrent(attempt) || !audioCPendingMatchesCurrentState(attempt, pending)) return null;
+  const targetMidi = pending.targetMidi;
+  attempt.pendingInput = null;
+  return startAudioCTeachingSequence(attempt, {
+    context: "guide-repair",
+    kind: "guide-repair",
+    reason: "guide-repair",
+    notes: [{ midi: targetMidi, durationMs: 720, delayMs: 0 }],
+    payload: { ...pending, recovery, finishRest },
+    scheduledPhase: "visible-guide",
+    playingPhase: "visible-guide",
+    onStarted: (transaction) => tracePairedListeningAudio(attempt, "target-replay", targetMidi, {
       phaseRole: "guide",
-      guideIndex: attempt.guideIndex,
-      targetMidi,
-      inputRoute: source,
-      childInput: midi,
-      correct,
-      repair: attempt.guideRepairStage,
-      playedAt: now,
-      timingUsedForMastery: false
-    };
-    attempt.guidedInputs.push({ midi, source, targetMidi, correct, phaseRole: "guide", scored: false, occurredAt: now });
-    attempt.guideEvidence.push(evidence);
-    state.lastInputMidi = midi;
-    state.lastInputResult = correct ? "correct" : "wrong";
-    if (correct) {
-      attempt.guideWrongCount = 0;
-      attempt.guideRepairStage = "none";
-      if (attempt.guideIndex < config.candidates.length - 1) {
-        attempt.guideIndex += 1;
-        persistPairedListeningAttempt();
-        renderGardenScreen();
-        state.pairedListeningFeedbackTimer = setTimeout(() => {
-          state.pairedListeningFeedbackTimer = null;
-          playPairedListeningGuide();
-        }, 520);
+      guideIndex: pending.guideIndex,
+      recovery,
+      playbackId: transaction.playbackId || null
+    }),
+    onEnded: (transaction, playback, { returnQueued }) => {
+      if (finishRest) {
+        finishPairedGuideRest("guide-repeated-wrong", { returnQueued });
         return;
       }
-      attempt.guidePlayed = true;
-      attempt.openingBoundaryGuideCompleted = config.levelId === "LS07";
-      storePairedGuideRun(attempt, config, { completed: true, reason: "child-guide-complete" });
-      persistPairedListeningAttempt();
-      renderGardenScreen();
+      attempt.guideRepairStage = "none";
+      persistAudioCAttempt(attempt);
+      renderAudioCAttempt(attempt);
+      if (!returnQueued) armAudioCGuideInput(attempt);
+    }
+  });
+}
+
+function commitAudioCGuideInput(attempt, pending, transaction, { returnQueued = false, external = false } = {}) {
+  if (!audioCAttemptIsCurrent(attempt) || !audioCPendingMatchesCurrentState(attempt, pending)) return false;
+  const config = pairedListeningConfig(attempt.levelId);
+  clearPairedListeningTimers();
+  if (attempt.pendingInput?.occurredAt === pending.occurredAt) attempt.pendingInput = null;
+  attempt.guideInputArmed = false;
+  const now = new Date().toISOString();
+  const correct = pending.midi === pending.targetMidi;
+  const session = state.activeSession;
+  const evidence = {
+    levelId: config.levelId,
+    bundleId: session?.bundleId || config.bundleId,
+    sessionId: session?.sessionId || null,
+    phaseRole: "guide",
+    guideIndex: pending.guideIndex,
+    targetMidi: pending.targetMidi,
+    inputRoute: pending.source,
+    childInput: pending.midi,
+    correct,
+    repair: attempt.guideRepairStage,
+    playedAt: pending.occurredAt,
+    committedAt: now,
+    external,
+    timingUsedForMastery: false
+  };
+  attempt.guidedInputs.push({ midi: pending.midi, source: pending.source, targetMidi: pending.targetMidi, correct, phaseRole: "guide", scored: false, occurredAt: pending.occurredAt, committedAt: now, external });
+  attempt.guideEvidence.push(evidence);
+  recordAudioCInputPresentation(pending.midi, pending.source, correct);
+  if (correct) {
+    attempt.guideWrongCount = 0;
+    attempt.guideRepairStage = "none";
+    if (pending.guideIndex < config.candidates.length - 1) {
+      attempt.guideIndex += 1;
+      if (returnQueued) {
+        attempt.phase = "guide-next-pending";
+        attempt.pendingGuidePresentation = {
+          guideIndex: attempt.guideIndex,
+          sourcePlaybackId: transaction?.playbackId || null,
+          source: "map-return",
+          queuedAt: now,
+          requiresExplicitGesture: false
+        };
+        setAudioCInputArmed(attempt, false);
+        setAudioCGuideInputArmed(attempt, false);
+        persistAudioCAttempt(attempt);
+        renderAudioCAttempt(attempt);
+        return true;
+      }
+      attempt.pendingGuidePresentation = null;
+      attempt.phase = "visible-guide";
+      persistAudioCAttempt(attempt);
+      renderAudioCAttempt(attempt);
       state.pairedListeningFeedbackTimer = setTimeout(() => {
         state.pairedListeningFeedbackTimer = null;
-        playPairedListeningTarget("system-first");
-      }, 720);
-      return;
+        if (audioCAttemptIsCurrent(attempt) && attempt.phase === "visible-guide") playPairedListeningGuide();
+      }, 520);
+      return true;
     }
-    attempt.guideWrongCount += 1;
-    if (attempt.guideWrongCount >= 2) {
-      persistPairedListeningAttempt();
-      renderGardenScreen();
-      finishPairedGuideRest("guide-repeated-wrong");
-      return;
+    attempt.guidePlayed = true;
+    attempt.openingBoundaryGuideCompleted = config.levelId === "LS07";
+    storePairedGuideRun(attempt, config, { completed: true, reason: "child-guide-complete" });
+    if (!returnQueued) scheduleAudioCSystemFirstTarget(attempt, transaction);
+    else {
+      attempt.guideTargetTransition = null;
+      persistAudioCAttempt(attempt);
+      renderAudioCAttempt(attempt);
     }
-    attempt.guideRepairStage = "soft-replay";
-    const childFrequency = midiFrequency(midi);
-    if (source !== "屏幕") playPianoNote(childFrequency, { gain: 0.10, duration: 0.42 });
-    const replayed = playPianoNote(midiFrequency(targetMidi), { gain: 0.13, duration: 0.72, delay: 0.46 });
-    if (!replayed) {
-      attempt.soundPauseCount += 1;
-      attempt.soundPauseContext = "guide";
-      attempt.phase = "sound-paused";
-    }
-    persistPairedListeningAttempt();
-    renderGardenScreen();
-    if (attempt.phase === "visible-guide") schedulePairedGuideTimeout();
-    return;
+    return true;
   }
-  if (["target-playing", "replay-ready", "sound-paused", "correct-feedback", "wrong-known", "pair-compare", "modeled-playing", "modeled-success"].includes(attempt.phase)) {
-    attempt.earlyInputs.push({ midi, source, phase: attempt.phase, occurredAt: now });
-    persistPairedListeningAttempt();
-    return;
-  }
-  if (!["awaiting-response", "assisted-retry", "visual-assist"].includes(attempt.phase)) return;
+  attempt.guideWrongCount += 1;
+  attempt.guideRepairStage = "soft-replay";
+  const repair = startAudioCGuideRepair(attempt, pending, { finishRest: attempt.guideWrongCount >= 2 });
+  if (returnQueued && repair) handoffAudioCQueuedReturn(attempt, transaction);
+  return Boolean(repair);
+}
+
+function startAudioCWrongRepair(attempt, pending, { recovery = false, presentationCounted = false } = {}) {
+  if (!audioCAttemptIsCurrent(attempt) || !audioCPendingMatchesCurrentState(attempt, pending)) return null;
+  const targetMidi = pending.targetMidi;
+  const modeledAfterRepair = attempt.callWrongCount >= 4;
+  const presentationPhase = modeledAfterRepair
+    ? "modeled-playing"
+    : (attempt.callRepairStage === "pair-compare"
+      ? "pair-compare"
+      : (attempt.callRepairStage === "wrong-known" ? "wrong-known" : "assisted-retry"));
+  const responsePhase = ["assisted", "candidate-outside"].includes(attempt.callRepairStage)
+    ? "assisted-retry"
+    : "awaiting-response";
+  attempt.pendingInput = null;
+  return startAudioCTeachingSequence(attempt, {
+    context: "wrong-repair",
+    kind: "wrong-repair",
+    reason: "wrong-repair",
+    notes: [{ midi: targetMidi, durationMs: 720, delayMs: 0 }],
+    payload: {
+      ...pending,
+      originalReason: "wrong-repair",
+      responsePhase,
+      presentationPhase,
+      modeledAfterRepair,
+      recovery,
+      presentationCounted
+    },
+    scheduledPhase: presentationPhase,
+    playingPhase: presentationPhase,
+    onStarted: (transaction) => {
+      if (!transaction.payload?.presentationCounted) {
+        attempt.replayCountSystem += 1;
+        attempt.callReplayCountSystem += 1;
+        if (transaction.payload) transaction.payload.presentationCounted = true;
+      }
+      tracePairedListeningAudio(attempt, "target-replay", targetMidi, {
+        callIndex: pending.callIndex,
+        childMidi: pending.midi,
+        source: pending.source,
+        recovery,
+        playbackId: transaction.playbackId || null
+      });
+    },
+    onEnded: (transaction, playback, { returnQueued }) => {
+      tracePairedListeningAudio(attempt, "wrong-repair-ended", targetMidi, {
+        callIndex: pending.callIndex,
+        childMidi: pending.midi,
+        source: pending.source,
+        recovery,
+        playbackId: transaction.playbackId || null
+      });
+      if (transaction.payload?.modeledAfterRepair) {
+        completePairedListeningModeled("assisted-retry-wrong", { targetAlreadyPlayed: true, returnQueued });
+        return;
+      }
+      if (returnQueued) return;
+      const nextPhase = transaction.payload?.responsePhase || "awaiting-response";
+      if (["wrong-known", "pair-compare"].includes(transaction.payload?.presentationPhase)) {
+        scheduleAudioCFeedbackTransition(
+          attempt,
+          transaction,
+          transaction.payload.presentationPhase,
+          attempt.callWrongCount === 2 ? 1500 : 1250
+        );
+        return;
+      }
+      attempt.phase = nextPhase;
+      if (nextPhase === "assisted-retry") attempt.assistedCueVisible = false;
+      if (nextPhase === "awaiting-response") attempt.callResponseStartedAt = new Date().toISOString();
+      persistAudioCAttempt(attempt);
+      renderAudioCAttempt(attempt);
+      armAudioCResponse(attempt);
+    }
+  });
+}
+
+function commitAudioCInput(attempt, pending, transaction, { returnQueued = false, external = false } = {}) {
+  if (!audioCAttemptIsCurrent(attempt) || !audioCPendingMatchesCurrentState(attempt, pending)) return false;
+  const config = pairedListeningConfig(attempt.levelId);
   clearPairedListeningTimers();
-  const targetMidi = pairedListeningTarget(attempt);
-  const visualAssist = attempt.phase === "visual-assist";
-  const correct = midi === targetMidi;
-  attempt.inputRoutes[source] = (attempt.inputRoutes[source] || 0) + 1;
+  if (attempt.pendingInput?.occurredAt === pending.occurredAt) attempt.pendingInput = null;
+  attempt.inputArmed = false;
+  const correct = pending.midi === pending.targetMidi;
+  attempt.inputRoutes[pending.source] = (attempt.inputRoutes[pending.source] || 0) + 1;
   if (!attempt.callFirstValidInput) {
     const responseStart = Date.parse(attempt.callResponseStartedAt || "");
     const responseMs = !attempt.callTimingInterrupted && Number.isFinite(responseStart) ? Math.max(0, Date.now() - responseStart) : null;
-    attempt.callFirstValidInput = { midi, source, occurredAt: now, responseMs };
+    attempt.callFirstValidInput = { midi: pending.midi, source: pending.source, occurredAt: pending.occurredAt, responseMs };
   }
-  if (source === "麦克风") {
+  if (external) {
     attempt.hasExperimentalInput = true;
     attempt.callExperimentalInput = true;
   }
-  attempt.childInputs.push({ midi, source, targetMidi, correct, scored: !visualAssist, callIndex: attempt.callIndex, occurredAt: now });
-  state.lastInputMidi = midi;
-  state.lastInputResult = correct ? "correct" : "wrong";
-  els.inputStatus.textContent = `输入：${source}`;
-  els.heardStatus.textContent = `听到：${noteForMidi(midi)?.name || midi}`;
-  if (visualAssist) {
+  attempt.childInputs.push({
+    midi: pending.midi,
+    source: pending.source,
+    targetMidi: pending.targetMidi,
+    correct,
+    scored: !pending.visualAssist,
+    callIndex: pending.callIndex,
+    occurredAt: pending.occurredAt,
+    committedAt: new Date().toISOString(),
+    external
+  });
+  recordAudioCInputPresentation(pending.midi, pending.source, correct);
+  if (pending.visualAssist) {
     attempt.accessibilityVisualAssist = true;
     attempt.callAccessibilityVisualAssist = true;
     if (attempt.levelId === "LS07") attempt.postPromptBoundaryStrongHelpUsed = true;
     if (!correct) {
-      persistPairedListeningAttempt();
-      renderGardenScreen();
-      return;
+      attempt.phase = "visual-assist";
+      persistAudioCAttempt(attempt);
+      renderAudioCAttempt(attempt);
+      if (!returnQueued) armAudioCResponse(attempt);
+      return true;
     }
-    advancePairedListeningCall(attempt, config, { targetMidi, inputMidi: midi, source, firstResponseCorrect: false, visualAssist: true });
-    return;
+    return advancePairedListeningCall(attempt, config, {
+      targetMidi: pending.targetMidi,
+      inputMidi: pending.midi,
+      source: pending.source,
+      firstResponseCorrect: false,
+      visualAssist: true,
+      returnQueued
+    });
   }
   if (correct) {
-    advancePairedListeningCall(attempt, config, { targetMidi, inputMidi: midi, source, firstResponseCorrect: attempt.callWrongCount === 0 });
-    return;
+    return advancePairedListeningCall(attempt, config, {
+      targetMidi: pending.targetMidi,
+      inputMidi: pending.midi,
+      source: pending.source,
+      firstResponseCorrect: attempt.callWrongCount === 0,
+      returnQueued
+    });
   }
   attempt.callWrongCount += 1;
   attempt.totalWrongCount += 1;
-  const confusionKey = [midi, targetMidi].sort((a, b) => a - b).join("-");
+  const confusionKey = [pending.midi, pending.targetMidi].sort((a, b) => a - b).join("-");
   attempt.confusionCounts[confusionKey] = (attempt.confusionCounts[confusionKey] || 0) + 1;
-  attempt.callConfusionPair = [midi, targetMidi];
-  const canShowPair = config.candidates.includes(midi) && midi !== targetMidi;
-  const childFrequency = midiFrequency(midi);
-  tracePairedListeningAudio(attempt, "child-input", midi, { callIndex: attempt.callIndex, frequency: childFrequency });
-  if (source !== "屏幕") playPianoNote(childFrequency, { gain: 0.10, duration: 0.42 });
-  const replayed = playPianoNote(midiFrequency(targetMidi), { gain: 0.13, duration: 0.72, delay: 0.46 });
-  if (!replayed) {
-    attempt.soundPauseCount += 1;
-    attempt.soundPauseContext = "wrong-replay";
-    attempt.phase = "sound-paused";
-    tracePairedListeningAudio(attempt, "audio-unavailable", null, { reason: "wrong-replay", callIndex: attempt.callIndex });
-    persistPairedListeningAttempt();
-    renderGardenScreen();
-    return;
-  }
-  attempt.replayCountSystem += 1;
-  attempt.callReplayCountSystem += 1;
-  tracePairedListeningAudio(attempt, "target-replay", targetMidi, { callIndex: attempt.callIndex });
+  attempt.callConfusionPair = [pending.midi, pending.targetMidi];
+  const canShowPair = config.candidates.includes(pending.midi) && pending.midi !== pending.targetMidi;
   if (attempt.callWrongCount >= 4) {
-    attempt.phase = "modeled-playing";
-    attempt.pendingModeled = { callIndex: attempt.callIndex, targetMidi, reason: "assisted-retry-wrong", targetAlreadyPlayed: true };
-    persistPairedListeningAttempt();
-    renderGardenScreen();
-    state.pairedListeningFeedbackTimer = setTimeout(() => {
-      state.pairedListeningFeedbackTimer = null;
-      completePairedListeningModeled("assisted-retry-wrong", { targetAlreadyPlayed: true });
-    }, 1250);
-    return;
-  }
-  if (attempt.callWrongCount >= 2 && !canShowPair) {
+    attempt.pendingModeled = { callIndex: attempt.callIndex, targetMidi: pending.targetMidi, reason: "assisted-retry-wrong", targetAlreadyPlayed: true };
+  } else if (attempt.callWrongCount >= 2 && !canShowPair) {
     attempt.strongCueUsed = true;
     attempt.targetRevealedBeforeResponse = true;
     attempt.callStrongCueUsed = true;
@@ -7256,7 +8052,6 @@ function handlePairedListeningInput(midi, source) {
     attempt.callRepairStage = "candidate-outside";
     attempt.assistedCueVisible = true;
     if (attempt.levelId === "LS07") attempt.postPromptBoundaryStrongHelpUsed = true;
-    attempt.phase = "assisted-retry";
   } else if (attempt.callWrongCount >= 3) {
     attempt.strongCueUsed = true;
     attempt.targetRevealedBeforeResponse = true;
@@ -7265,25 +8060,233 @@ function handlePairedListeningInput(midi, source) {
     attempt.callRepairStage = "assisted";
     attempt.assistedCueVisible = true;
     if (attempt.levelId === "LS07") attempt.postPromptBoundaryStrongHelpUsed = true;
-    attempt.phase = "assisted-retry";
   } else if (attempt.callWrongCount === 2) {
     attempt.callRepairStage = "pair-compare";
-    attempt.phase = "pair-compare";
   } else {
     attempt.callRepairStage = "wrong-known";
-    attempt.phase = "wrong-known";
   }
-  persistPairedListeningAttempt();
-  renderGardenScreen();
-  state.pairedListeningFeedbackTimer = setTimeout(() => {
-    state.pairedListeningFeedbackTimer = null;
-    attempt.phase = ["assisted", "candidate-outside"].includes(attempt.callRepairStage) ? "assisted-retry" : "awaiting-response";
-    if (attempt.phase === "assisted-retry") attempt.assistedCueVisible = false;
-    persistPairedListeningAttempt();
-    renderGardenScreen();
-    if (attempt.phase === "assisted-retry") schedulePairedListeningAssistedTimeout();
-    else schedulePairedListeningResponseTimeout();
-  }, attempt.callWrongCount === 2 ? 1500 : 1250);
+  const repair = startAudioCWrongRepair(attempt, pending);
+  if (returnQueued && repair) handoffAudioCQueuedReturn(attempt, transaction);
+  return Boolean(repair);
+}
+
+function handleAudioCPairedListeningInput(midi, source) {
+  const attempt = currentAudioCAttempt();
+  const config = pairedListeningConfig(attempt?.levelId);
+  if (!attempt || !config || state.chapter3.equipmentState !== "safe-open") return;
+  const retryingInterruptedExternalInput = attempt.phase === "sound-paused" &&
+    (attempt.soundPauseContext || attempt.audioTransaction?.context) === "external-input";
+  if (attempt.phase === "sound-paused") {
+    if (!retryingInterruptedExternalInput || !recoverAudioCAttempt()) {
+      if (source === "MIDI") recordAudioCMidiNoteOn(attempt, midi);
+      recordAudioCObservation(attempt, midi, source);
+      return;
+    }
+  }
+  if (source === "MIDI") {
+    const midiState = recordAudioCMidiNoteOn(attempt, midi);
+    if (midiState.blocked) {
+      recordAudioCObservation(attempt, midi, source, attempt.phase, { reason: "held-midi" });
+      return;
+    }
+  }
+  if (attempt.phase === "guide-ready") {
+    recordAudioCObservation(attempt, midi, source);
+    return;
+  }
+  if (attempt.phase === "visible-guide") {
+    if (!attempt.guideInputArmed) {
+      recordAudioCObservation(attempt, midi, source);
+      return;
+    }
+    beginAudioCGuideInput(attempt, midi, source);
+    return;
+  }
+  if (!audioCResponsePhaseAllows(attempt) || !attempt.inputArmed) {
+    recordAudioCObservation(attempt, midi, source);
+    return;
+  }
+  beginAudioCInput(attempt, midi, source);
+}
+
+function recoverAudioCAttempt() {
+  const attempt = currentAudioCAttempt();
+  if (!attempt || attempt.phase !== "sound-paused") return false;
+  clearPairedListeningTimers();
+  clearAudioCStaleInputHolds(attempt);
+  const transaction = attempt.audioTransaction;
+  const context = attempt.soundPauseContext || transaction?.context;
+  const payload = transaction?.payload || attempt.pendingInput || {};
+  const reason = payload.originalReason || transaction?.reason || "resume";
+  if (context === "external-input") {
+    attempt.pendingInput = null;
+    attempt.soundPauseContext = null;
+    if (payload.phaseRole === "guide") {
+      attempt.phase = "visible-guide";
+      setAudioCGuideInputArmed(attempt, true);
+    } else {
+      attempt.phase = ["assisted", "candidate-outside"].includes(attempt.callRepairStage) ? "assisted-retry" : "awaiting-response";
+      if (attempt.phase === "awaiting-response") attempt.callResponseStartedAt = new Date().toISOString();
+      setAudioCInputArmed(attempt, true);
+    }
+    persistAudioCAttempt(attempt);
+    renderAudioCAttempt(attempt);
+    return true;
+  }
+  if (context === "guide") return Boolean(playPairedListeningGuide({ recovery: true }));
+  if (context === "target") {
+    return Boolean(playPairedListeningTarget(reason, {
+      recovery: true,
+      presentationCounted: payload.presentationCounted === true
+    }));
+  }
+  if (context === "whole-pair-replay") {
+    return Boolean(playPairedListeningWholePairReplay({
+      recovery: true,
+      presentationCounted: payload.presentationCounted === true
+    }));
+  }
+  if (context === "child-echo" && audioCPendingMatchesCurrentState(attempt, payload)) {
+    return Boolean(startAudioCChildEcho(attempt, payload, { recovery: true }));
+  }
+  if (context === "guide-repair" && audioCPendingMatchesCurrentState(attempt, payload)) {
+    return Boolean(startAudioCGuideRepair(attempt, payload, {
+      recovery: true,
+      finishRest: payload.finishRest === true
+    }));
+  }
+  if (context === "wrong-repair" && audioCPendingMatchesCurrentState(attempt, payload)) {
+    return Boolean(startAudioCWrongRepair(attempt, payload, {
+      recovery: true,
+      presentationCounted: payload.presentationCounted === true
+    }));
+  }
+  if (context === "modeled") return Boolean(completePairedListeningModeled(payload.reason || "modeled-recovery"));
+  attempt.phase = attempt.guidePlayed ? "replay-ready" : "guide-ready";
+  attempt.soundPauseContext = null;
+  setAudioCInputArmed(attempt, false);
+  setAudioCGuideInputArmed(attempt, false);
+  persistAudioCAttempt(attempt);
+  renderAudioCAttempt(attempt);
+  return true;
+}
+
+function releaseAudioCInput(midi, source) {
+  const attempt = currentAudioCAttempt();
+  if (!attempt) return false;
+  if (source === "MIDI") {
+    if (!releaseAudioCMidiNote(attempt, midi)) return false;
+  } else if (source === "屏幕") {
+    if (!attempt.screenInputHeld) return false;
+    attempt.screenInputHeld = false;
+  } else if (isMicrophoneSource(source)) {
+    return finishAudioCExternalInput(attempt, midi, source, (pending, transaction, options) => {
+      if (pending.phaseRole === "guide") commitAudioCGuideInput(attempt, pending, transaction, options);
+      else commitAudioCInput(attempt, pending, transaction, { ...options, external: true });
+    });
+  } else {
+    return false;
+  }
+  if (attempt.phase === "visible-guide") {
+    if (!armAudioCGuideInput(attempt)) {
+      persistAudioCAttempt(attempt);
+      renderAudioCAttempt(attempt);
+    }
+  } else if (!armAudioCResponse(attempt)) {
+    persistAudioCAttempt(attempt);
+    renderAudioCAttempt(attempt);
+  }
+  return true;
+}
+
+function resumeAudioCPairedListeningFlow({ fromReload = false } = {}) {
+  const attempt = currentAudioCAttempt();
+  if (!attempt || state.screen !== "garden") return;
+  clearPairedListeningTimers();
+  if (fromReload) {
+    attempt.guideTargetTransition = null;
+    if (!["guide-ready", "visible-guide", "guide-next-pending"].includes(attempt.phase)) {
+      attempt.callTimingInterrupted = true;
+      attempt.callResponseStartedAt = null;
+    }
+    normalizeAudioCAttemptForRecovery(attempt);
+  }
+  if (attempt.phase === "sound-paused") {
+    persistAudioCAttempt(attempt);
+    renderAudioCAttempt(attempt);
+    return;
+  }
+  if (attempt.phase === "guide-next-pending") {
+    const pending = attempt.pendingGuidePresentation;
+    const config = pairedListeningConfig(attempt.levelId);
+    const pendingMatchesGuide = Boolean(
+      pending &&
+      Number.isInteger(pending.guideIndex) &&
+      pending.guideIndex === attempt.guideIndex &&
+      pending.guideIndex > 0 &&
+      pending.guideIndex < (config?.candidates?.length || 0)
+    );
+    if (!pendingMatchesGuide) {
+      attempt.pendingGuidePresentation = null;
+      attempt.phase = "guide-ready";
+      setAudioCInputArmed(attempt, false);
+      setAudioCGuideInputArmed(attempt, false);
+      persistAudioCAttempt(attempt);
+      renderAudioCAttempt(attempt);
+      return;
+    }
+    if (fromReload || !state.audioUnlocked) {
+      pending.requiresExplicitGesture = true;
+      pending.recoveryReadyAt ||= new Date().toISOString();
+      setAudioCInputArmed(attempt, false);
+      setAudioCGuideInputArmed(attempt, false);
+      persistAudioCAttempt(attempt);
+      renderAudioCAttempt(attempt);
+      return;
+    }
+    pending.requiresExplicitGesture = false;
+    playPairedListeningGuide({ recovery: true });
+    return;
+  }
+  if (attempt.phase === "visual-assist") {
+    armAudioCResponse(attempt);
+    return;
+  }
+  if (attempt.phase === "visible-guide") {
+    armAudioCGuideInput(attempt);
+    return;
+  }
+  if (["wrong-known", "pair-compare"].includes(attempt.phase)) {
+    const transaction = attempt.audioTransaction;
+    if (transaction?.endedAt && !transaction.interruptedAt) {
+      scheduleAudioCFeedbackTransition(attempt, transaction, attempt.phase, attempt.phase === "pair-compare" ? 1500 : 1250);
+    }
+    persistAudioCAttempt(attempt);
+    renderAudioCAttempt(attempt);
+    return;
+  }
+  if (attempt.phase === "assisted-retry") {
+    armAudioCResponse(attempt);
+    return;
+  }
+  if (["awaiting-response"].includes(attempt.phase)) {
+    armAudioCResponse(attempt);
+    return;
+  }
+  if (attempt.phase === "modeled-playing" && attempt.pendingModeled) {
+    completePairedListeningModeled(attempt.pendingModeled.reason, { targetAlreadyPlayed: true });
+    return;
+  }
+  if (fromReload || !state.audioUnlocked) {
+    attempt.phase = attempt.guidePlayed ? "replay-ready" : "guide-ready";
+    setAudioCInputArmed(attempt, false);
+    setAudioCGuideInputArmed(attempt, false);
+    persistAudioCAttempt(attempt);
+    renderAudioCAttempt(attempt);
+    return;
+  }
+  if (!attempt.guidePlayed) playPairedListeningGuide();
+  else playPairedListeningTarget("resume");
 }
 
 function enablePairedListeningVisualAssist() {
@@ -7300,61 +8303,6 @@ function enablePairedListeningVisualAssist() {
   attempt.phase = "visual-assist";
   persistPairedListeningAttempt();
   renderGardenScreen();
-}
-
-function resumePairedListeningFlow({ fromReload = false } = {}) {
-  const attempt = ensurePairedListeningAttempt();
-  if (!attempt || state.screen !== "garden") return;
-  clearPairedListeningTimers();
-  if (fromReload && !["guide-ready", "visible-guide"].includes(attempt.phase)) {
-    attempt.callTimingInterrupted = true;
-    attempt.callResponseStartedAt = null;
-    persistPairedListeningAttempt();
-  }
-  if (attempt.phase === "modeled-playing" && attempt.pendingModeled) {
-    completePairedListeningModeled(attempt.pendingModeled.reason, { targetAlreadyPlayed: true });
-    return;
-  }
-  if (["visual-assist", "sound-paused"].includes(attempt.phase)) {
-    persistPairedListeningAttempt();
-    renderGardenScreen();
-    return;
-  }
-  if (["pair-compare", "wrong-known"].includes(attempt.phase)) {
-    const delay = attempt.phase === "pair-compare" ? 1500 : 1250;
-    persistPairedListeningAttempt();
-    renderGardenScreen();
-    state.pairedListeningFeedbackTimer = setTimeout(() => {
-      state.pairedListeningFeedbackTimer = null;
-      if (!["pair-compare", "wrong-known"].includes(attempt.phase)) return;
-      attempt.phase = "awaiting-response";
-      persistPairedListeningAttempt();
-      renderGardenScreen();
-      schedulePairedListeningResponseTimeout();
-    }, delay);
-    return;
-  }
-  if (attempt.phase === "assisted-retry") {
-    attempt.assistedCueVisible = false;
-    persistPairedListeningAttempt();
-    renderGardenScreen();
-    schedulePairedListeningAssistedTimeout();
-    return;
-  }
-  if (fromReload) {
-    attempt.phase = attempt.guidePlayed ? "replay-ready" : "guide-ready";
-    persistPairedListeningAttempt();
-    renderGardenScreen();
-    return;
-  }
-  if (!state.audioUnlocked) {
-    attempt.phase = attempt.guidePlayed ? "replay-ready" : "guide-ready";
-    persistPairedListeningAttempt();
-    renderGardenScreen();
-    return;
-  }
-  if (!attempt.guidePlayed) playPairedListeningGuide();
-  else playPairedListeningTarget("resume");
 }
 
 function ls08SequenceForSeed(seed) {
@@ -13045,7 +13993,9 @@ function renderLs04Screen() {
   els.listeningCandidates.classList.toggle("is-scored", ["correct-feedback", "complete"].includes(attempt?.phase));
   els.listeningCandidates.classList.toggle("is-complete", attempt?.phase === "complete" || state.chapter3.ls04Completed || Boolean(state.chapter3.lessonEvidence.LS04?.completedAt));
   els.listeningResult.classList.remove("is-complete");
-  els.listeningReplay.disabled = playing || attempt?.phase === "correct-feedback" || attempt?.phase === "complete";
+  const replayDisabled = playing || attempt?.phase === "correct-feedback" || attempt?.phase === "complete";
+  els.listeningReplay.disabled = replayDisabled;
+  els.listeningReplay.setAttribute("aria-disabled", String(replayDisabled));
   els.listeningReplay.hidden = attempt?.phase === "complete";
   els.listeningCallProgress.innerHTML = [0, 1, 2, 3].map((index) => {
     const done = index < (attempt?.scoredCalls?.length || 0);
@@ -13154,7 +14104,9 @@ function renderLs05Screen() {
     els.ls05Compare.innerHTML = "";
     els.ls05Compare.removeAttribute("aria-label");
   }
-  els.listeningReplay.disabled = playing || ["correct-feedback", "complete", "modeled-success"].includes(attempt?.phase);
+  const replayDisabled = playing || ["correct-feedback", "complete", "modeled-success"].includes(attempt?.phase);
+  els.listeningReplay.disabled = replayDisabled;
+  els.listeningReplay.setAttribute("aria-disabled", String(replayDisabled));
   els.listeningReplay.hidden = attempt?.phase === "complete";
   const visualAssistAllowed = (attempt?.callRepairStage === "assisted" && attempt?.inputArmed &&
     !playing && !audioBExternalInputIsActive(attempt)) ||
@@ -13200,6 +14152,22 @@ function pairedListeningCopy(attempt, config) {
     return config.levelId === "LS06"
       ? { kicker: "回声石先带路", main: "这是 C", support: "我唱 Do。找到琴键上的 C，按一下。" }
       : { kicker: "边界花先带路", main: "这是 E", support: "我唱 Mi。找到两颗黑键右边的 E，按一下。" };
+  }
+  if (attempt.phase === "guide-next-pending") {
+    const midi = config.candidates[attempt.guideIndex] ?? config.candidates[0];
+    const note = noteForMidi(midi);
+    if (attempt.pendingGuidePresentation?.requiresExplicitGesture === true) {
+      return {
+        kicker: "\u5e26\u8def\u97f3\u8fd8\u5728\u8fd9\u91cc",
+        main: `\u8fd9\u662f ${note?.name || ""}`,
+        support: "\u6309\u626c\u58f0\u5668\u7ee7\u7eed\u542c\u4e0b\u4e00\u9897\u5e26\u8def\u97f3\u3002"
+      };
+    }
+    return {
+      kicker: "\u5e26\u8def\u97f3\u6b63\u5728\u8fd4\u56de\u5730\u56fe",
+      main: `\u8fd9\u662f ${note?.name || ""}`,
+      support: "\u7b49\u5f85\u5730\u56fe\u8fd4\u56de\u3002"
+    };
   }
   if (attempt.phase === "visible-guide") {
     const midi = config.candidates[attempt.guideIndex] ?? config.candidates[0];
@@ -13251,7 +14219,7 @@ function renderPairedListeningScreen() {
   const attempt = ensurePairedListeningAttempt();
   const config = pairedListeningConfig(attempt?.levelId);
   if (!attempt || !config) return;
-  const guidePhase = ["guide-ready", "visible-guide"].includes(attempt.phase);
+  const guidePhase = ["guide-ready", "visible-guide", "guide-next-pending"].includes(attempt.phase);
   const targetMidi = guidePhase
     ? config.candidates[attempt.guideIndex]
     : (pairedListeningTarget(attempt) ?? config.candidates[0]);
@@ -13266,7 +14234,9 @@ function renderPairedListeningScreen() {
   els.gardenScene.dataset.lesson = config.levelId;
   els.gardenScene.dataset.listeningPhase = attempt.phase;
   els.gardenScene.dataset.reviewableForMastery = "true";
-  els.gardenScene.dataset.repairStage = attempt.phase === "visible-guide" ? (attempt.guideRepairStage || "none") : (attempt.callRepairStage || "none");
+  els.gardenScene.dataset.repairStage = ["visible-guide", "guide-next-pending"].includes(attempt.phase)
+    ? (attempt.guideRepairStage || "none")
+    : (attempt.callRepairStage || "none");
   els.gardenXingya.dataset.equipment = "safe-open";
   renderGardenCharacterAsset("safe-open");
   els.gardenAirCheck.hidden = true;
@@ -13281,7 +14251,7 @@ function renderPairedListeningScreen() {
   els.gardenSpeechKicker.textContent = copy.kicker;
   els.gardenSpeechMain.textContent = copy.main;
   els.gardenSpeechSupport.textContent = copy.support;
-  const playing = ["visible-guide", "target-playing", "wrong-known", "pair-compare", "modeled-playing"].includes(attempt.phase);
+  const playing = ["visible-guide", "child-echo-playing", "target-playing", "wrong-known", "pair-compare", "modeled-playing"].includes(attempt.phase);
   els.listeningSource.classList.toggle("is-playing", playing);
   els.listeningSource.classList.toggle("is-sound-paused", attempt.phase === "sound-paused");
   const endpoints = [els.pairedListeningLeft, els.pairedListeningRight];
@@ -13289,7 +14259,7 @@ function renderPairedListeningScreen() {
     endpoint.classList.remove("is-responding", "is-complete", "is-guide-active");
     endpoint.removeAttribute("data-note");
   });
-  const guideVisible = attempt.phase === "guide-ready" || attempt.phase === "visible-guide";
+  const guideVisible = ["guide-ready", "visible-guide", "guide-next-pending"].includes(attempt.phase);
   if (guideVisible) {
     endpoints.forEach((endpoint, index) => endpoint.dataset.note = config.letters[index]);
     if (attempt.phase === "visible-guide") endpoints[attempt.guideIndex]?.classList.add("is-guide-active");
@@ -13319,13 +14289,18 @@ function renderPairedListeningScreen() {
     els.ls05Compare.innerHTML = "";
     els.ls05Compare.removeAttribute("aria-label");
   }
-  els.listeningReplay.disabled = playing || ["guide-rest", "correct-feedback", "complete", "modeled-success"].includes(attempt.phase);
+  const guidePresentationAwaitingMap = attempt.phase === "guide-next-pending" &&
+    attempt.pendingGuidePresentation?.requiresExplicitGesture !== true;
+  const replayDisabled = playing || guidePresentationAwaitingMap ||
+    ["guide-target-pending", "guide-rest", "correct-feedback", "complete", "modeled-success"].includes(attempt.phase);
+  els.listeningReplay.disabled = replayDisabled;
+  els.listeningReplay.setAttribute("aria-disabled", String(replayDisabled));
   els.listeningReplay.hidden = ["guide-rest", "complete"].includes(attempt.phase);
   const visualAssistAllowed = ["assisted", "candidate-outside"].includes(attempt.callRepairStage) || (attempt.phase === "sound-paused" && attempt.soundPauseCount >= 2);
   els.ls05VisualAssist.hidden = !visualAssistAllowed || ["visual-assist", "correct-feedback", "modeled-playing", "modeled-success", "complete"].includes(attempt.phase);
   els.listeningCallProgress.innerHTML = [0, 1, 2, 3].map((index) => {
     const done = index < attempt.neutralProgress;
-    const formalCallVisible = attempt.guidePlayed && !["guide-ready", "visible-guide", "guide-rest", "complete"].includes(attempt.phase);
+    const formalCallVisible = attempt.guidePlayed && !["guide-ready", "visible-guide", "guide-next-pending", "guide-rest", "complete"].includes(attempt.phase);
     const active = formalCallVisible && index === attempt.callIndex;
     return `<span class="${done ? "done" : ""}${active ? " active" : ""}" aria-hidden="true"></span>`;
   }).join("");
@@ -13333,7 +14308,7 @@ function renderPairedListeningScreen() {
   els.listeningResult.classList.remove("is-complete");
   els.gardenProgress.innerHTML = "";
   els.gardenProgress.hidden = true;
-  els.nextAction.textContent = ["guide-ready", "visible-guide"].includes(attempt.phase)
+  els.nextAction.textContent = ["guide-ready", "visible-guide", "guide-next-pending"].includes(attempt.phase)
     ? `跟着星芽找 ${config.letters.join(" / ")}`
     : (attempt.phase === "complete" ? `${config.progressLabel}完成` : `${config.progressLabel} ${Math.min(4, attempt.callIndex + 1)}/4`);
   els.inputStatus.textContent = "输入：屏幕琴键";
@@ -13453,7 +14428,9 @@ function renderLs08Screen() {
     els.ls05Compare.innerHTML = "";
     els.ls05Compare.removeAttribute("aria-label");
   }
-  els.listeningReplay.disabled = playing || ["guide-rest", "correct-feedback", "modeled-success", "complete-roots", "unscored-low-echo"].includes(attempt.phase);
+  const replayDisabled = playing || ["guide-rest", "correct-feedback", "modeled-success", "complete-roots", "unscored-low-echo"].includes(attempt.phase);
+  els.listeningReplay.disabled = replayDisabled;
+  els.listeningReplay.setAttribute("aria-disabled", String(replayDisabled));
   els.listeningReplay.hidden = ["guide-rest", "complete-roots", "unscored-low-echo"].includes(attempt.phase);
   const assistAllowed = !attempt.repairAudioPlaying && (attempt.phase === "assisted" || (attempt.phase === "sound-paused" && attempt.soundPauseCount >= 2));
   els.ls05VisualAssist.hidden = !assistAllowed || ["visual-assist", "modeled-playing", "modeled-success", "complete-roots", "unscored-low-echo"].includes(attempt.phase);
@@ -14200,9 +15177,10 @@ function showGardenScreen({ recovery = false } = {}) {
   else if (currentPairedListeningAction()) ensurePairedListeningAttempt();
   else restoreGardenPendingAttempt();
   const audioBAttempt = currentAudioBAttempt();
+  const audioCAttempt = currentAudioCAttempt();
   state.gardenInputArmed = state.gardenAudioAttempt
     ? state.gardenAudioAttempt.inputArmed === true
-    : (audioBAttempt ? audioBAttempt.inputArmed === true : true);
+    : (audioBAttempt ? audioBAttempt.inputArmed === true : (audioCAttempt ? (audioCAttempt.inputArmed === true || audioCAttempt.guideInputArmed === true) : true));
   history.replaceState(null, "", `?mode=garden${sessionUrlSuffix()}`);
   render();
   if (currentLs08Action()) {
@@ -14216,7 +15194,7 @@ function showGardenScreen({ recovery = false } = {}) {
     resumeLs05Flow();
   } else if (currentPairedListeningAction()) {
     setGardenEquipmentState("safe-open");
-    resumePairedListeningFlow();
+    resumeAudioCPairedListeningFlow();
   } else {
     beginGardenAirCheck({ recovery });
     if (recovery && state.gardenAudioAttempt?.phase === "sound-paused") recoverAudioAAttempt();
@@ -14404,15 +15382,19 @@ function showMapScreen() {
     persistLs08Attempt();
   }
   clearLs08Timers();
-  const pendingPaired = currentPairedListeningAction()?.listeningAttempt;
-  if (state.screen === "garden" && pendingPaired?.phase === "modeled-playing" && pendingPaired.pendingModeled) {
-    completePairedListeningModeled(pendingPaired.pendingModeled.reason, { targetAlreadyPlayed: true });
+  const audioCAttempt = currentAudioCAttempt();
+  if (audioCAttempt && audioCExternalInputIsActive(audioCAttempt)) {
+    interruptAudioCExternalInput(audioCAttempt, "map-external-input");
+  }
+  if (audioCAttempt && audioCPlaybackIsActive(audioCAttempt)) {
+    queueAudioCMapReturn(audioCAttempt);
     return;
   }
-  if (state.screen === "garden" && pendingPaired && pendingPaired.phase !== "complete") {
-    pendingPaired.callTimingInterrupted = true;
-    pendingPaired.callResponseStartedAt = null;
-    persistPairedListeningAttempt();
+  if (state.screen === "garden" && audioCAttempt && audioCAttempt.phase !== "complete") {
+    audioCAttempt.callTimingInterrupted = true;
+    audioCAttempt.callResponseStartedAt = null;
+    clearAudioCStaleInputHolds(audioCAttempt);
+    persistAudioCAttempt(audioCAttempt);
   }
   if (state.screen === "garden" && state.activeSession?.bundleId === "C3-01") {
     if (!state.chapter3.lessonEvidence.LS01?.completedAt) {
@@ -15747,6 +16729,7 @@ function stopMicrophone() {
   if (!state.audio) return;
   interruptActiveAudioAExternalInput("microphone-stopped");
   interruptActiveAudioBExternalInput("microphone-stopped");
+  interruptActiveAudioCExternalInput("microphone-stopped");
   const audio = state.audio;
   cancelAnimationFrame(audio.raf);
   audio.stream.getTracks().forEach((track) => track.stop());
@@ -16070,18 +17053,21 @@ window.addEventListener("blur", () => {
   interruptTeachingPianoSequence("window-blur");
   interruptActiveAudioAExternalInput("window-blur");
   interruptActiveAudioBExternalInput("window-blur");
+  interruptActiveAudioCExternalInput("window-blur");
 });
 document.addEventListener("visibilitychange", () => {
   if (document.visibilityState === "hidden") {
     interruptTeachingPianoSequence("document-hidden");
     interruptActiveAudioAExternalInput("document-hidden");
     interruptActiveAudioBExternalInput("document-hidden");
+    interruptActiveAudioCExternalInput("document-hidden");
   }
 });
 window.addEventListener("pagehide", () => {
   interruptTeachingPianoSequence("pagehide");
   interruptActiveAudioAExternalInput("pagehide");
   interruptActiveAudioBExternalInput("pagehide");
+  interruptActiveAudioCExternalInput("pagehide");
 });
 document.addEventListener("keydown", (event) => {
   if (!event.metaKey && !event.ctrlKey && !event.altKey) unlockAudioFromGesture();
@@ -16198,10 +17184,22 @@ els.listeningReplay?.addEventListener("click", () => {
     return;
   }
   if (currentPairedListeningAction()) {
-    const attempt = ensurePairedListeningAttempt();
+    const attempt = currentAudioCAttempt();
     if (!attempt) return;
-    if (!attempt.guidePlayed || attempt.phase === "guide-ready") playPairedListeningGuide();
-    else playPairedListeningTarget("child-replay");
+    if (audioCPlaybackIsActive(attempt) || audioCExternalInputIsActive(attempt)) return;
+    const pendingGuideNeedsGesture = attempt.phase === "guide-next-pending" &&
+      attempt.pendingGuidePresentation?.requiresExplicitGesture === true;
+    if (["child-echo-playing", "guide-target-pending"].includes(attempt.phase) ||
+      (attempt.phase === "guide-next-pending" && !pendingGuideNeedsGesture)) return;
+    if (attempt.phase === "sound-paused") {
+      recoverAudioCAttempt();
+      return;
+    }
+    if (!attempt.guidePlayed || ["guide-ready", "visible-guide", "guide-next-pending"].includes(attempt.phase)) {
+      playPairedListeningGuide({ recovery: pendingGuideNeedsGesture });
+    }
+    else if (attempt.phase === "replay-ready") playPairedListeningTarget("system-first");
+    else playPairedListeningWholePairReplay();
     return;
   }
   if (currentListeningAction("LS05")) {
@@ -16366,7 +17364,7 @@ if (state.screen === "garden") {
     setTimeout(() => resumeLs05Flow({ fromReload: true }), 0);
   } else if (currentPairedListeningAction()) {
     ensurePairedListeningAttempt();
-    setTimeout(() => resumePairedListeningFlow({ fromReload: true }), 0);
+    setTimeout(() => resumeAudioCPairedListeningFlow({ fromReload: true }), 0);
   } else {
     restoreGardenPendingAttempt();
   }

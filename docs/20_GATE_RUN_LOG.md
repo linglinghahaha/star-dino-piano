@@ -2,6 +2,41 @@
 
 This file records concrete pass/fail evidence for UI, teaching, and polish gates. It is not a substitute for the acceptance rules in `15_ACCEPTANCE_GATES.md`; it is the evidence trail.
 
+## 2026-07-18 - AUDIO-C LS06-LS07 Browser Gate Evidence
+
+Baseline and identity:
+
+- Baseline: frozen AUDIO-B candidate `overhaul-345c-audio-b`; AUDIO-C candidate identity: `overhaul-345d-audio-c`.
+- Final runtime digest: `app.js` SHA-256 `DAA50F00F4CCFD8A408631AE934BB39D8B6FB02EB064A99063475C751CD692C6`.
+- The shell loads `app.js?v=overhaul-345d-audio-c`; Service Worker cache `star-dino-pwa-overhaul-345d-audio-c` precaches the same URL. PWA shell evidence passed with that identity.
+
+Scope and lifecycle evidence:
+
+- AUDIO-C covers only Chapter 3 LS06 and LS07. Guide, hidden target, whole-pair child replay, controlled screen/MIDI child echo, wrong pair repair, modeled pair, microphone external input, reload/recovery, map queueing, and held MIDI reuse `playTeachingPianoSequence`; no lesson-local AudioContext or wall-clock completion path was introduced.
+- Verified start/end gates response scoring and world action. Mute, zero volume, rejected resume, suspend/closed, watchdog, map, refresh, visibility, pagehide, and blur produce interrupted/sound-paused evidence rather than fabricated score, flower/vine action, or next-lesson advance. Microphone remains accepted-onset-to-quiet external evidence with no local speaker echo.
+- AUDIO-C P1 closes the final-guide transition race. After the second guide child echo truly ends, `guide-target-pending` binds the automatic `system-first` target to that ended child transaction's playback token. Whole-pair replay is unavailable until a real response phase; the replay control is native-disabled and `aria-disabled` during child echo and the transition. The permanent probe proves repeated click, Enter, and Space create zero whole-pair starts, zero child replay count, one started/ended system-first target, zero orphan interruption, and zero scored calls.
+- AUDIO-C P1 also closes the non-final guide map-resume gap. If the child asks for the map during the first guide echo, the attempt persists `guide-next-pending` plus `pendingGuidePresentation`; re-entry in the explicit map gesture plays the second guide through the verified teaching sequence before `guideInputArmed=true`. A real page reload is not treated as a sound gesture: it keeps the guide phase unarmed, suppresses formal `1/4` progress, exposes one accessible replay control, and uses Xingya dialogue to request that explicit continuation. LS06 C->G and LS07 E->F each have permanent lifecycle, DOM, ARIA, session, denominator and mastery-isolation assertions.
+- LS06 remains C/G with four 2/2 calls and its existing 3/4 stable threshold. LS07 remains E/F with its existing guide/hidden boundary, four 2/2 calls, and existing stable/retained semantics. Neither lesson auto-starts LS07 or LS08; no course sequence, seed, threshold, mastery, DOM/CSS/layout, media, or runtime asset changed.
+
+Final browser gates (all exit 0 on the final digest):
+
+- `check:supervisor-audio-c` `13/13`; `check:audio-c` `46/46`; `check:chapter3-ls06-ls07` `64/64`. Full `check:audio-lifecycle` passed AUDIO-A `66/66`, AUDIO-B `46/46`, AUDIO-C `46/46`, LS08 `131/131`, and C4 LP01-LP02 `137/137`.
+- `check:chapter3-ls04` `39/39`; `check:chapter3-ls05` `66/66`; `check:sessions` `74/74`; `check:clean-state` `124/124`; `check:m03-garden` `32/32`; `check:chapter3-visible` `74/74`.
+- `check:child-note-names` `224/224`; `check:audio-settings` `13/13`; `check:input-reliability` `12/12`; `check:pwa-shell` `8/8`; `check:ipad-a11y` `43/43`.
+
+Unchanged-shell evidence inherited from the immediately preceding 345d digest:
+
+- On digest `310A2B78C0140231425F727FE7F71F6016A113172DB18052EBC599E18F40D529`, workshop identity `36/36`, assembly blueprint `39/39`, M01 hierarchy `17/17`, roof route `97/97`, staff readability `13/13`, staff repair `27/27`, Xingya suit `29/29`, staff mini `20/20`, motion `19/19`, palette `17/17`, and contrast `9/9` passed. The final P1 diff changes only AUDIO-C paired-listening state/copy and its lifecycle regression; it changes no HTML structure, CSS, asset, viewport, course note, seed or threshold. These results are retained as unchanged-shell regression evidence, not represented as newly rerun final-digest tests.
+
+Layout and static evidence:
+
+- LS06/LS07 historical 342a JSON and fixed screenshot directories were not re-signed or overwritten. AUDIO-C and its P1 changed no DOM/CSS geometry contract; the existing runner was only made lifecycle-aware by waiting for real guide/response rearm instead of wall-clock-timed input. Final-digest iPad accessibility passed `43/43`, child note-name/layout passed `224/224`, and all browser consoles remained clean. The 342a contracts remain layout-regression baselines rather than new 345d device evidence; physical iPad Safari is still missing.
+- `check:quick` passed syntax, note matrix, copy integrity, the 22-check audio contract audit, and the bundle audit. `check:bundle:strict` passed with 42 runtime files and 1,641,265 runtime-asset bytes.
+- `node --check` passed every changed JS/MJS file; `git diff --check` and `git diff --cached --check` passed. The only Git output is the non-failing CRLF normalization warning for `index.html`.
+- Runtime entry files have zero matches for `concepts/`, `audio/`, Grok/Gemini/Sora, technical preview, and prohibited-project identifiers. Historical docs and developer tools are excluded from that runtime-only statement.
+
+Status: final-digest browser/runtime evidence is `passed`, and the supervisor approves an isolated AUDIO-C promotion. Runtime media integration remains disallowed. Physical iPad Safari, real MIDI hardware, acoustic-piano microphone input, manual speaker/headphone listening review, teacher review, 3-5 child observation, source/provenance review, external similarity review, and release clearance remain `missing`.
+
 ## 2026-07-18 - AUDIO-B LS04-LS05 Browser Gate Evidence
 
 Baseline and identity:
