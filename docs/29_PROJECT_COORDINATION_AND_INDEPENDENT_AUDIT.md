@@ -6,7 +6,8 @@
 
 - 主管复核 `docs/48` 时发现原优先级缺少困难候选的轮换条件：持续 `needsPractice` 的 LP01 可能每个 session 都抢在 LP02 和新故事前，形成补教死循环并破坏 3-5 分钟儿童短课节奏。
 - 现改为基于正式 session 历史的单次冷却。一次 review 使用 repeated repair、strong、modeled、visual-assist 或长等待收短后，保留证据与原优先级，但写 `cooldownAfterSessionId`；至少一个后来结束的不同正式孩子 session 出现前，该候选暂不参选。期间可轮到其它合格 review 或新故事，刷新、debug/direct、地图往返和未结束 session 都不能消耗冷却。
-- `docs/09` 的通用支架规则和 `docs/48` 的字段、状态、自动化清单已经同步。该修正仍是 `prepared_not_dispatched` 规划，不触碰当前 LP03 运行实现，也不提前解锁 C4-R01 或 LP04。
+- `C4-R01` 同时明确为目标 bundle session 开头的最多一个 `opening-review` action，而不是额外故事 bundle：顺利时沿用同一 session 进入新课，困难时新课 action 保持未呈现并在 review 安全点结束。
+- `docs/09` 的通用支架规则和 `docs/48` 的字段、状态、自动化清单已经同步；`docs/51` 也已把 LP04 收敛为一份 `prepared_locked` 的 E-D-C 下降回声工作单。两者都只是后续规划，不触碰当前 LP03 运行实现，也不提前解锁 C4-R01、LP04 或媒体集成。
 
 ## 2026-07-18 `overhaul-345d-audio-c` 正式晋升与 LP03 解锁
 

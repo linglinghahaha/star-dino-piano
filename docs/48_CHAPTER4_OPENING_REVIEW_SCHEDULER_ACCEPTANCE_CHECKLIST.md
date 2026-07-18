@@ -85,6 +85,7 @@ LP02 opening review 使用当前已冻结的连续 `C3-B4` 单排键盘和真实
 
 ## 六、状态与队列
 
+- `C4-R01` 是调度动作身份，不是新的孩子故事 bundle。孩子从地图明确开始当前目标短课时只创建一个 formal session：`bundleId` 保持目标新课（LP03 通过后的首个目标是 `C4-03`），并在其 lesson actions 前最多插入一个带 `reviewSkillKey` 的 `opening-review` action。顺利 review 可在同一 session 继续目标 lesson；困难 review 在安全结果处结束该 session，目标 lesson actions 保持未呈现，下一次仍需孩子明确点击并创建新的 session。不得在 review 与新课之间自动创建第二个 session，也不得把未呈现的新课写进完成历史。
 - 队列项至少保存 `skillKey`、source session、reason、priority、`nextMode`、`remediationPreparedAt`、createdAt、lastAttemptAt、`lastAttemptSessionId`、`cooldownAfterSessionId` 和状态。
 - 创建 review session 后不能立即删除队列项；只有对应 review 真实 ended 后才按结果更新。
 - `passed stable/retained` 可关闭相应队列项；困难结果更新 `needsPractice` 并保留下一次资格，但不得在同一 session 再排第二遍。
@@ -112,12 +113,13 @@ LP02 opening review 使用当前已冻结的连续 `C3-B4` 单排键盘和真实
 5. 同一 session 最多一个 review；困难 review 后新课不自动开始。
 6. review session 创建、刷新、地图暂停、恢复、ended 和队列更新幂等；覆盖“技能 needsPractice 仍为 true，但队列 nextMode 已为 reduced-cue”时不会形成补教死循环或重复候选。
 7. 困难 review 写入 `cooldownAfterSessionId`；刷新、debug、未结束 session 不消耗冷却，一个后来结束的不同正式 session 才使其重新合格。冷却期间下一候选或新故事可运行，同一困难技能不能连续霸占两个孩子 session。
-8. 普通 replay/direct/debug/同日或不足 8 小时均不能 retained。
-9. stable/retained 历史不因后来困难删除；todayNeedsPractice 可同时存在。
-10. LP01/LP02 review 不改变 C 锚石、D/E 石头、LP03 阶段观察或前章证据。
-11. 孩子界面不出现 stable、retained、倒计时、速度、C3/C4 数字或两个 review 清单。
-12. 六视口、辅助激活、pointer/MIDI 生命周期、声音 started/ended、PWA、session、clean-state、quick 和 strict bundle 通过。
-13. `concepts/**`、`audio/**` 和未批准生成视频运行引用为 0。
+8. 复习以目标 bundle 的单一 session 前置 action 存在；顺利时沿用同一 session 进入新课，困难时新课 action 保持未呈现且 session 在 review 安全点 ended。两条路线均不得制造第二个自动 session、空的新课 completion 或重复 review history。
+9. 普通 replay/direct/debug/同日或不足 8 小时均不能 retained。
+10. stable/retained 历史不因后来困难删除；todayNeedsPractice 可同时存在。
+11. LP01/LP02 review 不改变 C 锚石、D/E 石头、LP03 阶段观察或前章证据。
+12. 孩子界面不出现 stable、retained、倒计时、速度、C3/C4 数字或两个 review 清单。
+13. 六视口、辅助激活、pointer/MIDI 生命周期、声音 started/ended、PWA、session、clean-state、quick 和 strict bundle 通过。
+14. `concepts/**`、`audio/**` 和未批准生成视频运行引用为 0。
 
 ## 九、放行顺序
 

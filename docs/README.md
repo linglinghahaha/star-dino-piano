@@ -52,8 +52,9 @@ These files define the product direction so implementation does not drift:
 - `46_CHAPTER4_LP01_LP02_SUPERVISOR_ACCEPTANCE_CHECKLIST.md`: accepted historical work order and evidence record for the `overhaul-344a-p3` Chapter 4 first slice; it separates LP01 high/low C sound comparison from LP02 low-C keyboard geography.
 - `47_CHAPTER4_LP03_SUPERVISOR_ACCEPTANCE_CHECKLIST.md`: active next-runtime contract for `C4-02 / LP03`. It preserves LP02's permanent C anchor, adds D/E without resetting the world, and is dispatch-ready after all three `docs/49` audio-lifecycle batches passed; implementation and independent LP03 acceptance remain pending.
 - `48_CHAPTER4_OPENING_REVIEW_SCHEDULER_ACCEPTANCE_CHECKLIST.md`: prepared but undispatched `C4-R01` work order. It makes LP01/LP02 opening-review queues executable without mixing hearing and key-location evidence, keeps LP03 C-D-E as a stage observation rather than premature stable mastery, and is scheduled after LP03 but before LP04.
-- `49_TEACHING_AUDIO_LIFECYCLE_AUDIT_CHECKLIST.md`: current blocking runtime work order. It migrates M03 and LS01-LS07 in three independently frozen batches (`AUDIO-A`, `AUDIO-B`, `AUDIO-C`) before LP03 can begin.
+- `49_TEACHING_AUDIO_LIFECYCLE_AUDIT_CHECKLIST.md`: completed historical work order. AUDIO-A, AUDIO-B, and AUDIO-C independently migrated and verified the M03/LS01-LS07 teaching-audio lifecycle; the final approved prerequisite is retained in `overhaul-345d-audio-c` / `2405734`.
 - `50_GROK_BATCH7_SUPERVISOR_REVIEW.md`: independent source-only ruling for Grok Batch 7; it does not approve runtime or release use.
+- `51_CHAPTER4_LP04_SUPERVISOR_ACCEPTANCE_CHECKLIST.md`: prepared but locked `C4-03 / LP04` work order. It turns the familiar low C-D-E homes into a guided E-D-C descending echo route, preserves the partial Dongdong reveal, and cannot be dispatched until LP03 and C4-R01 are independently accepted.
 
 When changing the app, check the relevant document first. If a requested feature conflicts with the north star, update the plan deliberately rather than letting the product drift.
 
