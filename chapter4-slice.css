@@ -310,6 +310,61 @@ body.screen-chapter4 {
 #appShell[data-chapter4-lesson="LP02"] .chapter4-depth { width: min(430px, 44vw); }
 #appShell[data-chapter4-lesson="LP02"] .chapter4-cave-rings { opacity: .72; }
 
+#appShell[data-chapter4-lesson="LP03"] .chapter4-bubbles,
+#appShell[data-chapter4-lesson="LP03"] .chapter4-sound-source { display: none; }
+#appShell[data-chapter4-lesson="LP03"] .chapter4-foundation { display: flex; }
+#appShell[data-chapter4-lesson="LP03"] .chapter4-depth { width: min(430px, 44vw); }
+#appShell[data-chapter4-lesson="LP03"] .chapter4-cave-rings { opacity: .72; }
+
+.chapter4-foundation[data-lp03="true"] {
+  gap: clamp(5px, 1.1vw, 12px);
+  align-items: end;
+}
+
+.chapter4-foundation[data-lp03="true"] span {
+  width: clamp(70px, 10vw, 116px);
+  height: 48px;
+  display: grid;
+  place-items: center;
+  color: #f7f1c4;
+  border: 4px dashed rgba(241,231,163,.9);
+  background: rgba(23,61,66,.22);
+  box-shadow: inset 0 0 0 3px rgba(23,61,66,.30);
+  font-size: 22px;
+  font-weight: 900;
+  opacity: .6;
+  transform: translateY(-44px);
+}
+
+.chapter4-foundation[data-lp03="true"] span:first-child {
+  opacity: 1;
+  transform: none;
+}
+
+.chapter4-foundation[data-lp03="true"][data-foundation-c-anchored="true"] span:first-child {
+  border-style: solid;
+  border-color: #f1e7a3;
+  background: #8d6b58;
+  box-shadow: inset 0 7px rgba(255,255,255,.18), 0 8px 0 #5d493f, 0 13px 16px rgba(7,31,34,.28);
+}
+
+.chapter4-foundation[data-lp03="true"][data-foundation-c-awake="true"] span:first-child {
+  color: #173d42;
+  background: #f1e590;
+  box-shadow: inset 0 7px rgba(255,255,255,.35), 0 8px 0 #5d493f, 0 0 0 4px rgba(234,255,168,.42), 0 13px 16px rgba(7,31,34,.28);
+}
+
+.chapter4-foundation[data-lp03="true"][data-foundation-d-placed="true"] span:nth-child(2),
+.chapter4-foundation[data-lp03="true"][data-foundation-e-placed="true"] span:nth-child(3) {
+  opacity: 1;
+  transform: none;
+  border-style: solid;
+  border-color: #f1e7a3;
+  background: #8d6b58;
+  box-shadow: inset 0 7px rgba(255,255,255,.18), 0 8px 0 #5d493f, 0 13px 16px rgba(7,31,34,.28);
+  animation: chapter4-foundation-land .46s ease-out both;
+}
+
 #appShell.app-shell.chapter4-mode[data-chapter4-lesson="LP01"] #keyboardPanel { display: none !important; }
 #appShell.app-shell.chapter4-mode[data-chapter4-lesson="LP02"] #keyboardPanel {
   display: grid !important;
@@ -318,6 +373,16 @@ body.screen-chapter4 {
   padding: 6px 10px 8px;
   background: #dfe7d6;
 }
+
+#appShell.app-shell.chapter4-mode[data-chapter4-lesson="LP03"] #keyboardPanel {
+  display: grid !important;
+  min-width: 0;
+  overflow: hidden;
+  padding: 6px 10px 8px;
+  background: #dfe7d6;
+}
+
+#appShell.app-shell.chapter4-mode[data-chapter4-lesson="LP03"] #keyboardPanel .status-row { display: none; }
 
 #appShell.app-shell.chapter4-mode[data-chapter4-lesson="LP02"] #keyboardPanel .status-row { display: none; }
 
@@ -359,6 +424,10 @@ body.screen-chapter4 {
 
 .keyboard.chapter4-keyboard .white-key strong { font-size: 20px; line-height: 1; }
 .keyboard.chapter4-keyboard .white-key small { display: block; margin-top: 4px; font-size: 9px; line-height: 1.05; }
+
+.keyboard.chapter4-keyboard[data-locator-cue="two-black"] .black-key.lp03-locator-key {
+  box-shadow: 0 0 0 3px rgba(241,229,144,.55), inset 0 -6px rgba(0,0,0,.16);
+}
 .keyboard.chapter4-keyboard .white-key.pressed { padding-bottom: 4px; border-bottom-width: 3px; background: #e2f4d5; }
 .keyboard.chapter4-keyboard .white-key.hit-wrong { background: #ffe0c1; }
 .keyboard.chapter4-keyboard .white-key.lp02-current-playing {

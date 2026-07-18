@@ -2,6 +2,43 @@
 
 This file records concrete pass/fail evidence for UI, teaching, and polish gates. It is not a substitute for the acceptance rules in `15_ACCEPTANCE_GATES.md`; it is the evidence trail.
 
+## 2026-07-19 - LP03 346a Contract Triple and Shared Regression Evidence
+
+Baseline, identity, and scope:
+
+- Baseline: approved AUDIO-C runtime `overhaul-345d-audio-c`; LP03 candidate identity: `overhaul-346a-lp03`. This is browser/prototype evidence only and is not a promotion or release baseline.
+- Frozen runtime digest throughout the contract triple and shared gates: `app.js` SHA-256 `98BBD58DF14B9CB97EC45EC46F2BD8133B2660341534C8EADC346739F1F9DCF5`.
+- The shell loads `app.js?v=overhaul-346a-lp03`; Service Worker cache `star-dino-pwa-overhaul-346a-lp03` precaches that URL and the matching Chapter 4 CSS URL. PWA shell passed on the frozen digest.
+- Scope remained C4-02 / LP03 evidence and its affected regression gates. This LP03 work made no C4-R01, LP04, low-staff/left-hand teaching, media integration, course order/threshold, mastery, or supervisor-document change. Candidate files remain unstaged and uncommitted.
+
+LP03 crash-recovery P1 and browser-harness evidence:
+
+- Persisted `lp03-step-complete` and `lp03-complete` states reconcile idempotently: clean C/D advance only once, assisted C rests only once, clean E becomes gesture-gated seam-ready, deferred E finishes only once, and an active final completion closes one session without duplicating route events, completed actions, history, learning completion, stable, or retained evidence.
+- The permanent LP03 harness closes every tracked context/browser in `finally`, has a 90-second scenario watchdog and 12-minute suite cap, prints the last scenario on failure, and supports the single persisted-C recovery fixture. The direct fixture passed `4/4`; the complete LP03 suite passed `54/54` without a residual Playwright process.
+
+Fixed-directory LP03 coordinate contract triple:
+
+- Contract: `chapter4-lp03-media-zones-overhaul-346a-v1`, `docs/30_CHAPTER4_LP03_MEDIA_ZONE_CONTRACT_346A_V1.json`, and `screenshots/chapter4_lp03_media_zones_346a_v1/`. Each independent run cleared and regenerated the fixed directory from the same frozen inputs.
+- All three runs passed `6` viewports x `19` states = `114` PNG, with `0` geometry failures and `0` browser errors. Required internal SHA-256 was identical in every run: `139635b5560dd316415b52b191871350273a0bdad0c8286d18dd8cd7848ea273`.
+- Round 1 raw hashes: JSON `FE1DFD7A55E2122503FA054031B4D6593B312FB161A6B4D6F5CE5D940610825D`; PNG manifest `1002b3a9bd5d96786c9620ca66bb323c4e17877641b2be648354b481db7268d0`.
+- Round 2 raw hashes: JSON `58B7E8735380363E3C97165B36EBEB3854AFA71C28BC223831E2821570E941C3`; PNG manifest `cfc569876c616b37e6b152aca74b4ff3d09e20378e2c0414ca7ab184e021ab74`.
+- Round 3 final raw hashes: JSON `AE8430B0ED39D55B201BD1D0A5B474879DBD30A4BE4FB6CC651856A2F18188B3`; PNG manifest `5d77ab02f67849b89d485e6fc39d5d1c295ed55a13410e848ac41f44e54d0dc8`. The internal runner hash is the fixed-run equivalence field; raw artifact hashes are recorded for traceability.
+
+Shared gates on the same frozen digest (all exit 0):
+
+- Full audio lifecycle: AUDIO-A `66/66`, AUDIO-B `46/46`, AUDIO-C `46/46`, LS08 `131/131`, C4 LP01-LP02 `137/137`, LP03 `54/54`, and LP03 supervisor `32/32`.
+- Session and device gates: sessions `74/74`, clean-state `124/124`, PWA `8/8`, iPad accessibility `43/43`, audio settings `13/13`, input reliability `12/12`, child note names `276/276`.
+- Course gates: M03/Garden `32/32`, Chapter 3 visible `74/74`, LS04 `39/39`, LS05 `66/66`, LS06/LS07 `64/64`, and continuity supervisor `14/14`.
+- Version-sensitive Chapter 1/2 gates: M01 hierarchy `17/17`, roof route `97/97`, assembly blueprint `39/39`, staff readability `13/13`, staff repair `27/27`, Xingya suit `29/29`, workshop identity `36/36`.
+- `check:quick` passed syntax, note matrix, copy integrity, the `22`-check audio audit, and bundle audit. `check:bundle:strict` passed with `42` runtime files and `1,641,265` runtime-asset bytes.
+
+Static, isolation, and remaining evidence:
+
+- `node --check` passed every changed JS/MJS file; `git diff --check` and `git diff --cached --check` passed. The only Git notice was the non-failing CRLF normalization warning for `index.html`.
+- Runtime entry files have zero matches for `concepts/`, `audio/`, Grok/Gemini/Sora, technical-preview, and prohibited-project identifiers. `package.json` has one non-runtime developer command that names `concepts/`; supervisor `docs/29` retains seven historical isolation references. Those non-runtime references are not represented as a whole-repository literal-zero claim.
+- Original-size final-round review artifacts include `ipad-1024x768-dpr1_initial-model-ready.png` SHA-256 `CB8520DF1282A938764AF1CAEE27C8A09E0E6DDB6FC5FC2488EEA275EDF8D7DA`, `ipad-1024x768-dpr1_assisted.png` SHA-256 `C21A5849A6D302361392BAB87BD087705ED8D768FD4F824A6F6C23A409AF58AB`, and `ipad-1024x768-dpr1_complete-map.png` SHA-256 `ABE828D6345DDCBD1E9A2F8561A4FE460A0FD2EBABB1AE1F1FEC2DE698D5A457` in the fixed screenshot directory.
+- Status: available browser/runtime evidence is `passed`; no contradiction was found and no test process remains. Physical iPad Safari, real MIDI hardware, acoustic-piano microphone input, manual speaker/headphone listening review, teacher review, 3-5 child observation, source/provenance review, external similarity review, and release clearance remain `missing`.
+
 ## 2026-07-18 - AUDIO-C LS06-LS07 Browser Gate Evidence
 
 Baseline and identity:

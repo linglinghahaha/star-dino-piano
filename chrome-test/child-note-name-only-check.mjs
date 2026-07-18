@@ -6,7 +6,7 @@ const require = createRequire(import.meta.url);
 const { chromium } = require("playwright");
 
 const rootUrl = process.argv[2] || "http://127.0.0.1:4173/";
-const screenshotDir = process.argv[3] || "screenshots/child_note_names_340c";
+const screenshotDir = process.argv[3] || "screenshots/child_note_names_346a";
 const viewports = [
   { id: "ipad-1024x768", width: 1024, height: 768, dpr: 1 },
   { id: "ipad-pro-11-1194x834", width: 1194, height: 834, dpr: 2 }
@@ -126,13 +126,27 @@ try {
         }))
         .filter((row) => tokenPattern.test(row.value) || /法法|索尔|Do\s*[/→-]\s*C/.test(row.value));
       const chapter4TextLeaks = textRows.filter((row) => row.chapter4 && (tokenPattern.test(row.text) || /法法|索尔|\b[A-G][34]\b/.test(row.text)));
-      const chapter4AccessibleLeaks = [...document.querySelectorAll("#chapter4Panel [aria-label], #chapter4Panel [title], #chapter4Panel [alt], #keyboardPanel [aria-label], #keyboardPanel [title], #keyboardPanel [alt]")]
+      const chapter4AccessibleValue = (element) => {
+        const labelledBy = (element.getAttribute("aria-labelledby") || "")
+          .split(/\s+/)
+          .filter(Boolean)
+          .map((id) => document.getElementById(id)?.textContent || "")
+          .join(" ");
+        return [
+          element.getAttribute("aria-label"),
+          element.getAttribute("aria-description"),
+          element.getAttribute("title"),
+          element.getAttribute("alt"),
+          labelledBy
+        ].filter(Boolean).join(" ");
+      };
+      const chapter4AccessibleLeaks = [...document.querySelectorAll("#chapter4Panel [aria-label], #chapter4Panel [aria-labelledby], #chapter4Panel [aria-description], #chapter4Panel [title], #chapter4Panel [alt], #keyboardPanel [aria-label], #keyboardPanel [aria-labelledby], #keyboardPanel [aria-description], #keyboardPanel [title], #keyboardPanel [alt]")]
         .filter((element) => elementVisible(element) && !element.closest(allowed))
         .map((element) => ({
           tag: element.tagName,
           id: element.id || "",
           className: element.className || "",
-          value: [element.getAttribute("aria-label"), element.getAttribute("title"), element.getAttribute("alt")].filter(Boolean).join(" ")
+          value: chapter4AccessibleValue(element)
         }))
         .filter((row) => tokenPattern.test(row.value) || /法法|索尔|\b[A-G][34]\b/.test(row.value));
       const chapter4PseudoLeaks = pseudoRows.filter((row) => row.chapter4 && (tokenPattern.test(row.content) || /法法|索尔|\b[A-G][34]\b/.test(row.content)));
@@ -149,7 +163,8 @@ try {
         midi: Number(key.dataset.midi),
         note: key.dataset.note || null,
         pitchName: key.dataset.pitchName || null,
-        aria: key.getAttribute("aria-label") || ""
+        aria: key.getAttribute("aria-label") || "",
+        isBlack: key.classList.contains("black-key")
       }));
       const routeLabelMetrics = [...document.querySelectorAll("#memoryStarRoute:not([hidden]) .memory-route-label strong, #fgStarRoute:not([hidden]) .fg-route-label strong")].map((label) => {
         const style = getComputedStyle(label);
@@ -334,6 +349,113 @@ try {
       chapter4Result = await inspect();
       record(`${viewport.id} LP02 complete: result and keyboard remain letter-only outside the character dialogue`, chapter4Result.chapter4TextLeaks.length === 0 && chapter4Result.chapter4AccessibleLeaks.length === 0 && chapter4Result.chapter4PseudoLeaks.length === 0, chapter4Result);
       await page.screenshot({ path: path.join(screenshotDir, `${viewport.id}_chapter4-lp02-complete.png`), fullPage: false });
+
+      const lp03ExpectedWhiteLetters = "CDEFGABCDEFGAB";
+      const lp03SurfacePass = (result) =>
+        result.chapter4TextLeaks.length === 0 &&
+        result.chapter4AccessibleLeaks.length === 0 &&
+        result.chapter4PseudoLeaks.length === 0;
+      const lp03KeyboardPass = (result) =>
+        result.chapter4WhiteKeys.length === 14 &&
+        result.chapter4WhiteKeys.map((key) => key.text.charAt(0)).join("") === lp03ExpectedWhiteLetters &&
+        result.chapter4WhiteKeys.every((key) => !/(Do|Re|Mi|Fa|Sol|\b[A-G][34]\b)/.test(`${key.text} ${key.aria}`)) &&
+        result.chapter4BlackKeys.length === 10 &&
+        result.chapter4BlackKeys.every((key) => key.isBlack && key.note === null && key.aria.startsWith("黑键") && !/(Do|Re|Mi|Fa|Sol|\b[A-G][34]\b)/.test(key.aria));
+      const waitLp03Phase = (phase, timeout = 14000) => page.waitForFunction(
+        (expected) => document.querySelector("#chapter4Scene")?.dataset.chapter4Phase === expected,
+        phase,
+        { timeout }
+      );
+      const waitLp03Response = (midi, timeout = 14000) => page.waitForFunction(
+        (target) => {
+          const attempt = ensureChapter4Attempt?.();
+          return attempt?.targetMidi === target && attempt.phase === "lp03-awaiting-response" && attempt.inputArmed === true;
+        },
+        midi,
+        { timeout }
+      );
+      const openLp03 = async (suffix = "") => {
+        await open(`?mode=chapter4&directMode=true&formalSession=false&lesson=LP03&check=child-note-names-lp03${suffix}`);
+        await waitLp03Phase("lp03-model-ready");
+      };
+      const recordLp03Policy = async (label, { speechIncludes = [] } = {}) => {
+        const result = await inspect();
+        const surfacePass = lp03SurfacePass(result) && speechIncludes.every((value) => result.chapter4Speech.includes(value));
+        record(`${viewport.id} LP03 ${label}: visible text, non-character ARIA/title/label and pseudo-elements keep solfege and octave labels inside the character speech`, surfacePass, result);
+        record(`${viewport.id} LP03 ${label}: fourteen white keys remain letter-only and ten black keys remain neutral black-key controls`, lp03KeyboardPass(result), result);
+        await page.screenshot({ path: path.join(screenshotDir, `${viewport.id}_chapter4-lp03_${label}.png`), fullPage: false });
+        return result;
+      };
+
+      await openLp03();
+      await recordLp03Policy("initial");
+      await page.locator("#chapter4StartCheck").click();
+      await waitLp03Phase("lp03-target-playing");
+      await recordLp03Policy("target");
+      await waitLp03Response(48);
+      await recordLp03Policy("response");
+      await page.locator('#keyboard [data-midi="53"]').click();
+      await waitLp03Phase("lp03-wrong-repair-playing");
+      await recordLp03Policy("wrong-white", { speechIncludes: ["F", "C"] });
+
+      await openLp03();
+      await page.locator("#chapter4StartCheck").click();
+      await waitLp03Response(48);
+      await page.locator('#keyboard [data-midi="49"]').click();
+      await waitLp03Phase("lp03-wrong-repair-playing");
+      await recordLp03Policy("wrong-black", { speechIncludes: ["C#", "黑键", "C"] });
+
+      await openLp03();
+      await page.locator("#chapter4StartCheck").click();
+      await waitLp03Response(48);
+      await page.locator('#keyboard [data-midi="60"]').click();
+      await waitLp03Phase("lp03-wrong-repair-playing");
+      await recordLp03Policy("same-name-wrong-octave", { speechIncludes: ["都是 C", "更低"] });
+
+      await openLp03();
+      await page.locator("#chapter4StartCheck").click();
+      await waitLp03Response(48);
+      await page.locator('#keyboard [data-midi="53"]').click();
+      await waitLp03Response(48);
+      await page.locator('#keyboard [data-midi="53"]').click();
+      await waitLp03Phase("lp03-assisted");
+      await recordLp03Policy("assisted");
+      await page.locator("#chapter4VisualAssist").click();
+      await waitLp03Phase("lp03-visual-assist");
+      await recordLp03Policy("visual-assist");
+
+      await openLp03();
+      await page.locator("#chapter4StartCheck").click();
+      await waitLp03Response(48);
+      await page.evaluate(() => window.completeLp03Modeled("child-note-name-gate"));
+      await waitLp03Phase("lp03-modeled-playing");
+      await recordLp03Policy("modeled");
+
+      await openLp03();
+      for (const midi of [48, 50, 52]) {
+        await page.locator("#chapter4StartCheck").click();
+        await waitLp03Response(midi);
+        await page.locator(`#keyboard [data-midi="${midi}"]`).click();
+        if (midi !== 52) await waitLp03Phase("lp03-model-ready");
+      }
+      await waitLp03Phase("lp03-seam-awaiting-response", 16000);
+      await recordLp03Policy("seam");
+      const seamSequence = await page.evaluate(() => ensureChapter4Attempt()?.seamCheck?.sequence?.slice() || []);
+      for (let index = 0; index < seamSequence.length; index += 1) {
+        await page.locator(`#keyboard [data-midi="${seamSequence[index]}"]`).click();
+        if (index < seamSequence.length - 1) await waitLp03Phase("lp03-seam-awaiting-response", 14000);
+      }
+      await waitLp03Phase("lp03-complete", 16000);
+      await recordLp03Policy("complete");
+
+      await openLp03("&audit=color-reduced");
+      await recordLp03Policy("reduced");
+      await openLp03("&audit=high-contrast");
+      await page.evaluate(() => {
+        document.documentElement.dataset.contrast = "more";
+        renderChapter4Screen();
+      });
+      await recordLp03Policy("high-contrast");
 
       if (viewport.id === "ipad-1024x768") {
         await open("?level=M07&check=child-note-names-forced-refresh");

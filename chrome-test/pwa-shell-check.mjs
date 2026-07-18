@@ -73,7 +73,7 @@ try {
   });
   record(
     "PWA metadata declares landscape standalone mode and starts from the map",
-    shellMetadata.version === "app.js?v=overhaul-345d-audio-c" && shellMetadata.chapter4Css === "chapter4-slice.css?v=overhaul-344a-p4" && shellMetadata.mapVisible &&
+    shellMetadata.version === "app.js?v=overhaul-346a-lp03" && shellMetadata.chapter4Css === "chapter4-slice.css?v=overhaul-346a-lp03" && shellMetadata.mapVisible &&
       shellMetadata.manifestHref === "manifest.webmanifest" &&
       shellMetadata.viewport.includes("viewport-fit=cover") &&
       shellMetadata.themeColor === "#1397e9" &&
@@ -125,7 +125,7 @@ try {
 
   const cacheInventory = await page.evaluate(async () => {
     const cacheNames = await caches.keys();
-    const cacheName = cacheNames.find((name) => name === "star-dino-pwa-overhaul-345d-audio-c") || "";
+    const cacheName = cacheNames.find((name) => name === "star-dino-pwa-overhaul-346a-lp03") || "";
     const requests = cacheName ? await (await caches.open(cacheName)).keys() : [];
     const paths = requests.map((request) => new URL(request.url).pathname + new URL(request.url).search);
     return { cacheNames, cacheName, paths, controlled: Boolean(navigator.serviceWorker.controller) };
@@ -139,11 +139,11 @@ try {
     "/assets/runtime/xingya-suit-point.webp",
     "/assets/runtime/xingya-garden-invite-v1.webp"
   ];
-  const expectedChapter4CssPath = "/chapter4-slice.css?v=overhaul-344a-p4";
+  const expectedChapter4CssPath = "/chapter4-slice.css?v=overhaul-346a-lp03";
   const chapter4CssRuntimeEntries = runtimeShellPaths.filter((item) => item.includes("chapter4-slice.css"));
   record(
-    "HTML, active runtime and precache share the Chapter 4 p4 stylesheet identity",
-    shellMetadata.chapter4Css === "chapter4-slice.css?v=overhaul-344a-p4" &&
+    "HTML, active runtime and precache share the LP03 Chapter 4 stylesheet identity",
+    shellMetadata.chapter4Css === "chapter4-slice.css?v=overhaul-346a-lp03" &&
       chapter4CssRuntimeEntries.length === 1 && chapter4CssRuntimeEntries[0] === expectedChapter4CssPath &&
       cacheInventory.paths.includes(expectedChapter4CssPath) &&
       !cacheInventory.paths.some((item) => item.includes("chapter4-slice.css?v=overhaul-344a-p1")),
@@ -151,7 +151,7 @@ try {
   );
   record(
     "local cache contains every index runtime stylesheet and script, with no concept or candidate media",
-    cacheInventory.controlled && cacheInventory.cacheName === "star-dino-pwa-overhaul-345d-audio-c" &&
+    cacheInventory.controlled && cacheInventory.cacheName === "star-dino-pwa-overhaul-346a-lp03" &&
       requiredShellPaths.every((item) => cacheInventory.paths.includes(item)) &&
       !cacheInventory.paths.some((item) => /(?:^|\/)(?:assets\/generated|concepts|audio|chrome-test|screenshots)(?:\/|$)/i.test(item)),
     { ...cacheInventory, runtimeEntries, requiredShellPaths }

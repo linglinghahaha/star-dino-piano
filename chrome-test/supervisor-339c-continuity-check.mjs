@@ -63,7 +63,52 @@ async function snapshot(page) {
   });
 }
 
-async function runCase({ id, waitMs, wrong }) {
+async function waitGardenAirState(page, airState, timeout = 10000) {
+  await page.waitForFunction((expected) => document.querySelector("#gardenScene")?.dataset.airState === expected, airState, { timeout });
+}
+
+async function waitGardenTeachingPhase(page, phase, timeout = 12000) {
+  await page.waitForFunction((expected) => document.querySelector("#gardenScene")?.dataset.teachingAudioPhase === expected, phase, { timeout });
+}
+
+async function waitGardenResponseArmed(page, timeout = 12000) {
+  await page.waitForFunction(() => {
+    const runtime = JSON.parse(localStorage.getItem("starDinoSessionRuntime") || "{}");
+    const action = runtime.active?.actions?.[runtime.active.actionIndex || 0];
+    const audioAttempt = action?.gardenAttempt?.audioAttempt;
+    return audioAttempt?.phase === "awaiting-response" && audioAttempt.inputArmed === true && Boolean(audioAttempt.audioTransaction?.endedAt);
+  }, null, { timeout });
+}
+
+async function waitForMap(page, timeout = 12000) {
+  await page.waitForFunction(() => document.body.classList.contains("screen-map"), null, { timeout });
+}
+
+async function waitForGarden(page, timeout = 12000) {
+  await page.waitForFunction(() => document.body.classList.contains("screen-garden"), null, { timeout });
+}
+
+async function waitGardenAssistedRetry(page, timeout = 12000) {
+  await page.waitForFunction(() => {
+    const scene = document.querySelector("#gardenScene");
+    return scene?.dataset.repairStage === "assisted" && scene.dataset.teachingAudioPhase === "awaiting-response";
+  }, null, { timeout });
+}
+
+async function prepareCase(page, { stage, wrong }) {
+  if (stage === "sealed" || stage === "scanning") {
+    await waitGardenAirState(page, stage);
+    return;
+  }
+  if (stage === "model-playing") await waitGardenTeachingPhase(page, "model-playing");
+  if (stage === "awaiting-response" || wrong) await waitGardenTeachingPhase(page, "awaiting-response");
+  if (wrong) {
+    await page.locator('.key.white-key[data-midi="62"]').click();
+    await waitGardenTeachingPhase(page, "wrong-repair-playing");
+  }
+}
+
+async function runCase({ id, stage, wrong }) {
   const context = await browser.newContext({ viewport: { width: 1024, height: 768 } });
   const page = await context.newPage();
   page.on("console", (message) => {
@@ -81,16 +126,12 @@ async function runCase({ id, waitMs, wrong }) {
   await page.reload({ waitUntil: "domcontentloaded", timeout: 12000 });
   await page.waitForSelector("#bootLoader", { state: "hidden", timeout: 12000 });
   await page.locator("#gardenRestMarker").click();
-  await page.waitForTimeout(waitMs);
-  if (wrong) {
-    await page.locator('.key.white-key[data-midi="62"]').click();
-    await page.waitForTimeout(120);
-  }
+  await prepareCase(page, { stage, wrong });
 
   const beforeReturn = await snapshot(page);
   const originalSessionId = beforeReturn.active?.sessionId;
   await page.locator("#mapReturn").click();
-  await page.waitForTimeout(180);
+  await waitForMap(page);
   const paused = await snapshot(page);
 
   const noFalseProgress = paused.chapter3?.leaves?.[0] === false &&
@@ -112,7 +153,7 @@ async function runCase({ id, waitMs, wrong }) {
     paused);
 
   await page.locator("#gardenRestMarker").click();
-  await page.waitForTimeout(220);
+  await waitForGarden(page);
   const resumed = await snapshot(page);
   record(`${id}: re-entry resumes the same LS01 session`,
     resumed.screen.includes("screen-garden") &&
@@ -126,10 +167,10 @@ async function runCase({ id, waitMs, wrong }) {
   await context.close();
 }
 
-await runCase({ id: "sealed", waitMs: 80, wrong: false });
-await runCase({ id: "scanning", waitMs: 520, wrong: false });
-await runCase({ id: "safe-open-zero-input", waitMs: 1450, wrong: false });
-await runCase({ id: "one-wrong", waitMs: 1450, wrong: true });
+await runCase({ id: "sealed", stage: "sealed", wrong: false });
+await runCase({ id: "scanning", stage: "scanning", wrong: false });
+await runCase({ id: "safe-open-zero-input", stage: "model-playing", wrong: false });
+await runCase({ id: "one-wrong", stage: "awaiting-response", wrong: true });
 
 async function runCrossNavigationErrorCase() {
   const context = await browser.newContext({ viewport: { width: 1024, height: 768 } });
@@ -149,16 +190,18 @@ async function runCrossNavigationErrorCase() {
   await page.reload({ waitUntil: "domcontentloaded", timeout: 12000 });
   await page.waitForSelector("#bootLoader", { state: "hidden", timeout: 12000 });
   await page.locator("#gardenRestMarker").click();
-  await page.waitForTimeout(1450);
+  await waitGardenResponseArmed(page);
   await page.locator('.key.white-key[data-midi="62"]').click();
-  await page.waitForTimeout(120);
+  await waitGardenTeachingPhase(page, "wrong-repair-playing");
   const originalSessionId = (await snapshot(page)).active?.sessionId;
   await page.locator("#mapReturn").click();
-  await page.waitForTimeout(180);
+  await waitForMap(page);
   await page.locator("#gardenRestMarker").click();
-  await page.waitForTimeout(220);
+  await waitForGarden(page);
+  await waitGardenResponseArmed(page);
   await page.locator('.key.white-key[data-midi="64"]').click();
-  await page.waitForTimeout(140);
+  await waitGardenTeachingPhase(page, "wrong-repair-playing");
+  await waitGardenAssistedRetry(page);
   const afterSecondError = await snapshot(page);
 
   record("Two LS01 errors remain cumulative across ordinary map navigation",

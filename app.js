@@ -459,6 +459,11 @@ const LP02_ASSISTED_WAIT_MS = 5200;
 const LP02_LONG_WAIT_MS = 20000;
 const LP02_CHILD_NOTE_DURATION_MS = 440;
 const LP02_EXTERNAL_INPUT_MAX_MS = 2400;
+const LP03_ASSISTED_WAIT_MS = 5200;
+const LP03_LONG_WAIT_MS = 20000;
+const LP03_CHILD_NOTE_DURATION_MS = 440;
+const LP03_TARGET_NOTE_DURATION_MS = 640;
+const LP03_EXTERNAL_INPUT_MAX_MS = 2400;
 const chapter3Lessons = {
   LS01: { id: "LS01", midi: 60, letter: "C", solfege: "Do", locator: "两黑键左侧", leaf: 1, prompt: "打开第一片叶" },
   LS02: { id: "LS02", midi: 62, letter: "D", solfege: "Re", locator: "两黑键中间", leaf: 2, prompt: "伸直第二片叶" },
@@ -525,6 +530,17 @@ const chapter4Config = {
     actionId: "LP02-low-c-home",
     targetMidi: 48,
     parentFocus: "低音 C 键位"
+  },
+  lp03: {
+    levelId: "LP03",
+    bundleId: "C4-02",
+    actionIds: ["LP03-c-awake", "LP03-d-place", "LP03-e-place"],
+    steps: [
+      { actionId: "LP03-c-awake", id: "C", midi: 48, foundationKey: "foundationCAwake", action: "awake" },
+      { actionId: "LP03-d-place", id: "D", midi: 50, foundationKey: "foundationDPlaced", action: "place" },
+      { actionId: "LP03-e-place", id: "E", midi: 52, foundationKey: "foundationEPlaced", action: "place" }
+    ],
+    parentFocus: "低音 C-D-E 地基路线"
   }
 };
 
@@ -653,6 +669,15 @@ const preschoolSessionBundles = [
     actions: [
       { actionId: "LP01-register-listening", kind: "chapter4-listening", targetId: "LP01", runMode: "check", reviewableForMastery: true },
       { actionId: "LP02-low-c-home", kind: "chapter4-keyboard", targetId: "LP02", runMode: "guided", reviewableForMastery: false }
+    ]
+  },
+  {
+    bundleId: "C4-02",
+    allowOpeningReview: false,
+    actions: [
+      { actionId: "LP03-c-awake", kind: "chapter4-keyboard", targetId: "LP03", lp03Step: "C", runMode: "guided", reviewableForMastery: false },
+      { actionId: "LP03-d-place", kind: "chapter4-keyboard", targetId: "LP03", lp03Step: "D", runMode: "guided", reviewableForMastery: false },
+      { actionId: "LP03-e-place", kind: "chapter4-keyboard", targetId: "LP03", lp03Step: "E", runMode: "guided", reviewableForMastery: false }
     ]
   }
 ];
@@ -841,7 +866,7 @@ function isExplicitChapter4DirectMode(params = new URLSearchParams(window.locati
   return params.get("mode") === "chapter4" &&
     params.get("directMode") === "true" &&
     params.get("formalSession") === "false" &&
-    ["LP01", "LP02"].includes(params.get("lesson") || "LP01");
+    ["LP01", "LP02", "LP03"].includes(params.get("lesson") || "LP01");
 }
 
 function initialChapter4DirectLesson() {
@@ -881,13 +906,30 @@ function createSessionId(bundleId) {
 
 function normalizeChapter4Runtime(source = {}) {
   const lessonEvidence = source.lessonEvidence && typeof source.lessonEvidence === "object" ? source.lessonEvidence : {};
+  const inheritedCAnchor = Boolean(source.lp03Progress?.foundationCAnchored || lessonEvidence.LP02?.completedAt);
+  const storedProgress = source.lp03Progress && typeof source.lp03Progress === "object" ? source.lp03Progress : {};
   return {
     completedSlice: Boolean(source.completedSlice && lessonEvidence.LP02?.completedAt),
     lessonEvidence,
     resume: source.resume && typeof source.resume === "object" ? source.resume : null,
     openingReviewQueue: Array.isArray(source.openingReviewQueue) ? source.openingReviewQueue : [],
     lp01Attempts: Array.isArray(source.lp01Attempts) ? source.lp01Attempts : [],
-    lp02Attempts: Array.isArray(source.lp02Attempts) ? source.lp02Attempts : []
+    lp02Attempts: Array.isArray(source.lp02Attempts) ? source.lp02Attempts : [],
+    lp03Attempts: Array.isArray(source.lp03Attempts) ? source.lp03Attempts : [],
+    lp03Progress: {
+      foundationCAnchored: inheritedCAnchor,
+      foundationCAwake: Boolean(storedProgress.foundationCAwake),
+      foundationDPlaced: Boolean(storedProgress.foundationDPlaced),
+      foundationEPlaced: Boolean(storedProgress.foundationEPlaced),
+      played: Boolean(storedProgress.played),
+      needsPractice: Boolean(storedProgress.needsPractice),
+      completedAt: storedProgress.completedAt || null,
+      seamChecks: Array.isArray(storedProgress.seamChecks) ? storedProgress.seamChecks : [],
+      seamCheckDeferred: Boolean(storedProgress.seamCheckDeferred),
+      routeEvents: Array.isArray(storedProgress.routeEvents) ? storedProgress.routeEvents : [],
+      originSessionId: storedProgress.originSessionId || null,
+      lastSessionId: storedProgress.lastSessionId || null
+    }
   };
 }
 
@@ -1245,7 +1287,7 @@ function persistSessionRuntimeSchemaUpgrade() {
     const parsed = JSON.parse(raw);
     const normalized = state.sessionRuntime;
     const staleChapterCompletion = Boolean(parsed.chapter3?.completed);
-    if (staleChapterCompletion || !Array.isArray(parsed.chapter3?.ls04Attempts) || !Array.isArray(parsed.chapter3?.ls05Attempts) || !Array.isArray(parsed.chapter3?.ls06Attempts) || !Array.isArray(parsed.chapter3?.ls07Attempts) || !Array.isArray(parsed.chapter3?.ls08Attempts) || !Object.hasOwn(parsed.chapter3 || {}, "visibleSliceCompleted") || !Object.hasOwn(parsed.chapter3 || {}, "ls04Completed") || !Object.hasOwn(parsed.chapter3 || {}, "ls05Completed") || !Object.hasOwn(parsed.chapter3 || {}, "ls06Completed") || !Object.hasOwn(parsed.chapter3 || {}, "ls07Completed") || !Object.hasOwn(parsed.chapter3 || {}, "ls08Completed") || !Object.hasOwn(parsed.chapter3 || {}, "ls05PartialRest") || !Object.hasOwn(parsed.chapter3 || {}, "ls06PartialRest") || !Object.hasOwn(parsed.chapter3 || {}, "ls07PartialRest") || !Object.hasOwn(parsed.chapter3 || {}, "ls08PartialRest") || !parsed.chapter4 || !Array.isArray(parsed.chapter4.lp01Attempts) || !Array.isArray(parsed.chapter4.lp02Attempts)) {
+    if (staleChapterCompletion || !Array.isArray(parsed.chapter3?.ls04Attempts) || !Array.isArray(parsed.chapter3?.ls05Attempts) || !Array.isArray(parsed.chapter3?.ls06Attempts) || !Array.isArray(parsed.chapter3?.ls07Attempts) || !Array.isArray(parsed.chapter3?.ls08Attempts) || !Object.hasOwn(parsed.chapter3 || {}, "visibleSliceCompleted") || !Object.hasOwn(parsed.chapter3 || {}, "ls04Completed") || !Object.hasOwn(parsed.chapter3 || {}, "ls05Completed") || !Object.hasOwn(parsed.chapter3 || {}, "ls06Completed") || !Object.hasOwn(parsed.chapter3 || {}, "ls07Completed") || !Object.hasOwn(parsed.chapter3 || {}, "ls08Completed") || !Object.hasOwn(parsed.chapter3 || {}, "ls05PartialRest") || !Object.hasOwn(parsed.chapter3 || {}, "ls06PartialRest") || !Object.hasOwn(parsed.chapter3 || {}, "ls07PartialRest") || !Object.hasOwn(parsed.chapter3 || {}, "ls08PartialRest") || !parsed.chapter4 || !Array.isArray(parsed.chapter4.lp01Attempts) || !Array.isArray(parsed.chapter4.lp02Attempts) || !Array.isArray(parsed.chapter4.lp03Attempts) || !parsed.chapter4.lp03Progress) {
       saveSessionRuntime(normalized);
     }
   } catch (error) {
@@ -2417,6 +2459,7 @@ function currentChapter4ParentLevel() {
   if (active?.targetId) return active.targetId;
   if (state.screen !== "map") return null;
   if (chapter4HasPendingLp01Review()) return "LP01";
+  if (state.chapter4.resume?.nextTargetId === "LP03" || state.chapter4.lessonEvidence.LP03?.completedAt || state.chapter4.lp03Attempts.length || chapter4Lp03Progress().routeEvents.length) return "LP03";
   if (state.chapter4.resume?.nextTargetId === "LP02" || state.chapter4.lessonEvidence.LP02?.completedAt || state.chapter4.lp02Attempts.length) return "LP02";
   if (state.chapter4.lessonEvidence.LP01?.completedAt || state.chapter4.lp01Attempts.length) return "LP01";
   return null;
@@ -2513,6 +2556,17 @@ function currentMasterySummary() {
       detail: evidence.played
         ? "低音 C 已在可见引导中找到家；之后还会在更少提示下再找一次。"
         : "低音 C 还要找家；先跟着可见引导完成这一步。"
+    };
+  }
+  if (evidence.chapter4Level === "LP03") {
+    return {
+      ...evidence,
+      stable: false,
+      retained: false,
+      status: evidence.played ? "低音 C-D-E 路线已完成" : "正在铺低音地基",
+      detail: evidence.played
+        ? "本节记录低音 C、D、E 路线与阶段观察，以后会在更少提示和隔次复习中再确认。"
+        : "让每一块地基在声音结束后安放好。"
     };
   }
   if (state.screen === "garden" && !evidence.listening) {
@@ -2698,6 +2752,19 @@ function currentLearningSummary() {
     return {
       focus: chapter4Config.lp02.parentFocus,
       detail: `要找的是低音 C；第一次按到 ${evidence.firstPitchName || evidence.firstChildMidi || "暂无"}，输入方式 ${evidence.firstInputRoute || evidence.inputRoute || "暂无"}，音名字母正确 ${evidence.noteNameCorrect ? "是" : "否"}，高低位置正确 ${evidence.registerCorrect ? "是" : "否"}，是否按到另一个 C ${evidence.wrongOctave ? "是" : "否"}，强提示 ${evidence.strongCueUsed ? "有" : "无"}，示范带做 ${evidence.modeled ? "有" : "无"}，麦克风尝试 ${evidence.experimentalInput ? evidence.microphoneConfidence || "有" : "无"}。${reviewNote}`
+    };
+  }
+  if (chapter4Level === "LP03") {
+    const progress = chapter4Lp03Progress();
+    const route = progress.routeEvents || [];
+    const done = [progress.foundationCAwake, progress.foundationDPlaced, progress.foundationEPlaced].filter(Boolean).length;
+    const currentStep = !progress.foundationCAwake ? "C" : (!progress.foundationDPlaced ? "D" : (!progress.foundationEPlaced ? "E" : null));
+    const settled = route.map((event) => event.stepId).filter(Boolean);
+    const routeDetail = settled.length ? `已完成 ${settled.join("、")}` : "还没开始";
+    const currentDetail = currentStep ? `当前在找 ${currentStep}` : "三块地基都已安放";
+    return {
+      focus: chapter4Config.lp03.parentFocus,
+      detail: `低音地基 ${done}/3；${routeDetail}，${currentDetail}。这只是低音 C、D、E 的当前路线，还需要以后在更少提示和隔次复习中确认。`
     };
   }
   if (usesLs08ParentEvidence()) {
@@ -3207,7 +3274,10 @@ function renderMapScreen() {
   if (!els.mapShell) return;
   const gardenReached = hasReachedGardenEntrance();
   const chapter4Entrance = hasFormalChapter4EntranceEvidence();
-  const activeChapter4 = state.activeSession?.status === "active" && state.activeSession.bundleId === chapter4Config.bundleId;
+  const activeChapter4 = state.activeSession?.status === "active" && [chapter4Config.bundleId, chapter4Config.lp03.bundleId].includes(state.activeSession.bundleId);
+  const activeLp03 = activeChapter4 && state.activeSession?.bundleId === chapter4Config.lp03.bundleId;
+  const lp03Available = hasFormalLp03EntranceEvidence();
+  const lp03Progress = chapter4Lp03Progress();
   const baseComplete = levels.every((level) => state.completed.has(level.id));
   const staffReadiness = fgBridgeReadiness();
   const shouldFocusStaff = !gardenReached && state.screen === "map" && baseComplete && !state.staffComplete && staffReadiness.ready;
@@ -3278,12 +3348,21 @@ function renderMapScreen() {
     const lp02Done = Boolean(state.chapter4.lessonEvidence.LP02?.completedAt);
     const action = activeChapter4 ? currentSessionAction(state.activeSession) : null;
     const attempt = action?.chapter4Attempt || state.chapter4.resume?.lp01Summary || state.chapter4.lp01Attempts.at(-1) || null;
-    if (!lp01Done || action?.targetId === "LP01") {
+    const lp03MapProgressContext = action?.targetId === "LP03" ||
+      state.chapter4.resume?.nextTargetId === "LP03" ||
+      lp03Progress.played ||
+      (lp03Available && !["LP01", "LP02"].includes(action?.targetId));
+    if (lp03MapProgressContext) {
+      const done = [lp03Progress.foundationCAwake, lp03Progress.foundationDPlaced, lp03Progress.foundationEPlaced].filter(Boolean).length;
+      const routeState = lp03Progress.played ? "休息" : (activeLp03 ? "正在铺" : (state.chapter4.resume?.nextTargetId === "LP03" ? "继续" : "准备"));
+      els.mapStarCount.textContent = `三块地基 ${done}/3 · ${routeState}`;
+      els.mapStarCount.setAttribute("aria-label", `三块地基进度，${done}/3 已安放，${routeState}`);
+    } else if (!lp01Done || action?.targetId === "LP01") {
       const resolved = Math.min(4, attempt?.resolvedCallCount ?? attempt?.scoredCalls?.length ?? 0);
       const listeningState = activeChapter4 ? "正在听" : (state.chapter4.resume ? "继续" : "准备");
       els.mapStarCount.textContent = `四次回声 ${resolved}/4 · ${listeningState}`;
       els.mapStarCount.setAttribute("aria-label", `地下回声洞进度：四次声音比较已解决 ${resolved} 次，${listeningState}`);
-    } else {
+    } else if (!lp02Done || action?.targetId === "LP02") {
       const homeState = lp02Done ? "休息" : (activeChapter4 ? "正在找" : (state.chapter4.resume ? "继续" : "准备"));
       els.mapStarCount.textContent = `低音 C 的家 · ${homeState}`;
       els.mapStarCount.setAttribute("aria-label", `地下回声洞低音 C 找家，${homeState}`);
@@ -3297,10 +3376,11 @@ function renderMapScreen() {
     const markerCopy = chapter4Entrance
       ? chapter4MapMarkerCopy({ activeChapter4 })
       : gardenMapMarkerCopy({ chapter3Done, activeGarden, leafCount: state.chapter3.leaves.filter(Boolean).length });
-    els.gardenRestMarker.disabled = chapter4Entrance ? Boolean(state.chapter4.completedSlice && !activeChapter4 && !state.chapter4.resume) : chapter3Done;
+    const canStartChapter4 = Boolean(nextChapter4SessionPlan());
+    els.gardenRestMarker.disabled = chapter4Entrance ? (!activeChapter4 && !canStartChapter4) : chapter3Done;
     els.gardenRestMarker.dataset.chapter3State = chapter3Done ? "complete" : ((activeGarden || waitingResume) ? "resume" : "ready");
     els.gardenRestMarker.dataset.chapter4State = chapter4Entrance
-      ? (state.chapter4.completedSlice ? "complete" : ((activeChapter4 || state.chapter4.resume) ? "resume" : "entry"))
+      ? (lp03Progress.played ? "complete" : ((activeChapter4 || state.chapter4.resume) ? "resume" : (lp03Available ? "lp03-entry" : "entry")))
       : "locked";
     els.gardenRestMarker.setAttribute("aria-label", `${markerCopy.strong}，${markerCopy.small}`);
     const markerStrong = els.gardenRestMarker.querySelector("strong");
@@ -3310,7 +3390,9 @@ function renderMapScreen() {
     if (gardenReached) els.gardenRestMarker.setAttribute("aria-current", "location");
     else els.gardenRestMarker.removeAttribute("aria-current");
   }
-  els.mapShell.dataset.chapter4Phase = chapter4Entrance && !state.chapter4.completedSlice ? "chapter4-entry" : "locked";
+  els.mapShell.dataset.chapter4Phase = !chapter4Entrance
+    ? "locked"
+    : (lp03Progress.played ? "chapter4-complete" : (lp03Available ? "chapter4-lp03-entry" : "chapter4-entry"));
   els.mapShell.querySelectorAll(".garden-branch").forEach((path) => {
     path.hidden = !gardenReached;
   });
@@ -3359,7 +3441,13 @@ function renderMapScreen() {
 }
 
 function chapter4MapMarkerCopy({ activeChapter4 = false } = {}) {
-  if (state.chapter4.completedSlice) return { strong: "第一块地基", small: "低音 C 已经找到家" };
+  const progress = chapter4Lp03Progress();
+  if (progress.played) return { strong: "三块地基路", small: "C-D-E 已经接好" };
+  if (hasFormalLp03EntranceEvidence()) {
+    if (activeChapter4 && state.activeSession?.bundleId === chapter4Config.lp03.bundleId) return { strong: "三块地基", small: "继续刚才的低音路线" };
+    if (state.chapter4.resume?.nextTargetId === "LP03") return { strong: "三块地基", small: "点这里继续下一块" };
+    return { strong: "三块地基", small: "点这里开始铺三块地基" };
+  }
   if (activeChapter4) return { strong: "地下回声洞", small: "继续刚才的声音" };
   if (state.chapter4.resume?.nextTargetId === "LP02") return { strong: "低音 C 的家", small: "点这里继续找家" };
   return { strong: "地下入口", small: "点这里听两个声音泡泡" };
@@ -3541,6 +3629,7 @@ function renderParentPanel() {
   if (!els.parentModal) return;
   const learning = currentLearningSummary();
   const mastery = currentMasterySummary();
+  const chapter4Level = currentChapter4ParentLevel();
   if (els.parentLearningFocus) {
     els.parentLearningFocus.textContent = learning.focus;
   }
@@ -3554,7 +3643,14 @@ function renderParentPanel() {
     els.parentMasteryDetail.textContent = mastery.detail;
   }
   if (els.parentEvidenceList) {
-    const rows = state.screen === "garden" && !mastery.listening
+    const rows = chapter4Level === "LP03"
+      ? [
+        ["三块地基已安放", mastery.played],
+        ["本节只做路线观察", mastery.played],
+        ["以后再确认", false],
+        ["今天需要提示", mastery.todayNeedsPractice]
+      ]
+      : (state.screen === "garden" && !mastery.listening
       ? [
         ["可见提示下练过", mastery.played],
         ["不计稳定", false],
@@ -3565,13 +3661,12 @@ function renderParentPanel() {
         ["本次减提示完成", mastery.stable],
         ["隔日再次减提示完成", mastery.retained],
         ["今天需要提示", mastery.todayNeedsPractice]
-      ];
+      ]);
     els.parentEvidenceList.innerHTML = rows
       .map(([label, active]) => `<span class="parent-evidence-chip${active ? " is-active" : ""}"><i aria-hidden="true">${active ? "✓" : "·"}</i>${label}</span>`)
       .join("");
   }
   if (els.parentProgressText) {
-    const chapter4Level = currentChapter4ParentLevel();
     if (chapter4Level === "LP01") {
       const activeAttempt = currentChapter4Action("LP01")?.chapter4Attempt;
       const stored = state.chapter4.lessonEvidence.LP01 || state.chapter4.lp01Attempts.at(-1);
@@ -3581,6 +3676,10 @@ function renderParentPanel() {
         : `四次声音比较 ${count}/4`;
     } else if (chapter4Level === "LP02") {
       els.parentProgressText.textContent = state.chapter4.lessonEvidence.LP02?.completedAt ? "低音 C 已找家" : "低音 C 找家中";
+    } else if (chapter4Level === "LP03") {
+      const progress = chapter4Lp03Progress();
+      const done = [progress.foundationCAwake, progress.foundationDPlaced, progress.foundationEPlaced].filter(Boolean).length;
+      els.parentProgressText.textContent = `三块地基 ${done}/3`;
     } else if (usesLs08ParentEvidence()) {
       const activeAttempt = currentLs08Action()?.listeningAttempt;
       const resumeAttempt = state.chapter3.resume?.nextTargetId === "LS08" ? state.chapter3.resume.ls08Attempt : null;
@@ -9488,18 +9587,23 @@ function currentChapter4Action(targetId = null) {
 }
 
 function createDirectChapter4Action(levelId) {
-  const targetId = levelId === "LP02" ? "LP02" : "LP01";
+  const targetId = ["LP02", "LP03"].includes(levelId) ? levelId : "LP01";
   const action = {
-    actionId: targetId === "LP01" ? chapter4Config.lp01.actionId : chapter4Config.lp02.actionId,
+    actionId: targetId === "LP01"
+      ? chapter4Config.lp01.actionId
+      : (targetId === "LP02" ? chapter4Config.lp02.actionId : chapter4Config.lp03.actionIds[0]),
     kind: targetId === "LP01" ? "chapter4-listening" : "chapter4-keyboard",
     targetId,
+    lp03Step: targetId === "LP03" ? "C" : null,
     runMode: targetId === "LP01" ? "check" : "guided",
     formalSession: false,
     directMode: true
   };
   action.chapter4Attempt = targetId === "LP01"
     ? createLp01Attempt(null, { formalSession: false, directMode: true })
-    : createLp02Attempt(null, { formalSession: false, directMode: true });
+    : (targetId === "LP02"
+      ? createLp02Attempt(null, { formalSession: false, directMode: true })
+      : createLp03Attempt(null, { formalSession: false, directMode: true, stepId: "C" }));
   return action;
 }
 
@@ -9640,16 +9744,132 @@ function createLp02Attempt(session = state.activeSession, options = {}) {
   };
 }
 
+function lp03StepForId(stepId) {
+  return chapter4Config.lp03.steps.find((step) => step.id === stepId) || null;
+}
+
+function lp03StepForAction(action = currentChapter4Action()) {
+  return lp03StepForId(action?.lp03Step) || null;
+}
+
+function chapter4Lp03Progress() {
+  if (!state.chapter4.lp03Progress || typeof state.chapter4.lp03Progress !== "object") {
+    state.chapter4.lp03Progress = normalizeChapter4Runtime().lp03Progress;
+  }
+  const progress = state.chapter4.lp03Progress;
+  progress.foundationCAnchored = Boolean(progress.foundationCAnchored || state.chapter4.lessonEvidence.LP02?.completedAt);
+  progress.routeEvents = Array.isArray(progress.routeEvents) ? progress.routeEvents : [];
+  progress.seamChecks = Array.isArray(progress.seamChecks) ? progress.seamChecks : [];
+  return progress;
+}
+
+function lp03FoundationState(attempt = null) {
+  const progress = chapter4Lp03Progress();
+  return {
+    cAnchored: Boolean(progress.foundationCAnchored || attempt?.directMode),
+    cAwake: Boolean(progress.foundationCAwake),
+    dPlaced: Boolean(progress.foundationDPlaced),
+    ePlaced: Boolean(progress.foundationEPlaced)
+  };
+}
+
+function lp03StepComplete(stepId, attempt = null) {
+  const foundation = lp03FoundationState(attempt);
+  if (stepId === "C") return foundation.cAwake;
+  if (stepId === "D") return foundation.dPlaced;
+  if (stepId === "E") return foundation.ePlaced;
+  return false;
+}
+
+function lp03RemainingStepIds(attempt = null) {
+  return chapter4Config.lp03.steps
+    .filter((step) => !lp03StepComplete(step.id, attempt))
+    .map((step) => step.id);
+}
+
+function lp03SeamOrderForSeed(seed) {
+  const orders = [
+    [48, 50, 52], [48, 52, 50], [50, 48, 52],
+    [50, 52, 48], [52, 48, 50], [52, 50, 48]
+  ];
+  return orders[hashSessionSeed(`LP03|seam|${seed}`) % orders.length].slice();
+}
+
+function createLp03Attempt(session = state.activeSession, options = {}) {
+  const step = lp03StepForId(options.stepId || lp03StepForAction()?.id || "C") || chapter4Config.lp03.steps[0];
+  const seed = session?.sessionId || options.seed || "C4-02-direct-LP03";
+  return {
+    version: 1,
+    levelId: "LP03",
+    bundleId: chapter4Config.lp03.bundleId,
+    actionId: step.actionId,
+    stepId: step.id,
+    stepAction: step.action,
+    foundationKey: step.foundationKey,
+    targetMidi: step.midi,
+    sessionId: session?.sessionId || null,
+    formalSession: options.formalSession ?? Boolean(session),
+    directMode: Boolean(options.directMode),
+    seed,
+    sessionSeed: seed,
+    phase: "lp03-model-ready",
+    targetSource: null,
+    targetStartedAt: null,
+    targetEndedAt: null,
+    responseStartedAt: null,
+    inputArmed: false,
+    timingInterrupted: false,
+    wrongCount: 0,
+    firstChildMidi: null,
+    firstInputRoute: null,
+    firstResponseMs: null,
+    childCorrectCount: 0,
+    childInputs: [],
+    inputRoutes: {},
+    lastWrongInput: null,
+    strongCueUsed: false,
+    modeled: false,
+    accessibilityVisualAssist: false,
+    experimentalInput: false,
+    microphoneConfidence: null,
+    repairStage: "none",
+    completionSource: null,
+    modeledInputs: [],
+    inputEvents: [],
+    observations: [],
+    audioTrace: [],
+    audioTransaction: null,
+    pendingLp03Input: null,
+    routeArmed: { "屏幕": true, MIDI: !(options.heldMidiNotes || []).length, "麦克风": true },
+    routeHeldMidi: { "屏幕": options.heldPointerMidi ?? null, MIDI: options.heldMidiNotes?.[0] ?? null, "麦克风": null },
+    heldMidiNotes: Array.isArray(options.heldMidiNotes) ? options.heldMidiNotes.slice() : [],
+    seamCheck: null,
+    outcomeRecorded: false
+  };
+}
+
+function normalizeLp03AttemptEvidence(attempt) {
+  if (!attempt || attempt.levelId !== "LP03") return attempt;
+  if (!Array.isArray(attempt.childInputs)) attempt.childInputs = [];
+  if (!attempt.inputRoutes || typeof attempt.inputRoutes !== "object" || Array.isArray(attempt.inputRoutes)) attempt.inputRoutes = {};
+  if (!Array.isArray(attempt.modeledInputs)) attempt.modeledInputs = [];
+  if (!Number.isFinite(attempt.childCorrectCount)) attempt.childCorrectCount = 0;
+  if (!["none", "normal", "assisted"].includes(attempt.repairStage)) attempt.repairStage = "none";
+  return attempt;
+}
+
 function ensureChapter4Attempt() {
   const action = currentChapter4Action();
   if (!action) return null;
   if (!action.chapter4Attempt) {
     action.chapter4Attempt = action.targetId === "LP01"
       ? createLp01Attempt(state.activeSession, { formalSession: !state.chapter4DirectMode, directMode: state.chapter4DirectMode })
-      : createLp02Attempt(state.activeSession, { formalSession: !state.chapter4DirectMode, directMode: state.chapter4DirectMode });
+      : (action.targetId === "LP02"
+        ? createLp02Attempt(state.activeSession, { formalSession: !state.chapter4DirectMode, directMode: state.chapter4DirectMode })
+        : createLp03Attempt(state.activeSession, { formalSession: !state.chapter4DirectMode, directMode: state.chapter4DirectMode, stepId: action.lp03Step }));
     persistChapter4Attempt();
   }
-  return action.chapter4Attempt;
+  return normalizeLp03AttemptEvidence(action.chapter4Attempt);
 }
 
 function persistChapter4Progress() {
@@ -9673,6 +9893,7 @@ function clearChapter4Timers() {
 function chapter4TargetMidi(attempt = ensureChapter4Attempt()) {
   if (!attempt) return null;
   if (attempt.levelId === "LP02") return 48;
+  if (attempt.levelId === "LP03") return attempt.targetMidi;
   return attempt.sequence[attempt.callIndex] ?? null;
 }
 
@@ -9953,10 +10174,48 @@ function scheduleLp01AssistedTimeout() {
 
 function renderChapter4Progress(attempt) {
   if (!els.chapter4CallProgress) return;
-  const total = attempt?.levelId === "LP01" ? 4 : 1;
-  const done = attempt?.levelId === "LP01" ? attempt.resolvedCallCount : (attempt?.phase === "lp02-complete" ? 1 : 0);
+  const total = attempt?.levelId === "LP01" ? 4 : (attempt?.levelId === "LP03" ? 3 : 1);
+  const lp03Foundation = attempt?.levelId === "LP03" ? lp03FoundationState(attempt) : null;
+  const done = attempt?.levelId === "LP01"
+    ? attempt.resolvedCallCount
+    : (attempt?.levelId === "LP03"
+      ? [lp03Foundation.cAwake, lp03Foundation.dPlaced, lp03Foundation.ePlaced].filter(Boolean).length
+      : (attempt?.phase === "lp02-complete" ? 1 : 0));
   els.chapter4CallProgress.innerHTML = Array.from({ length: total }, (_, index) => `<span class="${index < done ? "done" : ""}" aria-hidden="true"></span>`).join("");
-  els.chapter4CallProgress.setAttribute("aria-label", attempt?.levelId === "LP01" ? `声音泡泡进度，四次声音比较已解决 ${done} 次` : `低音 C 找家${done ? "已完成" : "进行中"}`);
+  els.chapter4CallProgress.setAttribute("aria-label", attempt?.levelId === "LP01"
+    ? `声音泡泡进度，四次声音比较已解决 ${done} 次`
+    : (attempt?.levelId === "LP03" ? `三块地基进度，已安放 ${done}/3` : `低音 C 找家${done ? "已完成" : "进行中"}`));
+}
+
+function lp03WrongRepairCopy(attempt, target) {
+  const wrong = attempt?.lastWrongInput;
+  if (!wrong) return { kicker: "再听一次", main: `先听刚才的，再听 ${target}`, support: "石头不会倒退。" };
+  const wrongLabel = wrong.isBlack ? `${wrong.pitchName || "黑键"} 黑键` : (wrong.name || wrong.pitchName || "刚才的键");
+  if (wrong.sameNameWrongOctave) {
+    const wrongOctave = chapter4NoteForMidi(wrong.midi)?.octave;
+    const targetOctave = chapter4NoteForMidi(attempt.targetMidi)?.octave;
+    const direction = Number.isFinite(wrongOctave) && Number.isFinite(targetOctave) && targetOctave < wrongOctave ? "更低" : "更高";
+    return { kicker: "再听一次", main: `都是 ${target}，这次找${direction}的 ${target}`, support: "先听刚才的，再听当前这一声。" };
+  }
+  if (wrong.status === "completed-step-repeat") {
+    return { kicker: "再听一次", main: `${wrongLabel} 已经就位，这次找 ${target}`, support: "先听刚才的，再听当前这一声。" };
+  }
+  if (wrong.status === "future-step") {
+    return { kicker: "再听一次", main: `${wrongLabel} 等会儿再来，这次先找 ${target}`, support: "先听刚才的，再听当前这一声。" };
+  }
+  return { kicker: "再听一次", main: `刚才是 ${wrongLabel}，这次找 ${target}`, support: "先听刚才的，再听当前这一声。" };
+}
+
+function lp03StatusCopy(phase) {
+  if (["lp03-wrong-repair-playing", "lp03-seam-repair-playing"].includes(phase)) return "正在比较两声琴音";
+  if (["lp03-target-playing", "lp03-seam-target-playing", "lp03-modeled-playing", "lp03-seam-modeled-playing"].includes(phase)) return "正在播放示范音";
+  if (["lp03-child-echo-playing", "lp03-seam-child-echo-playing"].includes(phase)) return "正在播放琴键声音";
+  if (["lp03-awaiting-response", "lp03-seam-awaiting-response", "lp03-assisted", "lp03-visual-assist"].includes(phase)) return "等待孩子输入";
+  if (["lp03-model-ready", "lp03-seam-ready"].includes(phase)) return "准备播放示范音";
+  if (phase === "lp03-step-complete") return "正在安放这块地基";
+  if (phase === "lp03-complete") return "三块地基已安放";
+  if (phase === "sound-paused") return "声音已暂停";
+  return "等待下一步";
 }
 
 function chapter4SpeechCopy(attempt) {
@@ -9973,6 +10232,27 @@ function chapter4SpeechCopy(attempt) {
     if (attempt.phase === "lp02-complete") return { kicker: "第一块地基", main: "低音 C 找到家了", support: "我唱 Do。今天先在洞口歇一歇。" };
     if (attempt.phase === "sound-paused") return { kicker: "声音先停住", main: "点重听再继续", support: "刚才的位置和记录都留着。" };
     return { kicker: "低音 C 的家", main: "找下面的 C", support: "两个都叫 Do。找到下面那个 C，按一下。" };
+  }
+  if (attempt.levelId === "LP03") {
+    const target = lp03TargetName(attempt);
+    const solfege = target === "C" ? "Do" : (target === "D" ? "Re" : "Mi");
+    const locator = chapter4NoteForMidi(lp03CurrentTargetMidi(attempt))?.locator || "两黑键旁边";
+    if (attempt.phase === "sound-paused") return { kicker: "声音先停住", main: "点重听再继续", support: "刚才的石头和记录都留着。" };
+    if (attempt.phase === "lp03-model-ready") return { kicker: "三块地基", main: "先听咚咚", support: `咚咚唱 ${solfege}，听完再按。` };
+    if (attempt.phase === "lp03-target-playing") return { kicker: "先听一听", main: "等咚咚唱完", support: `咚咚唱 ${solfege}，声音停稳后才轮到你。` };
+    if (attempt.phase === "lp03-seam-target-playing") return { kicker: "先听一听", main: "等这一声唱完", support: "声音停稳后才轮到你。" };
+    if (attempt.phase === "lp03-child-echo-playing" || attempt.phase === "lp03-seam-child-echo-playing") return { kicker: "听琴键唱完", main: "这一声还在唱", support: "等声音停稳，石头才会回应。" };
+    if (attempt.phase === "lp03-wrong-repair-playing") return lp03WrongRepairCopy(attempt, target);
+    if (attempt.phase === "lp03-seam-repair-playing") return { kicker: "再听一次", main: "先听刚才的，再听这一声", support: "石头不会倒退。" };
+    if (attempt.phase === "lp03-assisted") return { kicker: "两黑键帮忙", main: "找这块石头", support: `咚咚唱 ${solfege}，看看 ${locator} 的白键。` };
+    if (attempt.phase === "lp03-visual-assist") return { kicker: "看着找", main: "看着这块石头", support: `咚咚唱 ${solfege}，按完这一块就能安放好。` };
+    if (attempt.phase === "lp03-modeled-playing") return { kicker: "星芽一起安放", main: `咚咚唱 ${solfege}`, support: "声音停稳后，只完成眼前这一块。" };
+    if (attempt.phase === "lp03-seam-ready") return { kicker: "接缝小检查", main: "点扬声器听一声", support: "只看看已经安放好的三块石头。" };
+    if (attempt.phase === "lp03-seam-awaiting-response") return { kicker: "接缝小检查", main: `刚才是哪一块？`, support: "按一次同样的低音键。" };
+    if (attempt.phase === "lp03-seam-modeled-playing") return { kicker: "星芽一起听", main: "这一声正在唱", support: "听完这一次，接缝就安顿好。" };
+    if (attempt.phase === "lp03-step-complete") return { kicker: "地基接好", main: "这一块已经就位", support: "下一块会慢慢接上。" };
+    if (attempt.phase === "lp03-complete") return { kicker: "三块地基", main: "三块地基都安放好了", support: "今天先在洞口歇一歇。" };
+    return { kicker: "轮到你", main: "弹刚才那一声", support: "按完这一声，眼前这块石头才会回应。" };
   }
   if (["lp01-model-ready", "lp01-model-playing", "lp01-model"].includes(attempt.phase)) {
     return { kicker: "先听两个声音", main: "声音泡泡住在固定位置", support: "哪个 Do 住得更低？" };
@@ -9997,7 +10277,7 @@ function renderChapter4Screen() {
   if (!action || !attempt) return;
   const lessonId = action.targetId;
   const phase = attempt.phase;
-  if (els.mainTitle) els.mainTitle.textContent = lessonId === "LP01" ? "地下回声洞" : "低音 C 的家";
+  if (els.mainTitle) els.mainTitle.textContent = lessonId === "LP01" ? "地下回声洞" : (lessonId === "LP02" ? "低音 C 的家" : "三块地基石");
   if (els.levelBadge) els.levelBadge.textContent = state.chapter4DirectMode ? `${lessonId}·审` : lessonId;
   if (els.appShell) {
     els.appShell.dataset.chapter4Lesson = lessonId;
@@ -10010,24 +10290,44 @@ function renderChapter4Screen() {
   if (els.chapter4Scene) {
     els.chapter4Scene.dataset.chapter4Phase = phase;
     els.chapter4Scene.dataset.audioPlaying = attempt.audioTransaction && !attempt.audioTransaction.endedAt ? "true" : "false";
-    els.chapter4Scene.dataset.repairStage = attempt.callRepairStage || (attempt.strongCueUsed ? "assisted" : "none");
+    els.chapter4Scene.dataset.repairStage = attempt.levelId === "LP03"
+      ? (attempt.repairStage || (attempt.strongCueUsed ? "assisted" : "none"))
+      : (attempt.callRepairStage || (attempt.strongCueUsed ? "assisted" : "none"));
+    els.chapter4Scene.dataset.lp03Locator = attempt.levelId === "LP03" && ["lp03-assisted", "lp03-visual-assist"].includes(phase) ? "two-black" : "none";
   }
   const copy = chapter4SpeechCopy(attempt);
   if (els.chapter4SpeechKicker) els.chapter4SpeechKicker.textContent = copy.kicker;
   if (els.chapter4SpeechMain) els.chapter4SpeechMain.textContent = copy.main;
   if (els.chapter4SpeechSupport) els.chapter4SpeechSupport.textContent = copy.support;
+  if (els.chapter4Speech) els.chapter4Speech.removeAttribute("aria-label");
   if (els.chapter4XingyaImage && els.chapter4XingyaImage.getAttribute("src") !== chapter4CharacterAsset) {
     els.chapter4XingyaImage.setAttribute("src", chapter4CharacterAsset);
   }
   if (els.chapter4Scene) els.chapter4Scene.dataset.characterAssetState = "garden-mode";
   if (els.chapter4CaveRings) {
-    const done = attempt.levelId === "LP01" ? attempt.resolvedCallCount : (state.chapter4.lessonEvidence.LP01?.resolvedCallCount || 0);
-    els.chapter4CaveRings.innerHTML = Array.from({ length: 4 }, (_, index) => `<span class="${index < done ? "done" : ""}" style="--ring-index:${index}" aria-hidden="true"></span>`).join("");
+    const done = attempt.levelId === "LP01"
+      ? attempt.resolvedCallCount
+      : (attempt.levelId === "LP03"
+        ? [lp03FoundationState(attempt).cAwake, lp03FoundationState(attempt).dPlaced, lp03FoundationState(attempt).ePlaced].filter(Boolean).length
+        : (state.chapter4.lessonEvidence.LP01?.resolvedCallCount || 0));
+    const count = attempt.levelId === "LP03" ? 3 : 4;
+    els.chapter4CaveRings.innerHTML = Array.from({ length: count }, (_, index) => `<span class="${index < done ? "done" : ""}" style="--ring-index:${index}" aria-hidden="true"></span>`).join("");
   }
   if (els.chapter4Foundation) {
+    const lp03Foundation = lp03FoundationState(attempt);
     const installed = attempt.levelId === "LP02" && attempt.phase === "lp02-complete";
     els.chapter4Foundation.dataset.installed = installed ? "true" : "false";
-    els.chapter4Foundation.dataset.foundationState = installed ? "installed" : "landing-place";
+    els.chapter4Foundation.dataset.foundationState = attempt.levelId === "LP03"
+      ? "three-stone-route"
+      : (installed ? "installed" : "landing-place");
+    els.chapter4Foundation.dataset.lp03 = attempt.levelId === "LP03" ? "true" : "false";
+    els.chapter4Foundation.dataset.foundationCAnchored = lp03Foundation.cAnchored ? "true" : "false";
+    els.chapter4Foundation.dataset.foundationCAwake = lp03Foundation.cAwake ? "true" : "false";
+    els.chapter4Foundation.dataset.foundationDPlaced = lp03Foundation.dPlaced ? "true" : "false";
+    els.chapter4Foundation.dataset.foundationEPlaced = lp03Foundation.ePlaced ? "true" : "false";
+    [...els.chapter4Foundation.querySelectorAll("span")].forEach((stone, index) => {
+      stone.textContent = ["C", "D", "E"][index] || "";
+    });
   }
   if (els.chapter4SoundSource) {
     const sourcePhases = new Set([
@@ -10051,20 +10351,26 @@ function renderChapter4Screen() {
   });
   if (els.chapter4Replay) {
     const wholeTargetReplay = attempt.levelId === "LP01" && ["awaiting-response", "assisted", "visual-assist"].includes(phase);
+    const lp03Replay = attempt.levelId === "LP03" && ["lp03-awaiting-response", "lp03-assisted", "lp03-visual-assist", "lp03-seam-awaiting-response"].includes(phase);
     const soundRecovery = phase === "sound-paused";
-    els.chapter4Replay.hidden = !(wholeTargetReplay || soundRecovery);
-    els.chapter4Replay.disabled = wholeTargetReplay && Boolean(attempt.audioTransaction && !attempt.audioTransaction.endedAt);
+    els.chapter4Replay.hidden = !(wholeTargetReplay || lp03Replay || soundRecovery);
+    els.chapter4Replay.disabled = (wholeTargetReplay || lp03Replay) && Boolean(attempt.audioTransaction && !attempt.audioTransaction.endedAt);
   }
   if (els.chapter4StartCheck) {
     const lp01Start = attempt.levelId === "LP01" && ["lp01-model-ready", "lp01-model"].includes(phase);
     const lp02ReconnectStart = attempt.levelId === "LP02" && phase === "lp02-reconnect-ready";
-    els.chapter4StartCheck.hidden = !(lp01Start || lp02ReconnectStart);
-    els.chapter4StartCheck.textContent = lp02ReconnectStart ? "听两个 C" : (phase === "lp01-model-ready" ? "听两个声音" : "开始听");
+    const lp03Start = attempt.levelId === "LP03" && ["lp03-model-ready", "lp03-seam-ready"].includes(phase);
+    els.chapter4StartCheck.hidden = !(lp01Start || lp02ReconnectStart || lp03Start);
+    const startLabel = lp02ReconnectStart
+      ? "听两个 C"
+      : (lp03Start ? "听一声" : (phase === "lp01-model-ready" ? "听两个声音" : "开始听"));
+    els.chapter4StartCheck.textContent = startLabel;
+    els.chapter4StartCheck.setAttribute("aria-label", lp03Start ? "播放示范音" : startLabel);
   }
-  if (els.chapter4VisualAssist) els.chapter4VisualAssist.hidden = !(attempt.levelId === "LP01" && phase === "assisted");
-  if (els.chapter4Status) els.chapter4Status.textContent = copy.main;
-  if (els.keyboardPanel) els.keyboardPanel.hidden = lessonId !== "LP02";
-  if (lessonId === "LP02") renderChapter4Keyboard(attempt);
+  if (els.chapter4VisualAssist) els.chapter4VisualAssist.hidden = !((attempt.levelId === "LP01" && phase === "assisted") || (attempt.levelId === "LP03" && phase === "lp03-assisted"));
+  if (els.chapter4Status) els.chapter4Status.textContent = attempt.levelId === "LP03" ? lp03StatusCopy(phase) : copy.main;
+  if (els.keyboardPanel) els.keyboardPanel.hidden = !["LP02", "LP03"].includes(lessonId);
+  if (["LP02", "LP03"].includes(lessonId)) renderChapter4Keyboard(attempt);
   else if (els.keyboard) els.keyboard.innerHTML = "";
 }
 
@@ -10100,6 +10406,54 @@ function resumeChapter4Flow({ fromReload = false } = {}) {
     }
     if (attempt.phase === "awaiting-response") scheduleLp01ResponseTimeout();
     else if (attempt.phase === "assisted") scheduleLp01AssistedTimeout();
+    return;
+  }
+  if (attempt.levelId === "LP03") {
+    if (["lp03-step-complete", "lp03-complete"].includes(attempt.phase) && attempt.outcomeRecorded) {
+      settlePersistedLp03Completion(attempt);
+      return;
+    }
+    if (attempt.phase === "lp03-model-ready") {
+      if (!state.chapter4DirectMode && state.audioUnlocked) playLp03CurrentTarget("system-first");
+      return;
+    }
+    if (attempt.phase === "lp03-seam-ready") {
+      if (fromReload && attempt.seamCheck) {
+        attempt.seamCheck.recoveryGestureRequired = true;
+        persistChapter4Attempt();
+        renderChapter4Screen();
+        return;
+      }
+      if (!attempt.seamCheck?.recoveryGestureRequired && !state.chapter4DirectMode && state.audioUnlocked) playLp03SeamTarget(attempt, "system-first");
+      return;
+    }
+    if (attempt.phase === "lp03-awaiting-response") {
+      armLp03Input(attempt);
+      persistChapter4Attempt();
+      renderChapter4Screen();
+      scheduleLp03ResponseTimeout(attempt);
+      return;
+    }
+    if (attempt.phase === "lp03-seam-awaiting-response") {
+      armLp03Input(attempt);
+      if (attempt.seamCheck) attempt.seamCheck.inputArmed = attempt.inputArmed;
+      persistChapter4Attempt();
+      renderChapter4Screen();
+      scheduleLp03SeamTimeout(attempt);
+      return;
+    }
+    if (["lp03-assisted", "lp03-visual-assist"].includes(attempt.phase)) {
+      armLp03Input(attempt);
+      persistChapter4Attempt();
+      renderChapter4Screen();
+      scheduleLp03AssistedTimeout(attempt);
+      return;
+    }
+    if (attempt.phase === "lp03-step-complete" && !attempt.outcomeRecorded) {
+      attempt.phase = "lp03-model-ready";
+      persistChapter4Attempt();
+      renderChapter4Screen();
+    }
     return;
   }
   if (attempt.phase === "lp02-reconnect-ready") {
@@ -10575,10 +10929,17 @@ function renderChapter4Keyboard(attempt) {
   if (!els.keyboard) return;
   els.keyboard.innerHTML = "";
   els.keyboard.className = "keyboard chapter4-keyboard";
-  els.keyboard.dataset.targetVisible = ["lp02-assisted", "lp02-modeled-playing"].includes(attempt.phase) ? "true" : "false";
-  const assistTarget = ["lp02-assisted", "lp02-modeled-playing"].includes(attempt.phase);
-  const pendingMidi = attempt.phase === "lp02-input-playing" ? Number(attempt.pendingLp02Input?.midi) : null;
-  const showCommittedWrong = attempt.phase !== "lp02-input-playing" && state.lastInputResult === "wrong";
+  const lp03 = attempt.levelId === "LP03";
+  const assistTarget = ["lp02-assisted", "lp02-modeled-playing"].includes(attempt.phase) ||
+    (lp03 && ["lp03-visual-assist", "lp03-modeled-playing"].includes(attempt.phase));
+  els.keyboard.dataset.targetVisible = assistTarget ? "true" : "false";
+  els.keyboard.dataset.locatorCue = lp03 && ["lp03-assisted", "lp03-visual-assist"].includes(attempt.phase) ? "two-black" : "none";
+  const pendingMidi = ["lp02-input-playing", "lp03-child-echo-playing", "lp03-seam-child-echo-playing"].includes(attempt.phase)
+    ? Number((attempt.pendingLp02Input || attempt.pendingLp03Input)?.midi)
+    : null;
+  const showCommittedWrong = lp03
+    ? attempt.phase === "lp03-wrong-repair-playing" && state.lastInputResult === "wrong"
+    : !["lp02-input-playing", "lp03-child-echo-playing", "lp03-seam-child-echo-playing"].includes(attempt.phase) && state.lastInputResult === "wrong";
   chapter4WhiteMidis.forEach((midi, index) => {
     const note = chapter4NoteForMidi(midi);
     const key = document.createElement("button");
@@ -10587,7 +10948,7 @@ function renderChapter4Keyboard(attempt) {
     key.dataset.midi = String(midi);
     key.dataset.note = note.name;
     key.style.left = `${(index / 14) * 100}%`;
-    if (assistTarget && midi === 48) key.classList.add("lp02-assist-target");
+    if (assistTarget && midi === (lp03 ? attempt.targetMidi : 48)) key.classList.add("lp02-assist-target");
     if (midi === pendingMidi) key.classList.add("lp02-current-playing");
     if (showCommittedWrong && midi === state.lastInputMidi) key.classList.add("hit-wrong");
     const label = midi === 48 ? "低音 C" : (midi === 60 ? "中央 C" : note.name);
@@ -10604,6 +10965,9 @@ function renderChapter4Keyboard(attempt) {
     key.type = "button";
     key.dataset.midi = String(midi);
     key.style.left = `${(lowerWhiteIndex / 14) * 100}%`;
+    if (lp03 && ["lp03-assisted", "lp03-visual-assist"].includes(attempt.phase) && [49, 51].includes(midi)) {
+      key.classList.add("lp03-locator-key");
+    }
     if (midi === pendingMidi) key.classList.add("lp02-current-playing");
     if (showCommittedWrong && midi === state.lastInputMidi) key.classList.add("hit-wrong");
     key.setAttribute("aria-label", `黑键，${note.locator}`);
@@ -10860,6 +11224,10 @@ function handleChapter4Input(midi, source, meta = {}) {
   const attempt = ensureChapter4Attempt();
   if (!attempt) return;
   const now = new Date().toISOString();
+  if (attempt.levelId === "LP03") {
+    handleLp03Input(midi, source, meta);
+    return;
+  }
   if (attempt.levelId === "LP01") {
     attempt.observations.push({ event: "non-scoring-note", midi, source, phase: attempt.phase, occurredAt: now });
     if (source === "麦克风" || source === "MIDI") {
@@ -10891,7 +11259,12 @@ function handleChapter4Input(midi, source, meta = {}) {
 
 function releaseChapter4Input(midi, source) {
   const attempt = ensureChapter4Attempt();
-  if (!attempt || attempt.levelId !== "LP02") return;
+  if (!attempt) return;
+  if (attempt.levelId === "LP03") {
+    releaseLp03Input(attempt, midi, source);
+    return;
+  }
+  if (attempt.levelId !== "LP02") return;
   const held = attempt.routeHeldMidi[source];
   if (attempt.routeArmed[source] !== false && held === null) {
     if (attempt.phase === "lp02-input-playing" && attempt.pendingLp02Input?.source === source && !attempt.audioTransaction?.startedAt) {
@@ -10986,6 +11359,7 @@ function finalizeLp02Completion(attempt, { source, modeled = false } = {}) {
     state.chapter4.lp02Attempts.push(summary);
     state.chapter4.lp02Attempts = state.chapter4.lp02Attempts.slice(-20);
     state.chapter4.completedSlice = true;
+    chapter4Lp03Progress().foundationCAnchored = true;
     state.chapter4.resume = null;
     const session = state.activeSession;
     if (session) session.completedActions.push({ actionId: chapter4Config.lp02.actionId, kind: "chapter4-keyboard", targetId: "LP02", ...summary });
@@ -10998,6 +11372,1080 @@ function finalizeLp02Completion(attempt, { source, modeled = false } = {}) {
   state.chapter4RestView = action ? { ...action, chapter4Attempt: JSON.parse(JSON.stringify(attempt)) } : null;
   finishActiveSessionAtRest({ reward: "第一块地基", reason: "natural-rest" });
   state.chapter4FeedbackTimer = setTimeout(() => showMapScreen(), 1050);
+}
+
+function lp03InputIsHeld(attempt) {
+  return Boolean(
+    attempt?.routeHeldMidi?.["屏幕"] !== null ||
+    attempt?.routeHeldMidi?.["麦克风"] !== null ||
+    (attempt?.heldMidiNotes || []).length > 0
+  );
+}
+
+function armLp03Input(attempt) {
+  if (!attempt) return false;
+  attempt.inputArmed = !lp03InputIsHeld(attempt);
+  return attempt.inputArmed;
+}
+
+function lp03PendingInput(attempt, midi, source, meta = {}, occurredAt = new Date().toISOString(), targetMidi = attempt?.targetMidi) {
+  const started = Date.parse(attempt?.responseStartedAt || "");
+  return {
+    midi,
+    source,
+    activation: meta.activation || null,
+    occurredAt,
+    targetMidi,
+    phase: attempt?.phase || null,
+    responseMs: !attempt?.timingInterrupted && Number.isFinite(started) ? Math.max(0, Date.now() - started) : null,
+    onsetRecorded: false,
+    external: source === "麦克风"
+  };
+}
+
+function recordLp03InputOnset(attempt, pending, startedAt = new Date().toISOString()) {
+  if (!attempt || !pending || pending.onsetRecorded) return;
+  const note = chapter4NoteForMidi(pending.midi);
+  attempt.inputEvents.push({
+    event: "onset",
+    midi: pending.midi,
+    pitchName: note?.pitchName || null,
+    isBlack: Boolean(note?.isBlack),
+    route: pending.source,
+    occurredAt: pending.occurredAt,
+    audioStartedAt: startedAt
+  });
+  pending.onsetRecorded = true;
+}
+
+function recordLp03ChildInput(attempt, pending, { correct = false } = {}) {
+  if (!attempt || !pending || pending.childInputRecorded) return null;
+  normalizeLp03AttemptEvidence(attempt);
+  const note = chapter4NoteForMidi(pending.midi);
+  const target = chapter4NoteForMidi(pending.targetMidi);
+  const noteNameCorrect = Boolean(note && target && note.name === target.name);
+  const registerCorrect = Boolean(note && target && note.octave === target.octave);
+  const sameNameWrongOctave = Boolean(noteNameCorrect && pending.midi !== pending.targetMidi);
+  const input = {
+    midi: pending.midi,
+    targetMidi: pending.targetMidi,
+    pitchName: note?.pitchName || null,
+    octave: note?.octave ?? null,
+    isBlack: Boolean(note?.isBlack),
+    targetPitchName: target?.pitchName || null,
+    targetOctave: target?.octave ?? null,
+    noteNameCorrect,
+    registerCorrect,
+    sameNameWrongOctave,
+    route: pending.source,
+    stage: pending.stage || "route",
+    correct: Boolean(correct),
+    experimental: pending.source === "麦克风",
+    occurredAt: pending.occurredAt,
+    committedAt: new Date().toISOString()
+  };
+  attempt.childInputs.push(input);
+  attempt.inputRoutes[pending.source] = (attempt.inputRoutes[pending.source] || 0) + 1;
+  if (correct) attempt.childCorrectCount += 1;
+  pending.childInputRecorded = true;
+  return input;
+}
+
+function recordLp03ModeledInput(attempt, targetMidi, reason) {
+  if (!attempt || !Number.isFinite(targetMidi)) return null;
+  normalizeLp03AttemptEvidence(attempt);
+  if (attempt.modeledInputs.some((input) => input.stepId === attempt.stepId)) return null;
+  const target = chapter4NoteForMidi(targetMidi);
+  const input = {
+    source: "model",
+    targetMidi,
+    pitchName: target?.pitchName || null,
+    octave: target?.octave ?? null,
+    stepId: attempt.stepId,
+    reason,
+    completedAt: new Date().toISOString()
+  };
+  attempt.modeledInputs.push(input);
+  return input;
+}
+
+function lp03CurrentTargetMidi(attempt = ensureChapter4Attempt()) {
+  const seamTarget = attempt?.seamCheck?.sequence?.[attempt?.seamCheck?.index];
+  if (attempt?.levelId === "LP03" && attempt.phase?.startsWith("lp03-seam-") && Number.isFinite(seamTarget)) {
+    return seamTarget;
+  }
+  return Number.isFinite(attempt?.targetMidi) ? attempt.targetMidi : null;
+}
+
+function lp03TargetName(attempt = ensureChapter4Attempt()) {
+  return chapter4NoteForMidi(lp03CurrentTargetMidi(attempt))?.name || "C";
+}
+
+function playLp03CurrentTarget(reason = "system-first") {
+  const attempt = ensureChapter4Attempt();
+  if (!attempt || attempt.levelId !== "LP03" || !Number.isFinite(attempt.targetMidi)) return false;
+  clearChapter4Timers();
+  const targetMidi = attempt.targetMidi;
+  const replayReason = reason === "sound-recovery"
+    ? (attempt.audioTransaction?.payload?.sourceReason || attempt.targetSource || "system-first")
+    : reason;
+  const playback = startChapter4TeachingSequence(attempt, {
+    context: "lp03-target",
+    kind: "target",
+    reason: replayReason,
+    midis: [targetMidi],
+    payload: { targetMidi, stepId: attempt.stepId, sourceReason: replayReason },
+    phase: "lp03-target-playing",
+    noteDurationMs: LP03_TARGET_NOTE_DURATION_MS,
+    onStarted: (transaction) => {
+      attempt.targetSource = replayReason;
+      attempt.targetStartedAt = transaction.startedAt;
+      attempt.inputArmed = false;
+    },
+    onEnded: (transaction) => {
+      attempt.targetEndedAt = transaction.endedAt;
+      if (transaction.returnQueued) {
+        attempt.phase = "lp03-model-ready";
+        attempt.inputArmed = false;
+        persistChapter4Attempt();
+        renderChapter4Screen();
+        return;
+      }
+      attempt.phase = "lp03-awaiting-response";
+      attempt.soundPauseContext = null;
+      attempt.responseStartedAt = new Date().toISOString();
+      armLp03Input(attempt);
+      persistChapter4Attempt();
+      renderChapter4Screen();
+      scheduleLp03ResponseTimeout(attempt);
+    }
+  });
+  return Boolean(playback);
+}
+
+function scheduleLp03ResponseTimeout(attempt = ensureChapter4Attempt()) {
+  if (!attempt || attempt.levelId !== "LP03") return;
+  if (state.chapter4Timer) clearTimeout(state.chapter4Timer);
+  state.chapter4Timer = setTimeout(() => {
+    state.chapter4Timer = null;
+    const current = ensureChapter4Attempt();
+    if (current !== attempt || current.phase !== "lp03-awaiting-response") return;
+    current.strongCueUsed = true;
+    current.repairStage = "assisted";
+    current.phase = "lp03-assisted";
+    armLp03Input(current);
+    persistChapter4Attempt();
+    renderChapter4Screen();
+    scheduleLp03AssistedTimeout(current);
+  }, LP03_LONG_WAIT_MS);
+}
+
+function scheduleLp03AssistedTimeout(attempt = ensureChapter4Attempt()) {
+  if (!attempt || attempt.levelId !== "LP03") return;
+  if (state.chapter4Timer) clearTimeout(state.chapter4Timer);
+  state.chapter4Timer = setTimeout(() => {
+    state.chapter4Timer = null;
+    const current = ensureChapter4Attempt();
+    if (current !== attempt || !["lp03-assisted", "lp03-visual-assist"].includes(current.phase)) return;
+    completeLp03Modeled("assisted-timeout");
+  }, LP03_ASSISTED_WAIT_MS);
+}
+
+function beginLp03InputTransaction(attempt, pending, { recovery = false } = {}) {
+  if (!attempt || !pending) return false;
+  clearChapter4Timers();
+  attempt.pendingLp03Input = pending;
+  attempt.inputArmed = false;
+  const playback = startChapter4TeachingSequence(attempt, {
+    context: "lp03-child-input",
+    kind: "child-key",
+    reason: pending.source === "MIDI"
+      ? (recovery ? "midi-local-monitor-recovery" : "midi-local-monitor")
+      : (recovery ? "sound-recovery-child-key" : (pending.activation || "screen")),
+    midis: [pending.midi],
+    payload: { ...pending, recovery },
+    phase: "lp03-child-echo-playing",
+    child: true,
+    noteDurationMs: LP03_CHILD_NOTE_DURATION_MS,
+    onStarted: (transaction) => {
+      if (recovery || pending.releaseRequested) {
+        attempt.routeArmed[pending.source] = true;
+        attempt.routeHeldMidi[pending.source] = null;
+      } else {
+        attempt.routeArmed[pending.source] = false;
+        attempt.routeHeldMidi[pending.source] = pending.midi;
+      }
+      recordLp03InputOnset(attempt, pending, transaction.startedAt);
+    },
+    onEnded: () => commitLp03PendingInput(attempt)
+  });
+  return Boolean(playback);
+}
+
+function beginLp03ExternalInputTransaction(attempt, pending) {
+  if (!attempt || !pending) return false;
+  clearChapter4Timers();
+  attempt.pendingLp03Input = pending;
+  attempt.inputArmed = false;
+  attempt.routeArmed["麦克风"] = false;
+  attempt.routeHeldMidi["麦克风"] = pending.midi;
+  const occurredAt = new Date().toISOString();
+  beginChapter4AudioTransaction(attempt, {
+    context: "lp03-external-input",
+    kind: "external-child-key",
+    reason: "microphone-gate-accepted",
+    midis: [pending.midi],
+    durationMs: LP03_EXTERNAL_INPUT_MAX_MS,
+    payload: { ...pending, requiresQuietEnd: true },
+    phase: "lp03-child-echo-playing",
+    scheduledAt: occurredAt,
+    startedAt: occurredAt
+  });
+  state.chapter4Timer = setTimeout(() => {
+    state.chapter4Timer = null;
+    const transaction = attempt.audioTransaction;
+    if (!transaction || transaction.endedAt || transaction.interruptedAt || transaction.context !== "lp03-external-input") return;
+    attempt.timingInterrupted = true;
+    enterChapter4SoundPause(attempt, "lp03-external-input", "external-input-release-timeout");
+  }, LP03_EXTERNAL_INPUT_MAX_MS);
+  return true;
+}
+
+function handoffChapter4QueuedReturn(attempt, completedTransaction) {
+  const successor = attempt?.audioTransaction;
+  if (!completedTransaction?.returnQueued || !successor || successor === completedTransaction) return false;
+  successor.returnQueued = true;
+  completedTransaction.returnQueued = false;
+  traceChapter4(attempt, "queued-return-handoff", {
+    from: completedTransaction.context,
+    to: successor.context
+  });
+  persistChapter4Attempt();
+  return true;
+}
+
+function startLp03WrongRepair(attempt, pending, { recovery = false } = {}) {
+  if (!attempt || !pending || !Number.isFinite(attempt.targetMidi)) return false;
+  clearChapter4Timers();
+  const targetMidi = attempt.targetMidi;
+  const playback = startChapter4TeachingSequence(attempt, {
+    context: "lp03-wrong-repair",
+    kind: "repair-target",
+    reason: recovery ? "sound-recovery-target" : "child-then-target",
+    midis: [targetMidi],
+    payload: { ...pending, targetMidi, recovery },
+    phase: "lp03-wrong-repair-playing",
+    noteDurationMs: LP03_TARGET_NOTE_DURATION_MS,
+    onEnded: (transaction) => {
+      if (transaction.returnQueued) {
+        attempt.phase = attempt.wrongCount >= 2 ? "lp03-assisted" : "lp03-awaiting-response";
+        attempt.inputArmed = false;
+        persistChapter4Attempt();
+        renderChapter4Screen();
+        return;
+      }
+      if (attempt.pendingModeledReason) {
+        completeLp03Modeled(attempt.pendingModeledReason, { targetAlreadyPlayed: true });
+        return;
+      }
+      if (attempt.wrongCount >= 2) {
+        attempt.strongCueUsed = true;
+        attempt.repairStage = "assisted";
+        attempt.phase = "lp03-assisted";
+        armLp03Input(attempt);
+        persistChapter4Attempt();
+        renderChapter4Screen();
+        scheduleLp03AssistedTimeout(attempt);
+        return;
+      }
+      attempt.repairStage = "normal";
+      attempt.phase = "lp03-awaiting-response";
+      attempt.responseStartedAt = new Date().toISOString();
+      armLp03Input(attempt);
+      persistChapter4Attempt();
+      renderChapter4Screen();
+      scheduleLp03ResponseTimeout(attempt);
+    }
+  });
+  return Boolean(playback);
+}
+
+function lp03RouteEvent(attempt, { source, modeled = false } = {}) {
+  normalizeLp03AttemptEvidence(attempt);
+  return {
+    stepId: attempt.stepId,
+    targetMidi: attempt.targetMidi,
+    action: attempt.stepAction,
+    sessionId: attempt.formalSession ? (state.activeSession?.sessionId || attempt.sessionId) : null,
+    route: source,
+    firstChildMidi: attempt.firstChildMidi,
+    firstInputRoute: attempt.firstInputRoute,
+    wrongCount: attempt.wrongCount,
+    childCorrectCount: attempt.childCorrectCount,
+    childInputs: attempt.childInputs.map((input) => ({ ...input })),
+    inputRoutes: { ...attempt.inputRoutes },
+    repairStage: attempt.repairStage,
+    modeledInputs: attempt.modeledInputs.map((input) => ({ ...input })),
+    lastWrongInput: attempt.lastWrongInput ? { ...attempt.lastWrongInput } : null,
+    strongCueUsed: Boolean(attempt.strongCueUsed),
+    modeled: Boolean(modeled || attempt.modeled),
+    experimentalInput: Boolean(attempt.experimentalInput),
+    timingInterrupted: Boolean(attempt.timingInterrupted),
+    completedAt: new Date().toISOString()
+  };
+}
+
+function copyLp03RouteEvent(event) {
+  return {
+    ...event,
+    childInputs: (event.childInputs || []).map((input) => ({ ...input })),
+    inputRoutes: { ...(event.inputRoutes || {}) },
+    modeledInputs: (event.modeledInputs || []).map((input) => ({ ...input })),
+    lastWrongInput: event.lastWrongInput ? { ...event.lastWrongInput } : null
+  };
+}
+
+function lp03ActionCompletion(attempt, routeEvent) {
+  const session = state.activeSession;
+  const action = currentChapter4Action("LP03");
+  if (!session || !action || action.actionId !== attempt.actionId || action.lp03CompletionRecorded) return null;
+  const completion = {
+    actionId: action.actionId,
+    kind: "chapter4-keyboard",
+    targetId: "LP03",
+    lp03Step: attempt.stepId,
+    runMode: "guided",
+    reviewableForMastery: false,
+    stable: false,
+    retained: false,
+    completedAt: routeEvent.completedAt,
+    ...copyLp03RouteEvent(routeEvent)
+  };
+  action.lp03CompletionRecorded = true;
+  session.completedActions.push(completion);
+  return completion;
+}
+
+function lp03NeedsNaturalRest(attempt) {
+  return Boolean(attempt.strongCueUsed || attempt.modeled || attempt.experimentalInput || attempt.wrongCount >= 2);
+}
+
+function finishLp03EarlyRest(attempt, reason, { returnQueued = false } = {}) {
+  if (!attempt || state.chapter4DirectMode) return false;
+  const remaining = lp03RemainingStepIds(attempt);
+  if (!remaining.length) return false;
+  const progress = chapter4Lp03Progress();
+  const session = state.activeSession;
+  state.chapter4.resume = {
+    bundleId: chapter4Config.lp03.bundleId,
+    nextTargetId: "LP03",
+    nextStepId: remaining[0],
+    remainingStepIds: remaining,
+    endedSessionId: session?.sessionId || attempt.sessionId || null,
+    reason,
+    createdAt: new Date().toISOString(),
+    lp03Progress: JSON.parse(JSON.stringify(progress))
+  };
+  state.chapter4RestView = currentChapter4Action()
+    ? { ...currentChapter4Action(), chapter4Attempt: JSON.parse(JSON.stringify(attempt)) }
+    : null;
+  persistChapter4Progress();
+  persistChapter4Attempt();
+  finishActiveSessionAtRest({ reward: `${lp03TargetName(attempt)} 地基安放好`, reason });
+  renderChapter4Screen();
+  if (!returnQueued) state.chapter4FeedbackTimer = setTimeout(() => showMapScreen(), 900);
+  return true;
+}
+
+function lp03AttemptOwnsActiveFormalSession(attempt) {
+  const session = state.activeSession;
+  const action = currentChapter4Action("LP03");
+  return Boolean(
+    !state.chapter4DirectMode &&
+    attempt?.levelId === "LP03" &&
+    session?.status === "active" &&
+    session.bundleId === chapter4Config.lp03.bundleId &&
+    action?.chapter4Attempt === attempt &&
+    (!attempt.sessionId || attempt.sessionId === session.sessionId)
+  );
+}
+
+function settlePersistedLp03Completion(attempt) {
+  if (!attempt?.outcomeRecorded || !lp03AttemptOwnsActiveFormalSession(attempt)) return false;
+  const progress = chapter4Lp03Progress();
+  if (attempt.phase === "lp03-step-complete") {
+    if (!lp03StepComplete(attempt.stepId, attempt)) return false;
+    if (["C", "D"].includes(attempt.stepId)) {
+      if (lp03NeedsNaturalRest(attempt)) {
+        return finishLp03EarlyRest(attempt, attempt.modeled ? "modeled-safe-rest" : "repeated-repair");
+      }
+      return advanceLp03ToNextAction({ autoplay: false });
+    }
+    if (attempt.stepId === "E") {
+      if (progress.seamCheckDeferred || !lp03RouteIsClean(progress)) {
+        progress.seamCheckDeferred = true;
+        persistChapter4Progress();
+        return finishLp03Session(attempt, { reason: "seam-check-deferred" });
+      }
+      if (attempt.seamCheck) {
+        attempt.phase = "lp03-seam-ready";
+        attempt.seamCheck.inputArmed = false;
+        attempt.seamCheck.recoveryGestureRequired = true;
+        persistChapter4Attempt();
+        renderChapter4Screen();
+        return true;
+      }
+      return startLp03SeamChecks(attempt, { autoplay: false, recoveryGestureRequired: true });
+    }
+    return false;
+  }
+  if (attempt.phase === "lp03-complete") {
+    return finishLp03Session(attempt, { reason: "recovery-session-settle" });
+  }
+  return false;
+}
+
+function lp03RouteIsClean(progress = chapter4Lp03Progress()) {
+  const events = progress.routeEvents || [];
+  return events.length === 3 && events.every((event) =>
+    event.route !== "麦克风" && !event.modeled && !event.experimentalInput &&
+    !event.strongCueUsed && !event.timingInterrupted && event.wrongCount === 0
+  );
+}
+
+function startLp03SeamChecks(attempt, { autoplay = true, recoveryGestureRequired = false } = {}) {
+  if (!attempt || attempt.levelId !== "LP03" || attempt.stepId !== "E") return false;
+  const progress = chapter4Lp03Progress();
+  if (!lp03RouteIsClean(progress)) {
+    progress.seamCheckDeferred = true;
+    persistChapter4Progress();
+    return finishLp03Session(attempt, { reason: "seam-check-deferred" });
+  }
+  attempt.seamCheck = {
+    sequence: lp03SeamOrderForSeed(attempt.seed),
+    index: 0,
+    records: [],
+    inputArmed: false,
+    wrongCount: 0,
+    closedAt: null,
+    recoveryGestureRequired: Boolean(recoveryGestureRequired)
+  };
+  attempt.phase = "lp03-seam-ready";
+  persistChapter4Attempt();
+  renderChapter4Screen();
+  return autoplay ? playLp03SeamTarget(attempt, "system-first") : true;
+}
+
+function playLp03SeamTarget(attempt = ensureChapter4Attempt(), reason = "system-first") {
+  const seam = attempt?.seamCheck;
+  const targetMidi = seam?.sequence?.[seam.index];
+  if (!attempt || attempt.levelId !== "LP03" || !seam || !Number.isFinite(targetMidi)) return false;
+  clearChapter4Timers();
+  const playback = startChapter4TeachingSequence(attempt, {
+    context: "lp03-seam-target",
+    kind: "seam-target",
+    reason,
+    midis: [targetMidi],
+    payload: { targetMidi, seamIndex: seam.index, sourceReason: reason },
+    phase: "lp03-seam-target-playing",
+    noteDurationMs: LP03_TARGET_NOTE_DURATION_MS,
+    onStarted: () => {
+      seam.inputArmed = false;
+      attempt.inputArmed = false;
+    },
+    onEnded: (transaction) => {
+      if (transaction.returnQueued) {
+        attempt.phase = "lp03-seam-ready";
+        seam.inputArmed = false;
+        persistChapter4Attempt();
+        renderChapter4Screen();
+        return;
+      }
+      attempt.phase = "lp03-seam-awaiting-response";
+      attempt.responseStartedAt = new Date().toISOString();
+      seam.inputArmed = armLp03Input(attempt);
+      persistChapter4Attempt();
+      renderChapter4Screen();
+      scheduleLp03SeamTimeout(attempt);
+    }
+  });
+  return Boolean(playback);
+}
+
+function scheduleLp03SeamTimeout(attempt = ensureChapter4Attempt()) {
+  if (!attempt?.seamCheck) return;
+  if (state.chapter4Timer) clearTimeout(state.chapter4Timer);
+  state.chapter4Timer = setTimeout(() => {
+    state.chapter4Timer = null;
+    const current = ensureChapter4Attempt();
+    if (current !== attempt || current.phase !== "lp03-seam-awaiting-response") return;
+    current.strongCueUsed = true;
+    current.seamCheck.inputArmed = false;
+    completeLp03SeamModeled(current, "seam-timeout");
+  }, LP03_ASSISTED_WAIT_MS);
+}
+
+function beginLp03SeamInput(attempt, pending, { recovery = false } = {}) {
+  if (!attempt?.seamCheck || !pending) return false;
+  clearChapter4Timers();
+  attempt.pendingLp03Input = pending;
+  attempt.inputArmed = false;
+  attempt.seamCheck.inputArmed = false;
+  const playback = startChapter4TeachingSequence(attempt, {
+    context: "lp03-seam-child-input",
+    kind: "seam-child-key",
+    reason: recovery ? "sound-recovery-child-key" : (pending.activation || pending.source),
+    midis: [pending.midi],
+    payload: { ...pending, recovery },
+    phase: "lp03-seam-child-echo-playing",
+    child: true,
+    noteDurationMs: LP03_CHILD_NOTE_DURATION_MS,
+    onStarted: (transaction) => {
+      if (recovery || pending.releaseRequested) {
+        attempt.routeArmed[pending.source] = true;
+        attempt.routeHeldMidi[pending.source] = null;
+      } else {
+        attempt.routeArmed[pending.source] = false;
+        attempt.routeHeldMidi[pending.source] = pending.midi;
+      }
+      recordLp03InputOnset(attempt, pending, transaction.startedAt);
+    },
+    onEnded: () => commitLp03SeamInput(attempt)
+  });
+  return Boolean(playback);
+}
+
+function startLp03SeamRepair(attempt, pending, { recovery = false } = {}) {
+  const seam = attempt?.seamCheck;
+  const targetMidi = seam?.sequence?.[seam.index];
+  if (!attempt || !pending || !Number.isFinite(targetMidi)) return false;
+  const playback = startChapter4TeachingSequence(attempt, {
+    context: "lp03-seam-repair",
+    kind: "seam-repair-target",
+    reason: recovery ? "sound-recovery-target" : "child-then-target",
+    midis: [targetMidi],
+    payload: { ...pending, targetMidi, seamIndex: seam.index, recovery },
+    phase: "lp03-seam-repair-playing",
+    noteDurationMs: LP03_TARGET_NOTE_DURATION_MS,
+    onEnded: (transaction) => {
+      finalizeLp03SeamCheck(attempt, pending, {
+        modeled: false,
+        reason: transaction.returnQueued ? "queued-return" : null,
+        returnQueued: transaction.returnQueued
+      });
+    }
+  });
+  return Boolean(playback);
+}
+
+function completeLp03SeamModeled(attempt = ensureChapter4Attempt(), reason = "modeled") {
+  const seam = attempt?.seamCheck;
+  const targetMidi = seam?.sequence?.[seam.index];
+  if (!attempt || !seam || !Number.isFinite(targetMidi)) return false;
+  return Boolean(startChapter4TeachingSequence(attempt, {
+    context: "lp03-seam-modeled",
+    kind: "seam-modeled-target",
+    reason,
+    midis: [targetMidi],
+    payload: { targetMidi, seamIndex: seam.index, reason },
+    phase: "lp03-seam-modeled-playing",
+    noteDurationMs: LP03_TARGET_NOTE_DURATION_MS,
+    onEnded: (transaction) => {
+      finalizeLp03SeamCheck(attempt, { midi: targetMidi, source: "model", targetMidi }, {
+        modeled: true,
+        reason,
+        returnQueued: transaction.returnQueued
+      });
+    }
+  }));
+}
+
+function finalizeLp03SeamCheck(attempt, pending, { modeled = false, reason = null, returnQueued = false } = {}) {
+  const seam = attempt?.seamCheck;
+  const targetMidi = seam?.sequence?.[seam.index];
+  if (!attempt || !seam || !Number.isFinite(targetMidi)) return false;
+  const record = {
+    seamIndex: seam.index,
+    targetMidi,
+    targetName: chapter4NoteForMidi(targetMidi)?.name || null,
+    firstChildMidi: modeled ? null : (pending?.midi ?? null),
+    route: modeled ? "model" : (pending?.source || null),
+    correct: !modeled && pending?.midi === targetMidi,
+    childCorrectCount: modeled ? 0 : (pending?.midi === targetMidi ? 1 : 0),
+    wrongCount: Number(seam.wrongCount) || 0,
+    modeled: Boolean(modeled),
+    reason,
+    completedAt: new Date().toISOString()
+  };
+  seam.records.push(record);
+  const progress = chapter4Lp03Progress();
+  progress.seamChecks.push({ ...record });
+  progress.seamChecks = progress.seamChecks.slice(-12);
+  seam.index += 1;
+  attempt.pendingLp03Input = null;
+  attempt.inputArmed = false;
+  seam.inputArmed = false;
+  persistChapter4Progress();
+  const needsRest = Boolean(modeled || attempt.strongCueUsed || seam.wrongCount >= 2);
+  if (needsRest) {
+    progress.needsPractice = true;
+    progress.seamCheckDeferred = true;
+    persistChapter4Progress();
+    return finishLp03Session(attempt, {
+      reason: modeled ? "seam-check-modeled-rest" : "seam-check-repeated-repair-rest",
+      returnQueued
+    });
+  }
+  if (seam.index >= seam.sequence.length) return finishLp03Session(attempt, { reason: "seam-check-complete", returnQueued });
+  attempt.phase = "lp03-seam-ready";
+  persistChapter4Attempt();
+  renderChapter4Screen();
+  if (returnQueued) return true;
+  state.chapter4FeedbackTimer = setTimeout(() => {
+    state.chapter4FeedbackTimer = null;
+    if (ensureChapter4Attempt() === attempt && attempt.phase === "lp03-seam-ready") playLp03SeamTarget(attempt, "system-next");
+  }, 420);
+  return true;
+}
+
+function lp03SeamCheckpointIsOpen(attempt) {
+  const transaction = attempt?.audioTransaction;
+  const seam = attempt?.seamCheck;
+  const activeSeamTransaction = Boolean(
+    transaction?.context?.startsWith("lp03-seam-") &&
+    !transaction.endedAt &&
+    !transaction.interruptedAt
+  );
+  const unresolved = Boolean(seam && !seam.closedAt && attempt?.phase !== "lp03-complete");
+  return Boolean(
+    attempt?.levelId === "LP03" && unresolved && (
+      attempt.phase?.startsWith("lp03-seam-") ||
+      attempt.soundPauseContext?.startsWith("lp03-seam-") ||
+      activeSeamTransaction ||
+      attempt.pendingLp03Input?.stage === "seam"
+    )
+  );
+}
+
+function finishLp03SeamDeferred(attempt, reason = "seam-check-deferred-map") {
+  if (!lp03SeamCheckpointIsOpen(attempt)) return false;
+  clearChapter4Timers();
+  const progress = chapter4Lp03Progress();
+  const seam = attempt.seamCheck;
+  const hasRemaining = !seam || seam.index < seam.sequence.length;
+  if (hasRemaining) progress.seamCheckDeferred = true;
+  if (seam) seam.closedAt ||= new Date().toISOString();
+  attempt.pendingLp03Input = null;
+  attempt.inputArmed = false;
+  attempt.soundPauseContext = null;
+  attempt.phaseBeforeSoundPause = null;
+  if (attempt.audioTransaction?.context?.startsWith("lp03-seam-")) {
+    attempt.audioTransaction.returnQueued = false;
+  }
+  if (seam) seam.inputArmed = false;
+  persistChapter4Progress();
+  persistChapter4Attempt();
+  const finished = finishLp03Session(attempt, { reason, returnQueued: true });
+  if (finished && state.screen === "chapter4") showMapScreen();
+  return finished;
+}
+
+function recordLp03WrongInput(attempt, pending) {
+  normalizeLp03AttemptEvidence(attempt);
+  const note = chapter4NoteForMidi(pending.midi);
+  const target = chapter4NoteForMidi(pending.targetMidi);
+  const progress = chapter4Lp03Progress();
+  const completedStep = chapter4Config.lp03.steps.find((step) => step.midi === pending.midi);
+  const status = completedStep && lp03StepComplete(completedStep.id, attempt)
+    ? "completed-step-repeat"
+    : (completedStep && chapter4Config.lp03.steps.findIndex((step) => step.id === completedStep.id) > chapter4Config.lp03.steps.findIndex((step) => step.id === attempt.stepId)
+      ? "future-step"
+      : "wrong-step");
+  const sameNameWrongOctave = Boolean(note && target && note.name === target.name && pending.midi !== pending.targetMidi);
+  const registerCorrect = Boolean(note && target && note.octave === target.octave);
+  attempt.wrongCount += 1;
+  attempt.repairStage = attempt.wrongCount >= 2 ? "assisted" : "normal";
+  attempt.lastWrongInput = {
+    midi: pending.midi,
+    pitchName: note?.pitchName || null,
+    name: note?.name || null,
+    isBlack: Boolean(note?.isBlack),
+    noteNameCorrect: Boolean(note && target && note.name === target.name),
+    registerCorrect,
+    sameNameWrongOctave,
+    status
+  };
+  attempt.inputEvents.push({
+    event: "wrong-route",
+    midi: pending.midi,
+    targetMidi: pending.targetMidi,
+    pitchName: note?.pitchName || null,
+    isBlack: Boolean(note?.isBlack),
+    noteNameCorrect: attempt.lastWrongInput.noteNameCorrect,
+    registerCorrect,
+    sameNameWrongOctave,
+    status,
+    route: pending.source,
+    occurredAt: pending.occurredAt
+  });
+  if (attempt.wrongCount >= 2) attempt.strongCueUsed = true;
+  if (status === "completed-step-repeat" || status === "future-step") {
+    progress.needsPractice = true;
+  }
+}
+
+function commitLp03PendingInput(attempt) {
+  const pending = attempt?.pendingLp03Input;
+  if (!attempt || !pending || (attempt.outcomeRecorded && pending.stage !== "seam")) return false;
+  if (pending.stage === "seam") return commitLp03SeamInput(attempt);
+  attempt.pendingLp03Input = null;
+  const note = chapter4NoteForMidi(pending.midi);
+  if (!attempt.firstInputRoute && pending.source !== "麦克风") {
+    attempt.firstChildMidi = pending.midi;
+    attempt.firstInputRoute = pending.source;
+    attempt.firstResponseMs = pending.responseMs;
+  }
+  state.lastInputMidi = pending.midi;
+  const correct = pending.midi === pending.targetMidi;
+  recordLp03ChildInput(attempt, pending, { correct });
+  if (pending.source === "麦克风") {
+    attempt.experimentalInput = true;
+    attempt.microphoneConfidence = pending.midi === pending.targetMidi ? "confirmed" : "uncertain";
+    if (correct) {
+      attempt.firstChildMidi ??= pending.midi;
+      attempt.firstInputRoute ??= pending.source;
+      attempt.firstResponseMs ??= pending.responseMs;
+      return completeLp03Step(attempt, { source: "microphone-assisted", modeled: false });
+    }
+    attempt.observations.push({ event: "microphone-unscored", midi: pending.midi, occurredAt: pending.occurredAt });
+    attempt.phase = "lp03-awaiting-response";
+    attempt.responseStartedAt = new Date().toISOString();
+    armLp03Input(attempt);
+    persistChapter4Attempt();
+    renderChapter4Screen();
+    scheduleLp03ResponseTimeout(attempt);
+    return false;
+  }
+  if (correct) {
+    state.lastInputResult = "correct";
+    return completeLp03Step(attempt, { source: pending.source, modeled: false });
+  }
+  state.lastInputResult = "wrong";
+  recordLp03WrongInput(attempt, pending);
+  const completedChildTransaction = attempt.audioTransaction;
+  if (attempt.wrongCount >= 3) attempt.pendingModeledReason = "repeated-repair";
+  persistChapter4Attempt();
+  renderChapter4Screen();
+  const started = startLp03WrongRepair(attempt, pending);
+  if (started) handoffChapter4QueuedReturn(attempt, completedChildTransaction);
+  return false;
+}
+
+function completeLp03Modeled(reason, { targetAlreadyPlayed = false } = {}) {
+  const attempt = ensureChapter4Attempt();
+  if (!attempt || attempt.levelId !== "LP03" || attempt.seamCheck) return false;
+  clearChapter4Timers();
+  attempt.strongCueUsed = true;
+  attempt.modeled = true;
+  attempt.pendingModeledReason = reason;
+  if (targetAlreadyPlayed) {
+    recordLp03ModeledInput(attempt, attempt.targetMidi, reason);
+    return completeLp03Step(attempt, { source: "model", modeled: true });
+  }
+  return Boolean(startChapter4TeachingSequence(attempt, {
+    context: "lp03-modeled",
+    kind: "modeled-target",
+    reason,
+    midis: [attempt.targetMidi],
+    payload: { targetMidi: attempt.targetMidi, stepId: attempt.stepId, reason },
+    phase: "lp03-modeled-playing",
+    noteDurationMs: LP03_TARGET_NOTE_DURATION_MS,
+    onEnded: (transaction) => {
+      if (transaction.returnQueued) return;
+      recordLp03ModeledInput(attempt, attempt.targetMidi, reason);
+      completeLp03Step(attempt, { source: "model", modeled: true });
+    }
+  }));
+}
+
+function advanceLp03ToNextAction({ autoplay = true } = {}) {
+  const session = state.activeSession;
+  if ((!session || session.bundleId !== chapter4Config.lp03.bundleId) && state.chapter4DirectMode) {
+    const nextStep = lp03RemainingStepIds().at(0);
+    const step = lp03StepForId(nextStep);
+    if (!step) return false;
+    const previous = currentChapter4Action()?.chapter4Attempt;
+    state.chapter4DirectAction = {
+      actionId: step.actionId,
+      kind: "chapter4-keyboard",
+      targetId: "LP03",
+      lp03Step: step.id,
+      runMode: "guided",
+      formalSession: false,
+      directMode: true,
+      chapter4Attempt: createLp03Attempt(null, {
+        formalSession: false,
+        directMode: true,
+        stepId: step.id,
+        heldMidiNotes: previous?.heldMidiNotes || [],
+        heldPointerMidi: previous?.routeHeldMidi?.["屏幕"] ?? null
+      })
+    };
+    if (autoplay) showChapter4Screen();
+    else renderChapter4Screen();
+    return true;
+  }
+  if (!session || session.bundleId !== chapter4Config.lp03.bundleId) return false;
+  const previous = currentChapter4Action()?.chapter4Attempt;
+  const nextIndex = session.actionIndex + 1;
+  const nextAction = session.actions[nextIndex];
+  if (!nextAction || nextAction.targetId !== "LP03") return false;
+  session.actionIndex = nextIndex;
+  nextAction.chapter4Attempt = createLp03Attempt(session, {
+    stepId: nextAction.lp03Step,
+    heldMidiNotes: previous?.heldMidiNotes || [],
+    heldPointerMidi: previous?.routeHeldMidi?.["屏幕"] ?? null
+  });
+  persistActiveSession();
+  if (autoplay) showChapter4Screen();
+  else renderChapter4Screen();
+  return true;
+}
+
+function lp03EvidenceSummary(progress, sessionId = null) {
+  const routeEvents = (progress.routeEvents || []).map(copyLp03RouteEvent);
+  return {
+    levelId: "LP03",
+    bundleId: chapter4Config.lp03.bundleId,
+    sessionId,
+    completedAt: progress.completedAt,
+    played: Boolean(progress.played),
+    stable: false,
+    retained: false,
+    needsPractice: Boolean(progress.needsPractice),
+    foundationCAnchored: Boolean(progress.foundationCAnchored),
+    foundationCAwake: Boolean(progress.foundationCAwake),
+    foundationDPlaced: Boolean(progress.foundationDPlaced),
+    foundationEPlaced: Boolean(progress.foundationEPlaced),
+    routeEvents,
+    seamChecks: (progress.seamChecks || []).map((check) => ({ ...check })),
+    seamCheckDeferred: Boolean(progress.seamCheckDeferred),
+    stageObservation: {
+      skill: "low-key:C3-E3",
+      count: (progress.seamChecks || []).length,
+      stable: false,
+      retained: false
+    }
+  };
+}
+
+function finishLp03Session(attempt, { reason = "natural-rest", returnQueued = false } = {}) {
+  const progress = chapter4Lp03Progress();
+  const complete = Boolean(progress.foundationCAwake && progress.foundationDPlaced && progress.foundationEPlaced);
+  if (!complete) return false;
+  progress.played = true;
+  progress.completedAt ||= new Date().toISOString();
+  progress.lastSessionId = state.activeSession?.sessionId || attempt?.sessionId || progress.lastSessionId;
+  const evidence = lp03EvidenceSummary(progress, progress.lastSessionId);
+  if (attempt) {
+    if (attempt.seamCheck) {
+      attempt.seamCheck.inputArmed = false;
+      attempt.seamCheck.closedAt ||= new Date().toISOString();
+    }
+    attempt.phase = "lp03-complete";
+    attempt.inputArmed = false;
+    attempt.outcomeRecorded = true;
+  }
+  if (attempt?.formalSession && !state.chapter4DirectMode && !state.chapter4.lessonEvidence.LP03?.completedAt) {
+    state.chapter4.lessonEvidence.LP03 = evidence;
+    state.chapter4.lp03Attempts.push(evidence);
+    state.chapter4.lp03Attempts = state.chapter4.lp03Attempts.slice(-20);
+    const existing = state.learningStats.levels.LP03 || { completions: 0, formalCompletions: 0, stableCompletions: 0 };
+    existing.completions = (Number(existing.completions) || 0) + 1;
+    existing.formalCompletions = (Number(existing.formalCompletions) || 0) + 1;
+    existing.stableCompletions = Number(existing.stableCompletions) || 0;
+    existing.needsPractice = Boolean(progress.needsPractice);
+    existing.todayNeedsPractice = Boolean(progress.needsPractice);
+    existing.todayNeedsPracticeDate = progress.needsPractice ? localDateKeyAt(progress.completedAt) : existing.todayNeedsPracticeDate;
+    existing.lastCompletedAt = progress.completedAt;
+    existing.lastFormalCompletedAt = progress.completedAt;
+    existing.lastAttempt = { ...evidence };
+    state.learningStats.levels.LP03 = existing;
+    saveLearningStats();
+  }
+  persistChapter4Progress();
+  persistChapter4Attempt();
+  renderChapter4Screen();
+  if (state.chapter4DirectMode) return true;
+  state.chapter4.resume = null;
+  state.chapter4RestView = currentChapter4Action()
+    ? { ...currentChapter4Action(), chapter4Attempt: JSON.parse(JSON.stringify(attempt)) }
+    : null;
+  persistChapter4Progress();
+  finishActiveSessionAtRest({ reward: "C-D-E 地基路线", reason });
+  if (!returnQueued) state.chapter4FeedbackTimer = setTimeout(() => showMapScreen(), 1100);
+  return true;
+}
+
+function completeLp03Step(attempt, { source, modeled = false } = {}) {
+  if (!attempt || attempt.outcomeRecorded) return false;
+  clearChapter4Timers();
+  attempt.pendingLp03Input = null;
+  attempt.outcomeRecorded = true;
+  attempt.modeled = Boolean(modeled || attempt.modeled);
+  attempt.completionSource = source;
+  attempt.inputArmed = false;
+  attempt.phase = "lp03-step-complete";
+  const progress = chapter4Lp03Progress();
+  progress.foundationCAnchored = Boolean(progress.foundationCAnchored || attempt.directMode);
+  progress[attempt.foundationKey] = true;
+  progress.originSessionId ||= attempt.sessionId || null;
+  progress.lastSessionId = state.activeSession?.sessionId || attempt.sessionId || progress.lastSessionId;
+  progress.needsPractice = Boolean(progress.needsPractice || attempt.strongCueUsed || attempt.modeled || attempt.experimentalInput);
+  const routeEvent = lp03RouteEvent(attempt, { source, modeled });
+  progress.routeEvents.push(routeEvent);
+  progress.routeEvents = progress.routeEvents.slice(-12);
+  lp03ActionCompletion(attempt, routeEvent);
+  const returnQueued = attempt.audioTransaction?.returnQueued === true;
+  persistChapter4Progress();
+  persistChapter4Attempt();
+  renderChapter4Screen();
+  if (["C", "D"].includes(attempt.stepId) && lp03NeedsNaturalRest(attempt)) {
+    return finishLp03EarlyRest(attempt, attempt.modeled ? "modeled-safe-rest" : "repeated-repair", { returnQueued });
+  }
+  if (attempt.stepId === "E") {
+    if (returnQueued) {
+      progress.seamCheckDeferred = true;
+      persistChapter4Progress();
+      return finishLp03Session(attempt, { reason: "queued-return", returnQueued: true });
+    }
+    return startLp03SeamChecks(attempt);
+  }
+  return advanceLp03ToNextAction({ autoplay: !returnQueued });
+}
+
+function commitLp03SeamInput(attempt) {
+  const seam = attempt?.seamCheck;
+  const pending = attempt?.pendingLp03Input;
+  const targetMidi = seam?.sequence?.[seam.index];
+  if (!attempt || !seam || !pending || !Number.isFinite(targetMidi)) return false;
+  attempt.pendingLp03Input = null;
+  if (pending.source === "麦克风") {
+    attempt.experimentalInput = true;
+    chapter4Lp03Progress().needsPractice = true;
+    if (pending.midi === targetMidi) return finalizeLp03SeamCheck(attempt, pending, { modeled: false });
+    attempt.observations.push({ event: "microphone-unscored-seam", midi: pending.midi, occurredAt: pending.occurredAt });
+    attempt.phase = "lp03-seam-awaiting-response";
+    seam.inputArmed = armLp03Input(attempt);
+    persistChapter4Attempt();
+    renderChapter4Screen();
+    scheduleLp03SeamTimeout(attempt);
+    return false;
+  }
+  if (pending.midi === targetMidi) {
+    return finalizeLp03SeamCheck(attempt, pending, {
+      modeled: false,
+      returnQueued: Boolean(attempt.audioTransaction?.returnQueued)
+    });
+  }
+  seam.wrongCount = (Number(seam.wrongCount) || 0) + 1;
+  const completedChildTransaction = attempt.audioTransaction;
+  const started = startLp03SeamRepair(attempt, pending);
+  if (started) handoffChapter4QueuedReturn(attempt, completedChildTransaction);
+  return false;
+}
+
+function handleLp03Input(midi, source, meta = {}) {
+  const attempt = ensureChapter4Attempt();
+  if (!attempt || attempt.levelId !== "LP03") return false;
+  const occurredAt = new Date().toISOString();
+  const interruptedExternal = attempt.phase === "sound-paused" && attempt.soundPauseContext === "lp03-external-input";
+  if (attempt.phase === "sound-paused") {
+    recoverChapter4Sound();
+    if (!interruptedExternal) {
+      attempt.observations.push({ event: "sound-paused-input", midi, source, occurredAt });
+      persistChapter4Attempt();
+      return false;
+    }
+  }
+  if (source === "MIDI") {
+    const held = new Set(attempt.heldMidiNotes || []);
+    if (held.size > 0) {
+      attempt.observations.push({ event: "held-midi", midi, source, phase: attempt.phase, occurredAt });
+      persistChapter4Attempt();
+      return false;
+    }
+    held.add(midi);
+    attempt.heldMidiNotes = [...held];
+  }
+  const seamActive = attempt.phase === "lp03-seam-awaiting-response";
+  const routeActive = ["lp03-awaiting-response", "lp03-assisted", "lp03-visual-assist"].includes(attempt.phase);
+  const seamTarget = seamActive ? attempt.seamCheck?.sequence?.[attempt.seamCheck.index] : null;
+  if ((!routeActive && !seamActive) || !attempt.inputArmed || (seamActive && !attempt.seamCheck?.inputArmed)) {
+    attempt.observations.push({ event: "input-blocked", midi, source, phase: attempt.phase, occurredAt });
+    persistChapter4Attempt();
+    return false;
+  }
+  if (attempt.routeArmed[source] === false) {
+    attempt.observations.push({ event: "not-rearmed", midi, source, phase: attempt.phase, occurredAt });
+    persistChapter4Attempt();
+    return false;
+  }
+  const pending = lp03PendingInput(attempt, midi, source, meta, occurredAt, seamActive ? seamTarget : attempt.targetMidi);
+  pending.stage = seamActive ? "seam" : "route";
+  if (source === "麦克风") return beginLp03ExternalInputTransaction(attempt, pending);
+  return seamActive ? beginLp03SeamInput(attempt, pending) : beginLp03InputTransaction(attempt, pending);
+}
+
+function releaseLp03Input(attempt, midi, source) {
+  if (!attempt) return false;
+  if (source === "MIDI") {
+    const held = new Set(attempt.heldMidiNotes || []);
+    const numeric = Number(midi);
+    if (Number.isFinite(numeric)) held.delete(numeric);
+    attempt.heldMidiNotes = [...held];
+  }
+  const heldMidi = attempt.routeHeldMidi[source];
+  if (attempt.routeArmed[source] !== false && heldMidi === null) {
+    if (attempt.phase.includes("child-echo-playing") && attempt.pendingLp03Input?.source === source && !attempt.audioTransaction?.startedAt) {
+      attempt.pendingLp03Input.releaseRequested = true;
+      persistChapter4Attempt();
+    }
+    if (source === "MIDI" && attempt.phase === "lp03-awaiting-response" && !lp03InputIsHeld(attempt)) {
+      armLp03Input(attempt);
+      persistChapter4Attempt();
+      renderChapter4Screen();
+    }
+    return false;
+  }
+  if (source !== "麦克风" && heldMidi !== null && Number.isFinite(Number(midi)) && Number(midi) !== Number(heldMidi)) return false;
+  attempt.routeHeldMidi[source] = null;
+  attempt.routeArmed[source] = true;
+  attempt.inputEvents.push({ event: "release-rearm", midi: source === "麦克风" ? null : midi, route: source, occurredAt: new Date().toISOString() });
+  if (source === "麦克风" && attempt.phase === "lp03-child-echo-playing" && attempt.audioTransaction?.context === "lp03-external-input" && !attempt.audioTransaction.endedAt && !attempt.audioTransaction.interruptedAt) {
+    if (state.chapter4Timer) clearTimeout(state.chapter4Timer);
+    state.chapter4Timer = null;
+    recordLp03InputOnset(attempt, attempt.pendingLp03Input, attempt.audioTransaction.startedAt);
+    finishChapter4AudioTransaction(attempt, () => commitLp03PendingInput(attempt));
+    return true;
+  }
+  if (["lp03-awaiting-response", "lp03-seam-awaiting-response"].includes(attempt.phase) && !lp03InputIsHeld(attempt)) {
+    armLp03Input(attempt);
+    if (attempt.seamCheck) attempt.seamCheck.inputArmed = attempt.inputArmed;
+  }
+  persistChapter4Attempt();
+  renderChapter4Screen();
+  return true;
+}
+
+function interruptActiveChapter4ExternalInput(reason = "interrupted") {
+  const attempt = currentChapter4Action()?.chapter4Attempt;
+  const transaction = attempt?.audioTransaction;
+  if (!attempt || !transaction || transaction.endedAt || transaction.interruptedAt || !["lp02-external-input", "lp03-external-input"].includes(transaction.context)) return false;
+  clearChapter4Timers();
+  attempt.timingInterrupted = true;
+  enterChapter4SoundPause(attempt, transaction.context, reason);
+  return true;
 }
 
 function recoverChapter4Sound() {
@@ -11038,6 +12486,40 @@ function recoverChapter4Sound() {
     renderChapter4Screen();
     if (attempt.phase === "lp02-assisted") scheduleLp02AssistedTimeout();
     else scheduleLp02ResponseTimeout();
+  } else if (context === "lp03-target") {
+    playLp03CurrentTarget("sound-recovery");
+  } else if (context === "lp03-child-input") {
+    const pending = attempt.pendingLp03Input || interrupted?.payload;
+    if (pending) beginLp03InputTransaction(attempt, pending, { recovery: true });
+  } else if (context === "lp03-wrong-repair") {
+    const pending = interrupted?.payload;
+    if (pending) startLp03WrongRepair(attempt, pending, { recovery: true });
+  } else if (context === "lp03-modeled") {
+    completeLp03Modeled(interrupted?.payload?.reason || attempt.pendingModeledReason || "sound-recovery-modeled");
+  } else if (context === "lp03-seam-target") {
+    playLp03SeamTarget(attempt, "sound-recovery");
+  } else if (context === "lp03-seam-child-input") {
+    const pending = attempt.pendingLp03Input || interrupted?.payload;
+    if (pending) beginLp03SeamInput(attempt, pending, { recovery: true });
+  } else if (context === "lp03-seam-repair") {
+    const pending = interrupted?.payload;
+    if (pending) startLp03SeamRepair(attempt, pending, { recovery: true });
+  } else if (context === "lp03-seam-modeled") {
+    completeLp03SeamModeled(attempt, interrupted?.payload?.reason || "sound-recovery-modeled");
+  } else if (context === "lp03-external-input") {
+    const pending = attempt.pendingLp03Input || interrupted?.payload;
+    attempt.pendingLp03Input = null;
+    attempt.audioTransaction = null;
+    attempt.routeHeldMidi["麦克风"] = null;
+    attempt.routeArmed["麦克风"] = true;
+    attempt.phase = pending?.stage === "seam" ? "lp03-seam-awaiting-response" : "lp03-awaiting-response";
+    attempt.inputArmed = !lp03InputIsHeld(attempt);
+    if (attempt.seamCheck) attempt.seamCheck.inputArmed = attempt.inputArmed;
+    attempt.observations.push({ event: "external-input-retry-required", midi: pending?.midi ?? null, source: "麦克风", occurredAt: new Date().toISOString() });
+    persistChapter4Attempt();
+    renderChapter4Screen();
+    if (attempt.phase === "lp03-seam-awaiting-response") scheduleLp03SeamTimeout(attempt);
+    else scheduleLp03ResponseTimeout(attempt);
   }
 }
 
@@ -14601,6 +16083,18 @@ function hasFormalChapter4EntranceEvidence() {
   );
 }
 
+function hasFormalLp03EntranceEvidence() {
+  const lp02 = state.chapter4.lessonEvidence.LP02;
+  if (!lp02?.completedAt || !chapter4Lp03Progress().foundationCAnchored || !lp02.sessionId) return false;
+  return state.sessionRuntime.history.some((session) =>
+    session?.sessionId === lp02.sessionId &&
+    session?.bundleId === chapter4Config.bundleId &&
+    session?.status === "ended" &&
+    Array.isArray(session.completedActions) &&
+    session.completedActions.some((action) => action?.targetId === "LP02" && action?.completedAt)
+  );
+}
+
 function hasReviewableFormalHistory(stored) {
   return (Number(stored?.formalCompletions) || 0) > 0 || (Number(stored?.stableCompletions) || 0) > 0;
 }
@@ -14884,20 +16378,37 @@ function startGardenFromMap() {
 }
 
 function nextChapter4SessionPlan() {
-  if (!hasFormalChapter4EntranceEvidence() || state.chapter4.completedSlice) return null;
-  const resume = state.chapter4.resume?.nextTargetId === "LP02" ? state.chapter4.resume : null;
-  return resume
-    ? { actionIds: [chapter4Config.lp02.actionId], resumeOfSessionId: resume.endedSessionId || null, reconnectRequired: true }
-    : { actionIds: [chapter4Config.lp01.actionId, chapter4Config.lp02.actionId], resumeOfSessionId: null, reconnectRequired: false };
+  if (!hasFormalChapter4EntranceEvidence()) return null;
+  if (!state.chapter4.lessonEvidence.LP02?.completedAt) {
+    const resume = state.chapter4.resume?.nextTargetId === "LP02" ? state.chapter4.resume : null;
+    return resume
+      ? { bundleId: chapter4Config.bundleId, actionIds: [chapter4Config.lp02.actionId], resumeOfSessionId: resume.endedSessionId || null, reconnectRequired: true }
+      : { bundleId: chapter4Config.bundleId, actionIds: [chapter4Config.lp01.actionId, chapter4Config.lp02.actionId], resumeOfSessionId: null, reconnectRequired: false };
+  }
+  if (!hasFormalLp03EntranceEvidence() || chapter4Lp03Progress().played) return null;
+  const resume = state.chapter4.resume?.nextTargetId === "LP03" ? state.chapter4.resume : null;
+  const remaining = lp03RemainingStepIds();
+  const actionIds = chapter4Config.lp03.steps
+    .filter((step) => remaining.includes(step.id))
+    .map((step) => step.actionId);
+  if (!actionIds.length) return null;
+  return {
+    bundleId: chapter4Config.lp03.bundleId,
+    actionIds,
+    resumeOfSessionId: resume?.endedSessionId || null,
+    lp03Resume: Boolean(resume),
+    remainingStepIds: remaining
+  };
 }
 
 function createChapter4ActiveSession(plan) {
-  const bundle = sessionBundleById.get(chapter4Config.bundleId);
+  const bundleId = plan?.bundleId || chapter4Config.bundleId;
+  const bundle = sessionBundleById.get(bundleId);
   if (!bundle || !plan) return null;
   const now = new Date();
   const session = {
-    sessionId: createSessionId(chapter4Config.bundleId),
-    bundleId: chapter4Config.bundleId,
+    sessionId: createSessionId(bundleId),
+    bundleId,
     startedAt: now.toISOString(),
     localDateKey: localDateKeyAt(now),
     reviewSkillKey: null,
@@ -14918,6 +16429,7 @@ function createChapter4ActiveSession(plan) {
   const action = session.actions[0];
   if (action?.targetId === "LP01") action.chapter4Attempt = createLp01Attempt(session);
   if (action?.targetId === "LP02") action.chapter4Attempt = createLp02Attempt(session, { reconnectRequired: plan.reconnectRequired });
+  if (action?.targetId === "LP03") action.chapter4Attempt = createLp03Attempt(session, { stepId: action.lp03Step });
   return session;
 }
 
@@ -14932,7 +16444,7 @@ function startChapter4FromMap() {
   if (!hasFormalChapter4EntranceEvidence()) return;
   unlockChapter4AudioFromGesture();
   if (state.activeSession?.status === "active") {
-    if (state.activeSession.bundleId === chapter4Config.bundleId) startActiveSessionAction(state.activeSession.actionIndex);
+    if ([chapter4Config.bundleId, chapter4Config.lp03.bundleId].includes(state.activeSession.bundleId)) startActiveSessionAction(state.activeSession.actionIndex);
     return;
   }
   const plan = nextChapter4SessionPlan();
@@ -15291,7 +16803,7 @@ function showMapScreen() {
   const pendingChapter4 = currentChapter4Action()?.chapter4Attempt;
   const chapter4Playback = state.teachingPlayback;
   const chapter4ExternalInputIsActive = Boolean(
-    pendingChapter4?.audioTransaction?.context === "lp02-external-input" &&
+    ["lp02-external-input", "lp03-external-input"].includes(pendingChapter4?.audioTransaction?.context) &&
     !pendingChapter4.audioTransaction.endedAt &&
     !pendingChapter4.audioTransaction.interruptedAt
   );
@@ -15306,7 +16818,7 @@ function showMapScreen() {
   if (state.screen === "chapter4" && chapter4ExternalInputIsActive) {
     clearChapter4Timers();
     pendingChapter4.timingInterrupted = true;
-    enterChapter4SoundPause(pendingChapter4, "lp02-external-input", "map-external-input");
+    enterChapter4SoundPause(pendingChapter4, pendingChapter4.audioTransaction.context, "map-external-input");
   }
   if (state.screen === "chapter4" && chapter4AudioIsActive) {
     pendingChapter4.audioTransaction.returnQueued = true;
@@ -15316,7 +16828,11 @@ function showMapScreen() {
     renderChapter4Screen();
     return;
   }
-  if (state.screen === "chapter4" && pendingChapter4 && !["lp01-complete", "lp01-early-rest", "lp01-supported-story-rest", "lp02-complete"].includes(pendingChapter4.phase)) {
+  if (state.screen === "chapter4" && lp03SeamCheckpointIsOpen(pendingChapter4)) {
+    finishLp03SeamDeferred(pendingChapter4);
+    return;
+  }
+  if (state.screen === "chapter4" && pendingChapter4 && !["lp01-complete", "lp01-early-rest", "lp01-supported-story-rest", "lp02-complete", "lp03-complete"].includes(pendingChapter4.phase)) {
     pendingChapter4.callTimingInterrupted = true;
     pendingChapter4.timingInterrupted = true;
     persistChapter4Attempt();
@@ -16649,7 +18165,7 @@ function microphonePitchFromFrequency(frequencyOrEstimate, confidence) {
   const frequency = Number(estimate.frequency);
   const pitch = frequencyToPitch(frequency);
   if (!pitch || Math.abs(pitch.cents) > MIC_ACCEPT_CENTS) return null;
-  if (state.screen === "chapter4" && currentChapter4Action("LP02")) {
+  if (state.screen === "chapter4" && ["LP02", "LP03"].includes(currentChapter4Action()?.targetId)) {
     if (pitch.midi === 48 && estimate.octaveAmbiguous) return null;
     const chapter4Note = chapter4NoteForMidi(pitch.midi);
     return chapter4Note ? {
@@ -16727,6 +18243,7 @@ async function toggleMicrophone() {
 
 function stopMicrophone() {
   if (!state.audio) return;
+  interruptActiveChapter4ExternalInput("microphone-stopped");
   interruptActiveAudioAExternalInput("microphone-stopped");
   interruptActiveAudioBExternalInput("microphone-stopped");
   interruptActiveAudioCExternalInput("microphone-stopped");
@@ -16763,7 +18280,7 @@ function listenLoop() {
       releaseGardenInput(null, "麦克风");
     } else if (state.screen === "garden" && (currentListeningAction("LS04") || currentListeningAction("LS05")) && gateResult.state === "quiet") {
       releaseGardenInput(null, "麦克风");
-    } else if (state.screen === "chapter4" && currentChapter4Action("LP02") && gateResult.state === "quiet") {
+    } else if (state.screen === "chapter4" && ["LP02", "LP03"].includes(currentChapter4Action()?.targetId) && gateResult.state === "quiet") {
       releaseGardenInput(null, "麦克风");
     } else if (isAudioAM03Active() && gateResult.state === "quiet") {
       releaseGardenInput(null, "麦克风");
@@ -17051,6 +18568,7 @@ window.addEventListener("blur", () => {
   clearAllLs08PointerActivations();
   clearAllChapter4BubblePointerActivations();
   interruptTeachingPianoSequence("window-blur");
+  interruptActiveChapter4ExternalInput("window-blur");
   interruptActiveAudioAExternalInput("window-blur");
   interruptActiveAudioBExternalInput("window-blur");
   interruptActiveAudioCExternalInput("window-blur");
@@ -17058,6 +18576,7 @@ window.addEventListener("blur", () => {
 document.addEventListener("visibilitychange", () => {
   if (document.visibilityState === "hidden") {
     interruptTeachingPianoSequence("document-hidden");
+    interruptActiveChapter4ExternalInput("document-hidden");
     interruptActiveAudioAExternalInput("document-hidden");
     interruptActiveAudioBExternalInput("document-hidden");
     interruptActiveAudioCExternalInput("document-hidden");
@@ -17065,6 +18584,7 @@ document.addEventListener("visibilitychange", () => {
 });
 window.addEventListener("pagehide", () => {
   interruptTeachingPianoSequence("pagehide");
+  interruptActiveChapter4ExternalInput("pagehide");
   interruptActiveAudioAExternalInput("pagehide");
   interruptActiveAudioBExternalInput("pagehide");
   interruptActiveAudioCExternalInput("pagehide");
@@ -17130,6 +18650,14 @@ els.chapter4StartCheck?.addEventListener("click", () => {
     startLp02Reconnect();
     return;
   }
+  if (attempt.levelId === "LP03") {
+    if (attempt.phase === "lp03-model-ready") playLp03CurrentTarget("system-first");
+    else if (attempt.phase === "lp03-seam-ready") {
+      if (attempt.seamCheck) attempt.seamCheck.recoveryGestureRequired = false;
+      playLp03SeamTarget(attempt, "system-first");
+    }
+    return;
+  }
   if (attempt.levelId !== "LP01") return;
   if (attempt.phase === "lp01-model-ready") startLp01ModelStep(attempt.modelIndex || 0);
   else beginLp01Check();
@@ -17139,6 +18667,11 @@ els.chapter4Replay?.addEventListener("click", () => {
   const attempt = ensureChapter4Attempt();
   if (!attempt) return;
   if (attempt.phase === "sound-paused") recoverChapter4Sound();
+  else if (attempt.levelId === "LP03" && ["lp03-awaiting-response", "lp03-assisted", "lp03-visual-assist"].includes(attempt.phase)) {
+    playLp03CurrentTarget("child-replay");
+  } else if (attempt.levelId === "LP03" && attempt.phase === "lp03-seam-awaiting-response") {
+    playLp03SeamTarget(attempt, "child-replay");
+  }
   else if (attempt.levelId === "LP01" && attempt.phase === "lp01-model") {
     attempt.modelActiveBubbleId = "bubble-1";
     startLp01ModelStep(0, { replay: true });
@@ -17148,7 +18681,19 @@ els.chapter4Replay?.addEventListener("click", () => {
 });
 els.chapter4VisualAssist?.addEventListener("click", () => {
   const attempt = ensureChapter4Attempt();
-  if (!attempt || attempt.levelId !== "LP01" || attempt.phase !== "assisted") return;
+  if (!attempt) return;
+  if (attempt.levelId === "LP03" && attempt.phase === "lp03-assisted") {
+    clearChapter4Timers();
+    attempt.strongCueUsed = true;
+    attempt.accessibilityVisualAssist = true;
+    attempt.phase = "lp03-visual-assist";
+    armLp03Input(attempt);
+    persistChapter4Attempt();
+    renderChapter4Screen();
+    scheduleLp03AssistedTimeout(attempt);
+    return;
+  }
+  if (attempt.levelId !== "LP01" || attempt.phase !== "assisted") return;
   clearChapter4Timers();
   attempt.accessibilityVisualAssist = true;
   attempt.callAccessibilityVisualAssist = true;

@@ -660,9 +660,9 @@ record("LP02 1366x1024 records 44px-or-larger white and black touch boxes at rea
 
 await main.page.locator('#keyboard .white-key[data-midi="48"]').click();
 await waitPhase(main.page, "lp02-complete");
-current = await waitPhase(main.page, ["locked", "chapter4-entry"], 10000);
+current = await waitPhase(main.page, ["locked", "chapter4-entry", "chapter4-lp03-entry"], 10000);
 record("Touch C3 completes LP02 played evidence and natural rest", current.runtime.chapter4.lessonEvidence.LP02?.played === true && current.runtime.chapter4.lessonEvidence.LP02?.targetMidi === 48 && current.runtime.history.at(-1)?.bundleId === "C4-01" && current.runtime.history.at(-1)?.endReason === "natural-rest", current.runtime.chapter4.lessonEvidence.LP02);
-record("C4-01 LP02 never writes low-register stable or starts LP03", (current.learning.levels.LP02?.stableCompletions || 0) === 0 && !JSON.stringify(current.runtime).includes("LP03"), current.learning.levels.LP02);
+record("C4-01 LP02 never writes low-register stable or starts an LP03 session", (current.learning.levels.LP02?.stableCompletions || 0) === 0 && !current.runtime.chapter4.lessonEvidence.LP03 && current.runtime.chapter4.lp03Progress?.foundationCAnchored === true && current.runtime.chapter4.lp03Progress?.foundationCAwake === false && current.runtime.chapter4.lp03Progress?.foundationDPlaced === false && current.runtime.chapter4.lp03Progress?.foundationEPlaced === false && !current.runtime.active && !current.runtime.history.some((session) => session.bundleId === "C4-02"), current.runtime.chapter4);
 record("LP02 success does not clear LP01 needsPractice", current.learning.levels.LP01?.needsPractice === true && current.runtime.chapter4.openingReviewQueue.includes("LP01"), current.runtime.chapter4);
 await main.context.close();
 
@@ -1383,7 +1383,7 @@ current = await waitPhase(partial.page, "lp02-guide");
 record("Explicit LP02 reconnect command returns to guide without writing LP01 or LP02 evidence", current.runtime.active?.sessionId === reconnectSessionId && current.attempt.reconnectCompleted === true && current.attempt.outcomeRecorded === false && !current.runtime.chapter4.lessonEvidence.LP02 && current.runtime.active?.completedActions.length === 0, current);
 await partial.page.locator('#keyboard .white-key[data-midi="48"]').click();
 await waitPhase(partial.page, "lp02-complete");
-current = await waitPhase(partial.page, ["chapter4-entry", "locked"], 10000);
+current = await waitPhase(partial.page, ["chapter4-entry", "locked", "chapter4-lp03-entry"], 10000);
 const completedParentCopy = [current.parentFocus, current.parentDetail, current.parentProgress, current.parentMasteryStatus, current.parentMasteryDetail, current.parentStaffState].join(" ");
 record("Low-C completion map still prioritizes unresolved high-low C review", current.runtime.chapter4.lessonEvidence.LP02?.played === true && current.runtime.chapter4.openingReviewQueue.includes("LP01") && current.parentFocus === "高低 C 声音比较" && current.parentDetail.includes("低音 C 已在可见引导中找到家") && current.parentDetail.includes("这不会把高低 C 比较自动算作会了") && current.parentProgress.includes("高低 C 待复习") && current.parentStaffState === "高低 C 比较待复习", { parentFocus: current.parentFocus, parentDetail: current.parentDetail, parentProgress: current.parentProgress, parentStaffState: current.parentStaffState, chapter4: current.runtime.chapter4 });
 record("Completed parent-visible copy contains no internal level or evidence terms", !/LP01|LP02|played|stable/i.test(completedParentCopy), completedParentCopy);
