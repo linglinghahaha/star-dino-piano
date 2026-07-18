@@ -1,10 +1,10 @@
 # 全课程教学钢琴音生命周期主管审计工作单
 
-状态：`formal_work_order_active / AUDIO_A_B_passed / AUDIO_C_next / blocks_LP03_dispatch / media_locked`
+状态：`completed / AUDIO_A_B_C_passed / full_lifecycle_passed / LP03_unblocked / media_locked`
 
 本工作单解决一个系统性教学证据问题，不新增关卡。主管在 `C4-01 / 344a` 独立源审中确认：旧运行把 `playPianoNote()` 成功排程和墙钟计时误当成声音真实 started/ended；同源模式不仅存在于 C4 和 LS08，也存在于 M03、LS01-LS07。若 AudioContext 已 suspended、`resume()` 被拒绝或播放中再次挂起，旧代码可能在孩子没有听到目标音时显示“听到了”、开放作答、推进故事或写学习证据。
 
-`overhaul-344a-p3` 已建立共享受控播放句柄、迁移 LS08 与 C4-01，并在提交 `8cea6d46b725c26d2c8272086eab56b271750b18` 通过主管独立审查。AUDIO-A 与 AUDIO-B 现已分别冻结通过；本工作单仍是 LP03 之前唯一运行工作，下一批只做 `AUDIO-C`。不得与 LP03、C4-R01、美术、视频、语音或新课程合并。
+`overhaul-344a-p3` 已建立共享受控播放句柄、迁移 LS08 与 C4-01，并在提交 `8cea6d46b725c26d2c8272086eab56b271750b18` 通过主管独立审查。AUDIO-A、AUDIO-B、AUDIO-C 现已依次独立冻结；最终 AUDIO-C 基线为 `overhaul-345d-audio-c` / `2405734`，`app.js` SHA-256 为 `DAA50F00F4CCFD8A408631AE934BB39D8B6FB02EB064A99063475C751CD692C6`。全课程浏览器音频生命周期总回归已通过，因此本工作单完成并解除 LP03 的前置阻断；它不代表 LP03 已实现，也不批准美术、视频、语音或媒体运行集成。
 
 ## 一、为什么这是教学阻断项
 
@@ -133,7 +133,8 @@
 
 - 344a 前置条件已由 `overhaul-344a-p3` / `8cea6d46b725c26d2c8272086eab56b271750b18` 满足；`AUDIO-A` 已在 `overhaul-345b-audio-a` / `84a8f44213893304736d29ea45f7336d0730469d` 独立通过并冻结。它覆盖 M03 与 LS01-LS03，最终专项为 `66/66`。
 - `AUDIO-B` 已在 `overhaul-345c-audio-b` / `2a8a17529aeffd47a8666f21e175ba822d48347f` 独立通过并冻结。它覆盖 LS04-LS05，最终专项为 `46/46`；`app.js` SHA-256 为 `E59D9F99C3C1A1406A180D3E88A899EEBD5846A0BCB43E3919973E77D9C3E74D`。LS04 `39/39`、LS05 `66/66`、AUDIO-A `66/66`、sessions `74/74`、LS08 `131/131`、C4 `137/137`、孩子端音名 `224/224`、PWA/音频设置/输入、quick 与 strict bundle 均由主管独立复跑通过。
-- 下一唯一运行批次为 `AUDIO-C`（LS06-LS07）。必须从 345c 干净提交开始，保持各自 seed、pair 顺序、guide/hidden 边界、whole-pair replay、首答阈值和故事结果，不得夹带 LP03、美术、媒体或课程调整。
-- 只有 `AUDIO-A`、`AUDIO-B`、`AUDIO-C` 三批都独立通过、分别冻结提交并完成全课程总回归后，既有 M03/LS01-LS07 浏览器听辨证据才可重新称为 audio-lifecycle verified，并解锁 `docs/47` 的 LP03；AUDIO-A/B 两批通过不能提前解锁。
+- `AUDIO-C` 已在 `overhaul-345d-audio-c` / `2405734` 独立通过并冻结。它覆盖 LS06-LS07；主管验收 `13/13`、AUDIO-C 生命周期 `46/46`、LS06/LS07 课程专项 `64/64`。P1 证明 C->G 与 E->F 的第一颗带路音回声跨地图后，第二颗带路音必须真实 started/ended 才重新开放输入；真实刷新不自动播放、不显示正式 `1/4` 分母，并要求明确扬声器手势。
+- 同一最终 SHA 的全课程总回归通过 AUDIO-A `66/66`、AUDIO-B `46/46`、AUDIO-C `46/46`、LS08 `131/131`、C4 LP01-LP02 `137/137`；sessions `74/74`、clean-state `124/124`、M03/garden `32/32`、Chapter 3 visible `74/74`、LS04 `39/39`、LS05 `66/66`、孩子端音名 `224/224`、PWA `8/8`、iPad a11y `43/43`、音频设置 `13/13`、输入可靠性 `12/12`、quick 与 strict bundle 也通过。
+- 本工作单至此完成，M03/LS01-LS07 的浏览器证据可称为 `audio-lifecycle verified`；`docs/47` 的 LP03 现可作为下一唯一运行任务派发。该解锁不等于 LP03 已完成，也不自动解锁 LP04、完整咚咚揭晓、低音谱表、左手、媒体集成或发布。
 - 不因该浏览器审计声称实体 iPad Safari、扬声器/耳机、蓝牙延迟、真实 MIDI、本地原声钢琴麦克风、教师或儿童观察通过。
-- 原型任务必须选择性提交运行、专项、合同与 gate log；不得暂存主管 docs、`concepts/**`、`audio/**` 或未批准媒体。
+- AUDIO-C 提交已只包含运行、专项、版本断言和 gate log；主管 docs、`concepts/**`、`audio/**` 与未批准媒体未进入 `2405734`。

@@ -1,8 +1,15 @@
 # Chapter 4 C4-02 / LP03 主管验收工作单
 
-状态：`prepared_not_dispatched / 344a_prerequisite_passed / waits_for_AUDIO_A_B_C / runtime_locked`
+状态：`approved_for_dispatch / 345d_audio_prerequisite_passed / runtime_unlocked / implementation_pending`
 
-本文件只定义 `C4-02 / LP03`。`C4-01 / LP01-LP02` 已在 `overhaul-344a-p3` 完成选择性提交、主管独立复跑并晋升浏览器基线；剩余阻断项是 `docs/49` 的 `AUDIO-A`、`AUDIO-B`、`AUDIO-C` 必须依次全部通过并冻结。三批完成前不得据此修改运行代码，也不得合并 LP04、完整咚咚、低音谱表、左手或媒体候选。
+本文件只定义 `C4-02 / LP03`。`C4-01 / LP01-LP02` 已在 `overhaul-344a-p3` 完成选择性提交、主管独立复跑并晋升浏览器基线；`docs/49` 的 AUDIO-A、AUDIO-B、AUDIO-C 也已依次通过并冻结，最终基线为 `overhaul-345d-audio-c` / `2405734`。因此 LP03 现在可以派发给唯一运行写者，但仍是 `implementation_pending`：不得把“前置条件通过”写成“LP03 已完成”，也不得合并 LP04、完整咚咚、低音谱表、左手或媒体候选。
+
+## 零、解锁记录与本轮边界
+
+- AUDIO-C 最终 `app.js` SHA-256 为 `DAA50F00F4CCFD8A408631AE934BB39D8B6FB02EB064A99063475C751CD692C6`；主管验收 `13/13`、AUDIO-C `46/46`、LS06/LS07 `64/64` 和全课程音频生命周期总回归均通过。
+- 下一唯一运行工作就是本文件的 `C4-02 / LP03`。实现必须从提交 `2405734` 开始，保持 LP01/LP02、Chapter 3、音名政策、session、mastery 和共享音频生命周期不变。
+- 本轮只实现 C 锚石唤醒、D/E 落位、对应恢复/休息/证据与必要代码回退美术。LP04、完整咚咚出场、低音谱表、左手、视频、语音、SFX 和未批准角色/场景资产继续锁定。
+- 浏览器前置通过不替代实体 iPad、真实 MIDI、原声钢琴麦克风、扬声器/耳机听审、教师或儿童观察；这些仍是独立 missing 证据。
 
 ## 一、这节课为什么存在
 
