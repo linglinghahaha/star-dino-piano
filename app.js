@@ -439,9 +439,7 @@ const RETENTION_MIN_INTERVAL_MS = 8 * 60 * 60 * 1000;
 const CH3_ENTRY_AIR_CHECK = "CH3_ENTRY_AIR_CHECK";
 const CH3_ASSISTED_WAIT_MS = 5200;
 const CH3_LONG_WAIT_MS = 20000;
-const LS04_TARGET_PLAY_MS = 760;
 const LS04_ASSISTED_WAIT_MS = 5200;
-const LS05_TARGET_PLAY_MS = 760;
 const LS05_ASSISTED_WAIT_MS = 5200;
 const PAIRED_LISTENING_TARGET_PLAY_MS = 760;
 const PAIRED_LISTENING_ASSISTED_WAIT_MS = 5200;
@@ -5257,7 +5255,7 @@ function renderKeyboard(target, options = {}) {
         showKeyPressRipple(key);
         // AUDIO-A owns the child echo so a screen press cannot schedule a raw note
         // before its verified input transaction begins on click/keyboard activation.
-        if (!audioATeachingSurfaceIsActive()) {
+        if (!audioATeachingSurfaceIsActive() && !audioBTeachingSurfaceIsActive()) {
           played = playPianoNote(note.frequency, { gain: 0.10, duration: 0.42 });
         }
       }
@@ -5662,6 +5660,10 @@ function releaseGardenInput(midi, source) {
     releaseLs08Input(midi, source);
     return;
   }
+  if (currentListeningAction("LS04") || currentListeningAction("LS05")) {
+    releaseAudioBInput(midi, source);
+    return;
+  }
   if (currentListeningAction()) return;
   if (isAudioAGardenActive()) {
     releaseGardenAudioAInput(midi, source);
@@ -5794,11 +5796,12 @@ function recordLs04Outcome({ completed, reason }) {
   return completion;
 }
 
-function finishLs04Session({ completed, reason }) {
+function finishLs04Session({ completed, reason, returnQueued = false }) {
   const attempt = ensureLs04Attempt();
   if (!attempt) return;
   clearLs04Timers();
   if (completed) attempt.phase = "complete";
+  if (returnQueued) markAudioBQueuedReturnConsumed(attempt, attempt.audioTransaction);
   persistLs04Attempt();
   recordLs04Outcome({ completed, reason });
   if (completed) renderGardenScreen();
@@ -5806,7 +5809,7 @@ function finishLs04Session({ completed, reason }) {
   state.ls04FeedbackTimer = setTimeout(() => {
     state.ls04FeedbackTimer = null;
     showMapScreen();
-  }, completed ? 1450 : 850);
+  }, returnQueued ? 0 : (completed ? 1450 : 850));
 }
 
 function scheduleLs04AssistedTimeout() {
@@ -5817,58 +5820,78 @@ function scheduleLs04AssistedTimeout() {
   }, LS04_ASSISTED_WAIT_MS);
 }
 
-function completeLs04Modeled(reason) {
-  const attempt = ensureLs04Attempt();
-  const targetMidi = ls04Target(attempt);
-  if (!attempt || targetMidi === null) return;
-  clearLs04Timers();
+function settleLs04Modeled(attempt, targetMidi, reason, { targetAlreadyPlayed = false, returnQueued = false } = {}) {
+  if (!audioBAttemptIsCurrent(attempt) || attempt.modeledInputs.some((input) => input.callIndex === attempt.callIndex)) return false;
   attempt.modeled = true;
   attempt.strongCueUsed = true;
+  attempt.pendingModeled = null;
   attempt.phase = "modeled-success";
   attempt.modeledInputs.push({ source: "model", targetMidi, callIndex: attempt.callIndex, reason, completedAt: new Date().toISOString() });
   attempt.scoredCalls.push({ callIndex: attempt.callIndex, targetMidi, correct: false, modeled: true, wrongCount: attempt.callWrongCount });
-  const played = playPianoNote(noteForMidi(targetMidi).frequency, { gain: 0.13, duration: 0.72 });
-  if (!played) {
-    attempt.modeled = false;
-    attempt.modeledInputs.pop();
-    attempt.scoredCalls.pop();
-    attempt.phase = "sound-paused";
-    traceLs04Audio(attempt, "audio-unavailable", null, { reason: "modeled" });
-    persistLs04Attempt();
-    renderGardenScreen();
-    return;
-  }
-  traceLs04Audio(attempt, "modeled", targetMidi, { reason, callIndex: attempt.callIndex });
+  traceLs04Audio(attempt, "modeled", targetMidi, { reason, callIndex: attempt.callIndex, targetAlreadyPlayed });
   persistLs04Attempt();
   renderGardenScreen();
-  finishLs04Session({ completed: false, reason: "modeled-safe-rest" });
+  finishLs04Session({ completed: false, reason: "modeled-safe-rest", returnQueued });
+  return true;
 }
 
-function handleLs04Input(midi, source) {
+function completeLs04Modeled(reason, { targetAlreadyPlayed = false, returnQueued = false } = {}) {
   const attempt = ensureLs04Attempt();
-  if (!attempt || state.chapter3.equipmentState !== "safe-open") return;
-  const now = new Date().toISOString();
-  if (["reference", "target-playing", "reference-ready", "replay-ready", "sound-paused", "correct-feedback"].includes(attempt.phase)) {
-    attempt.earlyInputs.push({ midi, source, phase: attempt.phase, occurredAt: now });
-    persistLs04Attempt();
-    return;
-  }
-  if (!["awaiting-response", "assisted"].includes(attempt.phase)) return;
-  clearLs04Timers();
   const targetMidi = ls04Target(attempt);
-  const correct = midi === targetMidi;
-  attempt.inputRoutes[source] = (attempt.inputRoutes[source] || 0) + 1;
-  if (source === "麦克风") attempt.hasExperimentalInput = true;
-  attempt.childInputs.push({ midi, source, targetMidi, correct, callIndex: attempt.callIndex, occurredAt: now });
-  state.lastInputMidi = midi;
-  state.lastInputResult = correct ? "correct" : "wrong";
-  els.inputStatus.textContent = `输入：${source}`;
-  els.heardStatus.textContent = `听到：${noteForMidi(midi)?.name || midi}`;
+  if (!attempt || targetMidi === null) return;
+  if (attempt.modeledInputs.some((input) => input.callIndex === attempt.callIndex)) return;
+  clearLs04Timers();
+  if (targetAlreadyPlayed) {
+    return settleLs04Modeled(attempt, targetMidi, reason, { targetAlreadyPlayed: true, returnQueued });
+  }
+  attempt.pendingModeled = { targetMidi, callIndex: attempt.callIndex, reason };
+  return startAudioBTeachingSequence(attempt, {
+    context: "modeled",
+    kind: "modeled",
+    reason,
+    notes: [{ midi: targetMidi, durationMs: 720, delayMs: 0 }],
+    payload: { targetMidi, callIndex: attempt.callIndex, reason },
+    scheduledPhase: "modeled-scheduled",
+    playingPhase: "modeled-playing",
+    onEnded: (transaction, playback, { returnQueued: queued }) => {
+      if (transaction.outcomeRecorded) return;
+      transaction.outcomeRecorded = true;
+      settleLs04Modeled(attempt, targetMidi, reason, { returnQueued: queued });
+    }
+  });
+}
+
+function commitLs04AudioBInput(attempt, pending, transaction, { returnQueued = false, external = false } = {}) {
+  if (!audioBAttemptIsCurrent(attempt) || !audioBPendingMatchesCurrentCall(attempt, pending)) return false;
+  const targetMidi = pending.targetMidi;
+  const correct = pending.midi === targetMidi;
+  clearLs04Timers();
+  attempt.inputRoutes[pending.source] = (attempt.inputRoutes[pending.source] || 0) + 1;
+  if (external) attempt.hasExperimentalInput = true;
+  attempt.childInputs.push({
+    midi: pending.midi,
+    source: pending.source,
+    targetMidi,
+    correct,
+    callIndex: pending.callIndex,
+    occurredAt: pending.occurredAt,
+    committedAt: new Date().toISOString(),
+    external
+  });
+  recordAudioBInputPresentation(pending.midi, pending.source, correct);
+  traceLs04Audio(attempt, "child-input", pending.midi, {
+    callIndex: pending.callIndex,
+    targetMidi,
+    source: pending.source,
+    frequency: noteForMidi(pending.midi)?.frequency || midiFrequency(pending.midi),
+    external,
+    playbackId: transaction?.playbackId || null
+  });
 
   if (correct) {
     const firstAttemptCorrect = attempt.callWrongCount === 0;
     if (firstAttemptCorrect) attempt.correctCount += 1;
-    attempt.scoredCalls.push({ callIndex: attempt.callIndex, targetMidi, inputMidi: midi, correct: firstAttemptCorrect, wrongCount: attempt.callWrongCount, source });
+    attempt.scoredCalls.push({ callIndex: attempt.callIndex, targetMidi, inputMidi: pending.midi, correct: firstAttemptCorrect, wrongCount: attempt.callWrongCount, source: pending.source });
     attempt.callIndex += 1;
     attempt.callWrongCount = 0;
     attempt.supportStage = "none";
@@ -5876,14 +5899,16 @@ function handleLs04Input(midi, source) {
     persistLs04Attempt();
     renderGardenScreen();
     if (attempt.callIndex >= attempt.sequence.length) {
-      finishLs04Session({ completed: true, reason: "natural-rest" });
-      return;
+      finishLs04Session({ completed: true, reason: "natural-rest", returnQueued });
+      return true;
     }
-    state.ls04FeedbackTimer = setTimeout(() => {
-      state.ls04FeedbackTimer = null;
-      playLs04Target("system-next");
-    }, 620);
-    return;
+    if (!returnQueued) {
+      state.ls04FeedbackTimer = setTimeout(() => {
+        state.ls04FeedbackTimer = null;
+        if (audioBAttemptIsCurrent(attempt) && attempt.phase === "correct-feedback") playLs04Target("system-next");
+      }, 620);
+    }
+    return true;
   }
 
   attempt.callWrongCount += 1;
@@ -5893,33 +5918,39 @@ function handleLs04Input(midi, source) {
     attempt.supportStage = "assisted";
     attempt.targetRevealedBeforeResponse = true;
   }
-  if (attempt.callWrongCount >= 4) {
-    persistLs04Attempt();
-    completeLs04Modeled("assisted-retry-wrong");
-    return;
-  }
-  attempt.phase = "wrong-feedback";
-  traceLs04Audio(attempt, "child-input", midi, { callIndex: attempt.callIndex });
+  attempt.phase = attempt.supportStage === "assisted" ? "assisted" : "wrong-feedback";
+  showInputEffect(pending.midi, "wrong", { showLabel: false });
   persistLs04Attempt();
   renderGardenScreen();
-  if (source !== "屏幕") playPianoNote(noteForMidi(midi)?.frequency || 261.63, { gain: 0.10, duration: 0.42 });
-  const replayed = playPianoNote(noteForMidi(targetMidi).frequency, { gain: 0.13, duration: 0.72, delay: 0.46 });
-  if (!replayed) {
-    attempt.phase = "sound-paused";
-    traceLs04Audio(attempt, "audio-unavailable", null, { reason: "wrong-replay", callIndex: attempt.callIndex });
-    persistLs04Attempt();
-    renderGardenScreen();
+  const repair = startAudioBWrongRepair(attempt, pending);
+  if (returnQueued && repair) handoffAudioBQueuedReturn(attempt, transaction);
+  return Boolean(repair);
+}
+
+function handleLs04Input(midi, source) {
+  const attempt = ensureLs04Attempt();
+  if (!attempt || state.chapter3.equipmentState !== "safe-open") return;
+  const retryingInterruptedExternalInput = attempt.phase === "sound-paused" &&
+    (attempt.soundPauseContext || attempt.audioTransaction?.context) === "external-input";
+  if (attempt.phase === "sound-paused") {
+    if (!retryingInterruptedExternalInput || !recoverAudioBAttempt()) {
+      if (source === "MIDI") recordAudioBMidiNoteOn(attempt, midi);
+      recordAudioBObservation(attempt, midi, source);
+      return;
+    }
+  }
+  if (source === "MIDI") {
+    const midiState = recordAudioBMidiNoteOn(attempt, midi);
+    if (midiState.blocked) {
+      recordAudioBObservation(attempt, midi, source, "held-midi");
+      return;
+    }
+  }
+  if (!audioBInputPhaseAllows(attempt) || !attempt.inputArmed) {
+    recordAudioBObservation(attempt, midi, source);
     return;
   }
-  traceLs04Audio(attempt, "target-replay", targetMidi, { callIndex: attempt.callIndex });
-  persistLs04Attempt();
-  state.ls04FeedbackTimer = setTimeout(() => {
-    state.ls04FeedbackTimer = null;
-    attempt.phase = attempt.supportStage === "assisted" ? "assisted" : "awaiting-response";
-    persistLs04Attempt();
-    renderGardenScreen();
-    if (attempt.supportStage === "assisted") scheduleLs04AssistedTimeout();
-  }, 1250);
+  beginAudioBInput(attempt, midi, source);
 }
 
 function ls05FormalAttempt(attempt) {
@@ -6124,11 +6155,12 @@ function recordLs05Outcome({ completed, reason }) {
   return completion;
 }
 
-function finishLs05Session({ completed, reason }) {
+function finishLs05Session({ completed, reason, returnQueued = false }) {
   const attempt = ensureLs05Attempt();
   if (!attempt) return;
   clearLs05Timers();
   if (completed) attempt.phase = "complete";
+  if (returnQueued) markAudioBQueuedReturnConsumed(attempt, attempt.audioTransaction);
   persistLs05Attempt();
   recordLs05Outcome({ completed, reason });
   if (completed) renderGardenScreen();
@@ -6136,7 +6168,7 @@ function finishLs05Session({ completed, reason }) {
   state.ls05FeedbackTimer = setTimeout(() => {
     state.ls05FeedbackTimer = null;
     showMapScreen();
-  }, completed ? 1550 : 900);
+  }, returnQueued ? 0 : (completed ? 1550 : 900));
 }
 
 function storeLs05Resume(attempt, reason) {
@@ -6152,41 +6184,55 @@ function storeLs05Resume(attempt, reason) {
   persistChapter3Progress();
 }
 
-function completeLs05Modeled(reason, { targetAlreadyPlayed = false } = {}) {
-  const attempt = ensureLs05Attempt();
-  const targetMidi = ls05Target(attempt);
-  if (!attempt || targetMidi === null) return;
-  if (attempt.modeledInputs.some((input) => input.callIndex === attempt.callIndex)) return;
-  clearLs05Timers();
-  const played = targetAlreadyPlayed || playPianoNote(noteForMidi(targetMidi).frequency, { gain: 0.13, duration: 0.72 });
-  if (!played) {
-    attempt.soundPauseCount += 1;
-    attempt.phase = "sound-paused";
-    traceLs05Audio(attempt, "audio-unavailable", null, { reason: "modeled", callIndex: attempt.callIndex });
-    persistLs05Attempt();
-    renderGardenScreen();
-    return;
-  }
+function settleLs05Modeled(attempt, targetMidi, reason, { targetAlreadyPlayed = false, returnQueued = false } = {}) {
+  if (!audioBAttemptIsCurrent(attempt) || attempt.modeledInputs.some((input) => input.callIndex === attempt.callIndex)) return false;
   attempt.modeled = true;
   attempt.strongCueUsed = true;
   attempt.targetRevealedBeforeResponse = true;
   attempt.callStrongCueUsed = true;
   attempt.callTargetRevealedBeforeResponse = true;
-  attempt.modeledInputs.push({ source: "model", targetMidi, callIndex: attempt.callIndex, reason, completedAt: new Date().toISOString() });
   attempt.pendingModeled = null;
   attempt.scoredCalls.push(ls05CallRecord(attempt, { targetMidi, modeled: true }));
   attempt.callIndex += 1;
   attempt.neutralProgress = attempt.callIndex;
   attempt.phase = "modeled-success";
+  attempt.modeledInputs.push({ source: "model", targetMidi, callIndex: attempt.callIndex - 1, reason, completedAt: new Date().toISOString() });
   traceLs05Audio(attempt, "modeled", targetMidi, { reason, callIndex: attempt.callIndex - 1, targetAlreadyPlayed });
   persistLs05Attempt();
   renderGardenScreen();
   if (attempt.callIndex >= attempt.sequence.length) {
-    finishLs05Session({ completed: true, reason: "modeled-final-safe-rest" });
-    return;
+    finishLs05Session({ completed: true, reason: "modeled-final-safe-rest", returnQueued });
+    return true;
   }
   storeLs05Resume(attempt, reason);
-  finishLs05Session({ completed: false, reason: "modeled-safe-rest" });
+  finishLs05Session({ completed: false, reason: "modeled-safe-rest", returnQueued });
+  return true;
+}
+
+function completeLs05Modeled(reason, { targetAlreadyPlayed = false, returnQueued = false } = {}) {
+  const attempt = ensureLs05Attempt();
+  const targetMidi = ls05Target(attempt);
+  if (!attempt || targetMidi === null) return;
+  if (attempt.modeledInputs.some((input) => input.callIndex === attempt.callIndex)) return;
+  clearLs05Timers();
+  if (targetAlreadyPlayed) {
+    return settleLs05Modeled(attempt, targetMidi, reason, { targetAlreadyPlayed: true, returnQueued });
+  }
+  attempt.pendingModeled = { targetMidi, callIndex: attempt.callIndex, reason };
+  return startAudioBTeachingSequence(attempt, {
+    context: "modeled",
+    kind: "modeled",
+    reason,
+    notes: [{ midi: targetMidi, durationMs: 720, delayMs: 0 }],
+    payload: { targetMidi, callIndex: attempt.callIndex, reason },
+    scheduledPhase: "modeled-scheduled",
+    playingPhase: "modeled-playing",
+    onEnded: (transaction, playback, { returnQueued: queued }) => {
+      if (transaction.outcomeRecorded) return;
+      transaction.outcomeRecorded = true;
+      settleLs05Modeled(attempt, targetMidi, reason, { returnQueued: queued });
+    }
+  });
 }
 
 function resetLs05CallRepair(attempt) {
@@ -6249,7 +6295,7 @@ function ls05CallRecord(attempt, {
   };
 }
 
-function advanceLs05Call(attempt, { targetMidi, inputMidi, source, firstResponseCorrect, visualAssist = false }) {
+function advanceLs05Call(attempt, { targetMidi, inputMidi, source, firstResponseCorrect, visualAssist = false, returnQueued = false }) {
   const targetName = noteForMidi(targetMidi)?.name;
   if (firstResponseCorrect) {
     attempt.correctCount += 1;
@@ -6265,46 +6311,55 @@ function advanceLs05Call(attempt, { targetMidi, inputMidi, source, firstResponse
   persistLs05Attempt();
   renderGardenScreen();
   if (attempt.callIndex >= attempt.sequence.length) {
-    finishLs05Session({ completed: true, reason: visualAssist ? "visual-assist-complete" : "natural-rest" });
+    finishLs05Session({ completed: true, reason: visualAssist ? "visual-assist-complete" : "natural-rest", returnQueued });
     return;
   }
   resetLs05CallRepair(attempt);
   persistLs05Attempt();
-  state.ls05FeedbackTimer = setTimeout(() => {
-    state.ls05FeedbackTimer = null;
-    playLs05Target("system-next");
-  }, 720);
+  if (!returnQueued) {
+    state.ls05FeedbackTimer = setTimeout(() => {
+      state.ls05FeedbackTimer = null;
+      if (audioBAttemptIsCurrent(attempt) && attempt.phase === "correct-feedback") playLs05Target("system-next");
+    }, 720);
+  }
 }
 
-function handleLs05Input(midi, source) {
-  const attempt = ensureLs05Attempt();
-  if (!attempt || state.chapter3.equipmentState !== "safe-open") return;
-  const now = new Date().toISOString();
-  if (["reference", "target-playing", "reference-ready", "replay-ready", "sound-paused", "correct-feedback", "wrong-known", "pair-compare", "modeled-playing", "modeled-success"].includes(attempt.phase)) {
-    attempt.earlyInputs.push({ midi, source, phase: attempt.phase, occurredAt: now });
-    persistLs05Attempt();
-    return;
-  }
-  if (!["awaiting-response", "assisted-retry", "visual-assist"].includes(attempt.phase)) return;
+function commitLs05AudioBInput(attempt, pending, transaction, { returnQueued = false, external = false } = {}) {
+  if (!audioBAttemptIsCurrent(attempt) || !audioBPendingMatchesCurrentCall(attempt, pending)) return false;
+  const targetMidi = pending.targetMidi;
+  const visualAssist = pending.visualAssist === true;
+  const correct = pending.midi === targetMidi;
   clearLs05Timers();
-  const targetMidi = ls05Target(attempt);
-  const visualAssist = attempt.phase === "visual-assist";
-  const correct = midi === targetMidi;
-  attempt.inputRoutes[source] = (attempt.inputRoutes[source] || 0) + 1;
+  attempt.inputRoutes[pending.source] = (attempt.inputRoutes[pending.source] || 0) + 1;
   if (!attempt.callFirstValidInput) {
     const responseStart = Date.parse(attempt.callResponseStartedAt || "");
     const responseMs = !attempt.callTimingInterrupted && Number.isFinite(responseStart) ? Math.max(0, Date.now() - responseStart) : null;
-    attempt.callFirstValidInput = { midi, source, occurredAt: now, responseMs };
+    attempt.callFirstValidInput = { midi: pending.midi, source: pending.source, occurredAt: pending.occurredAt, responseMs };
   }
-  if (source === "麦克风") {
+  if (external) {
     attempt.hasExperimentalInput = true;
     attempt.callExperimentalInput = true;
   }
-  attempt.childInputs.push({ midi, source, targetMidi, correct, scored: !visualAssist, callIndex: attempt.callIndex, occurredAt: now });
-  state.lastInputMidi = midi;
-  state.lastInputResult = correct ? "correct" : "wrong";
-  els.inputStatus.textContent = `输入：${source}`;
-  els.heardStatus.textContent = `听到：${noteForMidi(midi)?.name || midi}`;
+  attempt.childInputs.push({
+    midi: pending.midi,
+    source: pending.source,
+    targetMidi,
+    correct,
+    scored: !visualAssist,
+    callIndex: pending.callIndex,
+    occurredAt: pending.occurredAt,
+    committedAt: new Date().toISOString(),
+    external
+  });
+  recordAudioBInputPresentation(pending.midi, pending.source, correct);
+  traceLs05Audio(attempt, "child-input", pending.midi, {
+    callIndex: pending.callIndex,
+    targetMidi,
+    source: pending.source,
+    frequency: noteForMidi(pending.midi)?.frequency || midiFrequency(pending.midi),
+    external,
+    playbackId: transaction?.playbackId || null
+  });
 
   if (visualAssist) {
     attempt.accessibilityVisualAssist = true;
@@ -6312,51 +6367,43 @@ function handleLs05Input(midi, source) {
     if (!correct) {
       persistLs05Attempt();
       renderGardenScreen();
-      return;
+      if (!returnQueued) armAudioBResponse(attempt);
+      return true;
     }
-    advanceLs05Call(attempt, { targetMidi, inputMidi: midi, source, firstResponseCorrect: false, visualAssist: true });
-    return;
+    advanceLs05Call(attempt, {
+      targetMidi,
+      inputMidi: pending.midi,
+      source: pending.source,
+      firstResponseCorrect: false,
+      visualAssist: true,
+      returnQueued
+    });
+    return true;
   }
 
   if (correct) {
     const firstResponseCorrect = attempt.callWrongCount === 0;
-    advanceLs05Call(attempt, { targetMidi, inputMidi: midi, source, firstResponseCorrect });
-    return;
+    advanceLs05Call(attempt, {
+      targetMidi,
+      inputMidi: pending.midi,
+      source: pending.source,
+      firstResponseCorrect,
+      returnQueued
+    });
+    return true;
   }
 
   attempt.callWrongCount += 1;
   attempt.totalWrongCount += 1;
-  const confusionKey = [midi, targetMidi].sort((a, b) => a - b).join("-");
+  const confusionKey = [pending.midi, targetMidi].sort((a, b) => a - b).join("-");
   attempt.confusionCounts[confusionKey] = (attempt.confusionCounts[confusionKey] || 0) + 1;
-  attempt.callConfusionPair = [midi, targetMidi];
-  const canShowChildPair = [60, 62, 64].includes(midi) && midi !== targetMidi;
-  const childFrequency = midiFrequency(midi);
-  traceLs05Audio(attempt, "child-input", midi, { callIndex: attempt.callIndex, frequency: childFrequency });
-  if (source !== "屏幕") playPianoNote(childFrequency, { gain: 0.10, duration: 0.42 });
-  const replayed = playPianoNote(noteForMidi(targetMidi).frequency, { gain: 0.13, duration: 0.72, delay: 0.46 });
-  if (!replayed) {
-    attempt.soundPauseCount += 1;
-    attempt.phase = "sound-paused";
-    traceLs05Audio(attempt, "audio-unavailable", null, { reason: "wrong-replay", callIndex: attempt.callIndex });
-    persistLs05Attempt();
-    renderGardenScreen();
-    return;
-  }
-  attempt.replayCountSystem += 1;
-  attempt.callReplayCountSystem += 1;
-  traceLs05Audio(attempt, "target-replay", targetMidi, { callIndex: attempt.callIndex });
+  attempt.callConfusionPair = [pending.midi, targetMidi];
+  const canShowChildPair = [60, 62, 64].includes(pending.midi) && pending.midi !== targetMidi;
   if (attempt.callWrongCount >= 4) {
+    attempt.callRepairStage = "modeled";
     attempt.phase = "modeled-playing";
     attempt.pendingModeled = { callIndex: attempt.callIndex, targetMidi, reason: "assisted-retry-wrong", targetAlreadyPlayed: true };
-    persistLs05Attempt();
-    renderGardenScreen();
-    state.ls05FeedbackTimer = setTimeout(() => {
-      state.ls05FeedbackTimer = null;
-      completeLs05Modeled("assisted-retry-wrong", { targetAlreadyPlayed: true });
-    }, 1250);
-    return;
-  }
-  if (attempt.callWrongCount >= 2 && !canShowChildPair) {
+  } else if (attempt.callWrongCount >= 2 && !canShowChildPair) {
     attempt.strongCueUsed = true;
     attempt.targetRevealedBeforeResponse = true;
     attempt.callStrongCueUsed = true;
@@ -6380,23 +6427,46 @@ function handleLs05Input(midi, source) {
     attempt.callRepairStage = "wrong-known";
     attempt.phase = "wrong-known";
   }
+  showInputEffect(pending.midi, "wrong", { showLabel: false });
   persistLs05Attempt();
   renderGardenScreen();
-  state.ls05FeedbackTimer = setTimeout(() => {
-    state.ls05FeedbackTimer = null;
-    attempt.phase = ["assisted", "candidate-outside"].includes(attempt.callRepairStage) ? "assisted-retry" : "awaiting-response";
-    if (attempt.phase === "assisted-retry") attempt.assistedCueVisible = false;
-    persistLs05Attempt();
-    renderGardenScreen();
-    if (attempt.phase === "assisted-retry") scheduleLs05AssistedTimeout();
-    else scheduleLs05ResponseTimeout();
-  }, attempt.callWrongCount === 2 ? 1500 : 1250);
+  const repair = startAudioBWrongRepair(attempt, pending);
+  if (returnQueued && repair) handoffAudioBQueuedReturn(attempt, transaction);
+  return Boolean(repair);
+}
+
+function handleLs05Input(midi, source) {
+  const attempt = ensureLs05Attempt();
+  if (!attempt || state.chapter3.equipmentState !== "safe-open") return;
+  const retryingInterruptedExternalInput = attempt.phase === "sound-paused" &&
+    (attempt.soundPauseContext || attempt.audioTransaction?.context) === "external-input";
+  if (attempt.phase === "sound-paused") {
+    if (!retryingInterruptedExternalInput || !recoverAudioBAttempt()) {
+      if (source === "MIDI") recordAudioBMidiNoteOn(attempt, midi);
+      recordAudioBObservation(attempt, midi, source);
+      return;
+    }
+  }
+  if (source === "MIDI") {
+    const midiState = recordAudioBMidiNoteOn(attempt, midi);
+    if (midiState.blocked) {
+      recordAudioBObservation(attempt, midi, source, "held-midi");
+      return;
+    }
+  }
+  if (!audioBInputPhaseAllows(attempt) || !attempt.inputArmed) {
+    recordAudioBObservation(attempt, midi, source);
+    return;
+  }
+  beginAudioBInput(attempt, midi, source);
 }
 
 function enableLs05VisualAssist() {
   const attempt = ensureLs05Attempt();
   if (!attempt) return;
-  const allowed = attempt.phase === "assisted-retry" || (attempt.phase === "sound-paused" && attempt.soundPauseCount >= 2);
+  const responseReady = attempt.phase === "assisted-retry" && attempt.inputArmed &&
+    !audioBPlaybackIsActive(attempt) && !audioBExternalInputIsActive(attempt);
+  const allowed = responseReady || (attempt.phase === "sound-paused" && attempt.soundPauseCount >= 2);
   if (!allowed) return;
   clearLs05Timers();
   attempt.accessibilityVisualAssist = true;
@@ -8878,7 +8948,7 @@ function playLp01Target(reason = "system-first") {
     midis: [targetMidi],
     payload: { sourceReason, recoveringInterruptedTarget },
     phase: "target-playing",
-    onStarted: () => {
+    onStarted: (transaction) => {
       if (!attempt.callPresentedAt) {
         attempt.callPresentedAt = new Date().toISOString();
         attempt.presentedCallCount += 1;
@@ -10094,7 +10164,7 @@ function startM03Model(attempt = ensureM03AudioAttempt(), reason = "system") {
     payload: { targetMidi, reason, stepIndex: state.stepIndex },
     scheduledPhase: "model-scheduled",
     playingPhase: "model-playing",
-    onStarted: () => {
+    onStarted: (transaction) => {
       if (els.heardStatus) els.heardStatus.textContent = "听到：小车轮唱了一声";
       if (els.feedback) {
         els.feedback.classList.remove("good", "bad");
@@ -11670,13 +11740,22 @@ function createLs04Attempt(session = state.activeSession) {
     inputRoutes: {},
     replayCountChild: 0,
     replayCountSystem: 0,
+    soundPauseCount: 0,
     strongCueUsed: false,
     supportStage: "none",
     modeled: false,
     modeledInputs: [],
+    pendingModeled: null,
     hasExperimentalInput: false,
     targetRevealedBeforeResponse: false,
-    audioTrace: []
+    audioTrace: [],
+    audioLifecycle: [],
+    audioTransaction: null,
+    soundPauseContext: null,
+    pendingInput: null,
+    midiHeldMidis: [],
+    inputArmed: false,
+    observations: []
   };
 }
 
@@ -11687,7 +11766,7 @@ function ensureLs04Attempt() {
     action.listeningAttempt = createLs04Attempt(state.activeSession);
     persistActiveSession();
   }
-  return action.listeningAttempt;
+  return initializeAudioBAttempt(action.listeningAttempt);
 }
 
 function clearLs04Timers() {
@@ -11711,64 +11790,87 @@ function traceLs04Audio(attempt, kind, midi, extra = {}) {
   attempt.audioTrace = attempt.audioTrace.slice(-40);
 }
 
-function playLs04Reference() {
+function playLs04Reference({ recovery = false } = {}) {
   const attempt = ensureLs04Attempt();
-  if (!attempt || state.screen !== "garden") return;
+  if (!attempt || state.screen !== "garden") return null;
   clearLs04Timers();
-  attempt.phase = "reference";
-  persistLs04Attempt();
-  renderGardenScreen();
-  const played = playPianoNote(noteForMidi(60).frequency, { gain: 0.13, duration: 0.72 });
-  if (!played) {
-    attempt.referencePlayed = false;
-    attempt.phase = "sound-paused";
-    traceLs04Audio(attempt, "audio-unavailable", null, { reason: "reference" });
-    persistLs04Attempt();
-    renderGardenScreen();
-    return;
-  }
-  attempt.referencePlayed = true;
-  traceLs04Audio(attempt, "reference", 60);
-  persistLs04Attempt();
-  state.ls04Timer = setTimeout(() => {
-    state.ls04Timer = null;
-    playLs04Target("system-first");
-  }, 900);
+  return startAudioBTeachingSequence(attempt, {
+    context: "reference",
+    kind: "reference",
+    reason: "reference",
+    notes: [{ midi: 60, durationMs: 720, delayMs: 0 }],
+    payload: { originalReason: "reference", recovery },
+    scheduledPhase: "reference",
+    playingPhase: "reference",
+    onStarted: () => traceLs04Audio(attempt, "reference", 60, { recovery }),
+    onEnded: (transaction, playback, { returnQueued }) => {
+      attempt.referencePlayed = true;
+      attempt.phase = "replay-ready";
+      persistLs04Attempt();
+      renderGardenScreen();
+      if (returnQueued) return;
+      state.ls04Timer = setTimeout(() => {
+        state.ls04Timer = null;
+        if (audioBAttemptIsCurrent(attempt) && attempt.phase === "replay-ready") playLs04Target("system-first");
+      }, 900);
+    }
+  });
 }
 
-function playLs04Target(reason = "system") {
+function playLs04Target(reason = "system", { recovery = false, presentationCounted = false } = {}) {
   const attempt = ensureLs04Attempt();
   const targetMidi = ls04Target(attempt);
-  if (!attempt || targetMidi === null || state.screen !== "garden") return;
+  if (!attempt || targetMidi === null || state.screen !== "garden") return null;
   clearLs04Timers();
-  attempt.phase = "target-playing";
-  if (reason === "child-replay") attempt.replayCountChild += 1;
-  else if (reason !== "system-first") attempt.replayCountSystem += 1;
-  persistLs04Attempt();
-  renderGardenScreen();
-  const played = playPianoNote(noteForMidi(targetMidi).frequency, { gain: 0.13, duration: 0.72 });
-  if (!played) {
-    attempt.phase = "sound-paused";
-    traceLs04Audio(attempt, "audio-unavailable", null, { reason, callIndex: attempt.callIndex });
+  return startAudioBTeachingSequence(attempt, {
+    context: "target",
+    kind: "target",
+    reason,
+    notes: [{ midi: targetMidi, durationMs: 720, delayMs: 0 }],
+    payload: { targetMidi, callIndex: attempt.callIndex, originalReason: reason, recovery, presentationCounted },
+    scheduledPhase: "target-playing",
+    playingPhase: "target-playing",
+    onStarted: (transaction) => {
+      if (!transaction.payload?.presentationCounted) {
+        if (reason === "child-replay") attempt.replayCountChild += 1;
+        else if (reason !== "system-first") attempt.replayCountSystem += 1;
+        if (transaction.payload) transaction.payload.presentationCounted = true;
+      }
+      traceLs04Audio(attempt, "target", targetMidi, { reason, callIndex: attempt.callIndex, recovery });
+    },
+    onEnded: (transaction, playback, { returnQueued }) => {
+      attempt.phase = audioBResponsePhaseForAttempt(attempt);
+      persistLs04Attempt();
+      renderGardenScreen();
+      if (!returnQueued) armAudioBResponse(attempt);
+    }
+  });
+}
+
+function resumeLs04Flow({ fromReload = false } = {}) {
+  const attempt = ensureLs04Attempt();
+  if (!attempt || state.screen !== "garden") return;
+  clearLs04Timers();
+  if (!audioBPlaybackIsActive(attempt) && !audioBExternalInputIsActive(attempt)) clearAudioBStaleMidiHolds(attempt);
+  if (fromReload) normalizeAudioBAttemptForRecovery(attempt);
+  if (attempt.phase === "sound-paused") {
     persistLs04Attempt();
     renderGardenScreen();
     return;
   }
-  traceLs04Audio(attempt, "target", targetMidi, { reason, callIndex: attempt.callIndex });
-  persistLs04Attempt();
-  state.ls04Timer = setTimeout(() => {
-    state.ls04Timer = null;
-    attempt.phase = attempt.supportStage === "assisted" ? "assisted" : "awaiting-response";
+  if (["awaiting-response", "assisted"].includes(attempt.phase)) {
+    armAudioBResponse(attempt);
+    return;
+  }
+  if (attempt.phase === "complete") {
     persistLs04Attempt();
     renderGardenScreen();
-    if (attempt.supportStage === "assisted") scheduleLs04AssistedTimeout();
-  }, LS04_TARGET_PLAY_MS);
-}
-
-function resumeLs04Flow() {
-  const attempt = ensureLs04Attempt();
-  if (!attempt || state.screen !== "garden") return;
-  clearLs04Timers();
+    return;
+  }
+  if (attempt.phase === "correct-feedback" && !fromReload) {
+    playLs04Target("system-next");
+    return;
+  }
   if (!state.audioUnlocked) {
     attempt.phase = attempt.referencePlayed ? "replay-ready" : "reference-ready";
     persistLs04Attempt();
@@ -11779,7 +11881,12 @@ function resumeLs04Flow() {
     playLs04Reference();
     return;
   }
-  playLs04Target("resume");
+  if (!fromReload) playLs04Target("resume");
+  else {
+    attempt.phase = "replay-ready";
+    persistLs04Attempt();
+    renderGardenScreen();
+  }
 }
 
 function hashSessionSeed(value) {
@@ -11861,7 +11968,14 @@ function createLs05Attempt(session = state.activeSession, resumeAttempt = null) 
     accessibilityVisualAssist: false,
     targetRevealedBeforeResponse: false,
     respondingFlower: null,
-    audioTrace: []
+    audioTrace: [],
+    audioLifecycle: [],
+    audioTransaction: null,
+    soundPauseContext: null,
+    pendingInput: null,
+    midiHeldMidis: [],
+    inputArmed: false,
+    observations: []
   };
 }
 
@@ -11872,7 +11986,7 @@ function ensureLs05Attempt() {
     action.listeningAttempt = createLs05Attempt(state.activeSession);
     persistActiveSession();
   }
-  return action.listeningAttempt;
+  return initializeAudioBAttempt(action.listeningAttempt);
 }
 
 function persistLs05Attempt() {
@@ -11893,6 +12007,679 @@ function ls05Target(attempt = ensureLs05Attempt()) {
 function traceLs05Audio(attempt, kind, midi, extra = {}) {
   attempt.audioTrace.push({ kind, midi, at: new Date().toISOString(), ...extra });
   attempt.audioTrace = attempt.audioTrace.slice(-60);
+}
+
+function initializeAudioBAttempt(attempt) {
+  if (!attempt) return attempt;
+  if (!Array.isArray(attempt.audioTrace)) attempt.audioTrace = [];
+  if (!Array.isArray(attempt.audioLifecycle)) attempt.audioLifecycle = [];
+  if (!Array.isArray(attempt.midiHeldMidis)) attempt.midiHeldMidis = [];
+  if (!Array.isArray(attempt.observations)) attempt.observations = [];
+  if (!Object.hasOwn(attempt, "audioTransaction")) attempt.audioTransaction = null;
+  if (!Object.hasOwn(attempt, "soundPauseContext")) attempt.soundPauseContext = null;
+  if (!Object.hasOwn(attempt, "pendingInput")) attempt.pendingInput = null;
+  if (!Object.hasOwn(attempt, "inputArmed")) attempt.inputArmed = false;
+  if (!Object.hasOwn(attempt, "soundPauseCount")) attempt.soundPauseCount = 0;
+  if (!Object.hasOwn(attempt, "pendingModeled")) attempt.pendingModeled = null;
+  return attempt;
+}
+
+function currentAudioBAttempt() {
+  const action = currentListeningAction();
+  if (action?.targetId === "LS04") return ensureLs04Attempt();
+  if (action?.targetId === "LS05") return ensureLs05Attempt();
+  return null;
+}
+
+function audioBLevelId(attempt = currentAudioBAttempt()) {
+  const action = currentListeningAction();
+  return action?.listeningAttempt === attempt ? action.targetId : null;
+}
+
+function audioBAttemptIsCurrent(attempt) {
+  const action = currentListeningAction();
+  return Boolean(
+    state.screen === "garden" &&
+    action &&
+    ["LS04", "LS05"].includes(action.targetId) &&
+    action.listeningAttempt === attempt
+  );
+}
+
+function persistAudioBAttempt(attempt) {
+  if (!audioBAttemptIsCurrent(attempt)) return;
+  if (audioBLevelId(attempt) === "LS04") persistLs04Attempt();
+  else persistLs05Attempt();
+}
+
+function renderAudioBAttempt(attempt) {
+  if (!audioBAttemptIsCurrent(attempt)) return;
+  renderGardenScreen();
+}
+
+function traceAudioBLifecycle(attempt, kind, transaction, extra = {}) {
+  if (!attempt) return;
+  attempt.audioLifecycle.push({
+    kind,
+    context: transaction?.context || null,
+    sequenceKind: transaction?.kind || null,
+    reason: transaction?.reason || null,
+    midis: Array.isArray(transaction?.notes)
+      ? transaction.notes.map((note) => note.midi).filter(Number.isFinite)
+      : (Number.isFinite(transaction?.payload?.midi) ? [transaction.payload.midi] : []),
+    playbackId: transaction?.playbackId || null,
+    scheduledAt: transaction?.scheduledAt || null,
+    startedAt: transaction?.startedAt || null,
+    endedAt: transaction?.endedAt || null,
+    interruptedAt: transaction?.interruptedAt || null,
+    startAudioTime: transaction?.startAudioTime ?? null,
+    endAudioTime: transaction?.endAudioTime ?? null,
+    interruptedAudioTime: transaction?.interruptedAudioTime ?? null,
+    contextState: transaction?.contextState || null,
+    ...extra
+  });
+  attempt.audioLifecycle = attempt.audioLifecycle.slice(-80);
+}
+
+function audioBHeldMidiNotes(attempt) {
+  if (!attempt) return [];
+  const held = [...new Set((attempt.midiHeldMidis || [])
+    .map((midi) => Number(midi))
+    .filter(Number.isFinite))];
+  attempt.midiHeldMidis = held;
+  return held;
+}
+
+function recordAudioBMidiNoteOn(attempt, midi) {
+  const note = Number(midi);
+  const held = audioBHeldMidiNotes(attempt);
+  if (!Number.isFinite(note)) return { blocked: false, wasHeld: false, hadHeld: held.length > 0 };
+  const wasHeld = held.includes(note);
+  const hadHeld = held.length > 0;
+  if (!wasHeld) held.push(note);
+  attempt.midiHeldMidis = held;
+  return { blocked: wasHeld || hadHeld, wasHeld, hadHeld };
+}
+
+function releaseAudioBMidiNote(attempt, midi) {
+  const note = Number(midi);
+  if (!Number.isFinite(note)) return false;
+  const held = audioBHeldMidiNotes(attempt);
+  if (!held.includes(note)) return false;
+  attempt.midiHeldMidis = held.filter((heldMidi) => heldMidi !== note);
+  return true;
+}
+
+function clearAudioBStaleMidiHolds(attempt) {
+  if (!attempt) return false;
+  const hadHeld = audioBHeldMidiNotes(attempt).length > 0;
+  attempt.midiHeldMidis = [];
+  return hadHeld;
+}
+
+function audioBInputPhaseAllows(attempt) {
+  const levelId = audioBLevelId(attempt);
+  if (levelId === "LS04") return ["awaiting-response", "assisted"].includes(attempt?.phase);
+  if (levelId === "LS05") return ["awaiting-response", "assisted-retry", "visual-assist"].includes(attempt?.phase);
+  return false;
+}
+
+function audioBExternalInputIsActive(attempt) {
+  const transaction = attempt?.audioTransaction;
+  return Boolean(
+    transaction?.context === "external-input" &&
+    !transaction.endedAt &&
+    !transaction.interruptedAt
+  );
+}
+
+function audioBPlaybackIsActive(attempt) {
+  const transaction = attempt?.audioTransaction;
+  const playback = state.teachingPlayback;
+  return Boolean(
+    transaction &&
+    !transaction.endedAt &&
+    !transaction.interruptedAt &&
+    transaction.playbackId &&
+    playback?.id === transaction.playbackId &&
+    ["scheduled", "playing"].includes(playback.status)
+  );
+}
+
+function setAudioBInputArmed(attempt, armed) {
+  const transaction = attempt?.audioTransaction;
+  const next = Boolean(armed) &&
+    audioBAttemptIsCurrent(attempt) &&
+    audioBInputPhaseAllows(attempt) &&
+    !audioBExternalInputIsActive(attempt) &&
+    audioBHeldMidiNotes(attempt).length === 0 &&
+    (!transaction || Boolean(transaction.endedAt || transaction.interruptedAt));
+  attempt.inputArmed = next;
+  state.gardenInputArmed = next;
+  if (els.gardenScene) els.gardenScene.dataset.inputArmed = next ? "true" : "false";
+  return next;
+}
+
+function armAudioBResponse(attempt) {
+  const wasArmed = attempt?.inputArmed === true;
+  const armed = setAudioBInputArmed(attempt, true);
+  if (!armed || wasArmed) {
+    persistAudioBAttempt(attempt);
+    renderAudioBAttempt(attempt);
+    return false;
+  }
+  if (audioBLevelId(attempt) === "LS04") {
+    if (attempt.phase === "assisted") scheduleLs04AssistedTimeout();
+  } else if (attempt.phase === "assisted-retry") {
+    scheduleLs05AssistedTimeout();
+  } else if (attempt.phase === "awaiting-response") {
+    scheduleLs05ResponseTimeout();
+  }
+  persistAudioBAttempt(attempt);
+  renderAudioBAttempt(attempt);
+  return true;
+}
+
+function recordAudioBObservation(attempt, midi, source, phase = attempt?.phase, extra = {}) {
+  if (!attempt) return;
+  attempt.observations.push({ midi, source, phase, occurredAt: new Date().toISOString(), ...extra });
+  attempt.observations = attempt.observations.slice(-32);
+  attempt.earlyInputs.push({ midi, source, phase, occurredAt: new Date().toISOString(), observation: true });
+  attempt.earlyInputs = attempt.earlyInputs.slice(-32);
+  persistAudioBAttempt(attempt);
+}
+
+function writeAudioBTransaction(transaction, playback, field) {
+  transaction.playbackId = playback.id;
+  transaction.scheduledAt = playback.scheduledAt;
+  transaction.startedAt = playback.startedAt;
+  transaction.endedAt = playback.endedAt;
+  transaction.interruptedAt = playback.interruptedAt;
+  transaction.startAudioTime = playback.startAudioTime;
+  transaction.endAudioTime = playback.endAudioTime;
+  transaction.interruptedAudioTime = playback.interruptedAudioTime;
+  transaction.contextState = playback.contextState;
+  transaction.status = playback.status;
+  if (field) transaction.lastLifecycleField = field;
+}
+
+function queueAudioBMapReturn(attempt) {
+  if (!audioBPlaybackIsActive(attempt)) return false;
+  attempt.audioTransaction.returnQueued = true;
+  persistAudioBAttempt(attempt);
+  renderAudioBAttempt(attempt);
+  return true;
+}
+
+function markAudioBQueuedReturnConsumed(attempt, transaction = attempt?.audioTransaction) {
+  if (!transaction?.returnQueued || transaction.returnQueuedConsumedAt) return false;
+  transaction.returnQueued = false;
+  transaction.returnQueuedConsumedAt = new Date().toISOString();
+  traceAudioBLifecycle(attempt, "queued-return-consumed", transaction, {
+    interruption: Boolean(transaction.interruptedAt)
+  });
+  persistAudioBAttempt(attempt);
+  return true;
+}
+
+function consumeAudioBQueuedReturn(attempt, transaction = attempt?.audioTransaction) {
+  if (!markAudioBQueuedReturnConsumed(attempt, transaction)) return false;
+  setTimeout(() => {
+    if (state.screen === "garden") showMapScreen();
+  }, 0);
+  return true;
+}
+
+function handoffAudioBQueuedReturn(attempt, transaction) {
+  const successor = attempt?.audioTransaction;
+  if (!transaction?.returnQueued || !successor || successor === transaction) return false;
+  transaction.returnQueued = false;
+  transaction.returnQueuedHandedOffAt = new Date().toISOString();
+  successor.returnQueued = true;
+  successor.returnQueuedFromPlaybackId = transaction.playbackId || null;
+  persistAudioBAttempt(attempt);
+  if (successor.interruptedAt) consumeAudioBQueuedReturn(attempt, successor);
+  return true;
+}
+
+function enterAudioBSoundPause(attempt, context, reason = "audio-unavailable", { increment = true } = {}) {
+  if (!attempt) return;
+  clearLs04Timers();
+  clearLs05Timers();
+  const transaction = attempt.audioTransaction;
+  const returnQueued = transaction?.returnQueued === true;
+  if (increment && Object.hasOwn(attempt, "soundPauseCount")) attempt.soundPauseCount += 1;
+  if (audioBLevelId(attempt) === "LS05") {
+    attempt.callTimingInterrupted = true;
+    attempt.callResponseStartedAt = null;
+  }
+  if (transaction && !transaction.endedAt && !transaction.interruptedAt) {
+    transaction.interruptedAt = new Date().toISOString();
+  }
+  attempt.soundPauseContext = context;
+  attempt.phase = "sound-paused";
+  setAudioBInputArmed(attempt, false);
+  traceAudioBLifecycle(attempt, "interrupted", transaction, { interruptionReason: reason });
+  persistAudioBAttempt(attempt);
+  renderAudioBAttempt(attempt);
+  if (returnQueued) consumeAudioBQueuedReturn(attempt, transaction);
+}
+
+function startAudioBTeachingSequence(attempt, {
+  context,
+  kind,
+  reason,
+  notes,
+  payload = null,
+  scheduledPhase,
+  playingPhase,
+  onStarted,
+  onEnded,
+  onInterrupted
+} = {}) {
+  if (!audioBAttemptIsCurrent(attempt) || !Array.isArray(notes) || notes.length === 0) return null;
+  const normalizedNotes = notes
+    .filter((note) => Number.isFinite(note?.midi))
+    .map((note) => ({
+      midi: Number(note.midi),
+      delayMs: Math.max(0, Number(note.delayMs) || 0),
+      durationMs: Math.max(1, Number(note.durationMs) || 720),
+      child: Boolean(note.child)
+    }));
+  if (normalizedNotes.length === 0) return null;
+  const transaction = {
+    context,
+    kind,
+    reason,
+    payload: payload ? JSON.parse(JSON.stringify(payload)) : null,
+    notes: normalizedNotes,
+    playbackId: null,
+    scheduledAt: new Date().toISOString(),
+    startedAt: null,
+    endedAt: null,
+    interruptedAt: null,
+    startAudioTime: null,
+    endAudioTime: null,
+    interruptedAudioTime: null,
+    contextState: "scheduled",
+    status: "scheduled",
+    returnQueued: false,
+    returnQueuedConsumedAt: null,
+    outcomeRecorded: false
+  };
+  attempt.audioTransaction = transaction;
+  attempt.soundPauseContext = null;
+  attempt.phase = scheduledPhase || `${context}-scheduled`;
+  setAudioBInputArmed(attempt, false);
+  persistAudioBAttempt(attempt);
+  renderAudioBAttempt(attempt);
+
+  const playback = playTeachingPianoSequence({
+    reason: `audio-b-${context}:${reason}`,
+    notes: normalizedNotes.map((note) => ({
+      frequency: noteForMidi(note.midi)?.frequency || midiFrequency(note.midi),
+      gain: note.child ? 0.10 : 0.13,
+      durationMs: note.durationMs,
+      delayMs: note.delayMs
+    })),
+    onStarted: (handle) => {
+      if (!audioBAttemptIsCurrent(attempt) || attempt.audioTransaction !== transaction) return;
+      writeAudioBTransaction(transaction, handle, "started");
+      attempt.phase = playingPhase || scheduledPhase || `${context}-playing`;
+      traceAudioBLifecycle(attempt, "started", transaction);
+      onStarted?.(transaction, handle);
+      persistAudioBAttempt(attempt);
+      renderAudioBAttempt(attempt);
+    },
+    onEnded: (handle) => {
+      if (!audioBAttemptIsCurrent(attempt) || attempt.audioTransaction !== transaction) return;
+      writeAudioBTransaction(transaction, handle, "ended");
+      traceAudioBLifecycle(attempt, "ended", transaction);
+      persistAudioBAttempt(attempt);
+      onEnded?.(transaction, handle, { returnQueued: transaction.returnQueued === true });
+      if (!audioBAttemptIsCurrent(attempt) || attempt.audioTransaction !== transaction) return;
+      persistAudioBAttempt(attempt);
+      renderAudioBAttempt(attempt);
+      consumeAudioBQueuedReturn(attempt, transaction);
+    },
+    onInterrupted: (handle, interruptionReason) => {
+      if (!audioBAttemptIsCurrent(attempt) || attempt.audioTransaction !== transaction || transaction.endedAt) return;
+      writeAudioBTransaction(transaction, handle, "interrupted");
+      onInterrupted?.(transaction, handle, interruptionReason);
+      enterAudioBSoundPause(attempt, context, `teaching-${interruptionReason}`);
+    }
+  });
+  if (audioBAttemptIsCurrent(attempt) && attempt.audioTransaction === transaction) {
+    transaction.playbackId ||= playback.id;
+    transaction.scheduledAt = playback.scheduledAt || transaction.scheduledAt;
+    transaction.status = playback.status;
+    transaction.contextState = playback.contextState || transaction.contextState;
+    persistAudioBAttempt(attempt);
+  }
+  return { playback, transaction };
+}
+
+function beginAudioBExternalInput(attempt, pending) {
+  if (!audioBAttemptIsCurrent(attempt) || !pending) return false;
+  clearLs04Timers();
+  clearLs05Timers();
+  const now = new Date().toISOString();
+  attempt.pendingInput = { ...pending, acceptedAt: now };
+  attempt.audioTransaction = {
+    context: "external-input",
+    kind: "external-input",
+    reason: "microphone-onset",
+    payload: { ...attempt.pendingInput },
+    notes: [{ midi: pending.midi, delayMs: 0, durationMs: 0 }],
+    playbackId: null,
+    scheduledAt: now,
+    startedAt: now,
+    endedAt: null,
+    interruptedAt: null,
+    startAudioTime: null,
+    endAudioTime: null,
+    interruptedAudioTime: null,
+    contextState: "external-input",
+    status: "playing",
+    returnQueued: false,
+    returnQueuedConsumedAt: null,
+    outcomeRecorded: false
+  };
+  attempt.soundPauseContext = null;
+  attempt.phase = "external-input";
+  setAudioBInputArmed(attempt, false);
+  traceAudioBLifecycle(attempt, "started", attempt.audioTransaction, { external: true });
+  persistAudioBAttempt(attempt);
+  renderAudioBAttempt(attempt);
+  return true;
+}
+
+function finishAudioBExternalInput(attempt, midi, source, commit) {
+  const transaction = attempt?.audioTransaction;
+  const pending = attempt?.pendingInput;
+  if (!audioBAttemptIsCurrent(attempt) || attempt.phase !== "external-input" || !transaction || !pending) return false;
+  if (pending.source !== source || (Number.isFinite(midi) && pending.midi !== midi)) return false;
+  transaction.endedAt = new Date().toISOString();
+  transaction.contextState = "external-input-quiet";
+  transaction.status = "ended";
+  transaction.outcomeRecorded = true;
+  traceAudioBLifecycle(attempt, "ended", transaction, { external: true });
+  commit(pending, transaction, { returnQueued: transaction.returnQueued === true, external: true });
+  if (!audioBAttemptIsCurrent(attempt) || attempt.audioTransaction !== transaction) return true;
+  persistAudioBAttempt(attempt);
+  renderAudioBAttempt(attempt);
+  consumeAudioBQueuedReturn(attempt, transaction);
+  return true;
+}
+
+function interruptAudioBExternalInput(attempt, reason = "external-interrupted") {
+  if (!audioBAttemptIsCurrent(attempt) || !audioBExternalInputIsActive(attempt)) return false;
+  const transaction = attempt.audioTransaction;
+  transaction.interruptedAt = new Date().toISOString();
+  transaction.contextState = "external-input-interrupted";
+  transaction.status = "interrupted";
+  transaction.interruptReason = reason;
+  enterAudioBSoundPause(attempt, "external-input", reason);
+  return true;
+}
+
+function interruptActiveAudioBExternalInput(reason) {
+  return interruptAudioBExternalInput(currentAudioBAttempt(), reason);
+}
+
+function audioBTeachingSurfaceIsActive() {
+  return state.screen === "garden" && Boolean(
+    currentListeningAction("LS04") || currentListeningAction("LS05")
+  );
+}
+
+function audioBResponsePhaseForAttempt(attempt) {
+  const levelId = audioBLevelId(attempt);
+  if (levelId === "LS04") return attempt?.supportStage === "assisted" ? "assisted" : "awaiting-response";
+  if (levelId === "LS05") {
+    return ["assisted", "candidate-outside"].includes(attempt?.callRepairStage)
+      ? "assisted-retry"
+      : "awaiting-response";
+  }
+  return "awaiting-response";
+}
+
+function normalizeAudioBAttemptForRecovery(attempt, { clearHeldMidi = true } = {}) {
+  if (!attempt) return attempt;
+  if (clearHeldMidi) clearAudioBStaleMidiHolds(attempt);
+  const transaction = attempt.audioTransaction;
+  if (!transaction || transaction.endedAt || transaction.interruptedAt) return attempt;
+  transaction.interruptedAt = new Date().toISOString();
+  transaction.contextState = "recovered-without-active-playback";
+  transaction.status = "interrupted";
+  attempt.soundPauseContext = transaction.context || null;
+  attempt.phase = "sound-paused";
+  setAudioBInputArmed(attempt, false);
+  traceAudioBLifecycle(attempt, "interrupted", transaction, { interruptionReason: "reload-without-active-playback" });
+  return attempt;
+}
+
+function releaseAudioBMidiInput(attempt, midi) {
+  if (!audioBAttemptIsCurrent(attempt) || !releaseAudioBMidiNote(attempt, midi)) return false;
+  if (!armAudioBResponse(attempt)) {
+    persistAudioBAttempt(attempt);
+    renderAudioBAttempt(attempt);
+  }
+  return true;
+}
+
+function audioBPendingMatchesCurrentCall(attempt, pending) {
+  return Boolean(
+    pending &&
+    Number.isInteger(pending.callIndex) &&
+    pending.callIndex === attempt?.callIndex &&
+    pending.targetMidi === (audioBLevelId(attempt) === "LS04" ? ls04Target(attempt) : ls05Target(attempt))
+  );
+}
+
+function recordAudioBInputPresentation(midi, source, correct) {
+  state.lastInputMidi = midi;
+  state.lastInputResult = correct ? "correct" : "wrong";
+  if (els.inputStatus) els.inputStatus.textContent = `输入：${source}`;
+  if (els.heardStatus) els.heardStatus.textContent = `听到：${noteForMidi(midi)?.name || midi}`;
+}
+
+function startAudioBChildEcho(attempt, pending, { recovery = false } = {}) {
+  if (!audioBAttemptIsCurrent(attempt) || !audioBPendingMatchesCurrentCall(attempt, pending)) return null;
+  const heardFrequency = noteForMidi(pending.midi)?.frequency || midiFrequency(pending.midi);
+  attempt.pendingInput = { ...pending };
+  return startAudioBTeachingSequence(attempt, {
+    context: "child-echo",
+    kind: "child-echo",
+    reason: recovery ? "recovery" : "child-input",
+    notes: [{ midi: pending.midi, durationMs: 420, delayMs: 0, child: true }],
+    payload: { ...pending, recovery },
+    scheduledPhase: "child-echo-scheduled",
+    playingPhase: "child-echo-playing",
+    onStarted: (transaction) => {
+      transaction.payload.frequency = heardFrequency;
+      traceAudioBInputStarted(attempt, pending, transaction, "child-echo", { recovery });
+    },
+    onEnded: (transaction, playback, { returnQueued }) => {
+      if (transaction.outcomeRecorded) return;
+      transaction.outcomeRecorded = true;
+      commitAudioBInput(attempt, pending, transaction, { returnQueued, external: false });
+    }
+  });
+}
+
+function beginAudioBInput(attempt, midi, source) {
+  const levelId = audioBLevelId(attempt);
+  const targetMidi = levelId === "LS04" ? ls04Target(attempt) : ls05Target(attempt);
+  if (!Number.isFinite(targetMidi)) return false;
+  clearLs04Timers();
+  clearLs05Timers();
+  const pending = {
+    midi,
+    source,
+    targetMidi,
+    callIndex: attempt.callIndex,
+    occurredAt: new Date().toISOString(),
+    correct: midi === targetMidi,
+    visualAssist: levelId === "LS05" && attempt.phase === "visual-assist"
+  };
+  if (isMicrophoneSource(source)) return beginAudioBExternalInput(attempt, pending);
+  return Boolean(startAudioBChildEcho(attempt, pending));
+}
+
+function traceAudioBInputStarted(attempt, pending, transaction, kind, extra = {}) {
+  const trace = audioBLevelId(attempt) === "LS04" ? traceLs04Audio : traceLs05Audio;
+  trace(attempt, kind, pending.midi, {
+    callIndex: pending.callIndex,
+    targetMidi: pending.targetMidi,
+    source: pending.source,
+    frequency: noteForMidi(pending.midi)?.frequency || midiFrequency(pending.midi),
+    ...extra
+  });
+}
+
+function traceAudioBInputEnded(attempt, pending, transaction, kind, extra = {}) {
+  const trace = audioBLevelId(attempt) === "LS04" ? traceLs04Audio : traceLs05Audio;
+  trace(attempt, kind, pending.targetMidi, {
+    callIndex: pending.callIndex,
+    childMidi: pending.midi,
+    source: pending.source,
+    frequency: noteForMidi(pending.midi)?.frequency || midiFrequency(pending.midi),
+    playbackId: transaction?.playbackId || null,
+    ...extra
+  });
+}
+
+function startAudioBWrongRepair(attempt, pending, { recovery = false, presentationCounted = false } = {}) {
+  if (!audioBAttemptIsCurrent(attempt) || !audioBPendingMatchesCurrentCall(attempt, pending)) return null;
+  const levelId = audioBLevelId(attempt);
+  const targetMidi = pending.targetMidi;
+  const modeledAfterRepair = levelId === "LS04"
+    ? attempt.callWrongCount >= 4
+    : attempt.callWrongCount >= 4;
+  const presentationPhase = modeledAfterRepair
+    ? "modeled-playing"
+    : (levelId === "LS04"
+      ? "wrong-feedback"
+      : (attempt.callRepairStage === "pair-compare"
+        ? "pair-compare"
+        : (attempt.callRepairStage === "wrong-known" ? "wrong-known" : "assisted-retry")));
+  const responsePhase = audioBResponsePhaseForAttempt(attempt);
+  attempt.pendingInput = null;
+  return startAudioBTeachingSequence(attempt, {
+    context: "wrong-repair",
+    kind: "wrong-repair",
+    reason: "wrong-repair",
+    notes: [{ midi: targetMidi, durationMs: 720, delayMs: 0 }],
+    payload: {
+      ...pending,
+      originalReason: "wrong-repair",
+      responsePhase,
+      presentationPhase,
+      modeledAfterRepair,
+      recovery,
+      presentationCounted
+    },
+    scheduledPhase: presentationPhase,
+    playingPhase: presentationPhase,
+    onStarted: (transaction) => {
+      if (!transaction.payload?.presentationCounted) {
+        if (levelId === "LS05") {
+          attempt.replayCountSystem += 1;
+          attempt.callReplayCountSystem += 1;
+        }
+        if (transaction.payload) transaction.payload.presentationCounted = true;
+      }
+      traceAudioBInputEnded(attempt, pending, transaction, "target-replay", { recovery });
+    },
+    onEnded: (transaction, playback, { returnQueued }) => {
+      traceAudioBInputEnded(attempt, pending, transaction, "wrong-repair-ended", { recovery });
+      if (transaction.payload?.modeledAfterRepair) {
+        if (levelId === "LS04") {
+          completeLs04Modeled("assisted-retry-wrong", { targetAlreadyPlayed: true, returnQueued });
+        } else {
+          completeLs05Modeled("assisted-retry-wrong", { targetAlreadyPlayed: true, returnQueued });
+        }
+        return;
+      }
+      attempt.phase = transaction.payload?.responsePhase || audioBResponsePhaseForAttempt(attempt);
+      if (levelId === "LS05" && attempt.phase === "assisted-retry") attempt.assistedCueVisible = false;
+      persistAudioBAttempt(attempt);
+      renderAudioBAttempt(attempt);
+      if (!returnQueued) armAudioBResponse(attempt);
+    }
+  });
+}
+
+function commitAudioBInput(attempt, pending, transaction, { returnQueued = false, external = false } = {}) {
+  if (!audioBAttemptIsCurrent(attempt) || !audioBPendingMatchesCurrentCall(attempt, pending)) return false;
+  const levelId = audioBLevelId(attempt);
+  if (attempt.pendingInput?.occurredAt === pending.occurredAt) attempt.pendingInput = null;
+  if (levelId === "LS04") return commitLs04AudioBInput(attempt, pending, transaction, { returnQueued, external });
+  if (levelId === "LS05") return commitLs05AudioBInput(attempt, pending, transaction, { returnQueued, external });
+  return false;
+}
+
+function recoverAudioBAttempt() {
+  const attempt = currentAudioBAttempt();
+  if (!attempt || attempt.phase !== "sound-paused") return false;
+  clearLs04Timers();
+  clearLs05Timers();
+  clearAudioBStaleMidiHolds(attempt);
+  const transaction = attempt.audioTransaction;
+  const context = attempt.soundPauseContext || transaction?.context;
+  const payload = transaction?.payload || attempt.pendingInput || {};
+  const reason = payload.originalReason || payload.reason || transaction?.reason || "resume";
+  if (context === "external-input") {
+    attempt.pendingInput = null;
+    attempt.phase = audioBResponsePhaseForAttempt(attempt);
+    attempt.soundPauseContext = null;
+    setAudioBInputArmed(attempt, true);
+    persistAudioBAttempt(attempt);
+    renderAudioBAttempt(attempt);
+    return true;
+  }
+  if (context === "reference") {
+    return audioBLevelId(attempt) === "LS04"
+      ? Boolean(playLs04Reference({ recovery: true }))
+      : Boolean(playLs05Reference({ recovery: true }));
+  }
+  if (context === "target") {
+    const presentationCounted = payload.presentationCounted === true;
+    return audioBLevelId(attempt) === "LS04"
+      ? Boolean(playLs04Target(reason, { recovery: true, presentationCounted }))
+      : Boolean(playLs05Target(reason, { recovery: true, presentationCounted }));
+  }
+  if (context === "child-echo" && audioBPendingMatchesCurrentCall(attempt, payload)) {
+    return Boolean(startAudioBChildEcho(attempt, payload, { recovery: true }));
+  }
+  if (context === "wrong-repair" && audioBPendingMatchesCurrentCall(attempt, payload)) {
+    return Boolean(startAudioBWrongRepair(attempt, payload, {
+      recovery: true,
+      presentationCounted: payload.presentationCounted === true
+    }));
+  }
+  if (context === "modeled") {
+    return audioBLevelId(attempt) === "LS04"
+      ? Boolean(completeLs04Modeled(payload.reason || "modeled-recovery"))
+      : Boolean(completeLs05Modeled(payload.reason || "modeled-recovery"));
+  }
+  attempt.phase = attempt.referencePlayed ? "replay-ready" : "reference-ready";
+  attempt.soundPauseContext = null;
+  setAudioBInputArmed(attempt, false);
+  persistAudioBAttempt(attempt);
+  renderAudioBAttempt(attempt);
+  return true;
+}
+
+function releaseAudioBInput(midi, source) {
+  const attempt = currentAudioBAttempt();
+  if (!attempt) return false;
+  if (source === "MIDI") return releaseAudioBMidiInput(attempt, midi);
+  if (!isMicrophoneSource(source)) return false;
+  return finishAudioBExternalInput(attempt, midi, source, (pending, transaction, options) => {
+    commitAudioBInput(attempt, pending, transaction, { ...options, external: true });
+  });
 }
 
 function scheduleLs05ResponseTimeout() {
@@ -11929,112 +12716,102 @@ function scheduleLs05AssistedTimeout() {
   }, LS05_ASSISTED_WAIT_MS);
 }
 
-function playLs05Reference() {
+function playLs05Reference({ recovery = false } = {}) {
   const attempt = ensureLs05Attempt();
-  if (!attempt || state.screen !== "garden") return;
+  if (!attempt || state.screen !== "garden") return null;
   clearLs05Timers();
-  attempt.phase = "reference";
-  persistLs05Attempt();
-  renderGardenScreen();
-  const played = playPianoNote(noteForMidi(60).frequency, { gain: 0.13, duration: 0.72 });
-  if (!played) {
-    attempt.referencePlayed = false;
-    attempt.soundPauseCount += 1;
-    attempt.phase = "sound-paused";
-    traceLs05Audio(attempt, "audio-unavailable", null, { reason: "reference" });
-    persistLs05Attempt();
-    renderGardenScreen();
-    return;
-  }
-  attempt.referencePlayed = true;
-  traceLs05Audio(attempt, "reference", 60);
-  persistLs05Attempt();
-  state.ls05Timer = setTimeout(() => {
-    state.ls05Timer = null;
-    playLs05Target("system-first");
-  }, 900);
+  return startAudioBTeachingSequence(attempt, {
+    context: "reference",
+    kind: "reference",
+    reason: "reference",
+    notes: [{ midi: 60, durationMs: 720, delayMs: 0 }],
+    payload: { originalReason: "reference", recovery },
+    scheduledPhase: "reference",
+    playingPhase: "reference",
+    onStarted: () => traceLs05Audio(attempt, "reference", 60, { recovery }),
+    onEnded: (transaction, playback, { returnQueued }) => {
+      attempt.referencePlayed = true;
+      attempt.phase = "replay-ready";
+      persistLs05Attempt();
+      renderGardenScreen();
+      if (returnQueued) return;
+      state.ls05Timer = setTimeout(() => {
+        state.ls05Timer = null;
+        if (audioBAttemptIsCurrent(attempt) && attempt.phase === "replay-ready") playLs05Target("system-first");
+      }, 900);
+    }
+  });
 }
 
-function playLs05Target(reason = "system") {
+function playLs05Target(reason = "system", { recovery = false, presentationCounted = false } = {}) {
   const attempt = ensureLs05Attempt();
   const targetMidi = ls05Target(attempt);
-  if (!attempt || targetMidi === null || state.screen !== "garden") return;
+  if (!attempt || targetMidi === null || state.screen !== "garden") return null;
   clearLs05Timers();
   attempt.respondingFlower = null;
-  attempt.phase = "target-playing";
-  persistLs05Attempt();
-  renderGardenScreen();
-  const played = playPianoNote(noteForMidi(targetMidi).frequency, { gain: 0.13, duration: 0.72 });
-  if (!played) {
-    attempt.soundPauseCount += 1;
-    attempt.phase = "sound-paused";
-    traceLs05Audio(attempt, "audio-unavailable", null, { reason, callIndex: attempt.callIndex });
-    persistLs05Attempt();
-    renderGardenScreen();
-    return;
-  }
-  if (reason === "child-replay") {
-    attempt.replayCountChild += 1;
-    attempt.callReplayCountChild += 1;
-  } else if (["resume", "system-replay"].includes(reason)) {
-    attempt.replayCountSystem += 1;
-    attempt.callReplayCountSystem += 1;
-  }
-  traceLs05Audio(attempt, "target", targetMidi, { reason, callIndex: attempt.callIndex });
-  persistLs05Attempt();
-  state.ls05Timer = setTimeout(() => {
-    state.ls05Timer = null;
-    attempt.phase = ["assisted", "candidate-outside"].includes(attempt.callRepairStage) ? "assisted-retry" : "awaiting-response";
-    if (attempt.phase === "awaiting-response" && !attempt.callFirstValidInput) attempt.callResponseStartedAt = new Date().toISOString();
-    persistLs05Attempt();
-    renderGardenScreen();
-    if (attempt.phase === "assisted-retry") scheduleLs05AssistedTimeout();
-    else scheduleLs05ResponseTimeout();
-  }, LS05_TARGET_PLAY_MS);
+  return startAudioBTeachingSequence(attempt, {
+    context: "target",
+    kind: "target",
+    reason,
+    notes: [{ midi: targetMidi, durationMs: 720, delayMs: 0 }],
+    payload: { targetMidi, callIndex: attempt.callIndex, originalReason: reason, recovery, presentationCounted },
+    scheduledPhase: "target-playing",
+    playingPhase: "target-playing",
+    onStarted: (transaction) => {
+      if (!transaction.payload?.presentationCounted) {
+        if (reason === "child-replay") {
+          attempt.replayCountChild += 1;
+          attempt.callReplayCountChild += 1;
+        } else if (["resume", "system-replay"].includes(reason)) {
+          attempt.replayCountSystem += 1;
+          attempt.callReplayCountSystem += 1;
+        }
+        if (transaction.payload) transaction.payload.presentationCounted = true;
+      }
+      traceLs05Audio(attempt, "target", targetMidi, { reason, callIndex: attempt.callIndex, recovery });
+    },
+    onEnded: (transaction, playback, { returnQueued }) => {
+      attempt.phase = audioBResponsePhaseForAttempt(attempt);
+      if (attempt.phase === "awaiting-response" && !attempt.callFirstValidInput) attempt.callResponseStartedAt = new Date().toISOString();
+      persistLs05Attempt();
+      renderGardenScreen();
+      if (!returnQueued) armAudioBResponse(attempt);
+    }
+  });
 }
 
 function resumeLs05Flow({ fromReload = false } = {}) {
   const attempt = ensureLs05Attempt();
   if (!attempt || state.screen !== "garden") return;
   clearLs05Timers();
-  if (fromReload && !["reference-ready", "reference"].includes(attempt.phase)) {
-    attempt.callTimingInterrupted = true;
-    attempt.callResponseStartedAt = null;
-    persistLs05Attempt();
-  }
-  if (attempt.phase === "modeled-playing" && attempt.pendingModeled) {
-    completeLs05Modeled(attempt.pendingModeled.reason, { targetAlreadyPlayed: true });
-    return;
+  if (!audioBPlaybackIsActive(attempt) && !audioBExternalInputIsActive(attempt)) clearAudioBStaleMidiHolds(attempt);
+  if (fromReload) {
+    if (!["reference-ready", "reference"].includes(attempt.phase)) {
+      attempt.callTimingInterrupted = true;
+      attempt.callResponseStartedAt = null;
+    }
+    normalizeAudioBAttemptForRecovery(attempt);
   }
   if (attempt.phase === "visual-assist") {
-    persistLs05Attempt();
-    renderGardenScreen();
-    return;
-  }
-  if (attempt.phase === "pair-compare" || attempt.phase === "wrong-known") {
-    const delay = attempt.phase === "pair-compare" ? 1500 : 1250;
-    persistLs05Attempt();
-    renderGardenScreen();
-    state.ls05FeedbackTimer = setTimeout(() => {
-      state.ls05FeedbackTimer = null;
-      if (!["pair-compare", "wrong-known"].includes(attempt.phase)) return;
-      attempt.phase = "awaiting-response";
-      persistLs05Attempt();
-      renderGardenScreen();
-      scheduleLs05ResponseTimeout();
-    }, delay);
-    return;
-  }
-  if (attempt.phase === "assisted-retry") {
-    attempt.assistedCueVisible = false;
-    persistLs05Attempt();
-    renderGardenScreen();
-    scheduleLs05AssistedTimeout();
+    armAudioBResponse(attempt);
     return;
   }
   if (attempt.phase === "sound-paused") {
     persistLs05Attempt();
     renderGardenScreen();
+    return;
+  }
+  if (["awaiting-response", "assisted-retry"].includes(attempt.phase)) {
+    armAudioBResponse(attempt);
+    return;
+  }
+  if (attempt.phase === "complete") {
+    persistLs05Attempt();
+    renderGardenScreen();
+    return;
+  }
+  if (attempt.phase === "correct-feedback" && !fromReload) {
+    playLs05Target("system-next");
     return;
   }
   if (fromReload) {
@@ -12262,7 +13039,7 @@ function renderLs04Screen() {
   els.gardenSpeechKicker.textContent = copy.kicker;
   els.gardenSpeechMain.textContent = copy.main;
   els.gardenSpeechSupport.textContent = copy.support;
-  const playing = ["reference", "target-playing", "wrong-feedback"].includes(attempt?.phase);
+  const playing = audioBPlaybackIsActive(attempt) || ["reference", "target-playing", "wrong-feedback", "child-echo-playing", "modeled-playing"].includes(attempt?.phase);
   els.listeningSource.classList.toggle("is-playing", playing);
   els.listeningSource.classList.toggle("is-sound-paused", attempt?.phase === "sound-paused");
   els.listeningCandidates.classList.toggle("is-scored", ["correct-feedback", "complete"].includes(attempt?.phase));
@@ -12348,7 +13125,7 @@ function renderLs05Screen() {
   els.gardenSpeechKicker.textContent = copy.kicker;
   els.gardenSpeechMain.textContent = copy.main;
   els.gardenSpeechSupport.textContent = copy.support;
-  const playing = ["reference", "target-playing", "wrong-known", "pair-compare", "modeled-playing"].includes(attempt?.phase);
+  const playing = audioBPlaybackIsActive(attempt) || ["reference", "target-playing", "wrong-known", "pair-compare", "modeled-playing", "child-echo-playing"].includes(attempt?.phase);
   els.listeningSource.classList.toggle("is-playing", playing);
   els.listeningSource.classList.toggle("is-sound-paused", attempt?.phase === "sound-paused");
   const flowerNodes = [...els.ls05FlowerArc.querySelectorAll(".ls05-flower")];
@@ -12379,7 +13156,9 @@ function renderLs05Screen() {
   }
   els.listeningReplay.disabled = playing || ["correct-feedback", "complete", "modeled-success"].includes(attempt?.phase);
   els.listeningReplay.hidden = attempt?.phase === "complete";
-  const visualAssistAllowed = attempt?.callRepairStage === "assisted" || (attempt?.phase === "sound-paused" && attempt?.soundPauseCount >= 2);
+  const visualAssistAllowed = (attempt?.callRepairStage === "assisted" && attempt?.inputArmed &&
+    !playing && !audioBExternalInputIsActive(attempt)) ||
+    (attempt?.phase === "sound-paused" && attempt?.soundPauseCount >= 2);
   els.ls05VisualAssist.hidden = !visualAssistAllowed || ["visual-assist", "correct-feedback", "modeled-playing", "modeled-success", "complete"].includes(attempt?.phase);
   els.listeningCallProgress.innerHTML = [0, 1, 2, 3, 4].map((index) => {
     const done = index < (attempt?.neutralProgress || 0);
@@ -13420,7 +14199,10 @@ function showGardenScreen({ recovery = false } = {}) {
   else if (currentListeningAction("LS05")) ensureLs05Attempt();
   else if (currentPairedListeningAction()) ensurePairedListeningAttempt();
   else restoreGardenPendingAttempt();
-  state.gardenInputArmed = state.gardenAudioAttempt ? state.gardenAudioAttempt.inputArmed === true : true;
+  const audioBAttempt = currentAudioBAttempt();
+  state.gardenInputArmed = state.gardenAudioAttempt
+    ? state.gardenAudioAttempt.inputArmed === true
+    : (audioBAttempt ? audioBAttempt.inputArmed === true : true);
   history.replaceState(null, "", `?mode=garden${sessionUrlSuffix()}`);
   render();
   if (currentLs08Action()) {
@@ -13570,6 +14352,19 @@ function showMapScreen() {
     queueAudioAMapReturn(audioAAttempt);
     return;
   }
+  const audioBAttempt = currentAudioBAttempt();
+  if (audioBAttempt && audioBExternalInputIsActive(audioBAttempt)) {
+    interruptAudioBExternalInput(audioBAttempt, "map-external-input");
+  }
+  if (audioBAttempt && audioBPlaybackIsActive(audioBAttempt)) {
+    queueAudioBMapReturn(audioBAttempt);
+    return;
+  }
+  if (state.screen === "garden" && audioBAttempt && audioBLevelId(audioBAttempt) === "LS05" && audioBAttempt.phase !== "complete") {
+    audioBAttempt.callTimingInterrupted = true;
+    audioBAttempt.callResponseStartedAt = null;
+    persistAudioBAttempt(audioBAttempt);
+  }
   const pendingLs08 = currentLs08Action()?.listeningAttempt;
   if (state.screen === "garden" && pendingLs08?.guideAudioPlaying && ["guide-first", "guide-second"].includes(pendingLs08.phase)) {
     queueLs08MapReturn(pendingLs08);
@@ -13609,16 +14404,6 @@ function showMapScreen() {
     persistLs08Attempt();
   }
   clearLs08Timers();
-  const pendingModeled = currentListeningAction("LS05")?.listeningAttempt;
-  if (state.screen === "garden" && pendingModeled?.phase === "modeled-playing" && pendingModeled.pendingModeled) {
-    completeLs05Modeled(pendingModeled.pendingModeled.reason, { targetAlreadyPlayed: true });
-    return;
-  }
-  if (state.screen === "garden" && pendingModeled && pendingModeled.phase !== "complete") {
-    pendingModeled.callTimingInterrupted = true;
-    pendingModeled.callResponseStartedAt = null;
-    persistLs05Attempt();
-  }
   const pendingPaired = currentPairedListeningAction()?.listeningAttempt;
   if (state.screen === "garden" && pendingPaired?.phase === "modeled-playing" && pendingPaired.pendingModeled) {
     completePairedListeningModeled(pendingPaired.pendingModeled.reason, { targetAlreadyPlayed: true });
@@ -14961,6 +15746,7 @@ async function toggleMicrophone() {
 function stopMicrophone() {
   if (!state.audio) return;
   interruptActiveAudioAExternalInput("microphone-stopped");
+  interruptActiveAudioBExternalInput("microphone-stopped");
   const audio = state.audio;
   cancelAnimationFrame(audio.raf);
   audio.stream.getTracks().forEach((track) => track.stop());
@@ -14991,6 +15777,8 @@ function listenLoop() {
   if (rmsValue < MIC_SIGNAL_RMS) {
     const gateResult = updateMicrophoneGate(audio, { now, rmsValue, detectedPitch: null });
     if (state.screen === "garden" && currentLs08Action() && gateResult.state === "quiet") {
+      releaseGardenInput(null, "麦克风");
+    } else if (state.screen === "garden" && (currentListeningAction("LS04") || currentListeningAction("LS05")) && gateResult.state === "quiet") {
       releaseGardenInput(null, "麦克风");
     } else if (state.screen === "chapter4" && currentChapter4Action("LP02") && gateResult.state === "quiet") {
       releaseGardenInput(null, "麦克风");
@@ -15281,16 +16069,19 @@ window.addEventListener("blur", () => {
   clearAllChapter4BubblePointerActivations();
   interruptTeachingPianoSequence("window-blur");
   interruptActiveAudioAExternalInput("window-blur");
+  interruptActiveAudioBExternalInput("window-blur");
 });
 document.addEventListener("visibilitychange", () => {
   if (document.visibilityState === "hidden") {
     interruptTeachingPianoSequence("document-hidden");
     interruptActiveAudioAExternalInput("document-hidden");
+    interruptActiveAudioBExternalInput("document-hidden");
   }
 });
 window.addEventListener("pagehide", () => {
   interruptTeachingPianoSequence("pagehide");
   interruptActiveAudioAExternalInput("pagehide");
+  interruptActiveAudioBExternalInput("pagehide");
 });
 document.addEventListener("keydown", (event) => {
   if (!event.metaKey && !event.ctrlKey && !event.altKey) unlockAudioFromGesture();
@@ -15416,13 +16207,25 @@ els.listeningReplay?.addEventListener("click", () => {
   if (currentListeningAction("LS05")) {
     const attempt = ensureLs05Attempt();
     if (!attempt) return;
+    if (audioBPlaybackIsActive(attempt)) return;
+    if (attempt.phase === "sound-paused") {
+      recoverAudioBAttempt();
+      return;
+    }
     if (!attempt.referencePlayed || attempt.phase === "reference-ready") playLs05Reference();
+    else if (attempt.phase === "replay-ready") playLs05Target("system-first");
     else playLs05Target("child-replay");
     return;
   }
   const attempt = ensureLs04Attempt();
   if (!attempt) return;
+  if (audioBPlaybackIsActive(attempt)) return;
+  if (attempt.phase === "sound-paused") {
+    recoverAudioBAttempt();
+    return;
+  }
   if (!attempt.referencePlayed || attempt.phase === "reference-ready") playLs04Reference();
+  else if (attempt.phase === "replay-ready") playLs04Target("system-first");
   else playLs04Target("child-replay");
 });
 els.ls05VisualAssist?.addEventListener("click", () => {
@@ -15556,9 +16359,8 @@ if (state.screen === "garden") {
     ensureLs08Attempt();
     setTimeout(() => resumeLs08Flow({ fromReload: true }), 0);
   } else if (currentListeningAction("LS04")) {
-    const attempt = ensureLs04Attempt();
-    attempt.phase = attempt.referencePlayed ? "replay-ready" : "reference-ready";
-    persistLs04Attempt();
+    ensureLs04Attempt();
+    setTimeout(() => resumeLs04Flow({ fromReload: true }), 0);
   } else if (currentListeningAction("LS05")) {
     ensureLs05Attempt();
     setTimeout(() => resumeLs05Flow({ fromReload: true }), 0);

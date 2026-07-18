@@ -163,7 +163,7 @@ try {
     const stable = await readRepairState(page);
     await page.screenshot({ path: `${screenshotPrefix}_${spec.id}_stable.png`, fullPage: false });
 
-    record(`${spec.id}: runtime is overhaul-345b-audio-a`, stable.version.includes("overhaul-345b-audio-a"), stable);
+    record(`${spec.id}: runtime is overhaul-345c-audio-b`, stable.version.includes("overhaul-345c-audio-b"), stable);
     record(`${spec.id}: repair state is explicit on app and stage`, stable.repairState === "repair" && stable.stageRepairState === "repair", stable);
     record(`${spec.id}: central staff target remains the main task`, stable.currentPadVisible && stable.currentPadText.includes("C") && !stable.currentPadText.includes("Do"), stable);
     record(`${spec.id}: stable repair has exactly two persistent guidance surfaces`, stable.guidanceCount === 2, stable);

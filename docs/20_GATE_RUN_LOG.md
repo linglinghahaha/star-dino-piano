@@ -2,6 +2,39 @@
 
 This file records concrete pass/fail evidence for UI, teaching, and polish gates. It is not a substitute for the acceptance rules in `15_ACCEPTANCE_GATES.md`; it is the evidence trail.
 
+## 2026-07-18 - AUDIO-B LS04-LS05 Browser Gate Evidence
+
+Baseline and identity:
+
+- Baseline: frozen AUDIO-A candidate `overhaul-345b-audio-a`; AUDIO-B candidate identity: `overhaul-345c-audio-b`.
+- Final runtime digest: `app.js` SHA-256 `E59D9F99C3C1A1406A180D3E88A899EEBD5846A0BCB43E3919973E77D9C3E74D`.
+- The shell loads `app.js?v=overhaul-345c-audio-b`; Service Worker cache `star-dino-pwa-overhaul-345c-audio-b` precaches that same URL. PWA shell evidence passed with the new identity.
+
+Scope and lifecycle evidence:
+
+- AUDIO-B covers only Chapter 3 LS04 and LS05. It reuses `playTeachingPianoSequence`; no new lesson-local AudioContext or wall-clock completion path was introduced.
+- Reference, hidden target, controlled touch/MIDI child echo, wrong repair, modeled completion, microphone external input, recovery, map queueing, and held-MIDI release all wait for verified start/end or enter `sound-paused`/`interrupted` without fabricated score, story action, or next-lesson advance.
+- Touch and local MIDI suppress the raw keyboard note while the controlled child echo owns that input, so one physical input produces one child voice. Wrong repair retains the one child voice followed by the target without overlap; microphone keeps accepted-onset-to-quiet external evidence with no local echo.
+- LS04 preserves its four C4/D4 calls and 3/4 stable threshold. LS05 preserves its seeded 2/2/1 C4/D4/E4 sequence, all-candidate coverage, one-child-replay rule, 4/5 stable threshold, and played/stable/retained semantics.
+- Map/reload recovery keeps the same call and logical source; held MIDI cannot rearm until every accepted note receives note-off. Late callbacks and queued map returns are idempotent, and neither LS05 nor LS06 auto-starts from an interrupted transaction.
+- No AUDIO-C, LP03+, course sequence/threshold, mastery, DOM/CSS/layout, media/runtime asset, or coordinate-contract change was introduced. Layout is unchanged, so the existing 344a coordinate contracts remain regression baselines and were not re-signed or renamed as AUDIO-B evidence.
+
+Final browser gates (all exit 0 on the final digest):
+
+- `check:audio-b` `46/46`; `check:chapter3-ls04` `39/39`; `check:chapter3-ls05` `66/66`; `check:audio-a` `66/66`.
+- `check:chapter3-ls08` `131/131`; `check:chapter4-lp01-lp02` `137/137`; `check:sessions` `74/74`; `check:clean-state` `124/124`; `check:m03-garden` `32/32`; `check:chapter3-visible` `74/74`.
+- `check:child-note-names` `224/224`; `check:audio-settings` `13/13`; `check:input-reliability` `12/12`; `check:pwa-shell` `8/8`.
+- Version-sensitive shell gates: `check:workshop-identity` `36/36`; `check:assembly-blueprint` `39/39`; `check:m01-hierarchy` `17/17`; `check:roof-route` `97/97`; `check:staff-readability` `13/13`; `check:staff-repair` `27/27`; `check:xingya-suit` `29/29`.
+- After the pre-existing port 4173 listener returned `ERR_EMPTY_RESPONSE`, subsequent browser scripts ran from a clean isolated local static server; no source, test timing, or assertion was changed to accommodate that transport fault.
+
+Static and isolation evidence:
+
+- `check:quick` passed syntax, note matrix, copy integrity, the 22-check audio contract audit, and bundle audit. `check:bundle:strict` passed with 42 runtime files and 1,641,265 runtime-asset bytes.
+- `node --check` passed `app.js`, `service-worker.js`, and every changed AUDIO-B test script. `git diff --check` and `git diff --cached --check` passed; the former only emitted Git's non-failing CRLF normalization warning for `index.html`.
+- Runtime files (`app.js`, shell, Service Worker, manifest, and loaded runtime CSS) have zero matches for `concepts/`, `audio/`, Grok/Gemini/Sora, technical preview, or prohibited-project identifiers. Historical docs and developer tooling are not represented as a whole-repository literal-zero claim.
+
+Status: browser/runtime evidence is `passed`; no browser-test contradiction was found. Candidate files remain unstaged and uncommitted pending supervisor review. Physical iPad Safari, real MIDI hardware, acoustic-piano microphone input, manual speaker/headphone listening review, teacher review, 3-5 child observation, source/provenance review, external similarity review, and release clearance remain `missing`.
+
 ## 2026-07-17 - AUDIO-A 345b Browser Gate Evidence
 
 Baseline and identity:

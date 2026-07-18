@@ -176,7 +176,7 @@ record("Explicit map gesture creates one independent formal C3-03 session", curr
 const sequence = current.attempt?.sequence || [];
 record("Seeded sequence has four calls with C4 and D4 exactly twice", sequence.length === 4 && sequence.filter((midi) => midi === 60).length === 2 && sequence.filter((midi) => midi === 62).length === 2, sequence);
 record("Seeded sequence never has more than two identical adjacent calls", !sequence.some((midi, index) => index >= 2 && midi === sequence[index - 1] && midi === sequence[index - 2]), sequence);
-record("Reference is persisted but not scored", current.attempt?.referencePlayed === true && current.attempt?.scoredCalls?.length === 0 && current.attempt?.correctCount === 0, current.attempt);
+record("Reference is truly started but remains unscored until its verified end", current.attempt?.referencePlayed === false && current.attempt?.scoredCalls?.length === 0 && current.attempt?.correctCount === 0 && current.attempt?.audioLifecycle?.some((event) => event.kind === "started" && event.context === "reference" && Boolean(event.startedAt)) && !current.attempt?.audioTransaction?.endedAt, current.attempt);
 await main.page.screenshot({ path: path.join(screenshotDir, "ls04_reference_1024x768.png") });
 
 await waitForPhase(main.page, "target-playing");
@@ -198,15 +198,15 @@ const refreshSessionId = current.active.sessionId;
 await main.page.reload({ waitUntil: "domcontentloaded", timeout: 12000 });
 await main.page.waitForSelector("#bootLoader", { state: "hidden", timeout: 12000 });
 current = await view(main.page);
-record("Refresh preserves the same session, seed and current call without autoplay scoring", current.active?.sessionId === refreshSessionId && current.attempt?.sequence.join(",") === refreshSequence && current.attempt?.callIndex === 0 && current.phase === "replay-ready", current);
-await main.page.locator("#listeningReplay").click();
-await waitForPhase(main.page, "awaiting-response");
+record("Refresh preserves the same session, seed and completed target response state without autoplay scoring", current.active?.sessionId === refreshSessionId && current.attempt?.sequence.join(",") === refreshSequence && current.attempt?.callIndex === 0 && current.phase === "awaiting-response" && current.attempt?.inputArmed === true && current.attempt?.scoredCalls?.length === 0, current);
 
 await press(main.page, wrong);
 await waitForPhase(main.page, "awaiting-response");
 current = await view(main.page);
-const trace = current.attempt.audioTrace.slice(-2);
-record("First wrong records child input sound before target replay", trace[0]?.kind === "child-input" && trace[0]?.midi === wrong && trace[1]?.kind === "target-replay" && trace[1]?.midi === target, trace);
+const trace = current.attempt.audioTrace;
+const childTraceIndex = trace.findLastIndex((event) => event.kind === "child-input" && event.midi === wrong);
+const repairTraceIndex = trace.findLastIndex((event) => event.kind === "target-replay" && event.midi === target);
+record("First wrong records the child echo before the target-only repair", childTraceIndex >= 0 && repairTraceIndex > childTraceIndex, { trace, childTraceIndex, repairTraceIndex });
 await main.page.screenshot({ path: path.join(screenshotDir, "ls04_wrong_1024x768.png") });
 
 const sessionId = current.active.sessionId;
@@ -222,8 +222,13 @@ record("Map re-entry preserves seed, wrong count and evidence", current.active.s
 while ((await view(main.page)).attempt?.callIndex < 4) {
   current = await waitForPhase(main.page, ["awaiting-response", "assisted"]);
   const midi = current.attempt.sequence[current.attempt.callIndex];
+  const finalCall = current.attempt.callIndex === current.attempt.sequence.length - 1;
   await press(main.page, midi);
-  if (current.attempt.callIndex < 3) await main.page.waitForTimeout(700);
+  if (finalCall) {
+    await waitForPhase(main.page, "complete");
+    break;
+  }
+  await waitForPhase(main.page, "target-playing");
 }
 await waitForPhase(main.page, "complete");
 const completedScene = await view(main.page);
@@ -305,7 +310,7 @@ for (let count = 0; count < 3; count += 1) {
   current = await view(timeout.page);
   const wrongMidi = current.attempt.sequence[current.attempt.callIndex] === 60 ? 62 : 60;
   await press(timeout.page, wrongMidi);
-  await waitForPhase(timeout.page, count === 2 ? "assisted" : "awaiting-response");
+  await waitForPhase(timeout.page, count === 2 ? "assisted" : "awaiting-response", 12000);
 }
 await timeout.page.waitForFunction(() => document.body.classList.contains("screen-map"), null, { timeout: 8000 });
 current = await view(timeout.page);
@@ -320,9 +325,12 @@ await waitForPhase(midi.page, "awaiting-response");
 await midi.page.evaluate(() => document.querySelector("#midiButton")?.click());
 current = await view(midi.page);
 await midi.page.evaluate((note) => window.__emitMidi(note), current.attempt.sequence[current.attempt.callIndex]);
-await midi.page.waitForTimeout(120);
+await midi.page.waitForFunction(() => {
+  const attempt = currentListeningAction("LS04")?.listeningAttempt;
+  return attempt?.callIndex === 1 && attempt.childInputs?.length === 1 && Boolean(attempt.audioTransaction?.endedAt);
+}, null, { timeout: 12000 });
 current = await view(midi.page);
-record("MIDI note-on advances one LS04 call through the same evidence path", current.attempt.callIndex === 1 && current.attempt.inputRoutes.MIDI === 1, current.attempt);
+record("MIDI note-on advances one LS04 call only after its controlled child echo ends", current.attempt.callIndex === 1 && current.attempt.inputRoutes.MIDI === 1 && current.attempt.childInputs.length === 1 && current.attempt.audioTransaction?.context === "child-echo" && Boolean(current.attempt.audioTransaction?.endedAt), current.attempt);
 await midi.context.close();
 
 const microphone = await makePage();
@@ -331,8 +339,11 @@ await startLs04(microphone.page);
 for (let index = 0; index < 4; index += 1) {
   current = await waitForPhase(microphone.page, "awaiting-response");
   const targetMidi = current.attempt.sequence[current.attempt.callIndex];
-  await microphone.page.evaluate((midi) => window.handleInput(midi, "麦克风"), targetMidi);
-  if (index < 3) await microphone.page.waitForTimeout(700);
+  await microphone.page.evaluate((midi) => {
+    window.handleInput(midi, "麦克风");
+    window.releaseGardenInput(midi, "麦克风");
+  }, targetMidi);
+  if (index < 3) await waitForPhase(microphone.page, ["correct-feedback", "target-playing", "awaiting-response"]);
 }
 await microphone.page.waitForFunction(() => document.body.classList.contains("screen-map"), null, { timeout: 6000 });
 current = await view(microphone.page);

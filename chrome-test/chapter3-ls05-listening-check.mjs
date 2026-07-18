@@ -75,6 +75,7 @@ async function makePage(viewport = { width: 1024, height: 768 }, { failAudioCont
     const input = { onmidimessage: null };
     navigator.requestMIDIAccess = async () => ({ inputs: new Map([["ls05-midi", input]]), onstatechange: null });
     window.__emitMidi = (note, velocity = 100) => input.onmidimessage?.({ data: [0x90, note, velocity] });
+    window.__emitMidiOff = (note) => input.onmidimessage?.({ data: [0x80, note, 0] });
     if (failAudioContext) {
       class FailedAudioContext { constructor() { throw new Error("simulated AudioContext failure"); } }
       window.AudioContext = FailedAudioContext;
@@ -196,7 +197,7 @@ async function start(page) {
     if (document.querySelector("#gardenScene")?.dataset.listeningPhase !== "reference") return false;
     const runtime = JSON.parse(localStorage.getItem("starDinoSessionRuntime") || "{}");
     const attempt = runtime.active?.actions?.[runtime.active.actionIndex || 0]?.listeningAttempt;
-    return attempt?.referencePlayed === true;
+    return attempt?.audioLifecycle?.some((event) => event.kind === "started" && event.context === "reference" && Boolean(event.startedAt));
   }, null, { timeout: 8000 });
   await page.locator("#gardenRestMarker").click();
   await referenceWait;
@@ -209,12 +210,26 @@ async function completeRemaining(page, source = "屏幕") {
     if (!snapshot.active || snapshot.attempt?.callIndex >= 5) return;
     const waiting = await waitPhase(page, ["awaiting-response", "assisted-retry", "visual-assist"]);
     const midi = waiting.attempt.sequence[waiting.attempt.callIndex];
+    const terminalCall = waiting.attempt.callIndex === waiting.attempt.sequence.length - 1;
     if (source === "屏幕") await press(page, midi);
     else await page.evaluate(({ note, route }) => window.handleInput(note, route), { note: midi, route: source });
+    if (terminalCall) {
+      await waitPhase(page, "complete");
+      return;
+    }
     const after = await view(page);
     if (!after.active || after.attempt?.callIndex >= 5) return;
     await waitPhase(page, ["correct-feedback", "target-playing", "awaiting-response"]);
   }
+}
+
+async function waitForLs05ResponseRearm(page, phase = "assisted-retry") {
+  await page.waitForFunction((expectedPhase) => {
+    const attempt = currentListeningAction("LS05")?.listeningAttempt;
+    return attempt?.phase === expectedPhase && attempt.inputArmed === true &&
+      Boolean(attempt.audioTransaction?.endedAt) && !state.teachingPlayback;
+  }, phase, { timeout: 12000 });
+  return view(page);
 }
 
 async function reachModeledPlaying(page) {
@@ -227,7 +242,10 @@ async function reachModeledPlaying(page) {
     await press(page, wrong);
     if (index === 0) { await waitPhase(page, "wrong-known"); await waitPhase(page, "awaiting-response"); }
     if (index === 1) { await waitPhase(page, "pair-compare"); await waitPhase(page, "awaiting-response"); }
-    if (index === 2) await waitPhase(page, "assisted-retry");
+    if (index === 2) {
+      await waitPhase(page, "assisted-retry");
+      await waitForLs05ResponseRearm(page);
+    }
   }
   snapshot = await waitPhase(page, "modeled-playing");
   return { snapshot, target, wrong };
@@ -274,7 +292,7 @@ let current = await view(main.page);
 record("LS04 rest exposes an enabled LS05 map entry without creating C3-04", current.marker.includes("三朵花") && !current.markerDisabled && current.mapProgress.includes("花粉环 0/5") && !current.active, current);
 current = await start(main.page);
 record("Explicit child gesture creates one formal C3-04 action", current.active?.bundleId === "C3-04" && current.active.actions?.length === 1 && current.active.actions[0].targetId === "LS05", current.active);
-record("C reference is visible and audible but not scored", current.phase === "reference" && current.speech.includes("C") && current.speech.includes("Do") && current.attempt.referencePlayed && current.attempt.scoredCalls.length === 0, current);
+record("C reference is visibly started but not yet scored or completed", current.phase === "reference" && current.speech.includes("C") && current.speech.includes("Do") && current.attempt.referencePlayed === false && current.attempt.audioLifecycle.some((event) => event.kind === "started" && event.context === "reference" && Boolean(event.startedAt)) && current.attempt.scoredCalls.length === 0, current);
 await main.page.screenshot({ path: path.join(screenshotDir, "ls05_reference_1024x768.png") });
 
 const sequence = current.attempt.sequence;
@@ -327,9 +345,7 @@ record("Same-session re-entry does not replay reference or change sequence", cur
 await main.page.reload({ waitUntil: "domcontentloaded", timeout: 20000 });
 await main.page.waitForSelector("#bootLoader", { state: "hidden", timeout: 20000 });
 current = await view(main.page);
-record("Refresh preserves attempt and waits for explicit replay", current.active?.sessionId === sessionId && current.attempt.sequence.join(",") === sequenceText && current.phase === "replay-ready", current);
-await main.page.locator("#listeningReplay").click();
-await waitPhase(main.page, "awaiting-response");
+record("Refresh preserves the completed replay response state without scoring or source drift", current.active?.sessionId === sessionId && current.attempt.sequence.join(",") === sequenceText && current.phase === "awaiting-response" && current.attempt.inputArmed === true && current.attempt.replayCountChild === 1 && current.attempt.scoredCalls.length === 0, current);
 
 const wrong = firstTarget === 60 ? 62 : 60;
 await press(main.page, wrong);
@@ -342,20 +358,24 @@ current = await waitPhase(main.page, "pair-compare");
 record("Second confusion enters an equal pair comparison", current.attempt.callRepairStage === "pair-compare" && current.compare.includes(noteName(wrong)) && current.compare.includes(noteName(firstTarget)) && current.targetNodeCount === 0, current);
 await main.page.screenshot({ path: path.join(screenshotDir, "ls05_pair_1024x768.png") });
 const pairEvidence = { sessionId: current.active.sessionId, seed: current.attempt.seed, sequence: current.attempt.sequence.join(","), wrong: current.attempt.callWrongCount, pair: current.attempt.callConfusionPair.join(",") };
+const pairPlaybackId = current.attempt.audioTransaction?.playbackId || null;
 await main.page.locator("#mapReturn").click();
+await main.page.waitForFunction(() => document.body.classList.contains("screen-map"), null, { timeout: 12000 });
 await main.page.locator("#gardenRestMarker").click();
-current = await waitPhase(main.page, "pair-compare");
-record("Pair comparison survives map pause with the same confusion evidence", current.active.sessionId === pairEvidence.sessionId && current.attempt.seed === pairEvidence.seed && current.attempt.sequence.join(",") === pairEvidence.sequence && current.attempt.callWrongCount === pairEvidence.wrong && current.attempt.callRepairStage === "pair-compare" && current.attempt.callConfusionPair.join(",") === pairEvidence.pair && current.attempt.correctCount === 0, current.attempt);
-await waitPhase(main.page, "awaiting-response");
+current = await waitPhase(main.page, "awaiting-response");
+const pairRepairEnded = current.attempt.audioLifecycle?.filter((event) => event.kind === "ended" && event.context === "wrong-repair" && event.playbackId === pairPlaybackId) || [];
+record("Queued map return waits for the pair repair end and retains the same confusion evidence", current.active.sessionId === pairEvidence.sessionId && current.attempt.seed === pairEvidence.seed && current.attempt.sequence.join(",") === pairEvidence.sequence && current.attempt.callWrongCount === pairEvidence.wrong && current.attempt.callRepairStage === "pair-compare" && current.attempt.callConfusionPair.join(",") === pairEvidence.pair && current.attempt.correctCount === 0 && pairRepairEnded.length === 1 && current.attempt.inputArmed === true, { attempt: current.attempt, pairRepairEnded });
 await press(main.page, wrong);
 current = await waitPhase(main.page, "assisted-retry");
-record("Third wrong enters bounded strong assisted and exposes only the explicit support cue", current.attempt.strongCueUsed && current.attempt.callRepairStage === "assisted" && current.targetVisible === "true" && current.targetNodeCount >= 1 && !current.assistHidden, current);
+record("Third wrong enters bounded strong assisted while its target repair is still the only active cue", current.attempt.strongCueUsed && current.attempt.callRepairStage === "assisted" && current.targetVisible === "true" && current.targetNodeCount >= 1 && current.assistHidden, current);
 await main.page.screenshot({ path: path.join(screenshotDir, "ls05_assisted_1024x768.png") });
+current = await waitForLs05ResponseRearm(main.page);
 const assistedWrongCount = current.attempt.callWrongCount;
 const assistedPair = current.attempt.callConfusionPair.join(",");
 await main.page.locator("#mapReturn").click();
+await main.page.waitForFunction(() => document.body.classList.contains("screen-map"), null, { timeout: 12000 });
 await main.page.locator("#gardenRestMarker").click();
-current = await waitPhase(main.page, "assisted-retry");
+current = await waitForLs05ResponseRearm(main.page);
 record("Assisted recovery keeps strong evidence and equal C D E boundary without replaying the short key pulse", current.attempt.callWrongCount === assistedWrongCount && current.attempt.callRepairStage === "assisted" && current.attempt.callConfusionPair.join(",") === assistedPair && current.attempt.strongCueUsed && current.compare.replace(/\s+/g, "") === "CDE" && current.targetVisible === "false" && current.attempt.correctCount === 0, current);
 await press(main.page, firstTarget);
 await waitPhase(main.page, ["correct-feedback", "target-playing", "awaiting-response"]);
@@ -386,7 +406,10 @@ for (let index = 0; index < 4; index += 1) {
   await press(modeled.page, modeledWrong);
   if (index < 2) await waitPhase(modeled.page, index === 0 ? "wrong-known" : "pair-compare");
   if (index < 2) await waitPhase(modeled.page, "awaiting-response");
-  if (index === 2) await waitPhase(modeled.page, "assisted-retry");
+  if (index === 2) {
+    await waitPhase(modeled.page, "assisted-retry");
+    await waitForLs05ResponseRearm(modeled.page);
+  }
 }
 await modeled.page.waitForFunction(() => document.body.classList.contains("screen-map"), null, { timeout: 8000 });
 current = await view(modeled.page);
@@ -436,10 +459,13 @@ current = (await reachModeledPlaying(atomicRefresh.page)).snapshot;
 const atomicSequence = current.attempt.sequence.join(",");
 await atomicRefresh.page.reload({ waitUntil: "domcontentloaded", timeout: 20000 });
 await atomicRefresh.page.waitForSelector("#bootLoader", { state: "hidden", timeout: 20000 });
-await atomicRefresh.page.waitForFunction(() => document.body.classList.contains("screen-map"), null, { timeout: 12000 }).catch(() => {});
+current = await waitPhase(atomicRefresh.page, "sound-paused");
+record("Refresh keeps a pending modeled repair interrupted until one explicit recovery", current.attempt.audioTransaction?.context === "wrong-repair" && current.attempt.audioTransaction?.endedAt === null && Boolean(current.attempt.audioTransaction?.interruptedAt) && current.attempt.pendingModeled?.targetAlreadyPlayed === true && current.runtime.history.at(-1)?.bundleId === "C2-03", current);
+await atomicRefresh.page.locator("#listeningReplay").click();
+await atomicRefresh.page.waitForFunction(() => document.body.classList.contains("screen-map"), null, { timeout: 12000 });
 current = await view(atomicRefresh.page);
 const atomicRefreshResume = current.chapter3.resume?.ls05Attempt;
-record("Refresh consumes the same pending modeled call exactly once", current.runtime.history.at(-1)?.endReason === "modeled-safe-rest" && atomicRefreshResume?.sequence.join(",") === atomicSequence && atomicRefreshResume?.modeledInputs?.length === 1 && atomicRefreshResume?.callIndex === 1 && atomicRefreshResume?.neutralProgress === 1 && atomicRefreshResume?.audioTrace?.filter((event) => event.kind === "modeled").length === 1, { history: current.runtime.history.at(-1), resume: atomicRefreshResume });
+record("Explicit refresh recovery consumes the same pending modeled call exactly once", current.runtime.history.at(-1)?.endReason === "modeled-safe-rest" && atomicRefreshResume?.sequence.join(",") === atomicSequence && atomicRefreshResume?.modeledInputs?.length === 1 && atomicRefreshResume?.callIndex === 1 && atomicRefreshResume?.neutralProgress === 1 && atomicRefreshResume?.audioTrace?.filter((event) => event.kind === "modeled").length === 1, { history: current.runtime.history.at(-1), resume: atomicRefreshResume });
 await atomicRefresh.context.close();
 await restartBrowser();
 
@@ -454,6 +480,7 @@ let repairedDuplicate = false;
 while ((await view(stablePage.page)).attempt?.callIndex < 5) {
   current = await waitPhase(stablePage.page, ["awaiting-response", "assisted-retry"]);
   const target = current.attempt.sequence[current.attempt.callIndex];
+  const terminalCall = current.attempt.callIndex === current.attempt.sequence.length - 1;
   if (!repairedDuplicate && target === duplicateMidi) {
     const miss = target === 60 ? 62 : 60;
     await press(stablePage.page, miss);
@@ -464,7 +491,11 @@ while ((await view(stablePage.page)).attempt?.callIndex < 5) {
   } else {
     await press(stablePage.page, target);
   }
-  if ((await view(stablePage.page)).attempt?.callIndex < 5) await waitPhase(stablePage.page, ["correct-feedback", "target-playing", "awaiting-response"]);
+  if (terminalCall) {
+    await waitPhase(stablePage.page, "complete");
+    break;
+  }
+  await waitPhase(stablePage.page, ["correct-feedback", "target-playing", "awaiting-response"]);
 }
 await waitPhase(stablePage.page, "complete");
 await stablePage.page.screenshot({ path: path.join(screenshotDir, "ls05_complete_1366x1024.png") });
@@ -487,7 +518,11 @@ await seed(mic.page);
 await start(mic.page);
 for (let index = 0; index < 5; index += 1) {
   current = await waitPhase(mic.page, "awaiting-response");
-  await mic.page.evaluate((midi) => window.handleInput(midi, "麦克风"), current.attempt.sequence[current.attempt.callIndex]);
+  await mic.page.evaluate((midi) => {
+    window.handleInput(midi, "麦克风");
+    window.releaseGardenInput(midi, "麦克风");
+  }, current.attempt.sequence[current.attempt.callIndex]);
+  if (index < 4) await waitPhase(mic.page, ["correct-feedback", "target-playing", "awaiting-response"]);
 }
 await mic.page.waitForFunction(() => document.body.classList.contains("screen-map"), null, { timeout: 8000 });
 current = await view(mic.page);
@@ -539,12 +574,18 @@ const octave = await makePage();
 await seed(octave.page);
 await start(octave.page);
 await waitPhase(octave.page, "awaiting-response");
-await octave.page.evaluate(() => window.handleInput(72, "MIDI"));
+await octave.page.evaluate(() => {
+  window.handleInput(72, "MIDI");
+  window.releaseGardenInput(72, "MIDI");
+});
 current = await waitPhase(octave.page, "wrong-known");
 const octaveTrace = current.attempt.audioTrace.findLast((event) => event.kind === "child-input");
 record("Wrong-octave MIDI replays its real C5 frequency and never counts as correct", octaveTrace?.midi === 72 && Math.abs(octaveTrace.frequency - 523.251) < 0.02 && current.attempt.correctCount === 0 && current.attempt.totalWrongCount === 1, { octaveTrace, attempt: current.attempt });
 await waitPhase(octave.page, "awaiting-response");
-await octave.page.evaluate(() => window.handleInput(72, "MIDI"));
+await octave.page.evaluate(() => {
+  window.handleInput(72, "MIDI");
+  window.releaseGardenInput(72, "MIDI");
+});
 current = await waitPhase(octave.page, "assisted-retry");
 record("Repeated wrong-octave input enters candidate-outside strong repair instead of a one-card pair", current.attempt.callRepairStage === "candidate-outside" && current.attempt.callOutOfCandidateRepair === true && current.attempt.strongCueUsed === true && current.compare.replace(/\s+/g, "") === "CDE" && current.compareItems.length === 3 && current.attempt.callConfusionPair.includes(72), current);
 await octave.context.close();
@@ -553,10 +594,16 @@ const blackKey = await makePage();
 await seed(blackKey.page);
 await start(blackKey.page);
 await waitPhase(blackKey.page, "awaiting-response");
-await blackKey.page.evaluate(() => window.handleInput(61, "MIDI"));
+await blackKey.page.evaluate(() => {
+  window.handleInput(61, "MIDI");
+  window.releaseGardenInput(61, "MIDI");
+});
 await waitPhase(blackKey.page, "wrong-known");
 await waitPhase(blackKey.page, "awaiting-response");
-await blackKey.page.evaluate(() => window.handleInput(61, "MIDI"));
+await blackKey.page.evaluate(() => {
+  window.handleInput(61, "MIDI");
+  window.releaseGardenInput(61, "MIDI");
+});
 current = await waitPhase(blackKey.page, "assisted-retry");
 const blackTrace = current.attempt.audioTrace.slice(-2);
 record("Repeated black-key input keeps real audio evidence and uses candidate-outside strong repair", current.attempt.callRepairStage === "candidate-outside" && current.attempt.callOutOfCandidateRepair === true && current.compareItems.length === 3 && current.targetNodeCount >= 1 && blackTrace[0]?.kind === "child-input" && blackTrace[0]?.midi === 61 && blackTrace[1]?.kind === "target-replay", current);
@@ -575,12 +622,18 @@ for (let index = 0; index < 3; index += 1) {
   await waitPhase(visual.page, index === 0 ? "wrong-known" : (index === 1 ? "pair-compare" : "assisted-retry"));
   if (index < 2) await waitPhase(visual.page, "awaiting-response");
 }
+await visual.page.waitForFunction(() => {
+  const attempt = currentListeningAction("LS05")?.listeningAttempt;
+  return attempt?.phase === "assisted-retry" && attempt.inputArmed === true &&
+    Boolean(attempt.audioTransaction?.endedAt) && !state.teachingPlayback;
+}, null, { timeout: 12000 });
 await visual.page.locator("#ls05VisualAssist").click();
 current = await waitPhase(visual.page, "visual-assist");
 record("Visual assist is explicit, target-visible, and exits hidden-listening scoring", current.attempt.accessibilityVisualAssist && current.targetVisible === "true" && current.compare.includes(noteName(visualTarget)), current);
 await visual.page.screenshot({ path: path.join(screenshotDir, "ls05_visual_assist_1194x834.png") });
 const visualEvidence = { sessionId: current.active.sessionId, seed: current.attempt.seed, sequence: current.attempt.sequence.join(","), callIndex: current.attempt.callIndex, correctCount: current.attempt.correctCount, wrongCount: current.attempt.totalWrongCount };
 await visual.page.locator("#mapReturn").click();
+await visual.page.waitForFunction(() => document.body.classList.contains("screen-map"), null, { timeout: 12000 });
 await visual.page.locator("#gardenRestMarker").click();
 current = await waitPhase(visual.page, "visual-assist");
 record("Visual assist survives map pause without replay or evidence drift", current.active.sessionId === visualEvidence.sessionId && current.attempt.seed === visualEvidence.seed && current.attempt.sequence.join(",") === visualEvidence.sequence && current.attempt.callIndex === visualEvidence.callIndex && current.attempt.correctCount === visualEvidence.correctCount && current.attempt.totalWrongCount === visualEvidence.wrongCount && current.attempt.accessibilityVisualAssist && current.targetVisible === "true", current.attempt);
@@ -612,6 +665,7 @@ await midi.page.locator("#parentClose").click();
 current = await view(midi.page);
 const midiTarget = current.attempt.sequence[0];
 await midi.page.evaluate((note) => window.__emitMidi(note), midiTarget);
+await midi.page.evaluate((note) => window.__emitMidiOff(note), midiTarget);
 current = await waitPhase(midi.page, ["correct-feedback", "target-playing", "awaiting-response"]);
 record("MIDI note-on advances through the same LS05 evidence path", current.attempt.callIndex === 1 && current.attempt.inputRoutes.MIDI === 1 && current.attempt.childInputs[0]?.source === "MIDI", current.attempt);
 await midi.context.close();
@@ -717,6 +771,7 @@ let missedSingleton = false;
 while ((await view(missingCoverage.page)).attempt?.callIndex < 5) {
   current = await waitPhase(missingCoverage.page, "awaiting-response");
   const target = current.attempt.sequence[current.attempt.callIndex];
+  const terminalCall = current.attempt.callIndex === current.attempt.sequence.length - 1;
   if (!missedSingleton && target === singletonMidi) {
     const miss = target === 60 ? 62 : 60;
     await press(missingCoverage.page, miss);
@@ -727,8 +782,11 @@ while ((await view(missingCoverage.page)).attempt?.callIndex < 5) {
   } else {
     await press(missingCoverage.page, target);
   }
-  const after = await view(missingCoverage.page);
-  if (after.attempt?.callIndex < 5) await waitPhase(missingCoverage.page, ["correct-feedback", "target-playing", "awaiting-response"]);
+  if (terminalCall) {
+    await waitPhase(missingCoverage.page, "complete");
+    break;
+  }
+  await waitPhase(missingCoverage.page, ["correct-feedback", "target-playing", "awaiting-response"]);
 }
 await missingCoverage.page.waitForFunction(() => document.body.classList.contains("screen-map"), null, { timeout: 8000 });
 current = await view(missingCoverage.page);

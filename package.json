@@ -22,6 +22,7 @@
     "check:workshop-identity": "node tools/with-playwright-path.mjs chrome-test/workshop-identity-telemetry-check.mjs http://127.0.0.1:4173/ screenshots/workshop_identity_latest",
     "check:m03-garden": "node tools/with-playwright-path.mjs chrome-test/m03-garden-narrow-check.mjs http://127.0.0.1:4173/ screenshots/m03_garden_340c",
     "check:audio-a": "node tools/with-playwright-path.mjs chrome-test/audio-a-m03-ls01-ls03-check.mjs http://127.0.0.1:4173/",
+    "check:audio-b": "node tools/with-playwright-path.mjs chrome-test/audio-b-lifecycle-check.mjs http://127.0.0.1:4173/",
     "check:chapter3-visible": "node tools/with-playwright-path.mjs chrome-test/chapter3-visible-check.mjs http://127.0.0.1:4173/ screenshots/chapter3_visible_340a",
     "check:chapter3-ls04": "node tools/with-playwright-path.mjs chrome-test/chapter3-ls04-listening-check.mjs http://127.0.0.1:4173/ screenshots/chapter3_ls04_340a",
     "check:chapter3-ls05": "node tools/with-playwright-path.mjs chrome-test/chapter3-ls05-listening-check.mjs http://127.0.0.1:4173/ screenshots/chapter3_ls05_341a",
