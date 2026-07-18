@@ -430,8 +430,8 @@
 
 | 任务 | 当前状态 | 当前唯一工作 | 主管现在应做什么 | 下一次允许发消息的触发点 |
 | --- | --- | --- | --- | --- |
-| 课程故事/主管 | `active / 346a approved browser baseline / C4-R01A dispatch` | 维护课程、故事、成熟 App 总账本与唯一放行裁决；先冻结 R01A 节奏、公平、隔离和证据合同，再独立验收 | 不写运行状态机或媒体；只在会虚构教学证据、串项目、改课程、挂死门禁或污染来源的 P0/P1 时介入 | R01A 正式冻结回执；Grok 额度外部状态变化 |
-| 原型/UI | `idle / overhaul-346a-lp03 accepted / commit cedc384` | 下一次只实现 `docs/48` 的 C4-R01A 调度核心 | 不做 LP04、C4-R01B、完整咚咚、低音谱表、左手、美术升级或媒体接入；不得回改 LP01-LP03 和 Chapter 1-3 证据 | 收到主管 R01A 单一工作单后启动；完成专项、合同、共享回归再冻结回报 |
+| 课程故事/主管 | `active / 346a approved browser baseline / C4-R01A independently supervising` | 维护课程、故事、成熟 App 总账本与唯一放行裁决；R01A 已派发，等待冻结回执后只读复核节奏、公平、隔离和证据 | 不写运行状态机或媒体；只在会虚构教学证据、串项目、改课程、挂死门禁或污染来源的 P0/P1 时介入 | R01A 阶段/P1 或正式冻结回执；Grok 额度外部状态变化 |
+| 原型/UI | `active / C4-R01A dispatched from efe668d / runtime baseline cedc384` | 只实现 `docs/48` 的 C4-R01A 调度核心、隔离夹具和浏览器门禁 | 不做 LP04、C4-R01B、完整咚咚、低音谱表、左手、美术升级或媒体接入；不得回改 LP01-LP03 和 Chapter 1-3 证据 | 只有 P0/P1 或完成专项、合同、共享回归后才回报；普通中间建议不打断 |
 | 动画/语音/音效 | `idle / Grok hard-paused / LP03 offline composite audit independently ruled` | 保留 Batch20 一次 402/403 失败证据及 LP03 三条既有原片 source-only 裁决；不再发供应商调用 | 不改 runtime/课程/主管文档，不上传录音或个人资料，不生成、不预检额度、不重试/换号/新建批次；三条 LP03 素材不得复制到 runtime | 用户以后明确确认 Grok 额度恢复；或主管下发不依赖供应商的新离线证据工作单 |
 | 用户/真机/儿童证据 | `protocols_ready / participants_and_devices_waiting` | `docs/37` 已锁定教师/儿童观察；`docs/38` 已锁定实体 iPad、MIDI、麦克风和音频测试 | 不要求现在提供私密录音、孩子资料或伪造真机截图；先让运行流程稳定 | 冻结纵切后才请求方向性观察；原生 N0/N1 后才执行真机矩阵；最终候选再做 3-5 名复测 |
 
@@ -441,10 +441,10 @@
 
 | 顺序 | 所有者 | 指令 | 当前动作 |
 | --- | --- | --- | --- |
-| `NOW-RUNTIME` | 原型/UI | 按 `docs/48` 只实现 `C4-R01A`：队列迁移、公平选择、候选冷却、全局 review 间隔、resume story-first、隔离夹具和可组合 plan；正式地图不建空 C4-03 | `dispatch_ready / baseline_cedc384 / do_not_merge_lp04` |
+| `NOW-RUNTIME` | 原型/UI | 按 `docs/48` 只实现 `C4-R01A`：队列迁移、公平选择、候选冷却、全局 review 间隔、resume story-first、隔离夹具和可组合 plan；正式地图不建空 C4-03 | `in_progress / dispatched_from_efe668d / runtime_baseline_cedc384 / do_not_merge_lp04` |
 | `NOW-MEDIA` | 媒体 | Batch20 在 1 次 outer 402/tool 403 后硬暂停；LP03 三条既有 Batch7 原片已完成主管 source-only 裁决，当前无媒体运行接入工作 | `external_quota_exhausted / lp03_composite_audit_ruled / idle / runtime_and_release_forbidden` |
 | `NEXT-RUNTIME` | 原型/UI -> 主管 | R01A 冻结后只读独立复核正式存储隔离、队列幂等、无饥饿、复习密度、resume 边界、声音生命周期和提交边界 | `waiting_R01A_handoff / do_not_merge_LP04` |
-| `NEXT-C4-R01A` | 主管 -> 原型/UI | LP03 前置已满足；派发 opening-review 调度核心并保持单独实现、审查和提交 | `ready_now / do_not_merge_lp04` |
+| `NEXT-C4-R01A` | 主管 -> 原型/UI | LP03 前置已满足；opening-review 调度核心已单独派发，等待冻结回执与主管复核 | `dispatched / in_progress / do_not_merge_lp04` |
 | `NEXT-LP04+B` | 主管 -> 原型/UI | 只有 LP03 与 C4-R01A 都独立通过并分别提交后，才派发 `docs/51` 的 LP04；候选内必须完成 C4-R01B 真实 actions 整合 | `runtime_locked / waits_for_lp03_and_c4_r01a / do_not_dispatch` |
 | `NEXT-AUDIO-AUDIT` | 主管 | 现有离线 LS04 包只保持历史通过；等待真人耳机/扬声器/iPad 听审，不能用自动响度与哈希冒充听感 | `offline_package_passed / runtime_forbidden / human_and_ipad_listening_missing` |
 | `BASELINE-REVIEW` | 主管 | `346a` 的源码、session、M03/LS01-LS08、LP01-LP03 教学音、音名、PWA、三轮 LP03 合同、共享回归和严格 bundle 已独立通过 | `passed_browser_teaching_baseline / full_audio_lifecycle_passed / external_evidence_missing` |
