@@ -1,13 +1,13 @@
 # Chapter 4 C4-02 / LP03 主管验收工作单
 
-状态：`approved_for_dispatch / 345d_audio_prerequisite_passed / runtime_unlocked / implementation_pending`
+状态：`accepted_browser_teaching_baseline / overhaul_346a_lp03 / commit_cedc384 / implementation_passed / release_evidence_missing`
 
-本文件只定义 `C4-02 / LP03`。`C4-01 / LP01-LP02` 已在 `overhaul-344a-p3` 完成选择性提交、主管独立复跑并晋升浏览器基线；`docs/49` 的 AUDIO-A、AUDIO-B、AUDIO-C 也已依次通过并冻结，最终基线为 `overhaul-345d-audio-c` / `2405734`。因此 LP03 现在可以派发给唯一运行写者，但仍是 `implementation_pending`：不得把“前置条件通过”写成“LP03 已完成”，也不得合并 LP04、完整咚咚、低音谱表、左手或媒体候选。
+本文件只定义 `C4-02 / LP03`。它已在 `overhaul-346a-lp03` 完成实现、主管独立复跑、三轮固定合同、共享回归和选择性提交；冻结提交为 `cedc38401b64144f4e47ad2b0ff2f4d4e0155ef4`。这证明浏览器教学逻辑、布局和证据边界通过，不证明正式美术、实体 iPad、真实设备输入、儿童学习效果或发布清关。LP04、完整咚咚、低音谱表、左手和媒体运行集成仍未因此解锁；下一唯一运行工作改为 `docs/48` 的 `C4-R01A` 调度核心。
 
 ## 零、解锁记录与本轮边界
 
 - AUDIO-C 最终 `app.js` SHA-256 为 `DAA50F00F4CCFD8A408631AE934BB39D8B6FB02EB064A99063475C751CD692C6`；主管验收 `13/13`、AUDIO-C `46/46`、LS06/LS07 `64/64` 和全课程音频生命周期总回归均通过。
-- 下一唯一运行工作就是本文件的 `C4-02 / LP03`。实现必须从提交 `2405734` 开始，保持 LP01/LP02、Chapter 3、音名政策、session、mastery 和共享音频生命周期不变。
+- LP03 实现从提交 `2405734` 开始，并在 `cedc384` 独立收口；LP01/LP02、Chapter 3、音名政策、session、mastery 和共享音频生命周期均由最终共享回归保持。
 - 本轮只实现 C 锚石唤醒、D/E 落位、对应恢复/休息/证据与必要代码回退美术。LP04、完整咚咚出场、低音谱表、左手、视频、语音、SFX 和未批准角色/场景资产继续锁定。
 - 浏览器前置通过不替代实体 iPad、真实 MIDI、原声钢琴麦克风、扬声器/耳机听审、教师或儿童观察；这些仍是独立 missing 证据。
 
@@ -162,4 +162,13 @@ LP03 三个路线动作真实呈现并完成后，可写 C-D-E 低音键位路�
 - passed / partial / missing / contradicted 四态自审。
 - 明确说明实体 iPad、真实 MIDI、原声钢琴麦克风、教师、3-5 名儿童、发布来源和外部相似性仍是否 missing。
 
-只有主管独立复跑并确认世界连续性、教学语义、输入生命周期、证据分轴和提交边界后，`C4-02` 才能晋升浏览器基线；LP04 在此之前继续锁定。
+## 十、2026-07-19 最终主管裁决
+
+- 冻结提交：`cedc38401b64144f4e47ad2b0ff2f4d4e0155ef4`；`app.js` SHA-256：`98BBD58DF14B9CB97EC45EC46F2BD8133B2660341534C8EADC346739F1F9DCF5`。
+- 主管独立复跑：LP03 supervisor `32/32`、孩子端音名 `276/276`、quick、strict bundle 均退出 0；严格包为 42 个运行文件、1,641,265 bytes。
+- 固定合同为 `chapter4-lp03-media-zones-overhaul-346a-v1`：三轮各 6 视口 x 19 状态 = 114 PNG，0 geometry failure、0 browser error，internal SHA 三次一致为 `139635b5560dd316415b52b191871350273a0bdad0c8286d18dd8cd7848ea273`。
+- 完整共享门禁保留 AUDIO-A/B/C、LS08、LP01/LP02、Chapter 1-3、session、PWA、输入、无障碍和音名策略；运行入口对未批准媒体及禁止项目标识为 0。
+- `passed`：浏览器教学逻辑、故事连续性、持久恢复、证据分轴、输入/教学音生命周期、布局合同和提交边界。
+- `missing`：实体 iPad Safari、真实 MIDI、声学钢琴麦克风、扬声器/耳机人工听审、教师、3-5 名儿童、最终美术来源、外部相似性和发布清关。
+
+因此 `C4-02 / LP03` 正式晋升为浏览器教学基线。它不是成熟发布版，也不允许跳过 `C4-R01A` 直接实现 LP04。

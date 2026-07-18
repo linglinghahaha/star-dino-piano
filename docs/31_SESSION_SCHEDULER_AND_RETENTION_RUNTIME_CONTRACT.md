@@ -1,6 +1,6 @@
 # 短课调度、自然休息与保持性证据运行合同
 
-状态：`specification_passed / browser_runtime_passed / physical_device_and_child_evidence_missing`
+状态：`specification_updated / existing_browser_runtime_passed_for_prior_scope / opening_review_spacing_and_fairness_runtime_pending / physical_device_and_child_evidence_missing`
 
 负责人：课程与调度任务锁定教学语义；原型任务负责运行实现、迁移和自动化。本文件不把浏览器实现等同于真实儿童或长期学习证据。
 
@@ -86,6 +86,10 @@
 - 回忆只使用孩子已经见过的音、键位、听辨集合或谱位，不得借“复习”引入新概念。
 - 同一技能本次需要强提示或修复后仍可获得故事奖励，但不能获得 retained。
 - 其余待复习项只显示在家长队列，不把孩子端变成练习清单。
+- opening review 不能每次开场都出现。任一正式 session 实际呈现过 opening review 后，调度器写 `reviewSpacingAfterSessionId=<本次 sessionId>`；至少要等一个**后来结束、正式、孩子参与且没有 opening-review action** 的 session，才可再次选择任何 opening review。刷新、地图往返、debug/direct、未结束 session 和另一个 review-only session 都不能消耗这道全局间隔。
+- 困难 opening review 若在安全点提前结束，下一次明确点击必须直接进入新故事，不得改选另一条复习继续拦路。新课使用自身的有界支架处理仍不稳的前置联系；故事前进不删除 needsPractice，也不伪造 stable/retained。
+- 同一优先级有多个候选时，先选从未尝试过的候选，再按正式 ended session 历史选择最久未尝试者；只有这些条件仍相同，才使用最早证据和固定技能键破平局。不得让一个较早的困难候选在每次冷却结束后永远压住其它候选。
+- 带 `resumeOfSessionId`、只续接上一短课剩余 action 的 session 永远 story-first，不插 opening review。孩子先完成眼前因果，不因自然休息、困难收短或页面恢复被旧题截断；该 session 若正式、无 review 且正常 ended，可以消费上述全局间隔。
 
 ## 学习证据兼容规则
 
@@ -203,6 +207,10 @@ M03 的内部无错计数不能提前变成 stable event。首次完整 `Re -> D
 28. 孩子在 assisted retry 自己按对可以完成故事，但 strong cue/assisted 状态阻止 stable 与 retained。
 29. `LS01-LS03` 即使已有 formal completion，也不进入 `played but not stable` opening-review 队列，不创建 stable/retained。
 30. `LS04-LS08` 的困难可以路由回 `LS01-LS03` 做可见补教，但该补教使用 remediation 身份，不占用或冒充 opening-review。
+31. 任一 session 呈现过 opening review 后，下一次 formal child session 必须没有 opening review；只有该无复习 session 正常 ended 后，后续 session 才可再次选择 review。
+32. 困难 review 提前收短后，下一次点击直接进入新故事；第二条候选、刷新、地图往返、debug/direct 和未结束 session 都不能绕过全局间隔。
+33. 同优先级两个 needsPractice 候选不会互相饿死：从未尝试者优先，其后按正式 ended 历史最久未尝试者轮换；证据更早只作最后破平局。
+34. `resumeOfSessionId` session 只含剩余故事 action、opening-review 数量 0；它正常 ended 后可作为全局复习间隔，但刷新或仍 active 时不能提前消费。
 
 ## 放行状态
 
@@ -212,6 +220,7 @@ M03 的内部无错计数不能提前变成 stable event。首次完整 `Re -> D
 - `passed_browser`：`338a` 保留了 M08“安装五片真实屋顶 -> 检查同一屋顶气密点 -> 吃力时在屋顶闭合后推迟检查”，并通过 `97/97` 专项、跨 session 和自然休息回归；这不等于儿童理解或实体 iPad 通过。
 - `passed_browser`：M03 第一次正式无错 `D4 -> C4` 仍只写 played，第二次 qualifying completion 才可写 stable，同 session retained 仍为 0；主管复跑 session 矩阵 `72/72` 和 M03/garden 专项 `32/32`。
 - `passed_browser`：正式 `C2-03` clean、assisted、modeled 三条实际运行路线都会结束 session 并持久落到花园入口；assisted/modeled 保持 stable/retained 为 0 和 `needsPractice=true`，刷新/根地址恢复不创建新 session。
+- `missing_runtime`：上述全局 opening-review 间隔、公平轮换和困难 review 后强制 story-first 是本次课程审查新增合同，等待 `C4-R01A` 单独实现和主管浏览器验收；既有 `338a-346a` 结果不能证明它们已经运行。
 - `missing`：真实 iPad 上的后台恢复、系统时间/时区变化行为。
 - `missing`：教师复核和 3-5 名 4-6 岁儿童对短课长度、自然停点与隔日回忆的观察。
 

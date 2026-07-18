@@ -1,6 +1,6 @@
 # Chapter 4 Low-Register Runtime Contract
 
-状态：`specification_passed / LP01_LP02_retained_at_345d / LP03_dispatch_ready / LP03_LP10_runtime_incomplete / device_teacher_child_evidence_missing`
+状态：`specification_passed / LP01_LP03_browser_runtime_passed_at_346a / C4_R01A_next / LP04_LP10_runtime_incomplete / device_teacher_child_evidence_missing`
 
 负责人：课程故事、整体调度与独立审查任务锁定教学语义；原型任务负责运行实现、浏览器门禁、截图和输入证据；媒体任务只生产可追溯候选，未经调度复核不得接入运行时。
 
@@ -102,7 +102,7 @@ Story mode 只有在正式 `C3-07/LS08` session 以 clean、bounded assisted 或
 - 中央 C4 是“名字对、家不同”的接近答案，不记作低音正确，也不羞辱。
 - 后续 reduced-cue 首答正确才可形成独立 C3 家证据；引导完成只记 played。
 - 触屏选择 C3 是核心正确路线。精确 MIDI C3 可形成 played，C4 写 `noteNameCorrect=true/registerCorrect=false`；其它音按真实 note/register 修复。实验麦克风 confirmed C3 最多形成 assisted story completion，不能形成 LP02 stable/retained；uncertain/noisy/bleed/octave-ambiguous 不算 wrong，立即保留触屏接管。
-- LP01 困难后续 LP02 不删除 `needsPractice`；scheduler 必须保留一个以后独立的高低 C opening review，而不是把 LP02 找键成功回填为 LP01 stable。
+- LP01 困难后续 LP02 不删除 `needsPractice`；scheduler 必须保留一个以后拥有独立证据的高低 C opening-review action，而不是把 LP02 找键成功回填为 LP01 stable。该 action 条件插入下一目标课的 session 开头，不是额外地图关或 review-only session。
 
 ### LP03-LP07 低音键位
 

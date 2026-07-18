@@ -1,10 +1,10 @@
 # Chapter 4 C4-03 / LP04 主管验收工作单
 
-状态：`prepared_locked / waits_for_LP03_and_C4_R01_browser_baselines / not_dispatched / runtime_forbidden`
+状态：`prepared_locked / LP03_baseline_passed / waits_for_C4_R01A_core_baseline / includes_C4_R01B_runtime_integration_gate / not_dispatched / runtime_forbidden`
 
 本文件把 `LP04 地洞回声` 从故事提纲收敛为可实现、可复核的短课合同。它只负责把已经教过的低音 `C-D-E` 键位关系转成一次 `E-D-C` 下降回声路线；不引入 F/G、低音谱表、左手、完整咚咚、视频、语音或 SFX 候选。
 
-当前不得派发。只有 `C4-02 / LP03` 与 `C4-R01` 都完成独立浏览器审查、各自形成单独冻结提交后，LP04 才能成为唯一运行工作。提前写好工作单是为了校验课程连续性，不代表运行已实现或解锁。
+当前不得派发。`C4-02 / LP03` 已在 `cedc384` 完成独立审查与冻结；现在只等待 `C4-R01A` 调度核心形成自己的独立基线。之后 LP04 才能成为唯一运行工作，并必须同时完成 `C4-R01B` 的真实 `C4-03` 整合门禁；这不允许把调度核心和 LP04 混成一个提交。提前写好工作单是为了校验课程连续性，不代表运行已实现或解锁。
 
 ## 一、这节课教什么，不教什么
 
@@ -66,8 +66,10 @@ LP03 已让孩子在正确低音八度找到 C、D、E 的三个家。LP04 不�
 ## 四、C4-R01 与 session 组合
 
 - 地图只有在正式 LP03 结束且三石地基成立后显示 LP04 入口。孩子明确点击后创建唯一目标 `bundleId=C4-03` formal session。
-- 已通过的 C4-R01 调度器可在该 session 的 LP04 actions 前插入最多一个 `opening-review` action；`reviewSkillKey` 与 LP04 evidence 分开。
+- 已通过的 `C4-R01A` 调度核心可在该 session 的 LP04 actions 前插入最多一个 `opening-review` action；本次 LP04 候选负责完成 `C4-R01B` 真实运行整合，`reviewSkillKey` 与 LP04 evidence 分开。
 - 无 review 或 review 顺利且孩子仍投入时，沿用同一 session 进入 LP04 模型；review 困难时 session 在 review 安全点 ended，LP04 模型和 actions 均未呈现。
+- 任一 session 呈现过 review 后，下一次正式点击必须创建不含 review 的 C4-03/后续故事 session；困难 review 后尤其不能改选另一条复习继续拦路。该无复习 session ended 后，调度器才可再次选 review。
+- LP04 在 E 后或 D 后自然休息形成的 `resumeOfSessionId` session 永远不插 review，只续 D/C 或 C；该 resume 正常 ended 后可作为全局无复习故事间隔。
 - render、刷新、debug/direct、地图查看和复习队列迁移都不能单独创建 C4-03 session。自然停点后的再次点击必须创建新 sessionId，并只含剩余 LP04 action；`resumeOfSessionId` 指向上一正式 session。
 
 ## 五、输入与教学音生命周期
@@ -99,7 +101,7 @@ LP04 三个 action 均为 `reviewableForMastery=false`。三步真实呈现并�
 ## 八、专项自动化最低清单
 
 1. LP03 正式完成、三石世界继承、地图入口、debug/direct 零历史、唯一 C4-03 session。
-2. C4-R01 无候选、顺利 review、困难 review 三条组合路线；困难时 LP04 全部未呈现且下次显式点击才创建新 session。
+2. `C4-R01B` 无候选、顺利 review、困难 review 三条真实 C4-03 组合路线；困难时 LP04 全部未呈现且下次显式点击创建无 review 的新 session，不能改选第二候选，也不能引用 A 类纯计划夹具冒充端到端通过。
 3. 一次模型 E-D-C 的真实 started/ended；刷新、返回、suspended、resume reject、mute/volume zero、watchdog 均不能伪造模型完成或 action 进度。
 4. E/D/C 三步 exact register、世界单向持久化、E 后和 D 后自然停点、新 session 只含剩余 action。
 5. 普通 wrong、黑键、C4/D4/E4 同名错八度、已完成音重复、未来音提前、assisted、modeled、mic ambiguous 分轴正确。
@@ -108,7 +110,9 @@ LP04 三个 action 均为 `reviewableForMastery=false`。三步真实呈现并�
 8. 完成只显示局部眼睛/颈盾剪影，0 完整咚咚、0 LP05 action、0 自动下一 bundle、0 结果弹层。
 9. 普通表面/ARIA 音名门禁、连续双八度键盘、六视口 phase-bound 合同、减少动态、PWA 冷离线。
 10. LP01-LP03、C4-R01、Chapter 1-3、session、clean-state、教学音总生命周期、iPad a11y、audio settings、input reliability、quick 和 strict bundle 回归。
-11. `concepts/**`、`audio/**`、Grok/Gemini 视频、未批准角色/剪影和跨项目标识运行引用为 0。
+11. 任一 review 后的下一 formal child session 为 story-first、opening-review 数量 0；只有该 session ended 后才可重新选择候选，同优先级候选无饥饿。
+12. E 后、D 后的 `resumeOfSessionId` 路线均保持 opening-review 数量 0、剩余 action 原序，且可在 ended 后诚实消费全局间隔。
+13. `concepts/**`、`audio/**`、Grok/Gemini 视频、未批准角色/剪影和跨项目标识运行引用为 0。
 
 ## 九、冻结交接要求
 

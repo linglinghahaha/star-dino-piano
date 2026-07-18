@@ -106,11 +106,11 @@ Use this table when S01 exposes F/G weakness:
 
 ## Next Implementation Targets
 
-1. Keep `overhaul-345d-audio-c` / `2405734` as the current browser evidence baseline. It preserves Chapters 1-3 and independently passes the full M03/LS01-LS08 plus LP01/LP02 teaching-audio lifecycle regression.
-2. Implement only `C4-02 / LP03` under the formal `docs/47` work order. LP03 wakes the permanent LP02 C anchor, then adds D/E; it does not re-drop C or reveal full Dongdong.
-3. Preserve all Chapter 1-3 and LP01/LP02 evidence. LP03 cannot rewrite high/low C or low-C-home results, clear earlier needs-practice, or turn guided/assisted/modeled progress into stable.
-4. Retain the continuous real two-octave keyboard, truthful register-near-miss/black-key evidence, bounded C/D natural rests, pending-attempt recovery and verified teaching-audio started/ended before promoting LP03.
-5. LP03 may save a `C3-E3` staged geography observation but must keep stable/retained at zero. Keep LP04+, Dongdong's full reveal, bass staff, left-hand tasks and broader `docs/34` implementation locked until LP03 passes; then `docs/48` C4-R01 is the only task before LP04.
+1. Keep `overhaul-346a-lp03` / `cedc384` as the current browser teaching baseline. It preserves Chapters 1-3, LP01/LP02, the full teaching-audio lifecycle, and adds only the accepted LP03 C-anchor/D/E route.
+2. Implement only `C4-R01A` under `docs/48` next: idempotent LP01/LP02 queue migration, fair candidate selection, per-candidate cooldown, global review spacing, isolated review state/persistence, and a composable plan interface. Do not expose C4-03 on the child map.
+3. Preserve all Chapter 1-3 and LP01-LP03 evidence. The scheduler cannot rewrite high/low C, low-C-home or C-D-E route results, clear earlier needs-practice, or turn guided/assisted/modeled progress into stable.
+4. Prove that any opening review is followed by a story-first review-free formal session, equal-priority candidates cannot starve, resume sessions never insert review, and all A-stage fixtures leave formal child storage byte-identical.
+5. Keep LP04+, Dongdong's full reveal, bass staff, left-hand tasks and broader `docs/34` implementation locked until C4-R01A passes separately. The later LP04 candidate must pass C4-R01B against real C4-03 actions before the scheduler can be called end-to-end complete.
 6. Only after `docs/34` passes, implement `docs/35`: core relay first, resumable TH05 stages, then optional paired/together routes with identical permanent rewards.
 7. Keep `16_ASSET_MANIFEST.md` as the asset/audio release ledger and keep all current media candidates out of runtime until the latest coordinate, source and audio-priority gates pass.
 8. Measure a frozen candidate on a real iPad speaker/headphones and verify Safari reduced motion, background resume, touch timing and MIDI before treating browser checks as device proof.
