@@ -308,7 +308,7 @@ Acceptance:
 
 ## Phase 2C: Chapter 4 First Low-Register Slice
 
-Status: `C4-01 / LP01-LP02` is independently accepted and retained in the current `overhaul-345c-audio-b` browser baseline under `docs/46`. `LP03+` is not unlocked: the only current runtime work is `docs/49` `AUDIO-C`, followed by the full lifecycle regression.
+Status: `C4-01 / LP01-LP02` is independently accepted and retained in the current `overhaul-345d-audio-c` / `2405734` browser baseline under `docs/46`. `docs/49` and the full lifecycle regression are complete. `LP03` is now the only unlocked runtime lesson under `docs/47`; `LP04+` remains locked.
 
 Scope:
 
@@ -316,7 +316,7 @@ Scope:
 - `LP01` high/low C comparison using fixed sound bubbles, without keyboard-location scoring;
 - `LP02` low C home on one continuous real two-octave keyboard;
 - truthful early-rest/resume, story-help completion and separate LP01/LP02 evidence;
-- no `LP03+`, full Dongdong reveal, bass staff, left-hand tasks, Chapter 5 or media runtime integration.
+- LP03 may add only C-anchor wake plus D/E placement; no `LP04+`, full Dongdong reveal, bass staff, left-hand tasks, Chapter 5 or media runtime integration.
 
 ## Phase 3: Art And Animation Polish
 

@@ -2,11 +2,13 @@
 
 Last reviewed: 2026-07-14.
 
+Status: `historical_snapshot / superseded_for_current_runtime_by_docs_29`. The evidence and findings below describe the 343a review point. Current baseline, task ownership and dispatch order now live in `29_PROJECT_COORDINATION_AND_INDEPENDENT_AUDIT.md`; do not use this file's old “next runtime” wording as an active instruction.
+
 Current validated browser baseline: `overhaul-343a-p2` preserves the accepted middle-C `C4-G4` scope, note-priority audio, complete pressure suit, touch/MIDI/experimental microphone paths, short-session scheduler, independent stable/retained events, PWA offline shell, S01 staff behavior, palette, reduced motion, contrast preference and iPad-size accessibility. It retains the full `342a` behavior and adds independently accepted `C3-07 / LS08`: visible unscored C-D guide, four hidden two-note pairs in free time, C-C discrete release/rearm, first-complete response freezing, bounded whole-pair replay, truthful cross-session story completion, unscored C4 -> C3 exit and no automatic Chapter 4 session. Independent reruns include LS08 `118/118`, LS06/LS07 `64/64`, LS05 `65/65`, LS04 `39/39`, child note names `183/183`, sessions `72/72`, clean-state `124/124`, PWA `7/7`, input/audio/accessibility and first-two-chapter gates, quick/strict bundle, generic/legacy coordinate regression, and a stable six-viewport/fourteen-state LS08 V2 contract with zero failures, browser errors or hidden target carriers. Commit `b431c1ab347dd813ac1aa712a05c5f7ab150cf55` remains the first source/LFS baseline; `d218df468aa7458b672fc540bd3996752b81e9ef` is the latest approved runtime commit. This remains browser evidence, not physical-iPad, real-audio, teacher or child proof.
 
-Current runtime decision: `343a-p2` is independently accepted as the browser baseline for Chapters 1-2 plus Chapter 3 `LS01-LS08`. The prototype task's next runtime work is only `C4-01 / LP01-LP02` under the formal `docs/46` work order. `LP03+`, Dongdong's full reveal, bass staff, left-hand tasks, Chapter 5, visual/media runtime integration, new character assets and broad polish remain locked. The media task may continue source-only integration boards against the frozen UI, but it may not write runtime.
+Historical runtime decision at this review point: `343a-p2` was independently accepted as the browser baseline for Chapters 1-2 plus Chapter 3 `LS01-LS08`, with `C4-01 / LP01-LP02` next under `docs/46`. This paragraph is retained as dated audit evidence; it is not the current queue.
 
-Role of this file: this is the single rolling audit source for the current plan. `13`, `21`, and `22` are dated or historical audits; keep their useful findings here and in `08_EXECUTION_BACKLOG.md` instead of treating them as competing checklists. `19` is story/art reference, not the production checklist.
+Role of this file: this is the dated 2026-07-14 planning audit. `29` is the single rolling coordination source; `08_EXECUTION_BACKLOG.md` is the execution queue. `13`, `18`, `21`, and `22` remain historical audits, while `19` is story/art reference rather than the production checklist.
 
 ## Short Verdict
 

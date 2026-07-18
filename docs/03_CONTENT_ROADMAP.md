@@ -8,8 +8,8 @@ This is the canonical chapter order. Other planning files must use the same numb
 | --- | --- | --- | --- |
 | 1 | 月亮小家 | middle `C4-G4` note identity and keyboard geography | current Web course |
 | 2 | 星星桥 | treble-staff `C4-G4` reading through physical jump pads | current flagship slice |
-| 3 | 会听的小种子 | guided pitch echo, small-set sound-to-key matching, and two-note aural memory | `LS01-LS08` browser behavior is in the approved `overhaul-344a-p3` baseline; LS08 now uses the verified teaching-audio lifecycle, while `LS01-LS07` remain in the staged `docs/49` migration |
-| 4 | 咚咚的低音星球 | high/low contrast, low `C3-G3`, bass staff, left-hand readiness | `overhaul-344a-p3` independently passes the `LP01-LP02` browser slice; `LP03+` remains locked until `AUDIO-A`, `AUDIO-B`, and `AUDIO-C` all pass |
+| 3 | 会听的小种子 | guided pitch echo, small-set sound-to-key matching, and two-note aural memory | `LS01-LS08` browser behavior and the full teaching-audio lifecycle pass in `overhaul-345d-audio-c` / `2405734`; physical-device, teacher and child evidence remain missing |
+| 4 | 咚咚的低音星球 | high/low contrast, low `C3-G3`, bass staff, left-hand readiness | `LP01-LP02` pass in the approved 345d baseline; `LP03` is the only dispatch-ready runtime lesson, while `LP04-LP10` remain locked |
 | 5 | 会唱歌的大家园 | hand alternation, simple two-hand coordination, grand staff | curriculum specified; not implemented |
 
 `音符护照` is a cross-chapter collection/review system, not a numbered chapter. Its child-facing collection is icon-led and records places, helpers and story accomplishments; parent-facing played/stable/retained evidence remains separate, so collection count cannot imply mastery. The A-G word game remains a later optional project.

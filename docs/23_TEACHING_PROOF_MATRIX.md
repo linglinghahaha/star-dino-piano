@@ -106,11 +106,11 @@ Use this table when S01 exposes F/G weakness:
 
 ## Next Implementation Targets
 
-1. Keep `overhaul-343a-p2` as the current browser evidence baseline. It closes the M08/M03/S01 route and the complete Chapter 3 LS01-LS08 browser sequence, including the unscored underground exit.
-2. Implement only `C4-01 / LP01-LP02` under the formal `docs/46` work order. LP01 tests high/low C by fixed sound bubbles; LP02 first introduces low-C keyboard location.
-3. Preserve all Chapter 1-3 evidence. Chapter 4 story entry may follow bounded story completion, but LP01/LP02 cannot rewrite LS08, clear earlier needs-practice, or turn guided success into stable.
-4. Require one continuous real two-octave keyboard, truthful register-near-miss evidence, bounded early-rest/resume and separate sound-comparison versus key-location records before promoting the Chapter 4 slice.
-5. Keep LP03+, Dongdong's full reveal, bass staff, left-hand tasks and broader `docs/34` implementation locked until the first slice passes; LP10 guided crossing and signal check remain separate and neither story entry nor Chapter 5 waits for stable.
+1. Keep `overhaul-345d-audio-c` / `2405734` as the current browser evidence baseline. It preserves Chapters 1-3 and independently passes the full M03/LS01-LS08 plus LP01/LP02 teaching-audio lifecycle regression.
+2. Implement only `C4-02 / LP03` under the formal `docs/47` work order. LP03 wakes the permanent LP02 C anchor, then adds D/E; it does not re-drop C or reveal full Dongdong.
+3. Preserve all Chapter 1-3 and LP01/LP02 evidence. LP03 cannot rewrite high/low C or low-C-home results, clear earlier needs-practice, or turn guided/assisted/modeled progress into stable.
+4. Retain the continuous real two-octave keyboard, truthful register-near-miss/black-key evidence, bounded C/D natural rests, pending-attempt recovery and verified teaching-audio started/ended before promoting LP03.
+5. LP03 may save a `C3-E3` staged geography observation but must keep stable/retained at zero. Keep LP04+, Dongdong's full reveal, bass staff, left-hand tasks and broader `docs/34` implementation locked until LP03 passes; then `docs/48` C4-R01 is the only task before LP04.
 6. Only after `docs/34` passes, implement `docs/35`: core relay first, resumable TH05 stages, then optional paired/together routes with identical permanent rewards.
 7. Keep `16_ASSET_MANIFEST.md` as the asset/audio release ledger and keep all current media candidates out of runtime until the latest coordinate, source and audio-priority gates pass.
 8. Measure a frozen candidate on a real iPad speaker/headphones and verify Safari reduced motion, background resume, touch timing and MIDI before treating browser checks as device proof.

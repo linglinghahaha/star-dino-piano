@@ -1,10 +1,10 @@
 # Chapter 4 C4-R01 Opening Review 调度主管工作单
 
-状态：`prepared_not_dispatched / C4_01_prerequisite_passed / waits_for_LP03_browser_baseline / runtime_locked`
+状态：`prepared_not_dispatched / C4_01_and_audio_prerequisites_passed / waits_for_LP03_browser_baseline / runtime_locked`
 
 本文件解决一个独立问题：第四章当前可以诚实记录 `LP01/LP02 needsPractice`，并为 LP01 保留 `openingReviewQueue` 标记，但 LP02 还只有证据、没有正式队列项，通用调度器也不能消费这些第四章技能。C4-R01 必须从已有真实证据幂等地建立 LP02 队列项，不能假设它已经存在，也不能回填或改写旧 session。该缺口若不补，家长会看到“以后再复习”，孩子却永远收不到真正的复习短课。
 
-`C4-R01` 只能在 `C4-01 / LP01-LP02` 和 `C4-02 / LP03` 均通过主管独立浏览器审查后下发；前者已由 344a 满足，后者仍被 `docs/49` 和 LP03 自身门禁阻断。它必须在 LP04 之前实现。当前不得借此修改已冻结的 C4-01 或正在执行的 AUDIO 批次，也不得把 LP04、咚咚剪影、低音谱表、左手或媒体候选一起接入。
+`C4-R01` 只能在 `C4-01 / LP01-LP02` 和 `C4-02 / LP03` 均通过主管独立浏览器审查后下发；前者与 `docs/49` 的全课程音频前置已由 345d 满足，当前只等待 LP03 本身实现、独立审查并冻结。它必须在 LP04 之前实现。当前不得借此修改已冻结的 C4-01 或正在执行的 LP03，也不得把 LP04、咚咚剪影、低音谱表、左手或媒体候选一起接入。
 
 ## 一、教学边界
 

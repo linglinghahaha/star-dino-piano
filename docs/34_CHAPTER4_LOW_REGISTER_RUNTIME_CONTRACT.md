@@ -1,6 +1,6 @@
 # Chapter 4 Low-Register Runtime Contract
 
-状态：`specification_passed / LP01_LP02_browser_passed_at_344a / LP03_LP10_runtime_missing / device_teacher_child_evidence_missing`
+状态：`specification_passed / LP01_LP02_retained_at_345d / LP03_dispatch_ready / LP03_LP10_runtime_incomplete / device_teacher_child_evidence_missing`
 
 负责人：课程故事、整体调度与独立审查任务锁定教学语义；原型任务负责运行实现、浏览器门禁、截图和输入证据；媒体任务只生产可追溯候选，未经调度复核不得接入运行时。
 
