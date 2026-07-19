@@ -259,7 +259,7 @@ try {
       overflowY: document.documentElement.scrollHeight > document.documentElement.clientHeight + 1
     };
   });
-  record("prototype loads the 346a LP03 runtime version", m02Initial.version?.includes("overhaul-346a-lp03"), m02Initial);
+  record("prototype loads the 347a R01A runtime version", m02Initial.version?.includes("overhaul-347a-c4-r01a"), m02Initial);
   record("current workshop part shows C without visible solfege", m02Initial.letter === "C" && !m02Initial.solfege, m02Initial);
   record("part keeps the object label separate from note identity", m02Initial.objectLabel === "小灯", m02Initial);
   record("M02 keeps its original scene without a construction blueprint", m02Initial.blueprintHidden, m02Initial);

@@ -647,7 +647,7 @@ async function snapshot(page, viewport, stateName) {
   if (geometry.viewport.scrollWidth > geometry.viewport.width + 1 || geometry.viewport.scrollHeight > geometry.viewport.height + 1) {
     failures.push({ viewportId: viewport.viewportId, stateName, kind: "overflow", viewport: geometry.viewport });
   }
-  if (!geometry.runtimeVersion.includes("overhaul-346a-lp03")) {
+  if (!geometry.runtimeVersion.includes("overhaul-347a-c4-r01a")) {
     failures.push({ viewportId: viewport.viewportId, stateName, kind: "runtime-identity", runtimeVersion: geometry.runtimeVersion });
   }
   const mapState = ["map-entry", "c-natural-rest", "d-natural-rest", "complete-map"].includes(stateName);
@@ -918,7 +918,7 @@ await browser.close();
 const core = {
   coordinateContractId: "chapter4-lp03-media-zones-overhaul-346a-v1",
   prototypeBaseline: "overhaul-345d-audio-c",
-  buildIdentity: "overhaul-346a-lp03",
+  buildIdentity: "overhaul-347a-c4-r01a",
   runtimeIntegrationAllowed: false,
   deviceValidation: "missing",
   expectedStates,

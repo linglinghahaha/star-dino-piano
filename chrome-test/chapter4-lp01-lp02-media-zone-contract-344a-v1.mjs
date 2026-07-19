@@ -8,6 +8,7 @@ const { chromium } = require("playwright");
 const rootUrl = process.argv[2] || "http://127.0.0.1:4173/";
 const outputPath = process.argv[3] || "docs/30_CHAPTER4_LP01_LP02_MEDIA_ZONE_CONTRACT_344A_V1.json";
 const screenshotDir = process.argv[4] || "screenshots/chapter4_lp01_lp02_media_zones_344a_v1";
+const coordinateContractId = process.env.CHAPTER4_COORDINATE_CONTRACT_ID || "chapter4-lp01-lp02-media-zones-overhaul-344a-v1";
 fs.mkdirSync(path.dirname(outputPath), { recursive: true });
 fs.mkdirSync(screenshotDir, { recursive: true });
 
@@ -35,6 +36,10 @@ const viewports = [
   ["media-1280x720-dpr1", 1280, 720, 1],
   ["large-ipad-1366x1024-dpr2", 1366, 1024, 2]
 ].map(([viewportId, width, height, dpr]) => ({ viewportId, width, height, dpr }));
+const selectedViewports = process.env.CHAPTER4_VIEWPORT
+  ? viewports.filter((viewport) => viewport.viewportId === process.env.CHAPTER4_VIEWPORT)
+  : viewports;
+if (selectedViewports.length === 0) throw new Error(`Unknown Chapter 4 contract viewport: ${process.env.CHAPTER4_VIEWPORT}`);
 const sourcePaths = [
   "chrome-test/chapter4-lp01-lp02-media-zone-contract-344a-v1.mjs",
   "index.html", "app.js", "styles.css", "keyboard-overrides.css", "map-overrides.css",
@@ -665,7 +670,7 @@ async function captureReduced(browser, viewport) {
 
 const browser = await chromium.launch({ headless: true, executablePath: process.env.CHROME_EXECUTABLE || undefined });
 const viewportRecords = [];
-for (const viewport of viewports) {
+for (const viewport of selectedViewports) {
   const states = [
     ...(await capturePrimary(browser, viewport)),
     ...(await captureSound(browser, viewport)),
@@ -681,10 +686,13 @@ for (const viewport of viewports) {
   }
   viewportRecords.push({ ...viewport, states: ordered });
 }
-await browser.close();
+await Promise.race([
+  browser.close(),
+  new Promise((resolve) => setTimeout(resolve, 2000))
+]);
 
 const core = {
-  coordinateContractId: "chapter4-lp01-lp02-media-zones-overhaul-344a-v1",
+  coordinateContractId,
   prototypeBaseline: "overhaul-344a",
   buildIdentity: "overhaul-344a-p3",
   runtimeIntegrationAllowed: false,

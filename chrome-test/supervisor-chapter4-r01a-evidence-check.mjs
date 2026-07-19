@@ -345,11 +345,23 @@ async function runBrowserChecks() {
         retention: {
           stableEvents: [{
             eventId: "stable-old",
+            evidenceType: "stable",
             skillKey: "level:LP01",
+            levelId: "LP01",
             sessionId: "stable-old-session",
+            bundleId: "C4-fixture",
+            sessionActionId: "opening-review",
+            sessionRole: "opening-review",
+            reviewSkillKey: "level:LP01",
             completedAt: "2026-07-18T00:00:00.000Z",
             localDateKey: "2026-07-18",
-            clockValid: true
+            runMode: "check",
+            wrongCount: 0,
+            cueStrength: "soft",
+            strongCueFrames: 0,
+            inputRoutes: { "touch-bubble": 4 },
+            experimentalInput: false,
+            thresholdVersion: "preschool-v1-2026-07-11"
           }],
           retainedEvents: []
         }

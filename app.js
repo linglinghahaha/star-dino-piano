@@ -894,6 +894,13 @@ function localDateKeyAt(value = new Date()) {
   return `${year}-${month}-${day}`;
 }
 
+function isValidLocalDateKey(value) {
+  if (typeof value !== "string" || !/^\d{4}-\d{2}-\d{2}$/.test(value)) return false;
+  const [year, month, day] = value.split("-").map(Number);
+  const date = new Date(Date.UTC(year, month - 1, day));
+  return date.getUTCFullYear() === year && date.getUTCMonth() === month - 1 && date.getUTCDate() === day;
+}
+
 function isoTimeMs(value) {
   if (typeof value !== "string" || !value) return NaN;
   return Date.parse(value);
@@ -902,6 +909,58 @@ function isoTimeMs(value) {
 function createSessionId(bundleId) {
   const random = window.crypto?.randomUUID?.() || `${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 10)}`;
   return `${bundleId}-${random}`;
+}
+
+const CHAPTER4_REVIEW_SCHEDULER_VERSION = 1;
+const CHAPTER4_REVIEW_SKILLS = {
+  LP01: "level:LP01",
+  LP02: "low-key:C3"
+};
+
+function reviewPriorityForReason(reason) {
+  return reason === "needs-practice" ? 0 : (reason === "played-not-stable" ? 1 : 2);
+}
+
+function normalizeChapter4ReviewCandidate(source = {}) {
+  const skillKey = typeof source.skillKey === "string" ? source.skillKey : "";
+  const sourceLevelId = typeof source.sourceLevelId === "string" ? source.sourceLevelId : "";
+  // Scheduler candidates are permanently scoped to the two approved review skills.
+  // Never reinterpret a malformed LP02 candidate as LP01 during recovery.
+  if (!skillKey || !sourceLevelId || CHAPTER4_REVIEW_SKILLS[sourceLevelId] !== skillKey) return null;
+  const reason = ["needs-practice", "played-not-stable", "retained-due"].includes(source.reason)
+    ? source.reason
+    : "needs-practice";
+  return {
+    skillKey,
+    sourceSessionId: typeof source.sourceSessionId === "string" ? source.sourceSessionId : null,
+    sourceLevelId,
+    reason,
+    priority: reviewPriorityForReason(reason),
+    nextMode: source.nextMode === "reduced-cue" ? "reduced-cue" : "remediation",
+    remediationPreparedAt: typeof source.remediationPreparedAt === "string" ? source.remediationPreparedAt : null,
+    createdAt: typeof source.createdAt === "string" ? source.createdAt : null,
+    lastAttemptAt: typeof source.lastAttemptAt === "string" ? source.lastAttemptAt : null,
+    lastAttemptSessionId: typeof source.lastAttemptSessionId === "string" ? source.lastAttemptSessionId : null,
+    cooldownAfterSessionId: typeof source.cooldownAfterSessionId === "string" ? source.cooldownAfterSessionId : null,
+    status: source.status === "closed" ? "closed" : (source.status === "cooldown" ? "cooldown" : "ready"),
+    lastSettledSessionId: typeof source.lastSettledSessionId === "string" ? source.lastSettledSessionId : null,
+    settledResult: ["stable", "retained"].includes(source.settledResult) ? source.settledResult : null
+  };
+}
+
+function normalizeChapter4ReviewScheduler(source = {}) {
+  const rawCandidates = Array.isArray(source.candidates) ? source.candidates : [];
+  const bySkill = new Map();
+  rawCandidates.map(normalizeChapter4ReviewCandidate).filter(Boolean).forEach((candidate) => {
+    const existing = bySkill.get(candidate.skillKey);
+    // A reduced-cue candidate is a later, more specific state than a legacy remediation summary.
+    if (!existing || candidate.nextMode === "reduced-cue" || candidate.createdAt < existing.createdAt) bySkill.set(candidate.skillKey, candidate);
+  });
+  return {
+    version: CHAPTER4_REVIEW_SCHEDULER_VERSION,
+    candidates: [...bySkill.values()].sort((a, b) => a.skillKey.localeCompare(b.skillKey)),
+    reviewSpacingAfterSessionId: typeof source.reviewSpacingAfterSessionId === "string" ? source.reviewSpacingAfterSessionId : null
+  };
 }
 
 function normalizeChapter4Runtime(source = {}) {
@@ -913,6 +972,7 @@ function normalizeChapter4Runtime(source = {}) {
     lessonEvidence,
     resume: source.resume && typeof source.resume === "object" ? source.resume : null,
     openingReviewQueue: Array.isArray(source.openingReviewQueue) ? source.openingReviewQueue : [],
+    reviewScheduler: normalizeChapter4ReviewScheduler(source.reviewScheduler),
     lp01Attempts: Array.isArray(source.lp01Attempts) ? source.lp01Attempts : [],
     lp02Attempts: Array.isArray(source.lp02Attempts) ? source.lp02Attempts : [],
     lp03Attempts: Array.isArray(source.lp03Attempts) ? source.lp03Attempts : [],
@@ -991,6 +1051,8 @@ function loadSessionRuntime() {
 }
 
 function saveSessionRuntime(runtime) {
+  // Browser-only R01A fixtures must exercise the runtime without mutating a child's saved state.
+  if (window.__STAR_DINO_R01A_TEST__ === true || state?.r01aTestFixture === true) return;
   localStorage.setItem(SESSION_RUNTIME_KEY, JSON.stringify(runtime));
 }
 
@@ -1078,6 +1140,7 @@ function loadLearningStats() {
 }
 
 function saveLearningStats() {
+  if (window.__STAR_DINO_R01A_TEST__ === true || state?.r01aTestFixture === true) return;
   localStorage.setItem("starDinoLearningStats", JSON.stringify(state.learningStats));
 }
 
@@ -1257,15 +1320,398 @@ const state = {
   ls08FeedbackTimer: null,
   chapter4Timer: null,
   chapter4FeedbackTimer: null,
-  teachingPlayback: null
+  teachingPlayback: null,
+  r01aTestFixture: false,
+  r01aFixtureIdentity: null
 };
+
+function reviewCandidateHistoryIsFormal(session) {
+  return Boolean(session?.status === "ended" && session.formalSession === true && session.directMode !== true && session.voluntaryReplay !== true);
+}
+
+function chapter4ReviewHasChildStoryAction(session) {
+  if (!reviewCandidateHistoryIsFormal(session)) return false;
+  const storyActions = Array.isArray(session.actions)
+    ? session.actions.filter((action) => ["lesson", "lesson-resume"].includes(action?.role))
+    : [];
+  if (storyActions.length === 0 || !Array.isArray(session.completedActions)) return false;
+  return storyActions.some((action) => session.completedActions.some((completed) => {
+    if (completed?.actionId !== action.actionId || !Number.isFinite(isoTimeMs(completed?.completedAt))) return false;
+    const childInputs = Array.isArray(completed?.childInputs) ? completed.childInputs
+      : (Array.isArray(action.childInputs) ? action.childInputs : []);
+    return childInputs.some((input) => {
+      const source = String(input?.source || input?.route || "").trim().toLowerCase();
+      return source.length > 0 && !["model", "system", "autoplay"].includes(source);
+    });
+  }));
+}
+
+function chapter4ReviewAnchorIndex(history, sessionId) {
+  if (!Array.isArray(history) || !sessionId) return -1;
+  return history.findIndex((session) => session?.sessionId === sessionId);
+}
+
+function chapter4ReviewHasLaterFormalEnd(history, sessionId) {
+  const anchorIndex = chapter4ReviewAnchorIndex(history, sessionId);
+  return anchorIndex >= 0 && history.slice(anchorIndex + 1).some(chapter4ReviewHasChildStoryAction);
+}
+
+function chapter4ReviewHasLaterStoryFirstEnd(history, sessionId) {
+  const anchorIndex = chapter4ReviewAnchorIndex(history, sessionId);
+  return anchorIndex >= 0 && history.slice(anchorIndex + 1).some((session) =>
+    chapter4ReviewHasChildStoryAction(session) &&
+    session.actions.filter((action) => action?.role === "opening-review").length === 0
+  );
+}
+
+function chapter4QualifiedStableAnchors(retention, skillKey) {
+  return (retention?.stableEvents || []).filter((event) => {
+    const sourceSessionId = event?.sourceSessionId || event?.sessionId;
+    const endedAt = event?.endedAt || event?.completedAt;
+    const expectedLevelId = skillKey.startsWith("level:") ? skillKey.slice("level:".length) : (skillKey === "low-key:C3" ? "LP02" : null);
+    const inputRoutes = event?.inputRoutes;
+    const hasChildRoute = inputRoutes && typeof inputRoutes === "object" && Object.entries(inputRoutes).some(([route, count]) => {
+      const normalized = String(route || "").trim().toLowerCase();
+      return normalized.length > 0 && !["model", "system", "autoplay"].includes(normalized) && Number.isFinite(Number(count)) && Number(count) > 0;
+    });
+    return event?.evidenceType === "stable" && typeof event?.eventId === "string" && event.eventId.length > 0 &&
+      event?.skillKey === skillKey && event?.clockValid !== false &&
+      typeof sourceSessionId === "string" && sourceSessionId.length > 0 &&
+      (!expectedLevelId || event?.levelId === expectedLevelId) &&
+      typeof event?.runMode === "string" && event.runMode.length > 0 &&
+      Number.isFinite(event?.wrongCount) && event.wrongCount >= 0 &&
+      ["none", "soft"].includes(event?.cueStrength) && Number(event?.strongCueFrames) === 0 &&
+      hasChildRoute &&
+      event?.experimentalInput === false && typeof event?.thresholdVersion === "string" && event.thresholdVersion.length > 0 &&
+      Number.isFinite(isoTimeMs(endedAt)) && isValidLocalDateKey(event?.localDateKey);
+  });
+}
+
+function latestEligibleReviewStableAnchor(retention, skillKey, now = new Date()) {
+  const nowMs = now instanceof Date ? now.getTime() : Date.now();
+  return chapter4QualifiedStableAnchors(retention, skillKey)
+    .filter((event) => {
+      const endedAt = event.endedAt || event.completedAt;
+      const endedMs = isoTimeMs(endedAt);
+      return Number.isFinite(endedMs) && nowMs - endedMs >= 8 * 60 * 60 * 1000 && event.localDateKey !== localDateKeyAt(now);
+    })
+    .sort((a, b) => isoTimeMs(b.endedAt || b.completedAt) - isoTimeMs(a.endedAt || a.completedAt))[0] || null;
+}
+
+function reviewSchedulerCanUseRetainedDue({ stored, skillKey, now, retention }) {
+  const anchor = latestEligibleReviewStableAnchor(retention, skillKey, now);
+  if (!stored || !anchor) return false;
+  if (retention?.retainedEvents?.some((event) => event?.skillKey === skillKey)) return false;
+  return anchor;
+}
+
+function chapter4ReviewCandidateFromEvidence(levelId, { chapter4, learningStats, now = new Date(), ignoreLegacyPractice = false }) {
+  const skillKey = CHAPTER4_REVIEW_SKILLS[levelId];
+  const stored = learningStats?.levels?.[levelId] || {};
+  const evidence = chapter4?.lessonEvidence?.[levelId] || {};
+  const legacyQueued = !ignoreLegacyPractice && levelId === "LP01" && chapter4?.openingReviewQueue?.includes("LP01");
+  const played = Boolean(evidence?.played || evidence?.completedAt || (Number(stored.formalCompletions) || 0) > 0);
+  if (!legacyQueued && !played) return null;
+  const needsPractice = !ignoreLegacyPractice && (legacyQueued || stored.needsPractice === true || evidence.needsPractice === true || evidence.openingReviewRequired === true);
+  const traceableAnchors = chapter4QualifiedStableAnchors(learningStats?.retention, skillKey);
+  const hasTraceableStable = traceableAnchors.length > 0;
+  const retainedAnchor = reviewSchedulerCanUseRetainedDue({ stored, skillKey, now, retention: learningStats?.retention });
+  const reason = needsPractice
+    ? "needs-practice"
+    : (!hasTraceableStable ? "played-not-stable" : (retainedAnchor ? "retained-due" : null));
+  if (!reason) return null;
+  const completedAt = retainedAnchor?.endedAt || retainedAnchor?.completedAt || evidence.completedAt || stored.lastFormalCompletedAt || stored.lastCompletedAt || now.toISOString();
+  return normalizeChapter4ReviewCandidate({
+    skillKey,
+    sourceSessionId: retainedAnchor?.sourceSessionId || retainedAnchor?.sessionId || evidence.sessionId || null,
+    sourceLevelId: levelId,
+    reason,
+    nextMode: reason === "needs-practice" ? "remediation" : "reduced-cue",
+    remediationPreparedAt: reason === "needs-practice" ? completedAt : null,
+    createdAt: completedAt,
+    status: "ready"
+  });
+}
+
+function migrateChapter4ReviewScheduler({ chapter4, learningStats, now = new Date() }) {
+  const scheduler = normalizeChapter4ReviewScheduler(chapter4?.reviewScheduler);
+  const existing = new Map(scheduler.candidates.map((candidate) => [candidate.skillKey, candidate]));
+  ["LP01", "LP02"].forEach((levelId) => {
+    const current = existing.get(CHAPTER4_REVIEW_SKILLS[levelId]);
+    const migrated = chapter4ReviewCandidateFromEvidence(levelId, {
+      chapter4,
+      learningStats,
+      now,
+      ignoreLegacyPractice: current?.status === "closed" && current?.settledResult === "stable"
+    });
+    const anchorMs = isoTimeMs(migrated?.createdAt);
+    const settledMs = isoTimeMs(current?.lastAttemptAt || current?.createdAt);
+    const sameSettledStableAnchor = current?.status === "closed" && current?.settledResult === "stable" &&
+      migrated?.reason === "retained-due" && migrated.sourceSessionId === current.lastAttemptSessionId && anchorMs >= settledMs;
+    const newerDistinctStableAnchor = current?.status === "closed" && current?.settledResult === "stable" &&
+      migrated?.reason === "retained-due" && Number.isFinite(anchorMs) && Number.isFinite(settledMs) && anchorMs > settledMs;
+    const closedBeforeAnchor = sameSettledStableAnchor || newerDistinctStableAnchor;
+    if ((!current || closedBeforeAnchor) && migrated) existing.set(migrated.skillKey, migrated);
+  });
+  return normalizeChapter4ReviewScheduler({ ...scheduler, candidates: [...existing.values()] });
+}
+
+function reconcileChapter4ReviewScheduler(scheduler, history = []) {
+  const next = normalizeChapter4ReviewScheduler(scheduler);
+  next.candidates = next.candidates.map((candidate) => {
+    if (candidate.status !== "cooldown" || !candidate.cooldownAfterSessionId || !chapter4ReviewHasLaterFormalEnd(history, candidate.cooldownAfterSessionId)) return candidate;
+    return { ...candidate, status: "ready", cooldownAfterSessionId: null };
+  });
+  if (next.reviewSpacingAfterSessionId && chapter4ReviewHasLaterStoryFirstEnd(history, next.reviewSpacingAfterSessionId)) {
+    next.reviewSpacingAfterSessionId = null;
+  }
+  return next;
+}
+
+function selectChapter4OpeningReview({ scheduler, history = [], now = new Date(), sessionId = "review-fixture" } = {}) {
+  const reconciled = reconcileChapter4ReviewScheduler(scheduler, history);
+  if (reconciled.reviewSpacingAfterSessionId) return { scheduler: reconciled, candidate: null, reason: "global-spacing" };
+  const candidates = reconciled.candidates
+    .filter((candidate) => candidate.status === "ready")
+    .sort((a, b) => {
+      const aUntested = !a.lastAttemptAt;
+      const bUntested = !b.lastAttemptAt;
+      if (a.priority !== b.priority) return a.priority - b.priority;
+      if (aUntested !== bUntested) return aUntested ? -1 : 1;
+      const aMs = isoTimeMs(a.lastAttemptAt);
+      const bMs = isoTimeMs(b.lastAttemptAt);
+      const aAttemptValid = Number.isFinite(aMs);
+      const bAttemptValid = Number.isFinite(bMs);
+      if (aAttemptValid !== bAttemptValid) return aAttemptValid ? -1 : 1;
+      if (aAttemptValid && aMs !== bMs) return aMs - bMs;
+      const aEvidenceMs = isoTimeMs(a.createdAt);
+      const bEvidenceMs = isoTimeMs(b.createdAt);
+      const aValid = Number.isFinite(aEvidenceMs);
+      const bValid = Number.isFinite(bEvidenceMs);
+      if (aValid !== bValid) return aValid ? -1 : 1;
+      if (aValid && aEvidenceMs !== bEvidenceMs) return aEvidenceMs - bEvidenceMs;
+      return a.skillKey.localeCompare(b.skillKey);
+    });
+  const candidate = candidates[0] || null;
+  if (!candidate) return { scheduler: reconciled, candidate: null, reason: "none" };
+  const targetId = candidate.sourceLevelId;
+  return {
+    scheduler: reconciled,
+    candidate,
+    reason: "selected",
+    action: {
+      actionId: `opening-review-${candidate.skillKey}-${sessionId}`,
+      kind: targetId === "LP01" ? "chapter4-listening" : "chapter4-keyboard",
+      targetId,
+      runMode: candidate.nextMode === "reduced-cue" ? "check" : "guided",
+      role: "opening-review",
+      requiredReview: true,
+      reviewSkillKey: candidate.skillKey,
+      reviewPriority: candidate.priority,
+      reviewMode: candidate.nextMode
+    }
+  };
+}
+
+function composeChapter4ReviewPlan({ actions = [], resumeOfSessionId = null, scheduler, history = [], now = new Date(), sessionId = "review-fixture", isFormalChildSession = true } = {}) {
+  const storyActions = JSON.parse(JSON.stringify(actions));
+  if (!isFormalChildSession || resumeOfSessionId || storyActions.length === 0) {
+    return { actions: storyActions, review: null, scheduler: reconcileChapter4ReviewScheduler(scheduler, history), reason: resumeOfSessionId ? "resume" : "not-eligible" };
+  }
+  const selection = selectChapter4OpeningReview({ scheduler, history, now, sessionId });
+  return {
+    actions: selection.action ? [selection.action, ...storyActions] : storyActions,
+    review: selection.action || null,
+    scheduler: selection.scheduler,
+    reason: selection.reason
+  };
+}
+
+function classifyLp02OpeningReviewInput({ midi, route = "screen", microphoneAmbiguous = false } = {}) {
+  const note = chapter4NoteForMidi(midi);
+  const target = chapter4NoteForMidi(48);
+  const noteNameCorrect = Boolean(note && note.name === "C");
+  const registerCorrect = Boolean(note && target && note.octave === target.octave);
+  const exactTouch = ["screen", "\u5c4f\u5e55", "touch"].includes(route) && midi === 48;
+  return {
+    midi,
+    route,
+    pitchName: note?.pitchName || null,
+    isBlack: Boolean(note?.isBlack),
+    noteNameCorrect,
+    registerCorrect,
+    sameNameWrongOctave: noteNameCorrect && !registerCorrect,
+    played: route !== "麦克风" || !microphoneAmbiguous,
+    stableEligible: exactTouch && !microphoneAmbiguous,
+    assistedOnly: route === "麦克风"
+  };
+}
+
+function settleChapter4OpeningReview(scheduler, { skillKey, sessionId, endedAt = new Date().toISOString(), result = "difficult" } = {}) {
+  const next = normalizeChapter4ReviewScheduler(scheduler);
+  const candidate = next.candidates.find((item) => item.skillKey === skillKey);
+  if (!candidate || !sessionId || candidate.lastSettledSessionId === sessionId) return next;
+  candidate.lastAttemptAt = endedAt;
+  candidate.lastAttemptSessionId = sessionId;
+  candidate.lastSettledSessionId = sessionId;
+  next.reviewSpacingAfterSessionId = sessionId;
+  if (result === "stable" || result === "retained") {
+    candidate.status = "closed";
+    candidate.cooldownAfterSessionId = null;
+    candidate.settledResult = result;
+  } else if (result === "remediation-complete") {
+    candidate.status = "ready";
+    candidate.reason = "played-not-stable";
+    candidate.priority = reviewPriorityForReason(candidate.reason);
+    candidate.nextMode = "reduced-cue";
+    candidate.cooldownAfterSessionId = null;
+  } else {
+    candidate.status = "cooldown";
+    candidate.reason = "needs-practice";
+    candidate.priority = reviewPriorityForReason(candidate.reason);
+    candidate.nextMode = "remediation";
+    candidate.remediationPreparedAt = endedAt;
+    candidate.cooldownAfterSessionId = sessionId;
+  }
+  return next;
+}
+
+function migrateChapter4ReviewSchedulerInState() {
+  const migrated = migrateChapter4ReviewScheduler({ chapter4: state.chapter4, learningStats: state.learningStats });
+  const reconciled = reconcileChapter4ReviewScheduler(migrated, state.sessionRuntime.history);
+  const changed = JSON.stringify(state.chapter4.reviewScheduler) !== JSON.stringify(reconciled);
+  state.chapter4.reviewScheduler = reconciled;
+  return changed;
+}
+
+if (!state.chapter4DirectMode && migrateChapter4ReviewSchedulerInState()) {
+  state.sessionRuntime.chapter4 = state.chapter4;
+  saveSessionRuntime(state.sessionRuntime);
+}
+
+function r01aFixtureIdentity() {
+  const session = state.activeSession;
+  const action = currentSessionAction(session) || state.r01aFixtureIdentity?.plan?.actions?.[0] || null;
+  const plan = state.r01aFixtureIdentity?.plan;
+  return {
+    identitySource: "runtime-isolated-fixture",
+    fixtureState: state.r01aFixtureIdentity?.stateName || null,
+    composeReason: plan?.reason || null,
+    composeReviewPresent: Boolean(plan?.review),
+    sessionId: session?.sessionId || state.r01aFixtureIdentity?.sessionId || null,
+    actionId: action?.actionId || null,
+    role: action?.role || null,
+    reviewSkillKey: action?.reviewSkillKey || null,
+    reviewMode: action?.reviewMode || null,
+    runMode: action?.runMode || null,
+    openingReviewCount: session?.actions?.filter((item) => item.role === "opening-review").length || 0
+  };
+}
+
+function renderR01ATestFixture(stateName) {
+  const lp02 = stateName.startsWith("lp02") || stateName === "reduced-motion";
+  const levelId = lp02 ? "LP02" : "LP01";
+  const reviewMode = stateName.includes("reduced-cue") || stateName === "reduced-motion" ? "reduced-cue" : "remediation";
+  const skillKey = levelId === "LP01" ? "level:LP01" : "low-key:C3";
+  const storyAction = {
+    actionId: `r01a-story-${stateName}`,
+    kind: "chapter4-keyboard",
+    targetId: "LP02",
+    role: "lesson"
+  };
+  const scheduler = normalizeChapter4ReviewScheduler({
+    candidates: [{
+      skillKey,
+      sourceLevelId: levelId,
+      reason: reviewMode === "remediation" ? "needs-practice" : "played-not-stable",
+      nextMode: reviewMode,
+      createdAt: "2026-07-01T00:00:00.000Z",
+      status: "ready"
+    }],
+    reviewSpacingAfterSessionId: stateName === "spacing-story-first" ? "r01a-spacing-anchor" : null
+  });
+  const history = stateName === "spacing-story-first"
+    ? [{
+      sessionId: "r01a-spacing-anchor",
+      formalSession: true,
+      status: "ended",
+      actions: [{ actionId: "r01a-anchor-review", role: "opening-review" }],
+      completedActions: []
+    }]
+    : [];
+  const plan = composeChapter4ReviewPlan({
+    actions: [storyAction],
+    scheduler,
+    history,
+    sessionId: `r01a-${stateName}`
+  });
+  state.r01aTestFixture = true;
+  state.r01aFixtureIdentity = { stateName, plan, sessionId: `r01a-${stateName}-session` };
+  if (!plan.review) {
+    state.activeSession = null;
+    state.sessionRuntime.active = null;
+    state.screen = "map";
+    render();
+    return r01aFixtureIdentity();
+  }
+  const action = plan.actions[0];
+  const session = {
+    sessionId: `r01a-${stateName}-session`,
+    bundleId: "C4-R01A-fixture",
+    formalSession: false,
+    status: "active",
+    actionIndex: 0,
+    actions: [action],
+    completedActions: []
+  };
+  action.chapter4Attempt = levelId === "LP01"
+    ? createLp01Attempt(session, { formalSession: false })
+    : createLp02Attempt(session, { formalSession: false });
+  action.chapter4Attempt.reviewMode = action.reviewMode;
+  if (levelId === "LP02") {
+    // Remediation is the only LP02 fixture surface that exposes the locator.
+    // Reduced cue remains a plain check until a child actually touches low C.
+    action.chapter4Attempt.reviewStableEligible = false;
+    if (reviewMode === "remediation") {
+      action.chapter4Attempt.strongCueUsed = true;
+      action.chapter4Attempt.phase = "lp02-assisted";
+    }
+  } else if (reviewMode === "reduced-cue") {
+    action.chapter4Attempt.modelCompleted = true;
+    action.chapter4Attempt.checkEntered = true;
+    action.chapter4Attempt.phase = "awaiting-response";
+  }
+  state.activeSession = session;
+  state.sessionRuntime.active = session;
+  state.chapter4DirectMode = false;
+  // Each isolated state starts gesture-locked so a previous fixture cannot autoplay into it.
+  state.audioUnlocked = false;
+  showChapter4Screen();
+  return r01aFixtureIdentity();
+}
+
+// The browser-only scheduler gate opts in before app.js loads. Normal children never receive this surface.
+if (window.__STAR_DINO_R01A_TEST__ === true) {
+  window.__starDinoR01ATestApi = {
+    normalizeChapter4ReviewScheduler,
+    migrateChapter4ReviewScheduler,
+    reconcileChapter4ReviewScheduler,
+    selectChapter4OpeningReview,
+    composeChapter4ReviewPlan,
+    classifyLp02OpeningReviewInput,
+    settleChapter4OpeningReview,
+    createR01AFixture: renderR01ATestFixture,
+    getR01AFixture: r01aFixtureIdentity,
+    interruptR01AFixtureAudio: () => interruptTeachingPianoSequence("r01a-fixture-interrupt")
+  };
+}
 
 if (initialDirectChapter4Lesson) {
   state.chapter4DirectAction = createDirectChapter4Action(initialDirectChapter4Lesson);
 }
 
 function persistLearningStatsSchemaUpgrade() {
-  if (state.chapter4DirectMode) return;
+  if (window.__STAR_DINO_R01A_TEST__ === true || state.chapter4DirectMode) return;
   try {
     const raw = localStorage.getItem("starDinoLearningStats");
     if (!raw) return;
@@ -1280,7 +1726,7 @@ function persistLearningStatsSchemaUpgrade() {
 persistLearningStatsSchemaUpgrade();
 
 function persistSessionRuntimeSchemaUpgrade() {
-  if (state.chapter4DirectMode) return;
+  if (window.__STAR_DINO_R01A_TEST__ === true || state.chapter4DirectMode) return;
   try {
     const raw = localStorage.getItem(SESSION_RUNTIME_KEY);
     if (!raw) return;
@@ -16749,6 +17195,10 @@ function finishActiveSessionAtRest({ reward = "", reason = "natural-rest" } = {}
   };
   state.sessionRuntime.active = null;
   state.activeSession = null;
+  if (session.formalSession === true && state.chapter4?.reviewScheduler) {
+    state.chapter4.reviewScheduler = reconcileChapter4ReviewScheduler(state.chapter4.reviewScheduler, state.sessionRuntime.history);
+    state.sessionRuntime.chapter4 = state.chapter4;
+  }
   saveSessionRuntime(state.sessionRuntime);
   return ended;
 }

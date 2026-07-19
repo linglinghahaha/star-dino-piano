@@ -9,6 +9,7 @@ const suites = [
   ["AUDIO-C", "chrome-test/audio-c-lifecycle-check.mjs"],
   ["LS08", "chrome-test/chapter3-ls08-listening-check.mjs"],
   ["C4 LP01-LP02", "chrome-test/chapter4-lp01-lp02-check.mjs"],
+  ["C4 R01A", "chrome-test/chapter4-r01a-audio-lifecycle-check.mjs"],
   ["C4 LP03", "chrome-test/chapter4-lp03-check.mjs"],
   ["C4 LP03 Supervisor", "chrome-test/chapter4-lp03-supervisor-check.mjs"]
 ];

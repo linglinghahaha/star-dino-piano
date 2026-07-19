@@ -2,6 +2,41 @@
 
 This file records concrete pass/fail evidence for UI, teaching, and polish gates. It is not a substitute for the acceptance rules in `15_ACCEPTANCE_GATES.md`; it is the evidence trail.
 
+## 2026-07-19 - C4-R01A Scheduler Core Accepted Browser Baseline
+
+Identity and scope:
+
+- Runtime identity: `overhaul-347a-c4-r01a`; frozen `app.js` SHA-256 `5E2041D554E20DA7E98A5C0544B1834051B4DD8AA7D684388F8A43B0CCB0D4DE`.
+- This milestone accepts only the C4-R01A opening-review scheduler core, its isolated real-screen fixtures, and evidence contracts. It does not create a formal `C4-03`, implement LP04, complete C4-R01B, or integrate media.
+- Canonical skills remain isolated as `level:LP01 -> LP01` and `low-key:C3 -> LP02`. Unknown, missing, or mismatched persisted identities are discarded instead of being remapped. Resume plans stay story-first; one post-review formal child story is required before another opening review.
+
+Focused independent gates:
+
+- Scheduler `35/35`; fixed supervisor evidence `19/19`; P1 adversarial `29/29`; dedicated R01A audio lifecycle `12/12`; artifact authenticity `20/20`; triple-contract authenticity `19/19`.
+- The P1 gate covers malformed retained anchors, missing stable-event fields, invalid dates, system-only routes, child-story spacing, same-day/cross-day boundaries, corrupt attempt timestamps, unknown skills, missing level identity, and both skill/level mismatch directions.
+- The audio gate proves real shared-piano started/ended transactions, reduced-cue no-model behavior, interruption recovery, reload isolation, and byte-identical non-empty formal storage.
+
+Three-round browser contract:
+
+- Each round is `captureScope=full`, six landscape browser viewports x seven real scheduler states = `42/42` PNG, with zero failures and zero browser errors. Every capture records decoded assets, frozen capture motion, and unchanged non-empty formal storage; all six LP01 playing states record `audioTransactionStarted=true`.
+- All three core hashes and all 42 state-keyed PNG hashes are byte-identical across rounds. Core SHA-256: `32b8f7b84a9d25e5a3fa7d43c1c0b6ff5f343552f509dcb92d68c74aaa492401`.
+- Round JSON SHA-256: round 1 `4FFD61F79D6A0160BD40146DA2260D3073283501BFE92C393CFC6E0173AA9BA4`; round 2 `E8DE24B7AD430DC236BE7F4C4C9B095512EA6A283A31CAEA215A85AEEA3140F4`; round 3 `FFE359BC60DD3F7F088C0EF32BC7962BE9B5ED6BB82B4408D450343E45243F7D`.
+- The canonical contract `docs/30_CHAPTER4_R01A_MEDIA_ZONE_CONTRACT_347A_V1.json` is byte-identical to accepted round 3 and points to `screenshots/chapter4_r01a_media_zones_347a_v1_full_round3/`. Runner SHA-256: `DB52C69CA81E5D6ABABCCC5669A0219C2C4F31E7ACF9DDE6B23DAF99EDE49C3D`; dedicated audio gate SHA-256: `58ED27B0EF32DECDB3E8E01097DAB19F513C660F201B150C4EA2CA7900FC2C53`.
+
+Shared regression on the frozen source:
+
+- Curriculum/story coherence `29/29`; child note-name policy `276/276`; sessions/retention `74/74`; clean-state `124/124`; M03/garden `32/32`; Chapter 3 visible `74/74`; LS04 `39/39`; LS05 `66/66`; LS06/LS07 `64/64`; LS08 `131/131`.
+- Full controlled audio components passed: AUDIO-A `66/66`, AUDIO-B `46/46`, AUDIO-C `46/46`, LS08 `131/131`, C4 LP01-LP02 `137/137`, C4 R01A `12/12`, C4 LP03 `54/54`, and LP03 supervisor `32/32`.
+- Input reliability `12/12`; audio settings `13/13`; PWA shell `8/8`; iPad accessibility `43/43`; staff mini `20/20`; staff repair `27/27`; staff readability `13/13`; motion `19/19`; palette `17/17`; contrast `9/9`.
+- Xingya equipment `29/29`; workshop identity `36/36`; assembly hierarchy `39/39`; M01 hierarchy `17/17`; M08 roof route `97/97`. `check:quick` and `check:bundle:strict` pass with 42 runtime files and 1,641,265 runtime-asset bytes.
+
+Status and remaining evidence:
+
+- `passed`: browser scheduler semantics, isolated real-screen remediation/reduced-cue fixtures, storage isolation, teaching audio lifecycle, exact three-round visual evidence, curriculum coherence, note-name policy, and shared browser regression.
+- `partial`: C4-R01A is a composable core; C4-R01B still must connect it to real LP04 actions in a later, separate milestone. Capture animation is deliberately frozen for deterministic geometry evidence and does not replace motion testing.
+- `missing`: physical iPad Safari, real MIDI hardware, acoustic-piano microphone, human speaker/headphone review, teacher review, 3-5 child observations, long-term retained learning evidence, final art/source clearance, native iPad/TestFlight/App Store evidence, LP04-LP10, and Chapter 5 runtime.
+- Grok video remains `external_quota_exhausted / hard_paused`: no precheck, retry, polling, alternate account, new batch, or runtime media integration is allowed until the user explicitly confirms restored quota.
+
 ## 2026-07-19 - LP03 346a Contract Triple and Shared Regression Evidence
 
 Baseline, identity, and scope:

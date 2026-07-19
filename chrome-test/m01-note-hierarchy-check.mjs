@@ -104,7 +104,7 @@ try {
       const keyOrder = state.primaryKeys.map((key) => key.primary).join("");
       const secondaryOrder = state.primaryKeys.map((key) => key.secondary).join("");
 
-      record(`${viewport.id}: runs the 346a LP03 shell`, state.runtimeVersion.includes("overhaul-346a-lp03"), state);
+      record(`${viewport.id}: runs the 347a R01A shell`, state.runtimeVersion.includes("overhaul-347a-c4-r01a"), state);
       record(`${viewport.id}: story card contains the story problem without a duplicate identity row`, state.storyIdentitySuppressed === "true" && state.storyCueCount === 0 && !/[A-G]|Do|Re|Mi|Fa|Sol|黑键/.test(state.storyText), state);
       record(`${viewport.id}: hanging part shows only the C note name`, state.badge.visible && state.badge.primary === "C" && state.badge.secondary === "", state.badge);
       record(`${viewport.id}: Xingya owns the only initial solfege prompt`, state.coachText.includes("唱 Do") && !state.coachText.includes("C") && !state.coachText.includes("黑"), state);
