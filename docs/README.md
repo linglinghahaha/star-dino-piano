@@ -15,12 +15,12 @@ These files define the product direction so implementation does not drift:
 - `10_STORY_WORLD_BIBLE.md`: story world, character, chapter, and reward rules.
 - `11_APP_STORE_COMPLIANCE_AND_PRIVACY.md`: child privacy, permission, copyright, and App Store guardrails.
 - `12_BUSINESS_WEDGE_AND_APP_STORE.md`: market wedge, buyer, screenshots, and retention strategy.
-- `13_PLANNING_AUDIT_AND_FIXES.md`: historical planning repair notes; do not treat it as the newest audit source if it conflicts with `18`.
+- `13_PLANNING_AUDIT_AND_FIXES.md`: historical planning repair notes; do not treat it as a current source if it conflicts with `29` or an authoritative runtime contract.
 - `14_NOTE_IDENTITY_MATRIX.md`: single planning source for C-D-E-F-G note identity.
 - `15_ACCEPTANCE_GATES.md`: hard pass/fail gates for gameplay, UI, teaching, assets, and release stages.
 - `16_ASSET_MANIFEST.md`: provisional asset ledger and release-readiness rules.
 - `17_STORY_ARC_AND_LEVEL_BEATS.md`: cute story arc, character naming, and level-by-level narrative beats.
-- `18_CURRENT_PLANNING_REVIEW.md`: current single rolling audit source for planning consistency, missed risks, contradictions, and priority order.
+- `18_CURRENT_PLANNING_REVIEW.md`: dated 2026-07-14 planning snapshot; its own header marks old runtime and next-work wording as superseded by `29`.
 - `19_STORY_TEACHING_ART_AUDIT.md`: story appeal and art-direction reference; use it for story/art detail, not as the master production checklist.
 - `20_GATE_RUN_LOG.md`: dated screenshot/interaction evidence for acceptance gates.
 - `21_PLANNING_SYSTEM_AUDIT_2026-07-10.md`: dated strict cross-file audit; active findings have been folded into `18`/`08` where still current.
@@ -31,7 +31,7 @@ These files define the product direction so implementation does not drift:
 - `26_IMAGEGEN_DELIVERABLE_BRIEF.md`: built-in image-generation prompts, output paths, reference images, and acceptance gates for replacing the rejected SVG wireframes.
 - `27_XINGYA_SPECIES_AND_SPACE_GEAR_BIBLE.md`: canonical Xingya species, space-new-home background, atmosphere states, pressure-suit rules, and chapter-by-chapter outfit continuity.
 - `28_CUTSCENE_VOICE_SFX_PRODUCTION_PLAN.md` and related `28_*` files: animation, voice, SFX, privacy, candidate-state, safety-zone, Grok capability evidence, and isolated-retest/tool-selection contracts owned by the media task.
-- `28_GROK_ISOLATED_RETEST_AND_USE_MATRIX.md`: plain-language Grok use boundaries, isolated-environment prerequisites, six bounded neutral tests, evidence requirements, and the source-candidate decision tree; it does not authorize current-host calls.
+- `28_GROK_ISOLATED_RETEST_AND_USE_MATRIX.md`: historical isolated-retest boundaries and decision tree. It does not authorize a new call; `29` owns the current user-confirmed Grok video hard pause.
 - `29_PROJECT_COORDINATION_AND_INDEPENDENT_AUDIT.md`: three-task ownership, scheduling, file-conflict prevention, evidence levels, independent-review limits, and current cross-task queue.
 - `30_TEACHING_ZONE_COORDINATE_CONTRACT_*.json`: versioned browser-coordinate evidence for protected teaching zones; each file is valid only for its recorded source hashes and is not physical-iPad proof.
 - `31_SESSION_SCHEDULER_AND_RETENTION_RUNTIME_CONTRACT.md`: authoritative session lifecycle, natural-rest, migration, opening-review, stable-history, and later-session retained acceptance contract.
@@ -51,14 +51,14 @@ These files define the product direction so implementation does not drift:
 - `45_LS08_SUPERVISOR_ACCEPTANCE_CHECKLIST.md`: accepted supervisor record for the two-note-order milestone; it preserves the historical `343a-p2` structure ruling and the `344a-p3` controlled-audio lifecycle re-acceptance.
 - `46_CHAPTER4_LP01_LP02_SUPERVISOR_ACCEPTANCE_CHECKLIST.md`: accepted historical work order and evidence record for the `overhaul-344a-p3` Chapter 4 first slice; it separates LP01 high/low C sound comparison from LP02 low-C keyboard geography.
 - `47_CHAPTER4_LP03_SUPERVISOR_ACCEPTANCE_CHECKLIST.md`: accepted browser-teaching record for `C4-02 / LP03` at `overhaul-346a-lp03` / `cedc384`; it preserves LP02's permanent C anchor, adds D/E without resetting the world, and keeps staged C3-E3 evidence separate from stable/retained.
-- `48_CHAPTER4_OPENING_REVIEW_SCHEDULER_ACCEPTANCE_CHECKLIST.md`: prepared but undispatched two-gate `C4-R01` work order. `C4-R01A` freezes queue migration, selection, cooldown, review state, persistence, and the composable plan interface after LP03; `C4-R01B` proves same-session integration against real C4-03 actions inside the later LP04 candidate. This avoids an empty child-visible C4-03 session while keeping hearing and key-location evidence separate.
+- `48_CHAPTER4_OPENING_REVIEW_SCHEDULER_ACCEPTANCE_CHECKLIST.md`: active two-gate `C4-R01` work order. `C4-R01A` is the only current runtime task; its first 347a draft was rejected in supervisor commit `addc693` and is not a baseline. `C4-R01B` remains locked for same-session integration against real C4-03 actions inside the later LP04 candidate.
 - `49_TEACHING_AUDIO_LIFECYCLE_AUDIT_CHECKLIST.md`: completed historical work order. AUDIO-A, AUDIO-B, and AUDIO-C independently migrated and verified the M03/LS01-LS07 teaching-audio lifecycle; the final approved prerequisite is retained in `overhaul-345d-audio-c` / `2405734`.
 - `50_GROK_BATCH7_SUPERVISOR_REVIEW.md`: independent source-only ruling for Grok Batch 7; it does not approve runtime or release use.
 - `51_CHAPTER4_LP04_SUPERVISOR_ACCEPTANCE_CHECKLIST.md`: prepared but locked `C4-03 / LP04` work order. LP03 is accepted; LP04 now waits only for the separate C4-R01A scheduler-core baseline, and its candidate must also pass C4-R01B against the real LP04 actions.
 
 When changing the app, check the relevant document first. If a requested feature conflicts with the north star, update the plan deliberately rather than letting the product drift.
 
-Current-source rule: this `web_star_dino_workshop/docs` directory is the active planning source. Older directories such as `copyright_safe_app_design` are historical reference only. `18_CURRENT_PLANNING_REVIEW.md` is the rolling product audit, while `29_PROJECT_COORDINATION_AND_INDEPENDENT_AUDIT.md` owns the newest cross-task order and pass/return status; neither can override the curriculum ownership rules below.
+Current-source rule: this `web_star_dino_workshop/docs` directory is the active planning source. Older directories such as `copyright_safe_app_design` are historical reference only. `29_PROJECT_COORDINATION_AND_INDEPENDENT_AUDIT.md` owns the newest cross-task order and pass/return status, `08_EXECUTION_BACKLOG.md` mirrors the active stage queue, and `18_CURRENT_PLANNING_REVIEW.md` is a dated historical audit. None can override the curriculum ownership rules below.
 
 ## Child-facing Note Language
 
@@ -154,7 +154,7 @@ Integration order:
 11. Physical iPad, MIDI and piano-microphone claims follow `docs/38`: Web/simulator evidence remains labeled, every promoted hardware route uses a frozen Release/TestFlight build and device matrix, and untested USB/BLE/microphone paths stay out of marketing.
 12. Asset and IP release follows `docs/39`: every final visual/audio/font/store asset has provenance, prompt/license/reference and final hash, then independent similarity and professional review; an AI-generated or internally approved file is not automatically cleared. Grok Batch 7's independent source-only ruling is recorded in `docs/50`; its preferred items are still not runtime- or release-approved.
 
-Curriculum handoff status (`2026-07-17`):
+Curriculum handoff status (`2026-07-19`):
 
 - Chapter numbering, `LS01-LS08`, `LP01-LP10`, `TH01-TH08`, register-qualified note targets, story causes, cue fading, route fallback, evidence wording, and native release parity are locked in `03`, `09`, `14`, `17`, `24`, and runtime contracts `31-36`.
 - Chapter 3 session pacing now separates visible `LS03` Mi transfer from the first hidden `LS04` Do/Re comparison.
@@ -168,7 +168,7 @@ Curriculum handoff status (`2026-07-17`):
 - `39` locks the originality and similarity-review protocol, but final unified provenance packages, independent comparison, music review and professional release clearance remain missing.
 - `49` is complete through `overhaul-345d-audio-c` / `2405734`, and `47` is complete through `overhaul-346a-lp03` / `cedc384`. `48` C4-R01A is now the next isolated runtime contract; LP04 remains locked. A wall-clock timeout is never successful audio completion.
 - `50` independently reviews Grok Batch 7: 18 real video calls produced 15 source-only originals, but runtime and release approvals remain zero and every 6.04-second original still needs a 2-5-second edit plus real-UI composite review.
-- Grok Batch 8 is frozen at 24 real calls/23 originals and the role-video chain is stopped after identity failures. Later source-only packages record Batch 9 at 11/11, Batch 10 at 8/8, Batch 11 at 6/6, Batch 12 at 2/2 and Batch 13 at 12/12; Batch 14 stopped at 5 calls/4 originals on a spending-limit response. Batch 15 failed before `image_to_video`, so it has 0 video calls/0 originals. Batch 16 indexed 146 historical originals, then a runner race triggered the same authorized ID twice; both video calls failed on spending-limit and produced 0 originals. Batch 17 remained a zero-call recharge queue. Batch 18 used one new CH3-A ID, triggered `image_to_video`, received outer 402 plus tool 403 `personal-team-blocked:spending-limit`, and produced 0 originals; its other seven jobs are frozen. These counts prove calls and local originals only. Nothing is runtime- or release-approved.
+- Grok Batch 8 is frozen at 24 real calls/23 originals and the role-video chain is stopped after identity failures. Later source-only packages record Batch 9 at 11/11, Batch 10 at 8/8, Batch 11 at 6/6, Batch 12 at 2/2 and Batch 13 at 12/12; Batch 14 stopped at 5 calls/4 originals on a spending-limit response. Batch 15 failed before `image_to_video`, so it has 0 video calls/0 originals. Batch 16 indexed 146 historical originals, then a runner race triggered the same authorized ID twice; both video calls failed on spending-limit and produced 0 originals. Batch 17 remained a zero-call recharge queue. Batch 18 and the final Batch20 probe each preserved their bounded failure evidence; Batch20 made one new CH3-A video call, received outer 402 plus tool 403 `personal-team-blocked:spending-limit`, and produced 0 originals. The user has now confirmed video quota exhaustion, so all Grok video generation, preflight, retries, account switching and new batches are hard-paused until explicit recovery. These counts prove calls and local originals only. Nothing is runtime- or release-approved.
 - The canonical Chapter 5 piece is two bars in 4/4; its exact notes, rhythm, relay route, optional together route, and timing evidence thresholds are in `03` and `09`.
 - Finger numbers remain parent/teacher support and are not a child mastery target.
 - This is curriculum self-reviewed, not teacher- or child-proven. No task may claim release readiness until the named runtime gates, real iPad/MIDI/audio checks, teacher review, and real 4-6 child observations are recorded.

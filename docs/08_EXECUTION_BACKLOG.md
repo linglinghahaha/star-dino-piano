@@ -2,6 +2,13 @@
 
 Current display override, 2026-07-13: child-visible surfaces and child-facing ARIA outside the small-dinosaur dialogue use letter names only. Older milestone bullets below that accurately report `large solfege`, `solfege-only badge`, `Do/C`, or similar historical UI remain evidence of what those versions did; they are not current acceptance criteria and must not be copied into new work. Parent-only evidence may retain dual identity. The current rule, approved baseline evidence and future regression requirement are tracked in `29_PROJECT_COORDINATION_AND_INDEPENDENT_AUDIT.md`.
 
+Current execution checkpoint, 2026-07-19:
+
+- `29_PROJECT_COORDINATION_AND_INDEPENDENT_AUDIT.md` is the live dispatch and pass/return source. The latest approved browser teaching baseline is `overhaul-346a-lp03` / `cedc38401b64144f4e47ad2b0ff2f4d4e0155ef4`.
+- Chapter 3 `LS01-LS08`, teaching-audio lifecycle batches A-C, Chapter 4 `LP01-LP03`, and their named browser regressions are complete at that baseline. Physical iPad, real MIDI/acoustic-piano microphone, human listening, teacher/child evidence, final art provenance and release clearance remain separate missing gates.
+- The only active runtime work is `docs/48` `C4-R01A`. Its first `overhaul-347a-c4-r01a` draft was rejected in supervisor commit `addc693` because it reused an old 344a contract and lacked a real isolated review lifecycle, non-empty formal-storage protection and R01A audio evidence. It is not a new baseline.
+- `LP04`, `C4-R01B`, `LP05+`, Chapter 5, native migration and all media runtime integration remain locked. Grok video generation is hard-paused after user-confirmed quota exhaustion; no generation, balance preflight, retry, account switching or new video batch is allowed until the user explicitly confirms recovery.
+
 ## Phase 0: Alignment Files
 
 Status: complete.
@@ -198,6 +205,8 @@ Planning repair gates before broad polish:
 
 ## Phase 2: Staff Star Bridge Polish
 
+Status: browser mechanic and current regressions are retained in the approved `346a` baseline; release art, physical-iPad feel and real-child comprehension remain incomplete.
+
 Goal: make S01 the flagship mechanic.
 
 Tasks:
@@ -278,7 +287,7 @@ Current progress:
 
 ## Phase 2B: Chapter 3 Listening Garden
 
-Status: the approved `overhaul-345c-audio-b` baseline retains the independently reviewed Chapter 3 session, story, input, repair, layout and evidence-shape results. M03 and LS01-LS03 have passed `AUDIO-A`; LS04-LS05 have passed `AUDIO-B`; LS08 already uses the verified lifecycle. `AUDIO-C` for LS06-LS07 is the only current runtime work, followed by the full lifecycle regression. Media runtime integration remains locked.
+Status: complete as a browser teaching baseline through `overhaul-346a-lp03`. `LS01-LS08` and teaching-audio lifecycle A-C have passed their independent browser gates and full regression. Final garden art, physical iPad/audio hardware, human listening, teacher/child observation and media release clearance remain incomplete; media runtime integration stays locked.
 
 Goal: turn the existing M03 listening seed into a staged story course that links heard piano sound, C/D/E/F/G letter name, Xingya's solfege, real keyboard geography, and neutral story consequences without claiming absolute pitch.
 
@@ -308,7 +317,7 @@ Acceptance:
 
 ## Phase 2C: Chapter 4 First Low-Register Slice
 
-Status: `C4-01 / LP01-LP02` is independently accepted and retained in the current `overhaul-345d-audio-c` / `2405734` browser baseline under `docs/46`. `docs/49` and the full lifecycle regression are complete. `LP03` is now the only unlocked runtime lesson under `docs/47`; `LP04+` remains locked.
+Status: `C4-01 / LP01-LP02` and `C4-02 / LP03` are independently accepted in `overhaul-346a-lp03` / `cedc384` under `docs/46-47`; `docs/49` and the full lifecycle regression are complete. The only active runtime work is the separate `C4-R01A` scheduler core under `docs/48`. Its first 347a draft is rejected and being corrected; `LP04+` and `C4-R01B` remain locked.
 
 Scope:
 
