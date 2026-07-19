@@ -1,13 +1,13 @@
 # Chapter 4-5 Course, Story, and Art Readiness Audit
 
-状态：`curriculum_story_static_passed / chapter4_lp01_lp03_browser_runtime_passed / chapter4_lp04_lp10_runtime_missing / chapter5_runtime_missing / art_package_partial / chapter5_scene_contradicted / teacher_child_device_evidence_missing`
+状态：`curriculum_story_static_passed / chapter4_lp01_lp03_browser_runtime_passed / chapter4_lp04_lp10_runtime_missing / chapter5_runtime_missing / art_package_partial / chapter5_scene_contradicted / provider_unverified_outputs_quarantined / grok_video_hard_paused / teacher_child_device_evidence_missing`
 
 初版日期：2026-07-13
-调度政策复核：2026-07-17
+调度政策复核：2026-07-19
 
 负责人：课程故事、整体调度与独立审查任务。本文只裁决课程、故事和概念素材是否足以进入后续生产，不批准任何素材进入 runtime。
 
-调度政策说明：本文初版时对共享 Administrator 宿主上的 Grok 调用采取全面关闭。后续经过独立能力、会话、原件、哈希和目录边界核验，现行政策已由 `docs/29_PROJECT_COORDINATION_AND_INDEPENDENT_AUDIT.md` 与对应 Grok 批次 manifest 取代旧禁令。Grok 只允许由“星龙工坊媒体候选”任务在明确批次内逐镜头调用，保存 prompt、参考源、会话与原件哈希，并始终保持 `runtimeApproval=false / integrationAllowed=false / releaseCleared=false`。工具可调用、账号可登录或视频生成成功，均不能替代逐帧质量审查、来源清关、外部相似性审查或运行集成批准。
+调度政策说明：历史 Grok 批次只用于保存能力和 source-only 证据，从未获得 runtime 或 release 批准。用户现已明确确认 Grok 视频额度耗尽，当前进入硬暂停：不得生成视频、预检额度、重试旧 ID、切换账号或建立新批次；只有用户以后明确确认额度恢复，主管才可重新评估。已有原片仍须保留 prompt、参考源、会话和原件哈希，并始终保持 `runtimeApproval=false / integrationAllowed=false / releaseCleared=false`。工具曾经可调用、账号可登录或视频曾生成成功，都不能替代逐帧质量审查、来源清关、外部相似性审查或运行集成批准。
 
 ## 给普通人看的结论
 
@@ -19,7 +19,7 @@
 - 第四章缺少 LP08-LP10 地下谱线、五个准确谱位、桥支撑和六个信号锚的可分层世界状态；
 - 第五章现有主场景把两处住处画成相邻房屋，并让角色站在桥上，不符合已经锁定的故事地理；
 - 第五章缺少 TH05 的“两桥墩 -> 两组各四颗星灯 -> 两小节接力桥完成”精确阶段图；
-- 所有现有生成图仍是 source concept，没有最终透明切图、完整来源包、外部相似性清关和真机教学安全区证据。
+- 仍可讨论的合格生成图最多是 source concept，没有最终透明切图、完整来源包、外部相似性清关和真机教学安全区证据；`concepts/generated-v3/chapter4-5-readiness` 的五张输出经过未验证本地代理，已全部隔离为 `provider_unverified_rejected`，不是 source concept 或候选。
 
 因此结论不是“第四、第五章要重写”，而是“课程可以保留；LP01-LP03 浏览器教学切片已通过，LP04-LP10 与第五章仍需按课程逐段实现，美术需要同步重新补齐”。
 
@@ -128,6 +128,8 @@
 
 ## 三、下一批必须补齐的概念稿
 
+下面 A-E 是未来生产规格，不是当前生成授权。Grok 视频硬暂停；任何静态图新生产也必须先证明使用的是官方或 Codex 内置提供方，并记录真实模型、参考上传边界、完整 prompt 和哈希。未验证代理的旧输出只能留在 quarantine，不能改名成为候选。
+
 ### A. Chapter 4 场景状态板
 
 一张 16:9 宽场景的四格连续状态，镜头和布局完全一致：
@@ -191,7 +193,7 @@
 6. 核对咚咚准确三只角、四足低姿、圆润颈盾和无额外角状尖刺；
 7. 不把琴键、五线谱、音符、音名、唱名或答案烘焙成正式素材；
 8. 不修改 app.js、HTML、CSS、runtime 资产、课程音序、掌握或 session 规则；
-9. Grok 只可由星龙工坊媒体候选任务按主管当前批次合同调用：固定项目与来源边界、每镜头一次、串行、保留完整 prompt/session/toolCallId/输入输出哈希；遇到认证、消费限制或停止条件立即冻结，不得换号绕过、混入其他项目或直接接入 runtime；
+9. Grok 视频当前硬暂停：用户明确确认额度恢复前，不得生成、预检额度、重试、换号或建立新批次；已有证据只可离线审查，不得混入其他项目或直接接入 runtime；
 10. 未经主管独立审查，不向原型任务发送集成建议。
 
 ## 五、仍然缺少的发布证据

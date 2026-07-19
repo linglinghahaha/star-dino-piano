@@ -17,6 +17,7 @@ const paths = {
   pacing: "docs/33_GAME_TEACHING_PACING_AND_MOTIVATION_CONTRACT.md",
   low: "docs/34_CHAPTER4_LOW_REGISTER_RUNTIME_CONTRACT.md",
   coordinationCourse: "docs/35_CHAPTER5_COORDINATION_RUNTIME_CONTRACT.md",
+  artReadiness: "docs/40_CHAPTER4_5_COURSE_STORY_AND_ART_READINESS_AUDIT.md",
   app: "app.js",
   shell: "index.html"
 };
@@ -222,6 +223,27 @@ check("equipment and atmosphere continuity remain safe across chapters", () => {
   expectIncludes(docs.coordinationCourse, ["星芽不无头盔返回真空月面", "不站在开放太空桥中央"], paths.coordinationCourse);
 });
 
+check("Chapter 4-5 art readiness keeps missing assets and provider gates honest", () => {
+  expectIncludes(docs.artReadiness, [
+    "chapter4_lp04_lp10_runtime_missing",
+    "chapter5_runtime_missing",
+    "provider_unverified_outputs_quarantined",
+    "grok_video_hard_paused",
+    "provider_unverified_rejected",
+    "Grok 视频硬暂停",
+    "不得生成、预检额度、重试、换号或建立新批次",
+    "runtimeApproval=false / integrationAllowed=false / releaseCleared=false"
+  ], paths.artReadiness);
+  expectIncludes(docs.artReadiness, [
+    "### A. Chapter 4 场景状态板",
+    "### B. Chapter 4 教学世界状态板",
+    "### C. Chapter 5 正确世界地理板",
+    "### D. TH05 精确阶段板",
+    "### E. 路线公平对照板"
+  ], paths.artReadiness);
+  expectExcludes(docs.artReadiness, ["Grok 只允许由“星龙工坊媒体候选”任务"], paths.artReadiness);
+});
+
 check("game and teaching pacing preserve short lessons and honest achievement", () => {
   expectIncludes(docs.pacing, [
     "唯一新教学轴是什么",
@@ -283,7 +305,7 @@ check("Chapter 5 automatic gate list is consecutively numbered", () => {
 
 check("curriculum sources contain no protected-IP or other-product markers", () => {
   const protectedPattern = /奥特曼|ultraman|琴键小队长|midiprobe|keyboard_captain|com\.dashun\.midiprobe|迪士尼|disney|漫威|marvel|宝可梦|pok[eé]mon|小猪佩奇|peppa/gi;
-  const curriculumKeys = ["readme", "roadmap", "wordMode", "backlog", "identity", "story", "historicalReview", "book", "listening", "pacing", "low", "coordinationCourse"];
+  const curriculumKeys = ["readme", "roadmap", "wordMode", "backlog", "identity", "story", "historicalReview", "book", "listening", "pacing", "low", "coordinationCourse", "artReadiness"];
   const hits = [];
   for (const key of curriculumKeys) {
     for (const match of docs[key].matchAll(protectedPattern)) hits.push(`${paths[key]}:${match[0]}`);
