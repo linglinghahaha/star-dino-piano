@@ -105,6 +105,22 @@ check("human lesson book headings follow the canonical order", () => {
   expect(sameArray(headings, canonicalIds), `actual heading order: ${headings.join(",")}`);
 });
 
+check("all 39 human lesson sections describe action, response, repair, and learning", () => {
+  const lessonHeadings = [...docs.book.matchAll(/^###\s+(M0[1-8]|FG0[1-4]|S01|LS0[1-8]|LP(?:0[1-9]|10)|TH0[1-8])\b/gm)];
+  const incomplete = [];
+  lessonHeadings.forEach((heading, index) => {
+    const section = docs.book.slice(heading.index, lessonHeadings[index + 1]?.index ?? docs.book.length);
+    const missing = [];
+    if (!section.includes("**开场画面**")) missing.push("opening");
+    if (!section.includes("**孩子做什么**")) missing.push("child-action");
+    if (!section.includes("**真正学到什么**")) missing.push("learning");
+    if (!/\*\*(?:答对时|完成时)\*\*/.test(section)) missing.push("success");
+    if (!/\*\*[^*\n]*(?:答错|按错|按到另一个|没能同时|弹乱|忘记)[^*\n]*\*\*/.test(section)) missing.push("repair");
+    if (missing.length) incomplete.push(`${heading[1]}:${missing.join("+")}`);
+  });
+  expect(incomplete.length === 0, incomplete.join(", "));
+});
+
 check("chapter names and progression remain aligned", () => {
   const names = ["月亮小家", "星星桥", "会听的小种子", "咚咚的低音星球", "会唱歌的大家园"];
   for (const key of ["roadmap", "story", "book", "pacing"]) {
