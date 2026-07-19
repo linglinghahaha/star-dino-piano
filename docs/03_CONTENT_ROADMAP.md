@@ -9,10 +9,10 @@ This is the canonical chapter order. Other planning files must use the same numb
 | 1 | 月亮小家 | middle `C4-G4` note identity and keyboard geography | current Web course |
 | 2 | 星星桥 | treble-staff `C4-G4` reading through physical jump pads | current flagship slice |
 | 3 | 会听的小种子 | guided pitch echo, small-set sound-to-key matching, and two-note aural memory | `LS01-LS08` browser behavior and the full teaching-audio lifecycle pass in `overhaul-345d-audio-c` / `2405734`; physical-device, teacher and child evidence remain missing |
-| 4 | 咚咚的低音星球 | high/low contrast, low `C3-G3`, bass staff, left-hand readiness | `LP01-LP02` pass in the approved 345d baseline; `LP03` is the only dispatch-ready runtime lesson, while `LP04-LP10` remain locked |
+| 4 | 咚咚的低音星球 | high/low contrast, low `C3-G3`, bass staff, left-hand readiness | `LP01-LP03` pass in the approved `overhaul-346a-lp03` / `cedc384` browser baseline; `C4-R01A` is the next gated runtime work, while `LP04-LP10` remain locked |
 | 5 | 会唱歌的大家园 | hand alternation, simple two-hand coordination, grand staff | curriculum specified; not implemented |
 
-`音符护照` is a cross-chapter collection/review system, not a numbered chapter. Its child-facing collection is icon-led and records places, helpers and story accomplishments; parent-facing played/stable/retained evidence remains separate, so collection count cannot imply mastery. The A-G word game remains a later optional project.
+`音符护照` is a cross-chapter collection/review system, not a numbered chapter. Its child-facing collection is icon-led and records places, helpers and story accomplishments; parent-facing played/stable/retained evidence remains separate, so collection count cannot imply mastery. The A-G word game is the parked final optional project: it cannot start before Chapters 1-5 and the core release foundation pass, all core P0/P1 issues are resolved, and a future supervisor explicitly dispatches it.
 
 ## Course-wide Learning Logic
 
@@ -384,7 +384,16 @@ Remediation:
 
 ## Later Project: A-G Word Typing Game
 
-Keep for later. It is promising but should not distract from the core MVP.
+Status: `parked_final_project / not_dispatched / runtime_forbidden`.
+
+Do not implement, prototype, generate dedicated art for, or expose an entry until all of the following are true:
+
+- Chapters 1-5 have passed their own supervisor gates;
+- the core release foundation is stable;
+- no unresolved core P0/P1 issue remains;
+- a future supervisor dispatch explicitly reopens this project.
+
+This order is stricter than merely finishing the C-G bridge or listening loops. Available engineering time, a convenient word list, or completed A/B rows are not unlock signals by themselves.
 
 Potential idea:
 
@@ -392,4 +401,4 @@ Potential idea:
 - Child presses piano keys to spell simple note-letter words.
 - Valid examples: `BAG`, `BAD`, `BED`, `BEE`, `CAB`, `DAD`, `EGG`, `FACE`, `FEED`, `AGED`, `CAGE`.
 - Music teaching value: strengthens letter note names.
-- Risk: English word reading may be too advanced for younger children, and A/B are not part of the first C-D-E-F-G course yet. Place it after core music literacy, define A/B note identity first, and make it optional.
+- Risk: English word reading may be too advanced for younger children, and A/B are not part of the first C-D-E-F-G course yet. After the final-project gate is explicitly reopened, define A/B note identity first, keep the mode optional/older-child, and verify that language play reinforces rather than replaces music literacy.

@@ -254,7 +254,7 @@ Transition notes:
 - `M03` is an early listening seed inside Chapter 1; Chapter 3 expands that skill after the first staff bridge.
 - Xingya wears the complete sealed exterior suit throughout moon-surface and S01 open-space play. A 2-4 second automatic atmosphere-check transition opens the helmet and removes the outer layer before LS01; it is story continuity, not a music question or a child-operated button.
 
-## Future Chapter 3 Level Beats
+## Chapter 3 Level Beats
 
 The exact sound tasks, thresholds, and input rules are canonical in `03_CONTENT_ROADMAP.md` and `09_SCAFFOLD_AND_ASSESSMENT_RULES.md`. This table locks the visible garden story so eight listening levels do not become eight identical sprouting animations.
 
@@ -269,7 +269,7 @@ The exact sound tasks, thresholds, and input rules are canonical in `03_CONTENT_
 | LS07 | 挨着睡的 E 和 F | E/F flowers lean into each other while one neutral dew drop gives the call | adjacent-sound comparison separates their stems after the response | the opened flowers blink a two-sound message to Xingya |
 | LS08 | 根须记两声 | the garden roots cannot remember the two-light message; a neutral central source first models one unscored pair, then plays hidden pairs while Xingya uses one invariant listening gesture | the guide grows one neutral bud; four fixed C-D-E check pairs add neutral root knots only after the child's response | after the full set or bounded shared completion, an unscored low C echo travels underground and the ground answers |
 
-## Future Chapter 4 Level Beats
+## Chapter 4 Level Beats
 
 The teaching details, notes, register, and gates for these ids are canonical in `03_CONTENT_ROADMAP.md`. This table locks the story rhythm so Chapter 4 does not become ten versions of "press a key and receive a stone."
 
@@ -286,7 +286,7 @@ The teaching details, notes, register, and gates for these ids are canonical in 
 | LP09 | 低音桥加固 | E-F-G supports are mixed up | neighboring bass positions lock into place | the full low bridge is ready for a crossing |
 | LP10 | 咚咚的低音星桥 | the cave and surface still have no usable connection | a guided crossing completes the bridge and sends a signal; a later reduced-cue session lights six existing signal anchors without rebuilding or re-crossing it | Xingya can answer after story completion while bass-staff stability remains honest adult evidence |
 
-## Future Chapter 5 Level Beats
+## Planned Chapter 5 Level Beats
 
 | ID | Cute title | Visible problem | Correct world change | Reason for the next level |
 | --- | --- | --- | --- | --- |

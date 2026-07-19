@@ -97,7 +97,7 @@ Canonical chapter numbering:
 4. 咚咚的低音星球
 5. 会唱歌的大家园
 
-`音符护照` is cross-chapter. A-G word typing is a later optional project.
+`音符护照` is cross-chapter. A-G word typing is the parked final optional project and remains runtime-forbidden until a future supervisor explicitly dispatches it after the core release foundation passes.
 
 ## Three-task Coordination Contract
 
@@ -105,12 +105,13 @@ The three active Codex tasks have different owners. Do not use one task to silen
 
 | Task | Owns | Primary write scope | Must not silently change |
 | --- | --- | --- | --- |
-| `星龙工坊｜课程故事、整体调度与独立审查` | curriculum sequence, story world, lesson scripts, note/register targets, scaffold and assessment rules, art/voice requirements needed by teaching, cross-task scheduling, handoff and independent review of other tasks | `00-03`, `07`, `09`, `10`, `14`, `17-19`, `23-25`, `27`, `29`, `31-50`, plus curriculum/coordination rows in shared indexes | runtime UI/state, CSS, production audio/video, device operation, or claiming its own curriculum self-review is independent |
-| `星龙工坊原型开发、界面` | Web/iPad prototype code, UI layout, interaction feedback, MIDI/audio input, animation/VFX/SFX, generated and runtime art assets, device testing, and gate evidence | `app.js`, `index.html`, CSS, `tools/`, `chrome-test/`, asset folders, `20_GATE_RUN_LOG.md`, plus implementation-status rows in `08/18/23/25/26` | chapter order, level ids, exact pitches/registers, teaching objective, scaffold/mastery threshold, story cause, or child-facing learning claim |
+| `星龙工坊｜课程故事、整体调度与独立审查` | curriculum sequence, story world, lesson scripts, note/register targets, scaffold and assessment rules, art/voice requirements needed by teaching, cross-task scheduling, handoff and independent review of other tasks | `00-03`, `07`, `09`, `10`, `14`, `17-19`, `23-25`, `27`, `29`, `31-50`, `tools/curriculum-story-coherence-audit.mjs`, plus curriculum/coordination rows in shared indexes | runtime UI/state, CSS, production audio/video, device operation, or claiming its own curriculum self-review is independent |
+| `星龙工坊原型开发、界面` | Web/iPad prototype code, UI layout, interaction feedback, MIDI/audio input, animation/VFX/SFX, generated and runtime art assets, device testing, and gate evidence | `app.js`, `index.html`, CSS, other `tools/`, `chrome-test/`, asset folders, `20_GATE_RUN_LOG.md`, plus implementation-status rows in `08/18/23/25/26` | chapter order, level ids, exact pitches/registers, teaching objective, scaffold/mastery threshold, story cause, or child-facing learning claim |
 | `星龙工坊过场动画、角色语音与音效` | Gemini/Grok capability tests, storyboards/keyframes, source-only video batches, short cutscene candidates, voice scripts/recording workflow, sound processing, SFX candidates, source/license/privacy ledger | `docs/28_*`, `concepts/animatics`, `concepts/grok-cli-video-capture-*`, `audio/source-concepts`, `audio/runtime-candidates` | runtime integration, curriculum semantics, child-voice upload or cloning without renewed explicit consent |
 
 Shared-file rule:
 
+- Run `node tools/curriculum-story-coherence-audit.mjs` after any curriculum, story, identity, chapter-contract, or coordination-course change. Its green result proves only cross-file coherence; it does not replace prototype, teacher, child, device, media, or release review.
 - `README`, `08`, `16`, `18`, `23`, `25`, and `26` may contain several owners' status, but each task edits only its scoped rows and confirms that another task is not actively editing the same file.
 - The curriculum task specifies what a scene/action must communicate; the prototype task chooses and polishes the actual UI, animation, audio, and bitmap asset that satisfies it.
 - The animation/audio task creates traceable source concepts and candidates; the prototype task owns conversion into runtime assets and integration after coordinator approval.

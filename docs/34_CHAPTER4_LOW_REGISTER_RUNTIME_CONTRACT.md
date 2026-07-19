@@ -106,17 +106,17 @@ Story mode 只有在正式 `C3-07/LS08` session 以 clean、bounded assisted 或
 
 ### LP03-LP07 低音键位
 
-- LP02 已永久放下 C 锚石。LP03 第一遍先用 C 唤醒/锁紧该锚石，再用 D、E 放下两块新石；不能把 C 重新悬起或再次落下。可选检查只点亮门-C、C-D、D-E 三个既有接缝，不移动任何石头。
-- LP04 目标音播放前不亮答案键；错误后先说孩子音，再重放目标和当前方向。
-- LP05 先教 E/F/G 三个家，再做近邻比较；完整咚咚只在故事单元结束时出现。
-- LP06 只记录远跳路线 played，不授予独立 G 家或跨度能力。
-- LP07 handPrompted=`left`，但 touch/MIDI/mic 的 note event 不得自动写 actualHand=`left`。
+- LP02 已永久放下 C 锚石。LP03 固定为 `C3-D3-E3`：先用 C3 唤醒/锁紧该锚石，再用 D3、E3 放下两块新石；不能把 C 重新悬起或再次落下。可选检查只点亮门-C、C-D、D-E 三个既有接缝，不移动任何石头。
+- LP04 固定为低音下降 `E3-D3-C3`。目标音播放前不亮答案键；错误后先说孩子音，再重放目标和当前方向。
+- LP05 固定先教 `E3-F3-G3` 三个家，再做同一近邻集合的短比较；完整咚咚只在故事单元结束时出现。
+- LP06 固定为 `C3-G3-C3` 远跳，只记录路线 played，不授予独立 G 家或跨度能力。
+- LP07 固定为熟悉路线 `C3-D3-E3-D3-C3`，并写 handPrompted=`left`；touch/MIDI/mic 的 note event 不得自动写 actualHand=`left`。
 
 ### LP08-LP10 低音谱表
 
-- LP08 引导点亮 C-D-E 地图；可选检查让已有轨道接通，不清空谱位。
-- LP09 引导锁紧 E-F-G 支撑；可选检查读取压力点，不拆桥。
-- LP10 guided 让咚咚过桥；later check 让六个信号锚稳定。两段使用同音序但不同世界状态。
+- LP08 引导按 `C3-D3-E3` 点亮对应低音谱位地图；可选检查让已有轨道接通，不清空谱位。
+- LP09 引导按 `E3-F3-G3` 锁紧对应低音谱位支撑；可选检查读取压力点，不拆桥。
+- LP10 guided 和 later check 都固定为 `C3-D3-E3-F3-G3-E3`。guided 让咚咚过桥，later check 只让六个信号锚稳定；两段使用同音序但不同世界状态。
 - wrong octave 必须记录 noteNameCorrect=true、registerCorrect=false，并提示低音家；不能计 bass staff correct。
 
 ## 六、played、stable、retained 与手部证据
@@ -236,7 +236,8 @@ retained 只能来自 scheduler 选择的 later opening review。普通重玩、
 ## 十二、放行状态
 
 - `passed`：本文件的 Chapter 4 音高、短课、故事、谱位、手部证据、输入和测试规格已锁定。
-- `missing`：LP01-LP10 运行、双八度键盘、地图、状态机、浏览器截图与自动化。
+- `passed_browser_lp01_lp03`：`LP01-LP03` 的高低 C、低音 C 家、`C3-D3-E3` 地基路线、连续双八度键盘、地图、自然停点、错误修复、教学音生命周期和诚实阶段证据已进入获批 `overhaul-346a-lp03` / `cedc384` 浏览器基线。
+- `next_gated_runtime_work`：`C4-R01A` 必须先通过独立 opening-review 调度证据；通过后才可派发 `LP04`。`LP04-LP10` 运行、咚咚完整揭晓、左手和低音谱表仍为 missing/locked。
 - `missing`：真实 iPad、MIDI、原声钢琴麦克风、教师和儿童证据。
 
-当前只能说“第四章运行规格完成”，不能说低音章、左手教学或 bass-staff 学习效果已实现或验证。
+当前只能说“第四章规格完整且 LP01-LP03 浏览器运行通过”，不能说完整低音章、左手教学或 bass-staff 学习效果已实现或验证。

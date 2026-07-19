@@ -47,7 +47,7 @@ S01 的自然停点先落在地图上的花园入口，不在上一关完成瞬�
 6. 事件只在首次正式进入 Chapter 3 时完整播放。后续短课从花园休息点恢复，不反复开盔、穿脱。
 7. 刷新或崩溃恢复必须幂等：不得同时出现已收纳压力服和密封头盔，也不得重复授予故事完成或学习证据。
 
-当前 Chapter 3 运行布局尚未实现，因此任何现有 `concepts/**` 视频最多是候选。过场可以缺席而课程仍可用代码回退进入；不能为了等媒体阻塞教学实现。
+当前 Chapter 3 已有完整浏览器教学运行与代码回退；任何现有 `concepts/**` 视频仍最多是候选。正式过场可以暂缺而课程继续使用确定性代码状态进入，不能为了等媒体阻塞教学，也不能把候选视频直接接入运行。
 
 ## 三、短课地图与自然停点
 
@@ -310,13 +310,10 @@ LS04-LS07 的 `correctCount` 按每次呼叫的第一次有效孩子作答计数
 ## 十五、放行状态
 
 - `passed`：第三章故事、音高、短课、无泄题、输入、证据和测试规格已锁定。
-- `passed_browser_visible_slice`：`overhaul-339d` 已由主管独立通过花园入口手势、确定性空气检测回退、`C3-01: LS01-LS02`、独立 `C3-02: LS03`、early-rest、地图五态和 pending-attempt 连续性；这三个 introduction-only level 仍固定 `reviewableForMastery=false`。
-- `passed_browser_ls04`：`overhaul-340d` 保留并由主管复跑通过独立 `C3-03: LS04`、可见 C4 定锚、四次平衡 C/D 隐藏呼叫、无泄题、错误比较、bounded assisted/modeled、`3/4` stable、无声不评分、自然停点和九态 Chapter 3 媒体保护区合同；`chapter3.completed` 仍为 false。
-- `passed_browser_ls05`：`overhaul-341a` 已由主管独立通过 `C3-04: LS05`、C/D/E 严格 `2/2/1`、五次隐藏呼叫、候选覆盖、首答计分、同权修复、候选外强帮助、声音恢复、跨 session 不拼 stable、答后角色唱名回连、自然停点和六视口十一状态合同；`chapter3.completed` 仍为 false。
-- `passed_browser_ls06_ls07`：`overhaul-342a` 已由主管独立通过 `C3-05: LS06` C/G 大距离比较与 `C3-06: LS07` E/F 相邻边界比较；两关均包含双候选可见带路、四次平衡隐藏呼叫、首答、同权 repair、声音恢复、跨 session、诚实 stable/needsPractice、自然停点和六视口十三状态合同；`chapter3.completed` 仍为 false。
-- `next_runtime_milestone`：当前只派发 `C3-07: LS08` 两声先后记忆、未计分 C4 -> C3 地底回声和第三章自然出口；不得实现第四章或媒体运行集成。
-- `missing`：`LS08` 正式运行与独立证据，以及完整 Chapter 3 状态机与章节出口。
+- `passed_browser_chapter3`：`LS01-LS08` 的入口、可见模仿、小集合隐藏听辨、C/G 大距离、E/F 相邻边界、两声顺序、未计分 C4 -> C3 地底回声、自然出口、暂停/恢复和诚实 played/stable/retained 边界均已进入获批浏览器基线。
+- `passed_browser_audio_lifecycle`：目标、重听、孩子音、错误比较、修复、modeled 与章节故事音均使用受控 started/ended 生命周期；打断、刷新、声音关闭、音量零和 watchdog 不得把未听完的音伪造成完成。
+- `approved_browser_baseline`：上述 Chapter 3 语义由 `overhaul-345d-audio-c` / `2405734` 收口，并由最新 `overhaul-346a-lp03` / `cedc384` 共享回归继续保持；这不等于实体设备或学习效果证明。
 - `missing`：正式空气检测/开盔/收纳动画和批准后的运行媒体。
 - `missing`：真实 iPad、MIDI、原声钢琴麦克风、教师与儿童证据。
 
-在这些缺口补齐前，只能说“第三章课程与运行规格完成”，不能说听音教学已证明有效或成熟 App 已完成。
+在这些缺口补齐前，只能说“第三章浏览器课程运行已通过”，不能说听音教学已由真实儿童证明有效或成熟 App 已完成。

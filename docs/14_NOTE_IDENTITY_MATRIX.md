@@ -39,9 +39,9 @@ The first course is middle-C anchored:
 
 Before expanding the keyboard range, define how octave, hand area, and staff position are explained to the child.
 
-## Chapter 4 Planned Low-register Mapping
+## Chapter 4 Low-register Mapping
 
-These rows are locked curriculum targets for `LP01-LP10`, but they are not current runtime targets until Chapter 4 implementation begins.
+These rows are locked curriculum targets for `LP01-LP10`. `LP01-LP03` now use this register and locator logic in the approved `overhaul-346a-lp03` / `cedc384` browser baseline; `LP04-LP10` remain planned and locked. Implementation status does not change the mapping.
 
 | Letter | Ordinary child label | MIDI / Hz | Keyboard locator | Bass-staff position | Story role | Common confusion | Repair focus |
 | --- | --- | --- | --- | --- | --- | --- | --- |
@@ -139,10 +139,16 @@ MIDI and microphone can later route into the same loop. They should not be requi
 
 The A-G word game remains parked. It must not start until:
 
+- Chapters 1-5 have passed their own supervisor gates;
+- the core release foundation is stable;
+- no unresolved core P0/P1 issue remains;
+- a future supervisor dispatch explicitly reopens the final project;
 - A and B have their own note identity rows;
 - the child can find A and B on the keyboard;
 - the mode is marked as older-child or optional;
 - the core C-D-E-F-G bridge and listening loops are stable.
+
+The first four release-foundation conditions are mandatory. Completing the A/B teaching rows or C-G loops alone never unlocks this mode.
 
 The word game should train letter names, not replace solfege or staff reading.
 
@@ -150,12 +156,12 @@ Implementation rule: A and B may appear as physical keyboard keys, but they are 
 
 ## Implementation Status
 
-The current code has a matching Course 1 `noteIdentityMatrix` in `app.js`, and `notes` are generated from that matrix. The planned `C3-G3` rows above are curriculum-only and must not be added to current targets until Chapter 4 implementation is explicitly started. This is the right direction, but it is not yet a fully protected single source of truth.
+The current code has a Course 1 `noteIdentityMatrix` in `app.js`, and `notes` are generated from that matrix. Chapter 4 `LP01-LP03` now use separate register-aware targets and evidence for C3/C4, but those low-register identities are not yet generated from one shared matrix. The approved browser baseline is `overhaul-346a-lp03` / `cedc384`; this is implementation progress, not proof that the document and runtime have become one protected source of truth.
 
-Before adding broad Chapter 2 content:
+Before extending `LP04+` or unlocking A/B:
 
-- keep note labels, key locators, staff hints, common confusions, and repair focus in sync with `noteIdentityMatrix`;
-- prefer generating child-facing note labels from the matrix instead of duplicating one-off strings;
-- add a lightweight sync check later if this document and the code matrix remain separate;
-- treat A/B rows as reserved expansion until their staff positions, story roles, and teaching gates are complete.
-- when Chapter 4 implementation starts, add register-qualified ids such as `C3`/`C4`; do not key runtime mastery only by letter name.
+- keep note labels, key locators, staff hints, common confusions, and repair focus in sync with the relevant runtime identity data;
+- prefer generating child-facing note labels from a register-aware matrix instead of duplicating one-off strings;
+- keep the curriculum-story coherence audit active while the document and code structures remain separate;
+- treat A/B rows as reserved expansion until their staff positions, story roles, repair rules, and final-project entry gates are complete;
+- keep register-qualified ids such as `C3`/`C4`; never key runtime mastery only by letter name.
