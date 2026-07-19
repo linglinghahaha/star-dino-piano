@@ -242,7 +242,7 @@
 - 同一 bundle 中若前半已经出现 repeated repair、assisted、modeled success 或明显疲劳，后半检查/迁移必须延期；
 - 两个 level 合并成一个短课时，它们必须服务同一个主要教学轴；前半吃力时允许在中间永久结果处提前休息；
 - optional 路线不提供更高级的角色认可、结局或收藏稀有度，避免孩子把能力差异理解成价值高低；
-- 第三章 LS01-LS08 的浏览器运行和教学音生命周期已通过；第四章 `LP01-LP03` 已进入 `overhaul-346a-lp03` / `cedc384` 获批浏览器教学基线，LP04+ 与第五章仍是未实现规划。第三至第五章均尚未获得教师、实体 iPad 或真实儿童证据。
+- 第三章 LS01-LS08 的浏览器运行和教学音生命周期已通过；第四章 `LP01-LP03` 与 C4-R01A 复习调度核心已进入 `overhaul-347a-c4-r01a` / `af9aa28` 获批浏览器教学基线，LP04+ 与第五章仍是未实现规划。第三至第五章均尚未获得教师、实体 iPad 或真实儿童证据。
 
 ## 八、难度怎样增加
 
@@ -380,8 +380,8 @@ M08 的“可演奏施工谱”是第一章的一种样板，不是要求后续�
 ## 当前实现状态
 
 - `passed`：本文件的课程、节奏、成就感和验收语义已锁定。
-- `passed_browser_structure`：最新获批基线为 `overhaul-346a-lp03` / `cedc384`。它保留 M08、M03、S01、第三章 LS01-LS08 与第四章 LP01-LP02 的既有合同，并新增 LP03 的 C 锚石唤醒、D/E 落位、自然休息、幂等恢复、阶段观察与完整教学音生命周期；LP03 stable/retained 仍为 0。
-- `passed_browser_audio_lifecycle`：M03 已收敛为一个车轮故事问题、一个重听动作和一句角色邀请，完成后车轮扣入小车并自然落到花园入口；目标音、重听、修复和 modeled 的受控 started/ended 生命周期已由 `docs/49` AUDIO-A 修复，并由 AUDIO-B、AUDIO-C 和 `346a` 总回归保持。
+- `passed_browser_structure`：最新获批基线为 `overhaul-347a-c4-r01a` / `af9aa28`。它保留 M08、M03、S01、第三章 LS01-LS08 与第四章 LP01-LP03 的既有合同，并新增只复习已学技能的 C4-R01A 调度核心；LP03 stable/retained 仍为 0，R01A 不创建正式 C4-03。
+- `passed_browser_audio_lifecycle`：M03 已收敛为一个车轮故事问题、一个重听动作和一句角色邀请，完成后车轮扣入小车并自然落到花园入口；目标音、重听、修复和 modeled 的受控 started/ended 生命周期已由 `docs/49` AUDIO-A 修复，并由 AUDIO-B、AUDIO-C 和 `347a` 总回归保持；R01A 另有专用 started/ended 与中断恢复门禁。
 - `partial`：第一、二章、第三章与第四章 LP01-LP03 已有短课、提示递减、世界变化、自然休息和受控教学音状态机。现有流程是否能被 4-6 岁孩子不经成人讲解理解仍无真实观察证据；花园和洞穴美术也仍是原型级。
 - `historical_contradiction_repaired`：`343a-p2` 的部分教学音路径曾把 oscillator 排程或墙钟到点当作孩子实际听到的 started/ended，相关旧声音证据继续作废；AUDIO-A/B/C 已以受控句柄、真实 onended、打断/恢复和 watchdog 边界重建浏览器证据。该修复仍不证明实体 iPad 扬声器、耳机或真实儿童实际听见。
 - `missing`：C4-R01A/R01B、统一 runtime pacing metadata 自动审计、第四章 LP04+ 与第五章完整运行、实体 iPad 节奏/声音证据、教师复核和 3-5 名 4-6 岁儿童观察。

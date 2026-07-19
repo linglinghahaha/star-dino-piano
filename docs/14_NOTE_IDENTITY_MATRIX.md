@@ -41,7 +41,7 @@ Before expanding the keyboard range, define how octave, hand area, and staff pos
 
 ## Chapter 4 Low-register Mapping
 
-These rows are locked curriculum targets for `LP01-LP10`. `LP01-LP03` now use this register and locator logic in the approved `overhaul-346a-lp03` / `cedc384` browser baseline; `LP04-LP10` remain planned and locked. Implementation status does not change the mapping.
+These rows are locked curriculum targets for `LP01-LP10`. `LP01-LP03` and their isolated opening-review scheduler now use this register and locator logic in the approved `overhaul-347a-c4-r01a` / `af9aa28` browser baseline; `LP04-LP10` remain planned and locked until their own gates pass. Implementation status does not change the mapping.
 
 | Letter | Ordinary child label | MIDI / Hz | Keyboard locator | Bass-staff position | Story role | Common confusion | Repair focus |
 | --- | --- | --- | --- | --- | --- | --- | --- |
@@ -156,7 +156,7 @@ Implementation rule: A and B may appear as physical keyboard keys, but they are 
 
 ## Implementation Status
 
-The current code has a Course 1 `noteIdentityMatrix` in `app.js`, and `notes` are generated from that matrix. Chapter 4 `LP01-LP03` now use separate register-aware targets and evidence for C3/C4, but those low-register identities are not yet generated from one shared matrix. The approved browser baseline is `overhaul-346a-lp03` / `cedc384`; this is implementation progress, not proof that the document and runtime have become one protected source of truth.
+The current code has a Course 1 `noteIdentityMatrix` in `app.js`, and `notes` are generated from that matrix. Chapter 4 `LP01-LP03` and C4-R01A now use separate register-aware targets and evidence for C3/C4, but those low-register identities are not yet generated from one shared matrix. The approved browser baseline is `overhaul-347a-c4-r01a` / `af9aa28`; this is implementation progress, not proof that the document and runtime have become one protected source of truth.
 
 Before extending `LP04+` or unlocking A/B:
 

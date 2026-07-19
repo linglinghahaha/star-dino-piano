@@ -9,7 +9,7 @@ This is the canonical chapter order. Other planning files must use the same numb
 | 1 | 月亮小家 | middle `C4-G4` note identity and keyboard geography | current Web course |
 | 2 | 星星桥 | treble-staff `C4-G4` reading through physical jump pads | current flagship slice |
 | 3 | 会听的小种子 | guided pitch echo, small-set sound-to-key matching, and two-note aural memory | `LS01-LS08` browser behavior and the full teaching-audio lifecycle pass in `overhaul-345d-audio-c` / `2405734`; physical-device, teacher and child evidence remain missing |
-| 4 | 咚咚的低音星球 | high/low contrast, low `C3-G3`, bass staff, left-hand readiness | `LP01-LP03` pass in the approved `overhaul-346a-lp03` / `cedc384` browser baseline; `C4-R01A` is the next gated runtime work, while `LP04-LP10` remain locked |
+| 4 | 咚咚的低音星球 | high/low contrast, low `C3-G3`, bass staff, left-hand readiness | `LP01-LP03` and the isolated C4-R01A review-scheduler core pass in the approved `overhaul-347a-c4-r01a` / `af9aa28` browser baseline; `LP04` plus real-action `C4-R01B` is the next gated runtime work, while `LP05-LP10` remain locked |
 | 5 | 会唱歌的大家园 | hand alternation, simple two-hand coordination, grand staff | curriculum specified; not implemented |
 
 `音符护照` is a cross-chapter collection/review system, not a numbered chapter. Its child-facing collection is icon-led and records places, helpers and story accomplishments; parent-facing played/stable/retained evidence remains separate, so collection count cannot imply mastery. The A-G word game is the parked final optional project: it cannot start before Chapters 1-5 and the core release foundation pass, all core P0/P1 issues are resolved, and a future supervisor explicitly dispatches it.

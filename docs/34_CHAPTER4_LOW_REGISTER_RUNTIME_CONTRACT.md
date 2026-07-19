@@ -236,8 +236,8 @@ retained 只能来自 scheduler 选择的 later opening review。普通重玩、
 ## 十二、放行状态
 
 - `passed`：本文件的 Chapter 4 音高、短课、故事、谱位、手部证据、输入和测试规格已锁定。
-- `passed_browser_lp01_lp03`：`LP01-LP03` 的高低 C、低音 C 家、`C3-D3-E3` 地基路线、连续双八度键盘、地图、自然停点、错误修复、教学音生命周期和诚实阶段证据已进入获批 `overhaul-346a-lp03` / `cedc384` 浏览器基线。
-- `next_gated_runtime_work`：`C4-R01A` 必须先通过独立 opening-review 调度证据；通过后才可派发 `LP04`。`LP04-LP10` 运行、咚咚完整揭晓、左手和低音谱表仍为 missing/locked。
+- `passed_browser_lp01_lp03_and_r01a`：`LP01-LP03` 的高低 C、低音 C 家、`C3-D3-E3` 地基路线、连续双八度键盘、地图、自然停点、错误修复、教学音生命周期、诚实阶段证据与隔离 opening-review 调度核心已进入获批 `overhaul-347a-c4-r01a` / `af9aa28` 浏览器基线。
+- `next_gated_runtime_work`：现在只可派发 `LP04`，并必须在同一候选内通过 `C4-R01B` 对真实 C4-03 actions 的整合证据。`LP05-LP10` 运行、咚咚完整揭晓、左手和低音谱表仍为 missing/locked。
 - `missing`：真实 iPad、MIDI、原声钢琴麦克风、教师和儿童证据。
 
 当前只能说“第四章规格完整且 LP01-LP03 浏览器运行通过”，不能说完整低音章、左手教学或 bass-staff 学习效果已实现或验证。

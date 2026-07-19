@@ -1,10 +1,10 @@
 # Chapter 4 C4-03 / LP04 主管验收工作单
 
-状态：`prepared_locked / LP03_baseline_passed / waits_for_C4_R01A_core_baseline / includes_C4_R01B_runtime_integration_gate / not_dispatched / runtime_forbidden`
+状态：`dispatch_ready / LP03_baseline_passed / C4_R01A_core_passed_at_af9aa28 / includes_C4_R01B_runtime_integration_gate / next_unique_runtime_work / media_forbidden`
 
 本文件把 `LP04 地洞回声` 从故事提纲收敛为可实现、可复核的短课合同。它只负责把已经教过的低音 `C-D-E` 键位关系转成一次 `E-D-C` 下降回声路线；不引入 F/G、低音谱表、左手、完整咚咚、视频、语音或 SFX 候选。
 
-当前不得派发。`C4-02 / LP03` 已在 `cedc384` 完成独立审查与冻结；现在只等待 `C4-R01A` 调度核心形成自己的独立基线。之后 LP04 才能成为唯一运行工作，并必须同时完成 `C4-R01B` 的真实 `C4-03` 整合门禁；这不允许把调度核心和 LP04 混成一个提交。提前写好工作单是为了校验课程连续性，不代表运行已实现或解锁。
+当前可派发。`C4-02 / LP03` 已在 `cedc384` 完成独立审查与冻结，`C4-R01A` 调度核心也已在 `overhaul-347a-c4-r01a` / `af9aa2831bb90c94fd10fdfbe3ca89ba4d03021a` 形成独立基线。LP04 现在是唯一运行工作，并必须同时完成 `C4-R01B` 的真实 `C4-03` 整合门禁；LP04/R01B 要形成新的独立提交，不能回写或压扁 R01A 提交。工作范围仍不包含媒体、完整咚咚、低音谱表、左手或 LP05+。
 
 ## 一、这节课教什么，不教什么
 

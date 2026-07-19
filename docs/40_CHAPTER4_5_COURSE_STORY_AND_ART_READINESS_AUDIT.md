@@ -198,7 +198,7 @@
 
 ## 五、仍然缺少的发布证据
 
-- Chapter 4 C4-R01A/R01B、LP04-LP10 与 Chapter 5 全部运行实现和自动化；LP01-LP03 已是已接受的浏览器运行，不再列为 missing；
+- Chapter 4 C4-R01B、LP04-LP10 与 Chapter 5 全部运行实现和自动化；LP01-LP03 与 C4-R01A 已是已接受的浏览器运行，不再列为 missing；
 - 真实 iPad 双八度键盘、触屏多点、MIDI 和麦克风证据；
 - 幼儿钢琴教师审查；
 - 3-5 名儿童分短 session 观察；

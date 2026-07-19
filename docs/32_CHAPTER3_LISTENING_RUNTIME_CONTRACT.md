@@ -312,7 +312,7 @@ LS04-LS07 的 `correctCount` 按每次呼叫的第一次有效孩子作答计数
 - `passed`：第三章故事、音高、短课、无泄题、输入、证据和测试规格已锁定。
 - `passed_browser_chapter3`：`LS01-LS08` 的入口、可见模仿、小集合隐藏听辨、C/G 大距离、E/F 相邻边界、两声顺序、未计分 C4 -> C3 地底回声、自然出口、暂停/恢复和诚实 played/stable/retained 边界均已进入获批浏览器基线。
 - `passed_browser_audio_lifecycle`：目标、重听、孩子音、错误比较、修复、modeled 与章节故事音均使用受控 started/ended 生命周期；打断、刷新、声音关闭、音量零和 watchdog 不得把未听完的音伪造成完成。
-- `approved_browser_baseline`：上述 Chapter 3 语义由 `overhaul-345d-audio-c` / `2405734` 收口，并由最新 `overhaul-346a-lp03` / `cedc384` 共享回归继续保持；这不等于实体设备或学习效果证明。
+- `approved_browser_baseline`：上述 Chapter 3 语义由 `overhaul-345d-audio-c` / `2405734` 收口，并由最新 `overhaul-347a-c4-r01a` / `af9aa28` 共享回归继续保持；这不等于实体设备或学习效果证明。
 - `missing`：正式空气检测/开盔/收纳动画和批准后的运行媒体。
 - `missing`：真实 iPad、MIDI、原声钢琴麦克风、教师与儿童证据。
 
