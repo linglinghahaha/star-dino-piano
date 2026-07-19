@@ -7,7 +7,7 @@ Current execution checkpoint, 2026-07-19:
 - `29_PROJECT_COORDINATION_AND_INDEPENDENT_AUDIT.md` is the live dispatch and pass/return source. The latest approved browser teaching baseline is `overhaul-347a-c4-r01a` / `af9aa2831bb90c94fd10fdfbe3ca89ba4d03021a`.
 - Chapter 3 `LS01-LS08`, teaching-audio lifecycle batches A-C, Chapter 4 `LP01-LP03`, the isolated `C4-R01A` opening-review scheduler core, and their named browser regressions are complete at that baseline. Physical iPad, real MIDI/acoustic-piano microphone, human listening, teacher/child evidence, final art provenance and release clearance remain separate missing gates.
 - The only active runtime work is `docs/51` `LP04` plus the real-action `C4-R01B` integration required by `docs/48`. It must use real C4-03 actions, remain a separate commit from `af9aa28`, and must not include LP05, bass staff, left hand, full Dongdong reveal or media integration.
-- `LP04`, `C4-R01B`, `LP05+`, Chapter 5, native migration and all media runtime integration remain locked. Grok video generation is hard-paused after user-confirmed quota exhaustion; no generation, balance preflight, retry, account switching or new video batch is allowed until the user explicitly confirms recovery.
+- `LP04` plus `C4-R01B` is unlocked only as the current scoped candidate. `LP05+`, Chapter 5, native migration and all media runtime integration remain locked. Grok video generation is hard-paused after user-confirmed quota exhaustion; no generation, balance preflight, retry, account switching or new video batch is allowed until the user explicitly confirms recovery.
 
 ## Phase 0: Alignment Files
 

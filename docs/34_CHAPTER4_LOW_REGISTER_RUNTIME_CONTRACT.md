@@ -1,6 +1,6 @@
 # Chapter 4 Low-Register Runtime Contract
 
-状态：`specification_passed / LP01_LP03_browser_runtime_passed_at_346a / C4_R01A_next / LP04_LP10_runtime_incomplete / device_teacher_child_evidence_missing`
+状态：`specification_passed / LP01_LP03_and_C4_R01A_browser_runtime_passed_at_347a / LP04_C4_R01B_next / LP05_LP10_runtime_incomplete / device_teacher_child_evidence_missing`
 
 负责人：课程故事、整体调度与独立审查任务锁定教学语义；原型任务负责运行实现、浏览器门禁、截图和输入证据；媒体任务只生产可追溯候选，未经调度复核不得接入运行时。
 
@@ -240,4 +240,4 @@ retained 只能来自 scheduler 选择的 later opening review。普通重玩、
 - `next_gated_runtime_work`：现在只可派发 `LP04`，并必须在同一候选内通过 `C4-R01B` 对真实 C4-03 actions 的整合证据。`LP05-LP10` 运行、咚咚完整揭晓、左手和低音谱表仍为 missing/locked。
 - `missing`：真实 iPad、MIDI、原声钢琴麦克风、教师和儿童证据。
 
-当前只能说“第四章规格完整且 LP01-LP03 浏览器运行通过”，不能说完整低音章、左手教学或 bass-staff 学习效果已实现或验证。
+当前只能说“第四章规格完整，LP01-LP03 与 C4-R01A 浏览器运行通过”，不能说完整低音章、左手教学或 bass-staff 学习效果已实现或验证。

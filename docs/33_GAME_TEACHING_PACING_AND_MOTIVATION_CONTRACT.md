@@ -384,6 +384,6 @@ M08 的“可演奏施工谱”是第一章的一种样板，不是要求后续�
 - `passed_browser_audio_lifecycle`：M03 已收敛为一个车轮故事问题、一个重听动作和一句角色邀请，完成后车轮扣入小车并自然落到花园入口；目标音、重听、修复和 modeled 的受控 started/ended 生命周期已由 `docs/49` AUDIO-A 修复，并由 AUDIO-B、AUDIO-C 和 `347a` 总回归保持；R01A 另有专用 started/ended 与中断恢复门禁。
 - `partial`：第一、二章、第三章与第四章 LP01-LP03 已有短课、提示递减、世界变化、自然休息和受控教学音状态机。现有流程是否能被 4-6 岁孩子不经成人讲解理解仍无真实观察证据；花园和洞穴美术也仍是原型级。
 - `historical_contradiction_repaired`：`343a-p2` 的部分教学音路径曾把 oscillator 排程或墙钟到点当作孩子实际听到的 started/ended，相关旧声音证据继续作废；AUDIO-A/B/C 已以受控句柄、真实 onended、打断/恢复和 watchdog 边界重建浏览器证据。该修复仍不证明实体 iPad 扬声器、耳机或真实儿童实际听见。
-- `missing`：C4-R01A/R01B、统一 runtime pacing metadata 自动审计、第四章 LP04+ 与第五章完整运行、实体 iPad 节奏/声音证据、教师复核和 3-5 名 4-6 岁儿童观察。
+- `missing`：C4-R01B、统一 runtime pacing metadata 自动审计、第四章 LP04+ 与第五章完整运行、实体 iPad 节奏/声音证据、教师复核和 3-5 名 4-6 岁儿童观察。C4-R01A 已在 `347a` 通过，不再列为 missing。
 
 在真实儿童证据出现前，只能说“节奏与成就感合同完成、部分浏览器流程已实现”，不能说已经证明孩子长期不枯燥或学习有效。
