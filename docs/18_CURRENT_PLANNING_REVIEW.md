@@ -10,6 +10,8 @@ Historical runtime decision at this review point: `343a-p2` was independently ac
 
 Role of this file: this is the dated 2026-07-14 planning audit. `29` is the single rolling coordination source; `08_EXECUTION_BACKLOG.md` is the execution queue. `13`, `18`, `21`, and `22` remain historical audits, while `19` is story/art reference rather than the production checklist.
 
+A-G override: any older wording below that sounds as if A/B identity plus a stable C-G loop is enough to start word typing is superseded. It is the parked final optional project and requires Chapters 1-5, the core release foundation, all core P0/P1, and a future explicit supervisor dispatch.
+
 ## Short Verdict
 
 The overall direction is reasonable. Do not restart the product.
@@ -17,7 +19,7 @@ The overall direction is reasonable. Do not restart the product.
 Latest whole-plan audit addendum, 2026-07-12:
 
 - The current carrier policy is letter-only ordinary child UI and child-facing accessibility labels, solfege only in the small-dinosaur dialogue, and dual identity only in gated parent evidence. Historical rows below that mention route solfege badges, large solfege, accessible `C Do`, or visible `Do/C` document old builds and are superseded as UI targets.
-- The planning system is coherent enough to guide work: fixed-do `Do=C`, touch-first web prototype, optional MIDI/microphone, S01 as flagship, C4-G4 register scope, A-G word typing parked, and parent-gate separation are not contradictions.
+- The planning system is coherent enough to guide work: fixed-do `Do=C`, touch-first web prototype, optional MIDI/microphone, S01 as flagship, C4-G4 register scope, A-G word typing parked as the final optional project, and parent-gate separation are not contradictions.
 - The previous evidence/version drift has been repaired through `343a-p2`. M08's world-action and seal-check contracts remain green; M03/S01 retain their accepted behavior; Chapter 3 `LS01-LS08` now passes independent browser review, including the unscored underground exit.
 - The verification harness has been repaired for this machine: `tools/with-playwright-path.mjs` resolves the bundled pnpm Playwright layout and falls back to installed Chrome/Edge. Keep this healthy before promoting any future runtime.
 - The biggest planning risk is false readiness. Scripted checks prove state and layout behavior, but they do not prove a 4-6-year-old can understand the task without adult reading.
@@ -58,7 +60,7 @@ The main risk is false readiness. The documents are now detailed enough to sound
 | Platform promise | Web prototype is touch-first; Web MIDI is optional and platform-dependent; reliable iPad MIDI belongs to native work later. |
 | Teaching order | C-D-E, then F/G prep, then S01 is coherent. `FG01-FG04` are needed before treating S01 as staff mastery. |
 | Fixed-do scope | MVP fixed-do mapping is consistent: `Do=C`, `Re=D`, `Mi=E`, `Fa=F`, `Sol=G`. |
-| A-G word typing | Correctly parked. It should wait until A/B have full note identity and the core C-G loop is stable. |
+| A-G word typing | Correctly parked as the final optional project. A/B identity and a stable C-G loop are necessary but insufficient; Chapters 1-5, the core release foundation, all core P0/P1 and an explicit future supervisor dispatch must pass first. |
 | Mastery split | Correct and now partly implemented: "played once" and "stable" are separate states. |
 | Evidence habit | `20_GATE_RUN_LOG.md` exists and recent runs include screenshot, viewport, input route, console, and overflow checks. |
 

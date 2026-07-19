@@ -22,7 +22,7 @@ Deliverables:
 - visual/audio/interaction standards;
 - implementation guardrails;
 - Apple ecosystem strategy;
-- A-G later-project parking lot;
+- A-G final-project parking lot;
 - scaffold and assessment rules;
 - story world bible;
 - App Store compliance and privacy guardrails;
@@ -412,10 +412,10 @@ Acceptance:
 - microphone remains optional and locally processed for MVP;
 - App Store screenshots and privacy copy match actual behavior.
 
-## Phase 7: Later A-G Word Typing Game
+## Phase 7: Final A-G Word Typing Project
 
-Goal: strengthen letter-note names after the main course is solid.
+Goal: strengthen letter-note names only after the complete core product is stable.
 
-Status: parked.
+Status: `parked_final_project / not_dispatched / runtime_forbidden`.
 
-Do not start until Phase 1-6 are stable and A/B have their own note identity rows.
+Do not start until Chapters 1-5 and Phase 1-6 have passed their supervisor gates, the core release foundation is stable, no unresolved core P0/P1 remains, and a future supervisor explicitly dispatches this project. A/B must also have complete note identity rows before implementation, but A/B readiness alone is not an unlock signal.

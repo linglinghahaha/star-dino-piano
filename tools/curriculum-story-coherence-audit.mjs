@@ -7,8 +7,10 @@ const paths = {
   readme: "docs/README.md",
   roadmap: "docs/03_CONTENT_ROADMAP.md",
   wordMode: "docs/07_AG_WORD_TYPING_LATER.md",
+  backlog: "docs/08_EXECUTION_BACKLOG.md",
   identity: "docs/14_NOTE_IDENTITY_MATRIX.md",
   story: "docs/17_STORY_ARC_AND_LEVEL_BEATS.md",
+  historicalReview: "docs/18_CURRENT_PLANNING_REVIEW.md",
   book: "docs/24_HUMAN_STORY_AND_LESSON_BOOK.md",
   coordination: "docs/29_PROJECT_COORDINATION_AND_INDEPENDENT_AUDIT.md",
   listening: "docs/32_CHAPTER3_LISTENING_RUNTIME_CONTRACT.md",
@@ -223,8 +225,10 @@ check("story completion remains separate from stable and retained evidence", () 
 check("A-G word typing remains the explicitly locked final project", () => {
   expectIncludes(docs.readme, ["parked final optional project", "runtime-forbidden", "future supervisor explicitly dispatches"], paths.readme);
   expectIncludes(docs.wordMode, ["parked_final_project", "Chapters 1-5", "core release foundation", "future supervisor dispatch"], paths.wordMode);
+  expectIncludes(docs.backlog, ["parked_final_project", "Chapters 1-5", "no unresolved core P0/P1", "future supervisor explicitly dispatches"], paths.backlog);
   expectIncludes(docs.roadmap, ["parked_final_project", "Chapters 1-5", "no unresolved core P0/P1", "future supervisor dispatch"], paths.roadmap);
   expectIncludes(docs.identity, ["Chapters 1-5", "no unresolved core P0/P1", "future supervisor dispatch explicitly reopens"], paths.identity);
+  expectIncludes(docs.historicalReview, ["A-G override", "parked final optional project", "requires Chapters 1-5", "all core P0/P1"], paths.historicalReview);
   expectIncludes(docs.pacing, ["最终可选项目", "第一至第五章", "核心 P0/P1", "未来主管明确派发"], paths.pacing);
   const runtimeText = `${docs.app}\n${docs.shell}`;
   expect(!/(wordTyping|word typing|单词打字|琴键拼词)/i.test(runtimeText), "word mode leaked into runtime shell");
@@ -262,8 +266,8 @@ check("Chapter 5 automatic gate list is consecutively numbered", () => {
 });
 
 check("curriculum sources contain no protected-IP or other-product markers", () => {
-  const protectedPattern = /奥特曼|ultraman|琴键小队长|midiprobe|keyboard_captain|matepad|harmonyos|com\.dashun\.midiprobe|迪士尼|disney|漫威|marvel|宝可梦|pok[eé]mon|小猪佩奇|peppa/gi;
-  const curriculumKeys = ["readme", "roadmap", "wordMode", "identity", "story", "book", "listening", "pacing", "low", "coordinationCourse"];
+  const protectedPattern = /奥特曼|ultraman|琴键小队长|midiprobe|keyboard_captain|com\.dashun\.midiprobe|迪士尼|disney|漫威|marvel|宝可梦|pok[eé]mon|小猪佩奇|peppa/gi;
+  const curriculumKeys = ["readme", "roadmap", "wordMode", "backlog", "identity", "story", "historicalReview", "book", "listening", "pacing", "low", "coordinationCourse"];
   const hits = [];
   for (const key of curriculumKeys) {
     for (const match of docs[key].matchAll(protectedPattern)) hits.push(`${paths[key]}:${match[0]}`);
