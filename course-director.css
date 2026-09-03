@@ -1401,33 +1401,33 @@ html[data-motion="reduced"] .map-shell[data-course-director="true"] .garden-rest
   box-sizing: border-box;
 }
 
-/* Station 1: Moon Base Workshop (Left Platform) */
+/* Station 1: Moon Base Workshop (On the golden musical road & steps) */
 .phase-hub-1 {
-  left: 50px !important;
-  top: 360px !important;
+  left: 45px !important;
+  top: 425px !important;
   transform: none !important;
-  width: 385px !important;
-  max-width: 400px !important;
+  width: 375px !important;
+  max-width: 385px !important;
 }
 
-/* Station 2: Central Circuit Turntable (Center Musical Ring Platform) */
+/* Station 2: Central Circuit Turntable (Center of glowing DJ disc) */
 .phase-hub-2 {
-  left: 597px !important;
-  top: 375px !important;
+  left: 545px !important;
+  top: 550px !important;
   transform: translate(-50%, -50%) !important;
 }
 
-/* Station 3: Greenhouse Dome Terrace (Right Botanical Dome) */
+/* Station 3: Greenhouse Dome Terrace (On road leading to flower dome) */
 .phase-hub-3 {
-  left: 920px !important;
-  top: 380px !important;
+  left: 840px !important;
+  top: 510px !important;
   transform: translate(-50%, -50%) !important;
 }
 
-/* Station 4: Cavern Gateway / Star Bridge Portal (Bottom Crystal Arch) */
+/* Station 4: Cavern Gateway / Star Bridge Portal (At the base of glowing rock arch) */
 .phase-hub-4 {
-  left: 597px !important;
-  top: 705px !important;
+  left: 520px !important;
+  top: 740px !important;
   transform: translate(-50%, -50%) !important;
 }
 
@@ -1550,73 +1550,106 @@ html[data-motion="reduced"] .map-shell[data-course-director="true"] .garden-rest
   margin-left: auto;
 }
 
-/* --- Active Hub Styling (Hero Stage Card) --- */
+/* --- Active Hub Styling (3D Creamy Candy Toy Hero Stage Card) --- */
 .phase-hub.active {
   z-index: 15;
-  background: rgba(13, 31, 56, 0.88);
-  border: 2px solid rgba(111, 226, 237, 0.9);
-  border-radius: 24px;
-  padding: 16px 20px 18px;
+  background: linear-gradient(180deg, #ffffff 0%, #fffbf0 60%, #fff4d9 100%) !important;
+  border: 3.5px solid #ffde6b !important;
+  border-radius: 32px !important;
+  padding: 16px 20px 18px !important;
   box-shadow:
-    0 20px 45px rgba(0, 10, 28, 0.65),
-    0 0 0 1px rgba(255, 255, 255, 0.15) inset,
-    0 0 28px rgba(111, 226, 237, 0.35);
-  backdrop-filter: blur(18px) saturate(1.15);
+    0 8px 0 #e0aa26,
+    0 18px 36px rgba(0, 0, 0, 0.45),
+    inset 0 2px 0 rgba(255, 255, 255, 0.9) !important;
+  backdrop-filter: blur(12px) !important;
+  animation: candyDropIn 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards !important;
+}
+
+@keyframes candyDropIn {
+  0% { opacity: 0; transform: translateY(-30px) scale(0.92); }
+  100% { opacity: 1; transform: translateY(0) scale(1); }
 }
 
 .phase-hub.active .phase-hub-badge {
-  color: #2b1700;
-  background: linear-gradient(135deg, #ffe072, #ffad33);
-  box-shadow: 0 2px 8px rgba(255, 173, 51, 0.4);
+  background: linear-gradient(135deg, #ff7b54, #ff5252) !important;
+  color: #ffffff !important;
+  font-size: 11px !important;
+  font-weight: 900 !important;
+  padding: 4px 10px !important;
+  border-radius: 999px !important;
+  box-shadow: 0 3px 6px rgba(255, 82, 82, 0.4) !important;
+  letter-spacing: 0.5px !important;
 }
 
 .phase-hub.active .phase-hub-title-group strong {
-  color: #ffffff;
+  font-size: 17px !important;
+  font-weight: 950 !important;
+  color: #3b2812 !important;
+  line-height: 1.2 !important;
 }
 
 .phase-hub.active .phase-hub-title-group small {
-  color: #a8dcff;
+  font-size: 12px !important;
+  font-weight: 700 !important;
+  color: #8c6d48 !important;
 }
 
 .phase-hub.active .phase-status-tag.current {
-  color: #062b1a;
-  background: #4ef2ab;
-  box-shadow: 0 0 10px rgba(78, 242, 171, 0.4);
+  background: #e8f8f0 !important;
+  color: #059669 !important;
+  border: 1.5px solid #a7f3d0 !important;
+  font-size: 11px !important;
+  font-weight: 800 !important;
+  padding: 3px 9px !important;
+  border-radius: 999px !important;
+  box-shadow: none !important;
 }
 
-/* --- Locked Hub Styling (Sleek Compact Station) --- */
+/* --- Locked Hub Styling (Sleek Compact 3D Golden Pill Station) --- */
 .phase-hub.locked {
-  background: rgba(8, 20, 38, 0.72);
-  border: 1.5px solid rgba(255, 255, 255, 0.22);
-  border-radius: 999px;
-  padding: 8px 18px 8px 14px;
-  box-shadow: 0 10px 24px rgba(0, 8, 20, 0.45);
-  backdrop-filter: blur(12px);
-  cursor: pointer;
+  background: linear-gradient(180deg, #ffffff, #fff7e8) !important;
+  border: 2.5px solid #ffd57a !important;
+  border-radius: 999px !important;
+  padding: 8px 18px 8px 12px !important;
+  box-shadow: 0 5px 0 #dfaa37, 0 10px 24px rgba(0, 0, 0, 0.4) !important;
+  backdrop-filter: blur(12px) !important;
+  cursor: pointer !important;
+  transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
 }
 
 .phase-hub.locked:hover {
-  border-color: rgba(111, 226, 237, 0.6);
-  transform: translateY(-2px);
-  box-shadow: 0 14px 28px rgba(0, 8, 20, 0.55), 0 0 16px rgba(111, 226, 237, 0.2);
+  transform: scale(1.08) translateY(-2px) !important;
+  border-color: #ffde59 !important;
 }
 
 .phase-hub.locked .phase-hub-badge {
-  color: #92b1cb;
-  background: rgba(255, 255, 255, 0.12);
+  background: #e2e8f0 !important;
+  color: #64748b !important;
+  font-size: 11px !important;
+  font-weight: 900 !important;
+  padding: 3px 8px !important;
+  border-radius: 999px !important;
 }
 
 .phase-hub.locked .phase-hub-title-group strong {
-  color: #dbeaf7;
+  font-size: 14px !important;
+  font-weight: 950 !important;
+  color: #3b2812 !important;
 }
 
 .phase-hub.locked .phase-hub-title-group small {
-  color: #8da4be;
+  font-size: 10px !important;
+  font-weight: 800 !important;
+  color: #8c6d48 !important;
 }
 
 .phase-hub.locked .phase-status-tag.locked {
-  color: #8da4be;
-  background: rgba(255, 255, 255, 0.08);
+  font-size: 10px !important;
+  font-weight: 800 !important;
+  color: #94a3b8 !important;
+  background: #f1f5f9 !important;
+  border-radius: 999px !important;
+  padding: 2px 7px !important;
 }
 
 .phase-hub.locked .phase-nodes-list {
@@ -1632,22 +1665,12 @@ html[data-motion="reduced"] .map-shell[data-course-director="true"] .garden-rest
   position: relative;
 }
 
-/* Connecting track line behind nodes */
 .phase-nodes-list::before {
-  content: "";
-  position: absolute;
-  left: 20px;
-  right: 20px;
-  top: 36px;
-  height: 3px;
-  border-radius: 2px;
-  background: rgba(255, 255, 255, 0.22);
-  z-index: 1;
+  display: none !important;
 }
 
 /* Reset individual node positions inside the phase hub list */
-.map-shell[data-course-director="true"] .phase-nodes-list .map-node,
-.map-shell[data-course-director="true"] .phase-nodes-list .map-node.active {
+.map-shell[data-course-director="true"] .phase-nodes-list .map-node {
   position: relative !important;
   left: 0 !important;
   top: 0 !important;
@@ -1664,38 +1687,66 @@ html[data-motion="reduced"] .map-shell[data-course-director="true"] .garden-rest
   align-items: center !important;
   justify-content: flex-start !important;
   padding: 8px 6px 8px !important;
-  border: 2px solid rgba(255, 255, 255, 0.25) !important;
-  border-radius: 18px !important;
-  background: rgba(18, 42, 70, 0.85) !important;
-  color: #ffffff !important;
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3) !important;
-  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease !important;
+  border: 2px solid #e2e8f0 !important;
+  border-radius: 20px !important;
+  background: #f1f5f9 !important;
+  color: #334155 !important;
+  box-shadow: 0 4px 0 #cbd5e1 !important;
+  transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
   cursor: pointer !important;
   overflow: visible !important;
 }
 
+.map-shell[data-course-director="true"] .phase-nodes-list .map-node:active {
+  transform: translateY(3px) !important;
+  box-shadow: 0 1px 0 #cbd5e1 !important;
+}
+
 .map-shell[data-course-director="true"] .phase-nodes-list .map-node.active {
-  border: 3px solid #ffde59 !important;
-  background: linear-gradient(160deg, #1d4670, #0d2847) !important;
-  box-shadow:
-    0 0 0 4px rgba(255, 222, 89, 0.35),
-    0 10px 24px rgba(0, 15, 35, 0.6),
-    0 0 20px rgba(255, 215, 0, 0.4) !important;
-  transform: translateY(-2px) !important;
+  background: linear-gradient(180deg, #fffbeb 0%, #fef3c7 100%) !important;
+  border: 3px solid #f59e0b !important;
+  box-shadow: 0 6px 0 #d97706, 0 10px 20px rgba(245, 158, 11, 0.3) !important;
+  transform: none !important;
+}
+
+.map-shell[data-course-director="true"] .phase-nodes-list .map-node.active:hover {
+  transform: scale(1.04) translateY(-2px) !important;
 }
 
 .phase-nodes-list .map-node::before {
   display: none !important;
 }
 
-/* Node Mascot Icon inside Phase list */
+/* Node Mascot Icon inside Phase list (Bobbing Astronaut Dino) */
 .phase-nodes-list .map-node .node-mascot {
   position: static !important;
-  width: 44px !important;
-  height: 44px !important;
+  width: 46px !important;
+  height: 46px !important;
   transform: none !important;
   margin-bottom: 4px !important;
-  filter: drop-shadow(0 4px 6px rgba(0,0,0,0.3)) !important;
+  filter: drop-shadow(0 4px 6px rgba(0,0,0,0.2)) !important;
+}
+
+.phase-nodes-list .map-node.active .node-mascot {
+  animation: candyBob 2s ease-in-out infinite alternate !important;
+}
+@keyframes candyBob {
+  0% { transform: translateY(0) rotate(-2deg); }
+  100% { transform: translateY(-4px) rotate(2deg); }
+}
+
+/* Pulsing "出发 ▶" button on active node */
+.map-shell[data-course-director="true"] .map-node.active .node-action-btn {
+  background: linear-gradient(135deg, #ffd33d, #ff9f1c) !important;
+  color: #451a03 !important;
+  border: 2px solid #ffffff !important;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.25) !important;
+  font-weight: 950 !important;
+  animation: pulsePlay 1.4s ease-in-out infinite alternate !important;
+}
+@keyframes pulsePlay {
+  0% { transform: scale(1); }
+  100% { transform: scale(1.12); }
 }
 
 /* Node Title */
@@ -1710,13 +1761,17 @@ html[data-motion="reduced"] .map-shell[data-course-director="true"] .garden-rest
   background: transparent !important;
   box-shadow: none !important;
   font-size: 11px !important;
-  font-weight: 800 !important;
+  font-weight: 900 !important;
   line-height: 1.25 !important;
-  color: #ffffff !important;
+  color: #334155 !important;
   text-align: center !important;
   white-space: normal !important;
   word-break: break-all !important;
   max-width: 96px !important;
+}
+
+.map-shell[data-course-director="true"] .phase-nodes-list .map-node.active .node-title {
+  color: #92400e !important;
 }
 
 .phase-nodes-list .map-node .node-title::before,
