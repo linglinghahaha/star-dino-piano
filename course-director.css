@@ -63,17 +63,24 @@
 .journey-director {
   position: absolute;
   z-index: 10;
-  left: max(34px, calc(env(safe-area-inset-left) + 24px));
-  right: clamp(250px, 26vw, 350px);
-  bottom: max(28px, calc(env(safe-area-inset-bottom) + 20px));
-  min-height: 268px;
+  left: max(16px, calc(env(safe-area-inset-left) + 12px));
+  bottom: max(14px, calc(env(safe-area-inset-bottom) + 12px));
+  right: auto;
+  width: min(270px, 26vw);
+  min-height: auto;
   color: var(--journey-ink);
-  border: 2px solid rgba(255, 255, 255, 0.88);
-  border-radius: 8px;
-  background: rgba(247, 253, 255, 0.91);
-  box-shadow: 0 18px 42px rgba(15, 53, 75, 0.24), inset 0 1px 0 #fff;
-  backdrop-filter: blur(14px) saturate(1.05);
-  overflow: visible;
+  border: 2px solid rgba(255, 255, 255, 0.95);
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.92);
+  box-shadow: 0 12px 28px rgba(15, 53, 75, 0.18), inset 0 1px 0 #fff;
+  backdrop-filter: blur(16px) saturate(1.1);
+  overflow: hidden;
+  transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.3, 1), box-shadow 0.3s ease;
+}
+
+.journey-director:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 16px 34px rgba(15, 53, 75, 0.24), inset 0 1px 0 #fff;
 }
 
 .journey-director[hidden] {
@@ -349,40 +356,30 @@
   display: none !important;
 }
 
+/* 369e overhaul: Keep all level nodes visible across the island map */
 .map-shell[data-course-director="true"] .map-node,
 .map-shell[data-course-director="true"] .garden-rest-marker {
-  display: none !important;
+  display: flex !important;
+  opacity: 0.92;
 }
 
 .map-shell[data-course-director="true"] .map-node.active,
 .map-shell[data-course-director="true"] .garden-rest-marker.active {
-  position: absolute !important;
+  opacity: 1 !important;
   z-index: 12 !important;
-  left: auto !important;
-  right: max(34px, calc(env(safe-area-inset-right) + 24px)) !important;
-  top: auto !important;
-  bottom: max(38px, calc(env(safe-area-inset-bottom) + 30px)) !important;
-  width: clamp(184px, 19vw, 238px) !important;
-  min-width: 184px !important;
-  height: clamp(184px, 19vw, 238px) !important;
-  min-height: 184px !important;
-  display: grid !important;
-  place-content: center !important;
-  justify-items: center !important;
-  gap: 7px !important;
-  padding: 56px 22px 24px !important;
-  border: 6px solid rgba(255, 255, 255, 0.96) !important;
-  border-radius: 50% !important;
-  color: #17324d !important;
-  background:
-    radial-gradient(circle at 33% 20%, rgba(255, 255, 255, 0.96) 0 7%, transparent 24%),
-    linear-gradient(155deg, #fff2a5 0%, #ffc65b 58%, #f58a58 100%) !important;
-  box-shadow:
-    inset 0 8px 0 rgba(255, 255, 255, 0.40),
-    inset 0 -15px 24px rgba(148, 70, 29, 0.14),
-    0 18px 34px rgba(16, 52, 73, 0.30),
-    0 0 0 9px rgba(255, 218, 100, 0.28) !important;
-  transform: none !important;
+  transform: translate(-50%, -54%) scale(1.12) !important;
+  filter: drop-shadow(0 0 16px rgba(255, 215, 0, 0.65)) drop-shadow(0 14px 22px rgba(10, 40, 65, 0.35)) !important;
+  animation: mapActivePulse 2.4s infinite ease-in-out !important;
+}
+
+@keyframes mapActivePulse {
+  0%, 100% {
+    transform: translate(-50%, -54%) scale(1.12);
+  }
+  50% {
+    transform: translate(-50%, -56%) scale(1.18);
+  }
+}
   opacity: 1 !important;
   pointer-events: auto !important;
   cursor: pointer !important;
@@ -405,76 +402,11 @@
   outline-offset: 6px !important;
 }
 
-.map-shell[data-course-director="true"] .map-node.active .node-mascot {
-  top: -34px !important;
-  left: 50% !important;
-  width: 104px !important;
-  height: 104px !important;
-  transform: translateX(-50%) !important;
-  filter: drop-shadow(0 9px 8px rgba(22, 55, 72, 0.24)) !important;
-}
-
-.map-shell[data-course-director="true"] .map-node.active .node-title,
-.map-shell[data-course-director="true"] .garden-rest-marker.active strong {
-  position: static !important;
-  min-height: 0 !important;
-  max-width: 170px !important;
-  padding: 0 !important;
-  border: 0 !important;
-  color: #17324d !important;
-  background: transparent !important;
-  box-shadow: none !important;
-  font-size: 18px !important;
-  font-weight: 1000 !important;
-  line-height: 1.12 !important;
-  text-align: center !important;
-  white-space: normal !important;
-}
-
-.map-shell[data-course-director="true"] .map-node.active .node-note {
-  display: none !important;
-}
-
-.map-shell[data-course-director="true"] .map-node.active .node-title b {
-  display: none !important;
-}
-
-.map-shell[data-course-director="true"] .map-node.active .node-title::after {
-  display: none !important;
-}
-
-.map-shell[data-course-director="true"] .map-node.active .node-note,
-.map-shell[data-course-director="true"] .garden-rest-marker.active small {
-  position: static !important;
-  min-width: 0 !important;
-  max-width: 164px !important;
-  padding: 0 !important;
-  border: 0 !important;
-  color: rgba(23, 50, 77, 0.76) !important;
-  background: transparent !important;
-  box-shadow: none !important;
-  font-size: 12px !important;
-  font-weight: 900 !important;
-  line-height: 1.2 !important;
-  text-align: center !important;
-  white-space: normal !important;
-}
-
-.map-shell[data-course-director="true"] .map-node.active .node-action-badge {
-  position: static !important;
-  min-width: 86px !important;
-  min-height: 34px !important;
-  display: inline-grid !important;
-  place-items: center !important;
-  padding: 5px 14px !important;
-  border: 2px solid rgba(255, 255, 255, 0.92) !important;
-  border-radius: 18px !important;
-  color: #fff !important;
-  background: #e85f49 !important;
-  box-shadow: 0 6px 12px rgba(114, 54, 36, 0.24) !important;
-  font-size: 14px !important;
-  font-weight: 950 !important;
-}
+/* 369e: Preserve standard circular platform bubble styles for active node */
+/*
+.map-shell[data-course-director="true"] .map-node.active .node-mascot { ... }
+...
+*/
 
 .map-shell[data-course-director="true"] .garden-rest-marker.active {
   grid-template-columns: 1fr !important;
@@ -1168,25 +1100,22 @@ html[data-motion="reduced"] #resultModal.result-modal[data-result="milestone"] .
 }
 
 .journey-director .journey-focus {
-  min-height: 120px !important;
-  grid-template-columns: 92px minmax(0, 1fr) !important;
+  min-height: 96px !important;
+  grid-template-columns: 70px minmax(0, 1fr) !important;
   gap: 8px !important;
-  padding: 0 !important;
+  padding: 6px 10px 8px 8px !important;
+  align-items: center !important;
 }
 
 .journey-director::before {
-  content: "";
-  position: absolute;
-  z-index: -1;
-  inset: -8px -20px -8px -12px;
-  border-radius: 16px;
-  background: linear-gradient(90deg, rgba(8, 52, 72, 0.80), rgba(8, 52, 72, 0.58) 68%, transparent);
+  display: none !important;
 }
 
 .journey-director .journey-focus img {
-  width: 92px !important;
-  height: 120px !important;
-  filter: drop-shadow(0 8px 8px rgba(12, 54, 73, 0.30)) !important;
+  width: 70px !important;
+  height: 94px !important;
+  object-fit: contain !important;
+  filter: drop-shadow(0 6px 8px rgba(12, 54, 73, 0.20)) !important;
 }
 
 .journey-director .journey-sequence {
@@ -1267,90 +1196,15 @@ html[data-motion="reduced"] #resultModal.result-modal[data-result="milestone"] .
   display: none !important;
 }
 
+/* 369e: Preserve round bubble node appearance for active node */
+/*
 .map-shell[data-course-director="true"] .map-node.active,
 .map-shell[data-course-director="true"] .garden-rest-marker.active {
-  right: max(26px, calc(env(safe-area-inset-right) + 20px)) !important;
-  bottom: max(26px, calc(env(safe-area-inset-bottom) + 20px)) !important;
-  width: clamp(208px, 22vw, 260px) !important;
-  min-width: 208px !important;
-  height: 96px !important;
-  min-height: 96px !important;
-  display: grid !important;
-  grid-template-columns: 64px minmax(0, 1fr) !important;
-  align-items: center !important;
-  justify-items: stretch !important;
-  gap: 9px !important;
-  padding: 13px 16px 13px 10px !important;
-  border: 3px solid rgba(255, 255, 255, 0.96) !important;
-  border-radius: 8px !important;
-  color: #17324d !important;
-  background: linear-gradient(135deg, #fff8cf, #ffd56a 62%, #f59b63) !important;
-  box-shadow: 0 12px 22px rgba(15, 53, 75, 0.26), inset 0 2px 0 rgba(255, 255, 255, 0.76) !important;
-  transform: none !important;
-  animation: none !important;
+... (disabled card overrides)
 }
+*/
 
-.map-shell[data-course-director="true"] .map-node.active::before,
-.map-shell[data-course-director="true"] .map-node.active::after {
-  display: none !important;
-}
-
-.map-shell[data-course-director="true"] .map-node.active:hover,
-.map-shell[data-course-director="true"] .garden-rest-marker.active:hover {
-  transform: translateY(-2px) !important;
-  filter: brightness(1.01) !important;
-}
-
-.map-shell[data-course-director="true"] .map-node.active .node-mascot {
-  position: static !important;
-  width: 64px !important;
-  height: 64px !important;
-  transform: none !important;
-  background: center / contain no-repeat var(--journey-object-image) !important;
-  filter: drop-shadow(0 6px 6px rgba(33, 70, 80, 0.22)) !important;
-}
-
-.map-shell[data-course-director="true"] .map-node.active .node-title {
-  position: static !important;
-  min-height: 0 !important;
-  display: block !important;
-  padding: 0 !important;
-  border: 0 !important;
-  border-radius: 0 !important;
-  color: #17324d !important;
-  background: transparent !important;
-  box-shadow: none !important;
-  font-size: 17px !important;
-  font-weight: 950 !important;
-  line-height: 1.15 !important;
-  text-align: left !important;
-  text-shadow: none !important;
-  white-space: normal !important;
-}
-
-.map-shell[data-course-director="true"] .map-node.active .node-title b,
-.map-shell[data-course-director="true"] .map-node.active .node-title::after,
-.map-shell[data-course-director="true"] .map-node.active .node-action-badge {
-  display: none !important;
-}
-
-.map-shell[data-course-director="true"] .map-node.active .node-note {
-  grid-column: 2 !important;
-  grid-row: 2 !important;
-  position: static !important;
-  min-width: 0 !important;
-  min-height: 0 !important;
-  margin-top: 4px !important;
-  padding: 0 !important;
-  border-radius: 0 !important;
-  color: #6b4725 !important;
-  background: transparent !important;
-  box-shadow: none !important;
-  font-size: 12px !important;
-  font-weight: 900 !important;
-  text-align: left !important;
-}
-
+/*
 .map-shell[data-course-director="true"] .map-node.active .node-mascot {
   grid-column: 1 !important;
   grid-row: 1 / span 2 !important;
@@ -1364,6 +1218,7 @@ html[data-motion="reduced"] #resultModal.result-modal[data-result="milestone"] .
 .map-shell[data-course-director="true"] .map-node.active.journey-has-glyph .node-note {
   display: none !important;
 }
+*/
 
 .node-learning-glyph {
   position: absolute;

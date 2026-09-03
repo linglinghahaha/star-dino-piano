@@ -30,8 +30,9 @@
   <link rel="stylesheet" href="parent-experience.css?v=overhaul-365b-parental-challenge-pointer-cancel-correction">
   <link rel="stylesheet" href="child-feedback-intensity.css?v=overhaul-369e-ipad-settlement-compactness-correction">
   <link rel="stylesheet" href="m01-m03-companion-feedback.css?v=overhaul-365b-parental-challenge-pointer-cancel-correction">
-  <link rel="stylesheet" href="world-map-v5-prototype.css?v=overhaul-361a-dark-scifi-map-v5-reference">
-  <link rel="stylesheet" href="world-map-v6-dark-scifi.css?v=overhaul-367b-world-map-pwa-qualification">
+  <!-- Disabled dark sci-fi overrides for vibrant cheerful children island map -->
+  <!-- <link rel="stylesheet" href="world-map-v5-prototype.css?v=overhaul-361a-dark-scifi-map-v5-reference"> -->
+  <!-- <link rel="stylesheet" href="world-map-v6-dark-scifi.css?v=overhaul-367b-world-map-pwa-qualification"> -->
   <link rel="stylesheet" href="s01-mini-training-dock.css?v=overhaul-368b-s01-mini-continuity-correction">
   <link rel="stylesheet" href="staff-notation-geometry.css?v=overhaul-369a-staff-notation-geometry-correction">
 </head>
@@ -96,6 +97,15 @@
       <div class="map-world-result map-dongdong-partial-reveal" id="mapDongdongPartialReveal" hidden aria-hidden="true">
         <i></i><i></i><b></b>
       </div>
+
+      <svg class="map-route" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+        <path class="map-route-shadow" d="M 17 48 C 24 42, 28 39, 34 39 C 42 39, 46 42, 52 42 C 60 42, 64 38, 69 36 C 78 36, 84 40, 84 47 C 84 57, 78 62, 72 66 C 66 72, 61 75, 55 75 C 46 75, 42 68, 38 67 C 30 67, 24 70, 22 76 C 24 84, 29 88, 35 88 C 43 88, 50 90, 58 90 C 66 90, 71 86, 75 84"></path>
+        <path class="map-route-line" d="M 17 48 C 24 42, 28 39, 34 39 C 42 39, 46 42, 52 42 C 60 42, 64 38, 69 36 C 78 36, 84 40, 84 47 C 84 57, 78 62, 72 66 C 66 72, 61 75, 55 75 C 46 75, 42 68, 38 67 C 30 67, 24 70, 22 76 C 24 84, 29 88, 35 88 C 43 88, 50 90, 58 90 C 66 90, 71 86, 75 84"></path>
+        <path class="map-route-shadow route-branch" d="M 75 84 C 81 79, 86 78, 90 82"></path>
+        <path class="map-route-line route-branch" d="M 75 84 C 81 79, 86 78, 90 82"></path>
+        <path class="map-route-shadow garden-branch" d="M 90 82 C 92 76, 93 70, 92 64" hidden></path>
+        <path class="map-route-line garden-branch" d="M 90 82 C 92 76, 93 70, 92 64" hidden></path>
+      </svg>
 
       <section class="journey-director" id="journeyDirector" aria-labelledby="journeyTitle">
         <div class="journey-chapters" id="journeyChapters" role="list" aria-label="星芽的四章旅程"></div>
