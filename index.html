@@ -35,6 +35,18 @@
   <!-- <link rel="stylesheet" href="world-map-v6-dark-scifi.css?v=overhaul-367b-world-map-pwa-qualification"> -->
   <link rel="stylesheet" href="s01-mini-training-dock.css?v=overhaul-368b-s01-mini-continuity-correction">
   <link rel="stylesheet" href="staff-notation-geometry.css?v=overhaul-369a-staff-notation-geometry-correction">
+  <script>
+    (function() {
+      function updateStageScale() {
+        var s = Math.min(window.innerWidth / 1194, window.innerHeight / 834);
+        document.documentElement.style.setProperty('--stage-scale', s);
+      }
+      window.addEventListener('resize', updateStageScale);
+      window.addEventListener('orientationchange', updateStageScale);
+      updateStageScale();
+      document.addEventListener('DOMContentLoaded', updateStageScale);
+    })();
+  </script>
 </head>
 <body class="booting">
   <div class="boot-loader" id="bootLoader" role="status" aria-live="polite">
@@ -64,34 +76,34 @@
   </div>
 
   <main class="map-shell" id="mapShell" hidden>
-    <header class="map-topbar" aria-label="星芽学习旅程进度">
-      <div class="map-brand">
-        <span class="brand-mark">★</span>
-        <div>
-          <p class="eyebrow">星龙工坊</p>
-          <h1>学习旅程</h1>
-        </div>
-      </div>
-      <div class="chapter-pill">
-        <span class="chapter-icon">◆</span>
-        <span id="mapChapterLabel">现在：月球基地</span>
-      </div>
-      <div class="star-pill">
-        <span class="star-icon">★</span>
-        <strong id="mapStarCount">第 1/10 站 · 准备</strong>
-      </div>
-      <button class="parent-gate" id="mapParentGate" type="button" aria-label="家长区" title="家长区">
-        <span>⚙</span>
-        <strong>家长区</strong>
-      </button>
-    </header>
-
     <span class="map-v4-focus-mask" data-map-v4-landmark="C1" aria-hidden="true"></span>
     <span class="map-v4-focus-mask" data-map-v4-landmark="C2" aria-hidden="true"></span>
     <span class="map-v4-focus-mask" data-map-v4-landmark="C3" aria-hidden="true"></span>
     <span class="map-v4-focus-mask" data-map-v4-landmark="C4" aria-hidden="true"></span>
 
     <section class="island-map" aria-label="星芽课程路线">
+      <header class="map-topbar" aria-label="星芽学习旅程进度">
+        <div class="map-brand">
+          <span class="brand-mark">★</span>
+          <div>
+            <p class="eyebrow">星龙工坊</p>
+            <h1>学习旅程</h1>
+          </div>
+        </div>
+        <div class="chapter-pill">
+          <span class="chapter-icon">◆</span>
+          <span id="mapChapterLabel">现在：月球基地</span>
+        </div>
+        <div class="star-pill">
+          <span class="star-icon">★</span>
+          <strong id="mapStarCount">第 1/10 站 · 准备</strong>
+        </div>
+        <button class="parent-gate" id="mapParentGate" type="button" aria-label="家长区" title="家长区">
+          <span>⚙</span>
+          <strong>家长区</strong>
+        </button>
+      </header>
+
       <div class="map-world-result map-floor-result" id="mapFloorResult" hidden aria-hidden="true"></div>
       <div class="map-world-result map-workshop-floor-result" id="mapWorkshopFloorResult" hidden aria-hidden="true"></div>
       <div class="map-world-result map-dongdong-partial-reveal" id="mapDongdongPartialReveal" hidden aria-hidden="true">

@@ -52,7 +52,7 @@
 }
 
 .map-shell[data-course-director="true"] .island-map {
-  inset: 70px 0 0 !important;
+  inset: auto !important;
 }
 
 .map-shell[data-course-director="true"] .map-route {
@@ -1320,16 +1320,67 @@ html[data-motion="reduced"] .map-shell[data-course-director="true"] .garden-rest
    Star Dino Workshop: 4-Phase Curriculum Hub Architecture (Clean & Gorgeous)
    ========================================================================= */
 
-/* Set Moon Base World Map Background */
+/* =========================================================================
+   Star Dino Workshop: iPad Pro 11" Stage-Locked Scaler (1194 x 834)
+   ========================================================================= */
+
+/* The outer viewport shell: centered, dark sci-fi cosmic border, overflow hidden */
 #mapShell.map-shell {
-  color: #e8f4fc !important;
-  background:
-    radial-gradient(circle at 50% 18%, rgba(255,255,255,0.05), transparent 35%),
-    url("assets/runtime/world-map-star-workshop.webp") center / cover no-repeat !important;
+  position: fixed !important;
+  inset: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  background: #040813 !important;
+  overflow: hidden !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 0 !important;
+  margin: 0 !important;
 }
 
-#mapShell.map-shell::before {
+/* Hide obsolete focus masks */
+.map-v4-focus-mask {
   display: none !important;
+}
+
+/* Hide old 2D dashed route line; let the high-res 3D golden musical staff road on the ground shine */
+.map-route {
+  display: none !important;
+}
+
+/* The 1194 x 834 iPad Pro 11" Fixed-Aspect Stage Canvas */
+#mapShell.map-shell .island-map {
+  position: absolute !important;
+  left: 50% !important;
+  top: 50% !important;
+  width: 1194px !important;
+  height: 834px !important;
+  min-width: 1194px !important;
+  min-height: 834px !important;
+  max-width: 1194px !important;
+  max-height: 834px !important;
+  background: url("assets/runtime/world-map-ipad-pro-11.webp") center / 100% 100% no-repeat !important;
+  transform: translate(-50%, -50%) scale(var(--stage-scale, 1)) !important;
+  transform-origin: center center !important;
+  flex-shrink: 0 !important;
+  overflow: hidden !important;
+  box-shadow: 0 0 60px rgba(0, 0, 0, 0.95) !important;
+}
+
+/* Map Topbar inside stage */
+.island-map .map-topbar {
+  position: absolute !important;
+  top: 18px !important;
+  left: 24px !important;
+  right: 24px !important;
+  z-index: 30 !important;
+  display: grid !important;
+  grid-template-columns: auto minmax(180px, 1fr) auto auto !important;
+  gap: 12px !important;
+  align-items: center !important;
+  padding: 0 !important;
 }
 
 /* Hide old duplicate bottom-left giant box to keep screen 100% clean */
@@ -1350,34 +1401,101 @@ html[data-motion="reduced"] .map-shell[data-course-director="true"] .garden-rest
   box-sizing: border-box;
 }
 
-/* Station 1: Moon Base Courtyard (Left) */
+/* Station 1: Moon Base Workshop (Left Platform) */
 .phase-hub-1 {
-  left: max(36px, calc(env(safe-area-inset-left) + 32px));
-  top: 48%;
-  transform: translateY(-50%);
-  width: 400px;
-  max-width: 420px;
+  left: 50px !important;
+  top: 360px !important;
+  transform: none !important;
+  width: 385px !important;
+  max-width: 400px !important;
 }
 
-/* Station 2: Central Circuit Transit */
+/* Station 2: Central Circuit Turntable (Center Musical Ring Platform) */
 .phase-hub-2 {
-  left: 45%;
-  top: 26%;
-  transform: translate(-50%, -50%);
+  left: 597px !important;
+  top: 375px !important;
+  transform: translate(-50%, -50%) !important;
 }
 
-/* Station 3: Greenhouse Dome Terrace */
+/* Station 3: Greenhouse Dome Terrace (Right Botanical Dome) */
 .phase-hub-3 {
-  right: max(36px, calc(env(safe-area-inset-right) + 32px));
-  top: 45%;
-  transform: translateY(-50%);
+  left: 920px !important;
+  top: 380px !important;
+  transform: translate(-50%, -50%) !important;
 }
 
-/* Station 4: Cavern Gateway / Star Bridge Portal */
+/* Station 4: Cavern Gateway / Star Bridge Portal (Bottom Crystal Arch) */
 .phase-hub-4 {
-  left: 50%;
-  bottom: max(36px, calc(env(safe-area-inset-bottom) + 24px));
-  transform: translateX(-50%);
+  left: 597px !important;
+  top: 705px !important;
+  transform: translate(-50%, -50%) !important;
+}
+
+/* Compact Capsule Garden Entrance Marker */
+.island-map .garden-rest-marker {
+  position: absolute !important;
+  right: 28px !important;
+  bottom: 24px !important;
+  width: auto !important;
+  height: 46px !important;
+  min-height: 46px !important;
+  max-height: 46px !important;
+  padding: 6px 16px 6px 10px !important;
+  border-radius: 999px !important;
+  display: inline-flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  writing-mode: horizontal-tb !important;
+  white-space: nowrap !important;
+  gap: 10px !important;
+  background: rgba(13, 31, 56, 0.82) !important;
+  border: 1.5px solid rgba(111, 226, 237, 0.6) !important;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4) !important;
+  backdrop-filter: blur(12px) !important;
+  color: #ffffff !important;
+  z-index: 25 !important;
+  cursor: pointer !important;
+}
+
+.island-map .garden-rest-marker .garden-rest-icon {
+  width: 32px !important;
+  height: 32px !important;
+  border-radius: 50% !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  background: linear-gradient(135deg, #37dd8a, #1fb96e) !important;
+  color: #ffffff !important;
+  font-size: 16px !important;
+  box-shadow: 0 2px 8px rgba(31, 185, 110, 0.4) !important;
+}
+
+.island-map .garden-rest-marker .garden-rest-copy {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: flex-start !important;
+  writing-mode: horizontal-tb !important;
+  white-space: nowrap !important;
+  gap: 1px !important;
+}
+
+.island-map .garden-rest-marker .garden-rest-copy strong,
+.island-map .garden-rest-marker .garden-rest-copy small {
+  writing-mode: horizontal-tb !important;
+  white-space: nowrap !important;
+}
+
+.island-map .garden-rest-marker .garden-rest-copy strong {
+  font-size: 13px !important;
+  font-weight: 900 !important;
+  color: #ffffff !important;
+  line-height: 1.1 !important;
+}
+
+.island-map .garden-rest-marker .garden-rest-copy small {
+  font-size: 10px !important;
+  color: #92bce3 !important;
+  line-height: 1.1 !important;
 }
 
 /* --- Header of Phase Hub --- */
