@@ -8,8 +8,8 @@
 *.md text eol=lf
 *.webmanifest text eol=lf
 
-# Approved runtime bitmaps are versioned through Git LFS.
-assets/runtime/*.png filter=lfs diff=lfs merge=lfs -text
-assets/runtime/*.jpg filter=lfs diff=lfs merge=lfs -text
-assets/runtime/*.jpeg filter=lfs diff=lfs merge=lfs -text
-assets/runtime/*.webp filter=lfs diff=lfs merge=lfs -text
+# Runtime bitmaps are stored directly in Git for GitHub Pages static compatibility
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.webp binary
