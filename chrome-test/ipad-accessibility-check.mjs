@@ -1,6 +1,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import { createRequire } from "node:module";
+import { completeParentChallenge } from "./parental-challenge-helper.mjs";
 
 const require = createRequire(import.meta.url);
 const { chromium } = require("playwright");
@@ -76,6 +77,8 @@ async function readInteractiveControls(page) {
           width: Math.round(rect.width * 10) / 10,
           height: Math.round(rect.height * 10) / 10,
           tabIndex: element.tabIndex,
+          role: element.getAttribute("role") || "",
+          selected: element.getAttribute("aria-selected") || "",
           visible: visible(element, rect)
         };
       })
@@ -87,7 +90,7 @@ async function auditControls(page, label) {
   const controls = await readInteractiveControls(page);
   const undersized = controls.filter((control) => control.width < 44 || control.height < 44);
   const unnamed = controls.filter((control) => !control.name);
-  const unfocusable = controls.filter((control) => control.tabIndex < 0);
+  const unfocusable = controls.filter((control) => control.tabIndex < 0 && !(control.role === "tab" && control.selected === "false"));
   record(`${label}: visible controls meet the 44px touch target`, undersized.length === 0, { undersized });
   record(`${label}: visible controls have accessible names`, unnamed.length === 0, { unnamed });
   record(`${label}: visible controls remain keyboard focusable`, unfocusable.length === 0, { unfocusable });
@@ -171,7 +174,7 @@ try {
 
   await gotoScreen(page, "?level=M01&check=ipad-a11y-parent", ".moon-yard");
   await page.locator("#playParentGate").click();
-  await page.waitForSelector("#parentModal", { state: "visible", timeout: 3000 });
+  await completeParentChallenge(page);
   await page.waitForTimeout(60);
   const parentOpen = await page.evaluate(() => ({
     activeId: document.activeElement?.id || "",
@@ -202,7 +205,8 @@ try {
   try {
     await gotoScreen(largePage, "?level=M01&check=ipad-a11y-parent-large", ".moon-yard");
     await largePage.locator("#playParentGate").click();
-    await largePage.waitForSelector("#parentModal", { state: "visible", timeout: 3000 });
+    await completeParentChallenge(largePage);
+    await largePage.locator("#parentTabDevices").click();
     const largeParentLayout = await largePage.evaluate(() => {
       const card = document.querySelector(".parent-card");
       const cardRect = card?.getBoundingClientRect();
@@ -245,28 +249,29 @@ try {
 
   await gotoScreen(page, "?level=M01&check=ipad-a11y-result", ".moon-yard");
   await page.locator('.key.white-key[data-midi="60"]').click();
-  await page.waitForSelector("#resultModal", { state: "visible", timeout: 4000 });
-  await page.waitForTimeout(20);
+  await page.waitForTimeout(240);
   const resultState = await page.evaluate(() => ({
-    activeId: document.activeElement?.id || "",
+    modalHidden: document.querySelector("#resultModal")?.hidden === true,
     appInert: Boolean(document.querySelector("#appShell")?.inert),
-    role: document.querySelector(".result-card")?.getAttribute("role"),
-    live: document.querySelector(".result-card")?.getAttribute("aria-live"),
-    atomic: document.querySelector(".result-card")?.getAttribute("aria-atomic"),
-    labelledBy: document.querySelector(".result-card")?.getAttribute("aria-labelledby"),
-    titleId: document.querySelector(".result-card h2")?.id || ""
+    keyboardVisible: (() => {
+      const rect = document.querySelector("#keyboard")?.getBoundingClientRect();
+      return Boolean(rect && rect.width > 0 && rect.height > 0);
+    })(),
+    placedSlots: document.querySelectorAll("#baseBuild .build-slot.placed").length,
+    visibleResultControls: [...document.querySelectorAll("#resultModal button, #resultModal [role='button']")]
+      .filter((element) => {
+        const rect = element.getBoundingClientRect();
+        return !element.closest("[hidden]") && rect.width > 0 && rect.height > 0;
+      }).length
   }));
   record(
-    "automatic result layer is an announced status while gameplay is paused",
-    resultState.appInert && resultState.role === "status" && resultState.live === "polite" && resultState.atomic === "true" && resultState.labelledBy === resultState.titleId && Boolean(resultState.titleId),
+    "scene completion keeps the keyboard available and leaves no result-layer controls or inert gameplay",
+    resultState.modalHidden && !resultState.appInert && resultState.keyboardVisible && resultState.placedSlots === 1 && resultState.visibleResultControls === 0,
     resultState
   );
-  await auditControls(page, "result status");
-  if (await page.locator("#resultModal").isVisible()) {
-    await page.locator("#modalNext").evaluate((button) => button.click());
-  }
-  await page.waitForSelector("#resultModal", { state: "hidden", timeout: 4000 });
-  record("result continuation returns gameplay to an interactive state", await page.evaluate(() => !document.querySelector("#appShell")?.inert));
+  await auditControls(page, "scene completion");
+  await page.waitForTimeout(820);
+  record("automatic scene continuation returns gameplay to an interactive state", await page.evaluate(() => document.querySelector("#resultModal")?.hidden === true && !document.querySelector("#appShell")?.inert));
 
   record("browser console is clean", browserErrors.length === 0, { browserErrors });
 } finally {

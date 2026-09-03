@@ -1,6 +1,8 @@
 import fs from "node:fs";
 import path from "node:path";
 import { createRequire } from "node:module";
+import { canonicalC1C2History } from "./canonical-course-fixture.mjs";
+import { completeParentChallenge } from "./parental-challenge-helper.mjs";
 
 const require = createRequire(import.meta.url);
 const { chromium } = require("playwright");
@@ -22,21 +24,13 @@ function targetUrl(search = "?screen=map") {
   return value.toString();
 }
 
-function endedC203() {
-  return {
-    sessionId: "C2-03-ch3-entry",
-    bundleId: "C2-03",
-    status: "ended",
-    actionIndex: 0,
-    actions: [{ actionId: "S01-check", kind: "staff", targetId: "S01", runMode: "check" }],
-    completedActions: [{ actionId: "S01-check", kind: "staff", targetId: "S01", runMode: "check" }],
-    endedAt: "2026-07-12T06:00:00.000Z",
-    endReason: "natural-rest"
-  };
-}
-
 function baseRuntime() {
-  return { version: 1, active: null, history: [endedC203()], lastRest: null };
+  return {
+    version: 1,
+    active: null,
+    history: canonicalC1C2History({ completedAt: "2026-07-12T06:00:00.000Z", tag: "chapter3-visible" }),
+    lastRest: null
+  };
 }
 
 const chapter12Sentinel = {
@@ -64,6 +58,16 @@ function gardenMasteryIsClean(view) {
 
 function chapter12SentinelPreserved(view) {
   return JSON.stringify(view.learningStats || {}) === JSON.stringify(chapter12Sentinel);
+}
+
+function gardenJourneyMap(view, station, state, signal) {
+  return view.mapChapter === "呼吸花园" &&
+    view.mapProgress === signal &&
+    view.mapProgressAria === `呼吸花园课程进度：共 7 站，现在第 ${station} 站，${state}`;
+}
+
+function gardenJourneyMarker(view, label, cue) {
+  return view.markerStrong === label && view.markerSmall === cue && view.markerAria === `现在要${label}`;
 }
 
 async function makePage(viewport = { width: 1024, height: 768, deviceScaleFactor: 1 }) {
@@ -111,6 +115,9 @@ async function snapshot(page) {
       const rect = element.getBoundingClientRect();
       return style.display !== "none" && style.visibility !== "hidden" && Number(style.opacity) > 0 && rect.width > 0 && rect.height > 0;
     };
+    const resultModal = document.querySelector("#resultModal");
+    const resultCard = resultModal?.querySelector(".result-card");
+    const resultCardBox = resultCard && visible(resultCard) ? resultCard.getBoundingClientRect() : null;
     return {
       screen: document.body.className,
       markerVisible: visible(document.querySelector("#gardenRestMarker")),
@@ -143,9 +150,15 @@ async function snapshot(page) {
       audioPhase: document.querySelector("#gardenScene")?.dataset.teachingAudioPhase || "",
       targetVisible: document.querySelector("#keyboard")?.dataset.targetVisible,
       speech: document.querySelector("#gardenSpeech")?.innerText?.replace(/\s+/g, " ").trim() || "",
+      gardenSpeechVisible: visible(document.querySelector("#gardenSpeech")),
       leaves: [...document.querySelectorAll(".garden-leaf")].map((leaf) => leaf.classList.contains("grown")),
       ls03Count: runtime.chapter3?.ls03QualifiedInputs || 0,
-      modalVisible: visible(document.querySelector("#resultModal")),
+      modalVisible: visible(resultModal),
+      resultKind: resultModal?.dataset.result || "",
+      resultControls: [...document.querySelectorAll("#resultModal button, #resultModal [role='button']")]
+        .filter(visible)
+        .map((element) => element.id || element.textContent?.trim() || "button"),
+      resultCard: resultCardBox ? { width: resultCardBox.width, height: resultCardBox.height } : null,
       mediaRefs: [...document.querySelectorAll("img,video,audio,source")].map((node) => node.getAttribute("src") || "").filter(Boolean)
     };
   });
@@ -178,6 +191,17 @@ async function waitForAirState(page, expected, timeout = 5000) {
     }));
     throw new Error(`Timed out waiting for air state ${expected}: ${JSON.stringify(diagnostics)}`, { cause: error });
   }
+}
+
+async function waitForCompactMilestone(page, timeout = 10000) {
+  await page.waitForFunction(() => {
+    const modal = document.querySelector("#resultModal");
+    const card = modal?.querySelector(".result-card");
+    if (!modal || modal.hidden || modal.dataset.result !== "milestone" || !card) return false;
+    const style = getComputedStyle(card);
+    const rect = card.getBoundingClientRect();
+    return style.display !== "none" && style.visibility !== "hidden" && Number(style.opacity) > 0.95 && rect.width > 0 && rect.height > 0;
+  }, null, { timeout });
 }
 
 async function waitGardenInputReady(page, lessonId = null, timeout = 10000) {
@@ -246,8 +270,8 @@ const main = await makePage();
 await seed(main.page);
 let view = await snapshot(main.page);
 record("Formal C2-03 unlocks one explicit button without creating a session", view.markerVisible && view.markerTag === "BUTTON" && !view.active, view);
-record("Unentered garden marker names the entrance consistently", view.markerStrong === "花园入口" && view.markerSmall === "点这里走进花园" && view.markerAria === "花园入口，点这里走进花园", view);
-record("Garden entry map uses the Chapter 3 identity and 0/3 world progress", view.mapChapter === "当前章节：呼吸花园" && view.mapProgress.includes("嫩芽 0/3") && !view.mapChapter.includes("月球基地") && !view.mapProgress.includes("基地"), view);
+record("Unentered garden marker names the first course station and its C focus consistently", gardenJourneyMarker(view, "打开第一片音符叶", "C"), view);
+record("Garden entry map uses the Chapter 3 journey identity and ready progress", gardenJourneyMap(view, 1, "准备", "跟着星芽"), view);
 record("Garden entry meets the child touch-target minimum", view.markerRect?.width >= 44 && view.markerRect?.height >= 44, view);
 record("Seeing and refreshing the entrance does not unlock audio", view.audioContexts === 0 && !view.audioGesture, view);
 await main.page.screenshot({ path: path.join(screenshotDir, "garden_entry_1024x768.png") });
@@ -258,13 +282,6 @@ await main.page.locator("#gardenRestMarker").click();
 view = await snapshot(main.page);
 record("Entrance gesture creates exactly one formal C3-01", view.active?.bundleId === "C3-01" && view.active.actions?.length === 2 && view.history.filter((item) => item.bundleId === "C3-01").length === 0, view);
 record("The same entrance gesture unlocks one AudioContext", view.audioGesture === "unlocked" && view.audioContexts === 1, view);
-const activeMapPage = await main.context.newPage();
-await activeMapPage.goto(targetUrl(), { waitUntil: "domcontentloaded", timeout: 12000 });
-await activeMapPage.waitForSelector("#bootLoader", { state: "hidden", timeout: 12000 });
-const activeMap = await snapshot(activeMapPage);
-record("C3-01 active map keeps the Chapter 3 identity and 0/3 active progress", activeMap.screen.includes("screen-map") && activeMap.mapChapter === "当前章节：呼吸花园" && activeMap.mapProgress.includes("嫩芽 0/3") && activeMap.mapProgress.includes("正在照顾") && !activeMap.mapProgress.includes("基地"), activeMap);
-record("Active LS01 map marker names the first leaf consistently", activeMap.markerStrong === "第一片叶" && activeMap.markerSmall === "继续第一片叶" && activeMap.markerAria === "第一片叶，继续第一片叶", activeMap);
-await activeMapPage.close();
 record("Air check begins sealed with no unapproved media", view.airState === "sealed" && !view.mediaRefs.some((src) => /concepts\/|audio\/|technical-preview-v1/.test(src)), view);
 record("Sealed arrival uses the sealed-suit character asset without a second fake helmet layer", view.gardenCharacterSrc.endsWith("xingya-suit-point.webp") && view.gardenCharacterAssetState === "sealed-suit" && view.fakeEquipmentLayers === 0, view);
 const sealedCharacterSrc = view.gardenCharacterSrc;
@@ -275,6 +292,14 @@ let observedAirStates = await airTransitions(main.page);
 record("Air check reaches scanning", view.airState === "scanning" && observedAirStates.includes("sealed") && observedAirStates.includes("scanning"), { view, observedAirStates });
 record("Scanning keeps the same sealed-suit bitmap without stacking fake equipment", view.gardenCharacterSrc === sealedCharacterSrc && view.gardenCharacterAssetState === "sealed-suit" && view.fakeEquipmentLayers === 0, view);
 await main.page.screenshot({ path: path.join(screenshotDir, "air_check_scanning_1024x768.png") });
+const activeMapPage = await main.context.newPage();
+await activeMapPage.goto(targetUrl(), { waitUntil: "domcontentloaded", timeout: 12000 });
+await activeMapPage.waitForSelector("#bootLoader", { state: "hidden", timeout: 12000 });
+const activeMap = await snapshot(activeMapPage);
+record("C3-01 active map keeps the Chapter 3 journey identity and in-progress state", activeMap.screen.includes("screen-map") && gardenJourneyMap(activeMap, 1, "进行中", "正在和星芽一起做"), activeMap);
+record("Active LS01 map marker names the continuing first course station and its C focus", gardenJourneyMarker(activeMap, "继续打开第一片音符叶", "C"), activeMap);
+await activeMapPage.close();
+await main.page.bringToFront();
 await waitForAirState(main.page, "safe-open");
 await waitGardenInputReady(main.page, "LS01");
 view = await snapshot(main.page);
@@ -282,18 +307,19 @@ observedAirStates = await airTransitions(main.page);
 record("Air check converges to safe-open before LS01 input", view.airState === "safe-open" && view.lesson === "LS01" && view.targetVisible === "true" && observedAirStates.indexOf("sealed") < observedAirStates.indexOf("scanning") && observedAirStates.indexOf("scanning") < observedAirStates.indexOf("safe-open"), { view, observedAirStates });
 const safeOpenCharacter = await inspectGardenCharacter(main.page);
 record("Safe-open switches from the sealed suit to the approved garden-mode runtime asset", view.gardenCharacterAssetState === "garden-mode" && view.gardenCharacterSrc.endsWith("xingya-garden-invite-v1.webp") && view.gardenCharacterSrc !== sealedCharacterSrc && !view.mediaRefs.some((src) => /concepts\/runtime-candidates\//.test(src)), { view, safeOpenCharacter });
-record("Garden-mode runtime asset matches the approved prototype hash and transparent dimensions", safeOpenCharacter?.sha256 === "1228082D4DF2BF576ED916B16950799296A975279ED6EFC554F6BB9EDDE88EBA" && safeOpenCharacter?.naturalWidth === 512 && safeOpenCharacter?.naturalHeight === 512 && safeOpenCharacter?.corners?.every((alpha) => alpha === 0), safeOpenCharacter);
+record("Garden-mode runtime asset matches the approved prototype hash and transparent dimensions", safeOpenCharacter?.sha256 === "AD83E1626A52FE86A49F882953F3089F5142A607B1B5B24F084D70EA775B9EF5" && safeOpenCharacter?.naturalWidth === 512 && safeOpenCharacter?.naturalHeight === 512 && safeOpenCharacter?.corners?.every((alpha) => alpha === 0), safeOpenCharacter);
 record("LS01 uses C as primary identity with Do as support", view.speech.includes("琴键 C") && view.speech.includes("我唱 Do") && view.speech.includes("两黑键左侧"), view);
 record("LS01-LS03 runtime explicitly disables mastery review", view.reviewable === "false", view);
 await main.page.screenshot({ path: path.join(screenshotDir, "LS01_initial_1024x768.png") });
 await main.page.locator("#playParentGate").click();
+await completeParentChallenge(main.page);
 const parentSummary = await main.page.evaluate(() => ({
   focus: document.querySelector("#parentLearningFocus")?.textContent || "",
   detail: document.querySelector("#parentLearningDetail")?.textContent || "",
   mastery: document.querySelector("#parentMasteryStatus")?.textContent || "",
   masteryDetail: document.querySelector("#parentMasteryDetail")?.textContent || ""
 }));
-record("Parent summary identifies visible teaching without claiming mastery", parentSummary.focus.includes("C / Do") && parentSummary.detail.includes("不进入 mastery") && parentSummary.masteryDetail.includes("不写入稳定或隔日保留"), parentSummary);
+record("Parent summary identifies visible teaching without claiming mastery", parentSummary.focus === "C / C · 两黑键左侧" && parentSummary.detail === "LS01 可见名称与键位教学 · 不进入 mastery 复习队列" && parentSummary.mastery === "正在认识名称与键位" && parentSummary.masteryDetail === "本切片只记录可见提示下的学习过程，不写入稳定或隔日保留。", parentSummary);
 await main.page.locator("#parentClose").click();
 
 await answerGarden(main.page, 60);
@@ -306,10 +332,24 @@ record("C3-01 advances to LS02 in the same session", view.lesson === "LS02" && v
 
 const retainedBefore = await main.page.evaluate(() => JSON.parse(localStorage.getItem("starDinoLearningStats") || "{}").retention || {});
 await answerGarden(main.page, 62);
+await main.page.waitForFunction(() => {
+  const runtime = JSON.parse(localStorage.getItem("starDinoSessionRuntime") || "{}");
+  return document.body.classList.contains("screen-garden") &&
+    runtime.active === null &&
+    runtime.chapter3?.leaves?.[0] === true &&
+    runtime.chapter3?.leaves?.[1] === true &&
+    runtime.chapter3?.leaves?.[2] !== true;
+}, null, { timeout: 10000 });
+const twoLeafRest = await snapshot(main.page);
+record("C3-01 rest names two grown leaves without claiming the third",
+  twoLeafRest.speech.includes("两片叶长好啦") &&
+    !twoLeafRest.speech.includes("三片叶长好啦") &&
+    twoLeafRest.leaves.filter(Boolean).length === 2,
+twoLeafRest);
 await waitForGardenMap(main.page);
 view = await snapshot(main.page);
 record("LS02 straightens leaf two and ends C3-01 at the map", view.leaves[1] && !view.active && view.history.some((item) => item.bundleId === "C3-01" && item.status === "ended"), view);
-record("Two completed leaves point to the third leaf consistently", view.markerStrong === "第三片叶" && view.markerSmall === "点这里唤醒第三片叶" && view.markerAria === "第三片叶，点这里唤醒第三片叶", view);
+record("Two completed leaves point to the E-focused third course station consistently", gardenJourneyMap(view, 2, "下一站", "跟着星芽") && gardenJourneyMarker(view, "唤醒第三片音符叶", "E"), view);
 await main.page.screenshot({ path: path.join(screenshotDir, "map_copy_ls03_ready_1024x768.png") });
 const retainedAfter = await main.page.evaluate(() => JSON.parse(localStorage.getItem("starDinoLearningStats") || "{}").retention || {});
 record("Visible garden lessons create no stable or retained evidence", JSON.stringify(retainedBefore) === JSON.stringify(retainedAfter), { retainedBefore, retainedAfter });
@@ -323,8 +363,8 @@ const c302MapPage = await main.context.newPage();
 await c302MapPage.goto(targetUrl(), { waitUntil: "domcontentloaded", timeout: 12000 });
 await c302MapPage.waitForSelector("#bootLoader", { state: "hidden", timeout: 12000 });
 const c302Map = await snapshot(c302MapPage);
-record("C3-02 active map uses the Chapter 3 identity and 2/3 active progress", c302Map.mapChapter === "当前章节：呼吸花园" && c302Map.mapProgress.includes("嫩芽 2/3") && c302Map.mapProgress.includes("正在照顾") && !c302Map.mapProgress.includes("基地"), c302Map);
-record("Active LS03 map marker names the third leaf consistently", c302Map.markerStrong === "第三片叶" && c302Map.markerSmall === "继续第三片叶" && c302Map.markerAria === "第三片叶，继续第三片叶", c302Map);
+record("C3-02 active map uses the Chapter 3 journey identity and in-progress state", gardenJourneyMap(c302Map, 2, "进行中", "正在和星芽一起做"), c302Map);
+record("Active LS03 map marker names the continuing third course station and its E focus", gardenJourneyMarker(c302Map, "继续唤醒第三片音符叶", "E"), c302Map);
 await c302MapPage.screenshot({ path: path.join(screenshotDir, "map_copy_ls03_active_1024x768.png") });
 await c302MapPage.close();
 await main.page.evaluate(() => window.handleInput(64, "程序测试"));
@@ -343,13 +383,15 @@ await main.page.evaluate(() => window.handleInput(64, "程序测试"));
 await main.page.waitForFunction(() => JSON.parse(localStorage.getItem("starDinoSessionRuntime") || "{}").chapter3?.leaves?.[2] === true, null, { timeout: 10000 });
 view = await snapshot(main.page);
 record("A released second E completes leaf three in the garden", view.leaves[2] && !view.active && view.screen.includes("screen-garden"), view);
-record("Chapter 3 completion uses no full-screen result modal", !view.modalVisible, view);
+await waitForCompactMilestone(main.page);
+view = await snapshot(main.page);
+record("Chapter 3 phase completion uses one compact no-control milestone without a competing garden speech surface", view.modalVisible && view.resultKind === "milestone" && view.resultControls.length === 0 && view.resultCard?.width <= 600 && view.resultCard?.height <= 220 && !view.gardenSpeechVisible, view);
 await main.page.screenshot({ path: path.join(screenshotDir, "LS03_complete_1024x768.png") });
 await waitForGardenMap(main.page);
 view = await snapshot(main.page);
 record("LS03 completion returns to an explicit interactive LS04-ready map marker", view.markerState === "ready" && !view.markerDisabled && view.screen.includes("screen-map"), view);
-record("LS03 completion keeps the Chapter 3 identity and starts LS04 at 0/4", view.mapChapter === "当前章节：呼吸花园" && view.mapProgress.includes("找朋友 0/4") && view.mapProgress.includes("准备") && !view.mapProgress.includes("基地"), view);
-record("LS04-ready marker names the hidden listening activity consistently", view.markerStrong === "C/D 找朋友" && view.markerSmall === "点这里听种核" && view.markerAria === "C/D 找朋友，点这里听种核", view);
+record("LS03 completion keeps the Chapter 3 journey identity and points to LS04", gardenJourneyMap(view, 3, "下一站", "跟着星芽"), view);
+record("LS04-ready marker names the next C-D listening station consistently", gardenJourneyMarker(view, "帮 C 和 D 找朋友", "C D"), view);
 record("Completed map state has no new Chapter 3 active session", view.history.filter((item) => item.bundleId === "C3-02" && item.status === "ended").length === 1 && !view.active, view);
 await main.page.screenshot({ path: path.join(screenshotDir, "garden_complete_map_1024x768.png") });
 await main.context.close();
@@ -379,8 +421,9 @@ async function runPreLs01ReturnCase(id, expectedState, prepare = async () => {})
   );
   record(
     `${id}: ordinary navigation keeps the first-leaf map copy and creates no needs-practice label`,
-    afterReturn.markerStrong === "第一片叶" && afterReturn.markerSmall === "继续第一片叶" &&
-      afterReturn.markerAria === "第一片叶，继续第一片叶" && ls01Evidence?.needsPractice !== true,
+    gardenJourneyMap(afterReturn, 1, "进行中", "正在和星芽一起做") &&
+      gardenJourneyMarker(afterReturn, "继续打开第一片音符叶", "C") &&
+      ls01Evidence?.needsPractice !== true,
     afterReturn
   );
   await probe.page.screenshot({ path: path.join(screenshotDir, `pre_ls01_return_${id}_1024x768.png`) });
@@ -455,8 +498,8 @@ const assistedEvidence = view.chapter3?.lessonEvidence?.LS01 || {};
 const assistedEnded = view.history.find((session) => session.sessionId === assistedOldSessionId);
 record("Two errors followed by child correction ends the old session at early-rest", !view.active && assistedEnded?.endReason === "early-rest" && view.leaves[0] && assistedEvidence.needsPractice === true && assistedEvidence.assisted === true && assistedEvidence.modeled === false, { view, assistedEvidence, assistedEnded });
 record("Assisted-correct route preserves Chapter 1/2 evidence and creates no LS01 mastery", gardenMasteryIsClean(view) && chapter12SentinelPreserved(view), view.learningStats);
-record("Assisted-correct map uses 1/3 Chapter 3 rest identity", view.mapChapter === "当前章节：呼吸花园" && view.mapProgress.includes("嫩芽 1/3") && view.mapProgress.includes("休息") && !view.mapProgress.includes("基地"), view);
-record("LS02 resume marker names the second leaf consistently", view.markerStrong === "第二片叶" && view.markerSmall === "继续第二片叶" && view.markerAria === "第二片叶，继续第二片叶", view);
+record("Assisted-correct map uses the Chapter 3 resume identity", gardenJourneyMap(view, 1, "继续", "接着星芽"), view);
+record("LS02 resume marker names the continuing second course station and its D focus", gardenJourneyMarker(view, "继续伸直第二片音符叶", "D"), view);
 await assistedCorrect.page.screenshot({ path: path.join(screenshotDir, "map_copy_ls02_resume_1194x834_dpr2.png") });
 await assistedCorrect.page.locator("#gardenRestMarker").click();
 await waitGardenInputReady(assistedCorrect.page, "LS02");
@@ -491,7 +534,18 @@ await seed(longWait.page, baseRuntime(), chapter12Sentinel);
 await longWait.page.locator("#gardenRestMarker").click();
 await waitGardenInputReady(longWait.page, "LS01");
 const longWaitOldSessionId = (await snapshot(longWait.page)).active?.sessionId;
-await longWait.page.waitForTimeout(20200);
+await longWait.page.waitForFunction(() => {
+  const runtime = JSON.parse(localStorage.getItem("starDinoSessionRuntime") || "{}");
+  return document.body.classList.contains("screen-garden") &&
+    runtime.chapter3?.lessonEvidence?.LS01?.modeled === true &&
+    runtime.chapter3?.leaves?.[0] === true;
+}, null, { timeout: 24000 });
+const longWaitRest = await snapshot(longWait.page);
+record("LS01 long-wait rest names only the first grown leaf",
+  longWaitRest.speech.includes("第一片叶长好啦") &&
+    !longWaitRest.speech.includes("三片叶长好啦") &&
+    longWaitRest.leaves.filter(Boolean).length === 1,
+longWaitRest);
 await waitForGardenMap(longWait.page);
 view = await snapshot(longWait.page);
 const longWaitEvidence = view.chapter3?.lessonEvidence?.LS01 || {};
@@ -513,12 +567,12 @@ await voluntary.page.locator("#mapReturn").click();
 await waitForGardenMap(voluntary.page);
 view = await snapshot(voluntary.page);
 record("A voluntary rest after leaf one ends the old session without labeling ordinary pace as difficulty", !view.active && view.history.some((session) => session.sessionId === voluntaryOldSessionId && session.endReason === "early-rest") && view.leaves[0] && view.chapter3?.lessonEvidence?.LS01?.needsPractice === false, view);
-record("A real leaf-one completion is the first voluntary return that points to LS02", view.markerStrong === "第二片叶" && view.markerSmall === "继续第二片叶" && view.markerAria === "第二片叶，继续第二片叶" && view.chapter3?.resume?.nextTargetId === "LS02", view);
+record("A real leaf-one completion is the first voluntary return that points to D-focused LS02", gardenJourneyMap(view, 1, "继续", "接着星芽") && gardenJourneyMarker(view, "继续伸直第二片音符叶", "D") && view.chapter3?.resume?.nextTargetId === "LS02", view);
 record("Voluntary rest preserves Chapter 1/2 evidence and creates no garden mastery", gardenMasteryIsClean(view) && chapter12SentinelPreserved(view), view.learningStats);
 await voluntary.page.reload({ waitUntil: "domcontentloaded", timeout: 12000 });
 await voluntary.page.waitForSelector("#bootLoader", { state: "hidden", timeout: 12000 });
 view = await snapshot(voluntary.page);
-record("Refreshing the early-rest map preserves leaf one and no active session", !view.active && view.chapter3?.leaves?.[0] === true && view.markerState === "resume" && view.mapProgress.includes("嫩芽 1/3"), view);
+record("Refreshing the early-rest map preserves leaf one and no active session", !view.active && view.chapter3?.leaves?.[0] === true && view.markerState === "resume" && gardenJourneyMap(view, 1, "继续", "接着星芽"), view);
 await voluntary.page.locator("#gardenRestMarker").click();
 await waitGardenInputReady(voluntary.page, "LS02");
 view = await snapshot(voluntary.page);
@@ -567,5 +621,14 @@ record("Chapter 3 test run has no browser warnings or errors", browserErrors.len
 await browser.close();
 
 const failed = checks.filter((check) => !check.pass);
-console.log(JSON.stringify({ passed: checks.length - failed.length, total: checks.length, failed, browserErrors }, null, 2));
+const summary = {
+  passed: checks.length - failed.length,
+  total: checks.length,
+  failed,
+  browserErrors
+};
+fs.writeFileSync(path.join(screenshotDir, "summary.json"), `${JSON.stringify(summary, null, 2)}\n`);
+console.log(`Chapter 3 visible checks: ${summary.passed}/${summary.total}`);
+failed.forEach((check) => console.log(`FAIL ${check.name}`));
+if (browserErrors.length) console.log(`browser errors: ${JSON.stringify(browserErrors)}`);
 if (failed.length) process.exitCode = 1;

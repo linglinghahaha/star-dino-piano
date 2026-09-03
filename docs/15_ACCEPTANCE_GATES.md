@@ -120,7 +120,7 @@ No broad visual polish pass should be called done without a gate-run record.
 
 Current baseline automation: rerun `chrome-test/clean-state-slice-check.mjs` after mastery, reveal-rule, or flow changes. It is the clean-state regression for `M01`, `M03`, `M08`, `FG01-FG04`, and `S01`, but it does not replace real-child observation, audio proof, or release asset/CSS gates.
 
-Current bundle automation: run `node tools/production-bundle-audit.mjs` after asset/reference changes. Prototype policy mode and `node tools/production-bundle-audit.mjs --strict` must both pass for any promoted browser baseline. The current independently validated `overhaul-344a-p3` baseline at commit `8cea6d46b725c26d2c8272086eab56b271750b18` passes strict mode with 42 runtime files and 1,641,265 runtime bytes; every later draft must rerun it with its own version, sources and runtime references before promotion. A historical exception cannot silently return.
+Current bundle automation: run `node tools/production-bundle-audit.mjs` after asset/reference changes. Prototype policy mode and `node tools/production-bundle-audit.mjs --strict` must both pass for any promoted browser baseline. Strict mode also requires every local stylesheet/script referenced by `index.html` to be present in the release include set. The latest committed runtime teaching baseline remains `overhaul-347a-c4-r01a` / `af9aa28`; the current browser/PWA experience candidate is the unapproved `overhaul-369d-course-route-monotonicity-correction`, whose runtime inventory keeps the same 29 runtime-image bytes first inventoried by 369a. Its manifest is `docs/30_COURSE_ROUTE_MONOTONICITY_CORRECTION_CANDIDATE_369D.json` and all runtime, integration, observation and release approval flags remain false. 369c is the direct stage-settlement/PWA predecessor, 369b the Figma A stage-settlement source, 369a the staff-notation source, 368b the S01-continuity source, 367b the portable-recovery predecessor, and 366a the teaching-core predecessor. The separate `overhaul-359a-map-shell-scroll-reset` / `docs/30_OBSERVATION_CANDIDATE_359A.json` freezes the exact 359a adult-preflight/child-observation baseline and remains diagnostic-only. Historical manifests remain exact evidence; every later draft must rerun the bundle and create its own manifest before promotion. A historical exception cannot silently return.
 
 Version-baseline rule: the runtime version query in `index.html` must not be treated as proof by itself. If the app loads a newer version than the latest `20_GATE_RUN_LOG.md` entry, call it a draft. A version becomes the current baseline only after its relevant script checks, screenshots, bundle result, and pass/fail notes are logged.
 
@@ -175,6 +175,7 @@ Producing an IPA, loading the Web prototype in a shell, or passing desktop brows
 The project is not a mature app merely because the current Web slice or TestFlight shell runs. Pass only when all of the following are true:
 
 - Chapters 1-5 core routes are implemented with their canonical session boundaries, story consequences, note/register/staff targets, cue fading, repair, natural rest, and parent evidence;
+- the advertised representation links have their own teaching, reduced-cue and later-review evidence: continuous Do/C pairing cannot replace the teacher-approved naming-carrier review, and separate sound-to-key plus staff-to-key lessons cannot replace the teacher-approved sound-to-staff transfer;
 - the Chapter 5 relay route reaches the full ending without requiring simultaneous two-hand play, while optional together play receives the same ending and reward;
 - the current source, runtime version, Service Worker cache, automated checks, screenshots, coordinate contract, gate log, asset manifest, and release package all identify the same promoted build;
 - final map, build, listening, staff, low-register, duet, parent, settings and completion screens have no placeholder-dominant art or unresolved P0/P1 clarity issue;
@@ -192,6 +193,8 @@ The project is not a mature app merely because the current Web slice or TestFlig
 - all 35 native release gates in `36_NATIVE_IPAD_AND_APP_STORE_RUNTIME_CONTRACT.md` have authoritative evidence or an explicitly stricter approved replacement; no gate is inferred from Web-only results.
 
 The cross-task status source for these conditions is `29_PROJECT_COORDINATION_AND_INDEPENDENT_AUDIT.md`. A row marked `partial`, `missing`, `contradicted`, `parked`, or based only on planning evidence prevents a mature-app completion claim.
+
+Executable supervisor gate: `npm run check:maturity-state` verifies that the current worktree, evidence holds and `29` ledger agree; it may pass while the product is still incomplete. `npm run check:maturity-release` is the actual mature-app release assertion and must exit `0` before completion can be claimed. The strict command is intentionally not part of ordinary `check:quick`: while any required row is partial, missing or parked, it must fail and list the remaining blockers.
 
 ## Hard Failure Examples
 

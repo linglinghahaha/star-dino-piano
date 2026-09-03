@@ -1,0 +1,275 @@
+/* 368a P1-A: S01-mini training dock presentation only. */
+#appShell.app-shell.staff-mode[data-staff-presentation="mini-training-dock"] .staff-stage {
+  background:
+    linear-gradient(180deg, rgba(5, 18, 42, 0.16), rgba(3, 11, 27, 0.42)),
+    linear-gradient(90deg, rgba(41, 171, 184, 0.12), transparent 48%, rgba(255, 193, 94, 0.08)) !important;
+}
+
+#appShell.app-shell.staff-mode[data-staff-presentation="mini-training-dock"] .staff-stage::after {
+  content: "";
+  position: absolute;
+  z-index: 2;
+  left: 4%;
+  bottom: 4%;
+  width: 58%;
+  height: 18%;
+  pointer-events: none;
+  clip-path: polygon(4% 34%, 88% 12%, 100% 58%, 92% 88%, 8% 96%, 0 68%);
+  background:
+    linear-gradient(90deg, rgba(78, 223, 214, 0.42), rgba(158, 232, 245, 0.22) 52%, rgba(255, 205, 112, 0.20)),
+    linear-gradient(180deg, #315c73, #152d43 64%, #0a182b);
+  box-shadow:
+    inset 0 5px rgba(230, 253, 255, 0.24),
+    inset 0 -10px rgba(3, 13, 28, 0.34),
+    0 16px 24px rgba(0, 0, 0, 0.24);
+}
+
+#appShell.app-shell.staff-mode[data-staff-presentation="mini-training-dock"] .staff-scene-art {
+  opacity: 0.24 !important;
+  filter: saturate(0.58) brightness(0.72) !important;
+  transform: translateY(-8%) scale(0.86) !important;
+  transform-origin: 58% 22% !important;
+}
+
+#appShell.app-shell.staff-mode[data-staff-presentation="mini-training-dock"] .staff-lines {
+  z-index: 4 !important;
+  left: 41% !important;
+  right: auto !important;
+  top: 25% !important;
+  bottom: 10% !important;
+  width: 54% !important;
+  opacity: 0.82 !important;
+  transform: translateX(-50%) perspective(820px) rotateX(9deg) !important;
+}
+
+#appShell.app-shell.staff-mode[data-staff-presentation="mini-training-dock"] .staff-lines::before {
+  opacity: 0.54 !important;
+  border-color: rgba(207, 241, 250, 0.44) !important;
+  box-shadow:
+    0 14px 30px rgba(0, 0, 0, 0.18),
+    0 0 24px rgba(101, 211, 221, 0.16) !important;
+}
+
+#appShell.app-shell.staff-mode[data-staff-presentation="mini-training-dock"] .staff-lines::after {
+  opacity: 0.38 !important;
+  box-shadow: none !important;
+}
+
+#appShell.app-shell.staff-mode[data-staff-presentation="mini-training-dock"] .staff-jump-guide,
+#appShell.app-shell.staff-mode[data-staff-presentation="mini-training-dock"] .staff-jump-footprints,
+#appShell.app-shell.staff-mode[data-staff-presentation="mini-training-dock"] .staff-visual-cue {
+  display: none !important;
+}
+
+#appShell.app-shell.staff-mode[data-staff-presentation="mini-training-dock"] .staff-start {
+  z-index: 5 !important;
+  left: 7% !important;
+  bottom: 7% !important;
+  min-width: 118px !important;
+  min-height: 62px !important;
+  opacity: 0.88 !important;
+  transform: rotate(-4deg) !important;
+}
+
+#appShell.app-shell.staff-mode[data-staff-presentation="mini-training-dock"] .staff-finish {
+  display: grid !important;
+  place-items: end center !important;
+  position: absolute !important;
+  z-index: 7 !important;
+  left: 70% !important;
+  right: auto !important;
+  top: 67% !important;
+  bottom: auto !important;
+  width: 116px !important;
+  height: 108px !important;
+  min-width: 0 !important;
+  min-height: 0 !important;
+  padding: 0 0 2px !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  color: rgba(239, 251, 255, 0.90) !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  font-size: 13px !important;
+  font-weight: 900 !important;
+  line-height: 1 !important;
+  letter-spacing: 0 !important;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.58) !important;
+  transform: translate(-50%, -50%) !important;
+  pointer-events: none !important;
+  user-select: none !important;
+}
+
+#appShell.app-shell.staff-mode[data-staff-presentation="mini-training-dock"] .staff-finish::before {
+  content: "★" !important;
+  display: grid !important;
+  place-items: center !important;
+  position: absolute !important;
+  left: 50% !important;
+  top: 43% !important;
+  width: 72px !important;
+  height: 72px !important;
+  border: 3px solid rgba(255, 249, 207, 0.82) !important;
+  border-radius: 50% !important;
+  color: #fff7bd !important;
+  background:
+    linear-gradient(145deg, rgba(255, 240, 139, 0.96), rgba(255, 181, 74, 0.94) 58%, rgba(202, 103, 64, 0.94)) !important;
+  box-shadow:
+    inset 0 5px rgba(255, 255, 255, 0.34),
+    0 0 0 8px rgba(255, 215, 106, 0.10),
+    0 14px 24px rgba(0, 0, 0, 0.24) !important;
+  font-size: 36px !important;
+  line-height: 1 !important;
+  transform: translate(-50%, -50%) !important;
+}
+
+#appShell.app-shell.staff-mode[data-staff-presentation="mini-training-dock"] .staff-finish::after {
+  content: "" !important;
+  position: absolute !important;
+  left: 24% !important;
+  right: 24% !important;
+  bottom: 16px !important;
+  height: 10px !important;
+  border-radius: 50% !important;
+  background: rgba(0, 0, 0, 0.22) !important;
+  filter: blur(4px) !important;
+}
+
+#appShell.app-shell.staff-mode[data-staff-presentation="mini-training-dock"] .staff-finish[data-destination-state="waiting"] {
+  opacity: 0.78 !important;
+  filter: saturate(0.74) brightness(0.92) !important;
+}
+
+#appShell.app-shell.staff-mode[data-staff-presentation="mini-training-dock"] .staff-finish[data-destination-state="reached"] {
+  opacity: 1 !important;
+  filter: saturate(1) brightness(1.05) !important;
+}
+
+#appShell.app-shell.staff-mode[data-staff-presentation="mini-training-dock"] .staff-step[data-training-pad="true"] {
+  width: 72px !important;
+  height: 58px !important;
+  border-radius: 20px 24px 18px 18px !important;
+}
+
+#appShell.app-shell.staff-mode[data-staff-presentation="mini-training-dock"] .staff-step[data-step-state="current"] {
+  width: 88px !important;
+  height: 72px !important;
+  opacity: 1 !important;
+  filter: none !important;
+  transform: translate(-50%, -50%) translateY(-4px) scale(1.05) !important;
+}
+
+#appShell.app-shell.staff-mode[data-staff-presentation="mini-training-dock"] .staff-step[data-step-state="locked"] {
+  width: 54px !important;
+  height: 44px !important;
+  opacity: 0.34 !important;
+  filter: grayscale(1) saturate(0) brightness(0.88) !important;
+  border-color: rgba(208, 230, 236, 0.54) !important;
+  background:
+    linear-gradient(180deg, rgba(222, 238, 241, 0.68), rgba(116, 145, 158, 0.56)) !important;
+  box-shadow:
+    0 9px 16px rgba(0, 0, 0, 0.16),
+    inset 0 -6px rgba(21, 47, 61, 0.18) !important;
+  transform: translate(-50%, -50%) scale(0.90) !important;
+}
+
+#appShell.app-shell.staff-mode[data-staff-presentation="mini-training-dock"] .staff-step[data-step-state="locked"] .staff-note-label,
+#appShell.app-shell.staff-mode[data-staff-presentation="mini-training-dock"] .staff-step[data-step-state="locked"] .staff-place,
+#appShell.app-shell.staff-mode[data-staff-presentation="mini-training-dock"] .staff-step[data-step-state="locked"] .staff-note-aura {
+  display: none !important;
+}
+
+#appShell.app-shell.staff-mode[data-staff-presentation="mini-training-dock"] .staff-step[data-step-state="locked"] .staff-note-head {
+  opacity: 0.54 !important;
+  filter: grayscale(1) !important;
+}
+
+#appShell.app-shell.staff-mode[data-staff-presentation="mini-training-dock"] .staff-step[data-step-state="done"] {
+  width: 64px !important;
+  height: 52px !important;
+  opacity: 0.84 !important;
+  filter: saturate(0.82) brightness(1.02) !important;
+  border-color: rgba(225, 255, 235, 0.80) !important;
+  background:
+    linear-gradient(180deg, #f7ffd5, #a9efd3 66%, #67c8a5) !important;
+  box-shadow:
+    0 11px 20px rgba(0, 0, 0, 0.18),
+    0 0 0 5px rgba(111, 226, 174, 0.11),
+    inset 0 -6px rgba(23, 94, 70, 0.16) !important;
+  transform: translate(-50%, -50%) scale(0.92) !important;
+}
+
+#appShell.app-shell.staff-mode[data-staff-presentation="mini-training-dock"] .staff-step[data-step-state="done"] .staff-note-head {
+  opacity: 0.74 !important;
+}
+
+#appShell.app-shell.staff-mode[data-staff-presentation="mini-training-dock"] .staff-step[data-step-state="done"] .staff-note-label {
+  opacity: 0.82 !important;
+}
+
+#appShell.app-shell.staff-mode[data-staff-presentation="mini-training-dock"] .staff-dino-wrap.is-jumping {
+  animation: 720ms cubic-bezier(.18, .82, .22, 1) s01MiniDockJump !important;
+}
+
+#appShell.app-shell.staff-mode[data-staff-presentation="mini-training-dock"] .staff-dino-wrap.is-jumping .staff-dino {
+  animation: 720ms cubic-bezier(.18, .82, .22, 1) s01MiniDockPose !important;
+}
+
+#appShell.app-shell.staff-mode[data-staff-presentation="mini-training-dock"] .staff-dino-wrap.is-stumbling {
+  animation-duration: 560ms !important;
+}
+
+#appShell.app-shell.staff-mode[data-staff-presentation="mini-training-dock"] .staff-dino-wrap[data-place="mini-rest"]::after {
+  left: -92% !important;
+  top: -36px !important;
+  min-width: 132px !important;
+  max-width: 164px !important;
+  border-radius: 18px 18px 7px 18px !important;
+}
+
+@keyframes s01MiniDockJump {
+  0% { transform: translate(calc(-50% + var(--hop-from-x, 0px)), calc(-72% + var(--hop-from-y, 0px))) scale(0.98); }
+  42% { transform: translate(-50%, calc(-72% - 52px)) scale(1.04); }
+  78% { transform: translate(-50%, calc(-72% - 8px)) scale(1.01); }
+  100% { transform: translate(-50%, -72%) scale(1); }
+}
+
+@keyframes s01MiniDockPose {
+  0% { transform: rotate(0deg) scale(1); }
+  34% { transform: rotate(-6deg) scale(1.04); }
+  72% { transform: rotate(4deg) scale(1.01); }
+  100% { transform: rotate(0deg) scale(1); }
+}
+
+html[data-motion="reduced"] #appShell.app-shell.staff-mode[data-staff-presentation="mini-training-dock"] .staff-dino-wrap,
+html[data-motion="reduced"] #appShell.app-shell.staff-mode[data-staff-presentation="mini-training-dock"] .staff-dino,
+html[data-motion="reduced"] #appShell.app-shell.staff-mode[data-staff-presentation="mini-training-dock"] .staff-step,
+html[data-motion="reduced"] #appShell.app-shell.staff-mode[data-staff-presentation="mini-training-dock"] .staff-finish {
+  animation: none !important;
+  transition-duration: 80ms !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #appShell.app-shell.staff-mode[data-staff-presentation="mini-training-dock"] .staff-dino-wrap,
+  #appShell.app-shell.staff-mode[data-staff-presentation="mini-training-dock"] .staff-dino,
+  #appShell.app-shell.staff-mode[data-staff-presentation="mini-training-dock"] .staff-step,
+  #appShell.app-shell.staff-mode[data-staff-presentation="mini-training-dock"] .staff-finish {
+    animation: none !important;
+    transition-duration: 80ms !important;
+  }
+}
+
+@media (max-width: 1180px) and (max-height: 820px) {
+  #appShell.app-shell.staff-mode[data-staff-presentation="mini-training-dock"] .staff-finish {
+    left: 71% !important;
+    width: 104px !important;
+    height: 98px !important;
+    font-size: 12px !important;
+  }
+
+  #appShell.app-shell.staff-mode[data-staff-presentation="mini-training-dock"] .staff-finish::before {
+    width: 64px !important;
+    height: 64px !important;
+    font-size: 31px !important;
+  }
+}

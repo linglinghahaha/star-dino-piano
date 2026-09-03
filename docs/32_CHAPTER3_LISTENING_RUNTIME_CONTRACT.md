@@ -27,6 +27,7 @@
 - `LS04-LS07` 是刚练过的小集合听后找键，不是无参照的绝对音高命名。
 - `LS08` 只考两个声音的顺序，使用自由速度，不引入节拍、BPM 或节奏读谱。
 - 章节结尾的 `C4 -> C3` 低音回声是未计分故事事件，不能写低音键位、低音谱表或 Chapter 4 mastery。
+- 正式 `LS08` 达到 played、bounded assisted 或 modeled story completion，并真实结束未计分低音回声后，都可以显示 Chapter 4 入口；modeled 路线保留 `needsPractice=true`，不回填 child correct、stable 或 retained，也不触发 clean 阶段结算。尚未到达故事结尾的 early-rest/partial 不能解锁入口。
 - 触屏键盘是完整核心路线。MIDI 和麦克风只能增加输入方式，不能成为通关前提。
 - 孩子端不显示正确率、倒计时、速度排名、stable、retained、考试失败或退步。
 - 家长端必须按当前 Chapter 3 action 区分：LS01-LS03 是“可见提示下玩过、不计稳定”；LS04-LS08 是小集合听辨，显示真实 played/stable/retained/needsPractice 和输入/重听/混淆证据。LS04 期间及完成后的地图休息态不能继续显示“C-D-E 三片叶/不计稳定”，也不能称绝对音感。
@@ -285,6 +286,7 @@ LS04-LS07 的 `correctCount` 按每次呼叫的第一次有效孩子作答计数
 31. LS05 的新 resume session 在第一道剩余呼叫前重新播放一次不计分 C4 定锚；不重置 seed/call/progress/evidence，不计孩子重听。同 session 暂停/刷新不得重复定锚。
 32. LS08 的可见 guide 不计分；guide 需要 repeated help 时不自动进入 check。check 每组只取第一次完整双输入，错后修对和跨 session 续做只推进故事，不回填 stable。
 33. LS05-LS08 家长摘要使用各自真实技能名称和证据字段，不把 C/G 写成音区掌握、不把 E/F 键位帮助写成听辨成功、不把 LS08 或末尾 C3 故事音写成节奏/低音能力。
+34. 真实 LS08 played、bounded-assisted 或 modeled story ending 均可在未计分低音回声结束后显示 Chapter 4 入口；modeled 保留 needsPractice 且不写 child correct/stable/retained、不触发 clean 结算。early-rest/partial、direct/debug、刷新和未结束 session 均不得伪造入口或 Chapter 3 mastery。
 
 建议新增独立脚本而不是把所有断言塞入旧测试：
 

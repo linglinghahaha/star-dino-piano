@@ -11,6 +11,7 @@ import argparse
 import hashlib
 import json
 import math
+import os
 import re
 import shutil
 import subprocess
@@ -35,6 +36,17 @@ MIX_DIR = REVIEW_DIR / "mixes"
 REFERENCE_DIR = REVIEW_DIR / "reference"
 MANIFEST_PATH = AUDIO_ROOT / "audio-asset-manifest.json"
 REVIEW_DATA_PATH = REVIEW_DIR / "review-data.generated.js"
+HUMAN_LISTENING_PROTOCOL = {
+    "id": "nonvoice-sfx-human-listening",
+    "revision": "r1",
+    "storage_key_format": "starDinoAudioHumanListening:<batch_id>:<protocol_id>:<revision>",
+    "legacy_protocol_records": "never_imported_into_this_protocol",
+    "human_listening_status": "missing",
+    "required_device_routes": [
+        "physical_ipad_speaker",
+        "physical_ipad_headphones",
+    ],
+}
 
 # LS04 deliberately reviews only the three cues that can accompany the first
 # Chapter 3 seed interaction. They remain review-only and never become runtime
@@ -569,6 +581,92 @@ def file_record(ffmpeg: str, ffprobe: str, path: Path, role: str) -> dict[str, o
     return record
 
 
+def human_listening_protocol_metadata() -> dict[str, object]:
+    return {
+        **HUMAN_LISTENING_PROTOCOL,
+        "scope": "All seven non-voice cues. seed-sprout, correct, and retry include existing C4/D4 A/B review mixes; the other four are standalone story Foley.",
+        "overall_status_rule": "passed only after every required iPad route has a complete non-pending result for all seven asset IDs and no result is revise or reject.",
+        "approval_state": "runtime_candidate_unapproved / human_listening_missing",
+    }
+
+
+def relative_to_review(relative_to_root: str) -> str:
+    return Path(os.path.relpath(ROOT / relative_to_root, REVIEW_DIR)).as_posix()
+
+
+def build_human_listening_review_data(manifest: dict[str, object]) -> dict[str, object]:
+    review_assets: list[dict[str, object]] = []
+    for item in manifest["assets"]:
+        runtime_records = item["files"]["runtime_candidates"]
+        m4a_record = next(record for record in runtime_records if str(record["path"]).endswith(".m4a"))
+        ogg_record = next(record for record in runtime_records if str(record["path"]).endswith(".ogg"))
+        ab_review = bool(item["ls04_offline_ab_review"]["in_scope"])
+        ab_mixes = [
+            {
+                "noteId": record["review_note_id"],
+                "variant": record["variant"],
+                "path": relative_to_review(str(record["path"])),
+            }
+            for record in item["files"]["review_mixes"]
+        ]
+        review_assets.append({
+            "asset_id": item["asset_id"],
+            "slug": item["slug"],
+            "nameZh": item["name_zh"],
+            "category": item["category"],
+            "storyUse": item["story_use"],
+            "reviewFocus": item["review_focus"],
+            "status": item["status"]["runtime"],
+            "analysis": item["analysis"],
+            "pitch": item["pitch_contract"],
+            "feedbackExperience": item.get("feedback_experience_screen") is not None,
+            "abReview": ab_review,
+            "abMixes": ab_mixes,
+            "paths": {
+                "sourceWav": relative_to_review(str(item["files"]["source_wav"])),
+                "candidateM4a": relative_to_review(str(m4a_record["path"])),
+                "candidateOgg": relative_to_review(str(ogg_record["path"])),
+            },
+        })
+    return {
+        "batch_id": manifest["batch_id"],
+        "generated_on": manifest["generated_on"],
+        "approval_state": "all_assets_require_human_review",
+        "review_protocol": human_listening_protocol_metadata(),
+        "review_references": [
+            {
+                "noteId": item["note_id"],
+                "label": item["label"],
+                "frequencyHz": item["frequency_hz"],
+                "path": relative_to_review(str(item["web_m4a"]["path"])),
+            }
+            for item in manifest["review_references"]
+        ],
+        "assets": review_assets,
+    }
+
+
+def write_human_listening_review_data(manifest: dict[str, object]) -> None:
+    review_data = build_human_listening_review_data(manifest)
+    REVIEW_DATA_PATH.write_text(
+        "window.AUDIO_REVIEW_DATA = " + json.dumps(review_data, ensure_ascii=False, indent=2) + ";\n",
+        encoding="utf-8",
+    )
+
+
+def refresh_human_listening_review_data() -> dict[str, object]:
+    if not MANIFEST_PATH.is_file():
+        raise RuntimeError(f"manifest not found: {MANIFEST_PATH}")
+    manifest = json.loads(MANIFEST_PATH.read_text(encoding="utf-8"))
+    verify(manifest)
+    manifest["review_protocol"] = human_listening_protocol_metadata()
+    manifest["human_listening_review"] = human_listening_protocol_metadata()
+    manifest.setdefault("provenance", {})["generator_sha256"] = sha256(Path(__file__).resolve())
+    MANIFEST_PATH.write_text(json.dumps(manifest, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    write_human_listening_review_data(manifest)
+    return manifest
+
+
 def generate() -> dict[str, object]:
     ffmpeg = require_tool("ffmpeg")
     ffprobe = require_tool("ffprobe")
@@ -751,6 +849,8 @@ def generate() -> dict[str, object]:
         "generated_on": GENERATION_DATE,
         "scope": "Seven non-voice source concepts and web runtime candidates. LS04 adds a C4/D4 offline A/B review for seed-sprout, correct, and retry only. No application runtime integration.",
         "approval_state": "all_assets_require_human_review",
+        "review_protocol": human_listening_protocol_metadata(),
+        "human_listening_review": human_listening_protocol_metadata(),
         "provenance": {
             "method": "deterministic local procedural DSP",
             "external_audio_used": False,
@@ -785,64 +885,7 @@ def generate() -> dict[str, object]:
     }
 
     MANIFEST_PATH.write_text(json.dumps(manifest, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
-    review_data = {
-        "batch_id": manifest["batch_id"],
-        "generated_on": GENERATION_DATE,
-        "approval_state": manifest["approval_state"],
-        "mix_contract": manifest["mix_contract"],
-        "review_references": [
-            {
-                "note_id": item["note_id"],
-                "label": item["label"],
-                "frequency_hz": item["frequency_hz"],
-                "path": (ROOT / str(item["web_m4a"]["path"])).relative_to(REVIEW_DIR).as_posix(),
-            }
-            for item in manifest["review_references"]
-        ],
-        "assets": [
-            {
-                "asset_id": item["asset_id"],
-                "slug": item["slug"],
-                "name_zh": item["name_zh"],
-                "category": item["category"],
-                "story_use": item["story_use"],
-                "status": item["status"]["runtime"],
-                "recipe": item["synthesis_recipe"],
-                "review_focus": item["review_focus"],
-                "trigger": item["trigger_contract"],
-                "pitch": item["pitch_contract"],
-                "answer_note_risk": item["answer_note_risk_screen"],
-                "feedback_experience": item["feedback_experience_screen"],
-                "analysis": item["analysis"],
-                "ls04_review": {
-                    "status": item["ls04_offline_ab_review"]["status"],
-                    "duck_measurement": item["ls04_offline_ab_review"]["duck_measurement"],
-                    "human_hearing_status": item["ls04_offline_ab_review"]["human_hearing_status"],
-                    "mixes": [
-                        {
-                            "note_id": record["review_note_id"],
-                            "note_label": record["review_note_label"],
-                            "frequency_hz": record["review_note_frequency_hz"],
-                            "variant": record["variant"],
-                            "path": (ROOT / str(record["path"])).relative_to(REVIEW_DIR).as_posix(),
-                        }
-                        for record in item["files"]["review_mixes"]
-                    ],
-                },
-                "paths": {
-                    "source_wav": f"../source-concepts/{item['slug']}_{VERSION}_source.wav",
-                    "runtime_m4a": f"../runtime-candidates/{item['slug']}_{VERSION}.m4a",
-                    "runtime_ogg": f"../runtime-candidates/{item['slug']}_{VERSION}.ogg",
-                },
-            }
-            for item in assets
-            if item["slug"] in LS04_REVIEW_SLUGS
-        ],
-    }
-    REVIEW_DATA_PATH.write_text(
-        "window.AUDIO_REVIEW_DATA = " + json.dumps(review_data, ensure_ascii=False, indent=2) + ";\n",
-        encoding="utf-8",
-    )
+    write_human_listening_review_data(manifest)
     return manifest
 
 
@@ -951,8 +994,18 @@ def verify(manifest: dict[str, object]) -> None:
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--verify-only", action="store_true", help="verify the existing generated manifest/files")
+    parser.add_argument(
+        "--refresh-human-listening-review",
+        action="store_true",
+        help="refresh the seven-item human-listening review data without generating or encoding audio",
+    )
     args = parser.parse_args()
-    if args.verify_only:
+    if args.verify_only and args.refresh_human_listening_review:
+        raise RuntimeError("--verify-only and --refresh-human-listening-review cannot be combined")
+    if args.refresh_human_listening_review:
+        manifest = refresh_human_listening_review_data()
+        print("human listening review data refreshed without audio generation")
+    elif args.verify_only:
         if not MANIFEST_PATH.is_file():
             raise RuntimeError(f"manifest not found: {MANIFEST_PATH}")
         manifest = json.loads(MANIFEST_PATH.read_text(encoding="utf-8"))

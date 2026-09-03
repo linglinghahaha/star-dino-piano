@@ -11,7 +11,8 @@ const suites = [
   ["C4 LP01-LP02", "chrome-test/chapter4-lp01-lp02-check.mjs"],
   ["C4 R01A", "chrome-test/chapter4-r01a-audio-lifecycle-check.mjs"],
   ["C4 LP03", "chrome-test/chapter4-lp03-check.mjs"],
-  ["C4 LP03 Supervisor", "chrome-test/chapter4-lp03-supervisor-check.mjs"]
+  ["C4 LP03 Supervisor", "chrome-test/chapter4-lp03-supervisor-check.mjs"],
+  ["C4 LP04", "chrome-test/chapter4-lp04-audio-lifecycle-check.mjs"]
 ];
 
 let failed = false;

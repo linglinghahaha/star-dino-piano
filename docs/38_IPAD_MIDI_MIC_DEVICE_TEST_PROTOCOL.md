@@ -1,8 +1,12 @@
 # 实体 iPad、MIDI 与钢琴声音测试协议
 
-状态：`protocol_ready / native_runtime_missing / physical_devices_missing / measurements_missing`。
+状态：`protocol_ready / device_readiness_inventory_r1_ready_result_missing / structured_device_batch_template_ready / validator_fail_closed / 359a_web_manifest_frozen_observation_held / map_return_P0_supervisor_passed / all_UI_P0_supervisor_passed / parent_build_identity_passed / parent_data_reset_browser_passed / microphone_browser_lifecycle_17_17_passed / AUDIO_A_B_C_browser_passed / adult_iPad_audio_preflight_ready_result_missing / native_prototype_present_nonqualifying / native_runtime_missing / physical_devices_missing / measurements_missing`。
 
 本协议把“iPad 能玩、MIDI 能连、麦克风能听钢琴”拆成可复查测试。它服从 `docs/36_NATIVE_IPAD_AND_APP_STORE_RUNTIME_CONTRACT.md` 的原生行为与 35 项放行门禁，也服从 `docs/09/31-35` 的课程、掌握和输入语义。Web 浏览器或模拟器成功不能替代实体 iPad、真实 MIDI、真实扬声器和原声钢琴证据。
+
+同产品早期 SwiftUI 原型已在 `docs/94_NATIVE_IPAD_PROTOTYPE_COMPATIBILITY_AUDIT_2026-07-27.md` 中只读盘点为 `native_prototype_present_nonqualifying`。其 Core MIDI 和麦克风源码不构成本协议的实体设备结果，也不能替代当前正典、Release build、签名、隐私和生命周期证据。
+
+第一次合格 Web/iPad Safari 方向性观察前，普通成人必须针对已冻结的 `359A` 候选按 `docs/60_ADULT_IPAD_AUDIO_PREFLIGHT_CARD.md` 完成 5-8 分钟预听。该简卡只关闭版本、横屏、教学音、遮盖和舒适度前置，不替代本文件的完整设备矩阵或发布真机测试。当前局域网 HTTP 地址也不能证明 Service Worker 离线、麦克风权限或 Web MIDI；这些能力需要受信任安全上下文或原生真机证据。
 
 ## 一、四种证据等级
 
@@ -72,7 +76,7 @@
 - 轻点白键中心、靠近白键边缘、靠近黑键底部和两个触点交界，检查误触；
 - 连续重复同一键、相邻键交替、快速抬起再按下，不能漏 note-off 或粘键；
 - 手指滑过多个键时行为与产品合同一致，不意外产生大量评分输入；
-- 多点触控只在 Chapter 5 可选 paired/together 路线使用，核心 relay 始终可单点完成；
+- 多点触控只在 Chapter 5 核心 TH08 已完成后的 optional paired/together-encore 使用，核心 relay 始终可单点完成；多点异常时原位转为 sequential fallback，不撤回已完成花园或记失败；
 - 屏幕琴键的可见标签和 `aria-label` 都只显示字母音名；ARIA 可补充真实键位定位，例如“C，两个黑键左边”，但不得加入 `Do/Re/Mi/Fa/Sol`。按下效果不能改变布局尺寸、遮住字母或把未来答案提前点亮；隐藏听辨不得把某键提前标为当前目标；
 - 触摸被系统手势、边缘返回或控制中心抢走时，不得记作错误能力证据。
 
@@ -233,6 +237,25 @@
 ## 十三、当前结论
 
 - `passed`：设备、触屏、MIDI、麦克风、音频会话、生命周期、性能、无障碍和证据记录协议已锁定。
-- `missing`：没有原生工程、实体 iPad、USB/BLE MIDI、原声钢琴、真机时延、准确率、混音或长时间压力测试结果。
-- `locked_by_native_environment`：Web 第一、二章、第三章 LS01-LS08 与第四章 LP01-LP02 已在 `overhaul-344a-p3`（提交 `8cea6d46b725c26d2c8272086eab56b271750b18`）形成独立通过的浏览器基线；其中 M03、LS01-LS07 的教学音生命周期仍须按 `docs/49` 分批迁移。当前仍缺 macOS/Xcode、实体 iPad 和原生 N0 工程，因此不得创建伪造的 Core MIDI、麦克风、AVAudioSession、真机时延或 TestFlight 通过记录。
+- `missing`：没有合格原生运行候选、实体 iPad、USB/BLE MIDI、原声钢琴、真机时延、准确率、混音或长时间压力测试结果。存在早期源码原型不改变本状态。
+- `web_evidence_current`：最新获批提交基线仍为 `overhaul-347a-c4-r01a` / `af9aa28`。当前未提交 `overhaul-359a-map-shell-scroll-reset` 保留家长清除 `13/13`、家长版本号 `9/9`、品牌 `6/6`、PWA `11/11`、课程导演 `68/68`、phase 结算 `62/62`、R01B `31/31` 和麦克风生命周期 `17/17`；它继承 358a 的 M08 可追溯姿势，只增加主页滚动归零 `12/12`。`docs/30_OBSERVATION_CANDIDATE_359A.json` 锁定其 47 个自包含运行文件，可作当前成人 Web/iPad Safari 预听对象。它仍不是原生或发布 build；成人实体 iPad 预听完成前 `observationAllowed=false`。
+- `locked_by_native_environment`：当前仍缺 macOS/Xcode、实体 iPad 和原生 N0 工程，因此不得创建伪造的 Core MIDI、麦克风、AVAudioSession、真机时延或 TestFlight 通过记录。没有 Mac 仍可在冻结 Web build 上做实体 iPad Safari 的触屏、布局、离线和扬声器方向性测试，但这不等于原生 Core MIDI、AVAudioSession 或 TestFlight 通过。
 - `release blocked`：本协议中与实际产品宣传相关的设备路线未形成 authoritative evidence 时，项目不能称为成熟 iPad App。
+
+## 十四、结构化单批次回传
+
+开测前的设备、连接、转接器、供电和获取计划使用 `docs/86_PHYSICAL_DEVICE_AND_CONNECTION_READINESS_MATRIX.md` 与 `device-readiness-inventory.template.json`。该 readiness 层只能形成采购计划或硬件可用主管候选，所有 `evidenceState` 仍为 `not_started`；真实测试只能进入下述单批次回传，二者不得合并。
+
+每次设备执行只填写一份 `review/field-return-templates/device-evidence-batch-return.template.json`，然后运行：
+
+`node tools/verify_field_review_return.mjs device <回传 JSON>`
+
+该入口只验证一个明确 build、设备、输入/音频路线和一组 Test ID：
+
+- 必填字段、步骤、预期、实际、状态、严重度、证据引用和隐私边界不完整时失败关闭；
+- `contradicted`、`partial`、`missing` 保留原义，不允许被总体“通过”覆盖；
+- 原始麦克风音频、个人资料、设备序列号或账号标识进入回传时拒绝；
+- 即使这一批全部 `passed`，最高也只是 `device_batch_candidate_pending_supervisor`；
+- 一份或多份单批次 JSON 都不能自行把 `fullMatrixPassed` 写成 true。完整 D1-D3/M1-M2/A1/P1 覆盖必须由主管另行汇总并对照最终原生 Release 候选裁决。
+
+当前模板针对星龙工坊证据合同，不包含或接收其他产品的设备记录。它不会制造当前缺失的实体 iPad、Core MIDI、原声钢琴、麦克风准确率、时延、压力或 TestFlight 证据。

@@ -1,6 +1,406 @@
 # 星龙工坊整体调度与独立审查规则
 
-状态：2026-07-19 调度重排继续生效；最新获批浏览器教学基线为 `overhaul-347a-c4-r01a` / `af9aa2831bb90c94fd10fdfbe3ca89ba4d03021a`，`app.js` SHA-256 为 `5E2041D554E20DA7E98A5C0544B1834051B4DD8AA7D684388F8A43B0CCB0D4DE`。它完整继承 `346a` 的第一至第三章与第四章 LP01-LP03，并新增已经独立通过的 C4-R01A opening-review 调度核心、隔离真实界面夹具、专用教学音生命周期和三轮六视口证据。A 阶段没有创建正式 C4-03、LP04 action 或媒体运行引用，因此完整 C4-R01 仍未结束；下一唯一运行工作是 `docs/51` 的 LP04 地洞回声，并在真实 C4-03 候选内完成 `C4-R01B` 同 session 整合门禁。完整咚咚揭晓、左手、低音谱表、LP05+、Chapter 5、正式媒体运行集成和全局重构继续锁定。用户已明确确认 Grok 生视频额度耗尽，因此 Batch20 及后续 Grok 视频调用保持硬暂停：不得生成、预检额度、重试旧 ID、换号或新建批次；只有用户以后明确确认额度恢复才可重开。三批准位继续为 false。现有洞穴、花园和地图仍是原型级美术，离线音频仍缺人工耳机/扬声器/iPad 听审；远程 Git、真实录音、实体 iPad、教师、儿童、最终来源/外部相似性、原生工程、TestFlight 和商店证据仍缺失，项目整体未达到发布准备状态。
+## 2026-08-31 369h 实时窄修与 369e PWA/表单基线（权威首段）
+
+当前状态以本节为准：`live_runtime_correction_369h / current_pwa_shell_369i / app_runtime_predecessor_369g / pwa_experience_baseline_369e / current_experience_prototype_369e / direct_predecessor_369d / course_route_predecessor_369d / figma_a_stage_settlement_source_369b / staff_notation_source_369a / s01_pwa_predecessor_368b / portable_recovery_predecessor_367b / teaching_core_predecessor_366a / observation_baseline_359a / current_static_recovery_owner_369i / current_source_recovery_missing_369i / 369i_staticBackup_passed / 369i_sourceSnapshot_missing / frozen_369e_staticBackup_passed / local_intake_current_369e / review_hub_current_369e / release_blockers_13 / all_approvals_false / releaseCleared=false`。本节优先于下方所有把 369d、369c 或 369a 写成当前在线体验、当前静态恢复所有者或当前表单归属的历史段落，也优先于只记录 369e 而未说明 369h 后置窄修的旧摘要；历史段落只证明其创建时事实，不得反向覆盖当前边界。
+
+当前工作树的未批准实时视觉窄修是 `overhaul-369h-s01-visual-focus`，绑定 `docs/30_S01_VISUAL_FOCUS_CANDIDATE_369H.json`，manifest SHA-256 为 `2F4101F6E9DEA3CDC747AB85D67FDDB24B857D82A40DE2D59497B84B220780A9`，`app.js` SHA-256 为 `C62E740D32BFB4E594417ADA79D4915E2866F76B13209F6457398EF065CC6A60`，`current-overhaul.css` SHA-256 为 `6535A02FB15387FC222628C08489D8E9A66C53993C76137D0D9F226F2451E851`；它在 369g 上只修正 S01 视觉聚焦，页面可见构建 ID 仍为 369e，且不重新授予 PWA 资格。`overhaul-369e-ipad-settlement-compactness-correction` 继续是可见体验、本地两张事实表和冻结旧静态恢复基线；369e 绑定 `docs/30_IPAD_SETTLEMENT_COMPACTNESS_CANDIDATE_369E.json`；369i 当前 PWA 候选绑定 `docs/30_PWA_CACHE_RETIREMENT_CANDIDATE_369I.json`，当前静态恢复绑定 `docs/30_PROTOTYPE_BACKUP_369I.json`。369d 保留为 369e 的课程路由与 PWA 直接前序，369c 保留为阶段结算前序，369b 只保留 Figma A 阶段结算来源，369a 只保留谱位来源及其自身恢复。
+
+模拟反馈采纳裁决（2026-08-31）：用户明确接受 `review/claude-drafts/` 中模拟稿作为建议输入，但不把它们升级为真人教师、儿童、真机、听审或独立相似性证据。已核实的低风险意见可按 `simulated_advisory_accepted / local_fact_check_required / automated_regression_required / formal_evidence_missing / no_automatic_approval` 处理；当前采纳设备清单的动态必填说明，并确认成人预检 `step=1` 与清空记录不重写空键已完成。M03 调试深链自动续关不代表正式地图流程；热身缩短、LP08/TH08 表现建议继续作为候选，不改音序、输入预算、stable/retained、章节揭晓或批准位。
+
+运行资产退役收口（2026-08-31）：零引用 V4 与仅预缓存 `staff-dino-hop-bg-v1.webp` 均已从当前工作树和严格包移除；冻结 359a/369e manifest 与 ZIP、历史源图/转换记录原样保留。369i 新缓存真实升级测试 `10/10`、PWA 壳 `11/11`，旧 369e 缓存删除且退役资源离线不可取。当前库存为 `27` 张、`1,724,282` bytes，分类 `27 runtime-direct / 0 cache-only / 0 zero-reference`，发布清关仍 `0/27`；可见 build 继续 369e，课程/UI 当前修正继续由 369h 拥有。状态为 `pwa_cache_retirement_369i_passed_browser / frozen_369e_inventory_29_29_preserved / current_369i_inventory_27_27 / releaseCleared=false`。
+
+369i 后置静态恢复（2026-08-31）：`docs/30_PROTOTYPE_BACKUP_369I.json` SHA-256 `EA5244F2B3ABCADD27B169337703CB2B0F91407DF2ED5DE27BF5F5067D383E61`，`dist/prototype/star-dino-369i-static-backup.zip` 为 `2,144,355` bytes、SHA-256 `C818FBE932332ED448C2566F26DBC782E01DAEFA59BB5468A641C085D65105B6`，精确包含 `52` 个运行文件和 `53` 个 ZIP 条目；双构建字节一致、archive-only、`5/5` 篡改拒绝和隔离恢复 `10/10` 均通过。它不包含源码/控制快照、浏览器存储、原生数据库、签名或部署状态；369i 源码快照、远程副本、第二实体主机、真实部署回滚和签名原生 archive 仍 missing，全部批准位 false。
+
+369e 的后置静态恢复已经通过：`docs/30_PROTOTYPE_BACKUP_369E.json` SHA-256 为 `F17DC39795E4DBCA20D4D5368256C3DED4C87C50D7A9868C948A4BF282673870`；`dist/prototype/star-dino-369e-static-backup.zip` 为 `2,368,293` bytes、SHA-256 `7CAEDA7083156E182DA3D0537C23289970052ACD0010FD21E513B1F570DD004C`，包含 `54` 个运行文件和 `55` 个 ZIP 条目，并通过 archive-only 完整性、`5/5` 篡改拒绝和隔离恢复 `10/10`。该静态包不包含源码/控制快照、浏览器存储、原生数据库、签名产物或部署状态；369e 源码恢复、远程副本、第二实体主机、真实部署回滚和签名原生 archive 继续 missing。369d 的静态恢复保持为不可变前序证据。
+
+发布负责人事实卡、设备准备页和审核中心必须绑定 369e；369d、369c、369a 或更早草稿必须因候选 ID/manifest 哈希不匹配而失败关闭。Figma 方案 A R2 独立候选是 [Star Dino Workshop - Scheme A Visual Canon Candidate R2](https://www.figma.com/design/178kxuO43UvcSizKTFILLm)，只用于地图、状态栏、角色对话、字母音名键盘和阶段结算的结构讨论，`runtimeIntegrationAllowed=false`。冻结 369e 的 `29` 张仍为历史库存证据；369i 完成两项退役后的当前工作树为 `27` 张、`0/27` 发布清关。LP05-LP10/TH01-TH08 正式运行覆盖仍为 `0/14`；实体 iPad、教师、儿童、最终语音/SFX、权利、原生 archive、TestFlight/App Store 与真实部署回滚均未通过。不得因自动化、静态恢复、Figma 或外部意见而减少这 `13` 个真实发布阻断。
+
+## 2026-08-03 369c 静态恢复增量
+
+当前恢复身份以本节为准：`current_experience_prototype_369c / current_static_recovery_owner_369c / current_source_recovery_missing_369c / staff_notation_source_own_recovery_369a / portable_recovery_predecessor_367b / observation_baseline_359a / 369c_staticBackup_passed / 369c_sourceSnapshot_missing / all_approvals_false`。369c 冻结候选 manifest 继续保留创建时的 `recovery.staticBackup=missing_for_369c` 历史字段，不回写、不改哈希；后置恢复清单 `docs/30_PROTOTYPE_BACKUP_369C.json` SHA-256 为 `68F08E6CE04B6B185CABE4CAE06684C389439EDE9F54E5B4E49AB1908551CE2D`，静态包 `dist/prototype/star-dino-369c-static-backup.zip` 为 `2,367,552` bytes、SHA-256 `8CF2C0C5A895D6F476B1FA5956E23FDB8B850DE936B3E83A733626FBB5527B4F`，包含 `54` 个运行文件和 `55` 个 ZIP 条目。
+
+该静态包已通过 archive-only 完整性核验、`5/5` 篡改拒绝和临时隔离槽位恢复 `10/10`；与 369a 静态槽位相比仅 `child-feedback-intensity.css`、`index.html`、`service-worker.js` 三个已声明的表现/PWA 文件不同，`app.js` 与全部运行媒体不变。369c 源码/控制快照仍缺失，原因是共享控制文件仍在变化；不得用 369a 的 dirty post-candidate 源码快照恢复或证明 369c。369a 只保留谱位来源及自身恢复，367b 只保留便携依赖/恢复包。此增量不授予运行、集成、观察或发布批准，不减少 13 个发布阻断，也不解锁 LP05+、TH、C3-X01、NP-CDE 或 NP-FG。
+
+## 2026-08-03 当前候选身份覆盖
+
+当前候选覆盖令牌：`current_experience_prototype_369c`；阶段结算前序令牌：`figma_a_stage_settlement_predecessor_369b`；谱位来源令牌：`staff_notation_source_369a`；S01 连续性来源令牌：`s01_pwa_predecessor_368b`；恢复前序令牌：`pwa_recovery_predecessor_367b`；教学核心前序令牌：`teaching_core_predecessor_366a`；浏览器 PWA 资格所有者令牌：`browser_pwa_qualification_owner_369c`；当前静态恢复所有者令牌：`current_static_recovery_owner_369c`；当前源码恢复状态：`current_source_recovery_missing_369c`；369a 只拥有自身静态/源码恢复证据：`staff_notation_source_own_recovery_369a`；观察覆盖令牌：`observation_baseline_359a`。本节优先于下方所有把 369a 写成“当前在线体验”或把 369c 静态备份写成 missing 的历史段落。
+
+当前未批准在线浏览器/PWA 体验是 `overhaul-369c-figma-a-stage-settlement-overlap-correction`，绑定 `docs/30_FIGMA_A_STAGE_SETTLEMENT_OVERLAP_CORRECTION_CANDIDATE_369C.json`，`app.js` 继续为 `197C588C...9A96`。369c 只迁移 Figma 方案 A 的阶段结算结构并修正顶栏/花园文案重叠、内部根布局和 `:has()` 后备选择器；普通答对、答错、assisted、modeled、early-rest、课程音序、输入预算、session、掌握、音频和媒体均未改变。专项现为 `child_nonblocking_78_78 / pwa_shell_11_11 / synthetic_predecessor_worker_upgrade_10_10 / runtime_pacing_1362_1362`。PWA 升级是在真实浏览器中从合成 369b worker 夹具更新，不是完整冻结 369b 应用壳证据。
+
+369c 的后置确定性静态备份已经通过，源码/控制快照仍缺失；冻结候选 manifest 中创建时的 `recovery.staticBackup=missing_for_369c` 只保留为历史字段，不代表当前恢复状态。369a 的冻结静态包和 dirty post-candidate 源码/控制快照只继续证明 369a，367b 只继续拥有便携 npm 缓存与便携恢复包。359a 仍是唯一成人实体 iPad 预听和方向性儿童观察基线。`docs/34_CHAPTER4_LOW_REGISTER_RUNTIME_CONTRACT.md` 是教师 r4 确定性包的冻结输入，其把 369a 写成当时当前候选的段落保持原字节，只作历史包事实，不覆盖本节的 369c 当前身份。当前状态为 `369c_browser_cold_offline_passed_physical_iPad_missing / 369c_staticBackup_passed / 369c_sourceSnapshot_missing / remote_backup_missing / second_physical_host_unverified / deployment_rollback_missing / all_approvals_false`；13 个发布阻断没有减少，LP05+、TH、C3-X01、NP-CDE/NP-FG 仍禁止运行派工。
+
+两套本地人工准备入口与审核中心已迁移为 `release_owner_facts_369c_template_and_page_ready_result_missing / device_readiness_369c_template_and_page_ready_result_missing / local_intake_current_369c`。369b、369a、368b、367b、366a 和 359a 的角色在页面顶栏分开显示；旧 369a 表单草稿不会加载到 369c。该迁移只修正回传归属，不授予运行、观察、设备、隐私或发布通过。
+
+Figma 方案 A 独立候选文件为 [Star Dino Workshop - Scheme A Visual Canon Candidate](https://www.figma.com/design/WyRtsab3RaH6cFwIfCoUXZ)。地图、角色、场景和键盘仍是几何审核占位，不得迁移或冒充正式美术；当前只允许阶段结算结构作为实现参考。Figma、369c 浏览器证据与真人/真机/版权/发布证据不得互相替代。
+
+发布视觉重绘 R1 主管复核（2026-08-03）：既有隐藏目录 `concepts/release-visual-redraw-brief-r1/` 已完成独立验真和候选身份修正，不再把 369a 写成当前体验。当前 369c 未改运行媒体，因此 369a 首次精确盘点的 `29` 张、`1,948,942` bytes 继续作为 369c 的字节库存事实；369a 只保留库存/谱位/自身恢复证据角色。R1 现含 `29/29` 现有图片替换矩阵、`39/39` 正典课程世界结果覆盖矩阵、统一美术方向、生产批次、权利模板、专业美术清单和机器验真器；自检通过 `39/39 lessons / 29/29 images / 11 outputs / all approvals false`。这只把 `release-visual-assets` 的本地委托准备从 missing 提升为 source-only passed，不减少该发布阻断：画师、可编辑源稿、外部相似性、专业美术、实体 iPad 和最终运行候选仍 missing，当前清关仍为 `0/29`。主管记录见 `docs/114_RELEASE_VISUAL_REDRAW_BRIEF_R1_SUPERVISOR_REVIEW.md`。
+
+当前候选覆盖令牌：`current_experience_prototype_369a`；S01 连续性/PWA 前序令牌：`s01_pwa_predecessor_368b`；恢复前序令牌：`pwa_recovery_predecessor_367b`；教学核心前序令牌：`teaching_core_predecessor_366a`；浏览器 PWA 资格所有者令牌：`browser_pwa_qualification_owner_369a`；当前静态/源码恢复所有者令牌：`current_static_source_recovery_owner_369a`；便携恢复前序令牌：`portable_recovery_predecessor_367b`；冻结静态/源码恢复所有者令牌：`frozen_static_source_recovery_owner_365b`；观察覆盖令牌：`observation_baseline_359a`；恢复前序令牌：`recovery_predecessor_364b`；输入前序令牌：`input_predecessor_364a`；版本迁移令牌：`candidate_version_migration_rules`。本段优先于下方历史里程碑：369a 是当前未批准的在线浏览器体验、Service Worker、缓存身份和浏览器冷离线资格候选；它只修正高音谱表 C4-G4 的可见几何、D4“下加一间”术语、谱号、FG04 F/G 谱位预览和高对比谱线，不改变课程、会话、掌握、音频或输入。369a 静态备份已通过 `369a_staticBackup_passed`：`docs/30_PROTOTYPE_BACKUP_369A.json` SHA-256 `73066E215135EB152EEECBFB980A25453A050EFEC164D1880267267B98BBD4AE`，ZIP `dist/prototype/star-dino-369a-static-backup.zip` 为 `2,367,360` bytes、SHA-256 `EF5B9C49CD366EE39902509D5F491789A0E154CEA1660265E3A24A19D5A73AD2`、`54` files/`55` ZIP entries，并已通过 archive-only、tamper 和隔离恢复。369a 源码快照已通过 `369a_sourceSnapshot_passed_dirty_post_candidate`，只能以 `dirty_post_candidate_source_and_control_snapshot` 身份恢复当前源/控制状态，不能改写冻结候选源身份；为避免快照自引用，其外部 manifest/ZIP 哈希只以 `docs/30_PROJECT_SOURCE_SNAPSHOT_369A.json` 为权威，不复制进被快照收录的协调文档。`docs/30_STAFF_NOTATION_GEOMETRY_CORRECTION_BOUNDARY_ADDENDUM_369A.json` SHA-256 `2317BB7936644743FADD6AE8656E0675E5CDBFF943FF8ADDBD2D3DFAE48B0713` 已通过 `369a_map_boundary_addendum_passed`，仅披露冻结前未归属的 world-map-v6 高对比四行差异，不改变 runtime。368b 退为直接 S01 连续性/PWA 前序；367b 只保留便携 npm dependency cache 与 portable recovery kit owner，不再是当前静态/源码恢复 owner。366a 是冻结教学核心前序；365b 继续只拥有自己的冻结恢复证据。359a 仍是唯一成人实体 iPad 预听/方向性观察基线。当前状态为 `369a_staticBackup_passed / 369a_sourceSnapshot_passed_dirty_post_candidate / predecessor_367b_portable_recovery_retained / remote_backup_missing / second_physical_host_unverified / 369a_browser_cold_offline_passed_physical_iPad_missing / 369a_deployment_rollback_missing / release_owner_facts_369a_template_and_page_ready_result_missing / device_readiness_369a_template_and_page_ready_result_missing / coordination_phase1_partial / all_approvals_false`；LP05-LP10/TH01-TH08 当前正式 session bundle 覆盖为 `0/14`，其中 LP08+ 低音谱表仍未实现、未验证，各候选不得混用运行哈希、截图、恢复证据或批准状态。`runtime_pacing_metadata_gate_passed` 只表示节奏元数据与候选绑定校验通过，不表示课程、儿童观察、实体 iPad 或发布通过。
+
+主管工具裁决（2026-07-26）：用户已经手动确认 Claude 可用，并把它的课程、玩法与文案意见作为外部建议交回；但本地原型任务没有稳定、可审计的 Claude Code 调用接口。当前状态为 `claude_external_advisory_only / no_callable_local_interface / no_automatic_approval`：Claude 输出可以进入提案文档，只有经过本地事实核对、逐条裁决和既有门禁后才能改正典或派工，不能自动批准运行、课程、掌握规则、素材或发布。当前不安排 CLI 重试；这不是永久禁用，用户以后交回的新结果仍按同一外部建议流程验真。Grok 视频额度耗尽硬暂停不变。
+
+模型与推理强度调度裁决（2026-08-01）：机械且可确定验真的只读盘点、哈希/路径/状态同步、重复门禁和清单整理优先使用 `gpt-5.6-luna / max`；边界清楚、写集互斥的普通实现使用 `gpt-5.6-terra / medium-high`；课程语义、4-6 岁儿童体验、session/掌握、隐私、权利、发布风险和最终裁决使用 `gpt-5.6-sol / high-xhigh`。Luna 输出不得直接批准课程、runtime、观察、素材或发布，必须由更高推理层抽查原文、复跑关键门禁并作最终判断。多个任务不得同时写同一文件；紧要路径不因低成本模型等待而停住；大型媒体只传绝对路径，不内联。当前状态为 `difficulty_routed_delegation_active / luna_mechanical_only / higher_reasoning_review_required / no_automatic_approval`。
+
+插件能力调度裁决（2026-08-02）：当前运行仓库是既有原生 HTML/CSS/JavaScript 应用，已有浏览器状态、截图、输入、课程和恢复门禁；不得因为新增插件而迁移到 Phaser、React/Vite、Three.js 或 SwiftUI。`Game Studio` 只在现阶段采用 `game-playtest`、`game-ui-frontend` 及必要时的受限 `sprite-pipeline`，用于真实游玩路径、遮挡、场景反馈、响应式、reduced-motion 和已批准素材规格核对，不接管课程或掌握裁决。`Build Web Apps` 采用 `frontend-testing-debugging`，并按其合同优先通过 Browser 插件检查页面身份、非空渲染、控制台、截图和目标交互；普通构建通过不替代视觉或教学验收。Figma MCP 已实测连接可用，可在用户给定或明确同意创建的文件中建立地图、课程状态、对话、键盘、结算和 reduced-motion 的视觉正典候选及设计变量；Figma 产物必须绑定现行文字、角色、课程和素材来源，未经主管逐项复核不得反向改代码、素材或批准 runtime。`Build macOS Apps` 面向 macOS，不得冒充 iPad/iOS 构建、签名、真机或 TestFlight 工具；当前 Web 主线和只读早期 iPad 原型均不派该插件，待未来建立明确 iOS/Xcode 任务后另行选型。当前状态为 `plugin_routing_audited / browser_game_playtest_workflow_allowed / figma_design_candidate_only / macos_plugin_out_of_scope_current / no_framework_migration / no_automatic_approval`。
+
+Figma 方案 A 视觉正典候选复核（2026-08-02）：主管记录见 `docs/111_FIGMA_SCHEME_A_VISUAL_CANON_SUPERVISOR_REVIEW.md`。已在独立文件 `https://www.figma.com/design/WyRtsab3RaH6cFwIfCoUXZ` 建立地图地标、课程状态栏、角色对话、字母音名键盘、阶段结算及初始/答错/答对/回流代表页面；文件含 `4` 个变量集合、`83` 个变量、`8` 个文字样式、`4` 个效果样式。地图每屏只保留一个 `196x156` 当前行动入口，普通输入无大结算框，阶段结算无按钮且不阻挡孩子停留；`Do` 仅出现在星芽角色对话，键盘与其他儿童面继续只用 `C/D/E/F/G/A/B`。本地 WebP 未获明确外传授权，Figma 中仍使用审核占位，禁止据此评价最终角色美术或把占位反向接入 runtime。状态为 `figma_scheme_a_candidate_created / local_asset_upload_authorization_missing / runtime_unchanged / runtimeIntegrationAllowed=false / no_automatic_approval`。
+
+世界观现行术语漏同步复核（2026-08-02）：独立只读扫描确认 `docs/03`、`docs/10` 和 `docs/17` 仍有四处把 Chapter 4 的音乐昵称/音区视觉动词写成正式 `Low Planet` 地点，与已锁定的“森芽星地下回声洞、咚咚来自鸣石星、第一季不前往鸣石星”冲突。现已把三个现行英文章节标题统一为 `Dongdong and the Underground Echo Cave`，把 `high planet / low planet` 视觉动词改为 `higher-register / lower-register moments`，并明确不得成为目标答案提示；`docs/19`、`docs/26` 已标注的 `historical_pre_98 / not_current_dispatch` 旧记录保持原字节，不冒充当前派工。课程故事门禁已在原有鸣石星检查中新增精确标题与禁用词断言，课程故事 `54/54`、课程事实 `105/105` 通过。该修正不改变中文故事名 `咚咚的低音星球`、任何课程音符、运行代码、素材或批准位，状态为 `current_world_naming_sync_passed / historical_records_retained / runtime_unchanged / all_approvals_false`。
+
+成熟度运行覆盖复核（2026-08-02）：主管独立核对正式 `preschoolSessionBundles` 后确认 LP05-LP10/TH01-TH08 实际覆盖为 `0/14`，此前报告的 `1/14` 来自全文搜索把一条 LP10 future phase-tail 注释误算成运行实现。`tools/mature-app-readiness-audit.mjs` 现只解析正式 session bundle 的 `targetId`，同样以结构化目标判定 `C3-X01`、`NP-CDE` 与 `NP-FG`，未来注释、文案和规格不再能冒充关卡。369a 的 `index.html` 同期发现 `</head>` 后缺一个 CR 的单字节身份漂移；已从冻结静态包恢复到 SHA-256 `EAF3696710C61B88AE7C7CC74AA5747A8D54595BA6931FE57BAB8C998C1B0424`，规范化文本和运行语义未变化。复核后 curriculum facts `105/105`、curriculum story `54/54`、runtime pacing `1362/1362`、maturity current-state facts `65/65`，13 个发布阻断和全部批准位均未减少。下一运行切片仍只能是 `C4-04 / LP05 only`，且必须先同时满足 359a 成人实体 iPad 预听获主管接受、首名方向性儿童观察无未关闭 P0、幼儿钢琴教师 Stage B 无课程 P0、主管明确下发允许基线；在此之前 LP05+ 继续 `spec_only_runtime_forbidden`，不得为追求内容数量提前实现。
+
+全课程谱位独立复核（2026-08-02）：`docs/110_STAFF_POSITION_CANONICAL_AUDIT.md` 已按谱号第一线锚点和音级顺序推导并交叉核对第一季十个目标音。高音谱表固定为 C4 下加一线、D4 下加一间、E4 第一线、F4 第一间、G4 第二线；低音谱表固定为 C3 第二间、D3 第三线（中间线）、E3 第三间、F3 第四线、G3 第四间。现行 369a 浏览器专项只证明前五个高音谱位几何，状态为 `treble_c4_g4_runtime_geometry_passed_browser`；低音五音只在 `docs/03/14/24/34/35/68` 的理论和课程合同中一致，状态为 `bass_c3_g3_theory_and_contract_passed_runtime_missing`。`tools/note-matrix-sync-audit.mjs` 现从谱号锚点推导 MIDI/线间位置，并锁定九份现行引用；LP08-LP10 运行、实体 iPad、教师和儿童验证仍缺失，不能因规格正确而批准 runtime 或学习效果。
+
+本轮协调事实迁移后，原型/UI 与媒体任务均保持 idle，不为同步状态重复派工。当前权威在线体验事实为 `docs/30_STAFF_NOTATION_GEOMETRY_CORRECTION_CANDIDATE_369A.json` / SHA-256 `A189D57C204B26F7267CE88B5883C060EDC5E4DDAD8C6718D687A2FAB27EF597`、`app.js 197C588C...9A96`、`index.html EAF36967...B0424` 与 Service Worker `3A38CB61...2BCB7`。369a 保留 368b S01 连续性与 CSS 字节、367b 恢复前序和 366a 教学核心；它不改课程音序、掌握、输入预算、错误阈值、音频或运行素材。专项为谱位几何 `21/21`、S01 表现 `43/43`、正式连续性 `10/10`、368b->369a successor upgrade `9/9`、PWA shell `11/11`，并回归 staff mini `20/20`、readability `13/13`、repair `27/27`、note names `286/286`、course director `78/78`、clean state `124/124`、sessions `74/74`、contrast `9/9`、motion `19/19`、iPad accessibility `43/43`。367b 恢复证据与 359a 观察基线继续独立冻结。这些通过不验证 LP08+ 低音谱表，也不解锁节奏教学、`C3-X01`、LP05+、Chapter 5、实体 iPad、教师、儿童、语音/音效、权利清关或发布。
+
+发布视觉库存增量复核（2026-08-02）：`docs/62` 继续只代表已外发的 359a `27/27` 冻结矩阵；当前 369a 严格包实际为 `29` 张、`1,948,942` bytes，精确入口扫描为 `27 runtime-direct / 1 cache-only / 1 zero-reference`。仅预缓存项是 `staff-dino-hop-bg-v1.webp`；零引用项是 `world-map-v4-360a.webp`；当前地图实际使用 `world-map-v5-361a.webp`。V4 与旧谱桥背景只列入后继候选退役探针，本轮不改 `assets/runtime/**`、Service Worker 或冻结候选。状态为 `frozen_359a_visual_inventory_27_27 / current_369a_visual_inventory_29_29 / current_369a_release_visual_clearance_0_29 / retirement_probe_2 / runtime_unchanged / all_approvals_false`；V5 虽有精确 prompt、执行 ID 和确定性转换链，参考输入文件/哈希、适用条款归档、发布权利和外部相似性仍缺。
+
+调度行动台账状态保持 `release_blocker_actionability_ledger_passed / runtime_dispatch_0 / releaseCleared=false`；不向已 idle 的原型或媒体任务重复发运行派工。
+
+Apple 官方规则增量复核状态为 `apple_age_and_sdk_rules_rechecked_2026-07-30 / documentation_gate_passed / runtime_dispatch_0 / releaseCleared=false`。内部教学目标 `4-6`、问卷计算的一般 App 年龄评级与 Kids Category 的 `5 and under / 6-8 / 9-11` 已分成三套字段；当前 `5 and under` 仍只是 Kids 元数据候选，不是 `4+` 评级或商店批准。`Declared Age Range`、`PermissionKit` 和 significant-change 流程只在未来真实功能触发时评估，不因为目标用户是儿童就默认接入。最终原生 Release archive 仍需证明适用 `PrivacyInfo.xcprivacy`/required-reason API、列名第三方 SDK 的有效 manifest/签名/版本来源、Xcode privacy report、年龄问卷和全球/地区/Kids 回传。专项门禁为 competitive facts `29/29`、Web privacy current-state `69/69`；原型/UI、媒体和咚咚设计任务保持 idle，不为这项文档事实同步派工。五个隐私发布阻断与 `maturity_release_blockers_13` 均不减少，所有批准位继续 false。
+
+发布工程当前状态为 `live_369a_manifest_bound / s01_pwa_predecessor_368b_retained / pwa_recovery_predecessor_367b_retained / teaching_core_predecessor_366a_retained / browser_pwa_qualification_owner_369a / current_static_source_recovery_owner_369a / portable_recovery_predecessor_367b / 369a_staticBackup_passed / 369a_sourceSnapshot_passed_dirty_post_candidate / 369a_map_boundary_addendum_passed / remote_backup_missing / 369a_browser_cold_offline_passed_physical_iPad_missing / 369a_deployment_rollback_missing / releaseCleared=false`。369a manifest 绑定当前在线运行和浏览器 PWA 更新/冷离线证据；它的创建时 `recovery.staticBackup/sourceSnapshot=missing_for_369a` 是冻结历史字段，不得重写。369a 静态备份已可恢复当前体验字节；369a 源码/控制快照已通过验证与隔离核心恢复，但只代表候选冻结后的脏工作树源/控制状态。367b 只继续拥有 portable npm dependency cache 与 portable recovery kit，用于第二机自举依赖/便携包，不能再被解释为当前 369a 静态或源码恢复 owner。365b 及更早恢复证据继续各自冻结，359a 继续只作成人预听/观察基线。该分离不减少 13 个发布阻断，实体 iPad、真实部署、持久化迁移、签名原生 archive、第二主机和远程备份仍未获批准。
+
+原生边界事实已由 `docs/94_NATIVE_IPAD_PROTOTYPE_COMPATIBILITY_AUDIT_2026-07-27.md` 与全文件哈希清单修正为 `native_prototype_present_nonqualifying / core_midi_reusable_candidate / releaseCleared=false`。同产品 sibling 目录确有一个 19 文件的早期 SwiftUI/Swift Playground 原型，但其 8 关旧课程、五只旧角色、孩子端唱名、直接上一关/下一关、内存进度、缺少正式 session/`played/stable/retained`、PrivacyInfo、签名、原生测试和发布美术均不符合当前正典。Core MIDI 和本地音高检测只可作为未来原生任务的技术候选；原生目录当前保持只读，不替代 359a 实体 iPad Safari 预检，也不减少 `maturity_release_blockers_13`。
+
+状态：Phase 1 协调迁移生效。最新已提交的获批浏览器教学基线仍为 `overhaul-347a-c4-r01a` / `af9aa2831bb90c94fd10fdfbe3ca89ba4d03021a`；当前可体验工作树为未批准的 `overhaul-369a-staff-notation-geometry-correction` / `app.js 197C588C...9A96`。369a 是当前浏览器 PWA 资格候选，368b 是 S01 连续性/PWA 前序，367b 是恢复前序，366a 是冻结教学核心前序；方向性观察基线仍独立冻结为 `overhaul-359a-map-shell-scroll-reset`。369a 只修正高音谱表 C4-G4 可见几何，不引入 `3/4`、`4/4`、拍号、小节、BPM、Perfect、连胜或拖拽题，也不改变目标音高、输入预算、八度严格判定、错误阈值、`played/stable/retained`、LP05 锁定或运行素材。浏览器冷离线已通过自动化，但 LP08+ 低音谱表、实体 iPad 资格与真人教学验证仍缺失。当前关键路径仍是成人按 `docs/60` 对精确 359a 做实体 iPad 预听；13 个首发阻断与所有批准位继续不变。
+
+## 2026-07-30 音符护照困难开场复习的 story-first 纠偏
+
+- 主管把 `docs/31`、未来 `C3-X01` 和 `NP-CDE/NP-FG` 逐项对照后确认：`C3-X01` 是独立故事短课，允许在永久进度点后新 session 续剩余 1-2 个调用；音符护照是 opening review，困难、长等待或疲劳收短后不得建立护照 continuation。
+- `docs/71` 原“续玩只完成故事”会让实现者误把未完成 `NP-FG` 在下一次点击继续，和同文件“下一次直接进入故事”及全局 review 间隔冲突。现固定为：完整印章安全点结束 review，下一次只进入原定故事且 opening review=0；至少一个后来结束、正式、孩子参与且无 opening review 的故事 session 后，才可把同一护照作为完整新 run 重新调度，任何跨 session 片段不得拼 stable/retained。
+- 红灯为课程故事 `53/54`，修正后 `54/54`；运行节奏仍为 `1362`。本轮只改未来规格、教师长表、主管事实和自动审计，不改 runtime、39 节课程、音序、输入预算、结算或 mastery；教师结果仍 missing，C3-X01、NP-CDE/NP-FG 仍无正式 ID、不得派工。
+
+## 2026-07-30 多课合并单元逐课合同补强
+
+- 主管核对 `docs/80` 后确认 `39` 个 canonical lesson 均存在，`38` 个 pacing unit 不是漏课；差异来自六个双课单元，以及 S01/TH08 在不同 session 角色中的重复出现。合并只属于 session 编排，不得合并课程身份或证据。
+- 旧门禁只检查单元整体字段，无法证明每个被合并课号仍有自己的教学目标、玩法动作、世界成果、自然停点和下一步。风险最高的是 `C4-01`：LP01 只考高低 C 听觉比较，LP02 才考低音 C 键位；若只看单元复合字段，两个教学轴可能被误当一个目标和一份 mastery 证据。
+- 已先增加 fail-closed 断言并得到预期红灯 `8` 项，再为 M04/M05、FG01/FG02、LS01/LS02、LP01/LP02、TH01/TH02、optional TH07/TH08 增加按原顺序排列的 12 条 `lessonSegments`。每条锁定 `oneNewTeachingAxis / primaryGameVerb / childMusicAction / permanentWorldResult / naturalRestPoint / nextTaskHandoff / sameSessionContinuationRule / settlementEligibility / masteryBoundary`；LP01 必须 `settlementEligibility=none`，只有 LP02 可作为 `C4-01` clean phase tail。
+- 专用节奏门禁现通过 `1362` 项。拓扑仍为 38 单元，运行仍为 23 个冻结单元，未来/条件/可选仍为 15 个；不拆现有 bundle，不改 runtime、输入预算、音序、session、掌握、结算或批准位，也不向 idle 原型/UI、媒体或咚咚任务派工。
+
+## 2026-07-30 第四章未来合同与教师审核包主管收口
+
+- 当前裁决只收紧 future-only 课程和审核事实，不形成运行派工。LP05 的计划输入为每次 child-started session 至少 `1` 个目标/世界进度槽位，绝对上限 `3`，且 `settlementEligibility=none`；LP10 允许 guided `3/6` 续接与 later check，每次 session 为 `2-3` 个目标槽位，并继续作为第四章唯一正式 phase tail。
+- 课程输入预算统一只统计目标/世界进度槽位；wrong、replay、repair 分开取证，不消耗故事预算，也不能阻止帮助下完成故事。LP07 的麦克风只属于 LP02-LP07 的实验 assisted story-progress 路线，必须在教学音结束或静音后才重新武装，且 `actualHand=unknown`；它不能证明真实左手、clean、stable 或 retained。
+- `low-key:C3-G3 stable` 当前没有可调度的独立 later-review 单元，状态必须保持 `missing_unschedulable`。主管不得通过改名既有课、拼接跨 session 证据或伪造复习事件关闭该缺口；未来只有教师结论和新的明确窄派工才能建立对应课程合同。
+- 专项静态门禁为课程故事 `53/53`、课程事实 `106`、运行节奏 `1227`、copy `9` 文件和 strict bundle `52` 文件 / `1,948,942` runtime-asset bytes。上述通过不改变 367b/367a/366a/365b/359a 的身份分工，不解锁 LP05+、C3-X01、NP-CDE/NP-FG、Chapter 5、儿童观察或任何媒体接入。
+- 当前教师外发包只认 `dist/review/star-dino-teacher-staged-review-359a-v7.zip`：`4,880,619` bytes / SHA-256 `FF4505E765D0AFEC247CF68DD83C3625121E4EEDD3C05A1007D59A15287E5EE0`。它仍绑定精确 359a、A13/B10/C10 共 33 题和全 false 批准位；页面 `98` 项、两次确定性构建和六类篡改拒绝通过。Review Hub 浏览器 `102`、白名单服务器 `239`，仍为四项外部任务、真实回传 `0/4`、运行路由 `0`、写方法 `0`。
+- 原型/UI 与媒体任务继续 idle。当前主管关键路径仍是精确 359a 成人实体 iPad 预听和真实教师回传；没有必要用文档同步打扰运行任务。Grok 视频额度耗尽硬暂停保持不变。`runtimeDispatchAllowed=false / observationAllowed=false / runtimeIntegrationAllowed=false / releaseCleared=false`，13 个发布阻断不变。
+
+## 2026-07-29 主管继续检查点
+
+- 当前版本身份继续严格拆分：`365b` 只用于浏览器体验现状，`359a` 只用于成人实体 iPad 预听和后续方向性观察，`347a` 仍是最新已提交教学基线。任何任务不得把 365b 截图、哈希或家长挑战结果写成 359a 真机观察证据。
+- 独立实测结果为课程故事 `52/52`、成熟度事实 `62` 项、发布要求 `15` 项、发布阻断 `13` 项；第 52 项专门锁定旧 A-E 禁止展示、当前 A-C 为唯一家庭静态偏好候选且运行审批全为 false。`check:quick` 与 `check:bundle:strict` 通过，当前打包事实为 `52 files / 1,948,942 runtime asset bytes`。严格成熟门禁必须继续非零退出，直到 13 项真实阻断逐项关闭。
+- 当前允许立即外发并等待真实回传的只有四项：精确 359a 成人实体 iPad 预听、幼儿钢琴教师阶段 A、七项非语音 SFX 的 iPad 扬声器/耳机双路线听审、V5 外部视觉相似性筛查。审核入口仍为 `review/index.html`，当前 `accepted_results=0/4`；建立页面、ZIP、模板或验证器不等于真人结果。
+- 当前本地只允许三类准备：产品负责人事实 r1、D1/D2/D3 设备 readiness r1、369a/368b/367b/365b/365a/364b/364a/359a 分离的发布工程恢复证据。三项现已在审核中心单独列为 `项目负责人本地准备`，不计入外部 `0/4`；前两项必须由真实负责人提供事实，不得由主管猜填，第三项只显示准备证据通过且仍等待获批原生候选与签名 archive，不得清理或覆盖共享脏工作区。两套填写页均精确绑定当前 369a 与冻结观察基线 359a，并显示 S01 前序 368b、恢复前序 367b、视觉前序 367a、教学前序 366a 和冻结恢复 365b；填写完整后只可导出给主管复核，页面不能自批。成人预检动作在普通入口或非法端口下都强制携带冻结 `appPort=4199`。当前负责人页、设备页、总入口与服务器审计分别通过 `76/76`、`112/112`、`105/105` 与 `239/239`。
+- `LP05-LP10`、`TH01-TH08`、`C3-X01`、`NP-CDE/NP-FG`、符合正典的原生 iPad runtime、TestFlight 和 App Store 继续是门控未来实现，`runtimeDispatchAllowed=false`。儿童观察继续等待成人 359a 预听和相应教师门禁，不能因为家庭静态图片偏好选择而提前。
+- 用户已否决咚咚从零重做的 A-F 路线，并继续否决旧 `dongdong-child-preference-study-v1-2026-07-29` A-E，因为它们没有充分守住“初版基础上更呆萌但不呆滞、并与星芽同画风”的方向；这些原图和旧家庭表只保留为 `user_rejected_visual_direction / superseded / not_current_household_display / not_child_observation_eligible` 历史证据。当前唯一家庭静态偏好候选改为 `concepts/runtime-candidates/dongdong-lively-cute-study-v1-2026-07-29/`：A `好奇听`、B `慢慢靠近`、C `稳稳开心` 均以初版咚咚为身份母版、以星芽模型表为共享 3D 玩具/黏土渲染锚点。媒体独立复核确认三张均保留恰好一鼻角、两眉角、四足、完整尾巴、低宽体型和薄荷绿/暖黄/奶油身份，7/7 声明哈希匹配，三条原始 provider 保存路径与归档 PNG 字节一致，运行引用为 0；家庭展示图 `review/dongdong-a-c-household-grid-2x2.png` SHA-256 为 `4933535CB9A5E68805C836A170201CB9AF8D53666B7A4F905230C4B67C4B6544`。该裁决只允许监护人提出一次中立、非身份化的静态偏好问题，不替孩子选最终版本；真实偏好、产品内儿童观察、外部相似性、版权/权利、runtime、课程观察、集成和发布仍为 missing/false。
+- 主管续查发现旧 A-E 包自身仍残留 `householdPreferencePacket=true`、`householdStaticPreferenceAllowed=true` 和“向孩子展示 A-E”的旧说明，导致陈旧包可被误当当前候选。现已只修正旧包的 manifest/README/audit/parent-guide：旧包状态为 `superseded_user_rejected_not_current_household_display`，两个家庭展示许可均为 false，旧 PNG 字节不变，并显式指向当前 A-C 包；旧包修正后 manifest SHA-256 为 `4FEE1B1BB07411C9781ECCCF5A2D66F7E98BDCCEE2B742B407C81500E5408964`。当前 A-C manifest SHA-256 为 `ABA42537845598B1CD0A50A9A5C7850F99932F0CCD38806E9DF282552CD5E280`，运行引用仍为 0。此纠偏不构成咚咚定稿、儿童观察、素材接入或发布批准。
+- 当前 A-C 家庭偏好已补齐独立 r1 回传合同，但没有虚构结果。模板 SHA-256 为 `80249BABB16529580582ADD177D8FE6185B37FAF681593C8F984E91510C0D022`，只允许记录日期、A/B/C 第一选择、可选且不同的第二选择以及中立/不反复追问确认；不含自由文本、孩子原话或任何身份字段。验证器专项 `29/29`，拒绝旧 A-E、候选/图片哈希漂移、重复排序、不存在的日历日期、诱导/反复追问、身份或媒体收集、跨项目标记及运行/定稿/发布越权。空模板继续 `incomplete_fail_closed`，完整回传也只能进入主管待审，不自动选择最终咚咚；`actualChildPreference` 仍为 `not_collected`。
+- 用户随后确认 `森芽星` 为呼吸花园与地下回声洞所在生态星球的正式名称。主管独立裁决为 `senya_name_locked / season_one_geography_unchanged / design_inference_rejected`：这只是给已经存在的生态星球命名，不新增地图节点、课程、session 或运行文案；第一季仍从月亮前哨经星星桥抵达森芽星，第四章仍在森芽星地下回声洞的共鸣石前哨，第五章仍连接森芽星生态家园与远端月亮前哨。角色设计任务自行推导的“第三章末沿共鸣航线飞往鸣石星地表、第五章连接森芽星与鸣石星”未获用户明确批准，现已撤销并向任务 `019fabda-c5b5-7423-905d-cb69bfabb6fb` 发送只记录、不继续生图的纠偏。鸣石星仍是咚咚故乡与后续 IP 扩展地点；该次正典修正把门禁从预期红灯 `50/51` 恢复为 `51/51`，本轮再加入候选权威断言后当前为 `52/52`，运行代码与批准位均未改变。
+- 内置 ImageGen V3 洞穴四态已完成主管独立裁决，状态为 `source_archive_verified_with_absolute_path_metadata_defect / lp01_lp02_direction_only / lp03_partial / lp04_rejected / runtime_forbidden`。四次不同执行 ID、四张 `1672x941` 源图、零重试及源图/默认生成缓存/manifest 哈希链均成立；`call-events.json` 的四条工作区绝对路径乱码被如实保留，但有效相对路径和哈希仍可复算。LP01/LP02 只保留洞门、狭缝、单锚石、镜头与材质方向，灯具仍需压暗并去掉双亮点；LP03 三石连续性成立但低宽遮挡剪影缺失，且旧提示词把剪影压到最大 `6% x 2.5%` 而没有 iPad 可读下限；LP04 因约五条凹槽、漂浮眼点、缺少连续圆颈盾/脸部中间调平面及疑似角状亮楔而否决。运行引用为 0，所有批准位与通知位保持 false；不得通知原型接入，也不得把 LP04 当咚咚脸/眼/颈盾参考。若媒体后续再做，只窄修 LP03/LP04 并先改提示规格，不重跑原提示。
+- 鸣石星正典的独立追扫发现 `docs/19_STORY_TEACHING_ART_AUDIT.md` 与 `docs/26_IMAGEGEN_DELIVERABLE_BRIEF.md` 仍保留正典决议前的“真实高/低两个星球、圆形低音星球、两颗星球相连”提示语言。两份文件及其旧图片提示现明确为 `historical_pre_98 / not_current_dispatch`，保留历史原文但不得继续派故事、美术、媒体或运行工作；当前方向只由 `docs/92` 与 `docs/98` 承担。`docs/93` 同时补入 LP05 教学音、三枚脚印、世界变化和完整露面全部结束后才可出现的咚咚台词 `我从鸣石星来。`，固定台词库存由 56 更新为 57；它仍为 `teacher_gated_provisional / unrecorded / unauthorized`，不创建鸣石星地图或导航。课程故事门禁已锁定这两个历史标记与 LP05 录音边界。
+- 2026-07-30 的现行来源复核又关闭三处较窄的正典歧义：`docs/03` 不再把森芽星地下前哨叫作“咚咚未完成的低音星球家”，`docs/24` 的 LP09 错八度普通界面改为“下面低音区的 G”，`docs/25` 的第二章构图统一为“左侧月面、右侧生态星球”。门禁先按预期在旧路线图上红灯 `52/53`，修正后课程故事 `53/53`、课程事实 `106`、节奏 `1227` 和 copy `9` 文件通过；`app.js`、课程、揭晓、运行文案、地图、媒体和批准位未变，原型/UI、媒体与咚咚设计任务继续 idle。
+- 第五章录音库存只消除了两处已有原句的归属歧义，没有新增台词：TH03 的整句 `咚咚一下，星芽一下。` 由咚咚说，不拆成连续双人语音；TH08 的整句 `用我们刚学会的方法，让花园唱起来！` 只由星芽在第一次 core-relay-finale 说，后来的 together-encore 不重复终章台词。库存现在为 `25 recording_ready_unrecorded / 0 dynamic_ui_only / 13 teacher_gated_provisional / 1 copy_missing`；唯一仍缺固定角色句的是 TH07，继续等待教师/课程负责人决定保持安静或另行定稿。固定句总数仍为 57，所有未来句仍未授权、未录制、未听审、未接入。
+- Claude 继续只作为用户带回的外部建议来源，不自动批准；Grok 视频额度耗尽保持硬暂停。不得为了保持任务忙碌再次启动同范围 Claude/Grok 探测，也不得让 idle 原型或媒体任务接入咚咚候选。
+- 下一次主管调度触发点是四项真实外部回传之一、产品负责人/设备 readiness 的真实 JSON、或监护人按当前 A-C 家庭表收回的一次非身份化静态偏好结果。偏好结果只决定后续角色方向复核，不自动形成角色定稿、儿童产品证据、素材接入或发布批准；触发前只做事实维护、课程合同一致性和来源边界检查，不派运行实现。
+
+## 2026-07-29 课程节奏与完成回流独立复核
+
+- `docs/80_RUNTIME_PACING_METADATA_CONTRACT.json` 已由通用 `JSON.parse` 独立解析为 38 个单元；逐单元核对教学轴、前置能力、故事问题、游戏动词、音乐动作、输入预算、可见世界进度、成就结果、自然停点、结算资格、掌握边界和下一单元等 14 类字段，缺项为 0。增加连续同玩法家族显式复核后，专用节奏门禁通过 `1215` 项断言。PowerShell 未显式使用 UTF-8 时出现的乱码/解析失败属于本机读取方式，不是文件损坏。
+- 当前 365b 浏览器候选的主页与回流专项独立通过：`home-single-task 23/23`、`child-course-director 78/78`。clean、active、partial resume、跨章、花园续接、LP04 完成和旧记录迁移均只暴露一个确定目的地；完成一个故事 bundle 后只突出下一 bundle，不自动创建或播放下一 session。
+- 普通输入与阶段结算专项独立通过：`child-nonblocking-feedback 62/62`、`child-feedback-intensity 42/42`、`M01-M03 companion feedback 21/21`。普通正确、错误、assisted 和 modeled 都只在原场景提供琴键、世界物件与角色姿势反馈，不弹居中结算框；只有正式 phase terminal 显示一次无控件紧凑里程碑，结束后回到唯一下一任务，刷新不重播。全动态与 reduced-motion、多视口/DPR 均保持键盘、角色和教学对象无遮挡。
+- 原尺寸截图复看与断言一致：普通 M01 完成保留月亮地板和星芽庆祝，M03 错误保留轮子、重听入口、字母音名琴键和角色对话；阶段卡位于场景上方，不遮键盘或世界结果。孩子端琴键继续只显示 `C/D/E/F/G`，唱名只在星芽气泡中出现。
+- 该复核只证明当前 365b 浏览器候选已修正“大框反复遮挡、完成后没有唯一下一步、去掉大框后情感反馈过淡”三类已知问题；它不等于实体 iPad、学龄前儿童可理解性、全流程语音、最终美术或发布通过。运行派工仍为 0，13 个成熟度阻断不变。
+
+## 2026-07-29 可见玩法机制多样性独立复核
+
+- 旧 `check:runtime-pacing` 的三课窗口只验证 `primaryGameVerb` 标签不完全相同，不能证明底层组件、音乐输入和可见世界机制真的不同。主管已把检查名收窄为 `declared verb-label variety`，并在 `docs/80` 增加三个连续同 `gameplayFamily` 区间的显式库存；新闸门通过 `1215` 项。完整证据和裁决见 `docs/100_VISIBLE_GAMEPLAY_MECHANIC_DIVERSITY_SUPERVISOR_AUDIT_2026-07-29.md`。
+- `C1-10 -> C2-03` 裁决为 `partial_contract_exception_child_boredom_unverified`：月球基地小地图到全屏谱桥有真实场景升级；但 C2-01/C2-02/C2-03 连续复用同一谱桥，第三次主要靠少提示和永久星光承担阶段终点。合同允许，儿童是否仍觉得重复没有证据。
+- `C3-03 -> C3-06` 裁决为 `partial_visible_change_present_interaction_loop_repeated`：种子握住、三花开放、回声藤连接和边界花分开并非同一个世界结果；但四课都是隐藏单音听后找键，现有 CSS 占位的动作强度不足以证明孩子会体验成四种玩法。
+- 当前不改音序、输入预算、mastery、结算或课程顺序，也不擅自加拖拽/长按。后续获准的原型窄修只应加厚不同世界动作和角色反应；教师、实体 iPad 与儿童证据返回前，多样性保持 `partial`，13 个发布阻断不变。
+
+发布工程本轮状态为 `release_engineering_preflight_passed / live_369a_manifest_bound / current_static_source_recovery_owner_369a / 369a_staticBackup_passed / 369a_sourceSnapshot_passed_dirty_post_candidate / portable_recovery_predecessor_367b / portablePredecessorStaticBackup=true / portablePredecessorSourceSnapshot=true / frozen_365b_static_source_recovery_owner_verified / predecessorRecoveryStaticBackup=true / predecessorRecoverySourceSnapshot=true / rollback_execution_missing / releaseCleared=false`。369a 后置静态包精确保存当前 54 个运行文件；369a 源码/控制快照明确是共享脏工作区的 post-candidate 恢复证据，不冒充冻结候选源码。367b 只保留 npm 离线缓存、便携自举包及其自身冻结恢复证据；365b、365a、364b 与 364a 继续各自独立，不得替代 369a 当前恢复对。`docs/109_REMOTE_BACKUP_AND_SECOND_HOST_RELEASE_ENGINEERING_RUNBOOK.md` 只把“远程副本/第二实体机器复验该怎么做”写成 source-only 执行卡，远程副本和第二主机本身仍然 missing/unverified。359a 归档继续用 archive-only 模式独立核验，当前共享工作树仍禁止清理、覆盖和部署。这些证据不等于真实部署回滚、schema 迁移、签名 archive 或发布通过。
+
+隐私与家长披露已按 `docs/75_PRELIMINARY_PRIVACY_DISCLOSURE_AND_APP_STORE_ANSWER_MAP.md` 更新为 `privacy_disclosure_fact_gate_passed / apple_rules_rechecked_2026-07-26 / not_for_publication / releaseCleared=false`。`check:privacy-state` 现在不仅核对存储、麦克风、MIDI 和网络代码，还锁定 Apple 官方链接、设备内/设备外“收集”边界、条件式 App Store 答案、Kids Category 家长门与监护人同意的区别，以及中英文麦克风用途说明。V5 提供方条款证据仍由 `docs/83_OPENAI_IMAGE_OUTPUT_RIGHTS_EVIDENCE_2026-07-26.md` 记录为 partial。该门禁只防止草案漂移，不提供运营主体、公开政策 URL、地区法律意见、原生 PrivacyInfo 或签名二进制，因此不减少隐私或成熟度阻断。
+
+发布负责人事实准备状态为 `release_owner_facts_intake_r1_page_passed / exact_369a_359a_manifest_binding_passed / frozen_privacy_inventory_367b_retained / real_owner_result_missing / local_only / no_automatic_approval`。`docs/85`、离线填写页与 `review/field-return-templates/release-owner-privacy-facts-return.template.json` 只收公开运营主体、支持/隐私联系方式、发行地区、年龄/定价和产品功能选择，明确禁止 Apple 凭据、签名秘密、儿童资料、录音/MIDI 流和设备序列号。页面只在本机保存草稿并下载 JSON，浏览器审计验证输入、桌面/平板布局、零外部请求及导出后由既有验证器复算；页面不能自批通过。验证器锁定当前 369a 浏览器体验候选和 359a 冻结观察基线；`docs/64` 继续冻结为 367b 前序 Web 清单，不能冒充 369a 当前隐私认证。空白保持 `incomplete_fail_closed`，所有发布批准继续为 false；真实负责人、地区专业复核、原生家长门、PrivacyInfo、Release archive 和商店回传仍 missing。
+
+实体设备准备状态为 `device_readiness_intake_r1_page_passed / D1_D2_D3_semantics_corrected / exact_369a_359a_manifest_binding_passed / s01_pwa_predecessor_368b_retained / pwa_recovery_predecessor_367b_retained / input_predecessor_364a_retained / real_inventory_result_missing / procurement_not_evidence / physical_matrix_missing`。`docs/86`、模板与本机填写页现在锁定当前 369a 与 359a 冻结观察基线；368b、367b 和 364a 只保留各自前序角色，不能冒充 369a 真机证据，也不能把任何浏览器候选当成 359a 真机观察证据。页面只在本机保存草稿并导出 JSON，浏览器审计覆盖设备矩阵、条件式 BLE/Lightning、导出验证、零外部请求和桌面/平板布局。`physicalDeviceEvidencePassed/fullMatrixPassed/releaseCleared` 继续为 false；序列号、蓝牙地址、凭据、儿童资料和录音仍被拒绝。
+
+真人填写页可用性复核（2026-08-02）：设备准备页已收敛为“范围、iPad、连接与听音、钢琴与环境”四步，一次只展示一步；固定必需范围不再反复询问，BLE MIDI、蓝牙音频、USB 音频和外接麦克风只在实际选用时展开，负责人角色只需填写一次，测试编号由页面自动生成且状态固定从 `not_started` 开始。发布负责人事实页已收敛为八步；空白页显示 `7` 步待完成而不是重复规则总数，Kids Category 的不适用项由选择派生，低联网/低数据候选必须由负责人主动点击“采用并逐项确认”后才填写，不能自动代替主体、地区、价格或外部证据。专项独立复跑为设备页 `112/112`、发布页 `76/76`，填写指南与两页 README 已同步；两页仍分别返回 `realInventoryResult=missing` 与 `realOwnerResult=missing`，`physicalDeviceEvidencePassed/fullMatrixPassed/releaseCleared=false`，因此这轮只关闭填写摩擦，不关闭任何真人、真机、隐私、原生或发布阻断。
+
+媒体七部件来源母版尝试的独立裁决为 `attempt_001_ledger_passed / provider_http_502 / generated_media_0 / source_missing / runtime_forbidden`。主管没有采用支线旧的“零调用”自述，而是核对 attempt JSON、错误文本、根 manifest、提示词哈希、27 个运行素材哈希和运行引用；当前 `verification.json` SHA-256 为 `BED9BCDFAA07EE204B3FB19A35BD02C3633421D026B692964E8A27C74BA149F5`。候选目录内的旧 `verify_zero_call.py` 已退役并 fail closed，不能覆盖当前一次失败调用的事实。该裁决只关闭尝试台账矛盾，不生成图片、不提高来源等级、不批准相似性或运行集成；Grok 视频额度硬暂停不变。
+
+后续独立 provider probe 的裁决与上述失败记录分开：原图 `gpt-image-2-probe-001.png` 为 `1,370,543` bytes、`1254x1254`、SHA-256 `3040AAF1F9B2C3394A2FD7EBE7229679D56E968F5365A2DD151430579B3AF50A`。主管原尺寸审图及保守连通域检查确认恰好七件、无裁切/合并/文字/品牌/角色/谱面/琴键，且材质与 359a 工坊相容；但图像全不透明，背景并非纯 `#FF00FF`，存在阴影和透明灯罩洋红污染。逐件裁决、教学边界和零调用拆分要求见 `docs/81_WORKSHOP_PROP_SOURCE_SUPERVISOR_REVIEW_2026-07-25.md`。该来源仍为 `runtimeApproval=false / integrationAllowed=false / releaseCleared=false / external_similarity_missing / provider_identity_and_terms_partial`。
+
+V2 拆分已由主管二次验收：`workshop_prop_v2_supervisor_checks_227 / six_source_only_passed / beacon_partial_rejected_for_runtime`。唯一输入、脚本、18 个双跑文件、七件实际 PNG 像素、桥/墙孔洞和三类调用事件均已锁定；第一版七件粉边继续作为失败证据。警示灯透明罩仍有粉色污染，不能随其余六件一起放行。当前运行中四个同名旧部件与 V2 哈希均不同，另外三个同名运行文件不存在，全部 V2 PNG/WebP 与 `assets/runtime` 的字节交集为 `0`。这关闭的是提取事实与台账，不是运行或发布美术批准；`runtimeApproval=false / integrationAllowed=false / releaseCleared=false` 不变。
+
+2026-07-25 单件补图更新：旧 V2 警示灯继续保留为 `beacon_partial_rejected_for_runtime` 证据；新目录 `workshop-beacon-release-source-2026-07-25` 的修正版透明候选通过 `replacement_beacon_source_only_passed`。首版 auto-key 抠图仍为 rejected，修正版 A/B 字节一致，棋盘及 M02/M05 合成保留完整暖黄灯罩和灯芯，洋红检出为 0。该补图只进入外部相似性与专业美术审查，不通知原型接入；`runtimeApproval=false / integrationAllowed=false / releaseCleared=false` 不变。
+
+当前统一门禁为 `workshop_prop_source_supervisor_checks_258`。它不把新灯计入运行批准，只证明第四次独立调用和 source-only 派生链可追溯；外部相似性审查包必须同时保留旧灯 rejected 证据和新灯 source-only 候选，不得静默替换历史。
+
+调度事实源已完成状态对账：`docs/31` 不再把已经运行的全局 opening-review 间隔、公平候选轮换和困难 review 后 story-first 写成 `missing_runtime`。主管浏览器证据为 `C4-R01A 35/35`、`C4-R01B 31/31`、精确 retained 锚点对抗 `9/9`，并覆盖 resume session 不插 review 及缺失/错配/重复锚点 fail closed。新增课程事实门禁禁止旧 pending 文案回流；这不解锁 LP05，不替代实体 iPad、教师、3-5 名儿童或长期保持观察，也不减少 13 个发布阻断。
+
+发布门禁依赖图与回传边界已收敛到 `docs/79_RELEASE_GATE_DEPENDENCY_AND_RETURN_CONTRACT.md`。本轮修正两处会导致错误派工的事实：LP05 必须同时等待成人 359a 预听、首名儿童无阻断 P0、教师阶段 B 无课程 P0和主管窄派工；TH06-TH08 的具体儿童观察只能在对应可审候选实现后发生，不能反过来作为创建候选前置。任何后继 runtime 都必须生成新候选 manifest 并同步迁移成熟度与审核包，不能一边增加 LP05+，一边继续把 359a 哈希写成当前候选。
+
+外部网页端两项审查已经完成受控接收、验真、去重和主管分级：课程原包 SHA-256 `4F009D1C...9DBAD`，UI 原包 SHA-256 `245A8E7B...E656BC`；权威裁决继续分别由 `docs/56`、`docs/65` 管理。课程包保留的跨表示迁移与唱名-音名提取缺口没有被“竞品很多”冲淡，UI 包中已经由 355a/356a 关闭的旧 P0 也没有被重新打开。外部意见不能自动改代码、课程、掌握规则或素材。
+
+课程十字段逐节复核已记录于 `docs/78_CURRICULUM_TEN_FIELD_AUDIT_2026-07-24.md`。`docs/24` 新增唯一“做完后去哪儿”路线索引，明确同一短课内可自动衔接、自然停点后必须由孩子点击，并补足 LP02 普通错误音/同名错误八度修复文案；这只属于人类可读教案澄清，不改变运行路由、音符顺序、mastery 或任何批准位。早期章节原先隐含的停点不再作为调度歧义，但实现仍以 `docs/31-35` 合同和冻结候选为准。
+
+未来合同 `docs/66-70` 已完成主管二次交叉复核：LP05 的 `E3-F3-G3`、TH01-TH04 的跨音区/谱位路线、TH05 的 `2/4/4/5/5` 五段输入、TH08 主线结局先于 TH06/TH07 可选加演、phase tail 与主页唯一当前任务均和 `docs/03/24/33/34/35` 一致。后续依赖审查又关闭三处调度缺陷：`docs/66` 补入教师阶段 B 作为 LP05 第三道人类门禁；`docs/70` 把具体玩法的儿童观察改为候选实现后的验收门禁；`docs/68` 的过期“357a runtime”事实已修为 `overhaul-359a-map-shell-scroll-reset`。五份文件继续保持 `runtime_forbidden`；成人实体 iPad、相应教师/儿童结果和明确主管窄派工缺失时，不联系 idle 的原型/UI任务。
+
+家长课程地图状态为 `parent_story_name_glossary_passed / runtime_unchanged / real_parent_comprehension_observation_missing`。`docs/24` 首页现在直接说明“月球基地/月亮小家、星星桥/星星桥、呼吸花园/会听的小种子、地下回声洞/咚咚的低音星球”是孩子地点名与同章故事名，不是两套关卡；并解释音符护照、自由琴键、少提示练习、故事完成、玩过、本次稳定、隔次记得和需要再练。`docs/56` 的 P1-6 与 `P1-STORY-NAME-GLOSSARY` 已据此关闭，当前课程一致性门禁为 `44/44`。这不证明真人家长已经看懂，也不改孩子界面、运行音序、掌握或 13 个发布阻断。
+
+成人外部证据统一入口为 `review/index.html`，状态为 `review_execution_hub_passed / four_external_tasks_ready / accepted_results_0_of_4 / child_observation_blocked`。它只组织实体 iPad 成人预检、幼儿钢琴教师 r4、七项非语音音效实体 iPad 听审和外部视觉相似性筛查；不重复执行已经回传的课程/UI ChatGPT 审查。入口继续把成人、教师和音效锁定在精确 359a，同时为视觉任务单独锁定 `overhaul-361a-dark-scifi-map-v5-prototype` manifest；当前视觉动作只指向同时覆盖 359a、七件工坊 V2、新旧警示灯、V5 原图和 14 张精确 361a 运行截图的 R5 包。桌面/手机共通过 `73` 项浏览器断言，`0` 外部请求、`0` 浏览器错误；教师 v1-v4 与视觉 R4 及更旧包只保留历史，不再暴露为当前动作。规范入口仍是 `4201`、单表备用仍是 `4200`，不得重复填写。若规范应用端口被占用，入口只接受 `1-65535` 的 `appPort` 查询参数并只传给成人预检表；无效值回退 `4199`，教师、音效与相似性链接不继承该参数。所有真实结果仍 missing，所有批准位仍 false。局域网执行状态为 `review_hub_allowlist_server_passed / packages_3_exact / runtime_routes_0 / write_methods_0`：`serve:review-hub` 只暴露白名单审核文件与三个固定 ZIP，冻结应用继续独立提供；服务器对抗检查通过 `55` 项，历史教师 v1-v4 与视觉 R4 ZIP 返回 404。建立入口不减少 13 个发布阻断，也不解冻孩子观察、运行集成或媒体任务。
+
+冻结应用的局域网入口现为 `observation_candidate_allowlist_server_passed / manifest_files_47 / non_manifest_routes_0 / write_methods_0 / adult_physical_iPad_result_missing / no_automatic_approval`。`npm run serve:observation-candidate` 使用 `immutable_observation_bundle_memory`：启动时同时核对精确 `359a` manifest、归档路径、归档 SHA-256 和 47 个文件的路径/字节/哈希，再把 `dist/observation/star-dino-359a.zip` 全量读入内存；请求期间不再读取当前工作树。`docs/**`、`concepts/**`、`audio/**`、`review/**`、`dist/**`、工具、Git 数据、目录列表与写方法均被拒绝。对抗审计通过 `274` 项，验证记录为 `review/observation-candidate-server-verification.json`。这关闭了“服务启动后工作树继续变化会污染冻结响应”的隔离缺陷，也继续关闭仓库暴露风险；它不是实体 iPad、教学效果、儿童观察、运行集成或发布批准。
+
+审核入口的执行关系按 `docs/72` 纠偏为：成人实体 iPad 预听是当前关键路径；教师阶段 A 与外部视觉相似性筛查现在可并行；七项非语音音效必须在实体 iPad 扬声器和耳机上分别听审；成人预听经主管接受后才安排首名儿童方向性观察并收教师阶段 B；教师阶段 C 随第四章运行推进。旧入口中“可并行执行四项”的笼统表述已删除，不能再据此要求教师一次完成 A/B/C，也不能把儿童观察提前。
+
+竞品定位的最新事实源为 `docs/77_APPLE_COMPETITOR_EVIDENCE_REFRESH_2026-07-23.md`。官方页面确认识谱、耳训、触屏、声学识别、MIDI、儿童游戏和教师功能都已有竞品，Note Rush 官方口径是 `all ages`，不能再推测其“偏大龄”。星龙工坊只保留组合定位假设：前阅读低龄课程、`声音 -> 谱位 -> 同名琴键` 独立迁移、角色唱名到字母音名提取、故事因果、可选输入、掌握证据诚实分层和家长可读关系报告。该假设仍等待 `docs/57/71`、教师和儿童证据，不得宣传全球唯一。`check:competitive-facts` 已加入 quick 门禁并通过 `26` 项；本轮不解冻原型/UI 或媒体任务。
+
+外部 UI 裁决已完成当前状态对账：`docs/65` 的 TOP 20 不再把 355a/356a 已关闭的 M01 反馈强度、phase 小结、完成气泡、主页唯一任务和 C1-01 月亮地板写成 `visual_P0_current`。当前真实剩余项仍是非当前地图地标略有按钮感、S01 教师门控减负、生态场景与整张地图发布美术；真实儿童感受仍 missing。`check:curriculum-facts` 以当前 `60` 项锁定“已关闭 P0 不重开、未完成 P1 不隐藏、家长双章名已关闭不回退、复习调度状态不回退”，并新增 `NP-FG` 名字提取/音区投递隔离、教师 r3 协议和 LP05 四道派工门禁的反回退；运行候选和 13 个发布阻断均未改变。
+
+发布地图母版的本轮 source-only 尝试已按 `map_generation_missing_after_interruption / cache_artifact_mismatch_excluded / runtime_unchanged` 收口。既有一次内置静态生图尝试只留下 `aborted`，没有可验证的世界地图返回图、`savedPath`、execution ID、SHA 或尺寸；同任务缓存中可见的旧七件套部件图已由主管原尺寸辨认为非地图，未复制、未登记、未制作伪合成。事实记录位于 `concepts/runtime-candidates/world-map-release-source-2026-07-25/manifest.json`，其 SHA-256 为 `B126DC074BC1008787460A427C6EF4C91D8E93FFF5A7D58D5EF7E55D18825F42`，目录内图像文件为 0。该轮不形成 source candidate，也不关闭“非当前地标按钮感、花园/洞穴/地图统一发布美术”P1；`runtimeApproval=false / integrationAllowed=false / releaseCleared=false`，不得通知冻结原型接入，也不得用旧七件套补位。
+
+随后独立的 V2 内置生图调用已形成可验证地图源，状态为 `world_map_v2_source_candidate_unapproved / cave_hierarchy_revision_required / runtime_unchanged`。原始 PNG 为 `1448x1086`、`2,892,992` bytes、SHA-256 `1F92448A3E95293121F16443AFAD29E4848E00F7E96E2335D15DB98EEC6B2C86`；它在一张连续世界中保留左侧月球工坊、右侧呼吸花园、下方回声洞、两颗星球与星光桥，并移除文字、角色、谱面、琴键、编号圆台和按钮式地标。主管只读叠加精确 359a 后，`1024x768` 与 `1194x834@2x` 均为一个可操作任务、零弹窗、零横向溢出、零故事条/任务卡几何交叠；但下方洞穴视觉权重过强且被两块底部 UI 部分遮挡，响应式分层、后续章节状态、真机、儿童、专业美术、提供方条款与外部相似性仍缺。完整记录在 `concepts/runtime-candidates/world-map-release-source-v2-2026-07-25/`；它只把地图从“无图”推进到“强源候选待构图修订”，不关闭 `release-visual-assets`，不改 359a，也不通知冻结原型接入。`runtimeApproval=false / integrationAllowed=false / observationAllowed=false / releaseCleared=false`。
+
+用户进一步要求“简洁卡通、科幻一点、色调暗一点”后，地图方向曾更新为 `world_map_v4_prototype_360a_integrated_unapproved / observation_baseline_359a_unchanged`。V3 明亮简化稿只保留为可追溯中间态；V4 使用精确 V3 输入和完整提示词重新生成，原图为 `1448x1086`、`2,009,499` bytes、SHA-256 `1D893F492B4F702BE3CC6A161E3D8A1F7A88C069659F36437B7094D446268417`。V4 保留大面积中央留白，把工坊/花园改为简洁太空舱，以深蓝青暮色、少量青光与暖黄灯强化科幻感，洞穴继续缩为次要入口。精确 359a 在 `1024x768` 与 `1194x834@2x` 的 12 项只读合成断言全过且两次输出字节一致；人工审图锁定“不再继续压暗、只局部降亮非当前地点、不得新增发光路线”。该源图继续以 source-only 身份保留在历史外部相似性 r4 回传包中；360a 运行字节也只作历史视觉原型证据，当前体验已由 361a 替代。它不构成 359a 观察基线迁移或发布批准，`runtimeApproval=false / integrationAllowed=false / observationAllowed=false / releaseCleared=false`。
+
+360a 历史运行补审状态为 `world_map_v4_runtime_check_75_75 / runtimeApproval_false / observationAllowed_false / releaseCleared_false`。主管先在精确冻结 359a 上建立 C1 M01、C2 S01、C3 LS01 ready/active、C3 LS04 ready、C4 LP01 ready/active 共 7 个真实状态，两种 iPad 导向尺寸合计 14 张，`168/168` 状态、几何和唯一任务断言通过；随后原型写者把同一聚焦规则实现为受限局部遮罩，V4 专项多轮均为 `75/75`。均匀整屏压暗方案保持否决；360a 当时只对三个非当前地标做最高 `0.22` 的局部降亮，当前地点和中央活动区保持原图亮度，不增加发光路线。旧红色基地地板已在 360a 中替换为非交互门槛灯，C3/C4 目标状态与响应式几何已进入浏览器验证；实体 iPad、儿童、外部相似性、提供方条款和发布来源清关仍缺，因此 360a 只作为历史体验原型，359a 继续作为独立冻结观察基线。
+
+用户确认继续向“更科幻、色调更暗”推进后，当前地图事实更新为 `world_map_v5_prototype_361a_integrated_unapproved / observation_baseline_359a_unchanged`。V5 原图为 `1448x1086`、`2,158,254` bytes、SHA-256 `604F95575B2DE22341E273DFC9BB285D44D321F4563790C055C29EBC2D08251A`，确定性 WebP 为 `133,276` bytes、SHA-256 `688FB37A8526640CCBD9CF6B3984648E7AFA32466279253F3073E59CC3DB3F10`。运行审查状态为 `world_map_v5_runtime_check_103_103 / one_current_task / dialogs_0 / horizontal_overflow_0 / runtimeApproval_false / observationAllowed_false / releaseCleared_false`；局部降亮上限收紧为 `0.16`，未增加整屏黑罩、关卡圆点、可点击建筑或第二入口。旧 R4 外部相似性包只覆盖 359a 与 V4 source-only 方向，不能冒充 V5 清关；当前 R5 已补入 V5 原图、14 张精确 361a 截图和新哈希，但只达到 `infrastructure_passed`，仍等待独立审查者真实回传。361a 不替换 359a 冻结观察基线，也不改变课程、掌握、输入、声音或人工门禁。
+
+教师执行更新：`docs/61` 继续保存完整权威题库，`docs/72` 把它拆成三次约 15-20 分钟的阶段，依次审中央 C/D/E 基础链与表示联系、第四章低音路线、第五章合作路线。旧 `NP-FG 3/4` 在四次二选一中有 `5/16 = 31.25%` 的纯猜中概率，当前待教师审查的暂定门槛保持 F/G 各两次且 `4/4` 首答正确；故事仍可在帮助下完成，但不能写 stable。本轮又发现原阶段 A 从 S01 开始，未让教师直接裁决 `M01 音名/黑键组 -> M03 声音 -> S01 谱位` 三条表示到琴键的基础顺序，也未独立裁决地板、车轮和跳跃的音乐因果与“阶段目标后才结算”节奏。当前 `r4` 保留原 A1-A11/B1-B10/C1-C10 不变，只追加 A12 基础三表示和 A13 故事教学节奏；`NP-FG` 的低音 `F3/G3` 投递仍由 B10 裁决。`review/preschool-piano-teacher-staged-359a/` 现从 `docs/72` 精确提取 A13/B10/C10 共 33 题。漏答、资质不符、非独立复核、儿童参与、需改或无法判断全部失败关闭；三阶段合成全过也只允许 `all_stages_pass_candidate_pending_supervisor`。状态为 `teacher_staged_review_infrastructure_passed / protocol_r4 / preschool_piano_teacher_result_missing / no_runtime_approval`，三阶段真实结果仍全部 missing，也不向已 idle 的原型或媒体任务发运行派工。
+
+表示联系课程独立复核状态为 `representation_specs_independently_rechecked / np_fg_transfer_register_ambiguity_corrected / teacher_decisions_missing / runtime_unchanged`。主管重新对照 `docs/57`、`docs/71`、`docs/72`、家长教案和十字段课程交接合同：`C3-X01` 继续只用已学 C4/D4/E4，把谱位首选与同名琴键首答分轴；`NP-CDE/NP-FG` 继续只考角色唱名到字母音名提取，收藏、名字首选和最后有提示琴键投递互不回填；两类任务不得同 session，之间至少隔一个无 opening review 的正式故事 session。修正后的 `NP-FG` 投递还单独保存目标/实际 MIDI、字母和音区是否正确，不能生成名字或低音键位 stable。动作预算、困难后故事完成、唯一下一任务、无逐键结算、触屏完整路线和禁用成熟度夸张均已写清。三选一负荷、LS05 后插入位置、低音投递是否保留、C3-X01 `3/4`、NP-CDE `3/3`、NP-FG `4/4` 和至少 8 小时 retained 门槛仍只能由合格幼儿钢琴教师先裁决；本次复核不分配正式 ID、不写 `docs/09`、不联系冻结原型或媒体任务。
+
+当前完整外发包为 `dist/review/star-dino-teacher-staged-review-359a-v7.zip`，含 21 个白名单文件和 1 个内嵌 manifest，`4,880,619` bytes、SHA-256 `FF4505E765D0AFEC247CF68DD83C3625121E4EEDD3C05A1007D59A15287E5EE0`。它显式携带并绑定 `docs/30_OBSERVATION_CANDIDATE_359A.json` / `C153CDB5CF2182CF78D1F2423E49FA883B8EF5E50D539266CF6CD7F196C7E4BC`，并固定七张 359a 参考图的字节、尺寸和哈希；当前工作树及任何后继候选都不能冒充教师运行证据。v7 已同步 C3-X01 最多四次 child-started session、LP05/LP10 续接预算、LP05 无阶段结算、LP07 实验麦克风边界、`low-key:C3-G3 stable` 调度缺口和护照困难 opening review 的 story-first 退出边界；A13/B10/C10 的 33 题数量、课程音序、参考截图和批准位不变。当前页面通过 `98` 项浏览器断言；确定性验证为 `2/2` 字节一致，内容篡改、批准位翻转、冻结 manifest 绑定、危险路径、时间戳漂移和缺文件 `6/6` 均被拒绝。旧 v6 固定为 `4,878,974` bytes / SHA-256 `A36A27DC6B0CEFB2F0494233C6197832D569792A9D6A71F2109A120793ED885B`，旧 v5 固定为 `4,878,528` bytes / SHA-256 `DB2992DDDACC37738FD45DFFA0D0CB8518A1AFD00EFEC26FAEB25FC8D8F39857`；两者都只按自身内嵌 manifest 和固定哈希只读验真，不再与可变现行文档比较或重打包。包内没有 runtime、audio、concepts、儿童数据或跨项目标识。完整总卡的回传标签继续限定为独立的 `C3-X01` 第 1-12 题；分阶段回传范围锁定为 A1-A13、B1-B10、C1-C10。旧 `star-dino-teacher-staged-review-359a-v1.zip` 至 `v6.zip` 与更早的单阶段包都只保留历史证据，不再是当前成熟度或回传事实源。
+
+运行节奏元数据状态为 `runtime_pacing_metadata_gate_passed / current_365b_bound / visible_mechanic_diversity_partial / future_units_runtime_forbidden`。`docs/80_RUNTIME_PACING_METADATA_CONTRACT.json` 已把 39 个 canonical lesson 收敛为 38 个节奏单元：23 个与当前 365b 运行逐项核对，15 个 future/conditional/optional 单元继续禁止接入运行；359a 仍只作冻结观察基线，364b/364a 只作冻结前序。`check:runtime-pacing` 以 1215 项断言锁定输入预算、最多两次有效输入内出现世界变化、声明动词标签、连续同家族复核库存、自然停点、phase 结算资格、永久结果与唯一下一任务。它不能证明儿童主观上不觉得重复；第二、三章多样性保持 partial，也不批准 LP05+、`C3-X01`、教师、儿童、真机或发布。
+
+`check:maturity-state` 现在分别锁定教师工具、完整 ZIP、成人/教师回传、视觉/儿童/设备现场回传、冻结候选局域网白名单服务器、统一运行节奏元数据、V1 中断地图尝试不得借旧七件套冒充成果的失败关闭状态、V2-V4 历史边界，以及 V5 原图、361a manifest、R5 的 14 张精确截图、确定性 ZIP、回传模板、全 false 批准位、`docs/83` 的保守提供方条款状态、365b 当前 manifest、365a 直接前序、364b 连续性/音名恢复前序、364a 输入路由前序、359a 观察证据和 362a 历史恢复证据；当前事实检查继续以命令实测为准，不减少 `13` 个发布阻断。任何页面、包、模板、服务器白名单、来源哈希或条款状态漂移，批准位被写成 true，真实结果被伪写成已完成，V1 失败记录被覆盖，R4 被重新暴露为当前动作，或 365b/365a/364b/364a 浏览器候选与前序被冒充 359a 真机观察候选都会让门禁失败；结构化回传、公开条款证据和安全服务器都不能自动批准儿童观察、运行素材、完整设备矩阵或 Release。
+
+真实回传入口状态：`human_review_return_intake_infrastructure_passed / adult_teacher_audio_recomputation_passed / authenticity_self_reported_unverified / adult_physical_iPad_result_missing / preschool_piano_teacher_result_missing / nonvoice_sfx_human_result_missing / no_automatic_approval`。`tools/verify_human_review_return.mjs` 只接受精确的成人 iPad `r1`、教师三阶段 `r4` 或七项非语音 SFX `r1` JSON，重新计算结果，不信任导出文件自带的状态、题目、路线覆盖、候选标志和批准位；教师旧协议及缺少 359a manifest 路径/哈希的旧 v4 包导出均拒绝。音效回传必须分别包含实体 iPad 扬声器和耳机两条路线及 14 条项目记录，不能用桌面、单一路线或伪造 aggregate 冒充。自检通过 `31` 项（`6` 个有效或明确不合格 fixture、`25` 种篡改拒绝）；真实页面集成通过 `19` 项，覆盖成人 `1` 份、教师 A/B/C `33` 题、音效两路线 `14` 条记录、伪造状态/题目/路线/冻结 manifest 哈希拒绝、`0` 外部请求和 `0` 浏览器错误。
+
+该入口只能证明回传字段与冻结协议自洽，不能用密码学证明填写者确为教师、设备确为实体 iPad，或现场观察确实发生。任何有效 JSON 仍只能进入 `supervisor-pending`；真实成人实体 iPad 结果与真实教师 A/B/C 结果继续是 missing，儿童观察、课程冻结、运行集成、mastery、stable/retained 和发布均不得自动批准。
+
+现场证据补充入口状态：`field_review_return_intake_infrastructure_passed / visual_child_device_recomputation_passed / child_observation_r2_behavioral_contract_passed / blank_templates_fail_closed / real_visual_child_device_results_missing / no_automatic_approval`。`tools/verify_field_review_return.mjs` 继续保存 359a/V4 R4 历史视觉协议以及儿童、设备回传，并锁定课程观察协议、27 项资产矩阵和接触表哈希；它不能验证当前 V5。儿童协议已升级为 `first-directional-child-observation/r2`：除原有开始、错误修复、遮挡结算和唯一下一任务外，结构化记录可观察参与信号、阶段成就是否被察觉、音乐动作与世界变化的因果联系、节奏状态，并要求 3-5 名儿童整体覆盖 M01 音名/黑键组到琴键、M03 声音到琴键、S01-mini 谱位到琴键三条无答案型干扰线索的迁移路线。只有全部阈值成立才形成 `low_age_engagement_and_teaching_flow_candidate_pending_supervisor`，仍不能写学习效果、mastery、stable/retained 或发布通过。当前 R5 视觉回传改由 `tools/verify_visual_similarity_review_v5_return.mjs` 单独重算，严格锁定 359a 基线、361a 视觉原型、V5 原图、14 个精确截图路径和逐文件证据哈希。R5 自检通过 `17` 项并拒绝 `15` 类协议、哈希、截图增删改名、隐私、跨项目标识和批准位篡改；通过也只能形成 `screening_pass_candidate_pending_supervisor`。历史 R4、儿童 r2 和设备模板继续失败关闭。一名孩子仍只能给方向信号，单个设备批次永远不能声明完整矩阵通过。真实视觉审查、儿童和设备结果均仍 missing。
+
+发布视觉执行更新：`tools/build_runtime_asset_review_sheet.py` 从 `docs/62` 精确矩阵生成 27 项运行素材接触表和机器清单，两次完整重建逐字节一致。接触表 SHA-256 为 `64F0F18446C9F2D33B7D973DD0B0C92980DA7DC66621F58B205C38386572E1AF`，清单 SHA-256 为 `8EE7F52D90CF16F4CD44E2994DB25AC1427832F73731268564F908259A1F3A25`，27/27 运行哈希匹配。人工逐项裁决见 `concepts/release-visual-audit-2026-07-23/retain-replace-retire.md`：七个 T1 气密服姿势保留并补权利/相似性；七个工坊部件从统一新母版重制；三张特效、成功徽章和无活动引用旧谱桥图进入后续代码替换/退役队列；地图和背景等待 359a 方向性观察后再重制。该分级不改变 `release_visual_clearance_0_27`，也不解冻 runtime。
+
+七部件统一母版的 2026-07-23 能力缺失分支只保留为历史：当时任务未暴露允许使用的 Codex 内置 `image_gen`，所以该次检查确为零调用、零源图；`concepts/runtime-candidates/workshop-prop-sheet-release-source-2026-07-23/` 只冻结生产规格。它不能覆盖后来一次失败的自定义 provider 调用、一次用户授权成功的兼容 Images API probe，以及停止前发生的一次排除型内置调用。当前事实只认并列调用账本和 V2 主管门禁；历史 `provider_unavailable / zero_calls / source_missing` 不再是七部件任务的现行总状态。
+
+Grok Batch10-12 的历史逐帧欠账已由主管独立关闭，见 `docs/76_GROK_BATCH10_12_SUPERVISOR_REVIEW_2026-07-23.md` 与机器清单 `docs/76_GROK_BATCH10_12_SUPERVISOR_RULINGS.json`。16 条既有原片完整裁决为 `3 preferred_source_only / 6 partial_source_only / 7 rejected`；Batch12 只运行既有本地脚本生成零音轨审核副本和接触表，没有新生成调用。屋顶脸化、民航客机、设备无因果变箱、随机碎石和中央巨型平台均明确拒绝；三个首选也只能作为 M08 整屋顶闭合、洞穴完成边缘暖光和中性洞穴呼吸方向。`node tools/audit_grok_batch10_12_supervisor_review.mjs` 锁定 16 个原片/接触表哈希、静音流和运行引用 0。Grok 额度耗尽硬暂停、`runtimeApproval=false / integrationAllowed=false / releaseCleared=false` 均不改变。
+
+历史外部相似性筛查包 `dist/review/star-dino-visual-similarity-screening-359a-v4.zip` 保持 `33` 个 ZIP 条目、`10,984,568` bytes、SHA-256 `670E1FAC9D59F2AB2B0066BFDC7B23444A1BEEFC80918EB8CAE394E7C2E3C702`，只用于追溯 359a、七件工坊 V2、新旧警示灯和 V4 source-only 方向。它不再是统一入口的当前下载动作，也不能验证 V5。
+
+当前执行包为 `dist/review/star-dino-visual-similarity-screening-361a-v5.zip`，共 `36` 个 ZIP 条目、`36,233,169` bytes、SHA-256 `27D8BA0E82A0E69AAB109DF0E0D9511DAF07630221855CA007E9A56FD5F176C2`；主管两次完整重建逐字节一致，打包器复核 `105` 项源事实，回传验证器通过 `17` 项并拒绝 `15` 类篡改。`docs/82` 明确定义 V1 为 359a 的角色/App 图标，V2 为 V5 原图与全部 14 张精确 361a 运行截图，V3 为七件 V2 道具、新旧警示灯和奖励；任何截图缺失、重复、新增或改名都失败关闭。R5 必答源图/运行原型边界、具体联想、构图、地标语言、低龄可读性、暗色压迫或低对比、唯一任务误读和发布级重绘。搜索只记录公开 URL，不复制第三方图片。状态为 `visual_similarity_r5_infrastructure_passed / independent_result_missing / no_automatic_approval`；真实独立审查者尚未回传，因此它不补齐权利链，也不批准 runtime、observation、integration 或 release。
+
+产品与角色名称公开初筛见 `docs/74`：返回结果中暂未观察到“星龙工坊 / Star Dino Workshop”精确同名产品，但普通搜索不等于官方商标查询；“星芽”已有 App Store 短剧产品等使用，“咚咚”已有多个 App，且“咚咚咚猜猜谁来了？”同属低龄、声音和动物近邻市场。当前保留工作名称与角色名，不改运行和故事；但两个角色名不得在专业检索前单独作为 App/衍生品牌，也不得宣称独占。状态保持 `official_trademark_search_missing / legal_clearance_missing / releaseCleared=false`，成熟度门禁现锁定这项诚实边界。
+
+隐私发布准备新增 `docs/75`：依据 Apple 2026-07-23 官方页面和精确 `docs/64` Web 清单，当前纯本机学习记录、MIDI 与麦克风即时分析可条件式映射为 App Store `Data Not Collected / No Tracking`，并给出家长说明和麦克风用途字符串候选。它只适用于保持零出设备传输的设计；没有原生 Release archive、SDK/网络检查、运营主体、联系渠道和地区法律审查时，状态必须是 `not_for_publication / releaseCleared=false`。该准备不关闭 `parent-privacy-release`，也不批准儿童麦克风观察。
+
+## 2026-07-23 成人实体 iPad 预检本地审核页主管验收
+
+- 状态令牌：`adult_ipad_preflight_review_infrastructure_passed / adult_physical_iPad_result_missing / pass_candidate_pending_supervisor_only / observationAllowed_false / runtimeApproval_false / releaseCleared_false`。这只关闭文字卡容易漏填、版本写错和结果难以机器复核的问题，不关闭实体 iPad 结果。
+- `review/adult-ipad-preflight-359a/` 精确锁定 `adult-ipad-audio-preflight/r1`、候选 `overhaul-359a-map-shell-scroll-reset` 和版本 `359a · 5AB01914`。必填设备事实和 `docs/60` 五项检查通过修订化 localStorage 保存，可复制人类摘要或导出 JSON；没有儿童姓名、录音、上传、媒体播放或运行引用。
+- 独立审计通过 `71` 项：除空字段、待检查、桌面设备、非 Safari、错误版本、不通过和无法判断均失败关闭外，还直接锁定 `docs/30_OBSERVATION_CANDIDATE_359A.json` 的路径、SHA、候选 ID、冻结 `app.js` 哈希、全 false 批准位与不含审核工具的文件集合；不再拿当前 361a 工作树的 `app.js` 冒充 359a 证据。五项全过仍只能导出 `pass_candidate_pending_supervisor`，且 `finalPassed=false / childObservationAllowed=false`，所有 mastery、stable/retained、观察、运行、集成和发布批准位保持 false。错误修订的旧 localStorage 不导入；合法 `appPort` 可把同主机替代应用端口传给主页与 M03 诊断，无效或越界值回退 `4199`。
+- 桌面 `1366x900` 与移动 `390x844` 的 clean 截图均在清除合成测试值后生成，0 横向溢出、0 控制台或请求错误、0 外部请求。专项当前通过 `78/78`，并验证推荐音量 `60` 合法、全部阻断原因可见、清空后不重建空默认记录。机器 manifest SHA-256 为 `2F4938D5...A6BC2A`，当前验证文件 SHA-256 为 `6527AFBD...0F5`；复现命令是 `npm run check:adult-ipad-preflight-review`，并已加入 `check:quick`。局域网填写页可由统一入口或 `npm run serve:adult-ipad-preflight-review` 的窄目录服务提供。
+- 当前仍必须由真实成人在实体 iPad Safari 完成并回传，主管才能考虑登记对应的成熟度通过事实。在此之前不开放儿童观察、不解锁 LP05，不向已 idle 的原型或媒体任务发重复修改；成熟度为 `58` 项事实检查、`15` 项要求、`maturity_release_blockers_13`。
+
+## 2026-07-23 七项非语音音效人工听审入口主管独立验收
+
+- 状态令牌：`nonvoice_sfx_review_infrastructure_passed / human_listening_missing / runtime_candidate_unapproved / runtimeApproval_false / integrationAllowed_false / releaseCleared_false`。这只关闭“七项是否有统一、可验真的成人试听入口”，不关闭真人听感、实体 iPad、最终音效、角色语音或运行集成。
+- 外发包为 `dist/review/star-dino-nonvoice-sfx-human-listening-v1.zip`，`753,681` bytes / SHA-256 `F38289D48EA65EFFC92AD10EE4B84CB059C87C2820A38FCB4EF00306CE66C520`。主管独立检查 35 个 ZIP 条目：全部位于单一根目录，0 绝对路径、0 `..`、0 反斜杠、0 重复项；包内 manifest 登记 34 个文件，逐文件 SHA-256 `34/34` 一致，未含 runtime、concepts、private-recordings、视频或跨项目标识。
+- 新协议为 `nonvoice-sfx-human-listening/r1`，精确覆盖 7 个 ID、7 WAV、7 M4A 和 28 个可见播放器；只有 `seed-sprout`、`correct`、`retry` 提供 C4/D4 A/B，另外四项明确为 standalone Foley。7 OGG 继续只作哈希登记，不替代 iPad 的 M4A 路线。主管复算 7 WAV + 7 M4A + 7 OGG 及现有混音/参考共 37 个音频哈希，0 mismatch、0 音频字节变化。
+- 工作区页与 ZIP 自包含页均通过本机 Chrome 审计：7 行、28 播放器、0 autoplay、全部可解码、停止全部有效、桌面 1366x900 与移动 390x844 无横向溢出；仅当前项目适用的字段可见。旧 `ls04-c4-d4-offline-ab/r1` localStorage 不导入新 key；空记录、同一路线 6/7、仅完成实体 iPad 扬声器三种情况的 `overallStatus` 均保持 `pending`，耳机路线不能由桌面或扬声器冒充。导出的两路线 JSON 还必须通过统一验证器的独立重算，不能仅凭页面自报状态进入主管候选。
+- 统一 Review Hub 现在把主操作直接指向 `http://<电脑局域网IP>:4201/review/nonvoice-sfx-listening-r1/review/`，同时保留固定 ZIP 作为离线证据包。4201 服务只按包内 manifest 放行 34 个页面/音频文件及 manifest 本身，M4A/WAV 使用正确 MIME 和 Safari 所需的单段 byte-range；仓库原始 `audio/review/**`、runtime、concepts、其他音频和未登记文件仍返回 404。CSP 只允许同源媒体，继续禁止连接、frame、object 和写方法。
+- 可复现命令为 `python tools/verify_nonvoice_sfx_review.py`、`node tools/with-playwright-path.mjs tools/audit_nonvoice_sfx_human_listening.mjs auto ...`、对应 `auto-package` 路线和 `npm run check:review-hub:all`。建立直达页面、ZIP、Range 服务和自动门禁不等于真人听审通过；真实成人仍须分别在实体 iPad 扬声器和耳机完成 7/7 并回传 JSON。最终音频媒体门禁仍未通过，成熟度仍为 15 项要求、13 个发布阻断。
+
+## 2026-07-23 359a 主页滚动归零与阶段连续性独立验收
+
+- 状态令牌：`observation_candidate_359a_frozen / map_shell_scroll_reset_12_12 / M01_same_session_revisit_preserved / single_next_task_M02 / observationAllowed_false / releaseCleared_false`。
+- 主管复现的真实根因是 `window.scrollY=0` 但 `#mapShell.scrollTop=310`；任务结束后看似已经回主页，实际顶部品牌、地点、因果链和唯一下一任务仍被内部滚动容器卷出首屏。359a 在每次进入地图时即时、下一帧和再下一帧归零内部横纵滚动，覆盖正式返回、显式暂停、刷新恢复和干净启动。
+- 新专项通过 `12/12`：干净主页和正式返回均 `scrollTop=0 / topbarTop=0`；M01 第一次 C 后继续 `M01-do-revisit`，无 result/milestone；完整 `C1-01` 结束后主页只有 M02“叫醒三颗小灯”一个 enabled/current 任务；部分进度恢复仍只显示“继续再找到一次 C，让地板锁紧”，不会创建第二个 session。原尺寸证据在 `screenshots/map_shell_scroll_reset_359a/`。
+- 核心哈希为 `app.js 5AB01914C5B2AFA0E17838AAB59C2E0CAC5D8A4CA8E0956A23F382A4818AE566`、`index.html 8768366E0CB7ACF47F2EA7862B77E87B50B584AF31AD1010484128B4CF8A2B9B`、`service-worker.js 34B600701609333CB4EB777E7F503E4B9449813C961E70EB9FB58DCBE56991AD`。`docs/30_OBSERVATION_CANDIDATE_359A.json` 冻结 47 个自包含文件，manifest SHA-256 为 `C153CDB5CF2182CF78D1F2423E49FA883B8EF5E50D539266CF6CD7F196C7E4BC`；27 张运行图片的哈希和总字节 `1,700,918` 均未改变。
+- 共享回归通过：主页单任务 `23/23`、课程导演 `68/68`、非阻挡反馈 `62/62`、反馈强度 `42/42`、sessions `74/74`、clean-state `124/124`、iPad accessibility `43/43`、PWA `11/11`、观察身份 `9/9`。普通输入、错误和局部正确继续不出现居中大框；只有完整 phase 尾允许一次短暂无按钮小结。
+- 两个外审 ZIP 已按精确哈希验真并由 `docs/56/65` 完成主管分级；UI 包四张额外 PNG 继续隔离，`docs/57/71` 的新课程候选继续等待幼儿钢琴教师复核。外审不自动改运行代码、课程音符、掌握规则或素材。
+
+## 2026-07-23 358a M08 可追溯姿势独立验收与冻结
+
+- 状态令牌：`observation_candidate_358a_frozen / M08_A2_prototype_runtime_passed / runtime_asset_traceability_27_27 / T1_7_T5_0 / observationAllowed_false / releaseCleared_false`。
+- 新运行图 `assets/runtime/xingya-suit-point-m08-route-a2.png` 与批准候选逐字节一致：`205,311` bytes / `AF3DCD97...8236`；旧 T5 原字节只保存在退役目录，活动运行引用、PWA 预缓存和严格包均为 0。`app.js` 仍为 `17B78E96...AA276`，课程、session、mastery、音名/唱名载体、输入和隐私语义未变。
+- 主管独立核对 1024x768、1194x834 DPR2、1366x1024 三张原尺寸图：三颗头芽、透明头盔、完整气密服、手套、靴子、背包和尾套可读；角色不挡气泡、蓝图或键盘。独立门禁通过 M08 `18/18`、roof route `97/97`、气密服 `29/29`、PWA `11/11`、音名 `286/286`、clean `124/124`、sessions `74/74`、strict bundle `47 files / 1,700,918 runtime asset bytes`。
+- `docs/30_OBSERVATION_CANDIDATE_358A.json` 冻结 47 个自包含运行文件，SHA-256 `A19BF62E053A9BF9D68D6FDCFF817F40029322E620B2F7488957AA40619E6D3D`。资产矩阵从 T1 `6 -> 7`、T5 `1 -> 0`，但发布清关仍为 `0/27`；可追溯不等于发布权利或外部相似性通过。
+- 当前唯一外部动作仍是成人实体 iPad 预听。没有成人结果前不开放儿童观察，不解锁 LP05，不再派运行、美术、课程或媒体修改。
+
+## 2026-07-23 M08 A2 静态来源候选独立裁决
+
+- Route A1 直接复用方形 `assets/runtime/xingya-suit-point.webp` 时，透明画布会在 M08 竖向角色框内把主体压小，因此保持拒绝。Route A2 只按 alpha 边界裁去透明画布并保留四边 `12px` 安全边：源裁切框 `[51,44,461,500]`，输出 `410x456` PNG，SHA-256 为 `AF3DCD97F0134487F86141C177A2DF8800BD9CA01B3F6F96442A79FC5BFB8236`；没有重绘、调色、修脸、补像素或改变姿势。
+- 两个冻结 M08 视口的人工对照确认三颗头芽、透明头盔、连体服、手套、靴子、背包和完整尾套仍可读。1024 视口可见主体约 `154x169`，当前 T5 约 `152x174`；1194 视口约 `168x187`，当前 T5 约 `167x192`。键盘交叠为 0，蓝图尾端的少量 alpha 交叠与当前 T5 同量级，因此只通过 source-only 审计，不构成运行批准。
+- 主管首次复跑发现 `manifest.json` 两张三栏接触表仍写旧哈希，尽管旧验证器误报 passed；该问题已退回并补成逐项路径、存在性和 SHA-256 的 fail-closed 检查。第二次独立执行 `verify_route_a.py` 通过，`manifestAuditArtifactHashesMatch=true`，最终 `verification.json` SHA-256 为 `4E12FBC718E28C2D6DBD686DCB8829AB4F0C47674D327E5A5B14129AE30ED4FA`。
+- 两次审计构建字节一致；27 个 `assets/runtime` 文件在验证前后哈希零变化，运行引用和跨项目标识均为 0。A2 保持 `source_candidate_unapproved / runtimeApproval=false / integrationAllowed=false / releaseCleared=false`；不修改 `docs/62`，不通知原型接入。Route B 内置生图仍 missing，Grok 继续额度耗尽硬暂停，当前 T5 的发布来源和外部相似性仍未关闭。
+
+## 2026-07-23 357a UI-P0C 独立验收与冻结
+
+- 状态令牌：`UI_P0A_P0B_P0C_supervisor_passed / observation_candidate_357a_frozen / adult_iPad_preflight_next / observationAllowed_false / releaseCleared_false`。
+- 当前核心哈希：`app.js 17B78E96F5D143EDDAFEC4463B8DE178DB2BD424B7F6B8D41A3BA15BC37AA276`、`index.html AB85F6CE21F429120C608CEC37E3EAC1E09A622151C69AE4396ADB12D7CBC166`、`service-worker.js C3D53BD7A943DEBE906C1203AC0C7D7EDE8B8668289220C5EAF9D97CE7DFC95C`；47 文件 manifest SHA-256 为 `AD666DE4F0540489E880DEF2BA11E0FFFB6A5E245FCAC6D7E54DD5A48AB5FD90`。
+- 自由琴键月面使用完整气密服；孩子可见文字与 ARIA 只写“屏幕琴键 / 外接琴键 / 钢琴声音”，不出现 MIDI、Web MIDI、协议或浏览器支持；真实 MIDI 信息只留在家长设备页。自由琴键继续无评分、无正式 session/mastery 写入，关闭后正式学习存储字节不变。
+- 主管独立复跑：P0C `17/17`、家长回看/自由琴键 `20/20`、主页唯一任务 `23/23`、课程导演 `68/68`、非阻挡反馈 `62/62`、反馈强度 `42/42`、sessions `74/74`、clean-state `124/124`、motion `19/19`、iPad a11y `43/43`、PWA `10/10`、气密服 `29/29`、孩子音名 `286/286`、课程故事 `33/33`、strict bundle `47 files / 1,621,097 runtime asset bytes`。
+- 相对 356a 的 47 个发布文件只改变 `app.js`、`index.html`、`service-worker.js`；`assets/runtime/**` 字节变化为 0。自由琴键顶部与场景标题略重复、中央区域偏空是 P1 视觉观察，不回改已冻结 P0C。
+- 本次不批准儿童观察或发布。成人必须先在实体 iPad 上按 `docs/60` 核对精确版本、横屏布局、钢琴音、遮盖、音量和静音；通过后才由主管决定首名方向性儿童观察。
+
+## 2026-07-22 356a UI-P0B 独立验收与冻结
+
+- 状态令牌：`UI_P0A_P0B_supervisor_passed / UI_P0C_next / home_single_task_23_23 / observationAllowed_false / releaseCleared_false`。
+- 当前核心哈希：`app.js F328FB09...CDC42`、`index.html DAAFBF50...EA1B6`、`service-worker.js 9A8F1D98...EE4B0C`、`course-director.css 858BB506...752CB`；`docs/30_OBSERVATION_CANDIDATE_356A.json` 冻结 47 文件，manifest SHA-256 为 `DC196F29FEA70DB1FFB269D22D2B178C92E8415AE3E601A28976453B494DBECA`，批准位继续为 false。
+- 孩子主页在 clean、正式进度、active、resume、S01、第三章和第四章入口均只暴露一个 enabled 且 `aria-current` 的对象动作任务；站点数字从孩子视觉层移除，左下保留“刚完成 / 现在 / 随后”因果链。C1-01 正式完成后地板落在第一圆台并跨刷新保留，只有孩子明确点击 M02 才创建下一 session。
+- 主管独立阅读专项断言、完成真实 C1-01 路线并查看 1024x768 原尺寸 clean/after/active/resume 图。专项 `23/23`，共享回归为课程导演 `68/68`、非阻挡 `62/62`、反馈强度 `42/42`、sessions `74/74`、clean-state `124/124`、motion `19/19`、iPad a11y `43/43`、PWA `10/10`、气密服 `29/29`。
+- 裁决只关闭 P0B 的浏览器结构与当前原型视觉。非当前圆台经过降饱和后仍略像禁用圆按钮，最终地图背景/地标仍需正式美术重制；这不回退单一任务语义，也不能写成成熟视觉或发布美术通过。
+- 本次只有 `app.js`、`index.html`、`service-worker.js`、`course-director.css` 相对 355a 运行字节变化；27 张运行图、`child-feedback-intensity.css`、课程音序、phase 资格、session、played/stable/retained、声音和素材批准状态未变。P0C 必须单独处理自由琴键安全语境与孩子端 MIDI 协议字样。
+
+## 2026-07-22 355a UI-P0A 独立验收与冻结
+
+- 状态令牌：`UI_P0A_supervisor_passed / UI_P0B_next / UI_P0C_waiting / runtime_asset_traceability_27_27 / release_visual_clearance_0_27 / observationAllowed_false / releaseCleared_false`。
+- 当前核心哈希：`app.js 9531C9F9...0484CA`、`index.html 54A2882C...6FACDC`、`service-worker.js 5849D7C4...E752`、`child-feedback-intensity.css 615BF928...0126`；`docs/30_OBSERVATION_CANDIDATE_355A.json` 冻结 47 文件，manifest SHA-256 为 `4559045F556E4A206F0E6163224171BF16907033FEB758EA9C8BD1AD533A1577`。
+- M01 普通错误只保留键内软环，不再出现大型红叉、浮动字母或跨场景粒子；短暂状态类结束后也不会在 assisted 状态回弹。D/C 音名字母始终可读。完整阶段完成才出现一次最大 `380x130`、无按钮、无焦点、约 2.3 秒自动返回主页的小结；出现前收起旧目标、路线气泡、站号和内部练习文案，保留五颗完成星、角色与世界成果。
+- 主管独立复跑通过：视觉强度 `42/42`、非阻挡反馈 `62/62`、课程导演 `68/68`、sessions `74/74`、clean-state `124/124`、motion `19/19`、iPad a11y `43/43`、PWA `10/10`、气密服 `29/29`、观察 build `9/9`、strict bundle `47 files / 1,621,097 runtime bytes`。这关闭 P0A，不关闭 P0B/P0C、实体设备、教师/儿童或发布素材清关。
+- 本次未改课程音序、phase 资格、session、played/stable/retained、27 张运行图字节、声音或素材批准状态。普通孩子界面与琴键继续只显示音名字母；唱名只允许在小恐龙对话/语音中出现。
+
+## 2026-07-22 外部 UI/UX Markdown 净化、内容复核与视觉 P0 裁决
+
+- 原始 UI ZIP `6,942,469` bytes / `245A8E7B...E656BC` 继续保留为含 PNG 的无效原件；主管通过固定 SHA、固定 12 项白名单机械复制 8 份 Markdown，两次输出均为 `34,908` bytes / `199DB652...B9DD`，四张 PNG 未复制、未接入、未批准。
+- intake 自测扩为 `9/9`；实包严格门禁为 `ready_for_supervisor_content_review / validCount=2 / invalidCount=0 / warnings=0`。完整内容裁决见 `docs/65_EXTERNAL_UI_UX_AUDIT_TRIAGE_2026-07-22.md`。
+- 接受的当前 P0：M01 wrong/correct/assisted 和 phase-tail 的贴纸/粒子/banner 强度；主页非当前圆台仍像按钮且世界完成物不变化；自由琴键在月面使用无气密服角色并显示 MIDI 协议。S01 教学减负列为教师门控 P1。
+- 拒绝外部把 LP03 改成隐藏候选的建议：LP03 是可见 `C3-D3-E3` 地基路线，no-leak 属于 LP04。当前 M01/S01 气密路径经最新资产复跑 `29/29`；只有自由琴键的安全语境仍未关闭。
+- 状态令牌：`maturity_external_ui_audit_passed / external_UI_result_triaged / visual_P0_runtime_dispatch_required / 354b_observation_superseded / maturity_release_blockers_14 / releaseCleared_false`。
+- 历史包边界保持：`docs/30_OBSERVATION_CANDIDATE_354B.json` 仍是 354b 的精确冻结记录，但不再批准儿童观察；354a ZIP 虽曾通过旧哈希验证，仍因漏收四个页面 CSS 而只作缺陷追溯。
+
+## 2026-07-22 354b 家长本机学习记录清除与自包含观察清单独立验收
+
+- 状态令牌：`parent_delete_all_browser_passed / real_parental_challenge_missing / self_contained_manifest_46_passed / observationAllowed_false / privacy_release_blocked`。
+- 家长“设备与声音”页使用应用内内联二次确认，不调用 `window.confirm`。首次点击、取消、关闭面板和 `pagehide` 均零写入；确认后只删除 `starDinoSessionRuntime`、`starDinoCompletedLevels`、`starDinoLearningStats`、`starDinoFreePianoRuntime` 和 sessionStorage 的 `starDinoM03AudioAttempt`，保留声音、减少动态以及无关 local/session storage。确认前先停止麦克风、教学音和计时器，随后回到无 active/history/milestone/autoplay 的唯一首任务地图。
+- 主管独立复跑：家长清除 `13/13`、PWA `10/10`、观察版本 `9/9`、麦克风 `17/17`、输入 `12/12`、sessions `74/74`、clean-state `124/124`；确认说明和取消/确认按钮在 834x1194 触控视口中同时可见，孩子地图和课中没有可见或 ARIA 删除入口。
+- 主管发现旧 `release-bundle-policy.json` 未包含 `roof-blueprint-overrides.css`、`chapter3-visible.css`、`course-director.css`、`parent-experience.css`，导致 354a 的 42 文件确定性 ZIP 不是自包含页面。策略已补为 46 文件，strict bundle 新增 `index.html` 本地 `src/href` 完整性断言；旧 354a ZIP 仅保留缺陷追溯，不再作为当前证据。
+- 当前冻结核心：`app.js 15674BC3...09C8D9`、`index.html FF30FB81...34BBC5`、`service-worker.js BAD487F1...B0C6E`、manifest `018DEAEA...71FC8`。这只关闭浏览器原型的本机学习数据清除，不关闭真实家长挑战、原生隐私、实体 iPad 权限或发布清关；`observationAllowed=false / releaseCleared=false` 保持。
+
+## 2026-07-21 354a 麦克风生命周期与监督事实源独立验收
+
+- 状态令牌：`web_privacy_surface_current_partial / microphone_browser_background_release_passed / physical_iPad_permission_missing / parent_delete_all_missing / observationAllowed_false / privacy_release_blocked`。
+- 主管核对本地与 `http://127.0.0.1:4173/` 实际服务的三个核心哈希一致：`app.js C6E79EBA...121560`、`index.html 586E51FD...E8E9`、`service-worker.js 36A14397...7DBA`。`docs/30_OBSERVATION_CANDIDATE_354A.json` 冻结 42 个运行文件；353b manifest 保留为历史候选。
+- 独立复跑通过：麦克风生命周期 `17/17`、输入可靠性 `12/12`、观察版本 `9/9`、PWA `10/10`、品牌 `6/6`、课程主页 `68/68`、非阻挡与阶段结算 `62/62`、R01B `31/31`、精确锚点对抗 `9/9`、音频合同 `22/22`、AUDIO-A `66/66`、AUDIO-B `46/46`、AUDIO-C `46/46`、LP04 音频 `11/11`。普通答错/答对继续原场景反馈，只有完整正式阶段目标才出现一次自动小结并回到唯一下一任务。
+- 浏览器 hidden/pagehide 已证明停轨、关麦克风 context、取消监听 RAF、清除晚到请求并且可见/pageshow 不自动重开；麦克风仍只能产生 experimental/assisted 证据，不能单独写 strict stable/retained。实体 iPad 权限、切后台/来电、原声钢琴、扬声器串音与 Web MIDI 仍 missing。
+- 本次监督更新只改 manifest、事实审计、隐私/观察/调度文档与确定性打包指向，不改课程音序、掌握阈值、运行代码、素材或外部 UI 隔离裁决。`observationAllowed=false / releaseCleared=false` 保持不变；下一项本地可关闭 P0 是家长二次确认的“清除全部本地学习数据”，但必须等本候选门禁收口后再窄派工。
+
+## 2026-07-20 Web 数据、权限与网络独立审查
+
+- 状态令牌：`web_privacy_surface_current_partial / external_runtime_network_static_passed / child_microphone_observation_blocked / privacy_release_blocked`。
+- 主管按冻结的 353b 三个核心哈希审查了全部存储调用、麦克风获取/分析/释放、MIDI 解析、Service Worker fetch/cache 和运行资源。机器事实源为 `docs/64_WEB_DATA_PERMISSION_AND_NETWORK_INVENTORY.json`，家长可读说明为同号 Markdown；本轮不改运行文件或 manifest。
+- 当前运行静态范围内没有外部 URL、第三方 SDK、分析、广告、账号、云同步、WebSocket/beacon、文件上传或原始音频存储。六个 `localStorage` 键、两个 `sessionStorage` 键和一个同源静态缓存均已逐项登记；麦克风波形只在内存中分析，MIDI `sysex=false` 且不保存 velocity/设备身份/完整字节流。
+- P0 未关闭：hidden/pagehide/blur 只停止判分，不停止 MediaStream；家长页没有清除全部本地学习数据；当前家长区不是发布级家长挑战。因此成人 `docs/60` 可继续做**不启用麦克风**的布局与教学音预听，但不得开展儿童麦克风观察，`observationAllowed=false / releaseCleared=false` 不变。
+- 另有 MIDI 断开/处理器释放、实体 iPad 权限和真实设备、原生 `PrivacyInfo.xcprivacy`/用途字符串、隐私政策/App Store 答案/发行地区审查继续 missing。`check:privacy-state` 只证明当前事实一致；`check:privacy-release` 必须在七项阻断关闭前失败，不能用一份清单替代发布通过。
+- 调度：该发现需要下一次原型运行写入时作为一个独立 P0 窄修处理，不与课程、UI 外审替换包、LP05、素材或全局重构捆绑；在唯一运行写者收到明确派工前，主管保持 353b 冻结，不自行漂移 candidate id。
+
+## 2026-07-20 第四、第五章课程故事与状态事实复核
+
+- 主管重新交叉核对 `docs/03/09/14/17/24/33/34/35/40`。第四章仍保持“高低音区 -> 低音键位 -> 左手邀请 -> 低音谱表 -> 低音桥”，第五章仍保持“同名跨音区 -> 轮流 -> 大谱表会合 -> 分声部 -> 接力结局”，同时弹奏只作同等奖励的可选路线；没有发现需要改音序、音高或故事地理的新矛盾。
+- 修正真实事实漂移：`docs/17` 的公开 TH01/TH02 关名从唱名改为 `两个 C 说你好`、`G 回声接力`；`docs/08/23/48/51/56/README` 不再把已接受的 LP04/R01B 写成下一项或未证明工作；`docs/34` 与观察事实统一到 353b。
+- 新增 `tools/curriculum-status-fact-audit.mjs` 并纳入 `check:quick`，固定检查当前观察候选、R01B 状态、公开音名关名、成熟 App 总账、成人 iPad/教师卡、353a 历史边界和过期派工禁句。当前专项通过 `52/52`。
+- 本轮不改运行、课程音序、掌握门槛、素材或 manifest。LP05 仍等待成人实体 iPad 预听、方向性观察和主管明确窄派工；`docs/57` 仍等待幼儿钢琴教师复核。
+
+## 2026-07-20 C4-R01B 完整生命周期主管独立验收
+
+- 唯一运行写者冻结 `app.js` SHA-256 `1598F42AC37F017AE240F9E8AF40A0B1E10AAD8B3F2C909E5397F7163BFF616D` 后停止写入；主管检查实现确认 retained 完成时只接受 action 保存的 session+时间精确命中的唯一 stable，不再回退选择其他 anchor。
+- 主管把独立对抗探针扩为缺失锚点、同 session 时间错配和重复精确锚点歧义三种场景，`9/9` 全部 fail-closed：不写 replacement stable/retained，不错误关闭 retained 候选，浏览器错误 0。
+- 独立复跑：R01B lifecycle `31/31`、R01A `35/35`、foundation `20/20`、LP04 `27/27 + 11/11 + 8/8`、sessions `74/74`、LP01/LP02 `137/137`、非阻挡/phase 结算 `62/62`、课程导演 `68/68`、音名 `286/286`、clean `124/124`、PWA `10/10`、quick/strict 全部通过。
+- 运行扫描中跨产品标识、`C3-X01`、LP05+ 和未批准媒体引用均为 0；`4173` 在线字节与本地 `index.html/app.js` 哈希一致，产品身份为星龙工坊。
+- 裁决：`C4_R01B_browser_lifecycle_accepted_uncommitted / exact_anchor_P1_closed / LP05_not_auto_unlocked / release_not_approved`。后续 353a 已关闭产品名漂移，353b 又补齐家长可核对的观察版本号并冻结当前 manifest；完整证据见 `docs/59_C4_R01B_SUPERVISOR_ACCEPTANCE_2026-07-20.md`。
+
+## 2026-07-20 外部 ChatGPT 两项独立审查接收与去重裁决
+
+- `01_course_story_phase_audit` 已回传、通过严格结构门禁并完成主管内容复核。结果 ZIP 为 `35,034` bytes / SHA-256 `4F009D1C7C52342492A12FFF0BCB1456132259817B05BAC123E86F0AA8C9DBAD`；最终状态为 `structurally_valid / supervisor_triaged / no_auto_approval`。完整分级见 `docs/56_EXTERNAL_CHATGPT_AUDIT_TRIAGE_2026-07-20.md`。
+- `02_child_ui_ux_visual_audit` 原始回传 ZIP 为 `6,942,469` bytes / SHA-256 `245A8E7B1935A5E38498E3C4DCCB492178ADDB0A71CCBBA1836C873A66E656BC`；它在 8 个 Markdown 外夹带 4 张嵌套 PNG，因此原包继续隔离。随后主管只对该固定源哈希和固定 12 项条目执行白名单净化，得到 `34,908` bytes / `199DB652...B9DD` 的 8 项 Markdown-only 包；逐文件哈希与原包中的 Markdown 一致，已在 `docs/65` 完成分级。四张 PNG 从未进入净化包、运行或素材批准。
+- 上传任务包位于 `G:\新电脑E盘\个人\大顺\钢琴\chatgpt_web_task_packs_2026-07-20`。上传 ZIP 已存在并有本地校验记录：课程包 `7,054,750` bytes / SHA-256 `AB8D5E79F55291106448F4AB61A03550A24FF5C4F869D55007641AD98C1BF423`，UI 包 `7,040,373` bytes / SHA-256 `CB95449F243041835B22515060ED18CD105CC2040A52FA86CE2CFD7A462C716D`。它们是输入包，不是审查结果。
+- 两项外部总审均已由“等待外部”转为“已验真、已分级、不得绕过 `docs/56/65` 重审或原样派工”。原始 UI PNG-bearing ZIP 不能解除素材门禁，也不能成为直接实现依据。
+- 去重不阻塞已明确的窄实现。LP04、R01B 和品牌事实源均不重做；UI-P0A/P0B/P0C 已在 355a/356a/357a 关闭，358a 替换 M08 可追溯角色素材，359a 关闭主页内部滚动残留。当前先对精确 359a 做实体 iPad 成人预听，再决定方向性观察。LP05、S01 教师门控减负和家长回看 B/C 必须分别经过新的窄派工；外部意见不得自动修改运行代码、课程音符、掌握规则、界面或素材。
+- 两项任务只属于星龙工坊 `G:\新电脑E盘\个人\大顺\钢琴\web_star_dino_workshop`；禁止引用 `G:\DevProjects\MidiInputProbe`、`keyboard_captain_*`、琴键小队长、MatePad 或 `com.dashun.midiprobe` 的源码、截图、素材和证据。
+- 回传接收合同见 `docs/55_EXTERNAL_CHATGPT_AUDIT_RESULT_INTAKE_PROTOCOL.md`。当前 `tools/verify-external-chatgpt-audit-results.ps1` 自测 `9/9`，真实目录为 `ready_for_supervisor_content_review / validCount=2 / invalidCount=0`，两份输入包哈希有效、自动批准为 false；主管内容分级已分别记录在 `docs/56/65`。
+- 2026-07-23 用户再次提供的两个下载 ZIP 与登记原件 SHA-256 完全一致，不构成新版本或新一轮审查。课程副本字节一致；UI 原包中的 8 个 Markdown 与净化包逐文件哈希一致。本节其余初始隔离过程只保留历史。
+
+## 2026-07-20 花园星芽 v2 候选初审及后续撤销
+
+- 本节所述 v2 撤销时，v1 运行文件 `assets/runtime/xingya-garden-invite-v1.webp` 为 `31,996` bytes / SHA-256 `F2B305052BE42B47DD67795498E04733D7522C3312152B1308D7BB9D053FA5AB`；其整矩形眼部 alpha 修复在浅底产生左眼外黑条和眼缘伪影，因此该组旧字节保持 rejected，不能通过修改门禁获得批准。
+- v2 位于 `concepts/runtime-candidates/ch03-garden-xingya-v2/`，从既有 `xingya-model-sheet-v1.png` 确定性重建。主管曾对当时的 `33,624` bytes / SHA-256 `E500F4C5F495A5B6CD581F4A309765288E0639907E02F154CD40814E5AA9651C` 快照完成机器门禁和课堂尺寸初审；该结论只属于那个精确快照。
+- 在运行集成开始前，用户进一步查看图片并明确指出“左边多出来一块白色，眼睛中间还是有一块透明区域”。媒体任务因此继续修改同一个 v2 构建器和输出；共享工作树中随后已观测到 WebP 从 `E500F4...` 漂移为 `4F318F...`，又变为 `EF3EED...`，脚本哈希也从 `B7E477...` 变为 `18EF63...`。这证明 v2 目录仍是活动生产目录，不是冻结候选。
+- 唯一运行写者在读取到第一个哈希冲突时正确停止，当时未复制候选、未改 runtime、PWA 或资产合同；因此该检查点的 PWA 正确保持资产完整性阻断，而不是放宽门禁。
+- 先前 v2 的 `prototype_runtime_source_approved_for_controlled_integration` 裁决已撤销，最终状态为 `user_visual_rejected / superseded_by_user_selected_v3 / releaseCleared=false`。下方 v3 是新的冻结候选和独立裁决，不能反向把 v1/v2 旧字节改写为已批准。
+
+## 2026-07-20 花园星芽 v3 用户选定图独立裁决
+
+- 用户随后明确指定 `D:/Users/Administrator/downloads/image.png`：“用这个吧”。媒体任务没有再修补眼睛，而是把该 512x512 RGBA 图原样冻结为 `concepts/runtime-candidates/ch03-garden-xingya-v3/sources/user-provided-xingya-garden-eye-reference.png` 和同字节候选 PNG；三者 SHA-256 均为 `6B8AF92EC623AA9FCDF20CE239F32958AB82FE26992EE9FCE6D6A0ED2580F28D`，PNG 为 `196,851` bytes。
+- 候选 WebP 为 `30,010` bytes / SHA-256 `AD83E1626A52FE86A49F882953F3089F5142A607B1B5B24F084D70EA775B9EF5`。四角 alpha 为 0，前景 bbox `[62,26,449,488]`；三颗青绿色头芽、完整身体/双脚/尾巴、花园背带和星星背包保留，无压力服。
+- 主管独立查看用户源图、浅底、深底、棋盘 before/v3 接触表、原像素眼部放大图及 1024x768、1194x834 课堂合成。v2 的蓝色眼内透明裂缝消失，用户选定的自然眼白/虹膜/瞳孔/高光完整；课堂尺寸不挡教学目标或键盘。用户源图本身存在的边缘抗锯齿保持原样，没有由候选管线新增白块。
+- 主管独立执行 `--determinism-check` 和 `--verify-only` 后再次核对哈希：两次完整构建 byte-identical，manifest 仍为 `63B04505...FD8`，脚本仍为 `07F53D44...6F20`，PNG/WebP 哈希与审前一致。双眼审计区共 `5,230` 像素，源/PNG/WebP minimum alpha 均为 255，transparent-hole pixels 为 0，alphaChangesFromUserSource 和 leftEyeExteriorAddedWhitePixels 均为 0；运行引用与禁用产品标识扫描均为 0。
+- 裁决为 `prototype_runtime_source_approved_for_controlled_integration / user_selected / release_provenance_partial / external_similarity_clearance_missing / releaseCleared=false`。允许唯一运行写者把精确 v3 WebP 复制到既有 `assets/runtime/xingya-garden-invite-v1.webp` URL，更新 docs/16、PWA cache/字节/哈希及角色门禁，并做当前真实运行截图和冷离线复验；不得把用户选择或原型批准误写为发布版权清关，不得夹带课程、R01B、家长回看 B/C、LP05 或其他媒体。
+
+## 2026-07-20 `overhaul-352b-garden-v3` 受控运行接入独立验收
+
+- 稳定运行 URL `assets/runtime/xingya-garden-invite-v1.webp` 现承载用户选定 v3 的精确 WebP：`30,010` bytes / `512x512` RGBA / SHA-256 `AD83E1626A52FE86A49F882953F3089F5142A607B1B5B24F084D70EA775B9EF5`；Service Worker cache 为 `star-dino-pwa-overhaul-352b-garden-v3`。`app.js`、HTML/CSS、课程、session/mastery、音序、音频和六张密封服未随本次接入改动。
+- 主管没有沿用支线自报，已在冻结工作树独立复跑：角色 `29/29`、PWA 冷离线 `10/10`、Chapter 3 `74/74`、LP01/LP02 `137/137`、课程导演 `68/68`、家长历史/自由琴 `20/20`、phase 结算/非阻挡反馈 `62/62`、quick 和 strict bundle 全部退出 0；运行/HTML/CSS 中 `concepts/**`、未批准 `audio/**` 和 technical preview 引用为 0。
+- Chapter 3 专项原先只伪造单条 C2-03，已不能满足当前课程导演的完整 C1/C2 正式先修合同。它现改用共享 canonical C1/C2 fixture，同时保留“缺少正式先修则入口隐藏”的负向场景；没有跳过真实 `sealed -> scanning -> safe-open`、session、输入、恢复或 mastery 隔离断言。C3-02 阶段尾还明确验证一次紧凑、无按钮 milestone，单键和中间 action 仍无结算。
+- 1024x768 与 1194x834 原图中，safe-open 使用三芽花园装，眼白/虹膜/高光完整，无 v1/v2 黑条、白块或眼内透明裂缝；角色不挡教学目标或键盘。scanning 仍使用完整密封服。
+- 裁决为 `prototype_runtime_integration_passed / pwa_asset_integrity_blocker_closed / release_provenance_partial / external_similarity_clearance_missing / releaseCleared=false`。实体 iPad、真实 MIDI/声学麦克风、教师和儿童观察、最终来源/外部相似性、原生工程、TestFlight 与商店证据继续 missing。
+
+## 2026-07-20 `overhaul-352a-p0d-milestone` 阶段结算裁决
+
+- 用户进一步明确“结算框应该是完成了阶段一个小目标之后出来”。这条新裁决取代下方 2026-07-19 的“任意正式自然休息均可结算”：单音、action、assisted/modeled、安全休息和阶段中间 bundle 全部保持场景反馈，不弹结算。
+- 只有正式完成 phase 尾 bundle，且该 phase 所有 bundle 的课程 action 均有 `formalSession === true` 完整证据时，才显示一次“这一阶段完成！”。第一章 phase 尾为 `C1-03/C1-06/C1-09/C1-10`，第三章为 `C3-02/C3-04/C3-06/C3-07`；第二、四章当前每 bundle 各自构成一个 phase。
+- `review-deferred`、`assisted-safe-rest`、`early-rest`、`guide-rest`、`lp01-early-rest`、direct/debug、voluntary replay、零完成和 partial session 均拒绝。C3/C4 合法业务完成 reason 采用完整课程证据加负向排除，不能硬绑 `natural-rest`。
+- 专项 `62/62`，课程导演 `68/68`、sessions `74/74`、clean `124/124`、iPad `43/43`、motion `19/19`、quick/strict 通过。家长区独立复跑 `20/20`、LS08 `131/131`、LP01-LP02 `137/137`、LP03 `54/54`、LP03 supervisor `32/32`。LP03 两个门禁中 5 条旧顶部进度断言已同步到 P0-C 的 canonical `第 n/3 站` 和唯一 `开始这一站` 入口；只改测试事实源，未改运行逻辑。
+- 该检查点当时的裁决为 `P0_D_phase_tail_milestone_browser_passed / parent_phase_A_passed / pwa_asset_integrity_blocked / physical_iPad_and_child_observation_missing / release_not_approved`；其中 PWA 资产阻断已由上方 352b 精确接入关闭，其余发布外部证据仍缺失。
+
+## 2026-07-19 `overhaul-350c-milestone-settlement` 小目标结算裁决（已被 2026-07-20 phase 尾规则取代）
+
+- 用户明确纠正节奏：结算框应在完成阶段性小目标后出现，而不是每按一个键出现，也不是被永久取消。主管据此把 `docs/52` 的绝对禁令改为分层合同：单键反馈和组内 action 衔接无结算；正式 session 到自然休息点且已有完成 action 时，结算一次。
+- 运行使用独立 `data-result="milestone"` 结构，隔离旧 level/staff/final 结果构图。卡片位于上方、约 132px 高、无按钮、无成绩与速度，不压琴键、不把背景 inert；可见时输入被忽略，约 `2.3s` 后自动回主页，不创建下一 session。
+- 结算内容读取既有 bundle/action 世界结果与 `childJourneyPlan()` 的下一站；阶段末显示“这一阶段完成！”，其他休息点显示“小目标完成！”。voluntary replay、direct/debug、零完成暂停以及同 bundle 自动下一 action 均不触发。
+- session 回归首次冻结系统 `Date` 后暴露自动返回反复延期；最终视觉时长改用 `performance.now()` 单调计时，学习记录、stable/retained 和跨日证据仍使用原 ISO 时间，课程语义未改。
+- 独立门禁：小目标结算 `56/56`、课程导演 `68/68`、session/retention `74/74`、clean `124/124`、iPad a11y `43/43`、motion `19/19`、PWA `10/10`、quick/strict 通过。裁决为 `P0_D_milestone_settlement_browser_passed / uncommitted / physical_iPad_and_child_observation_missing / release_not_approved`。
+- 调度边界不变：本次只解决孩子完成节奏与回主页连续性，不借机改课程音序、掌握阈值、媒体、角色装备、LP05+ 或家长回看；Grok 视频额度仍硬暂停。
+
+## 2026-07-19 `overhaul-348a-course-director-p0c` 主页课程单一事实源裁决
+
+- 用户实玩时仍看到旧十二按钮主页；主管在同一个星龙工坊 `4173` 页面复现：刷新前确为旧地图，刷新后虽出现 348a 课程导演，顶部仍说 `基地 12/12 · 小恐龙待跳`，中央却要求续 `C1-01`，右侧入口又写旧名 `找到 C`。因此问题不是用户没有理解，而是页面存在缓存滞后和三套课程事实。
+- P0-C 把主页品牌改为 `学习旅程`，并让顶部 `第 n/总数 站 · 状态`、四章路线、`本领：`、`接下来：` 和唯一圆形入口都从 `childJourneyPlan()` 派生。旧完成集合与 partial formal session 冲突时，主页只显示 canonical resume；完成 C1-01 后，中央和入口都变为 `叫醒三颗小灯 / 第 2/10 站 · 下一站`，但不会自动创建 C1-02 session。
+- 新 Service Worker 身份为 `star-dino-pwa-overhaul-348a-course-director-p0c`。已有控制器检测到更新时，只在 map 且无 active session 的安全点刷新；课中只记 pending，避免更新打断教学音和孩子输入。
+- 专项 `58/58`，其中新增用户同型的 `legacy-formal-conflict`；截图位于 `screenshots/child_course_director_348b/`。共享门禁通过：P0-A `54/54`、sessions `74/74`、clean `124/124`、iPad `43/43`、workshop `36/36`、孩子音名 `286/286`、palette `17/17`、motion `19/19`、contrast `9/9`、PWA `10/10`、LP04 `27/27`、LP04 input `8/8`、LP04 audio `11/11`、quick 和 strict bundle。
+- 调度纠偏：原型/UI 任务仍卡在过期 P0-A 的 `waitingOnApproval`，主管已经发送“取消旧等待、只读审查、不得编辑”的新指令。为避免无人处理与同时双写，本次 P0-C 窄修期间运行写入权由主管临时接管；该候选冻结后，原型任务只有在确认当前 SHA 并收到新的明确写入范围时才能恢复写入。
+- 裁决：`P0_C_home_fact_source_passed / parent_history_replay_missing / uncommitted / release_not_approved`。不得因主页更清楚而跳过 `docs/53`，也不得解锁 C4-R01B、LP05 或媒体运行接入。
+
+## 2026-07-19 `overhaul-348a-course-director` 全局孩子流程 P0 浏览器裁决
+
+- 主管没有把“隐藏十二个按钮”当作课程导演。运行侧现由单一纯派生状态按 `active -> resume -> 最早未完成 canonical bundle -> 下一章节 -> complete` 计算首页；旧 `levelIndex`、URL、完成集合和地图节点不再各自猜下一关。只看地图、刷新和 DOM 重绘不会创建 session。
+- 孩子主页现在展示四章故事路线、当前故事任务、当前考察重点和下一故事因果；当前任务之外的旧节点在孩子端不可见、disabled、不可聚焦。active 保持同一 `sessionId`；partial bundle 从首个未完成 action 建立 `lesson-resume` 与 `resumeOfSessionId`，不重播已完成动作、不插 opening review。
+- 专项 `44/44` 覆盖 clean、active、partial resume、C1->C2、花园 resume、C4 ready、当前内容 complete 和旧数据迁移；双激活只有一个 session。clean 实际完成 `C1-01` 后，主页唯一入口切到 `C1-02 / M02 / 叫醒三颗小灯`，直接回答用户“这个做完接下来干嘛”。原图位于 `screenshots/child_course_director_348a/`。
+- 受影响回归通过：P0-A `54/54`、sessions `74/74`、clean `124/124`、iPad a11y `43/43`、workshop identity `36/36`、孩子音名 `286/286`、AUDIO-A `66/66`、palette `17/17`、motion `19/19`、contrast `9/9`、PWA `8/8`、quick 与 strict bundle。严格包为 42 文件、运行素材 1,641,265 bytes。
+- 裁决：`P0_A_browser_passed / P0_B_child_home_core_passed / parent_history_replay_missing / uncommitted / release_not_approved`。本节当时的“不得引入结果弹层”已由上方 350a 精确化为“不得引入逐键、手动关闭或与课程导演平行的结果弹层”；唯一允许的是小目标自然休息的自动 milestone。主页最终美术可以后续继续打磨，但不得再引入孩子端自由选关、多个 enabled current 或平行下一关事实源。实体 iPad、真实输入、教师/儿童和发布来源证据继续 missing。
+
+## 2026-07-19 LP04 无复习教学闭环原子检查点独立裁决
+
+- 原型首个冻结回执声称 LP04 主闭环 `27/27`、输入 `8/8`、音频 `11/11`、foundation `20/20`、R01A `35/35` 与 quick 通过。主管没有直接放行：独立复跑 LP03 得到 `53/54`，确认 LP04 一解锁，家长与完成摘要立即切到“向下回声 0/3”，吞掉了刚完成的“三块地基已安放”故事结果。该失败与用户“一个游戏后面接下来干嘛不成系统”的反馈同源，不能通过删断言或把 parent identity 退回 LP03 处理。
+- 窄修保持 LP04 为唯一下一入口与 parent identity，只在 LP04 `0/3`、无 active/resume/route evidence 时，把真实地图入口、家长状态和学习详情连接为“三块低音地基已经安放、接好，所以现在可以听 E-D-C 的向下回声”；active、resume、partial 和 complete 继续使用 LP04 自身进度，不重复上一课说明，也不暗示 stable/retained。
+- 修正后的冻结 `app.js` SHA-256 为 `53DB06759C1693F03914E187389EDAE57D832A1C1B10A2850BBE00A052F0A0F3`。主管独立复跑通过：LP03 `54/54`、LP04 `27/27`、LP04 输入 `8/8`、LP04 音频 `11/11`、foundation `20/20`、R01A `35/35`、sessions `74/74`、clean-state `124/124`、孩子音名 `286/286`、输入 `12/12`、声音设置 `13/13`、quick 与 strict bundle。完整教学音套件也退出 0：AUDIO-A `66/66`、AUDIO-B `46/46`、AUDIO-C `46/46`、LS08 `131/131`、LP01-LP02 `137/137`、R01A 音频 `12/12`、LP03 `54/54`、LP03 supervisor `32/32`、LP04 音频 `11/11`。
+- 裁决：`lp04_no_review_atomic_checkpoint_passed / uncommitted / C4_R01B_not_done / release_not_approved / P0_A_dispatched`。该检查点只允许作为 P0 改造的工作树基线；没有三轮六视口合同、实体 iPad、真实 MIDI/声学钢琴、人工听审、教师/儿童观察或发布来源清关，不能晋升为成熟 App 或发布证据。
+
+## 2026-07-19 用户实玩触发的全局孩子流程 P0
+
+- 主管直接复看用户当前 `http://127.0.0.1:4173/`：主页同时显示第一章十二个彩色关卡按钮和 `S01` 当前入口，实际可见 `map-node=13 / enabled=13 / aria-current=1`；旧节点、当前节点和课程阶段没有形成单一视觉优先级。当前截图状态虽然内部调度写着“基地 12/12 · 小恐龙待跳”，孩子仍必须从一屏标签中自行判断下一步。
+- 运行源码确认普通错误仍会创建 `.stage-input-toast` 居中修复框；非 session/direct 或回看完成仍可调用 `showResultModal()`。这与 `docs/03/09/31` 已锁定的“场景内反馈、短课自动续动作、自然休息无成绩弹窗”矛盾，用户实际感受证明不能再以“自动消失”或“只在修复时出现”作为放行理由。
+- 新增 `docs/52_CHILD_COURSE_DIRECTOR_AND_NONBLOCKING_FEEDBACK_ACCEPTANCE_CHECKLIST.md`，把孩子主页收敛为唯一 current journey marker：active -> resume -> 下一 bundle -> 下一章节入口 -> 完成世界。已完成地点降为景物，未来地点降为远景，历史回看移入家长区；地图、URL、`levelIndex` 和完成集合不得分别猜下一关。
+- 调度裁决：`global_child_flow_p0 / runtime_not_approved / current_LP04_atomic_fix_may_finish / R01B_and_new_content_paused`。原型任务当前只完成正在进行的 LP04 原子事务、家长证据和崩溃窗口收口，不开始 R01B；随后先交付无阻挡反馈窄修，再交付孩子主页课程导演。主管必须从 clean 和“第一章全完成、S01 待开始”两种状态逐 bundle 独立走通后才可恢复扩课。
 
 ## 2026-07-19 `overhaul-347a-c4-r01a` 正式晋升与 LP04/R01B 解锁
 
@@ -448,22 +848,38 @@
 
 | 任务 | 当前状态 | 当前唯一工作 | 主管现在应做什么 | 下一次允许发消息的触发点 |
 | --- | --- | --- | --- | --- |
-| 课程故事/主管 | `active / 347a approved browser baseline / LP04+C4-R01B supervising` | 维护课程、故事、成熟 App 总账本与唯一放行裁决；R01A 已独立通过并提交，现只读审查 LP04 与真实 C4-03 整合 | 不写运行状态机或媒体；只在会虚构教学证据、串项目、改课程、挂死门禁或污染来源的 P0/P1 时介入 | LP04/R01B 阶段 P1 或正式冻结回执；Grok 额度外部状态变化 |
-| 原型/UI | `active / LP04+C4-R01B next unique runtime / baseline af9aa28` | 只实现 `docs/51` 的 LP04 地洞回声和 `docs/48` B 门禁，使用真实 C4-03 actions 完成同 session 整合 | 不做 LP05+、完整咚咚、低音谱表、左手、美术升级或媒体接入；不得回改 LP01-LP03、R01A 核心和 Chapter 1-3 证据 | 只有 P0/P1 或完成专项、合同三连、共享回归后才回报；普通中间建议不打断 |
-| 动画/语音/音效 | `idle / Grok hard-paused / LP03 offline composite audit independently ruled` | 保留 Batch20 一次 402/403 失败证据及 LP03 三条既有原片 source-only 裁决；不再发供应商调用 | 不改 runtime/课程/主管文档，不上传录音或个人资料，不生成、不预检额度、不重试/换号/新建批次；三条 LP03 素材不得复制到 runtime | 用户以后明确确认 Grok 额度恢复；或主管下发不依赖供应商的新离线证据工作单 |
-| 用户/真机/儿童证据 | `protocols_ready / participants_and_devices_waiting` | `docs/37` 已锁定教师/儿童观察；`docs/38` 已锁定实体 iPad、MIDI、麦克风和音频测试 | 不要求现在提供私密录音、孩子资料或伪造真机截图；先让运行流程稳定 | 冻结纵切后才请求方向性观察；原生 N0/N1 后才执行真机矩阵；最终候选再做 3-5 名复测 |
+| 课程故事/主管 | `active / 359a_map_return_P0_passed / external_audits_closed / teacher_review_card_ready / adult_iPad_preflight_next` | 维护总账本；等待精确 359a 的成人实体 iPad 预听结果 | 不改课程音序/mastery；`docs/57/61/71` 等教师审查；LP05 锁定；原型无阻断时不追加消息 | 成人预听、教师卡回传或阻断冲突 |
+| 原型/UI | `idle_frozen_359a / no_runtime_dispatch` | 保持 359a 精确运行字节和既有门禁，不主动继续改版 | 不夹带 S01、课程、LP05、全局重构或媒体；成人预听前不生成新候选 | 主管依据真机/教师/儿童证据下发新的窄合同 |
+| 动画/语音/音效 | `idle / seven-prop_v2_six_source_only_beacon_partial / M08_A2_prototype_runtime_only / Grok hard-paused` | 保留 A2 来源链、V2 六件 source-only 切图和灯罩退回证据；不顺手改运行 | 不改 runtime/课程；不上传录音或个人资料；Grok 额度耗尽期间不调用、预检、重试或换号；六件也不通知原型接入 | 灯罩新合格来源、provider 条款/发布权利、外部相似性或主管新的窄生产合同回传 |
+| 外部 ChatGPT 审查 | `course_valid_and_triaged / UI_sanitized_valid_and_triaged / closed` | 两份外审内容均完成主管分级 | 原始 PNG 继续隔离；外部意见不自动改运行、课程或素材 | 后续只按 docs/56/65 的已接受窄项执行，不重跑总审 |
+| 用户/真机/儿童证据 | `protocols_ready / exact_359a_required / adult_iPad_preflight_missing / observationAllowed_false / participants_waiting` | 成人按 `docs/60` 对 `359a / app.js 5AB01914...` 做实体 iPad 预听 | 旧 354b-358a 结果只能诊断；成人预听前不做儿童观察 | 成人预听回传后，由主管决定是否开放首名方向性观察 |
 
-工作区当前的已复核浏览器教学基线是 `overhaul-347a-c4-r01a`，冻结提交为 `af9aa2831bb90c94fd10fdfbe3ca89ba4d03021a`。它保留第一、二章、第三章 `LS01-LS08` 与第四章 LP01-LP03 的课程、session、输入、错误修复、故事和布局结构，并新增不创建正式 C4-03 的 opening-review 调度核心与隔离生命周期证据。它不是完整 C4-R01、媒体集成、实体 iPad、真实学习效果或 Release 基线。任何 source-only 视频或后续未冻结运行都不能冒充新基线。
+工作区当前已提交的获批浏览器教学基线仍是 `overhaul-347a-c4-r01a` / `af9aa2831bb90c94fd10fdfbe3ca89ba4d03021a`。359a 已按 `app.js 5AB01914...E566` 和 manifest `C153CDB5...E4BC` 冻结，继承 UI-P0A/P0B/P0C 与 M08 A2 来源修复，并关闭主页内部滚动残留造成的首屏导航 P0；但成人实体 iPad 预听未完成，所以仍不是儿童观察候选。354b-358a 只作历史证据。互动故事回看 B/C、LP05+、媒体发布集成、实体 iPad、真实学习效果和 Release 仍缺；任何活动候选、source-only 视频或自动化结果都不能冒充已批准发布基线。
 
 ### 当前命令队列
 
 | 顺序 | 所有者 | 指令 | 当前动作 |
 | --- | --- | --- | --- |
-| `NOW-RUNTIME` | 原型/UI | 按 `docs/51` 实现 LP04 的 E3-D3-C3 地洞回声，并在同一候选内完成 `docs/48` 的 C4-R01B 真实 C4-03 整合 | `dispatch_ready / baseline_af9aa28 / LP04_and_R01B_same_candidate / media_locked` |
-| `NOW-MEDIA` | 媒体 | Batch20 在 1 次 outer 402/tool 403 后硬暂停；LP03 三条既有 Batch7 原片已完成主管 source-only 裁决，当前无媒体运行接入工作 | `external_quota_exhausted / lp03_composite_audit_ruled / idle / runtime_and_release_forbidden` |
-| `NEXT-RUNTIME` | 原型/UI -> 主管 | LP04/R01B 冻结后只读独立复核真实 C4-03 同 session、困难收短、story-first 间隔、E-D-C 教学因果和提交边界 | `waiting_LP04_R01B_handoff / do_not_start_LP05` |
+| `DONE-GARDEN-V3` | 媒体/主管/原型 | 用户选定 v3 已冻结、独立验真并完成 352b 受控 runtime/PWA 接入 | `completed / exact_hash_AD83E162...B9EF5 / release_clearance_false` |
+| `DONE-C4-R01B` | 原型/UI + 主管 | 真实 C4-03 R01B 完整生命周期与精确 retained 锚点 | `frozen_app_1598F42A / lifecycle_31_of_31 / supervisor_adversarial_9_of_9 / accepted_uncommitted` |
+| `DONE-EXTERNAL-COURSE` | 网页端 ChatGPT -> 主管 | 课程、故事与阶段节奏独立审查 | `result_valid / supervisor_triaged_in_docs56 / no_auto_approval` |
+| `DONE-EXTERNAL-UI` | 网页端 ChatGPT -> 主管 | 固定源净化 8 个 Markdown、严格验真、逐项分级 | `sanitized_zip_199DB652 / intake_9_of_9 / triaged_in_docs65 / no_auto_approval` |
+| `DONE-UI-P0A` | 原型/UI + 主管 | 缩减 M01 wrong/correct/assisted 与 phase-tail 视觉强度 | `355a_frozen / supervisor_passed / manifest_4559045F / P0B_P0C_not_started` |
+| `DONE-UI-P0B` | 原型/UI + 主管 | 主页只突出唯一下一任务，并让 C1-01 完成产生真实世界结果 | `356a_frozen / supervisor_passed / home_23_of_23 / manifest_DC196F29 / P0C_not_started` |
+| `DONE-UI-P0C` | 原型/UI + 主管 | 自由琴键改为完整气密服并移除孩子端 MIDI 协议字样，家长设备页保持真实 | `357a_frozen / supervisor_passed / free_piano_17_of_17 / manifest_AD666DE4 / formal_storage_unchanged` |
+| `DONE-M08-A2-PROTOTYPE-INTEGRATION` | 媒体 + 原型/UI + 主管 | 从可复现 T1 点指姿势只裁透明边缘，完成来源审计、三视口和 358a 受控运行/PWA 接入 | `358a_frozen / A2_AF3DCD97 / verification_4E12FBC7 / T1_7_T5_0 / releaseCleared_false` |
+| `DONE-MAP-SHELL-SCROLL-RESET` | 原型/UI + 主管 | 复现并关闭主页内部滚动残留，保持 M01 两次 C 属于同一阶段，并验证完整阶段后唯一下一任务为 M02 | `359a_frozen / map_scroll_12_of_12 / app_5AB01914 / manifest_C153CDB5 / runtime_assets_unchanged` |
+| `BLOCKED-M08-RELEASE-CLEARANCE` | 媒体 + 主管 | A2 只获 prototype runtime 批准；发布权利与外部相似性仍未清关，Route B 内置生图仍不可用 | `release_provenance_missing / external_similarity_missing / Grok_hard_paused / releaseCleared_false` |
+| `DONE-ASSET-INTEGRATION` | 主管 -> 原型/UI | v3 精确接入既有 runtime URL并关闭 PWA 完整性阻断 | `completed_at_352b / independently_passed / release_clearance_still_false` |
+| `DONE-BRAND-FACT-SOURCE` | 原型/UI + 主管 | 孩子端统一“星龙工坊”，PWA 353a，课程和 app.js 不变 | `brand_6_of_6 / pwa_10_of_10 / independently_passed` |
+| `DONE-OBSERVATION-BUILD-ID` | 原型/UI + 主管 | 家长区唯一 353b 版本号、孩子表面零泄露、PWA 冷离线一致 | `build_9_of_9 / brand_6_of_6 / pwa_10_of_10 / manifest_AD9B325A / independently_passed` |
+| `DONE-MICROPHONE-BACKGROUND-RELEASE` | 原型/UI + 主管 | 354a hidden/pagehide 幂等释放、晚到请求清理、可见后不自动重开 | `lifecycle_17_of_17 / app_C6E79EBA / manifest_E4A98185 / browser_passed_device_unverified` |
+| `DONE-PARENT-DATA-RESET` | 原型/UI + 主管 | 354b 家长页内联二次确认、精确清除、设置/无关存储保留、麦克风释放和干净主页 | `reset_13_of_13 / app_15674BC3 / manifest_018DEAEA / browser_passed_real_parental_challenge_missing` |
+| `NOW-ADULT-IPAD-PREFLIGHT` | 用户/成人 + 主管 | 按 `docs/60` 对精确 359a 核对版本、横屏、钢琴音、遮盖、音量和静音 | `exact_359a_manifest_C153CDB5 / result_missing / child_observation_forbidden_until_passed` |
+| `NOW-PRESCHOOL-TEACHER-REVIEW` | 用户/幼儿钢琴教师 + 主管 | 按 `docs/61` 复核当前高低音谱位、低音/左手顺序及 `docs/57` 听音到谱位短课 | `card_ready / teacher_result_missing / runtime_forbidden` |
+| `NEXT-DIRECTIONAL-OBSERVATION` | 主管 + 用户/教师 | 359a 成人 iPad 预听通过后，再按 docs/58 观察首名儿童 | `manifest_ready / observationAllowed_false / adult_preflight_and_participants_missing` |
+| `NEXT-PARENT-REPLAY` | 主管 -> 原型/UI | 家长 Phase A 已过；B/C 互动故事回看仍按章节隔离实施 | `phase_A_passed / phase_B_C_missing / wait_UI_P0_and_child_flow` |
 | `NEXT-C4-R01A` | 主管 | opening-review 调度核心已在 `af9aa28` 单独通过并提交；A 阶段关闭，不再回改 | `completed / independently_passed / historical_gate` |
-| `NEXT-LP04+B` | 主管 -> 原型/UI | 以 `af9aa28` 为唯一运行基线派发 `docs/51` LP04；候选内必须完成 C4-R01B 真实 actions 整合，且不得接媒体或 LP05 | `dispatch_ready / next_unique_runtime / separate_commit_required` |
 | `NEXT-AUDIO-AUDIT` | 主管 | 现有离线 LS04 包只保持历史通过；等待真人耳机/扬声器/iPad 听审，不能用自动响度与哈希冒充听感 | `offline_package_passed / runtime_forbidden / human_and_ipad_listening_missing` |
 | `BASELINE-REVIEW` | 主管 | `347a` 继承 `346a` 的全部课程与音频证据，并使 R01A 调度、隔离夹具、专用音频门禁和三轮 42 状态合同独立通过 | `passed_browser_teaching_baseline / C4_R01A_core_passed / external_evidence_missing` |
 | `NEXT-1` | 主管/基础设施 | 建立有效 Git 与私密录音忽略验证；不处理真实录音 | `passed_repo_ignore_lfs / baseline_commit_b431c1a` |
@@ -474,7 +890,7 @@
 | `DEVICE-EVIDENCE` | 未来原生任务/主管 | 按 `docs/38` 执行实体 iPad、触屏、USB/BLE MIDI、麦克风、音频会话、生命周期和压力矩阵 | `protocol_ready / native_and_hardware_evidence_missing` |
 | `IP-EVIDENCE` | 主管/媒体/外部专业人员 | 按 `docs/39` 收齐来源包、最终哈希、独立视觉/音乐相似性复核和发布地区专业意见 | `protocol_ready / final_assets_and_external_clearance_missing` |
 | `PARALLEL-MEDIA` | 媒体 | Batch13 为 12 调用/12 原件，Batch14 为 5 调用/4 原件；Batch15 在媒体工具前以 402 停止；Batch16 同一 ID 两次工具触发均额度失败；Batch17 零调用；Batch18 一次工具触发额度失败，后三批新原件均为 0 | `batch13_14_frozen / batch15_16_18_quota_failed / batch17_zero_call / runtime_and_release_forbidden` |
-| `PARALLEL-ART` | 媒体 | 从已选源概念确定性提取 Chapter 3 garden-mode 星芽 512px 透明候选；不写 runtime、不调用生成服务 | `completed / approved_for_339b_prototype_copy_only / release_not_cleared`；Chapter 4/5 批量概念仍暂缓 |
+| `PARALLEL-ART` | 媒体 | 旧 339b 花园角色链已被后续眼部修复和用户可见缺陷反馈取代；当前只冻结新的精细眼形候选，不写 runtime、不调用生成服务 | `v1_rejected / v2_user_rejected_and_mutating / v3_frozen_candidate_waiting / release_not_cleared`；Chapter 4/5 批量概念仍暂缓 |
 | `PARALLEL-AUDIO` | 媒体 | 复核 LS04 现有无音高反馈/Foley 与 C4/D4 教学音并播；只做本地确定性审核资产 | `completed / independently_passed_offline_package / runtime_forbidden / human_listening_missing` |
 | `PARALLEL-GARDEN-ART` | 媒体 | LS06/LS07 garden-art-v3 源包已收口并经主管独立审查；22 个透明道具保留为后续整合候选，knot3 拒绝，真实四步进度整合板仍缺失 | `completed_source_package / independently_audited / progression_integration_board_missing / runtime_locked / recording_closed` |
 
@@ -614,25 +1030,30 @@
 
 ## 成熟 App 总完成账本
 
+当前账本身份：`current_unapproved_browser_pwa_369d / direct_predecessor_369c / figma_a_stage_settlement_source_369b / staff_notation_source_369a / s01_pwa_predecessor_368b / portable_recovery_predecessor_367b / teaching_core_predecessor_366a / current_static_recovery_owner_369d / current_source_recovery_missing_369d / staff_notation_source_own_recovery_369a / observation_baseline_359a / all_approvals_false`。369d 只有精确静态恢复，源码/控制快照仍缺失；369c、369a 和 367b 的恢复证据只能证明各自角色，359a 观察证据也不能被任一后继浏览器候选继承。
+
 下表是主管长期检查的主账本。某个局部里程碑通过，只能更新对应一行，不能把项目整体状态直接改成完成。
 
 | 领域 | 成熟 App 放行条件 | 当前证据 | 当前状态 | 唯一负责人/下一触发点 |
 | --- | --- | --- | --- | --- |
-| 产品定位与课程合同 | 五章顺序、每短课目标、音符/谱位/音区、提示递减、played/stable/retained、故事因果和原生迁移不漂移 | `00/02/03/09/14/17/24/31/32/33/34/35/36` 已形成合同 | `passed_spec / teacher_evidence_missing / native_runtime_missing` | 主管；运行实现遇到冲突时裁决，正式发布前教师复核 |
+| 产品定位与课程合同 | 五章顺序、每短课目标、音符/谱位/音区、提示递减、played/stable/retained、故事因果和原生迁移不漂移 | `00/02/03/09/14/17/24/31-36/66-71/78/89/91/99` 已形成合同与裁决边界；课程故事门禁已纳入 quick 并通过 `61/61`，课程状态事实门禁通过 `110` 项。门禁现结构化锁定当前 `23` 个运行 bundle、`25` 个已实现 lesson、LP01-LP04 精确音高/动作路线和 LP05-LP10/TH01-TH08/C3-X01/NP-CDE/NP-FG 零提前接入，同时继续覆盖 39 节教案顺序、逐课世界结果与下一任务、C4-R01 同 session 无成绩页、LP05 派工前置门禁、Chapter 5 核心终章先于可选加演，以及跨载体提取教师门控规格。`docs/61` 教师卡已把当前谱位、`docs/57` 声音到谱位规格和 `docs/71` 音名护照候选收敛为可回传问题 | `passed_spec / curriculum_story_gate_61_61 / curriculum_fact_gate_110 / runtime_bundle_structure_23 / implemented_lessons_25_of_39 / future_runtime_14_missing_by_design / external_audits_triaged / naming_retrieval_teacher_review_missing / LP05_checklist_ready_runtime_forbidden / teacher_review_card_ready_result_missing / native_runtime_missing` | 主管；保持 369d 运行候选与 359a 观察基线分离，先收实体 iPad、教师和方向观察证据；收到幼儿钢琴教师意见后分别裁决 `docs/57/71` 与后续章节规格，不直接派 runtime |
 | 第一、二章 Web 教学闭环 | M01-M08、FG01-FG04、S01 的正式 session、错误修复、自然停点、家长证据和离线壳层稳定 | `347a` 继承状态机、音名、视觉、输入和回归；M03 的真实 started/ended、held MIDI、麦克风外部事务、正式会话 ownership 和终态返回已在 AUDIO-A 通过并由总回归保持 | `passed_browser_structure / M03_audio_lifecycle_passed / physical_device_teacher_child_evidence_missing` | LP04/R01B 不得改第一、二章；主管持续跑共享回归 |
 | 第三章听音花园 | 花园入口、LS01-LS08、小集合隐藏听辨、重听、音频优先、自然停点和证据阈值全部运行通过 | `347a` 继承入口、装备、session、early-rest、地图/刷新、输入与故事状态；LS01-LS03 AUDIO-A、LS04-LS05 AUDIO-B、LS06-LS07 AUDIO-C 与 LS08 均通过受控音频生命周期 | `passed_browser_logic_layout_and_audio / release_art_device_teacher_child_evidence_missing` | LP04/R01B 不得回改第三章；媒体只做 source-only，真机/教师/儿童另补 |
-| 第四章低音与低音谱表 | C3-G3 双八度真实键盘、音区、高低比较、低音谱位、左手邀请和咚咚故事运行通过 | 课程/故事脚本完整；`347a` 继承 LP01-LP03 并使 C4-R01A 调度核心、隔离生命周期和三轮 42 状态合同通过。LP04-LP10 与 R01B 仍未实现 | `LP01_LP03_browser_passed / C4_R01A_core_passed / LP04_R01B_dispatch_ready / LP05_LP10_runtime_incomplete / external_evidence_missing` | 现在只按 `docs/51` 实现 LP04，并同时完成 `docs/48` 的 R01B；不得提前做 LP05、低音谱表、左手或完整咚咚 |
+| 第四章低音与低音谱表 | C3-G3 双八度真实键盘、音区、高低比较、低音谱位、左手邀请和咚咚故事运行通过 | `347a` 继承 LP01-LP03 与 C4-R01A；359a 的未提交 `app.js 5AB01914...` 保留主管接受的 LP04 与 C4-R01B 完整生命周期，并保留浏览器麦克风后台释放；LP05-LP10 未实现 | `LP01_LP04_browser_worktree_passed / C4_R01A_core_passed / C4_R01B_browser_accepted_uncommitted / LP05_LP10_runtime_incomplete / adult_iPad_observation_missing` | 成人按 `docs/60` 对精确 359a 预听；主管根据真机/教师/儿童证据决定是否只派 LP05 |
 | 第五章轮流与合作 | 接力主线、可选同时路线、两小节固定原创曲、同等奖励结局和总谱地图运行通过 | 课程/故事脚本存在，无运行闭环 | `missing_runtime` | 第四章低音/谱表门禁通过后下发 |
-| UI、美术与角色动作 | 地图、关卡、键盘、谱桥、五章场景和角色状态达到统一发布质量；无占位物；来源和版权清楚 | `347a` 的视觉层级、音名、键盘、LP03 教学安全区和 R01A 隔离界面合同通过浏览器审查；第三章及第四章洞穴仍是原型级 CSS/代码回退。LP03 对三条既有 Batch7 原片完成 36 张真实 UI 合成：rock-breathe 仅为下一分层实验首选、dust-pulse 仅作参考、shadowless-depth 对 LP03 拒绝；暖粉灰整幅替换削弱深青洞口轮廓和教学对比。没有视频获 runtime 或 release 批准 | `partial / prototype_visual_passed / lp03_source_only_composite_ruled / grok_hard_paused / runtime_integration_forbidden / release_art_missing` | 不接入当前三条素材；未来美术须保留教学对比并重新通过来源、相似性、性能、真机和儿童注意力审查 |
-| 钢琴音、音效、过场与角色语音 | 真机上钢琴音清晰；SFX/语音不遮盖；过场可跳过/减少动态；授权和隐私完整 | 7 个本地原创候选和离线混音合同存在；M03、LS01-LS08、LP01-LP03 与 R01A 的浏览器教学钢琴音已通过完整生命周期总回归。完成动画、角色录音、真人听感和真机混音均缺失 | `partial / browser_teaching_audio_lifecycle_passed / recording_gate_closed / human_device_listening_missing` | LP04/R01B 必须保持共享音频合同；媒体运行集成仍须独立审查，录音门禁有效且用户再次同意后才接收录音 |
-| 输入与设备可靠性 | 按 `docs/38` 证明触屏始终可完成、原生 iPad Core MIDI 可靠、麦克风可选且置信度安全、旋转/中断/恢复可用 | 设备协议已完成；浏览器触屏、桌面 MIDI/实验麦克风和输入自动化存在，无实体测量 | `passed_protocol / runtime_partial / physical_iPad_missing` | Web主线稳定后建立原生 iPad 项目，并按 N0/N1 执行真机矩阵 |
-| 低龄可理解性与教学效果 | 按 `docs/37` 由 3-5 名 4-6 岁儿童分多次完成开始、错误、修复、结果和休息；教师复核目标/阈值；最终美术声音后重复验证 | 观察协议与表格已完成；仍只有自动化和成人截图，无合格儿童/教师记录 | `passed_protocol / external_evidence_missing` | 冻结教学纵切后先做一名儿童方向性观察；最终候选执行 3-5 名复测，不由自动化替代 |
-| 隐私、版权与家长门禁 | 无受保护 IP；按 `docs/39` 让资产/音乐/声音来源和最终哈希可追溯并通过独立相似性审查；真实家长挑战；隐私政策、数据地图和权限文案与行为一致 | 原创世界、资产台账和版权协议较强；最终来源包、外部相似性/地区法律复核、真实家长挑战和有效录音忽略验证缺失 | `passed_protocol / implementation_and_external_review_partial` | 主管+媒体+专业/地区复核；TestFlight 前必须通过 |
-| 原生 iPad、TestFlight 与 App Store | `docs/36` 的 N0-N3、35 项门禁、Xcode/iPadOS 工程、签名、设备测试、TestFlight、商店素材、隐私披露和审核准备完成 | 原生验收规格已通过；目前只有 Web/PWA 原型，没有原生工程或设备/商店证据 | `passed_spec / architecture_open / runtime_and_external_evidence_missing` | 一个稳定教学纵切通过且可使用 macOS/Xcode、实体 iPad 和开发者账号后，创建独立原生任务；不要求必须自购 Mac |
-| 发布工程与版本可追溯 | 有效 Git、可复现构建、版本/缓存/截图/坐标合同一致、回滚和迁移计划、正式发布包门禁通过 | `347a` 的版本、缓存、R01A 专项、三轮完整合同和 gate log 已进入 `af9aa28`；既有未改布局合同继续作为冻结基线。项目 Git、私密录音 ignore、LFS 和连续里程碑提交有效；仍无远程备份、签名发布构建和迁移/回滚演练 | `partial / browser_evidence_aligned / git_valid / milestone_commits_present / release_pipeline_missing` | 保持 LP04/R01B 与 R01A 的独立提交边界；原生/TestFlight 前补远程备份、签名构建、迁移与回滚演练 |
-| A-G 英文单词玩法 | A/B 身份、年龄定位、词库版权/教学意义和独立玩法完成，不抢占主线 | 只有停放计划 | `parked / missing` | 第一至第五章和发布基础稳定后才启动 |
+| UI、美术与角色动作 | 地图、关卡、键盘、谱桥、五章场景和角色状态达到统一发布质量；无占位物；来源和版权清楚 | 外部 UI Markdown 已严格验真并由 `docs/65` 完成主管分级。355a-359a 关闭了大型普通输入覆盖、主页单任务、自由琴键与地图回流问题；369b/369c 只提供 Figma A 阶段结算实现来源，369d 继承该表现但未获得运行批准。Figma 方案 A R2 已形成地图、状态栏、角色对话、字母音名键盘和阶段结算的结构候选，仍不是正式美术。`docs/62` 保留冻结 359a 的 `27/27` 溯源矩阵；`docs/107` 与重绘包精确覆盖当前 369d 的 `29` 张、`1,948,942` bytes，库存证据来源仍是 369a。当前发布清关为 `0/29`，最终地图、S01 减负、第三至第五章场景、角色统一源稿和外部相似性审查均未完成 | `partial / external_UI_audit_passed / visual_P0A_P0B_P0C_passed / map_return_P0_passed / child_flow_semantics_passed / figma_A_R2_structure_candidate_only / frozen_359a_inventory_27_27 / current_369d_inventory_29_29_source_369a / release_asset_clearance_0_29 / grok_video_quota_exhausted / release_art_missing` | 保持 369d 当前候选冻结，369a 只作谱位与库存证据来源，359a 只作成人观察基线；资产负责人按重绘包建立可追溯正式源稿，完成专业美术、外部相似性和权利复核后再逐项派集成 |
+| 钢琴音、音效、过场与角色语音 | 真机上钢琴音清晰；SFX/语音不遮盖；过场可跳过/减少动态；授权和隐私完整 | 7 个本地原创候选和离线混音合同存在；M03、LS01-LS08、LP01-LP04、R01A/R01B 的浏览器教学钢琴音生命周期保持通过。`docs/60` 成人预听卡已准备；完成动画、角色录音、真人听感和真机混音均缺失 | `partial / browser_teaching_audio_lifecycle_passed / adult_preflight_ready_result_missing / recording_gate_closed / final_media_missing` | 成人先做实体 iPad 预听；媒体候选不接 runtime，儿童/成人录音须用户再次授权且走私密门禁 |
+| 输入与设备可靠性 | 按 `docs/38` 证明触屏始终可完成、原生 iPad Core MIDI 可靠、麦克风可选且置信度安全、旋转/中断/恢复可用 | 设备协议和 359a 成人预听卡已同步；浏览器麦克风 hidden/pagehide 生命周期 `17/17`、触屏、桌面 MIDI/实验麦克风和输入自动化存在，无实体测量。当前 LAN HTTP 只能证明触屏/布局/听感，不能证明 Service Worker 离线、麦克风权限或 Web MIDI | `passed_protocol / microphone_browser_lifecycle_passed / web_runtime_partial / physical_iPad_preflight_missing / native_input_missing` | 用户/成人针对精确 359a 完成 `docs/60`；安全上下文、Core MIDI、麦克风和完整离线证据留给后续 HTTPS/原生 N0-N1 |
+| 家长控制与自由探索 | 家长可看懂正式下一任务、隔离回看已学故事、进入真正无评分的自由琴键；关闭后孩子主线和所有正式证据原字节不变 | 359a 原样保留 357a 的 Phase A `20/20`、浏览器家长精确清除 `13/13` 和自由琴键 P0C `17/17` 证据；完整气密服、孩子技术词清理、家长 MIDI 事实和正式学习存储隔离均未改变。互动回看 session 的 C1/C2 Phase B 与 C3/C4 Phase C、发布级真实家长挑战仍 missing | `phase_A_browser_passed / parent_build_identity_passed / parent_delete_all_browser_passed / free_piano_P0C_passed / real_parental_challenge_missing / interactive_history_replay_phase_B_C_missing / physical_parent_observation_missing` | 保持 359a；B/C 回看、原生家长挑战、LP05 和 UI 总改必须分别派工 |
+| 低龄可理解性与教学效果 | 按 `docs/37` 由 3-5 名 4-6 岁儿童分多次完成开始、错误、修复、结果和休息；教师复核目标/阈值；最终美术声音后重复验证 | `docs/37/58` 观察协议、359a manifest 和 `docs/60` 成人预听卡已同步；`observationAllowed=false`，实体 iPad 成人结果、合格儿童和教师记录仍缺 | `passed_protocol / adult_preflight_ready_result_missing / child_teacher_evidence_missing` | 成人对 359a 预听通过后先观察一名儿童；方向性可接受后再 3-5 名；最终美术声音后必须复测 |
+| 隐私、版权与家长门禁 | 无受保护 IP；按 `docs/39` 让资产/音乐/声音来源和最终哈希可追溯并通过独立相似性审查；真实家长挑战；隐私政策、数据地图和权限文案与行为一致 | 当前 369d Web 隐私事实门禁通过 `73` 项：6 个持久记录、2 个会话记录、0 个外部运行 URL，并保持原始音频、原始 MIDI 流和设备身份不落盘。浏览器精确清除本机学习数据已通过，但现有家长挑战仍只是未批准 Web 参考。`docs/62` 保留冻结 359a 的 27 张运行图溯源；`docs/107` 和重绘包覆盖当前 369d 的 29 张库存，库存证据来源为 369a。盘点完整不等于发布来源完整，当前 29 张图仍全部 `releaseCleared=false`；实体权限、原生 PrivacyInfo/用途字符串、公开隐私政策、App Store 答案、地区法律和外部相似性审查仍缺 | `web_privacy_current_state_73_passed / web_privacy_release_blockers_5 / parent_delete_browser_passed / real_native_parental_challenge_missing / frozen_runtime_inventory_passed / current_369d_runtime_inventory_29_29 / release_visual_clearance_0_29 / implementation_and_external_review_partial` | 主管+唯一资产负责人+发布负责人+专业/地区复核；不补造 prompt/许可，缺来源素材必须替换；任何家庭录音仍需再次授权，原生/TestFlight 前完成隐私、权限和最终清关 |
+| 原生 iPad、TestFlight 与 App Store | `docs/36` 的 N0-N3、35 项门禁、Xcode/iPadOS 工程、签名、设备测试、TestFlight、商店素材、隐私披露和审核准备完成 | 原生验收规格已通过；`docs/94` 已确认同产品早期 SwiftUI 原型存在，但课程、角色、孩子端音名、session/掌握、持久化、隐私、签名、测试和美术均不合格；只有 Core MIDI/音高检测可作受限技术候选 | `passed_spec / native_prototype_present_nonqualifying / architecture_open / runtime_and_external_evidence_missing` | 先完成 359a 成人预检；未来有 macOS/Xcode、实体 iPad 和开发者账号后，创建独立原生任务并以当前正典重建纵切，不直接续做旧 8 关原型 |
+| 发布工程与版本可追溯 | 有效 Git、可复现构建、版本/缓存/截图/坐标合同一致、回滚和迁移计划、正式发布包门禁通过 | 最新已提交运行教学基线仍是 `347a / af9aa28`；当前未批准浏览器/PWA 体验是 369d。其 manifest 和 54 文件后置静态恢复包已验证，源码/控制快照明确仍为 `missing_for_369d`；369c 是直接阶段结算/PWA 前任，369a 只拥有自身谱位来源及自身恢复证据，367b 只保留便携依赖自举角色。359a 的 47 文件自包含 manifest `C153CDB5...E4BC` 继续只作成人实体 iPad 预听与方向性观察基线。Git/ignore/LFS 有效，但共享工作树仍脏；这不是签名发布包，也没有远程备份、第二物理主机复验、原生 archive、真实部署回滚、schema 迁移/恢复或 TestFlight 证据 | `partial / committed_runtime_baseline_347a / current_unapproved_browser_pwa_369d / observation_baseline_359a / current_static_recovery_owner_369d / current_source_recovery_missing_369d / signed_release_and_rollback_missing` | 保持 369d 候选 manifest、369d 静态恢复包与 359a 观察哈希分别冻结；不把 369c/369a/367b 的历史恢复证据冒充 369d 源码或发布恢复；原生/TestFlight 前补远程、签名、迁移与回滚 |
+| A-G 英文单词玩法 | 首发范围必须明确；若未来实施，仍需 A/B 身份、年龄定位、词库版权/教学意义和独立玩法完成且不抢占主线 | 用户已明确“作为最后面要完成的项目，目前先把其他的做完”；据此首个成熟版本正式排除 A-G，保留为核心版本完成后的最后可选项目。该裁决不表示玩法、A/B 教学或词库已完成 | `passed_scope_decision / excluded_from_v1 / parked_post_v1 / maturity_ag_scope_excluded_from_v1` | 不阻塞首发成熟度；第一至第五章和发布基础稳定后，由未来主管另行派工 |
 
-项目整体只有当上述主线必需行均为 `passed`，且可选 A-G 是否纳入首发范围已有明确产品决定时，才可以调用“成熟 App 已完成”。当前不能因为课程合同较完整或浏览器测试通过而提前结束主管目标。
+可执行总账门禁（2026-07-23）：`npm run check:maturity-state` 当前必须通过并报告 `maturity_release_blockers_13`，证明上表的缺口与工作区事实一致；这不是发布通过。外部 UI 审查结果已关闭，但其发现的视觉 P0 被归入仍未通过的发布视觉/儿童观察要求，不另造重复阻塞；跨章严审另确认唱名到音名字母的独立提取缺失，因此该项作为新的真实教学阻断进入总账。A-G 已按用户决定排除在首发范围外，只关闭范围决策，不关闭未来玩法本身。`npm run check:maturity-release` 是成熟 App 严格断言，当前必须非零退出并逐项列出 13 个阻塞。只有未来所有首发必需证据关闭且严格命令退出 `0`，主管才可把项目整体状态改为完成。
+
+项目整体只有当上述首发主线必需行均为 `passed` 时，才可以调用“成熟 App 已完成”。A-G 已明确为首发之后的最后可选项目；当前仍不能因为课程合同较完整、A-G 范围已决定或浏览器测试通过而提前结束主管目标。
 
 ## 调度任务的权限
 
@@ -971,15 +1392,16 @@ Chapter 3 媒体保护区合同：
 
 ## 当前固定实施顺序
 
-1. `overhaul-347a-c4-r01a` / `af9aa2831bb90c94fd10fdfbe3ca89ba4d03021a` 是当前获批浏览器教学基线；它继承 `346a` 的第一至第三章与第四章 LP01-LP03，并使 C4-R01A 调度核心、隔离真实界面夹具、专用教学音生命周期和三轮完整合同通过独立审查。
+1. `overhaul-347a-c4-r01a` / `af9aa2831bb90c94fd10fdfbe3ca89ba4d03021a` 仍是最新已提交浏览器教学基线；当前未提交冻结候选只认 `overhaul-359a-map-shell-scroll-reset` / `app.js 5AB01914...` / manifest `C153CDB5...`，二者不得混称为同一个已提交版本或发布版。359a 仍 `observationAllowed=false`，原因是成人实体 iPad 预听缺失，不是主页滚动、UI-P0C 或 M08 来源盘点未完成。
 2. `C` 的有效 Git、LFS 与 WAV/PDF 忽略证明已通过；首个源码基线为 `b431c1ab347dd813ac1aa712a05c5f7ab150cf55`，没有远程仓库，也没有接收录音。后续修正必须用新 commit，不得重写该基线。
-3. `docs/47`、`docs/49` 与 `docs/48` 的 A 门禁已完成；当前唯一运行工作是 `docs/51` 的 LP04，并在同一候选内完成 `docs/48` 的 C4-R01B。只实现 E3-D3-C3 地洞回声、真实 C4-03 同 session 组合、困难收短、story-first 间隔和恢复边界；不得混入 LP05、完整咚咚、低音谱表、左手、美术、媒体或课程阈值。
-4. C4-R01A 已在 `af9aa28` 单独审查和提交。LP04/R01B 也必须形成独立提交；不得回写 A 的冻结证据，也不得在 B 通过前称 C4-R01 完整运行通过或继续 LP05。
-5. Grok 视频现为用户确认的额度耗尽硬暂停。Batch20 仅有一次全新 CH3-A `image_to_video` 尝试，结果为外层 `402`、工具 `403 personal-team-blocked:spending-limit`、raw MP4=0、`videoCallCount=1`，所有批准位为 false。从现在起不得再生成、额度预检、重试旧 ID、换号或新建批次；只有用户以后明确确认额度恢复才可重开。媒体当前只能离线审查已有原片、真实 UI 合成和来源证据，且不得复制到 runtime、改课程或打断 LP04/R01B。
-6. 可在冻结 `347a` 上准备不收集身份、声音或影像的方向性观察；M03/LS01-LS08、LP01-LP03 与 R01A 隔离复习界面可引用浏览器生命周期证据。任何早期观察都不能外推到未实现的 LP04+、第五章或最终发布。
-7. `docs/46` 与 `docs/47` 已成为 Chapter 4 `C4-01 / LP01-LP03` 的历史通过记录；`docs/48` 的 R01A 也已成为调度核心历史通过记录。现在只解锁 LP04 + R01B；LP05+、完整咚咚揭晓、左手、低音谱表、Chapter 5 和媒体运行集成继续锁定。
-8. 所有媒体运行集成都必须逐文件哈希、真实 UI 合成、来源/相似性、教学安全和运行回归分别通过；source-clearance、技术预演或生成成功不能自动变成 runtime approved。
-9. Chapter 4、5、原生 iPad、TestFlight 和最终发布按 `I -> J -> K` 推进。A-G 单词玩法继续保持最后项目，不抢占主线资源。
+3. 花园星芽 v3 的 352b 受控接入及主管独立验收已完成。稳定 URL 虽沿用 `v1` 文件名，但只认 `30,010` bytes / `AD83E162...B9EF5` 的 v3 字节，发布清关仍为 false；357a 已再次证明全部 `assets/runtime/**` 相对 356a 保持不变。
+4. 外部课程 ZIP 已由 `docs/56` 分级；外部 UI 原包继续隔离，固定 SHA 的 8 项 Markdown-only 净化包已严格通过并由 `docs/65` 分级。四张 PNG 不读取、不接入；不得重复启动同范围课程/UI 总审。
+5. C4-R01B、品牌、浏览器麦克风、家长精确清除、UI-P0A/P0B/P0C 和主页滚动归零均已通过。354b-358a manifest 只作历史证据；当前保持 359a 冻结。下一步是成人实体 iPad 预听，不得回改主页单任务、M01 同 session 复查或自由琴键语义，不得合并 S01、课程、素材或 LP05，也不自动进入 LP05。`docs/66` 已把 LP05 收敛为主管验收清单，但“清单就绪”不等于派工。
+6. 家长故事回看 Phase B/C、LP05+、完整咚咚揭晓、左手、低音谱表和 Chapter 5 继续锁定。LP05 只有在精确 359a 成人实体 iPad 预听通过、首名方向性儿童观察经主管复核无阻断 P0、幼儿钢琴教师阶段 B 经主管复核无课程 P0，以及主管另发 `C4-04 / LP05 only` 窄派工后才可启动。`docs/57/71` 的跨载体候选只等教师阶段 A 复核，不能插入活动 runtime；`docs/67`、`docs/68` 与 `docs/69` 分别只锁定未来 TH01-TH02、TH03-TH04、TH05，仍须 LP10 运行出口、前序 Chapter 5 运行、教师意见和明确窄派工，不能越过第四章启动。
+7. Grok 视频现为用户确认的额度耗尽硬暂停。Batch20 仅有一次全新 CH3-A `image_to_video` 尝试，结果为外层 `402`、工具 `403 personal-team-blocked:spending-limit`、raw MP4=0、`videoCallCount=1`，所有批准位为 false。不得生成、额度预检、重试旧 ID、换号或新建批次；只有用户以后明确确认额度恢复才可重开。
+8. `docs/37`、`docs/38` 和 `docs/58` 已准备教师、设备和儿童观察流程；P0A/P0B/P0C、M08 A2 与 359a 主页返回修复已通过。只有成人先完成精确 359a 的 iPad 声音预听并回传合格结果，主管才可把 `observationAllowed` 改为 true 并安排不收集身份、声音或影像的首名方向性观察；任何早期观察都不能外推到 C3-X01、NP-CDE/NP-FG、LP05+、第五章或最终发布。
+9. 所有媒体运行集成都必须逐文件哈希、真实 UI 合成、来源/相似性、教学安全和运行回归分别通过；source-clearance、技术预演、机器门禁或生成成功不能自动变成 runtime approved。
+10. Chapter 4、5、原生 iPad、TestFlight 和最终发布按 `I -> J -> K` 推进。A-G 单词玩法已明确排除在首发范围外，继续保持首发之后的最后可选项目，不抢占主线资源。
 
 该顺序不允许两个任务同时修改运行代码，也不允许未批准素材先占位进入发布路径。
 
@@ -992,6 +1414,57 @@ Chapter 3 媒体保护区合同：
 - 28 张合成和 156/156 几何通过只证明坐标不碰保护区。人工画面仍显示新背景与 v1 小道具材质、尺度不统一，白色轨迹圈和浅蓝占位层争抢注意力，道具像贴在场景上而不是长在花园里；这不满足成熟 App 的统一美术门禁。
 - 媒体下一轮只做 source-only v3：以 Direction D 为风格参考重做同材质、低龄可读的大号 LS06 回声石/藤拱和 LS07 水滴/边界花状态；真实 UI 合成必须保留现有运行层一起审。暂不再次生成星芽，先复用批准模型或既有运行姿势作 audit-only 合成。
 - `runtimeApproval=false`、`integrationAllowed=false`、`releaseCleared=false` 和 runtime references `0` 保持不变。v3 正式冻结并经主管逐图、逐哈希审查前，不联系原型任务、不复制文件、不建立运行引用。
+
+### 2026-07-23 TH01-TH02 课程、故事与未来运行合同严审
+
+- 保留 `C3 -> C4`、`G3 -> G4 -> C3 -> C4` 的六输入音乐路线，但把教学轴从含混的“角色/手轮次”修正为“角色/音区轮次”。任意手、非邀请手或同一根手指按到准确键都正确，音高不能证明真实左右手。
+- TH01 固定为有模型音的 C 定锚；TH02 前半有提示迁移到 G，后半无模型音、无目标键光返回 C。同 session 返回只写 transfer observation，stable 只能来自以后独立 C/G 两对、4/4 exact-register first response 的 opening review。
+- 普通孩子语言统一为 `低音 C / 中央 C / 低音 G / 上面的 G`，明确禁止错误的 `中央 G`；角色对话仍可说 Do/Sol，科学音高只进成人证据。
+- C、G、返回 C 三个完整 pair 分别触发半程信号、中段信号和第一批桥材料。困难时只在已完成 pair 休息并续未完成部分；TH01、TH02 和 C5-01 均不是 phase tail，不出现结果框，完成后主页唯一下一任务为 TH03。
+- `docs/67_CHAPTER5_TH01_TH02_SUPERVISOR_ACCEPTANCE_CHECKLIST.md`、`docs/61` 二-E 和美术状态板已同步。课程故事专项增至 `36/36`；该结果只证明静态合同一致，不解锁 Chapter 5 runtime、素材或儿童观察。
+- 原“下一课程-only 严审入口为 TH03-TH04”已由下节关闭；冻结运行任务仍未被联系。
+
+### 2026-07-23 TH03-TH04 课程、故事与未来运行合同严审
+
+- TH03 保留 `C3-C4-D3-D4-E3-E4` 音序，但把可验证技能锁定为角色/音区轮次。第一次只走一遍 free-time 六音路线，每音必须 note-off/rearm；不调用 pulse、BPM 或 timing stable。左右手图标只作邀请，任意手或单指按到 exact key 都正确，实际用手保持 unknown。
+- C、D、E 三个完整 pair 各锁一段桥并成为唯一休息点；错误、帮助、地图、刷新和续接不拆除已建段，也不跨 pair 或跨 session 拼 stable。later review 才可在六个 exact-register first response、无强答案且最多一个 pulseMiss 时写 `role-register relay stable`。
+- TH04 只做两个 one-at-a-time staff-to-key 循环：bass-staff second-space C3/48，再到 treble-staff ledger-line-below C4/60。错八度先肯定名字再修音区；C3/C4 evidence 与 mastery id 分开，guided 不能冒充 grand-staff stable。
+- TH03 无结算。TH04 是 `C5-P1` 唯一 phase tail；完整正式 clean 完成才可有一次约 2.3 秒无按钮轻量 milestone，assisted/modeled 同样打开 TH05 但保留 needsPractice 且不显示 clean milestone。主页始终只有一个当前任务。
+- 新增 `docs/68_CHAPTER5_TH03_TH04_SUPERVISOR_ACCEPTANCE_CHECKLIST.md`，同步 `docs/61` 二-F、课程权威文档与自动门禁。该清单是 future acceptance contract，不是 runtime dispatch；Chapter 5、媒体、儿童观察和发布状态均未改变。
+- 独立验证通过：用户回传课程 ZIP `4F009D1C...9DBAD`、UI ZIP `245A8E7B...E656BC` 与已分级原件字节一致；外部 intake `valid=2 / invalid=0`、自测 `9/9`。课程故事 `37/37`、课程事实 `52`、quick、strict bundle `47 files / 1,621,097 runtime bytes` 全部通过；成熟度当前事实 `35` 通过并继续列出 `13` 个发布阻断。`app.js` 仍为 `17B78E96...AA276`，本轮没有运行、素材或音频写入。
+- 下一课程-only 严审入口为 TH05 的 supports/high-bars/relay 三阶段：核对十事件窗、分 session 休息、已完成世界结果持久化和 TH08 接力出口；仍不得联系冻结运行任务。
+
+### 2026-07-23 TH05 课程负荷、故事连续性与未来运行合同严审
+
+- 原三阶段框架继续保留为课程概念，但运行 action 精确拆为五次孩子主动开始的 session：A supports `C3,G3`（2 输入）、B1 `C4-D4-E4-D4`（4）、B2 `E4-D4-C4-C4`（4）、C1 `C3,C4,D4,E4,D4`（5）、C2 `G3,E4,D4,C4,C4`（5）。完成一段后回主页，不自动创建下一段。
+- 两组 high bar 先完整听一次模型，再逐颗点灯；first teaching 不因 timing 失败。两个 relay bar 每次只组合一小节，低音锚可先松开，不要求同时、四拍保持或踏板。TH08 才第一次把两段连成完整两小节演出。
+- 桥墩、每颗灯、relay step 和桥段跨刷新、地图、帮助与休息持久。resume session 只续当前 action，story-first 且不插 opening review。
+- TH05 首次只写 component played/order；不再误并入 TH03 六音 role/register stable，也不写节拍、延音、真实手、paired timing、完整两小节 stable 或 retained。
+- A/B1/B2/C1 无结算；C2 是 `C5-P2` phase tail。正式 action 链完整且 C2 clean 才可一次约 2.3 秒无按钮轻量 milestone；帮助完成仍建桥并打开 TH08，但不显示 clean milestone。主页固定为 `主桥接通了 / 让大家园唱起来 / 花园会打开`，只有 TH08 可操作。
+- 新增 `docs/69_CHAPTER5_TH05_SUPERVISOR_ACCEPTANCE_CHECKLIST.md`，同步 `docs/61` 二-G、课程事实源、教师卡、美术状态板和自动门禁。该清单不是运行派工；357a、素材、音频、儿童观察和发布状态均未改变。
+- 独立验证通过：课程故事 `38/38`、课程事实 `52`、`check:quick`、严格打包 `47 files / 1,621,097 runtime bytes`、成熟度当前事实 `35` 全部通过；成熟度仍诚实列出 `13` 个发布阻断。`app.js` SHA-256 仍为 `17B78E96F5D143EDDAFEC4463B8DE178DB2BD424B7F6B8D41A3BA15BC37AA276`。
+- 原“下一课程-only 严审入口为 TH05”已关闭。下一入口是 TH06-TH08 的 optional 插入、公平回退与 finale 证据；在完成课程-only 审查前仍不联系冻结运行任务。
+
+### 2026-07-23 TH06-TH08 核心终章、后续加演与主页连续性严审
+
+- 独立交叉核对确认旧规格存在真实矛盾：TH05 权威合同要求完成后主页只有 TH08，但旧能力路线又允许先插入 TH06-TH07；“按能力和尝试自动选择”没有唯一事实源或可验证阈值，并会让表现顺利的孩子多做三次才获得与其他孩子相同的结局。
+- 主管裁决为 universal-core-first：所有孩子固定走 `TH05 -> TH08 mode=core-relay-finale`，以十个顺序单音第一次连起两小节并打开花园。core TH08 是唯一 Chapter 5 story completion，不需要 simultaneous、四拍保持、踏板或真实手证明；结束用场景演出自然停留，不叠结算大框。
+- `TH06 -> TH07 bar 1 -> TH07 bar 2 -> TH08 together-encore` 改为花园已经完成后的 later optional。它们不能在 core completion session 创建，每段都要新的孩子点击和 session，也不能依据正确率、stable、速度、pitch 或推测用手把孩子分档。
+- TH06 固定 `C3+C4 / G3+G4 / C3+C4`：同名字母先降低找键负荷，只教 paired onset；TH07 才迁移到作品实际 bar-start `C3+C4` 与 `G3+E4`。paired/sequential、clean/helped 留下同一练习拱门，optional 不重写花园、角色认可、收藏或 core route。
+- 600ms 友好动画和 350ms emerging observation 继续保留为 provisional、可配置候选，必须由幼儿钢琴教师和实体 iPad/MIDI 复核；两者都不能写 actual hand、一般双手 stable 或 retained。together-encore 最多写窄义 `twoLayerCoordinationObserved`。
+- 新增 `docs/70_CHAPTER5_TH06_TH08_SUPERVISOR_ACCEPTANCE_CHECKLIST.md`，同步课程、故事、调度、主页、教师卡、设备和儿童观察事实源。该清单不是运行派工；357a runtime、媒体、声音、外部观察与发布状态均未改变。
+- 独立验证通过：外部 intake `2 valid / 0 invalid`、自测 `9/9`、课程故事 `39/39`、课程事实 `52`、`check:quick`、严格打包 `47 files / 1,621,097 runtime bytes`、成熟度当前事实 `35` 和 `git diff --check`。成熟度仍诚实保留 `13` 个发布阻断，`app.js` SHA-256 仍为 `17B78E96F5D143EDDAFEC4463B8DE178DB2BD424B7F6B8D41A3BA15BC37AA276`。
+- 下一课程-only 审查转为跨章总闭环与教师卡可执行性复核；在教师和前序 Chapter 4/5 runtime 门禁满足前，不联系冻结原型任务实施 TH06-TH08。
+
+### 2026-07-23 外部结果跨章闭环、音符护照与成熟度事实修正
+
+- 两个用户回传 ZIP 已保持原字节验真：课程包 `4F009D1C...9DBAD`；UI 原包 `245A8E7B...E656BC` 仍因 4 张 PNG 不进入严格结果门禁，只有逐 Markdown 哈希一致的净化包可读。受控 intake 为 `2 valid / 0 invalid`，对抗自测 `9/9`；课程和 UI 内容分别由 `docs/56`、`docs/65` 完成主管分级，不重复启动同范围总审。
+- 跨五章逐链核对发现 `docs/03` 仍残留一句“`C5-X1/X2` 在 finale 前从 C5-04 分支”，与 `docs/70` 的 universal-core-first 直接矛盾。现已删除并固定所有孩子 `TH05 -> TH08 core-relay-finale`，以后新到访才按 `TH06 -> TH07 bar 1 -> TH07 bar 2 -> TH08 together-encore`；自动门禁新增 stale-text 排除。
+- `docs/23` 的表示联系矩阵确认第二个真实缺口：M01-M02 的 C/Do 持续配对只能证明教过，不能证明孩子以后听到角色唱名会独立找到音名字母。新增 `docs/71_CROSS_CHAPTER_REPRESENTATION_AND_NOTE_PASSPORT_SUPERVISOR_CHECKLIST.md`，把护照拆成“安静故事收藏”和“教师门控名字联系复习”；候选 `NP-CDE/NP-FG` 不占地图节点，普通 UI 仍只显示字母，角色声音/气泡承载唱名，名字首选、最后一次有提示琴键迁移和成人观察的主动说唱互不回填。
+- `docs/71` 只是一份可供家长和幼儿钢琴老师判断的课程规格。CDE 方案为 3 次字母选择 + 1 次琴键迁移，FG 为 4 + 1；错误后对照、共同完成、不扣奖励，困难后回原故事。正式位置、skill key、stable/retained 门槛、声音、运行和儿童证据均未获批准；不得联系冻结原型任务实现。
+- 成熟度可执行总账在该历史快照新增 `naming-carrier-retrieval`，避免把“显示规则通过”误报为教学承诺完成。当时 `check:maturity-state` 为 `36` 个事实、`15` 项发布要求、`14` 个阻断；`maturity_release_blockers_14` 是该历史快照令牌，已经由文件顶部记录的当前 `13` 阻断状态替代。既有 `sound-staff-transfer` 仍由 `docs/57` 独立阻断，两项都需教师复核，不能互相替代。
+- 独立验证：课程故事 `41/41`、课程事实 `52`、外部 intake `2/0`、self-test `9/9`、quick、strict bundle `47 files / 1,621,097 runtime bytes`、maturity current-state `36 facts / 14 blockers` 均通过。`app.js` SHA-256 保持 `17B78E96F5D143EDDAFEC4463B8DE178DB2BD424B7F6B8D41A3BA15BC37AA276`，本轮未修改 runtime、媒体或音频。
+- 下一课程动作是把 `docs/57` 与 `docs/71` 一并交给合格幼儿钢琴老师审查并由主管吸收意见；等待期间不打扰当前原型任务，也不派 C3-X01、NP-CDE/NP-FG、LP05 或 Chapter 5 runtime。
 
 ## 当前必须保持未通过的门禁
 
@@ -1017,3 +1490,16 @@ Chapter 3 媒体保护区合同：
 5. 下一步由谁负责，哪些文件被冻结。
 
 整个星龙工坊只有在课程合同、运行原型、素材版权/隐私、iPad 真机、MIDI 输入和真实儿童观察分别达到预定门禁后，才可以声称达到成熟 App 的发布准备状态。
+
+## 2026-08-31 TH07 角色台词正典裁决
+
+- 用户明确采用咚咚台词：`咚咚托稳大地。花朵——等你叫醒。`。它只说明低音支撑与花朵回应的故事分工，不携带音名、键位、节奏、真实左右手、同时阈值或答案提示。
+- 每个 TH07 小节开始前最多播放一次，并须在模型或目标钢琴音起音前结束；答错修复、主动重播和后来的 TH08 `together-encore` 不重复。TH07 仍是终章后的 future optional，不进入核心终章之前，也不改变已打开的花园。
+- 当前语音库存更新为 `25 recording_ready_unrecorded / 0 dynamic_ui_only / 14 teacher_gated_provisional / 0 copy_missing`，固定角色句总数为 58。该裁决只关闭文案缺口；教师、设备、录音授权、录制、人耳听审、运行接入与发布批准仍全部缺失或为 false。
+
+## 2026-08-03 Figma A 阶段结算窄迁移裁决
+
+- 主管独立对照当前正式结算原图、`#resultModal[data-result="milestone"]` DOM/CSS、2300ms lifecycle、`docs/52` 和 Figma A 节点 `45:3`。行为边界为 `passed`：仅正式 phase 尾点结算、普通输入零结算、无按钮、零 autoplay、自动回唯一下一任务。
+- 当前浅色约 `560 x 136` 中央卡片仍为 `partial`：虽然未遮键盘，但抢占场景主视觉，与当前深色科幻世界不连续。Figma A 的暗色双区结算条可作为结构参考；其地图、角色、场景和键盘几何占位不得迁移。
+- 新增 `docs/112_FIGMA_A_STAGE_SETTLEMENT_RUNTIME_GAP_AND_DISPATCH.md`，把后继候选锁为 `overhaul-369b-figma-a-stage-settlement`。第一阶段 CSS 主导，不得修改资格函数、2300ms、session/mastery、课程、世界结果或下一任务；若现有 DOM 不足，原型任务必须先回报而不是自行扩范围。
+- 原型/UI 唯一运行写者在下发前为 idle；派工已发送到既有任务 `019f4aa6-edba-7843-a835-c4b930a388ff`，没有新建重复任务。本派工不触碰 LP05+、TH、C3-X01、NP-CDE/NP-FG、媒体、音频、素材、地图或其他产品。369b 回传后仍需主管独立看原图、computed style、DOM、正式/非正式边界、六视口、减少动态、PWA 和共享回归，未复核前 `runtimeIntegrationAllowed=false / observationAllowed=false / releaseCleared=false`。

@@ -108,6 +108,27 @@ async function auditReferences(files, policy, readFile) {
   return failures;
 }
 
+function localEntryReference(value) {
+  const candidate = String(value || "").trim();
+  if (!candidate || candidate.startsWith("#") || /^(?:[a-z][a-z0-9+.-]*:|\/\/)/i.test(candidate)) return null;
+  const pathname = candidate.split(/[?#]/, 1)[0].replace(/^\/+/, "");
+  return pathname ? normalizeRelative(pathname) : null;
+}
+
+async function auditEntryPointReferences(files) {
+  const failures = [];
+  const included = new Set(files);
+  const html = await readIfExists("index.html");
+  const attributePattern = /<(?:link|script)\b[^>]*?\b(?:href|src)\s*=\s*(["'])(.*?)\1/gi;
+  for (const match of html.matchAll(attributePattern)) {
+    const reference = localEntryReference(match[2]);
+    if (reference && !included.has(reference)) {
+      failures.push(`index.html local dependency is absent from release include: ${reference}`);
+    }
+  }
+  return failures;
+}
+
 async function auditPolicy(policy) {
   const failures = [];
   const warnings = [];
@@ -126,6 +147,7 @@ async function auditPolicy(policy) {
   }
 
   failures.push(...await auditReferences(includes, policy, readIfExists));
+  failures.push(...await auditEntryPointReferences(includes));
 
   const cssBudget = policy.budgets?.maxCssBytes ?? Number.POSITIVE_INFINITY;
   const exceptions = new Map((policy.temporaryExceptions || []).map((item) => [item.path, item]));

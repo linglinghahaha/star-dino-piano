@@ -183,7 +183,7 @@ try {
       const planRatio = initial.blueprint.width / initial.yard.width;
       const planHeightRatio = initial.blueprint.height / initial.yard.height;
 
-      record(`${viewport.id}: runs the 347a R01A shell`, initial.runtimeVersion.includes("overhaul-347a-c4-r01a"), initial);
+      record(`${viewport.id}: runs the 369e iPad settlement build`, initial.runtimeVersion.includes("overhaul-369e-ipad-settlement-compactness-correction"), initial);
       record(`${viewport.id}: projected blueprint owns the guided 1/C-5/G sequence`,
         initial.roofMode === "install" && initial.blueprintMode === "install" &&
         initial.parts.map((part) => part.letter).join("") === "CDEFG" &&
@@ -206,8 +206,8 @@ try {
         (initial.coachDino.left + initial.coachDino.right) / 2 <= initial.blueprint.left + 12 &&
         initial.coachDino.height >= initial.yard.height * 0.18 &&
         initial.coachDino.bottom >= initial.blueprint.top && initial.coachDino.bottom <= initial.blueprint.bottom + 12, initial);
-      record(`${viewport.id}: M08 uses the approved flat three-sprout Xingya runtime asset`,
-        initial.coachContent.includes("xingya-suit-point-flat-m08-v3.webp"), initial);
+      record(`${viewport.id}: M08 uses the approved traceable three-sprout Xingya runtime asset`,
+        initial.coachContent.includes("xingya-suit-point-m08-route-a2.png"), initial);
       record(`${viewport.id}: one solfege bubble is separated from Xingya and carries no duplicate letter locator`,
         initial.coachText.includes("Do") && !initial.coachText.includes("C") && !initial.coachText.includes("2黑") &&
         initial.coachBubble.bottom <= initial.coachDino.top + 8 && initial.coachBubble.width >= initial.yard.width * 0.20, initial);
@@ -361,7 +361,6 @@ try {
       await smoothPage.locator(`.key.white-key[data-note="${note}"]`).click();
       await smoothPage.waitForTimeout(110);
     }
-    await smoothPage.waitForTimeout(820);
     const guidedComplete = await readRoofState(smoothPage);
     record("guided completion closes all five world roof panels and the skylight before the seal pass",
       guidedComplete.worldMode === "install" && guidedComplete.worldInstalledCount === 5 &&

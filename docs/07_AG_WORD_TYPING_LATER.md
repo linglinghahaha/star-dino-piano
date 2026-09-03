@@ -2,9 +2,9 @@
 
 ## Status
 
-`parked_final_project / not_dispatched / runtime_forbidden`
+`excluded_from_v1_scope_by_user / parked_final_project / not_dispatched / runtime_forbidden`
 
-This is the final optional project in the current product order. Do not implement, prototype, generate dedicated art for, or expose an entry before Chapters 1-5 and the core release foundation have passed their own supervisor gates. Completion of a few C-G lessons, available engineering time, or a convenient word list is not an unlock signal. A future supervisor dispatch must explicitly reopen this file.
+The user has explicitly placed this mode after all current core work. It is therefore outside the first mature release scope and remains the final optional post-v1 project; this is a scope decision, not an implementation pass. Do not implement, prototype, generate dedicated art for, or expose an entry before Chapters 1-5 and the core release foundation have passed their own supervisor gates. Completion of a few C-G lessons, available engineering time, or a convenient word list is not an unlock signal. A future supervisor dispatch must explicitly reopen this file.
 
 ## Why It Is Interesting
 

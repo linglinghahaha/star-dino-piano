@@ -1,4 +1,5 @@
 import { createRequire } from "node:module";
+import { canonicalC1C2History } from "./canonical-course-fixture.mjs";
 
 const require = createRequire(import.meta.url);
 const { chromium } = require("playwright");
@@ -24,12 +25,7 @@ function runtimeFixture({ ls06 = false, ls07 = false } = {}) {
   return {
     version: 1,
     active: null,
-    history: [{
-      sessionId: "audio-c-c2-03",
-      bundleId: "C2-03",
-      status: "ended",
-      completedActions: [{ actionId: "S01-check", kind: "staff", targetId: "S01" }]
-    }],
+    history: canonicalC1C2History({ completedAt, tag: "audio-c" }),
     lastRest: null,
     chapter3: {
       entryEventId: "CH3_ENTRY_AIR_CHECK",

@@ -9,8 +9,19 @@ This is the canonical chapter order. Other planning files must use the same numb
 | 1 | 月亮小家 | middle `C4-G4` note identity and keyboard geography | current Web course |
 | 2 | 星星桥 | treble-staff `C4-G4` reading through physical jump pads | current flagship slice |
 | 3 | 会听的小种子 | guided pitch echo, small-set sound-to-key matching, and two-note aural memory | `LS01-LS08` browser behavior and the full teaching-audio lifecycle pass in `overhaul-345d-audio-c` / `2405734`; physical-device, teacher and child evidence remain missing |
-| 4 | 咚咚的低音星球 | high/low contrast, low `C3-G3`, bass staff, left-hand readiness | `LP01-LP03` and the isolated C4-R01A review-scheduler core pass in the approved `overhaul-347a-c4-r01a` / `af9aa28` browser baseline; `LP04` plus real-action `C4-R01B` is the next gated runtime work, while `LP05-LP10` remain locked |
+| 4 | 咚咚的低音星球 | high/low contrast, low `C3-G3`, bass staff, left-hand readiness | approved baseline `overhaul-347a-c4-r01a` / `af9aa28` contains `LP01-LP03` and isolated C4-R01A. The current unapproved browser/PWA experience candidate `overhaul-369d-course-route-monotonicity-correction` at `app.js F3B4F960...` changes only formal progression-history eligibility and forward garden-route recovery. It keeps 369c as its direct stage-settlement/PWA predecessor, 369b as the Figma A settlement source, 369a as the staff-notation source, 368b as the S01-continuity source, 367b as the portable-recovery predecessor and 366a as the teaching-core predecessor. It does not implement or verify the future LP08-LP10 bass staff. None replaces the frozen adult physical-iPad preflight and directional child-observation baseline `overhaul-359a-map-shell-scroll-reset` / `docs/30_OBSERVATION_CANDIDATE_359A.json`; `LP05-LP10` stay locked while adult iPad, device, teacher and child evidence remain missing |
 | 5 | 会唱歌的大家园 | hand alternation, simple two-hand coordination, grand staff | curriculum specified; not implemented |
+
+Child-map labels and story-script titles are two names for the same canonical chapters, not separate levels:
+
+| Chapter | Child map / navigation label | Parent-readable story title |
+| --- | --- | --- |
+| 1 | 月球基地 | 月亮小家 |
+| 2 | 星星桥 | 星星桥 |
+| 3 | 呼吸花园 | 会听的小种子 |
+| 4 | 地下回声洞 | 咚咚的低音星球 |
+
+Child navigation uses the middle column consistently. Story and lesson documents may use the right column when describing narrative tone, but parent-facing summaries must show the mapping instead of presenting the two names as different destinations.
 
 `音符护照` is a cross-chapter collection/review system, not a numbered chapter. Its child-facing collection is icon-led and records places, helpers and story accomplishments; parent-facing played/stable/retained evidence remains separate, so collection count cannot imply mastery. The A-G word game is the parked final optional project: it cannot start before Chapters 1-5 and the core release foundation pass, all core P0/P1 issues are resolved, and a future supervisor explicitly dispatches it.
 
@@ -62,19 +73,19 @@ The reduced-cue retrieval may move to the next session when the child needed rep
 | `C4-01` | `LP01-LP02` | high/low C contrast and the low C3 home | cave opens and the permanent C anchor stone lands |
 | `C4-02` | `LP03` | low C3-D3-E3 keyboard geography | the existing C anchor wakes; D and E join it to complete the three-stone path |
 | `C4-03` | `LP04` | low descending sound-to-key route | cave echo travels downward |
-| `C4-04` | `LP05` | low E3-F3-G3 neighborhood | broad footprints reach the support |
-| `C4-05` | `LP06` | low C-G-C leap preview | arch stone rolls into place |
+| `C4-04` | `LP05` | low E3-F3-G3 neighborhood | E wakes the faint starting footprint, F/G restore the two missing footprints, and Dongdong fully appears only when the story unit resolves |
+| `C4-05` | `LP06` | low C-G-C leap preview | C releases the stone stop, G rolls the arch stone across the marked arc, and the final C seats it permanently |
 | `C4-06` | `LP07` | left-hand invitation on a familiar low route | five steady footprints appear |
 | `C4-07` | `LP08` | first bass-staff C3-D3-E3 positions | underground map lights three homes |
 | `C4-08` | `LP09` | bass-staff E3-F3-G3 neighborhood | upper bridge gains three supports |
 | `C4-09` | `LP10` guided crossing, then a later reduced-cue signal check | integrate low sound, key, and bass staff without forcing two six-note routes into one session | Dongdong completes the low bridge and sends a usable signal; a later review lights the existing signal anchors without rebuilding or re-crossing it |
-| `C5-01` | `TH01-TH02` | same-name register calls and turn taking | the two homes answer with light signals |
-| `C5-02` | `TH03` | slow left/right alternation | bridge grows from both ends |
-| `C5-03` | `TH04` | grand staff as two maps joined near middle C | meeting light closes the brace |
-| `C5-04` | resumable `TH05` phases | low supports, high four-note bars, then the known relay are separate short sessions rather than one 20-input lesson | supports and star lights accumulate without resetting; the completed relay makes the main bridge ready |
-| `C5-05` | `TH08` relay route | finish the core 4-6 story without simultaneous-note gating | the shared garden opens |
-| `C5-X1` | optional `TH06` | friendly paired landings for capable touch/MIDI input | the same practice arch lights through paired or sequential fallback; paired timing adds only a brief musical layer, not an exclusive object |
-| `C5-X2` | optional `TH07 -> TH08` together route | rehearse one known bar per short session before the full two-bar finale | same shared-garden ending and permanent world state as the relay route |
+| `C5-01` | `TH01-TH02` | guided same-name register calls, then a C/G role-register transfer without testing physical hand use | the two homes answer with two permanent signal pairs and release the first bridge materials |
+| `C5-02` | `TH03` | free-time role/register relay with left/right invitations | three C/D/E bridge pairs lock from both ends |
+| `C5-03` | `TH04` | two one-at-a-time C staff landmarks join the two maps | meeting light closes the brace and the first Chapter 5 phase |
+| `C5-04` | resumable `TH05` phases | five explicit child-started sessions: supports (2 inputs), near high bar (4), far high bar (4), relay bar 1 (5), relay bar 2 (5); no stage auto-starts the next | two supports, two four-light groups and two signal spans accumulate without resetting; relay bar 2 makes the main bridge ready |
+| `C5-05` | `TH08` core relay finale | every child finishes the 4-6 story before any simultaneous-note invitation | the shared garden opens once and the two characters meet |
+| `C5-X1` | later optional `TH06` | use familiar same-name C/C and G/G pairs to isolate friendly paired onset after the garden is already open | the same practice arch lights through paired or sequential fallback; paired timing adds only a brief musical layer, not an exclusive object |
+| `C5-X2` | later optional `TH07 -> TH08 together-encore` | rehearse one known bar per later child-started session, then optionally add a complete two-layer encore | the already-open garden gains a temporary musical layer; no second story completion or new permanent reward |
 
 Session guardrails:
 
@@ -82,11 +93,13 @@ Session guardrails:
 - never require a child to finish a reduced-cue check after repeated repair; end on an assisted success and schedule retrieval later;
 - after a planned story pause, continuing is a new session choice, not an automatic endless chain;
 - no child-facing close or next-level modal is required. Within a session, story motion advances automatically; at the rest point, the character settles and the world map becomes the resume surface;
+- the child world map exposes exactly one current journey marker. Completed landmarks remain as quiet scenery, future landmarks remain distant or locked, and historical replay belongs in the parent area rather than a grid of equally prominent child buttons;
+- key-by-key correct, wrong, assisted, and modeled feedback stays inside the teaching scene and character safe area. It never opens a centered blocking card or the child result modal; see `docs/52_CHILD_COURSE_DIRECTOR_AND_NONBLOCKING_FEEDBACK_ACCEPTANCE_CHECKLIST.md`;
 - after S01, the map rests at the Chapter 3 garden entrance. Tapping that story destination starts `C3-01` and supplies the user gesture needed for browser audio; completion must not route back to `M01` or autoplay the new chapter without a gesture;
 - `C3-01` normally contains LS01-LS02, but repeated repair, a strong/assisted cue, modeled success, long waiting, or clear fatigue during LS01 ends early at the first-leaf safe point. The next formal session resumes only the pending LS02 action;
 - `LS03` and `LS04` are separate first-play sessions: the third leaf is the rest point after visible echo transfer, and the first hidden Do/Re call begins only when the child starts the next session;
-- Chapter 5 optional sessions cannot delay or downgrade the shared-garden ending.
-- `C5-X1/X2` branch from `C5-04` before the finale for a child who is ready; they are not post-finale requirements. A child may go directly from `C5-04` to the `C5-05` relay ending.
+- Chapter 5 optional sessions cannot delay or downgrade the shared-garden ending;
+- every child goes from `C5-04/TH05` to `C5-05/TH08 core-relay-finale` first. Only after that formal finale, on later child-started visits, may `C5-X1/X2` offer `TH06 -> TH07 bar 1 -> TH07 bar 2 -> TH08 together-encore`.
 
 ## Chapter 1: Moon Base Builder
 
@@ -144,7 +157,7 @@ Required polish:
 - make the current note pad obvious;
 - keep future pads visible but not dominant;
 - make correct jump and wrong stumble readable;
-- finish at the right planet without needing a manual "next" button.
+- finish at the ecology-planet arrival without needing a manual "next" button.
 
 S01 release gate:
 
@@ -184,6 +197,8 @@ Entry conditions:
 | `LS06` | 远远的回声藤 | hear a large contrast before a close contrast | compare/match `C4` and `G4` in 4 calls | a vine reaches across two distant garden stones | first call may show both homes; check uses sound plus stable keyboard geography |
 | `LS07` | 挨着睡的 E 和 F | discriminate adjacent known keys | compare/match `E4` and `F4` in 4 calls | two tangled flowers separate at the two-black/three-black boundary | wrong input reveals only the E/F boundary map; check target is 3 of 4 |
 | `LS08` | 根须记两声 | first two-note aural memory within C-D-E | first echo one visible, unscored `C4-D4` guide pair, then answer 4 hidden pairs from `C4-D4`, `E4-D4`, `C4-C4`, `D4-E4` | the guide grows one neutral root bud; scored pairs add neutral root knots, and after story completion an unscored `C4 -> C3` low echo travels underground | enter the four-pair check in the same session only after a smooth guide; otherwise rest, repeat a shorter visible guide next session, and route repeated guide difficulty back to C/D single-note remediation. Stable requires the first complete child response to at least 3 of 4 pairs in one session, no separate-note replay, and at most one child-requested whole-pair replay; resumed fragments finish story only; C3 is story exposure only |
+
+`docs/57_SOUND_TO_STAFF_CROSS_REPRESENTATION_LESSON_SPEC.md` proposes a `C3-X01` interlude after LS05 and before LS06 to close the direct `heard sound -> staff position -> same-name key` gap with known C/D/E only. Its curriculum specification is ready, but teacher review, formal ID/phase approval, runtime and child evidence are missing. It is not part of the current canonical runtime order and cannot be implemented by inference from this paragraph.
 
 Chapter 3 guardrails:
 
@@ -227,7 +242,9 @@ Listening MVP limit:
 
 ## Cross-chapter System: Note Passport Review
 
-Goal: each note gets a compact identity card:
+Goal: each note gets a compact identity card while the product separately checks whether the child can retrieve the letter name from the dinosaur's solfege carrier. Full teacher-gated detail lives in `docs/71_CROSS_CHAPTER_REPRESENTATION_AND_NOTE_PASSPORT_SUPERVISOR_CHECKLIST.md`.
+
+The collection page may contain:
 
 - character buddy;
 - solfege;
@@ -239,19 +256,21 @@ Goal: each note gets a compact identity card:
 
 This is not a flashcard wall. It should be unlocked through play.
 
-The passport appears as a short rest point after each chapter. It may show what the child has met, but it must not interrupt the story or claim mastery from a single guided pass.
+The collection layer updates quietly at natural rests and may show what the child has met, but it must not interrupt the story or claim mastery from a single guided pass. The proposed naming-carrier review is a separate, short opening-review action: `NP-CDE` is not eligible before LS05, `NP-FG` is not eligible before LS07 plus LP05, neither is a numbered map level, and neither may enter runtime before preschool-teacher review and an explicit supervisor dispatch.
 
-## Chapter 4: Dongdong's Low Planet
+## Chapter 4: Dongdong and the Underground Echo Cave
 
 Story name: `咚咚的低音星球`.
 
+Canonical geography: `森芽星` is the formal name of the current breathable ecology planet. Dongdong comes from `鸣石星`, but Season One does not travel there. Chapter 4 remains in Senya's `地下回声洞`, where Dongdong guards a small `共鸣石前哨`. The chapter nickname is not Mingshi's formal name and creates no new map node, route, session, or teaching evidence.
+
 Goal: let the child first hear and feel a lower sound world, connect low `C3-G3` to keyboard geography, let the left hand walk an already-familiar route, and only then map that route onto bass-staff positions. Do not start by saying "now use the left hand."
 
-Story transition: one singing seed sends a deep echo into the ground. The soil glows, a cave opens, and Xingya discovers Dongdong's unfinished low-planet home. Dongdong needs steady low sounds to move foundation stones and hold the bridge.
+Story transition: one singing seed sends a deep echo into the ground. The soil glows, a cave opens, and Xingya discovers the unfinished resonance-stone outpost that Dongdong is guarding. Dongdong needs steady low sounds to move foundation stones and hold the bridge.
 
 Entry conditions:
 
-- in story mode, `C3-07/LS08` has reached its played or bounded assisted story ending so the underground echo exists; teacher/direct modes may bypass the story route but cannot invent Chapter 3 mastery;
+- in story mode, `C3-07/LS08` has reached its played, bounded assisted, or modeled story ending so the underground echo exists; a modeled ending keeps `needsPractice` and cannot invent child-correct, stable, retained, or Chapter 3 mastery evidence; teacher/direct modes may bypass the story route but cannot invent Chapter 3 mastery;
 - the child has completed the guided S01 bridge or an equivalent `C4-G4` note/key route;
 - `C4-G4` does not need to be fully stable, but unresolved F/G weakness keeps adaptive support available;
 - touch input remains sufficient; no hardware is required.
@@ -262,12 +281,12 @@ Entry conditions:
 | `LP02` | 低音 C 的家 | same solfege/letter can live in another register | find `C3` at the lower two-black-left home; compare with `C4` | the permanent C anchor stone lands beside the cave door | keep `低音 C` large; `C3` stays parent/teacher detail |
 | `LP03` | 三块地基石 | low two-black-group geography | press `C3` to wake/relock the existing anchor, then place `D3-E3` | C stays in place while D and E lock to its right | fade direct key glow after the guided route; never re-float or re-drop C |
 | `LP04` | 地洞回声 | low descending direction plus sound matching | hear/play `E3-D3-C3` | echo lights travel down the cave | hide answer key before sound; reveal locator only after wrong input |
-| `LP05` | 三黑键旁的脚印 | isolate low `F3/G3` and compare `E3-F3-G3` | `E3-F3-G3`, then short random comparison | Dongdong's footprints reach the bridge support | reduce color and future-note labels in check |
-| `LP06` | 咚咚搬大石 | first low-register leap, not hand stretch | sequential `C3-G3-C3` | one heavy arch stone rolls into place | strong locator on first run; no stable claim from this preview alone |
-| `LP07` | 左手小队出发 | introduce left-hand use only after low key geography | `C3-D3-E3-D3-C3` | Dongdong stamps five steady footprints | child sees a left-hand icon; suggested `5-4-3-4-5` is parent/teacher support only |
-| `LP08` | 地下谱线地图 | first bass-staff positions | `C3` second space, `D3` middle line, `E3` third space | underground map lights one position at a time | guided pad + key locator, then no strong key glow |
-| `LP09` | 低音桥加固 | complete bass-staff `E3-F3-G3` neighborhood | `E3` third space, `F3` fourth line, `G3` fourth space | upper bridge receives three supports | wrong input compares neighboring staff/key positions |
-| `LP10` | 咚咚的低音星桥 | integrate low sound, key, bass staff, and story | `C3-D3-E3-F3-G3-E3` | guided crossing completes the bridge and sends the shared-home signal; a later check lights six existing signal anchors | guided crossing and reduced-cue check are different sessions; the bridge stays built and story progress does not wait for stable |
+| `LP05` | 三黑键旁的脚印 | isolate low `F3/G3` and compare `E3-F3-G3` | three guided footprints `E3-F3-G3`, then at most three short comparisons if the child remains ready | E wakes the faint starting footprint, F/G restore the two missing footprints; after the comparison branch finishes or is honestly deferred, Dongdong fully appears once at the story-unit ending | reduce color and future-note labels in check; never delay the story reward merely to force optional comparisons |
+| `LP06` | 咚咚搬大石 | first low-register leap, not hand stretch | three released, sequential taps `C3-G3-C3`; one finger may reposition between notes | C releases the stone stop, G rolls the arch stone across the marked arc, and the final C seats it permanently | strong current-note locator on first run; no held span, simultaneous notes, legato requirement, added check, or stable claim from this preview alone |
+| `LP07` | 左手小队出发 | invite the child's left hand only after low key geography is familiar; do not test hand technique | five released notes `C3-D3-E3-D3-C3`; right-hand, one-finger, touch, MIDI, or microphone completion still advances the story | each released correct note stamps one permanent footprint; the fifth forms the team and points toward LP08 | one standardized child-perspective left-hand glyph sits beside the keyboard; wrong-note repair reveals only the current C/D/E locator; suggested `5-4-3-4-5` is optional parent/teacher support only |
+| `LP08` | 地下谱线地图 | map the already-familiar low C/D/E footprints onto the first three bass-staff homes, one current position at a time | guided `C3` second space -> `D3` third line -> `E3` third space loops show the current letter, one model tone, and one exact key locator; if the child remains ready, an optional light check presents C/D/E once each in a deterministic non-ascending order | three homes stay lit as one short underground rail; the optional check connects three existing rail joints without rebuilding the homes | use one wide one-measure staff with five fixed thick/spaced lines and one current notehead; the check hides answer letter, solfege, target sound, and target-key glow before response; wrong-note repair reveals only the current staff/letter/key relationship |
+| `LP09` | 低音桥加固 | reuse the existing E3 third-space home as an anchor, then add the new F3 fourth-line and G3 fourth-space homes | guided E3 lowers the folded anchor brace, F3 and G3 install two new supports; if the child remains ready, an optional pressure check presents E/F/G once each in a deterministic non-ascending order | three supports stay installed and the short bridge stops wobbling; the optional check sends pressure light through existing supports without rebuilding them | only one current support/notehead is active; the check hides answer letter, solfege, target sound, color, and target-key glow; E/F and F/G repair compares both exact staff position and black-key boundary |
+| `LP10` | 咚咚的低音星桥 | integrate the already-taught low sound, exact key, bass-staff position, and six-note order without adding rhythm or a hand requirement | guided six released notes `C3-D3-E3-F3-G3-E3` light one current stepping signal at a time and move Dongdong to the tower; fatigue may rest after the first E without replaying completed steps; a later scheduler-selected session reads the same six staff positions with reduced cues | the supported bridge gains a usable signal route, Dongdong remains at the tower, and Xingya answers from the safe garden relay; the later check lights six existing anchors without moving either character or replaying the chapter ending | guided pads may show the current letter/locator and a child-perspective left-hand invitation, but any hand or one finger can finish; the later check hides answer letter, solfege, target sound, color, and target-key glow; guided completion unlocks Chapter 5, while only the later check may create current stable evidence |
 
 Chapter 4 guardrails:
 
@@ -275,15 +294,21 @@ Chapter 4 guardrails:
 - Chapter 4-5 play uses one continuous, non-scrolling two-octave keyboard from `C3` through `B4`, so `C3-G3` and `C4-G4` keep their real spatial relationship. Black keys follow real 2/3 groups and key widths never change between levels.
 - Ordinary child copy uses `低音 C/D/E/F/G`, `下面的 C`, or a black-key locator. Only dinosaur dialogue may say `低音 Do/Re/Mi/Fa/Sol`; parent/teacher evidence records `C3/D3/...`.
 - LP02's C foundation stone is a permanent world result. LP03 must render it already seated, use the first C response only to wake or lock that anchor, and add only the D and E stones; refresh, rest, repair, or later checks must never suspend or drop C again.
-- The left hand is introduced in `LP07`, after location and sound are familiar. Before that, high/low is a musical contrast, not a hand test.
+- The left hand is invited in `LP07`, after location and sound are familiar. Before that, high/low is a musical contrast, not a hand test. In LP07, using the right hand or one finger is not a wrong answer and cannot reduce the story reward.
+- LP07 uses one standardized child-perspective left-hand glyph beside the keyboard. A mirrored character paw cannot be the only left/right cue. Touch, MIDI, and microphone events default to `actualHand=unknown`; only optional adult observation may add `adultConfirmedHandUse`, and that field never proves technique or mastery.
+- LP08 is a staff-to-key lesson, not a hidden listening test. Its guided loop may model the current target tone after the footprint reaches its named staff home; its optional check must not play or name the target before the response. Only one C/D/E notehead is active at a time, and future answer positions stay hidden rather than appearing as three equal pads.
+- LP08 guided or supported completion writes only the C3-D3-E3 bass-staff subset as played. The optional check may retain per-note first-response evidence, but LP08 alone cannot create full `bass-staff:C3-G3` stable or retained evidence.
+- LP09 inherits LP08's lit E3 home. E3 lowers an existing folded brace; it does not erase, refloat, or reteach the E staff home as new. F3 fourth line and G3 fourth space appear one at a time, with exact three-black-group locators. Its optional pressure check reads existing supports and cannot create full bass-staff stable/retained evidence by itself.
+- LP10 begins on LP09's already-supported bridge. The guided crossing completes its six-step signal route; it does not build another bridge. Guided, assisted, or modeled story completion may unlock Chapter 5 but cannot create bass-staff stable. The reduced-cue signal-anchor check is a different explicit session chosen later by the scheduler, never the immediate mandatory map destination.
+- A clean formal LP10 guided ending is a meaningful Chapter 4 phase tail and may show the single lightweight buttonless milestone under `docs/52`. Assisted/modeled/partial endings and the later signal check never show that settlement. After either path, the child map has one obvious story destination; the check cannot replace or block the unlocked Chapter 5 task.
 - Do not require a small child to hold a five-key span or play legato. Single-note taps and repositioning are valid; fingering is a support layer, not the answer.
-- Microphone may experimentally support the single-note key-response tasks in `LP02-LP06`, but it is not a scored response route for the touch-only high/low comparison in `LP01` and cannot prove hand use or simultaneous coordination.
-- `LP10` guided crossing and reduced-cue signal check are separate short sessions. Guided/assisted story completion may unlock Chapter 5; the later check measures bass-staff stability and must not make Dongdong rebuild or re-cross the same bridge.
+- Microphone may experimentally support the single-note key-response tasks in `LP02-LP07`, but it is not a scored response route for the touch-only high/low comparison in `LP01` and cannot prove hand use or simultaneous coordination. In LP07 it is assisted story progress only: `actualHand=unknown`, no stable/retained evidence, and one confirmed pitch must end or fall to silence before the route rearms for another footprint.
+- `LP10` guided crossing and reduced-cue signal check are separate short sessions. Guided/assisted/modeled story completion may unlock Chapter 5; the later check measures bass-staff stability and must not make Dongdong rebuild or re-cross the same bridge.
 
 Chapter 4 stable evidence:
 
 - high/low comparison succeeds on at least 3 of 4 first responses, with at most one whole-target replay and without candidate preview, character/color/position/stereo answers, strong or modeled help;
-- low `C3-G3` keys are found in reduced cue with no more than two wrong inputs;
+- `low-key:C3-G3 stable` remains an unscheduled evidence target: no current LP05-LP10 action or C4-R01 route grants it; a separate teacher-reviewed, supervisor-dispatched opening review must first define its exact order, cue exclusions, input budget, and routing;
 - bass-staff `C3-G3` check finishes without strong target-key glow;
 - parent view separates `低音区玩过`, `低音键位稳定`, and `低音谱位稳定`.
 
@@ -313,27 +338,29 @@ Use three short sessions instead:
 
 Story name: `会唱歌的大家园`.
 
+The Chapter 5 bridge connects the ecology home with the remote moon outpost. Mingshi is not a current endpoint and remains reserved for a future, separately reviewed expansion.
+
 Goal: turn the two characters' separate jobs into a gradual coordination course. Alternating hands comes before simultaneous hands; separate-hand rehearsal comes before a two-bar duet; rhythm stays simple while coordination is new.
 
 Story transition: Dongdong's low bridge sends a steady signal upward, and Xingya answers from a safe garden relay station linked to the distant moon outpost. Both characters remain at the breathable ecology-side control stations; the moon endpoint is a remote beacon with automatic bridge modules, not a place where helmet-free Xingya is shown standing. Low anchors grow from the ecology side while high-register signals activate the remote moon end, and the treble and bass staves become two connected maps.
 
 Entry conditions:
 
-- in story mode, `C4-09/LP10` has reached its played or bounded assisted signal ending; stable bass-staff evidence is not required to meet Xingya again;
+- in story mode, `C4-09/LP10` has reached its played, bounded assisted, or modeled signal ending; a modeled ending keeps `needsPractice`, creates no child-correct/stable/retained backfill, and shows no clean phase-tail milestone; stable bass-staff evidence is not required to meet Xingya again;
 - low `C3-E3` and middle `C4-E4` keyboard locations are familiar with medium cues; unresolved locations keep adaptive support in the core relay route rather than blocking it;
 - the child has experienced a slow one-hand route. The core relay remains guided when turn-taking is not yet stable;
-- simultaneous levels remain capability-gated and never block the 4-6 story path.
+- simultaneous levels remain post-story optional invitations and never block, delay, or upgrade the 4-6 story path.
 
 | Level | Child-facing mission | New teaching job | Playable note task | Story consequence | Cue fade / check |
 | --- | --- | --- | --- | --- | --- |
-| `TH01` | 两个 C 说你好 | same name across registers; left/right turn taking | left/low `C3`, then right/middle `C4` | two homes exchange their first light signal | sequential only; character motion replaces long text |
-| `TH02` | G 回声接力 | transfer the same idea to another keyboard group | `G3 -> G4`, then `C3 -> C4` | bridge lights answer from low to high | no direct glow on the responding key in check |
-| `TH03` | 两边轮流修桥 | slow left/right alternation | `L:C3 -> R:C4 -> L:D3 -> R:D4 -> L:E3 -> R:E4` | bridge grows from both ends | one hand icon at a time; free-time exploration first, then the same 48-56 BPM guided range used by the canonical piece; speed never fails the story |
-| `TH04` | 中央 C 会合点 | understand treble/bass as two maps joined around one middle-C landmark | find bass `C3` on its second-space home, then find middle `C4` on the treble ledger-line home | the brace closes and one middle-C meeting light joins the maps | show `C4` once as the meeting landmark; no new rhythm or simultaneous notes |
-| `TH05` | 一边托住，一边点灯 | rehearse the two musical jobs before choosing a route | resumable phases: low anchors `C3 | G3`; high bar 1 and bar 2; then the known two-bar relay | supports and stars remain installed across rests; completing the relay makes the main bridge ready | each phase is a separate short session; no child is asked to rehearse both parts and perform the relay in one sitting |
-| `TH06` | 第一次一起落地 | optional first paired attack | `C3+C4`, then `G3+G4`, then `C3+C4` | paired or sequential fallback lights the same existing practice arch; a close pair adds only a brief together animation | touch/MIDI only; `<=600 ms` may trigger the friendly effect, while tighter evidence is stored separately; no exclusive collectible |
-| `TH07` | 两小节小合奏 | optional two-hand version of the already-known relay piece | one known bar per short session, then the full two-bar route only in `TH08` | each practiced bar adds a temporary two-layer rehearsal light; permanent garden state remains identical to relay | separate parts are already known from TH05; early low-note release is coached, not failed |
-| `TH08` | 会唱歌的大家园 | finish through either relay or optional together play | replay the same two-bar original in the route already learned | both homes join and the garden opens automatically | relay and together routes receive the same story ending; no manual next button and no easy/hard label |
+| `TH01` | 两个 C 说你好 | recall the already-taught low/middle C relationship and add Dongdong-then-Xingya role/register order; this is not a physical-hand test | after each role voice ends, one model tone and one current letter/locator guide `C3`, then `C4`; any hand, one finger, touch, exact MIDI, or eligible sequential microphone input may respond | the low-station C lamp and middle-C relay lamp answer in order, leaving one permanent signal arc | guided only: one current role, one child-perspective hand invitation and one current locator; the future C key stays neutral |
+| `TH02` | G 回声接力 | transfer the same-name/different-register rule from C to G, then recall C with fewer cues | guided `G3 -> G4`, then reduced-cue `C3 -> C4`; child labels are `低音 G` and `上面的 G`, never `中央 G` | the G pair closes the middle signal gap; the returning C pair releases the first permanent bridge materials | G may use one model tone and exact current locator per turn; the C return has no model tone, target-key glow, color answer, or future-key preview; this same-session transfer is observation, not stable evidence |
+| `TH03` | 两边轮流修桥 | follow Dongdong/Xingya role-register turns while left/right hands are invited, without treating pitch as proof of physical-hand use | one free-time route of six discrete released inputs: `C3 -> C4 -> D3 -> D4 -> E3 -> E4`; C/D/E each form one low/upper pair | each pair joins one permanent bridge section, so the bridge grows in three readable steps from both ends | one current role/register and at most one child-perspective hand invitation; first play has no pulse or tempo requirement; a slow pulse belongs only to a later separate review |
+| `TH04` | 中央 C 会合点 | connect two exact C staff landmarks to two exact keyboard homes, one current position at a time | two guided staff-to-key loops only: bass-staff second-space `C3`, then treble-staff ledger-line-below `C4` | the brace closes and one middle-C meeting light joins the maps | no hand switching, pulse, rhythm, melody, simultaneous input, alternate bass-ledger spelling of C4, or second active note on screen |
+| `TH05` | 一边托住，一边点灯 | rehearse the two musical jobs, then combine one bar at a time | five resumable sessions: low anchors `C3 | G3`; high bar 1; high bar 2; relay bar 1; relay bar 2 | each session leaves one readable permanent result; the second relay span makes the main bridge ready | each session starts only from a new child map action and contains at most five meaningful inputs; TH08 alone joins both bars into one complete performance |
+| `TH06` | 第一次一起落地 | later optional paired-onset exploration after the core story is complete | `C3+C4`, then `G3+G4`, then `C3+C4`; same-name pairs reduce note-selection load before the real second-bar transfer | paired or sequential fallback lights the same existing practice arch; a close pair adds only a brief together animation | touch/MIDI may observe timing; microphone or single-point input uses sequential fallback; provisional `<=600 ms` friendly feedback and tighter observation remain teacher/device-gated |
+| `TH07` | 两小节小合奏 | later optional transfer from same-name pairs to the actual two-layer bar starts | one known bar per new child-started session: `C3+C4` then `D4-E4-D4`; later `G3+E4` then `D4-C4-C4` | each practiced bar adds a temporary two-layer rehearsal light; the already-open garden and permanent rewards do not change | early low-note release and scattered pairs are coached or completed sequentially, not failed |
+| `TH08` | 会唱歌的大家园 | first run is the universal relay story finale; a later replay may be a together encore | core: join the two TH05 relay bars; later encore: join the two TH07 bars with pair windows only at bar starts | core opens the shared garden once; later encore adds temporary two-layer sound and returns to the same garden | no manual next button, route-choice modal, second story completion, or easy/hard label |
 
 ### Canonical Two-measure Piece And Route Fork
 
@@ -345,20 +372,28 @@ The implementation must use one fixed original piece instead of inventing a diff
 | Dongdong / low-register part | `C3 w` | `G3 w` | one support lands on beat 1 and may be held for four pulses |
 
 - Meter is `4/4`; guided target tempo is `52 BPM`, with a permitted range of `48-56 BPM`.
-- `TH05` is a resumable three-phase bundle: first place the two low supports, then learn the two high four-note bars with a rest available after bar 1, then complete the known two-bar relay in a later session. Finished supports and lights never reset between phases.
-- The default 4-6 route is `TH01 -> TH02 -> TH03 -> TH04 -> TH05 -> TH08 relay finale`.
-- The capability route is `TH05 -> TH06 -> TH07 bar 1 -> TH07 bar 2 -> TH08 together finale`. It is offered only after the separate parts are playable and the input route can receive two notes.
-- Route choice is inferred from input capability and the child's attempts. A scattered paired try, unavailable multi-touch/MIDI, or fatigue returns gently to the relay finale; it never blocks the garden reward.
+- `TH05` is one public mission with five internal, child-started short sessions: `C5-04A` supports `C3,G3`; `C5-04B1` near lights `C4-D4-E4-D4`; `C5-04B2` far lights `E4-D4-C4-C4`; `C5-04C1` relay bar 1 `C3,C4,D4,E4,D4`; and `C5-04C2` relay bar 2 `G3,E4,D4,C4,C4`. A completed session never auto-starts the next, and every installed support, light and signal span persists across map return, refresh, repair and rest.
+- Supports and high bars are first teaching/rehearsal; the two relay bars observe known component order. None of these first-play stages creates TH03 role/register stable, paired timing, sustain, verified-hand or two-measure mastery evidence. The low anchor may be released before the high answer; no pedal or four-beat hold is required.
+- `C5-04C2` is the second Chapter 5 phase tail. Only a formal completion with a clean final relay-bar action may show one lightweight, buttonless milestone; helped completion still opens TH08 with `needsPractice` and no clean milestone. Internal TH05 stages use permanent world changes only, never a result modal.
+- After core TH05 completion, the home shows `刚完成：主桥接通了 / 现在：让大家园唱起来 / 随后：花园会打开`; only TH08 is actionable and no TH08 session is created automatically. TH08 is the first time the two learned relay bars are joined into one uninterrupted two-bar performance.
+- The universal 4-6 route is `TH01 -> TH02 -> TH03 -> TH04 -> TH05 -> TH08 core relay finale`. Every child opens the garden before any paired invitation.
+- Only on a later child-started visit after the formal core finale may the scheduler offer `TH06 -> TH07 bar 1 -> TH07 bar 2 -> TH08 together-encore`. No optional session is created in the core completion session.
+- Optional eligibility is never inferred from accuracy, stable labels, speed, pitch, hand icons, or presumed ability. A child click starts the invitation; touch/MIDI may observe two onsets, while microphone, single-point input, scattered pairs, fatigue, or preference for one-at-a-time play uses the equal sequential fallback or defers the encore without affecting the completed garden.
 - `TH06` does not unlock a unique permanent arch or rarer collectible. Paired and sequential fallback leave the same practice-arch state; only the brief animation/audio layer differs.
-- In `TH06`, a pair within `600 ms` is close enough for the friendly landing animation. Optional emerging paired-timing evidence requires at least 2 of 3 pairs within `350 ms`; this still does not prove physical hand identity or technique.
+- In `TH06`, `600 ms` is only a provisional friendly-animation threshold and `2 of 3 pairs within 350 ms` is only a provisional emerging paired-timing observation. Both require preschool-teacher and physical-device review and still cannot prove physical hand identity or technique.
 - In `TH07`, the two bar-start pairs are the only required simultaneous onsets. Releasing the low whole note early does not fail the story, use the pedal, or create a sustain mastery claim.
 - The child never sees `easy`, `hard`, `failed two hands`, BPM numbers, or timing milliseconds. Those are implementation and parent/teacher evidence details.
 
 Chapter 5 guardrails:
 
 - Do not infer which physical hand was used from pitch alone. MIDI and microphone report notes, not hands. Store `hand prompted`, `range accuracy`, `switch timing`, `paired timing`, and optional adult confirmation separately.
-- `TH01-TH05` plus the `TH08` relay finale are the core 4-6 route. `TH06-TH07` and the `TH08` together finale form a gentle capability branch; inability to play simultaneous notes never blocks story completion.
-- Core Chapter 5 story entry and completion depend on played/bounded assisted story progress, not stable or retained labels. Those labels only change support, parent evidence, and whether the optional together invitation is appropriate.
+- `TH01-TH02` teach role/register order before any explicit left/right invitation. `TH03` begins that invitation, but the assessable task remains exact role/register order: a child who uses the same finger or the non-invited hand on the correct key is still correct, and pitch cannot prove actual hand use.
+- `TH01` is the guided C reminder. `TH02` guides the new cross-register G pair and uses the returning C pair as a same-session reduced-cue transfer. Neither first-play route may create stable; a later scheduler-selected opening review must present one C pair and one G pair, require four first-response exact-register inputs with no model tone, strong locator, target-key glow, modeled input, or cross-session stitching, and still cannot prove physical hand use.
+- `C5-01` has no result modal or phase settlement after TH01 or TH02. Smooth play advances from TH01 into TH02 inside one session; difficulty rests at the completed C or G signal pair, and the next explicit map action resumes only the unfinished pair. After TH02, the world returns with `刚完成：两个家听见了 / 现在：轮流修桥 / 随后：中央 C 会合点`; only the current task is actionable.
+- `TH03` first play is one free-time six-note route with a real release/rearm between turns. C, D, and E are three permanent pair checkpoints; difficulty rests only after a completed pair and resumes only unfinished pairs. It has no result modal or phase settlement, and returns to `刚完成：桥轮流长出三段 / 现在：中央 C 会合点 / 随后：一边托住，一边点灯`.
+- `TH04` presents only one current staff landmark and one keyboard target at a time. Guided completion writes narrow C-landmark played evidence, not grand-staff mastery. It is the first Chapter 5 phase tail: a clean formal phase completion may show one lightweight buttonless milestone; assisted or modeled completion still opens TH05 with `needsPractice` but shows no clean milestone.
+- `TH01-TH05` plus the first `TH08` core relay finale are the complete 4-6 story route. `TH06-TH07` and a later `TH08` together encore form a post-story invitation; inability or unwillingness to play simultaneous notes never delays, downgrades, or reopens story completion.
+- Core Chapter 5 story entry and completion depend on played, bounded assisted, or modeled story progress, not stable or retained labels. Modeled progress keeps `needsPractice` and cannot backfill child-correct, stable, or retained evidence; those labels only change support, parent evidence, and whether the optional together invitation is appropriate.
 - Introduce no chords within one hand, syncopation, dotted rhythm, pedal, or long piece while two-hand coordination is new.
 - The first duet stays at two measures. Practice each hand separately before combining.
 - The microphone route stays sequential. Touch/MIDI can test paired attacks, but neither proves hand identity without observation/confirmation.
@@ -368,23 +403,26 @@ Chapter 5 guardrails:
 
 Chapter 5 stable evidence:
 
-- alternating-hand route completes at a slow pulse with at most one missed switch;
+- same-name register/role retrieval is observed only in a later opening review with one C pair and one G pair: all four first responses use the requested register, no model/strong target locator/target-key glow/modeled input is used, and cross-session fragments are not combined;
+- role/register relay begins in TH03; first play is free-time and cannot create stable. A later separate slow-pulse review may establish `role-register relay stable` only from six exact-register first responses in order, no model/strong locator/target-key glow/modeled input, and at most one pulse miss; actual hand use remains unknown without adult observation;
+- TH04 guided play writes only `C3/C4 staff landmarks played`; a later reduced-cue session may establish those two landmarks stable from 2/2 exact staff-to-key first responses, while C3 and C4 remain separate mastery identities;
 - each separate part can be replayed without strong target-key glow;
 - paired-note timing, when attempted, is tracked separately from note accuracy;
 - relay completion and together-attempt completion remain separate facts;
-- parent view says `左右接力稳定` or `双手合奏练习中`; it never claims verified hand technique from note input alone.
+- parent view may say `左右手轮流练过` after the invitation and `角色/音区接力稳定` after the later relay gate. It may describe actual left/right use only when an adult observed it; note input alone never proves hand technique.
 
 Remediation:
 
-- correct notes but wrong turn: slow the route and show only the next character/hand icon;
-- correct hands but timing breaks: remove pitch changes and rehearse two alternating anchor notes;
+- correct letter but wrong register/role: praise the letter, keep the completed signal, and show only the current character plus `低音 C/G`, `中央 C`, or `上面的 G`; never call `G4` `中央 G`;
+- correct key played with the non-invited hand: accept it, keep `actualHand=unknown`, and continue without a hand-error message;
+- exact notes but the later review pulse breaks: keep hand use unknown, remove new pitch changes, and rehearse two alternating role/register anchors;
 - simultaneous pair is scattered: accept a wider timing window, rehearse each note separately, then retry once without penalty;
 - staff overload: return to the separate treble or bass bridge before showing the grand staff again;
 - fatigue/frustration: stop at the completed alternating route and preserve the story reward.
 
 ## Later Project: A-G Word Typing Game
 
-Status: `parked_final_project / not_dispatched / runtime_forbidden`.
+Status: `excluded_from_v1_scope_by_user / parked_final_project / not_dispatched / runtime_forbidden`.
 
 Do not implement, prototype, generate dedicated art for, or expose an entry until all of the following are true:
 

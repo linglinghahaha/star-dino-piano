@@ -1,0 +1,92 @@
+/* 360a prototype-only V4 map treatment. The source image already contains the route. */
+#mapShell.map-shell[data-map-visual="v4"] {
+  background: #071b3b url("assets/runtime/world-map-v4-360a.webp") center / cover no-repeat !important;
+}
+
+#mapShell.map-shell[data-map-visual="v4"]::before,
+#mapShell.map-shell[data-map-visual="v4"] .map-route,
+#mapShell.map-shell[data-map-visual="v4"] .map-landmark-wash {
+  display: none !important;
+}
+
+#mapShell.map-shell[data-map-visual="v4"] .map-v4-focus-mask {
+  --map-v4-dim-alpha: 0.22;
+  position: absolute;
+  z-index: 3;
+  display: block;
+  pointer-events: none;
+  opacity: 0;
+  background: radial-gradient(ellipse at center, rgba(2, 12, 31, var(--map-v4-dim-alpha)) 0, rgba(2, 12, 31, 0.14) 30%, rgba(2, 12, 31, 0.06) 58%, transparent 88%);
+}
+
+#mapShell.map-shell[data-map-visual="v4"] .map-v4-focus-mask[data-map-v4-landmark="C1"] {
+  left: 0;
+  top: 12%;
+  width: 44%;
+  height: 44%;
+}
+
+#mapShell.map-shell[data-map-visual="v4"] .map-v4-focus-mask[data-map-v4-landmark="C2"] {
+  left: 16%;
+  top: -2%;
+  width: 68%;
+  height: 34%;
+}
+
+#mapShell.map-shell[data-map-visual="v4"] .map-v4-focus-mask[data-map-v4-landmark="C3"] {
+  left: 60%;
+  top: 12%;
+  width: 40%;
+  height: 44%;
+}
+
+#mapShell.map-shell[data-map-visual="v4"] .map-v4-focus-mask[data-map-v4-landmark="C4"] {
+  left: 30%;
+  top: 70%;
+  width: 44%;
+  height: 36%;
+}
+
+#mapShell.map-shell[data-map-visual="v4"][data-map-focus-chapter="C1"] .map-v4-focus-mask:not([data-map-v4-landmark="C1"]),
+#mapShell.map-shell[data-map-visual="v4"][data-map-focus-chapter="C2"] .map-v4-focus-mask:not([data-map-v4-landmark="C2"]),
+#mapShell.map-shell[data-map-visual="v4"][data-map-focus-chapter="C3"] .map-v4-focus-mask:not([data-map-v4-landmark="C3"]),
+#mapShell.map-shell[data-map-visual="v4"][data-map-focus-chapter="C4"] .map-v4-focus-mask:not([data-map-v4-landmark="C4"]) {
+  opacity: 1;
+}
+
+#mapShell.map-shell[data-map-visual="v4"] .map-floor-result {
+  display: none !important;
+}
+
+#mapShell.map-shell[data-map-visual="v4"] .map-workshop-floor-result {
+  left: 18.3%;
+  top: 40.6%;
+  z-index: 5;
+  width: clamp(70px, 8vw, 96px);
+  height: clamp(13px, 1.45vw, 18px);
+  border-radius: 52% 52% 28% 28%;
+  background: linear-gradient(90deg, rgba(131, 239, 255, 0.3), rgba(237, 250, 255, 0.9) 28% 72%, rgba(84, 198, 224, 0.34));
+  box-shadow: 0 3px 5px rgba(5, 25, 55, 0.26), 0 0 10px rgba(122, 235, 255, 0.34);
+}
+
+#mapShell.map-shell[data-map-visual="v4"] .map-workshop-floor-result::before {
+  content: "";
+  position: absolute;
+  inset: 3px 9% 2px;
+  border: 1px solid rgba(221, 252, 255, 0.78);
+  border-radius: inherit;
+  background: linear-gradient(90deg, transparent 0 23%, rgba(53, 174, 205, 0.38) 24% 26%, transparent 27% 73%, rgba(53, 174, 205, 0.38) 74% 76%, transparent 77%);
+}
+
+#mapShell.map-shell[data-map-visual="v4"] .map-workshop-floor-result::after {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  left: 10%;
+  right: 10%;
+  bottom: -5px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgba(9, 32, 63, 0.3);
+  filter: blur(3px);
+}

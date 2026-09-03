@@ -22,7 +22,7 @@ MVP uses fixed-do:
 | Letter | Solfege | MIDI | Keyboard locator | Staff position | Story role | Color role | Common confusion | Repair focus |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | C | Do | 60 | two-black left | ledger line below staff | first floor, start pad | first-exposure scaffold only | D | compare left vs middle in the two-black group |
-| D | Re | 62 | two-black middle | below staff | wheel, middle light | first-exposure scaffold only | C/E | show it between C and E |
+| D | Re | 62 | two-black middle | space below staff | wheel, middle light | first-exposure scaffold only | C/E | show it between C and E |
 | E | Mi | 64 | two-black right | first line | light, lower star | first-exposure scaffold only | D/F | compare two-black right vs three-black left |
 | F | Fa | 65 | three-black left | first space | landing pad | first-exposure scaffold only | E/G | show it as the first key before the three-black group |
 | G | Sol | 67 | three-black left-middle | second line | star gate | first-exposure scaffold only | F/C leap | compare first and second white keys around the three-black group |
@@ -41,12 +41,12 @@ Before expanding the keyboard range, define how octave, hand area, and staff pos
 
 ## Chapter 4 Low-register Mapping
 
-These rows are locked curriculum targets for `LP01-LP10`. `LP01-LP03` and their isolated opening-review scheduler now use this register and locator logic in the approved `overhaul-347a-c4-r01a` / `af9aa28` browser baseline; `LP04-LP10` remain planned and locked until their own gates pass. Implementation status does not change the mapping.
+These rows are locked curriculum targets for `LP01-LP10`. `LP01-LP03` and their isolated opening-review scheduler use this register and locator logic in the approved `overhaul-347a-c4-r01a` / `af9aa28` browser baseline. The current unapproved browser/PWA experience candidate is `overhaul-369d-course-route-monotonicity-correction` at `app.js F3B4F960...`; 369c is the direct stage-settlement/PWA predecessor, 369b the Figma A settlement source, 369a the staff-notation source, 368b the S01-continuity source, 367b the portable-recovery predecessor, and 366a the teaching-core predecessor. It preserves the independently accepted LP04 loop, complete R01B lifecycle, compact phase-tail settlement and prior input corrections. Its route correction adds no bass-staff evidence; the future LP08-LP10 bass-staff rows remain specification-only. The separate frozen observation baseline remains `overhaul-359a-map-shell-scroll-reset` / `app.js 5AB01914...`; neither candidate changes this mapping. `LP05-LP10` remain planned and locked pending the next explicit dispatch.
 
 | Letter | Ordinary child label | MIDI / Hz | Keyboard locator | Bass-staff position | Story role | Common confusion | Repair focus |
 | --- | --- | --- | --- | --- | --- | --- | --- |
 | C3 | 低音 C | `48 / 130.81` | lower two-black left | second space | first foundation stone | C4 / D3 | same name, different home; compare low vs middle C |
-| D3 | 低音 D | `50 / 146.83` | lower two-black middle | middle/third line | tunnel rail | C3 / E3 | show it between low C and E |
+| D3 | 低音 D | `50 / 146.83` | lower two-black middle | third line (middle line) | tunnel rail | C3 / E3 | show it between low C and E |
 | E3 | 低音 E | `52 / 164.81` | lower two-black right | third space | echo crystal | D3 / F3 | compare two-black right with three-black left |
 | F3 | 低音 F | `53 / 174.61` | lower three-black left | fourth line | bridge support pad | E3 / G3 | show it as the first white key before three black keys |
 | G3 | 低音 G | `55 / 196.00` | lower three-black left-middle | fourth space | main bridge anchor | F3 / G4 | compare first and second white keys around the three-black group; then compare registers |
@@ -54,6 +54,7 @@ These rows are locked curriculum targets for `LP01-LP10`. `LP01-LP03` and their 
 Register-language contract:
 
 - Ordinary child UI uses `低音 C` and `中央 C`/`较高的 C`, not an abstract octave lecture. A dinosaur dialogue may call the same sounds `低音 Do` and `中央 Do`.
+- In the Chapter 5 TH03 relay, ordinary prompts distinguish `低音 D` from `上面的 D` and `低音 E` from `上面的 E`; `中央` remains reserved for the established `中央 C` landmark. Keyboard keycaps themselves still show letters only.
 - Parent/teacher evidence always records `C3` or `C4` explicitly.
 - A correct letter/solfege in the wrong octave is a useful near miss: name what was correct, show the required home, and do not count staff mastery.
 - Color and character identity must not be the only way to distinguish registers.
@@ -72,6 +73,7 @@ Two-octave display contract:
 - `C3` remains low Do on the bass-staff second space. It is never called middle C.
 - `C4` remains middle Do/middle C and keeps the treble ledger-line-below position already learned in S01.
 - In `TH04`, the game may animate `C4` as the meeting landmark between the two maps, but it must not draw `C3` at that meeting point or merge `C3`/`C4` into one mastery id.
+- `TH04` uses two separate staff-to-key loops and exposes only one current staff note at a time: bass-staff second-space `C3`, then treble-staff ledger-line-below `C4`.
 - A full grand staff can write middle `C4` above the bass staff or below the treble staff. Chapter 5 introduces only the already-known treble-ledger form first; the alternate bass-ledger spelling is a later comparison, not a same-screen test.
 - Same-name comparison means `Do is still Do in another home`; it does not mean the pitches, staff positions, or keyboard locations are interchangeable.
 
@@ -88,6 +90,8 @@ Every first-course level that targets a note must expose at least two identity l
 | Listening seed | across the full model/feedback cycle: heard sound + note identity + key locator; during a hidden call before action: heard sound/replay only |
 
 These links accumulate across the teaching cycle; they do not all have to be visible at the same instant. In particular, a listening check fails if target identity, target color, answer key, or locator appears before the child responds.
+
+Accumulation is teaching, not automatic proof. The current M01-M02 carrier pattern continuously pairs dinosaur solfege with ordinary letter names, so the `letter name <-> solfege` link remains partial until the teacher-gated `docs/71` review is approved, implemented and observed. Its proposed first letter choice and later guided piano transfer remain separate evidence; one cannot repair or backfill the other.
 
 ## Visual Differentiation
 
@@ -156,7 +160,7 @@ Implementation rule: A and B may appear as physical keyboard keys, but they are 
 
 ## Implementation Status
 
-The current code has a Course 1 `noteIdentityMatrix` in `app.js`, and `notes` are generated from that matrix. Chapter 4 `LP01-LP03` and C4-R01A now use separate register-aware targets and evidence for C3/C4, but those low-register identities are not yet generated from one shared matrix. The approved browser baseline is `overhaul-347a-c4-r01a` / `af9aa28`; this is implementation progress, not proof that the document and runtime have become one protected source of truth.
+The current code has a Course 1 `noteIdentityMatrix` in `app.js`, and `notes` are generated from that matrix. Chapter 4 `LP01-LP04` and C4-R01A/R01B foundations use separate register-aware targets and evidence for C3/C4, but those low-register identities are not yet generated from one shared matrix. The approved committed browser baseline remains `overhaul-347a-c4-r01a` / `af9aa28`; LP04 is present in the current unapproved browser/PWA experience candidate 369d. 369c is the direct stage-settlement/PWA predecessor, 369b the Figma A settlement source, 369a the staff-notation source, 368b the S01-continuity source, 367b the portable-recovery predecessor, 366a the teaching-core predecessor, 365b the frozen static/source recovery owner, and 359a remains the separate frozen observation baseline. The 369d route correction adds no bass-staff evidence; future bass-staff positions remain specification-only. This is implementation progress, not proof that the document and runtime have become one protected source of truth.
 
 Before extending `LP04+` or unlocking A/B:
 

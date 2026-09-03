@@ -2,6 +2,8 @@ import crypto from "node:crypto";
 import fs from "node:fs";
 import path from "node:path";
 import { createRequire } from "node:module";
+import { canonicalC1C2History } from "./canonical-course-fixture.mjs";
+import { completeParentChallenge } from "./parental-challenge-helper.mjs";
 
 const require = createRequire(import.meta.url);
 const { chromium } = require("playwright");
@@ -150,7 +152,7 @@ function fixture() {
   return {
     version: 1,
     active: null,
-    history: [{ bundleId: "C2-03", status: "ended", completedActions: [{ actionId: "S01-check", kind: "staff", targetId: "S01" }] }],
+    history: canonicalC1C2History({ completedAt: "2026-07-11T01:00:00.000Z", tag: `chapter3-${levelId.toLowerCase()}-zones` }),
     lastRest: null,
     chapter3: {
       entryEventId: "CH3_ENTRY_AIR_CHECK",
@@ -386,11 +388,15 @@ try {
     states.push({ geometry: await geometry(page, "awaiting-response"), screenshot: await maybeScreenshot(page, spec, "awaiting-response") });
 
     await page.locator("#playParentGate").click();
+    await completeParentChallenge(page);
+    await page.locator("#parentTabDevices").click();
     await page.locator("#parentSoundToggle").click();
     await page.locator("#parentClose").click();
     await page.locator("#listeningReplay").click();
     states.push({ geometry: await geometry(page, "sound-paused"), screenshot: await maybeScreenshot(page, spec, "sound-paused") });
     await page.locator("#playParentGate").click();
+    await completeParentChallenge(page);
+    await page.locator("#parentTabDevices").click();
     await page.locator("#parentSoundToggle").click();
     await page.locator("#parentClose").click();
     await page.locator("#listeningReplay").click();

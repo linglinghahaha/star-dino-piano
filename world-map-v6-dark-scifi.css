@@ -1,0 +1,473 @@
+/* 362a prototype-only dark sci-fi map treatment.
+ * The audited V5 background remains the source; this file only changes its
+ * lighting and the child-facing HUD hierarchy.
+ */
+#mapShell.map-shell[data-map-visual="v6"] {
+  isolation: isolate;
+  color: #edf9ff;
+  background-color: #020711 !important;
+  background-image:
+    linear-gradient(180deg, rgba(1, 6, 18, 0.78) 0%, rgba(2, 10, 22, 0.28) 42%, rgba(1, 5, 13, 0.78) 100%),
+    url("assets/runtime/world-map-v5-361a.webp") !important;
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-blend-mode: multiply, normal !important;
+}
+
+#mapShell.map-shell[data-map-visual="v6"]::before {
+  content: "" !important;
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  display: block !important;
+  pointer-events: none;
+  background:
+    linear-gradient(90deg, rgba(1, 7, 17, 0.28), transparent 23%, transparent 77%, rgba(1, 7, 17, 0.30)),
+    radial-gradient(ellipse at 50% 45%, transparent 0 43%, rgba(0, 3, 10, 0.28) 82%, rgba(0, 2, 7, 0.60) 100%) !important;
+}
+
+#mapShell.map-shell[data-map-visual="v6"]::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  opacity: 0.17;
+  border: 1px solid rgba(112, 225, 237, 0.28);
+  background:
+    linear-gradient(90deg, transparent 0 7%, rgba(111, 226, 237, 0.16) 7% 7.12%, transparent 7.12% 92.88%, rgba(111, 226, 237, 0.14) 92.88% 93%, transparent 93%),
+    repeating-linear-gradient(180deg, transparent 0 74px, rgba(120, 218, 231, 0.055) 74px 75px, transparent 75px 150px);
+}
+
+#mapShell.map-shell[data-map-visual="v6"] .map-route,
+#mapShell.map-shell[data-map-visual="v6"] .map-landmark-wash {
+  display: none !important;
+}
+
+#mapShell.map-shell[data-map-visual="v6"] .map-v4-focus-mask {
+  --map-v6-dim-alpha: 0.16;
+  position: absolute;
+  z-index: 3;
+  display: block;
+  pointer-events: none;
+  opacity: 0;
+  background: radial-gradient(ellipse at center, rgba(0, 7, 18, var(--map-v6-dim-alpha)) 0, rgba(0, 7, 18, 0.14) 34%, rgba(0, 7, 18, 0.06) 61%, transparent 88%);
+}
+
+#mapShell.map-shell[data-map-visual="v6"] .map-v4-focus-mask[data-map-v4-landmark="C1"] {
+  left: 0;
+  top: 12%;
+  width: 44%;
+  height: 44%;
+}
+
+#mapShell.map-shell[data-map-visual="v6"] .map-v4-focus-mask[data-map-v4-landmark="C2"] {
+  left: 16%;
+  top: -2%;
+  width: 68%;
+  height: 34%;
+}
+
+#mapShell.map-shell[data-map-visual="v6"] .map-v4-focus-mask[data-map-v4-landmark="C3"] {
+  left: 60%;
+  top: 12%;
+  width: 40%;
+  height: 44%;
+}
+
+#mapShell.map-shell[data-map-visual="v6"] .map-v4-focus-mask[data-map-v4-landmark="C4"] {
+  left: 30%;
+  top: 70%;
+  width: 44%;
+  height: 30%;
+}
+
+#mapShell.map-shell[data-map-visual="v6"][data-map-focus-chapter="C1"] .map-v4-focus-mask:not([data-map-v4-landmark="C1"]),
+#mapShell.map-shell[data-map-visual="v6"][data-map-focus-chapter="C2"] .map-v4-focus-mask:not([data-map-v4-landmark="C2"]),
+#mapShell.map-shell[data-map-visual="v6"][data-map-focus-chapter="C3"] .map-v4-focus-mask:not([data-map-v4-landmark="C3"]),
+#mapShell.map-shell[data-map-visual="v6"][data-map-focus-chapter="C4"] .map-v4-focus-mask:not([data-map-v4-landmark="C4"]) {
+  opacity: 1;
+}
+
+#mapShell.map-shell[data-map-visual="v6"] .map-brand,
+#mapShell.map-shell[data-map-visual="v6"] .chapter-pill,
+#mapShell.map-shell[data-map-visual="v6"] .star-pill,
+#mapShell.map-shell[data-map-visual="v6"] .parent-gate {
+  color: #effcff !important;
+  background: rgba(3, 13, 28, 0.88) !important;
+  border: 1px solid rgba(111, 226, 237, 0.48) !important;
+  box-shadow: inset 0 1px 0 rgba(205, 250, 255, 0.12), 0 10px 24px rgba(0, 2, 10, 0.48) !important;
+  backdrop-filter: blur(12px) saturate(0.92);
+}
+
+#mapShell.map-shell[data-map-visual="v6"] .map-brand {
+  background:
+    linear-gradient(135deg, rgba(5, 23, 43, 0.95), rgba(7, 35, 51, 0.86)),
+    radial-gradient(circle at 12% 0%, rgba(255, 206, 116, 0.18), transparent 36%) !important;
+  border-color: rgba(244, 198, 106, 0.62) !important;
+}
+
+#mapShell.map-shell[data-map-visual="v6"] .map-brand .eyebrow,
+#mapShell.map-shell[data-map-visual="v6"] .map-brand h1,
+#mapShell.map-shell[data-map-visual="v6"] .chapter-pill *,
+#mapShell.map-shell[data-map-visual="v6"] .star-pill *,
+#mapShell.map-shell[data-map-visual="v6"] .parent-gate * {
+  color: inherit !important;
+}
+
+#mapShell.map-shell[data-map-visual="v6"] .chapter-pill::before,
+#mapShell.map-shell[data-map-visual="v6"] .star-pill::before {
+  color: #72e4ef !important;
+}
+
+#mapShell.map-shell[data-map-visual="v6"] .star-icon {
+  color: #f4c66a !important;
+  filter: drop-shadow(0 0 8px rgba(244, 198, 106, 0.34));
+}
+
+#mapShell.map-shell[data-map-visual="v6"] .journey-director {
+  color: #eaf9ff !important;
+  border: 1px solid rgba(108, 222, 235, 0.46) !important;
+  background: rgba(3, 12, 25, 0.88) !important;
+  box-shadow: 0 18px 44px rgba(0, 2, 10, 0.56), inset 0 1px 0 rgba(225, 251, 255, 0.12) !important;
+  backdrop-filter: blur(16px) saturate(0.82) !important;
+}
+
+#mapShell.map-shell[data-map-visual="v6"] .journey-director::before {
+  background: linear-gradient(90deg, rgba(5, 35, 49, 0.80), rgba(5, 25, 41, 0.48) 70%, transparent) !important;
+}
+
+#mapShell.map-shell[data-map-visual="v6"] .journey-chapters,
+#mapShell.map-shell[data-map-visual="v6"] .journey-mission {
+  border-color: rgba(111, 226, 237, 0.16) !important;
+}
+
+#mapShell.map-shell[data-map-visual="v6"] .journey-mission {
+  background: rgba(11, 42, 50, 0.52) !important;
+}
+
+#mapShell.map-shell[data-map-visual="v6"] .journey-mission strong,
+#mapShell.map-shell[data-map-visual="v6"] .journey-learning {
+  color: #d8f5f8 !important;
+}
+
+#mapShell.map-shell[data-map-visual="v6"] .journey-step-copy strong,
+#mapShell.map-shell[data-map-visual="v6"] .journey-copy h2,
+#mapShell.map-shell[data-map-visual="v6"] .journey-step-current .journey-learning {
+  color: #f6fdff !important;
+}
+
+#mapShell.map-shell[data-map-visual="v6"] .journey-kicker,
+#mapShell.map-shell[data-map-visual="v6"] .journey-phase {
+  color: #f4c66a !important;
+}
+
+#mapShell.map-shell[data-map-visual="v6"] .journey-step-current {
+  border-color: #ff8a6c !important;
+  background: rgba(24, 25, 35, 0.54) !important;
+}
+
+#mapShell.map-shell[data-map-visual="v6"] .map-node.active,
+#mapShell.map-shell[data-map-visual="v6"] .garden-rest-marker.active {
+  background: rgba(3, 14, 29, 0.96) !important;
+  border: 1px solid #f4c66a !important;
+  box-shadow: 0 10px 24px rgba(0, 2, 10, 0.58), 0 0 0 1px rgba(111, 226, 237, 0.42) !important;
+  width: clamp(276px, 27vw, 320px) !important;
+  min-width: 276px !important;
+  grid-template-columns: 58px minmax(0, 1fr) !important;
+  gap: 10px !important;
+  padding-right: 18px !important;
+}
+
+#mapShell.map-shell[data-map-visual="v6"] .map-node.active *,
+#mapShell.map-shell[data-map-visual="v6"] .garden-rest-marker.active * {
+  color: #f7fdff !important;
+}
+
+#mapShell.map-shell[data-map-visual="v6"] .map-node.active .node-title,
+#mapShell.map-shell[data-map-visual="v6"] .garden-rest-marker.active strong {
+  max-width: none !important;
+}
+
+#mapShell.map-shell[data-map-visual="v6"] .map-node.active .node-mascot,
+#mapShell.map-shell[data-map-visual="v6"] .garden-rest-marker.active .garden-rest-icon {
+  width: 58px !important;
+  height: 58px !important;
+}
+
+#mapShell.map-shell[data-map-visual="v6"] .garden-rest-marker.active .garden-rest-copy {
+  grid-column: 2 !important;
+  grid-row: 1 !important;
+  width: 100% !important;
+  justify-items: stretch !important;
+}
+
+#mapShell.map-shell[data-map-visual="v6"] .garden-rest-marker.active strong,
+#mapShell.map-shell[data-map-visual="v6"] .garden-rest-marker.active small {
+  text-align: left !important;
+}
+
+#mapShell.map-shell[data-map-visual="v6"] .map-node.active .node-action-badge,
+#mapShell.map-shell[data-map-visual="v6"] .garden-rest-marker.active .node-action-badge {
+  color: #071321 !important;
+  background: #f4c66a !important;
+  border-color: #fff2c3 !important;
+}
+
+#mapShell.map-shell[data-map-visual="v6"] .map-floor-result {
+  display: none !important;
+}
+
+#mapShell.map-shell[data-map-visual="v6"] .map-workshop-floor-result {
+  left: 18.9%;
+  top: 41.5%;
+  z-index: 5;
+  width: clamp(66px, 7.2vw, 90px);
+  height: 5px;
+  border: 0;
+  border-radius: 2px;
+  background: repeating-linear-gradient(90deg, rgba(135, 237, 244, 0.82) 0 10px, rgba(44, 145, 163, 0.70) 10px 12px, transparent 12px 15px);
+  box-shadow: 0 2px 3px rgba(0, 3, 11, 0.48), 0 0 8px rgba(110, 229, 240, 0.30);
+  animation: none !important;
+}
+
+#mapShell.map-shell[data-map-visual="v6"] .map-workshop-floor-result::before,
+#mapShell.map-shell[data-map-visual="v6"] .map-workshop-floor-result::after {
+  content: none !important;
+}
+
+@media (max-width: 920px) {
+  #mapShell.map-shell[data-map-visual="v6"]::after {
+    opacity: 0.12;
+  }
+
+  #mapShell.map-shell[data-map-visual="v6"] .journey-director {
+    background: rgba(3, 12, 25, 0.92) !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #mapShell.map-shell[data-map-visual="v6"]::after {
+    background: linear-gradient(90deg, transparent 0 7%, rgba(111, 226, 237, 0.12) 7% 7.12%, transparent 7.12% 92.88%, rgba(111, 226, 237, 0.10) 92.88% 93%, transparent 93%);
+  }
+}
+
+/* 367a narrow visual-focus slice: the map stays one world, while each
+ * chapter gets a quiet local identity and sleeping landmarks retain shape. */
+#mapShell.map-shell[data-map-visual="v6"] {
+  --map-focus-anchor: moon-workshop;
+  --map-focus-accent: #f4c66a;
+  --map-focus-overlay: radial-gradient(ellipse at 18% 39%, rgba(244, 198, 106, 0.24) 0 8%, rgba(244, 198, 106, 0.10) 19%, transparent 35%);
+}
+
+#mapShell.map-shell[data-map-visual="v6"][data-map-focus-chapter="C1"] {
+  --map-focus-anchor: moon-workshop;
+  --map-focus-accent: #f4c66a;
+  --map-focus-overlay: radial-gradient(ellipse at 18% 39%, rgba(244, 198, 106, 0.24) 0 8%, rgba(244, 198, 106, 0.10) 19%, transparent 35%);
+}
+
+#mapShell.map-shell[data-map-visual="v6"][data-map-focus-chapter="C2"] {
+  --map-focus-anchor: star-bridge;
+  --map-focus-accent: #73e3ee;
+  --map-focus-overlay: radial-gradient(ellipse at 50% 13%, rgba(115, 227, 238, 0.15) 0 7%, rgba(115, 227, 238, 0.07) 15%, transparent 29%);
+}
+
+#mapShell.map-shell[data-map-visual="v6"][data-map-focus-chapter="C3"] {
+  --map-focus-anchor: breathing-garden;
+  --map-focus-accent: #8fdb9e;
+  --map-focus-overlay: radial-gradient(ellipse at 84% 35%, rgba(143, 219, 158, 0.22) 0 8%, rgba(143, 219, 158, 0.10) 19%, transparent 34%), radial-gradient(ellipse at 91% 39%, rgba(143, 219, 158, 0.10) 0 8%, transparent 25%);
+}
+
+#mapShell.map-shell[data-map-visual="v6"][data-map-focus-chapter="C4"] {
+  --map-focus-anchor: echo-entrance;
+  --map-focus-accent: #e9bd75;
+  --map-focus-overlay: radial-gradient(ellipse at 52% 82%, rgba(233, 189, 117, 0.20) 0 8%, rgba(233, 189, 117, 0.08) 19%, transparent 31%), radial-gradient(ellipse at 52% 86%, rgba(111, 226, 237, 0.10) 0 7%, transparent 24%);
+}
+
+#mapShell.map-shell[data-map-visual="v6"]::before {
+  background:
+    var(--map-focus-overlay),
+    linear-gradient(90deg, rgba(1, 7, 17, 0.28), transparent 23%, transparent 77%, rgba(1, 7, 17, 0.30)),
+    radial-gradient(ellipse at 50% 45%, transparent 0 43%, rgba(0, 3, 10, 0.28) 82%, rgba(0, 2, 7, 0.60) 100%) !important;
+}
+
+/* Each quiet landmark keeps a physical, story-shaped trace instead of a
+ * generic disabled-looking gray wash. The current mask remains transparent. */
+#mapShell.map-shell[data-map-visual="v6"] .map-v4-focus-mask[data-map-v4-landmark="C1"] {
+  background:
+    radial-gradient(ellipse at 50% 76%, rgba(244, 198, 106, 0.09) 0 15%, transparent 32%),
+    radial-gradient(ellipse at center, rgba(0, 7, 18, var(--map-v6-dim-alpha)) 0, rgba(0, 7, 18, 0.14) 34%, rgba(0, 7, 18, 0.06) 61%, transparent 88%) !important;
+}
+
+#mapShell.map-shell[data-map-visual="v6"] .map-v4-focus-mask[data-map-v4-landmark="C2"] {
+  background:
+    radial-gradient(ellipse at 50% 82%, rgba(111, 226, 237, 0.09) 0 13%, transparent 31%),
+    radial-gradient(ellipse at center, rgba(0, 7, 18, var(--map-v6-dim-alpha)) 0, rgba(0, 7, 18, 0.14) 34%, rgba(0, 7, 18, 0.06) 61%, transparent 88%) !important;
+}
+
+#mapShell.map-shell[data-map-visual="v6"] .map-v4-focus-mask[data-map-v4-landmark="C3"] {
+  background:
+    radial-gradient(ellipse at 72% 52%, rgba(143, 219, 158, 0.10) 0 12%, transparent 28%),
+    radial-gradient(ellipse at center, rgba(0, 7, 18, var(--map-v6-dim-alpha)) 0, rgba(0, 7, 18, 0.14) 34%, rgba(0, 7, 18, 0.06) 61%, transparent 88%) !important;
+}
+
+#mapShell.map-shell[data-map-visual="v6"] .map-v4-focus-mask[data-map-v4-landmark="C4"] {
+  background:
+    radial-gradient(ellipse at 50% 70%, rgba(233, 189, 117, 0.09) 0 14%, transparent 31%),
+    radial-gradient(ellipse at center, rgba(0, 7, 18, var(--map-v6-dim-alpha)) 0, rgba(0, 7, 18, 0.14) 34%, rgba(0, 7, 18, 0.06) 61%, transparent 88%) !important;
+}
+
+#mapShell.map-shell[data-map-visual="v6"] .journey-director {
+  width: min(360px, calc(100vw - 330px)) !important;
+  bottom: max(18px, calc(env(safe-area-inset-bottom) + 14px)) !important;
+}
+
+#mapShell.map-shell[data-map-visual="v6"] .journey-director::before {
+  inset: -6px -12px -6px -8px !important;
+  border-radius: 12px !important;
+  background: linear-gradient(90deg, rgba(5, 31, 47, 0.72), rgba(5, 31, 47, 0.46) 72%, transparent) !important;
+}
+
+#mapShell.map-shell[data-map-visual="v6"] .journey-director .journey-focus {
+  min-height: 106px !important;
+  grid-template-columns: 72px minmax(0, 1fr) !important;
+  gap: 6px !important;
+}
+
+#mapShell.map-shell[data-map-visual="v6"] .journey-director .journey-focus img {
+  width: 72px !important;
+  height: 98px !important;
+}
+
+#mapShell.map-shell[data-map-visual="v6"] .journey-director .journey-sequence {
+  gap: 2px !important;
+}
+
+#mapShell.map-shell[data-map-visual="v6"] .journey-director .journey-step-copy strong {
+  font-size: 11px !important;
+  line-height: 1.2 !important;
+}
+
+#mapShell.map-shell[data-map-visual="v6"] .journey-director .journey-step-copy small {
+  font-size: 10px !important;
+  line-height: 1.2 !important;
+}
+
+#mapShell.map-shell[data-map-visual="v6"] .journey-director .journey-step-current {
+  border-left-color: var(--map-focus-accent) !important;
+}
+
+#mapShell.map-shell[data-map-visual="v6"] .journey-director .journey-copy h2 {
+  font-size: 20px !important;
+}
+
+#mapShell.map-shell[data-map-visual="v6"] .map-node.active,
+#mapShell.map-shell[data-map-visual="v6"] .garden-rest-marker.active {
+  height: 84px !important;
+  min-height: 84px !important;
+  grid-template-columns: 54px minmax(0, 1fr) !important;
+  gap: 8px !important;
+  padding: 10px 14px 10px 10px !important;
+  border-color: var(--map-focus-accent) !important;
+}
+
+#mapShell.map-shell[data-map-visual="v6"] .map-node.active .node-mascot,
+#mapShell.map-shell[data-map-visual="v6"] .garden-rest-marker.active .garden-rest-icon {
+  width: 54px !important;
+  height: 54px !important;
+}
+
+#mapShell.map-shell[data-map-visual="v6"] .map-node.active .node-title,
+#mapShell.map-shell[data-map-visual="v6"] .garden-rest-marker.active strong {
+  font-size: 16px !important;
+  line-height: 1.15 !important;
+}
+
+#mapShell.map-shell[data-map-visual="v6"] .map-node.active .node-note,
+#mapShell.map-shell[data-map-visual="v6"] .garden-rest-marker.active small {
+  margin-top: 2px !important;
+  font-size: 11px !important;
+  line-height: 1.1 !important;
+}
+
+#mapShell.map-shell[data-map-visual="v6"] .map-node.active .node-action-badge,
+#mapShell.map-shell[data-map-visual="v6"] .garden-rest-marker.active .node-action-badge {
+  background: var(--map-focus-accent) !important;
+}
+
+html[data-motion="reduced"] #mapShell.map-shell[data-map-visual="v6"]::before,
+html[data-motion="reduced"] #mapShell.map-shell[data-map-visual="v6"] .journey-director,
+html[data-motion="reduced"] #mapShell.map-shell[data-map-visual="v6"] .map-node.active,
+html[data-motion="reduced"] #mapShell.map-shell[data-map-visual="v6"] .garden-rest-marker.active {
+  animation: none !important;
+  transition: none !important;
+}
+
+html[data-contrast="more"] #mapShell.map-shell[data-map-visual="v6"] .map-brand {
+  background-color: #05172b !important;
+  background-image: none !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #mapShell.map-shell[data-map-visual="v6"]::before,
+  #mapShell.map-shell[data-map-visual="v6"] .journey-director,
+  #mapShell.map-shell[data-map-visual="v6"] .map-node.active,
+  #mapShell.map-shell[data-map-visual="v6"] .garden-rest-marker.active {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+@media (max-width: 920px) {
+  #mapShell.map-shell[data-map-visual="v6"] .journey-director {
+    width: min(336px, calc(100vw - 292px)) !important;
+  }
+}
+
+@media (max-width: 520px) {
+  #mapShell.map-shell[data-map-visual="v6"] .map-topbar {
+    grid-template-columns: minmax(0, 1fr) 52px !important;
+    gap: 12px !important;
+  }
+
+  #mapShell.map-shell[data-map-visual="v6"] .map-brand {
+    width: min(220px, 100%) !important;
+    min-width: 0 !important;
+    justify-self: start !important;
+  }
+
+  #mapShell.map-shell[data-map-visual="v6"] .chapter-pill,
+  #mapShell.map-shell[data-map-visual="v6"] .star-pill {
+    display: none !important;
+  }
+
+  #mapShell.map-shell[data-map-visual="v6"] .parent-gate {
+    grid-column: 2 !important;
+    justify-self: end !important;
+  }
+
+  #mapShell.map-shell[data-map-visual="v6"] .journey-director {
+    top: max(84px, calc(env(safe-area-inset-top) + 76px)) !important;
+    right: max(16px, calc(env(safe-area-inset-right) + 12px)) !important;
+    bottom: auto !important;
+    left: max(16px, calc(env(safe-area-inset-left) + 12px)) !important;
+    width: auto !important;
+  }
+
+  #mapShell.map-shell[data-map-visual="v6"] .journey-director::before {
+    inset: -6px !important;
+    background: rgba(5, 31, 47, 0.72) !important;
+  }
+
+  #mapShell.map-shell[data-map-visual="v6"] .journey-director .journey-focus {
+    min-height: 108px !important;
+    grid-template-columns: 58px minmax(0, 1fr) !important;
+    gap: 8px !important;
+  }
+
+  #mapShell.map-shell[data-map-visual="v6"] .journey-director .journey-focus img {
+    width: 58px !important;
+    height: 90px !important;
+  }
+}

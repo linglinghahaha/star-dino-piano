@@ -2,7 +2,7 @@
 
 ## One-line Positioning
 
-`Star Dino Piano` is a story-first iPad piano primer for young children: a small dinosaur crosses space bridges by matching solfege, letter names, staff positions, keyboard locations, and real piano sounds.
+`Star Dino Workshop` (`星龙工坊`) is a story-first iPad piano primer for young children: a small dinosaur crosses space bridges by matching solfege, letter names, staff positions, keyboard locations, and real piano sounds.
 
 ## Product Promise
 
@@ -18,14 +18,14 @@ If a feature does not strengthen one of these links, it is secondary.
 
 ## Target User
 
-- Child: roughly 4-8 years old, early or pre-reading piano learner.
+- Child: core MVP age 4-6, early or pre-reading piano learner.
 - Parent: wants low-friction practice without needing to explain every screen.
 - Teacher: may use it as a light supplement for note-name, key-finding, and staff-recognition drills.
 
-Internal age bands:
+Age boundary:
 
-- 4-6: pre-reading friendly, large targets, minimal text, parent setup, and no required English word reading.
-- 6-8: can handle more letter-name practice, short labels, staff-position language, and later optional A-G word play.
+- Core MVP, 4-6: pre-reading friendly, large targets, minimal text, parent setup, and no required English word reading. All current child-flow acceptance uses this band.
+- Later expansion, 6-8: may add more letter-name practice, short labels, staff-position language, and optional A-G word play only after the core MVP passes its own gates.
 
 Child-facing screens should be designed for the younger band first. Parent and teacher surfaces can carry denser explanations.
 

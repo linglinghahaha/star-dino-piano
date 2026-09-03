@@ -1,6 +1,4 @@
 import { createRequire } from "node:module";
-import fs from "node:fs";
-
 const require = createRequire(import.meta.url);
 const { chromium } = require("playwright");
 const baseUrl = process.argv[2] || "http://127.0.0.1:4173/";
@@ -229,7 +227,7 @@ async function run() {
       runtime: localStorage.getItem("starDinoSessionRuntime"),
       stats: localStorage.getItem("starDinoLearningStats")
     };
-    return { api: Boolean(api), storageBefore, storageAfter, migratedOne, migratedTwo, lp02Migrated, candidateIsolation, retained, v2OnlyStable, savedLocalDateAnchor, closedReopened, sameDayClosed, sameDaySettled, crossDaySettled, crossDaySettledRepeat, remedial, difficult, afterPending, afterFormal, beforeAnchorHistory, nextReviewHistory, assistedStory, autoModeledStory, resumedStory, fair, older, evidenceTimeFair, corruptAttemptFair, sourceActions, plan, resumePlan, spaced, axes };
+    return { api: Boolean(api), storageBefore, storageAfter, migratedOne, migratedTwo, lp02Migrated, candidateIsolation, retained, v2OnlyStable, savedLocalDateAnchor, closedReopened, sameDayClosed, sameDaySettled, crossDaySettled, crossDaySettledRepeat, remedial, difficult, afterPending, afterFormal, beforeAnchorHistory, nextReviewHistory, assistedStory, autoModeledStory, resumedStory, fair, older, evidenceTimeFair, corruptAttemptFair, sourceActions, plan, resumePlan, spaced, axes, c403Bundle: api.chapter4BundleSnapshot() };
   });
 
   record("test-only scheduler API is opt-in", result.api);
@@ -270,8 +268,25 @@ async function run() {
   record("LP02 exact touch C3 is the only first-pass stable route", exactC3.stableEligible && !highC4.stableEligible && !whiteWrong.stableEligible && !blackWrong.stableEligible, result.axes);
   record("LP02 distinguishes C4 same-name octave, white-key register, and black-key identity", highC4.noteNameCorrect && !highC4.registerCorrect && highC4.sameNameWrongOctave && !whiteWrong.noteNameCorrect && whiteWrong.registerCorrect && blackWrong.isBlack && Boolean(blackWrong.pitchName), result.axes);
   record("LP02 MIDI is observation-only and ambiguous microphone cannot score", !midiC3.stableEligible && midiC3.played && !micAmbiguous.played && micAmbiguous.assistedOnly, result.axes);
-  const source = fs.readFileSync(new URL("../app.js", import.meta.url), "utf8");
-  record("R01A leaves no formal C4-03 map node or session bundle in runtime", !/bundleId:\s*["']C4-03/.test(source) && !/data-level=["']C4-03/.test(source), {});
+  const c403StoryActions = result.c403Bundle?.actions?.map((action) => ({
+    actionId: action.actionId,
+    kind: action.kind,
+    targetId: action.targetId,
+    lp04Step: action.lp04Step,
+    runMode: action.runMode,
+    reviewableForMastery: action.reviewableForMastery
+  })) || [];
+  record(
+    "R01A bundle snapshot exposes exactly three ordered LP04 story actions, never an empty or review-only C4-03",
+    result.c403Bundle?.bundleId === "C4-03" &&
+      JSON.stringify(c403StoryActions) === JSON.stringify([
+        { actionId: "LP04-e-echo", kind: "chapter4-keyboard", targetId: "LP04", lp04Step: "E", runMode: "guided", reviewableForMastery: false },
+        { actionId: "LP04-d-echo", kind: "chapter4-keyboard", targetId: "LP04", lp04Step: "D", runMode: "guided", reviewableForMastery: false },
+        { actionId: "LP04-c-echo", kind: "chapter4-keyboard", targetId: "LP04", lp04Step: "C", runMode: "guided", reviewableForMastery: false }
+      ]) &&
+      !result.c403Bundle.actions.some((action) => action.role === "opening-review" || action.requiredReview === true),
+    result.c403Bundle
+  );
 
   await closeResources();
   clearTimeout(suiteDeadline);

@@ -19,7 +19,8 @@ const states = [
   { id: "staff", search: "?mode=staff&session=mini&check=child-note-names" },
   { id: "garden", search: "?mode=garden&check=child-note-names" },
   { id: "chapter4-lp01", search: "?mode=chapter4&directMode=true&formalSession=false&lesson=LP01&check=child-note-names" },
-  { id: "chapter4-lp02", search: "?mode=chapter4&directMode=true&formalSession=false&lesson=LP02&check=child-note-names" }
+  { id: "chapter4-lp02", search: "?mode=chapter4&directMode=true&formalSession=false&lesson=LP02&check=child-note-names" },
+  { id: "chapter4-lp04", search: "?mode=chapter4&directMode=true&formalSession=false&lesson=LP04&check=child-note-names" }
 ];
 
 fs.mkdirSync(screenshotDir, { recursive: true });
@@ -300,6 +301,27 @@ try {
             result.chapter4BlackKeys.length === 10 && result.chapter4BlackKeys.every((key) => key.note === null && key.aria.startsWith("黑键") && !/(Do|Re|Mi|Fa|Sol|\b[A-G][34]\b)/.test(key.aria)),
             result.chapter4BlackKeys);
           record(`${viewport.id} LP02: ordinary text, ARIA and pseudo-elements exclude solfege and octave numbers`, result.chapter4TextLeaks.length === 0 && result.chapter4AccessibleLeaks.length === 0 && result.chapter4PseudoLeaks.length === 0, result);
+        }
+        if (state.id === "chapter4-lp04") {
+          const expectedLetters = "CDEFGABCDEFGAB";
+          record(`${viewport.id} LP04: fourteen white keys retain C-D-E-F-G-A-B labels and Chinese white-key ARIA without octave digits or solfege`,
+            result.chapter4WhiteKeys.length === 14 &&
+            result.chapter4WhiteKeys.map((key) => key.text.charAt(0)).join("") === expectedLetters &&
+            result.chapter4WhiteKeys.every((key) => key.aria.includes("白键") && !/(Do|Re|Mi|Fa|Sol|\b[A-G][34]\b)/.test(`${key.text} ${key.aria}`)),
+            result.chapter4WhiteKeys);
+          const expectedBlackKeyNames = ["C#", "D#", "F#", "G#", "A#", "C#", "D#", "F#", "G#", "A#"];
+          record(`${viewport.id} LP04: ten black keys expose sharp note-name ARIA without null identities, octave digits, or solfege`,
+            result.chapter4BlackKeys.length === 10 &&
+            result.chapter4BlackKeys.every((key, index) =>
+              key.note === null &&
+              key.aria === `${expectedBlackKeyNames[index]} 黑键` &&
+              !/null|undefined|[0-9]|Do|Re|Mi|Fa|Sol/.test(key.aria)),
+            result.chapter4BlackKeys);
+          record(`${viewport.id} LP04: ordinary DOM text, ARIA, and pseudo-elements remain letter-only while the character introduces Mi-Re-Do with E-D-C`,
+            result.chapter4TextLeaks.length === 0 &&
+            result.chapter4AccessibleLeaks.length === 0 &&
+            result.chapter4PseudoLeaks.length === 0 && /Mi.*Re.*Do/.test(result.chapter4Speech) && /E.*D.*C/.test(result.chapter4Speech),
+            result);
         }
         record(`${viewport.id} ${state.id}: note-name layout has no page overflow`, !result.overflowX && !result.overflowY, result);
         if (state.id === "M07") {

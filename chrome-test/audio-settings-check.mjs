@@ -1,6 +1,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import { createRequire } from "node:module";
+import { completeParentChallenge } from "./parental-challenge-helper.mjs";
 
 const require = createRequire(import.meta.url);
 const { chromium } = require("playwright");
@@ -42,7 +43,8 @@ async function waitReady() {
 
 async function openParentPanel() {
   await page.locator("#playParentGate").click();
-  await page.waitForSelector("#parentModal", { state: "visible", timeout: 3000 });
+  await completeParentChallenge(page);
+  await page.locator("#parentTabDevices").click();
 }
 
 async function readAudioState() {

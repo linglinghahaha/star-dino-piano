@@ -57,19 +57,19 @@ Default Chinese name: `咚咚`
 
 Role:
 
-- later companion from the low planet;
+- visitor from `鸣石星` who currently guards the underground `共鸣石前哨` on `森芽星`, the current ecology planet;
 - round, steady, warm, strong;
 - represents left-hand/low-register/bass foundation later.
 
 Design notes:
 
-- chubby triceratops silhouette;
-- strong feet, gentle eyes, small star tools;
+- original low-wide quadruped silhouette with exactly one nose horn, two brow horns, four legs, a rounded continuous frill, and a full tail;
+- strong feet, gentle eyes, and no extra frill spikes or crown teeth;
 - feels stable and capable, never dumb or slow.
 
 Teaching personality:
 
-- "My planet needs steady sounds."
+- "This outpost needs steady sounds."
 - "Low notes can hold the bridge."
 - "I can carry the big pieces."
 
@@ -99,7 +99,7 @@ Canonical numbering is fixed across the project:
 4. `咚咚的低音星球`
 5. `会唱歌的大家园`
 
-`音符护照` is a cross-chapter collection/rest system, not Chapter 4. It quietly collects icon-led story memories at natural rests; it is not a score ladder and its item count cannot mean mastery. Detailed teaching sequences and gates live in `03_CONTENT_ROADMAP.md`, `09_SCAFFOLD_AND_ASSESSMENT_RULES.md`, and `33_GAME_TEACHING_PACING_AND_MOTIVATION_CONTRACT.md`.
+`音符护照` is a cross-chapter collection/rest system, not Chapter 4. It quietly collects icon-led story memories at natural rests; it is not a score ladder and its item count cannot mean mastery. A separate teacher-gated review may later let Xingya call Do/Re/Mi or Fa/Sol while the child finds a neutral C/D/E or F/G stamp, then makes one guided key delivery back into the current story. It is not a map level, result page or runtime-approved task. Detailed teaching sequences and gates live in `03_CONTENT_ROADMAP.md`, `09_SCAFFOLD_AND_ASSESSMENT_RULES.md`, `33_GAME_TEACHING_PACING_AND_MOTIVATION_CONTRACT.md`, and `docs/71_CROSS_CHAPTER_REPRESENTATION_AND_NOTE_PASSPORT_SUPERVISOR_CHECKLIST.md`.
 
 ### Chapter 1: Moon Little Home
 
@@ -178,7 +178,7 @@ Pedagogy:
 - later MIDI/microphone can feed the same loop;
 - do not call this absolute pitch: every reduced-cue check keeps a learned reference or just-practiced candidate set.
 
-### Chapter 4: Low Planet Friend
+### Chapter 4: Dongdong and the Underground Echo Cave
 
 Working Chinese title: `咚咚的低音星球`
 
@@ -189,7 +189,9 @@ Purpose:
 
 Story:
 
-星芽所在的生态星球脚下轻轻震了一下。孩子后来可以把这片温暖地下生态层昵称为“低音星球”，但它不是第三颗新星球。星芽先听见地底的“咚”，再找到一座圆圆的地下小屋。洞里的剪影慢慢露出眼睛、颈盾和脚印，最后才出现三角龙咚咚。咚咚的家需要更稳、更低的声音来修地基。
+当前可呼吸生态星球的正式名称是 `森芽星`。森芽星脚下轻轻震了一下；孩子后来可以把这片温暖地下生态层昵称为“低音星球”，但它不是第三颗新星球，也不是鸣石星。星芽先听见地底的“咚”，再找到咚咚暂时守护的共鸣石前哨。揭晓严格按声音、被建筑遮挡的宽低剪影、眼睛与圆颈盾局部、三枚脚印、LP05 完整见面的顺序推进。咚咚来自遥远的鸣石星；第一季不会前往鸣石星，当前地下回声洞也不是它的出生地。
+
+LP05 的教学动作、三枚脚印和世界变化全部结束后，咚咚才可以说一句非教学角色台词：`我从鸣石星来。` 这句话不与教学钢琴音重叠，不触发下一关，也不产生 played、stable 或 retained 证据。
 
 Player emotion:
 
@@ -214,7 +216,7 @@ Purpose:
 
 Story:
 
-咚咚从地下生态层的地基站发出低音信号，星芽在可呼吸花园的中继台回答；两位角色都留在生态星球的安全控制区。远处月亮前哨是地图上的自动端点：较高的声音让远端桥灯和模块响应，较低的声音托住生态侧地基，临时探索路线因此升级成能够长期连接两个安全住处的双层家园桥。最终庆祝发生在花园中继台，不让无头盔角色跑到开放太空桥中央。
+咚咚从森芽星地下生态层的地基站发出低音信号，星芽在可呼吸花园的中继台回答；两位角色都留在森芽星的安全控制区。远处月亮前哨是地图上的自动端点：较高的声音让远端桥灯和模块响应，较低的声音托住生态侧地基，临时探索路线因此升级成能够长期连接两个安全住处的双层家园桥。最终庆祝发生在花园中继台，不让无头盔角色跑到开放太空桥中央。
 
 Player emotion:
 
@@ -245,7 +247,7 @@ These beats should replace abstract level copy. They are intentionally small and
 | FG02 | Sol 星门 | 星门需要第二个三黑键旁的声音 | isolate `Sol/G` | star gate opens halfway | F/G contrast shown visually |
 | FG03 | 三颗近邻星 | 三颗星要排队：Mi-Fa-Sol | `E-F-G` compare | stars line up into a small ladder | target clue returns without giving full sequence |
 | FG04 | 桥前小地图 | 星芽看到五线谱桥的前两格 | F/G staff preview | staff pad glows as a real landing spot | bubble says the staff position, then key locator |
-| S01 | 星星桥第一跳 | 星芽从月亮小家跳向新星球 | staff notes `C-D-E-F-G-E` | dinosaur jumps pad by pad to the right planet | gentle stumble, then staff position + key clue |
+| S01 | 星星桥第一跳 | 星芽从月亮小家跳向新星球 | staff notes `C-D-E-F-G-E` | dinosaur jumps pad by pad from the moon outpost to the ecology-planet arrival | gentle stumble, then staff position + key clue |
 
 Transition notes:
 
@@ -279,32 +281,50 @@ The teaching details, notes, register, and gates for these ids are canonical in 
 | LP02 | 低音 C 的家 | Xingya finds two Do homes but only one opens the cave | low Do drops the permanent C anchor stone beside the door | the D and E stones are still floating to its right |
 | LP03 | 三块地基石 | the C anchor is seated but asleep, while the D and E stones cannot find their places | low C wakes and locks the existing anchor; low D and E join it from left to right | the completed three-stone path sends an echo downward |
 | LP04 | 地洞回声 | the echo is travelling the wrong way | E-D-C guides it down and Dongdong's silhouette answers | footprints appear beside a three-black group |
-| LP05 | 三黑键旁的脚印 | the last two footprints are missing | E-F-G reveals Dongdong fully at the end of the path | a large arch stone is too heavy to move nearby |
-| LP06 | 咚咚搬大石 | the arch stone needs a far low jump | C-G-C rolls and seats the stone | Dongdong asks the child's left hand to make steady steps |
-| LP07 | 左手小队出发 | five footprint lights are asleep | a short left-hand route wakes them | the footprints point to an underground five-line map |
-| LP08 | 地下谱线地图 | the first three map locations are dark | C3-D3-E3 light their bass-staff homes | the upper two supports still have no map positions |
-| LP09 | 低音桥加固 | E-F-G supports are mixed up | neighboring bass positions lock into place | the full low bridge is ready for a crossing |
-| LP10 | 咚咚的低音星桥 | the cave and surface still have no usable connection | a guided crossing completes the bridge and sends a signal; a later reduced-cue session lights six existing signal anchors without rebuilding or re-crossing it | Xingya can answer after story completion while bass-staff stability remains honest adult evidence |
+| LP05 | 三黑键旁的脚印 | one faint E starting footprint remains while the F/G footprints are missing | E wakes the start and F/G restore the two missing steps; after any optional comparison is completed or honestly deferred, Dongdong appears fully once at the story-unit ending | a large arch stone is too heavy to move nearby |
+| LP06 | 咚咚搬大石 | the arch stone is held by a stop and cannot reach the bridge seat | the first C releases the stop, G rolls the stone across the arc, and the final C seats it permanently; every note is released before the next and no hand span is required | Dongdong asks the child's left hand to make steady steps on an already familiar route |
+| LP07 | 左手小队出发 | five footprint lights are asleep; one child-perspective left-hand invitation waits beside the keyboard | each released correct note in C3-D3-E3-D3-C3 stamps one permanent footprint; the story still advances if the child uses another hand or one finger | the fifth footprint forms Dongdong's team and points to an underground five-line map |
+| LP08 | 地下谱线地图 | one wide five-line rail has no coordinates; only the current familiar footprint waits beside it | C3, D3, and E3 enter one at a time and permanently light second-space, third-line, and third-space homes; a smooth optional check connects three existing rail joints without relighting the homes | two neutral upper support sockets appear beyond the short rail, without revealing the future F/G answers |
+| LP09 | 低音桥加固 | the existing E home holds a folded anchor brace, while two neutral upper sockets have no F/G coordinates | E lowers the inherited brace, then F fourth line and G fourth space install two new supports one at a time; a smooth optional pressure check lights the existing supports without moving them | the short bridge stops wobbling and its entrance points toward the final crossing |
+| LP10 | 咚咚的低音星桥 | LP09's bridge is supported, but its six stepping signals and tower link are still dark | C-D-E-F-G-E lights the signal route as Dongdong crosses once and stays at the tower; Xingya answers from the safe garden relay; a later reduced-cue session lights six existing anchors without moving either character | Chapter 5 opens from the real story signal while bass-staff stable remains separate adult evidence and later review never blocks the next adventure |
+
+LP07 is a left-hand invitation, not a hand-use detector or technique test. Dongdong may point toward the child-perspective left-hand glyph, but a mirrored character paw is never the only directional cue. Wrong notes pause the next footprint and reveal the current C/D/E locator; using the right hand, one finger, touch, MIDI, or microphone does not count as a wrong note or remove the team reward.
+
+LP08 transforms the permanent LP07 footprints instead of replacing them with three simultaneous answer pads. One footprint enters one staff home at a time while Dongdong stays beside the rail and never covers a line, space, clef, or notehead. Once C/D/E are mapped, the short rail remains built whether the optional check happens now or is deferred; the child rests before choosing LP09.
+
+LP09 does not scramble or rebuild the five-line map. The inherited E third-space home remains visible at low emphasis; E unfolds its brace, while F fourth line and G fourth space become the only two new coordinates. Each support is a permanent world object. Wrong notes or deferred pressure checks leave all installed supports in place, and the child rests at the bridge entrance before choosing LP10.
+
+LP10 uses the bridge that LP09 already made safe. The six guided notes create a signal path rather than six new bridge pieces. A tired child may rest at the first E midpoint and later continue from F with Dongdong still there. Once the final E reaches the tower, the bridge, character position, signal, and Xingya's answer remain permanent. Only a clean formal story ending may show one brief buttonless chapter milestone; the later signal-anchor check never replays the crossing, settlement, or reward and never becomes a blocking map node.
 
 ## Planned Chapter 5 Level Beats
 
 | ID | Cute title | Visible problem | Correct world change | Reason for the next level |
 | --- | --- | --- | --- | --- |
-| TH01 | 两个 Do 说你好 | the two homes cannot hear each other | low Do calls and middle Do answers | a second signal appears near Sol |
-| TH02 | Sol 回声接力 | the signal reaches only halfway | low/high Sol and Do echoes complete the route | both ends begin building, but not in turn |
-| TH03 | 两边轮流修桥 | bridge pieces collide when both sides move randomly | slow left/right turns grow the bridge evenly | the two music maps still do not line up |
-| TH04 | 中央 C 会合点 | treble and bass maps float apart | bass C3 leads to the one middle-C C4 meeting light and the brace connects | each dinosaur now receives a separate musical job |
-| TH05 | 一边托住，一边点灯 | supports and lights activate in the wrong order | resumable short sessions place low supports, learn the two four-note light bars, then complete the known relay without resetting finished work | the main bridge is ready and the garden can open now; an existing practice arch invites a together landing |
-| TH06 | 第一次一起落地 | the practice arch has two matching landing marks | paired or sequential fallback lights the same arch; a close pair adds only a brief together layer, not an exclusive object | the connected bridge offers the already-known two-bar piece in two layers |
-| TH07 | 两小节小合奏 | the known relay invitation is split into low support and high phrase | one known bar is rehearsed per short session; the full two-bar optional route waits for TH08 | one final performance opens the same whole home |
-| TH08 | 会唱歌的大家园 | the two homes are connected but still quiet | the learned relay or optional together route completes the same original mini-piece | both characters enter the shared musical garden with the same ending |
+| TH01 | 两个 C 说你好 | the two homes cannot hear each other | Dongdong's modeled low C call and Xingya's modeled middle-C answer are echoed by the child in role/register order; any physical hand is valid | one permanent C signal arc reaches halfway and reveals two neutral G relay stars |
+| TH02 | G 回声接力 | the C signal reaches only halfway | guided low G and upper G close the gap; a reduced-cue low-C/middle-C return releases the first bridge materials; solfege remains in dinosaur dialogue only | the homes can now hear each other, so TH03 can teach alternating construction turns |
+| TH03 | 两边轮流修桥 | bridge pieces collide when both sides move randomly | one free-time sequence of Dongdong/Xingya low/upper role-register turns joins the C, D, and E bridge pairs; hand icons invite but never judge the physical hand | the three bridge sections meet, but the two music maps still do not line up |
+| TH04 | 中央 C 会合点 | treble and bass maps float apart | one current note at a time links bass second-space C3 and treble ledger-line-below C4 to their exact keys; the brace and one middle-C meeting light connect | the connected maps give each dinosaur a separate musical job |
+| TH05 | 一边托住，一边点灯 | supports and lights activate in the wrong order | five child-started short sessions install two supports, wake the near and far four-light groups, then carry signal across relay bar 1 and relay bar 2 without resetting finished work | each visit leaves a visible bridge result; the second signal span makes the main bridge ready, so TH08 can join both bars and open the garden |
+| TH06 | 第一次一起落地 | after the garden is already open, the practice arch has two matching landing marks | familiar same-name C/C and G/G pairs isolate paired onset; paired or sequential fallback lights the same arch | a later invitation offers the known two-bar piece in two layers without changing the completed garden |
+| TH07 | 两小节小合奏 | the post-story invitation splits the known relay into low support and high phrase | one known bar is rehearsed per new child-started session; scattered pairs complete sequentially without losing anything | both temporary rehearsal lights make a together encore available |
+| TH08 | 会唱歌的大家园 | first run: the connected homes are still quiet; later encore: the opened garden invites another performance | the universal relay first opens the garden; only later may the same piece return as a together encore | both characters enter the shared garden once; the encore adds temporary music, not a second or better ending |
 
 Chapter 5 route rule:
 
+- `TH01-TH02` are one six-input teaching bundle, not two bright-key quizzes. TH01 models the known C homes; TH02 guides the new G register pair and then recalls C without model tone or target-key glow. Smooth play stays in one session, while repeated repair, strong/assisted/modeled help, long waiting or fatigue rests after the completed C or G pair and resumes only unfinished work after a new explicit map action.
+- TH01/TH02 role order never proves which hand was used. A same finger or non-invited hand on the exact key keeps the same story result. The first bundle writes played/needs-practice honestly; stable waits for a later reduced-cue C-and-G opening review.
+- C5-01 ends through the permanent signal and bridge-material reveal, not a result card or phase settlement. The map then shows `刚完成：两个家听见了`, `现在：轮流修桥`, and `随后：中央 C 会合点`; it never autostarts TH03.
+- TH03 first play has no beat target. Each released exact input moves one bridge half, each completed C/D/E pair locks one section, and difficulty can rest only at those three pair checkpoints. It has no settlement; the map then shows `刚完成：桥轮流长出三段`, `现在：中央 C 会合点`, and `随后：一边托住，一边点灯`.
+- TH04 is two guided staff-to-key loops, not a hand/pulse/melody task. A clean formal completion may close the first Chapter 5 phase with one lightweight buttonless milestone; helped story completion still opens TH05 but keeps `needsPractice` and does not show the clean milestone.
+- TH05 is one public mission but five explicit map actions: supports, near four lights, far four lights, first signal span and second signal span. Each action has at most five inputs, never auto-starts the next, and preserves every completed object and step across help, refresh, map return and rest.
+- TH05's internal actions have no result modal. The clean formal tail of the second signal span may close the second Chapter 5 phase with one lightweight buttonless milestone; assisted/modeled completion still makes the bridge ready and opens TH08 with `needsPractice`, but shows no clean milestone.
+- After core TH05, the map reads `刚完成：主桥接通了`, `现在：让大家园唱起来`, `随后：花园会打开`; only TH08 is actionable. TH08 is the first uninterrupted two-bar relay, so it synthesizes the two separately learned spans rather than immediately repeating a full TH05 performance.
 - `TH01-TH05` is the core sequence. It flows directly into the `TH08` relay finale without asking the child to choose `easy` or `hard`.
-- When two-note input is available and the child is comfortable, the bonus route inserts `TH06-TH07` before the `TH08` together finale.
-- A scattered pair, early low-note release, fatigue, or unavailable hardware returns to the relay version through character animation, not a failure dialog.
-- Both versions open the identical garden. The together route adds a musical layer, not a better prize or higher-status ending.
+- The core TH08 relay opens the garden for every child before any paired invitation. It writes the only Chapter 5 story completion and ends in the garden without a result dialog.
+- On a later fresh home visit, TH06 may become the one current post-story invitation. It is never inserted from accuracy, speed, stable labels, pitch or inferred hand ability, and it never starts in the core completion session.
+- TH06 uses C/C, G/G, C/C to reduce note-selection load before TH07 transfers the paired onset to the real bar starts C3+C4 and G3+E4. TH07 keeps one known bar per visit; a later TH08 `together-encore` joins them without replaying the first garden unlock.
+- A scattered pair, early low-note release, fatigue, microphone route, single-point input or preference for sequential play completes the same arch/bar or defers the encore through character animation, not a failure dialog.
+- The garden, character approval, collectibles and permanent world are already complete before the optional route. The together encore adds only a temporary musical layer, never a better prize or higher-status ending.
 
 ## Chapter Transition Invariants
 
@@ -378,8 +398,8 @@ Reusable motifs:
 - star gates;
 - note pads on staff lines/spaces;
 - seed sprouts for listening;
-- high planet: brighter, light jumps;
-- low planet: warmer, rounder, stronger footstep animations.
+- higher-register moments: brighter, lighter jumps, never a target-answer cue;
+- lower-register moments: warmer, rounder, firmer footsteps, never a target-answer cue.
 
 Audio cues:
 

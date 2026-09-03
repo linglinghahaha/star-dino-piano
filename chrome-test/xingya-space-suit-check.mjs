@@ -21,7 +21,7 @@ const runtimeAssets = [
   "xingya-suit-jump.webp"
 ];
 const gardenRuntimeAsset = "xingya-garden-invite-v1.webp";
-const gardenRuntimeSha256 = "1228082D4DF2BF576ED916B16950799296A975279ED6EFC554F6BB9EDDE88EBA";
+const gardenRuntimeSha256 = "AD83E1626A52FE86A49F882953F3089F5142A607B1B5B24F084D70EA775B9EF5";
 
 function record(name, pass, details = {}) {
   checks.push({ name, pass, details });
@@ -109,6 +109,7 @@ const activeSources = [
   "quality-overrides-3.css",
   "quality-overrides-4.css",
   "current-overhaul.css",
+  "roof-blueprint-overrides.css",
   "chapter4-slice.css"
 ];
 const activeText = activeSources.map((file) => fs.readFileSync(file, "utf8")).join("\n");
@@ -138,6 +139,11 @@ try {
     viewport: { width: 1024, height: 768 },
     deviceScaleFactor: 1,
     reducedMotion: "no-preference"
+  });
+  await context.addInitScript(() => {
+    if (!localStorage.getItem("starDinoAudioSettings")) {
+      localStorage.setItem("starDinoAudioSettings", JSON.stringify({ enabled: false, volume: 0.6 }));
+    }
   });
   const page = await context.newPage();
   watchPage(page, "xingya-suit");
@@ -181,7 +187,7 @@ try {
   record("approved garden-mode image decodes as a complete transparent 512px character", decodedGardenAsset?.ok && decodedGardenAsset.width === 512 && decodedGardenAsset.height === 512 && decodedGardenAsset.cornerAlpha.every((alpha) => alpha === 0) && decodedGardenAsset.visible >= 70_000, decodedGardenAsset);
 
   const version = await page.evaluate(() => [...document.scripts].map((script) => script.src).find((src) => src.includes("app.js")));
-  record("prototype loads the 347a R01A runtime version", version?.includes("overhaul-347a-c4-r01a"), { version });
+  record("prototype loads the frozen 369e visible-build baseline", version?.includes("overhaul-369e-ipad-settlement-compactness-correction"), { version });
 
   const m01Dino = await readImageState(page, "#dinoSvg");
   const m01Coach = await readImageState(page, "#coachDino");
@@ -209,9 +215,13 @@ try {
   await page.screenshot({ path: `${screenshotPrefix}_M01_wrong_1024.png`, fullPage: false });
 
   await page.locator('.key.white-key[data-note="C"]').click();
-  await page.waitForSelector("#resultModal", { state: "visible", timeout: 3000 });
-  const resultDino = await readImageState(page, ".result-dino");
-  record("M01 completion uses a visible sealed-suit celebration pose", resultDino.src?.endsWith("xingya-suit-celebrate.webp") && resultDino.rect.width >= 110 && resultDino.rect.height >= 110 && resultDino.rect.left >= 0 && resultDino.rect.right <= 1024, resultDino);
+  await page.waitForTimeout(240);
+  const resultDino = await readImageState(page, "#coachDino");
+  const completionSurface = await page.evaluate(() => ({
+    modalHidden: document.querySelector("#resultModal")?.hidden === true,
+    appInert: Boolean(document.querySelector("#appShell")?.inert)
+  }));
+  record("M01 completion uses a visible sealed-suit celebration pose in the workshop scene", resultDino.src?.endsWith("xingya-suit-celebrate.webp") && resultDino.rect.width >= 100 && resultDino.rect.height >= 100 && resultDino.rect.left >= 0 && resultDino.rect.right <= 1024 && completionSurface.modalHidden && !completionSurface.appInert, { resultDino, completionSurface });
   await page.screenshot({ path: `${screenshotPrefix}_M01_complete_1024.png`, fullPage: false });
 
   await gotoMode(page, "?level=M03&check=xingya-suit-323a-listen");
@@ -278,6 +288,9 @@ try {
   record("wrong S01 input uses the sealed-suit gentle-stumble pose", staffWrong.src?.endsWith("xingya-suit-try-again.webp") && staffWrong.stumbling, staffWrong);
   await page.screenshot({ path: `${screenshotPrefix}_S01_wrong_1024.png`, fullPage: false });
 
+  await page.evaluate(() => {
+    localStorage.setItem("starDinoAudioSettings", JSON.stringify({ enabled: true, volume: 0.6 }));
+  });
   await gotoChapter4(page, "LP01");
   await page.locator("#chapter4StartCheck").click();
   await waitChapter4Phase(page, "lp01-model");

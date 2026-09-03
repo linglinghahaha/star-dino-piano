@@ -36,11 +36,19 @@ The architecture remains open until `N0` evidence exists. Full native SwiftUI/Sp
 Platform promise rule:
 
 - Treat iPad web as touch-first. Do not promise Web MIDI on iPad Safari in product copy.
-- As of the 2026-07-10 planning check, iPad/iOS Safari should be treated as not supporting Web MIDI for this product plan.
+- As of the 2026-07-23 evidence refresh, iPad/iOS Safari should be treated as not supporting Web MIDI for this product plan.
 - Web MIDI can remain a desktop/prototype option where the browser exposes it.
 - The reliable iPad MIDI promise belongs to a later native build using Apple's Core MIDI path.
+- Native wired MIDI is already supported by competing iPad piano products. Core MIDI reliability is a release-quality requirement, not a unique market wedge.
 - MIDI and microphone must never block child progress.
 - Web Service Worker, browser local storage, and desktop Web MIDI results cannot substitute for native offline, migration, Core MIDI, lifecycle, or audio-session evidence.
+
+Kids Category rule:
+
+- If the first release enters the Kids Category, the current metadata candidate is Apple's official `5 and under` band because the child experience is designed for pre-reading beginners. Reconfirm the band against the final native content before submission.
+- Purchases, external links, microphone explanation/permission flows, account or subscription actions, and adult-only settings require a real parental gate.
+- A visible button labelled "Parent" is not itself a parental gate.
+- The product's internal 4-6 teaching target must not be presented as though Apple offers a `4-6` Kids Category band.
 
 ## Apple-specific Product Advantages To Lean Into
 
@@ -55,9 +63,13 @@ Platform promise rule:
 Future screenshots should show:
 
 1. Dinosaur on staff bridge.
-2. Real piano-like keyboard with `Do/C` target.
+2. Real piano-like keyboard with a letter-name target such as `C`.
 3. Correct jump and star destination.
 4. Parent view showing learning goals.
 5. Optional microphone/native MIDI/touch input choices, only after those paths are reliable enough.
 
+Child-facing screenshot rule: piano keys, staff labels, task badges, and non-character prompts show letter names A-G only. Solfege appears only in dinosaur dialogue or voice; marketing screenshots must not reintroduce a literal combined `Do/C` child label.
+
 Do not lead with a generic landing page.
+
+The dated competitor and Apple Kids evidence source is `77_APPLE_COMPETITOR_EVIDENCE_REFRESH_2026-07-23.md`.

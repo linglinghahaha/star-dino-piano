@@ -1,6 +1,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import { createRequire } from "node:module";
+import { completeParentChallenge } from "./parental-challenge-helper.mjs";
 
 const require = createRequire(import.meta.url);
 const { chromium } = require("playwright");
@@ -218,18 +219,28 @@ async function playSequence(sequence, delay = 360) {
 }
 
 async function waitResult() {
-  await page.waitForFunction(() => !document.querySelector("#resultModal")?.hidden, null, { timeout: 8000 });
-  await page.waitForTimeout(160);
+  await page.waitForTimeout(260);
+  await page.waitForFunction(() => document.querySelector("#resultModal")?.hidden === true, null, { timeout: 4000 });
+}
+
+async function levelCompletionCount(levelId) {
+  return page.evaluate((id) => Number(JSON.parse(localStorage.getItem("starDinoLearningStats") || "{}").levels?.[id]?.completions) || 0, levelId);
+}
+
+async function waitForLevelCompletion(levelId, previousCount) {
+  await page.waitForFunction(({ id, before }) => {
+    const stats = JSON.parse(localStorage.getItem("starDinoLearningStats") || "{}");
+    return (Number(stats.levels?.[id]?.completions) || 0) > before && document.querySelector("#resultModal")?.hidden === true;
+  }, { id: levelId, before: previousCount }, { timeout: 8000 });
 }
 
 async function enterCheckRun(levelId, sequence) {
   await gotoMode(`?level=${levelId}&check=workshop-325a-${levelId.toLowerCase()}-guided`);
   await playSequence(sequence);
   await waitResult();
-  await page.evaluate(() => document.querySelector("#modalNext")?.click());
   await page.waitForFunction(() => (
     document.querySelector("#appShell")?.dataset.levelRunMode === "check" &&
-    document.querySelector("#resultModal")?.hidden
+    document.querySelector("#resultModal")?.hidden === true
   ), null, { timeout: 8000 });
   await page.waitForTimeout(180);
 }
@@ -259,7 +270,7 @@ try {
       overflowY: document.documentElement.scrollHeight > document.documentElement.clientHeight + 1
     };
   });
-  record("prototype loads the 347a R01A runtime version", m02Initial.version?.includes("overhaul-347a-c4-r01a"), m02Initial);
+  record("prototype loads the current 369e runtime version", m02Initial.version?.includes("overhaul-369e-ipad-settlement-compactness-correction"), m02Initial);
   record("current workshop part shows C without visible solfege", m02Initial.letter === "C" && !m02Initial.solfege, m02Initial);
   record("part keeps the object label separate from note identity", m02Initial.objectLabel === "小灯", m02Initial);
   record("M02 keeps its original scene without a construction blueprint", m02Initial.blueprintHidden, m02Initial);
@@ -293,7 +304,11 @@ try {
   record("color-reduced mode removes color as the answer without adding a blueprint", reduced.badgeColor === "#5F7286" && reduced.slotColor === "#5F7286" && reduced.blueprintHidden, reduced);
   await playSequence([60, 62, 64]);
   await waitResult();
-  record("color-reduced workshop completes by note/key identity", await page.locator("#resultModal").isVisible());
+  const colorReducedCompletion = await page.evaluate(() => ({
+    modalHidden: document.querySelector("#resultModal")?.hidden === true,
+    placedSlots: document.querySelectorAll("#baseBuild .build-slot.placed").length
+  }));
+  record("color-reduced workshop completes by note/key identity in the base scene without a result modal", colorReducedCompletion.modalHidden && colorReducedCompletion.placedSlots === 3, colorReducedCompletion);
   await page.screenshot({ path: `${screenshotPrefix}_M02_color_reduced_complete.png`, fullPage: false });
 
   await gotoMode("?level=M03&check=workshop-325a-listening-identity");
@@ -367,13 +382,23 @@ try {
   record("first idle hint is a visible dino dialog connecting solfege and letter", identityHint.stage === "identity" && identityHint.visible && identityHint.bubble?.includes("Do") && identityHint.bubble?.includes("C") && identityHint.targetVisible === "false", identityHint);
   await page.screenshot({ path: `${screenshotPrefix}_M07_idle_identity.png`, fullPage: false });
 
+  const softCompletionCount = await levelCompletionCount("M07");
   await playSequence(m07Sequence, 280);
-  await waitResult();
+  await waitForLevelCompletion("M07", softCompletionCount);
   const softResult = await page.evaluate(() => ({
-    resultKind: document.querySelector("#resultModal")?.dataset.result,
-    title: document.querySelector("#resultModal h2")?.textContent
+    modalHidden: document.querySelector("#resultModal")?.hidden === true,
+    stableCompletions: JSON.parse(localStorage.getItem("starDinoLearningStats") || "{}").levels?.M07?.stableCompletions || 0,
+    formalCompletions: JSON.parse(localStorage.getItem("starDinoLearningStats") || "{}").levels?.M07?.formalCompletions || 0,
+    needsPractice: JSON.parse(localStorage.getItem("starDinoLearningStats") || "{}").levels?.M07?.needsPractice || false,
+    lastAttempt: JSON.parse(localStorage.getItem("starDinoLearningStats") || "{}").levels?.M07?.lastAttempt || null,
+    lastResponse: JSON.parse(localStorage.getItem("starDinoLearningStats") || "{}").levels?.M07?.lastResponse || null
   }));
-  record("waiting for the identity reminder does not fail a correct reduced-cue run", softResult.resultKind === "level", softResult);
+  record("identity reminder stays soft without forging formal mastery in direct mode", softResult.modalHidden &&
+    softResult.stableCompletions === 0 &&
+    softResult.formalCompletions === 0 &&
+    softResult.needsPractice === false &&
+    softResult.lastAttempt?.strongCueFrames === 0 &&
+    softResult.lastResponse?.idleIdentityHints >= 1, softResult);
 
   await enterCheckRun("M07", m07Sequence);
   await page.waitForFunction(() => document.querySelector("#appShell")?.dataset.idleHint === "locator", null, { timeout: 13000 });
@@ -391,13 +416,23 @@ try {
   record("second idle hint visibly gives the key locator without a permanent target key", locatorHint.stage === "locator" && locatorHint.visible && locatorHint.bubble?.includes("Do") && locatorHint.bubble?.includes("C") && locatorHint.bubble?.includes("两黑键") && locatorHint.targetVisible === "false", locatorHint);
   await page.screenshot({ path: `${screenshotPrefix}_M07_idle_locator.png`, fullPage: false });
 
+  const strongCompletionCount = await levelCompletionCount("M07");
   await playSequence(m07Sequence, 280);
-  await waitResult();
+  await waitForLevelCompletion("M07", strongCompletionCount);
   const strongResult = await page.evaluate(() => ({
-    resultKind: document.querySelector("#resultModal")?.dataset.result,
-    title: document.querySelector("#resultModal h2")?.textContent
+    modalHidden: document.querySelector("#resultModal")?.hidden === true,
+    stableCompletions: JSON.parse(localStorage.getItem("starDinoLearningStats") || "{}").levels?.M07?.stableCompletions || 0,
+    formalCompletions: JSON.parse(localStorage.getItem("starDinoLearningStats") || "{}").levels?.M07?.formalCompletions || 0,
+    needsPractice: JSON.parse(localStorage.getItem("starDinoLearningStats") || "{}").levels?.M07?.needsPractice || false,
+    lastAttempt: JSON.parse(localStorage.getItem("starDinoLearningStats") || "{}").levels?.M07?.lastAttempt || null,
+    lastResponse: JSON.parse(localStorage.getItem("starDinoLearningStats") || "{}").levels?.M07?.lastResponse || null
   }));
-  record("using the locator hint keeps the run out of stable mastery", strongResult.resultKind === "level-check", strongResult);
+  record("locator hint records strong support without forging formal mastery in direct mode", strongResult.modalHidden &&
+    strongResult.stableCompletions === softResult.stableCompletions &&
+    strongResult.formalCompletions === 0 &&
+    strongResult.needsPractice === false &&
+    strongResult.lastAttempt?.strongCueFrames > 0 &&
+    strongResult.lastResponse?.idleLocatorHints >= 1, strongResult);
 
   await gotoMode("?level=M08&check=workshop-325a-m08-route-bubble");
   await page.waitForFunction(() => document.querySelector("#appShell")?.dataset.idleHint === "identity", null, { timeout: 9000 });
@@ -435,7 +470,7 @@ try {
 
   await gotoMode("?level=M01&check=workshop-325a-response-parent");
   await page.locator("#playParentGate").click();
-  await page.waitForSelector("#parentModal:not([hidden])", { timeout: 5000 });
+  await completeParentChallenge(page, { timeout: 8000 });
   const parentRecord = await page.evaluate(() => {
     const card = document.querySelector(".parent-card")?.getBoundingClientRect();
     const recordElement = document.querySelector("#parentResponseRecord");

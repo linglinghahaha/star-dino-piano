@@ -1,6 +1,7 @@
 import { createRequire } from "node:module";
 import fs from "node:fs";
 import path from "node:path";
+import { completeParentChallenge } from "./parental-challenge-helper.mjs";
 
 const require = createRequire(import.meta.url);
 const { chromium } = require("playwright");
@@ -85,10 +86,10 @@ const waitM03AudioPhase = async (phase, timeout = 10000) => {
 };
 
 const waitResult = async () => {
-  await page.waitForFunction(() => !document.querySelector("#resultModal")?.hidden, null, {
-    timeout: 8000
+  await page.waitForTimeout(260);
+  await page.waitForFunction(() => document.querySelector("#resultModal")?.hidden === true, null, {
+    timeout: 4000
   });
-  await page.waitForTimeout(220);
 };
 
 const clickModalNext = async (selector = ".moon-yard") => {
@@ -235,7 +236,7 @@ const listeningAnswerLeaks = (state, { solfege, letter, locators }) => state.vis
 
 const openParentSnapshot = async (name) => {
   await page.locator("#playParentGate").click({ timeout: 5000 });
-  await page.waitForSelector("#parentModal:not([hidden])", { timeout: 5000 });
+  await completeParentChallenge(page);
   await page.waitForTimeout(120);
   const shot = await screenshot(`${name}_parent`);
   const state = await readState(`${name} parent`);
@@ -280,13 +281,13 @@ const completeGuidedThenCheckLevel = async ({ levelId, sequence }) => {
     await tapMidi(midi);
   }
   await waitResult();
+  await page.waitForFunction(() => document.querySelector("#appShell")?.dataset.levelRunMode === "check", null, { timeout: 4000 });
   const guidedResult = await readState(`${levelId} guided result`);
   await screenshot(`${levelId}_guided_result`);
-  record(`${levelId}: guided completion opens check replay`, guidedResult.resultKind === "level-check", guidedResult);
+  record(`${levelId}: guided completion enters check replay in the scene without a result modal`, guidedResult.levelRunMode === "check" && !guidedResult.resultVisible, guidedResult);
   assertCleanState(guidedResult);
 
-  await clickModalNext(".moon-yard");
-  const checkInitial = await readState(`${levelId} check initial`);
+  const checkInitial = guidedResult;
   await screenshot(`${levelId}_check_initial`);
   record(`${levelId}: check scaffold`, checkInitial.scaffold === "level-check", checkInitial);
   record(`${levelId}: check starts without target glow`, checkInitial.keyboardTargetVisible === "false", checkInitial);
@@ -298,7 +299,7 @@ const completeGuidedThenCheckLevel = async ({ levelId, sequence }) => {
   await waitResult();
   const checkResult = await readState(`${levelId} check result`);
   await screenshot(`${levelId}_check_result`);
-  record(`${levelId}: check completion result visible`, checkResult.resultVisible, checkResult);
+  record(`${levelId}: check completion remains visible in the scene without a result modal`, !checkResult.resultVisible, checkResult);
   assertCleanState(checkResult);
 
   await gotoQuery(`?level=${levelId}&check=clean-${levelId.toLowerCase()}-parent`);
@@ -367,7 +368,7 @@ const completeM01 = async () => {
   await waitResult();
   const result = await readState("M01 result");
   await screenshot("M01_result");
-  record("M01: completed", result.resultVisible, result);
+  record("M01: completed in the moon-base scene without a result modal", !result.resultVisible, result);
   assertCleanState(result);
 
   await gotoQuery("?level=M01&check=clean-m01-parent");
@@ -395,13 +396,13 @@ const completeStaffBridge = async () => {
     await tapMidi(midi);
   }
   await waitResult();
+  await page.waitForFunction(() => document.querySelector("#appShell")?.dataset.scaffold === "staff-check", null, { timeout: 4000 });
   const guidedResult = await readState("S01 guided result");
   await screenshot("S01_guided_result");
-  record("S01: guided completion opens staff check", guidedResult.resultKind === "staff-check", guidedResult);
+  record("S01: guided completion enters staff check in the scene without a result modal", guidedResult.scaffold === "staff-check" && !guidedResult.resultVisible, guidedResult);
   assertCleanState(guidedResult);
 
-  await clickModalNext(".staff-stage");
-  const checkInitial = await readState("S01 check initial");
+  const checkInitial = guidedResult;
   await screenshot("S01_check_initial");
   record("S01: check scaffold", checkInitial.scaffold === "staff-check", checkInitial);
   record("S01: check starts without target glow", checkInitial.keyboardTargetVisible === "false", checkInitial);
@@ -413,7 +414,7 @@ const completeStaffBridge = async () => {
   await waitResult();
   const checkResult = await readState("S01 check result");
   await screenshot("S01_check_result");
-  record("S01: stable result kind", checkResult.resultKind === "staff", checkResult);
+  record("S01: stable completion remains in the scene without a result modal", !checkResult.resultVisible, checkResult);
   assertCleanState(checkResult);
 
   await gotoQuery("?mode=staff&check=clean-s01-parent", ".staff-stage");

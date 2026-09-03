@@ -10,6 +10,8 @@ The child should not merely press the key that lights up. Each level should buil
 - staff position: ledger line, below staff, first line, first space, second line;
 - sound memory: the heard piano tone.
 
+These links are not transitive evidence. Repeatedly showing C while Xingya says Do teaches a pairing, but it does not prove that the child can later hear Do and retrieve C without the continuous pair. Likewise, `sound -> key` plus `staff -> key` does not prove `sound -> staff`. `23_TEACHING_PROOF_MATRIX.md` owns the current proof map; `docs/57` and `docs/71` hold the two teacher-gated missing-link specifications. Neither may enter runtime before teacher review and a separate supervisor dispatch.
+
 ## Game And Teaching Must Be The Same Action
 
 The app must not alternate between a decorative game and a separate worksheet. A meaningful piano action must cause the story change, and the story consequence must make the learning relation easier to notice without revealing an assessment answer in advance.
@@ -23,7 +25,7 @@ Core rule: story completion may remain generous, while learning claims stay stri
 Every child-facing step should follow this pattern:
 
 1. A story need appears: the dinosaur needs a part, star, bridge tile, or jump pad.
-2. The target note identity appears with letter-first visual hierarchy: large `C`, smaller `Do`; Xingya may say `Do` first.
+2. The target note identity is split across carriers: ordinary UI shows the letter name such as large `C`; Xingya may say or show `Do` inside the dinosaur dialogue. Do not place a smaller `Do` beside `C` on an ordinary child surface.
 3. The key-finding clue appears: `2-black left`.
 4. The child plays by touch, MIDI, or acoustic piano sound.
 5. Correct: the world changes immediately.
@@ -80,6 +82,8 @@ Use at most one sentence-level instruction carrier in a play state. The story ca
 
 The full chain `solfege -> letter -> key locator -> staff position -> sound` should accumulate across the level and parent evidence, not appear as five competing instructions in one play state. Ordinary child-facing UI uses the letter name; only the dinosaur dialogue bubble may visibly carry solfege. If a state shows both as repeated chips, locator words, staff words, color, sequence numbers, multiple bubbles, and parent-like explanation at once, it fails the preschool version even if each clue is individually correct.
 
+The cross-chapter Note Passport follows the same rule. Its collection page may remind the child what was encountered, but only a separately approved reduced-cue naming-carrier review may test whether dinosaur solfege retrieves a letter name. Collection count, an automatic character echo, or a later correct piano key cannot backfill the child's first letter choice.
+
 ## Color Policy
 
 Color is allowed only as a scaffold:
@@ -125,10 +129,10 @@ Avoid generic wrong feedback like "press the glowing key" once the child is beyo
 
 The staff bridge is the flagship mechanic. It should not feel like a UI panel. It should feel like:
 
-- left planet/start;
+- completed moon outpost/start;
 - short one- or two-measure staff bridge;
 - note pads as jump spots;
-- right planet/finish;
+- breathable ecology-planet arrival/finish;
 - dinosaur physically jumping from staff position to staff position.
 
 ## Input Rules
@@ -164,7 +168,7 @@ Hand-evidence rule:
 - MIDI cannot tell which hand pressed a key;
 - microphone cannot verify simultaneous two-hand play in the MVP;
 - parent/teacher confirmation or direct observation is required before claiming physical hand technique;
-- the 4-6 story path can finish through alternating hands, while simultaneous two-hand play remains a capability branch.
+- the 4-6 story path always finishes through the sequential relay first; simultaneous paired play is a later post-story invitation with equal sequential fallback, not a capability branch that can delay or upgrade the ending.
 
 Finger-number rule:
 

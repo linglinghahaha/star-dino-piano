@@ -1,0 +1,327 @@
+/* 355a: M01 keeps feedback at the played key and installed floor, never across the scene. */
+#appShell:not(.staff-mode) .keyboard.real-piano .key.m01-local-feedback {
+  animation-duration: 620ms !important;
+}
+
+#appShell:not(.staff-mode) .keyboard.real-piano .key.m01-local-feedback .key-touch-ripple {
+  top: 34% !important;
+  width: min(68px, 72%) !important;
+  height: min(68px, 72%) !important;
+  opacity: 0.7 !important;
+  animation-duration: 560ms !important;
+}
+
+#appShell:not(.staff-mode) .keyboard.real-piano .key.m01-local-feedback::after {
+  top: 28% !important;
+  width: min(64px, 68%) !important;
+  height: min(64px, 68%) !important;
+}
+
+#appShell:not(.staff-mode) .keyboard.real-piano .key.m01-local-feedback.correct::after {
+  border: 3px solid rgba(42, 191, 118, 0.58) !important;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.78) 0 12%, rgba(42, 191, 118, 0.16) 13% 48%, transparent 50%) !important;
+  animation: m01KeySuccess 620ms ease forwards !important;
+}
+
+#appShell:not(.staff-mode) .keyboard.real-piano .key.m01-local-feedback.wrong::after {
+  border: 3px solid rgba(180, 35, 24, 0.48) !important;
+  background: radial-gradient(circle, rgba(180, 35, 24, 0.16) 0 45%, transparent 48%) !important;
+  animation: m01KeyWrong 560ms ease forwards !important;
+}
+
+#appShell[data-level-id="M01"]:not(.staff-mode) .key:is(.hit-wrong, .wrong) .key-content::after,
+#appShell[data-level-id="M01"]:not(.staff-mode) .key.m01-local-feedback.wrong .key-content::after {
+  content: none !important;
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+}
+
+#appShell:not(.staff-mode) .keyboard.real-piano .key.m01-local-feedback.hint::after {
+  border-width: 3px !important;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.72) 0 13%, var(--target-soft, rgba(240, 100, 73, 0.16)) 14% 48%, transparent 51%) !important;
+  animation-duration: 620ms !important;
+}
+
+#appShell:not(.staff-mode) .moon-yard.m01-local-world-feedback.success-flash {
+  animation: none !important;
+}
+
+#appShell:not(.staff-mode) .moon-yard.m01-local-world-feedback .build-slot.just-added {
+  animation: m01FloorSettle 560ms ease both !important;
+}
+
+/* M01 keeps the active answer on the key while the suspended part retains its letter identity. */
+#appShell.app-shell:not(.staff-mode)[data-level-id="M01"] .build-pad {
+  display: none !important;
+}
+
+#appShell.app-shell:not(.staff-mode)[data-level-id="M01"][data-level-complete="false"] .base .build-slot.current {
+  opacity: 0 !important;
+  box-shadow: none !important;
+}
+
+#appShell.app-shell:not(.staff-mode)[data-level-id="M01"] .keyboard.real-piano .tap-badge,
+#appShell.app-shell:not(.staff-mode)[data-level-id="M01"] .keyboard.real-piano .tap-finger,
+#appShell.app-shell:not(.staff-mode)[data-level-id="M01"] .keyboard.real-piano .key-locator-mini {
+  display: none !important;
+}
+
+@keyframes m01KeySuccess {
+  0% { opacity: 0; transform: translateX(-50%) scale(0.78); }
+  36% { opacity: 0.92; transform: translateX(-50%) scale(1); }
+  100% { opacity: 0; transform: translateX(-50%) scale(1.08); }
+}
+
+@keyframes m01KeyWrong {
+  0% { opacity: 0; transform: translateX(-50%) scale(0.72); }
+  40% { opacity: 0.8; transform: translateX(-50%) scale(1); }
+  100% { opacity: 0; transform: translateX(-50%) scale(1.04); }
+}
+
+@keyframes m01FloorSettle {
+  0% { filter: brightness(1); transform: scale(0.94); }
+  48% { filter: brightness(1.1); transform: scale(1.02); }
+  100% { filter: brightness(1); transform: scale(1); }
+}
+
+/* A phase settlement is a brief status, not a screen or button. */
+#resultModal.result-modal[data-result="milestone"] {
+  place-items: start center !important;
+  padding: max(78px, calc(env(safe-area-inset-top) + 72px)) 32px 20px !important;
+  pointer-events: none !important;
+}
+
+#resultModal.result-modal[data-result="milestone"] .result-card {
+  box-sizing: border-box !important;
+  width: min(590px, calc(100vw - 48px)) !important;
+  max-width: 590px !important;
+  height: 102px !important;
+  min-height: 102px !important;
+  max-height: 102px !important;
+  display: block !important;
+  overflow: hidden !important;
+  padding: 0 !important;
+  border: 1px solid rgba(255, 207, 105, 0.72) !important;
+  border-radius: 8px !important;
+  background-color: rgb(13, 31, 45) !important;
+  background-image: linear-gradient(180deg, rgba(13, 31, 45, 0.96), rgba(8, 22, 34, 0.95)) !important;
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.26), 0 0 0 1px rgba(126, 228, 255, 0.16) inset, 0 0 0 4px rgba(255, 207, 105, 0.08) !important;
+  animation: milestoneSettlementArrive 160ms 120ms ease-out both !important;
+}
+
+#resultModal.result-modal[data-result="milestone"] .result-card > :not(.milestone-settlement) {
+  display: none !important;
+}
+
+#resultModal.result-modal[data-result="milestone"] .milestone-settlement {
+  box-sizing: border-box !important;
+  width: 100% !important;
+  height: 100% !important;
+  min-height: 0 !important;
+  max-height: 100% !important;
+  display: grid !important;
+  grid-template-columns: 42px minmax(0, 1fr) !important;
+  align-items: center !important;
+  gap: 0 14px !important;
+  padding: 12px 18px !important;
+}
+
+#resultModal.result-modal[data-result="milestone"] .milestone-settlement-icon {
+  grid-column: 1 !important;
+  grid-row: 1 !important;
+  width: 40px !important;
+  height: 40px !important;
+  margin: 0 !important;
+  object-fit: contain !important;
+  filter: drop-shadow(0 0 10px rgba(255, 210, 112, 0.36)) !important;
+}
+
+#resultModal.result-modal[data-result="milestone"] .milestone-settlement-main {
+  grid-column: 2 !important;
+  min-width: 0 !important;
+  display: grid !important;
+  grid-template-columns: minmax(260px, 1fr) minmax(210px, 0.72fr) !important;
+  grid-template-rows: auto auto !important;
+  align-items: center !important;
+  gap: 2px 18px !important;
+}
+
+#resultModal.result-modal[data-result="milestone"] .milestone-settlement h2 {
+  grid-column: 1 !important;
+  grid-row: 1 !important;
+  margin: 0 !important;
+  color: #fff7d8 !important;
+  font-size: 20px !important;
+  line-height: 1.1 !important;
+  letter-spacing: 0 !important;
+  text-shadow: 0 1px 0 rgba(0, 0, 0, 0.32) !important;
+}
+
+#resultModal.result-modal[data-result="milestone"] .milestone-settlement p {
+  grid-column: 1 !important;
+  grid-row: 2 !important;
+  margin: 0 !important;
+  color: rgba(209, 243, 252, 0.9) !important;
+  font-size: 12px !important;
+  font-weight: 850 !important;
+  line-height: 1.28 !important;
+}
+
+#resultModal.result-modal[data-result="milestone"] .milestone-settlement-next {
+  grid-column: 2 !important;
+  grid-row: 1 / span 2 !important;
+  min-width: 0 !important;
+  min-height: 58px !important;
+  display: grid !important;
+  align-content: center !important;
+  justify-items: start !important;
+  gap: 3px !important;
+  padding-left: 18px !important;
+  border-left: 1px solid rgba(255, 207, 105, 0.44) !important;
+}
+
+#resultModal.result-modal[data-result="milestone"] .milestone-settlement-next small {
+  color: rgba(255, 210, 112, 0.86) !important;
+  font-size: 10px !important;
+  font-weight: 900 !important;
+  line-height: 1.1 !important;
+}
+
+#resultModal.result-modal[data-result="milestone"] .milestone-settlement-next strong {
+  min-width: 0 !important;
+  overflow: visible !important;
+  color: #ffffff !important;
+  font-size: 12px !important;
+  font-weight: 900 !important;
+  line-height: 1.22 !important;
+  text-overflow: clip !important;
+  white-space: normal !important;
+  overflow-wrap: anywhere !important;
+}
+
+body.milestone-settlement-active #appShell .coach-bubble,
+body.milestone-settlement-active #appShell .garden-speech,
+body.milestone-settlement-active #appShell .key .tap-badge,
+body.milestone-settlement-active #appShell .key.target::after,
+body.milestone-settlement-active #appShell .key.target-muted::after,
+body.milestone-settlement-active #appShell .stage-note-orb {
+  visibility: hidden !important;
+}
+
+@supports selector(body:has(*)) {
+  body:has(#resultModal.result-modal[data-result="milestone"]:not([hidden])) #appShell .coach-bubble,
+  body:has(#resultModal.result-modal[data-result="milestone"]:not([hidden])) #appShell .garden-speech,
+  body:has(#resultModal.result-modal[data-result="milestone"]:not([hidden])) #appShell .key .tap-badge,
+  body:has(#resultModal.result-modal[data-result="milestone"]:not([hidden])) #appShell .key.target::after,
+  body:has(#resultModal.result-modal[data-result="milestone"]:not([hidden])) #appShell .key.target-muted::after,
+  body:has(#resultModal.result-modal[data-result="milestone"]:not([hidden])) #appShell .stage-note-orb {
+    visibility: hidden !important;
+  }
+}
+
+body:has(#appShell[data-level-id="M01"]) .sprite-effect,
+body:has(#appShell[data-level-id="M01"]) .key-press-label,
+body:has(#appShell[data-level-id="M01"]) .note-feedback-burst,
+body:has(#appShell[data-level-id="M01"]) .music-flight,
+body:has(#appShell[data-level-id="M01"]) .music-flight-landing,
+body:has(#appShell[data-level-id="M01"]) .stage-confetti-effect,
+body:has(#appShell[data-level-id="M01"]) .flying-part {
+  display: none !important;
+}
+
+html[data-motion="reduced"] #resultModal.result-modal[data-result="milestone"] .result-card,
+html[data-motion="reduced"] #resultModal.result-modal[data-result="milestone"] .milestone-settlement *,
+html[data-motion="reduced"] #appShell:not(.staff-mode) .key.m01-local-feedback::after,
+html[data-motion="reduced"] #appShell:not(.staff-mode) .moon-yard.m01-local-world-feedback .build-slot.just-added {
+  animation: none !important;
+}
+
+/* 370a: keep ordinary M01 feedback visible without bringing back the task card. */
+#appShell.app-shell:not(.staff-mode)[data-level-id="M01"] .status-row {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: flex-start !important;
+  min-width: 0 !important;
+  min-height: 34px !important;
+  gap: 0 !important;
+  flex-wrap: nowrap !important;
+}
+
+#appShell.app-shell:not(.staff-mode)[data-level-id="M01"] .keyboard-panel {
+  grid-template-rows: 34px minmax(0, 1fr) !important;
+}
+
+#appShell.app-shell:not(.staff-mode)[data-level-id="M01"] .keyboard.real-piano {
+  min-height: 0 !important;
+}
+
+#appShell.app-shell:not(.staff-mode)[data-level-id="M01"] .status-row > .child-feedback {
+  box-sizing: border-box !important;
+  display: flex !important;
+  align-items: center !important;
+  flex: 1 1 auto !important;
+  min-width: 0 !important;
+  max-width: 100% !important;
+  min-height: 30px !important;
+  margin: 0 !important;
+  padding: 4px 10px !important;
+  overflow: hidden !important;
+  border: 1px solid rgba(151, 211, 255, 0.20) !important;
+  border-radius: 9px !important;
+  color: rgba(231, 247, 255, 0.88) !important;
+  background: rgba(8, 35, 65, 0.40) !important;
+  box-shadow: inset 0 1px rgba(255, 255, 255, 0.08) !important;
+  font-size: 14px !important;
+  font-weight: 850 !important;
+  line-height: 1.2 !important;
+  text-align: left !important;
+  white-space: normal !important;
+  overflow-wrap: anywhere !important;
+}
+
+#appShell.app-shell:not(.staff-mode)[data-level-id="M01"] .status-row > .child-feedback.good {
+  color: #d8ffe9 !important;
+  border-color: rgba(90, 218, 151, 0.36) !important;
+  background: rgba(36, 168, 101, 0.20) !important;
+}
+
+#appShell.app-shell:not(.staff-mode)[data-level-id="M01"] .status-row > .child-feedback.bad {
+  color: #ffe8e2 !important;
+  border-color: rgba(255, 142, 126, 0.38) !important;
+  background: rgba(180, 35, 24, 0.22) !important;
+}
+
+#appShell.app-shell:not(.staff-mode)[data-level-id="M01"] .status-row > :not(.child-feedback) {
+  display: none !important;
+}
+
+@media (max-width: 720px) {
+  #appShell.app-shell:not(.staff-mode)[data-level-id="M01"] .status-row > .child-feedback {
+    min-height: 28px !important;
+    padding: 4px 8px !important;
+    font-size: 13px !important;
+  }
+}
+
+@media (max-width: 720px) {
+  #resultModal.result-modal[data-result="milestone"] {
+    padding: max(76px, calc(env(safe-area-inset-top) + 70px)) 20px 20px !important;
+  }
+
+  #resultModal.result-modal[data-result="milestone"] .result-card {
+    width: calc(100vw - 40px) !important;
+    height: 108px !important;
+    min-height: 108px !important;
+    max-height: 108px !important;
+  }
+
+  #resultModal.result-modal[data-result="milestone"] .milestone-settlement-main {
+    grid-template-columns: minmax(180px, 1fr) minmax(154px, 0.7fr) !important;
+    gap: 2px 12px !important;
+  }
+
+  #resultModal.result-modal[data-result="milestone"] .milestone-settlement-next {
+    padding-left: 12px !important;
+  }
+}

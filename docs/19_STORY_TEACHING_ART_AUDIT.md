@@ -1,5 +1,21 @@
 # Story Teaching Art Audit
 
+Status: `historical_pre_98 / source_planning_evidence_only / not_current_dispatch`
+
+2026-07-29 geography supersession: this file preserves the review language and
+image-prompt thinking that existed before
+`docs/98_DONGDONG_MINGSHI_ORIGIN_AND_SEASON_ONE_BOUNDARY.md`. References below
+to a literal high planet/low planet pair, a round low planet, Dongdong building
+his birthplace here, or a bridge between those two planets are historical and
+must not be reused for story, art, media, or runtime assignments. Current
+Season One geography is the remote moon outpost plus one ecology planet: its
+breathing garden connects downward to the underground echo cave and Dongdong's
+temporary resonance-stone outpost. Dongdong comes from Mingshi, but Season One
+does not travel there. Use `docs/92_CHAPTER4_SUSPENSE_AND_GLOBAL_VISUAL_UNIFICATION_SPEC.md`
+for current visual production guidance. Educational observations in this file
+remain consultative only when they agree with `docs/03`, `docs/17`, `docs/24`,
+`docs/33`, `docs/92`, and `docs/98`.
+
 This document reviews whether the current story can become a lovable children-first piano learning product, and converts the story into art-direction prompts for concept sketches.
 
 ## Short Verdict
@@ -302,7 +318,7 @@ Mechanic:
 - treble and bass maps connect around middle C;
 - each part rehearses separately before one paired landing and a two-measure original duet.
 
-Teaching guardrail: the 4-6 core path is hand alternation. Simultaneous two-hand play is a capability branch. Note input can prove pitch and timing, but cannot by itself prove which physical hand the child used; microphone remains sequential only.
+Teaching guardrail: the 4-6 core path uses sequential role/register relay and opens the garden before any simultaneous invitation. Paired play is a later optional encore with sequential fallback, not an ability branch. Note input can prove pitch and timing, but cannot by itself prove which physical hand the child used; microphone remains sequential only.
 
 Route guardrail: the relay finale and together finale open the same garden. The app does not show `easy/hard`, does not interrupt the child with a next-level dialog, and automatically returns a tired or struggling child to the relay route.
 

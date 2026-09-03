@@ -16,7 +16,17 @@
     "quality-overrides-3.css",
     "quality-overrides-4.css",
     "current-overhaul.css",
+    "roof-blueprint-overrides.css",
+    "chapter3-visible.css",
     "chapter4-slice.css",
+    "course-director.css",
+    "parent-experience.css",
+    "child-feedback-intensity.css",
+    "m01-m03-companion-feedback.css",
+    "s01-mini-training-dock.css",
+    "staff-notation-geometry.css",
+    "world-map-v5-prototype.css",
+    "world-map-v6-dark-scifi.css",
     "assets/runtime/**"
   ],
   "deny": [

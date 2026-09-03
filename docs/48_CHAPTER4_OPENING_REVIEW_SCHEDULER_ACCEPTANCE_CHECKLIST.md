@@ -1,10 +1,10 @@
 # Chapter 4 C4-R01 Opening Review 调度主管工作单
 
-状态：`C4_R01A_core_passed_at_af9aa28 / C4_R01B_waits_for_real_LP04 / core_then_integration_two_gate_contract / LP04_dispatch_ready`
+状态：`C4_R01A_core_passed_at_af9aa28 / C4_R01B_real_LP04_lifecycle_supervisor_accepted / exact_anchor_fail_closed / two_gate_contract_complete / LP05_not_auto_unlocked`
 
 本文件解决一个独立问题：第四章当前可以诚实记录 `LP01/LP02 needsPractice`，并为 LP01 保留 `openingReviewQueue` 标记，但 LP02 还只有证据、没有正式队列项，通用调度器也不能消费这些第四章技能。C4-R01 必须从已有真实证据幂等地建立 LP02 队列项，不能假设它已经存在，也不能回填或改写旧 session。该缺口若不补，家长会看到“以后再复习”，孩子却永远收不到真正的复习短课。
 
-`C4-01 / LP01-LP02`、全课程音频前置和 `C4-02 / LP03` 均已通过主管独立浏览器审查；`C4-R01A` 调度核心又在 `overhaul-347a-c4-r01a` / `af9aa2831bb90c94fd10fdfbe3ca89ba4d03021a` 独立通过并提交。A 阶段没有创建正式 C4-03 或 LP04 action。现在允许下发 LP04 候选，并且必须在该候选内完成 `C4-R01B` 真实目标课整合；不得借此回改已冻结的 C4-01/LP03/R01A，也不得把完整咚咚、低音谱表、左手或媒体候选提前接入。
+`C4-01 / LP01-LP02`、全课程音频前置和 `C4-02 / LP03` 均已通过主管独立浏览器审查；`C4-R01A` 调度核心又在 `overhaul-347a-c4-r01a` / `af9aa2831bb90c94fd10fdfbe3ca89ba4d03021a` 独立通过并提交。A 阶段没有创建正式 C4-03 或 LP04 action。后续未提交候选已把 `C4-R01B` 接入真实 LP04 actions，并由主管以 lifecycle `31/31`、foundation `20/20` 和 retained-anchor 对抗探针 `9/9` 接受。该结果不得回改已冻结的 C4-01/LP03/R01A，也不自动解锁完整咚咚、低音谱表、左手、LP05+ 或媒体候选。
 
 拆分的原因不是缩小验收，而是消除循环依赖：LP04 尚未实现时，运行侧还没有合法的 `C4-03` lesson actions，因而不可能诚实证明“review 顺利后在同一 session 继续 LP04”。`C4-R01A` 只冻结队列迁移、候选选择、冷却、review 状态机、持久化和可组合 plan 接口；正式地图不得创建空的 `C4-03` session，也不得用测试占位 action 冒充新课。`C4-R01B` 必须在 LP04 候选中把该接口接到真实 `C4-03` actions，并完成本文件规定的同 session、困难收短和未呈现边界。两道门禁都通过后，C4-R01 才算完整运行通过。
 
@@ -145,11 +145,11 @@ LP02 opening review 使用当前已冻结的连续 `C3-B4` 单排键盘和真实
 
 ## 九、放行顺序
 
-- 当前：`C4_R01A_core_passed_at_af9aa28 / LP04_and_C4_R01B_dispatch_ready`。
+- 当前：`C4_R01A_core_passed_at_af9aa28 / LP04_and_C4_R01B_supervisor_accepted_uncommitted / LP05_not_auto_unlocked`。
 - C4-01 未晋升浏览器基线前：不得下发。
 - LP03 已在 `cedc384` 晋升浏览器教学基线，C4-R01A 前置已满足。
 - `C4-R01A` 已在 `af9aa28` 单独实现、审查并提交；正式地图继续停在 LP03 完成态，没有创建空的 C4-03。
-- 现在可开始 LP04。LP04 候选的第一项集成责任是 `C4-R01B`，必须使用真实 C4-03 actions 完成本文件的同 session 与困难收短端到端门禁；不能用 A 类纯计划夹具替代。
-- `C4-R01A` 与 LP04 运行改动保持两个提交边界；`C4-R01B` 随 LP04 候选审查。主管确认 A、B 两道门禁均通过后，才可称 C4-R01 完整运行通过并继续 LP05。
+- LP04 与 C4-R01B 已使用真实 C4-03 actions 完成本文件的同 session、困难收短、story-first、resume、retained 与 fail-closed 端到端门禁；A 类计划夹具没有被用来冒充 B 类完成。
+- `C4-R01A` 的提交边界与未提交 LP04/R01B 候选继续分开。A、B 两道浏览器门禁均已通过，但 LP05 仍等待 354b 实体 iPad 成人预听、方向性观察和主管明确窄派工。
 
 实体 iPad、真实 MIDI、原声钢琴麦克风、教师、3-5 名儿童、长期 retained 效果、素材来源和外部相似性在对应证据完成前继续标记 missing。

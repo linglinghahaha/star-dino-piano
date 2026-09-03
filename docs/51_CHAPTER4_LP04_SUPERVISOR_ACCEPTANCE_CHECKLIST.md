@@ -1,10 +1,10 @@
 # Chapter 4 C4-03 / LP04 主管验收工作单
 
-状态：`dispatch_ready / LP03_baseline_passed / C4_R01A_core_passed_at_af9aa28 / includes_C4_R01B_runtime_integration_gate / next_unique_runtime_work / media_forbidden`
+状态：`LP04_browser_passed_uncommitted / LP03_baseline_passed / C4_R01A_core_passed_at_af9aa28 / C4_R01B_full_lifecycle_supervisor_accepted / exact_retained_anchor_fail_closed / LP05_not_auto_unlocked / media_forbidden`
 
 本文件把 `LP04 地洞回声` 从故事提纲收敛为可实现、可复核的短课合同。它只负责把已经教过的低音 `C-D-E` 键位关系转成一次 `E-D-C` 下降回声路线；不引入 F/G、低音谱表、左手、完整咚咚、视频、语音或 SFX 候选。
 
-当前可派发。`C4-02 / LP03` 已在 `cedc384` 完成独立审查与冻结，`C4-R01A` 调度核心也已在 `overhaul-347a-c4-r01a` / `af9aa2831bb90c94fd10fdfbe3ca89ba4d03021a` 形成独立基线。LP04 现在是唯一运行工作，并必须同时完成 `C4-R01B` 的真实 `C4-03` 整合门禁；LP04/R01B 要形成新的独立提交，不能回写或压扁 R01A 提交。工作范围仍不包含媒体、完整咚咚、低音谱表、左手或 LP05+。
+`C4-02 / LP03` 已在 `cedc384` 完成独立审查与冻结，`C4-R01A` 调度核心也已在 `overhaul-347a-c4-r01a` / `af9aa2831bb90c94fd10fdfbe3ca89ba4d03021a` 形成独立基线。当前未提交工作树已实现 LP04 教学闭环和真实 C4-03 的完整 R01B 生命周期；主管以当前 `app.js` SHA-256 `15674BC35D5EF9D1F71BD420B117C2A1A6994B187C6B70AEA9AD80E00109C8D9` 独立复核保持通过。该通过不回写或压扁 R01A，也不夹带媒体、完整咚咚、低音谱表、左手或 LP05+。
 
 ## 一、这节课教什么，不教什么
 
@@ -116,6 +116,14 @@ LP04 三个 action 均为 `reviewableForMastery=false`。三步真实呈现并�
 
 ## 九、冻结交接要求
 
-原型任务获准执行后，必须单独提交 LP04，并提供改动文件、最终源码 SHA、专项逐项数量、共享回归、六视口合同三连 internal hash、原尺寸截图、浏览器错误、严格包清单以及 passed/partial/missing/contradicted 自审。
+LP04 原始实现必须保留改动文件、最终源码 SHA、专项逐项数量、共享回归、原尺寸截图、浏览器错误、严格包清单以及 passed/partial/missing/contradicted 自审。当前后续冻结包只补齐 C4-R01B 剩余生命周期及对应证据，不重新实现 LP04，也不夹带 LP05+。
 
 实体 iPad Safari、真实 MIDI、原声钢琴麦克风、扬声器/耳机真人听审、教师、3-5 名儿童、最终剪影/角色美术、来源和外部相似性在有直接证据前继续 missing。主管独立复跑通过前，LP05 和所有媒体运行集成仍锁定。
+
+## 十、2026-07-20 最终浏览器检查点
+
+- LP04 通过 main `27/27`、input `8/8`、audio lifecycle `11/11`；E-D-C 顺序、错误八度、分段休息、刷新恢复、世界不倒退、played/needsPractice 诚实和完整咚咚/LP05 禁止边界均有浏览器证据。
+- foundation `20/20` 证明 formal LP03 才开放 C4-03、一次点击只创建一个 session、最多一个 opening-review、真实 LP04 actions 保持 E-D-C、resume 不插复习、非法前缀 fail-closed 且既有证据保持。
+- R01B lifecycle `31/31` 现补齐顺利 review 同 session 继续、困难安全停点、下一次 story-first、全局间隔、resume、刷新幂等和 retained-due。主管另以 `9/9` 对抗探针证明选中锚点缺失、时间错配或重复歧义时不替换 stable、不写 retained。
+- 共享回归独立通过：R01A `35/35`、sessions `74/74`、LP01/LP02 `137/137`、非阻挡/phase 结算 `62/62`、课程导演 `68/68`、音名 `286/286`、clean `124/124`、PWA `10/10`、quick/strict。
+- 本工作单的浏览器生命周期已整体通过，完整裁决见 `docs/59_C4_R01B_SUPERVISOR_ACCEPTANCE_2026-07-20.md`。354b 已保留产品名修正，以家长可见版本号冻结当前实体观察候选，保留浏览器后台麦克风释放并关闭浏览器家长精确清除 P0；LP05 的技术先修虽满足，但在成人 iPad 预听和方向性观察前不会自动解锁。

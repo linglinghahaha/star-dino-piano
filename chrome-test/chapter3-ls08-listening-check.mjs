@@ -1,6 +1,8 @@
 import fs from "node:fs";
 import path from "node:path";
 import { createRequire } from "node:module";
+import { canonicalC1C2History } from "./canonical-course-fixture.mjs";
+import { completeParentChallenge } from "./parental-challenge-helper.mjs";
 
 const require = createRequire(import.meta.url);
 const { chromium } = require("playwright");
@@ -24,7 +26,7 @@ function fixture({ ls07 = true, guideStreak = 0, remediation = false } = {}) {
     version: 1,
     active: null,
     history: [
-      { sessionId: "C2-03-entry", bundleId: "C2-03", status: "ended", completedActions: [{ actionId: "S01-check", kind: "staff", targetId: "S01" }] },
+      ...canonicalC1C2History({ completedAt, tag: "ls08" }),
       { sessionId: "C3-06-done", bundleId: "C3-06", status: "ended", completedActions: [{ actionId: "LS07-listening", targetId: "LS07" }] }
     ],
     lastRest: { sessionId: "C3-06-done", bundleId: "C3-06", reward: "两株边界花", reason: "natural-rest", endedAt: completedAt, localDateKey: "2026-07-13" },
@@ -141,7 +143,12 @@ async function view(page) {
       phase: document.body?.classList.contains("screen-map") ? "map" : (document.querySelector("#gardenScene")?.dataset.listeningPhase || ""),
       speech: document.querySelector("#gardenSpeech")?.innerText?.replace(/\s+/g, " ").trim() || "",
       marker: document.querySelector("#gardenRestMarker")?.innerText?.replace(/\s+/g, " ").trim() || "",
+      markerAria: document.querySelector("#gardenRestMarker")?.getAttribute("aria-label") || "",
       markerDisabled: document.querySelector("#gardenRestMarker")?.disabled,
+      journeyChapter: document.querySelector("#mapShell")?.dataset.journeyChapter || "",
+      journeyBundle: document.querySelector("#mapShell")?.dataset.journeyBundle || "",
+      journeyTarget: document.querySelector("#mapShell")?.dataset.journeyTarget || "",
+      journeyTitle: document.querySelector("#journeyTitle")?.textContent?.trim() || "",
       mapDetail: document.querySelector("#mapSessionDetail")?.textContent?.trim() || "",
       slots, keyboard, childText, childLeaks,
       compare: document.querySelector("#ls05Compare")?.innerText?.replace(/\s+/g, " ").trim() || "",
@@ -285,7 +292,7 @@ await locked.context.close();
 const main = await makePage({ width: 1366, height: 1024 }, { sessionUuid: "ls08-main-seed" });
 await seed(main.page);
 current = await view(main.page);
-record("Map render does not create C3-07 or write LS08 evidence", !current.runtime.active && !current.runtime.chapter3.lessonEvidence.LS08 && current.marker.includes("两声根须"), current);
+record("Map render does not create C3-07 or write LS08 evidence", !current.runtime.active && !current.runtime.chapter3.lessonEvidence.LS08 && current.journeyChapter === "C3" && current.journeyBundle === "C3-07" && current.journeyTarget === "LS08" && current.journeyTitle === "让两声根须向下长", current);
 await main.page.screenshot({ path: path.join(screenshotDir, "ls08_map_entry_1366x1024.png") });
 current = await start(main.page);
 record("Explicit map click creates the only C3-07 session", current.runtime.active?.bundleId === "C3-07" && current.action?.targetId === "LS08", current.runtime.active);
@@ -333,10 +340,11 @@ record("Final C4 to C3 echo is an unscored story event with no low-key teaching"
 await main.page.screenshot({ path: path.join(screenshotDir, "ls08_unscored_low_echo_1366x1024.png") });
 await waitPhase(main.page, "map", 10000);
 current = await view(main.page);
-record("LS08 completes Chapter 3 and exposes the entrance without starting Chapter 4", current.runtime.chapter3.completed === true && current.runtime.chapter3.lessonEvidence.LS08?.completed && !current.runtime.active && !current.markerDisabled && current.marker.includes("地下入口") && !JSON.stringify(current.runtime).includes("\"LP01\""), current.runtime.chapter3);
+record("LS08 completes Chapter 3 and exposes the entrance without starting Chapter 4", current.runtime.chapter3.completed === true && current.runtime.chapter3.lessonEvidence.LS08?.completed && !current.runtime.active && !current.markerDisabled && current.journeyChapter === "C4" && current.journeyBundle === "C4-01" && current.journeyTarget === "LP01" && current.journeyTitle === "听两个 C 的回声" && !JSON.stringify(current.runtime).includes("\"LP01\""), { chapter3: current.runtime.chapter3, journey: { chapter: current.journeyChapter, bundle: current.journeyBundle, target: current.journeyTarget, title: current.journeyTitle, marker: current.marker, markerAria: current.markerAria } });
 record("Clean 4/4 creates stable but not retained", current.learning.levels.LS08?.stableCompletions === 1 && current.learning.retention.stableEvents.some((event) => event.skillKey === "level:LS08") && !current.learning.retention.retainedEvents.some((event) => event.skillKey === "level:LS08"), current.learning);
 await main.page.screenshot({ path: path.join(screenshotDir, "ls08_map_rest_1366x1024.png") });
 await main.page.locator("#mapParentGate").click();
+await completeParentChallenge(main.page);
 current = await view(main.page);
 record("Parent evidence names two-sound order memory without rhythm or low-note claims", current.parentFocus.includes("两个声音的先后记忆") && current.parentDetail.includes("首次完整回答 4/4") && !/节奏能力|速度能力|低音能力|绝对音感能力/.test(current.parentDetail) && current.parentProgress.includes("4/4"), current);
 await main.context.close();

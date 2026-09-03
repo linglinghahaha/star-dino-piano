@@ -1,6 +1,7 @@
 import { createRequire } from "node:module";
 import fs from "node:fs";
 import path from "node:path";
+import { completeParentChallenge } from "./parental-challenge-helper.mjs";
 
 const require = createRequire(import.meta.url);
 const { chromium } = require("playwright");
@@ -26,6 +27,7 @@ const record = (name, pass, details = {}) => {
 const makeUrl = (query = "") => {
   const url = new URL(baseUrl);
   url.search = query;
+  url.searchParams.set("legacyMap", "true");
   return url.toString();
 };
 
@@ -358,13 +360,32 @@ const completeSession = async (page, optionsByAction = {}) => {
 };
 
 const completeDebugLevel = async (page) => {
+  const initial = await page.evaluate(() => ({
+    screen: state.screen,
+    levelId: activeLevel()?.id || "",
+    partCount: activeLevel()?.parts?.length || 0,
+    staffStepCount: typeof activeStaffStepCount === "function" ? activeStaffStepCount() : 0
+  }));
   for (let guard = 0; guard < 28; guard += 1) {
-    const resultVisible = await page.evaluate(() => !document.querySelector("#resultModal")?.hidden);
-    if (resultVisible) return;
+    const completed = await page.evaluate(({ screen, levelId, partCount, staffStepCount }) => {
+      if (document.querySelector("#resultModal")?.hidden !== true) return false;
+      if (screen === "staff") return state.staffComplete || state.staffStepIndex >= staffStepCount;
+      return activeLevel()?.id !== levelId || state.stepIndex >= partCount;
+    }, initial);
+    if (completed) return;
     const tapped = await tapTarget(page);
     if (!tapped) await page.waitForTimeout(180);
   }
-  throw new Error("debug level did not complete");
+  const diagnostic = await page.evaluate(() => ({
+    screen: state.screen,
+    levelId: activeLevel()?.id || "",
+    levelStepIndex: state.stepIndex,
+    staffStepIndex: state.staffStepIndex,
+    staffStepCount: typeof activeStaffStepCount === "function" ? activeStaffStepCount() : 0,
+    staffComplete: state.staffComplete,
+    targetMidi: Number(document.querySelector('.key.white-key[data-target-note="true"]')?.dataset.midi || NaN)
+  }));
+  throw new Error(`debug level did not complete: ${JSON.stringify(diagnostic)}`);
 };
 
 const clickMapNode = async (page, levelId) => {
@@ -376,7 +397,7 @@ const clickMapNode = async (page, levelId) => {
 
 const openParentEvidence = async (page) => {
   await page.locator("#playParentGate").click({ timeout: 5000 });
-  await page.waitForSelector("#parentModal", { state: "visible", timeout: 5000 });
+  await completeParentChallenge(page);
   return page.evaluate(() => ({
     status: document.querySelector("#parentMasteryStatus")?.textContent?.trim() || "",
     detail: document.querySelector("#parentMasteryDetail")?.textContent?.trim() || "",

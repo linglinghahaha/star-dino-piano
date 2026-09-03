@@ -1,12 +1,14 @@
 # 原生 iPad、Core MIDI 与 App Store 运行合同
 
-状态：`specification_passed / web_reference_ready_at_342a / architecture_choice_open / native_runtime_missing / mac_xcode_account_device_store_evidence_missing`
+状态：`specification_passed / web_reference_ready_at_342a / architecture_choice_open / native_prototype_present_nonqualifying / native_runtime_missing / mac_xcode_account_device_store_evidence_missing`
 
 负责人：课程故事、整体调度与独立审查任务锁定行为、教学、隐私和放行证据；未来原生 iPad 任务拥有 Xcode 工程和原生桥接写入权；Web 原型任务只提供已通过的行为参考；媒体任务只交付经批准的运行格式与来源台账。
 
 本文件规定“Web 原型怎样变成成熟 iPad App”，不预先强制 SwiftUI、SpriteKit、WKWebView 或 Capacitor 中的某一种架构。任何实现都必须证明相同行为、离线、音频、MIDI、隐私、家长门、无障碍和 App Store 结果，不能用“已经打包成 IPA”代替产品通过。
 
 `38_IPAD_MIDI_MIC_DEVICE_TEST_PROTOCOL.md` 是本合同的实体设备执行方法；它不能改变本文件的门禁，只负责证明指定 build、设备、MIDI、麦克风和音频路线是否真实达到门槛。
+
+2026-07-27 事实修正：同产品 sibling 目录中存在一个早期 SwiftUI/Swift Playground 原型，但它不符合当前课程、角色、孩子端音名、正式 session/掌握、持久化、隐私、签名、测试或发布美术合同。完整只读盘点见 `docs/94_NATIVE_IPAD_PROTOTYPE_COMPATIBILITY_AUDIT_2026-07-27.md`。Core MIDI 和本地音高检测只登记为受限技术候选；原生运行、TestFlight 和 App Store 实现仍为 `native_runtime_missing`。
 
 ## 给家长看的简短说明
 
@@ -39,7 +41,7 @@
 
 N0 只证明平台可行性，不建立 App Store 或课程完成声明。没有 Mac 时继续 Web 课程和素材工作，不伪造 Xcode/TestFlight 证据。
 
-2026-07-13 状态：`overhaul-342a`（提交 `e6e27cc1fee57dc0eb2ed4a46f5b6dbb13176ff6`）已形成第一、二章及第三章至 LS07 的独立通过 Web 教学参考；正在开发的 `343a / LS08` 仍不计入批准基线。N0 仍不能开始，因为当前没有可核验的 macOS/Xcode、实体 iPad、签名账号和原生工程环境；等待这些条件不妨碍继续完成 Web 课程、素材和审查。
+2026-07-13 状态：`overhaul-342a`（提交 `e6e27cc1fee57dc0eb2ed4a46f5b6dbb13176ff6`）已形成第一、二章及第三章至 LS07 的独立通过 Web 教学参考；正在开发的 `343a / LS08` 仍不计入批准基线。当时尚未盘点 sibling 早期原生原型。2026-07-27 盘点后，N0 仍不能开始，因为当前没有可核验的 macOS/Xcode、实体 iPad、签名账号和**符合本合同的原生运行候选**；等待这些条件不妨碍继续完成 Web 课程、素材和审查。
 
 ### N1 原生纵切
 
@@ -154,10 +156,12 @@ accessibilitySettings
 
 - 每个本地字段、权限、日志、SDK、网络请求和处理目的进入发布 child-data map。
 - 提交前完成 App Privacy 问卷、隐私政策、`PrivacyInfo.xcprivacy`/所需原因 API 清单、麦克风用途字符串和第三方 SDK 隐私清单；内容必须与 Release 包实际行为一致。
+- 对最终 Release archive 逐项盘点直接、传递和重新封装的列名第三方 SDK；凡 Apple 要求者必须带有效 privacy manifest，并核对 SDK 签名、版本来源和 Xcode 汇总 privacy report。不能因主 App 自身零网络就跳过 SDK 证据。
 - 默认没有第三方分析、广告、归因、社交、崩溃上传或远程配置 SDK。若未来增加，必须先重新打开地区儿童隐私、家长同意、数据保留和删除审查。
 - 网络关闭时核心孩子流程完整；任何支持/隐私链接只在家长门后打开系统浏览器。
 - 日志不得包含儿童姓名、自由文本、原始音频、完整 MIDI 流或可识别家庭信息。
-- App Store Kids 年龄段在元数据冻结前明确选择。当前 UI 先按“5 岁及以下”的不依赖阅读标准设计，同时让 6 岁儿童可用；最终声明仍需对照当时 Apple 规则和真实观察。
+- 三套年龄字段必须分开记录：内部教学目标 `4-6`；由 App Store Connect 问卷计算且可能随地区/系统代际显示不同的一般 App 年龄评级；Kids Category 的 `5 and under`、`6-8`、`9-11` 年龄带。当前 UI 按“5 岁及以下”的不依赖阅读标准设计，Kids 候选为 `5 and under`，但这不预判最终一般评级、Kids 资格或地区结果。
+- `Declared Age Range`、`PermissionKit` 和 significant-change permission flow 不因为面向儿童就默认接入。只有最终产品确实请求年龄范围、按年龄改变功能、加入受覆盖通信或发生 Apple 定义的重大功能变化时，才单列 entitlement、数据最小化、sandbox、监护人流程和地区合规验证；不得为了“合规”凭空增加账号、网络或儿童数据。
 
 ## 十一、生命周期、离线和恢复
 
@@ -211,6 +215,7 @@ TestFlight 前冻结：最低 iPadOS、支持方向、目标 iPad 尺寸、芯�
 - Review Notes 清楚说明：触屏可完整玩、麦克风可选且本地不存储、MIDI 需要实际设备、家长门位置和 Kids 内容路径。
 - 所有图片、动画、角色语音、SFX、钢琴音源、字体、旋律和商店媒体有来源、授权、处理记录和最终哈希。
 - 商店提交前重新核对当时 Apple Review Guidelines、Kids Category、隐私问卷和所需原因 API；旧文档日期不能替代提交时事实。
+- 一般 App 年龄评级问卷结果、地区评级与 Kids Category 年龄带分别留档；Made for Kids 选择一经 App Review 批准，不把后续不可随意更改的约束当成普通文案编辑。
 - 年龄段、定价、一次性购买/订阅/免费策略和地区范围在 metadata freeze 前明确；未决定项阻止提交但不阻止课程原型。
 
 ## 十五、必须自动或可重复验证的门禁
@@ -239,7 +244,7 @@ TestFlight 前冻结：最低 iPadOS、支持方向、目标 iPad 尺寸、芯�
 22. 家长门覆盖权限、设置、外链、购买、导入导出、重置和诊断分享。
 23. 家长门失败不显示答案，成功/超时/返回状态可恢复。
 24. child-data map 与实际本地字段、权限、日志和网络请求一致。
-25. Release 包包含正确隐私 manifest、用途说明和第三方 SDK 清单。
+25. Release 包包含正确隐私 manifest、用途说明和完整第三方 SDK 清单；列名 SDK 的有效 manifest、SDK 签名、版本来源和汇总 privacy report 可复核。
 26. 默认构建无广告、分析、归因、社交、账号、云同步和远程课程依赖。
 27. 处理后角色语音有授权/来源；私密原录音不在仓库、包或诊断中。
 28. 所有运行图像、视频、音频、字体和旋律的最终哈希在资产台账且状态 approved。
@@ -283,7 +288,7 @@ TestFlight 前冻结：最低 iPadOS、支持方向、目标 iPad 尺寸、芯�
 
 - `passed`：本文件的原生行为、平台、隐私、输入、音频、生命周期、无障碍、设备和商店证据合同已锁定。
 - `open`：原生架构、最低 iPadOS、支持设备、Kids 声明年龄段、定价和地区需在对应冻结点决定。
-- `missing`：Mac/Xcode/Apple Developer 环境、原生工程、Core MIDI、原生麦克风、TestFlight 和 App Store 实现。
+- `missing`：Mac/Xcode/Apple Developer 构建环境、符合当前正典的原生运行候选、原生真机输入证据、TestFlight 和 App Store 实现。早期原型中的 Core MIDI/麦克风源码只算候选，不算本行通过。
 - `missing`：实体 iPad/MIDI/原声钢琴、教师、儿童、家长门、隐私、版权和商店审核证据。
 
 当前只能说“原生 iPad 与 App Store 验收合同完成”。项目仍不是原生 App，也没有 TestFlight 或成熟发布证据。

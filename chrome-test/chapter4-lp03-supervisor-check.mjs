@@ -1,4 +1,5 @@
 import { createRequire } from "node:module";
+import { canonicalC1C2History } from "./canonical-course-fixture.mjs";
 
 const require = createRequire(import.meta.url);
 const { chromium } = require("playwright");
@@ -40,12 +41,7 @@ function formalRuntimeFixture() {
     version: 1,
     active: null,
     history: [
-      {
-        sessionId: "C2-03-lp03-supervisor-garden-entry",
-        bundleId: "C2-03",
-        status: "ended",
-        completedActions: [{ actionId: "S01-check", kind: "staff", targetId: "S01" }]
-      },
+      ...canonicalC1C2History({ completedAt, tag: "lp03-supervisor" }),
       {
         sessionId: ls08SessionId,
         bundleId: "C3-07",
@@ -351,10 +347,9 @@ try {
   const lp01Map = await makePage({ runtime: lp01MapRuntime, seed: "lp01-map-progress" });
   const lp01MapState = await snapshot(lp01Map.page);
   record(
-    "LP01 map progress remains four echoes when LP03 is unavailable",
-    lp01MapState.mapProgress?.text === "四次回声 0/4 · 准备" &&
-      /四次声音比较/.test(lp01MapState.mapProgress?.aria || "") &&
-      !lp01MapState.mapProgress?.text.includes("三块地基"),
+    "LP01 map progress remains the canonical first underground course stop when LP03 is unavailable",
+    lp01MapState.mapProgress?.text === "跟着星芽" &&
+      lp01MapState.mapProgress?.aria === "地下回声洞课程进度：共 3 站，现在第 1 站，准备",
     lp01MapState.mapProgress
   );
   await lp01Map.context.close();
@@ -421,9 +416,8 @@ try {
       cRestMap.progress?.foundationEPlaced === false &&
       cRestMap.runtime?.chapter4?.resume?.nextStepId === "D" &&
       cRestMap.runtime?.chapter4?.resume?.remainingStepIds?.join(",") === "D,E" &&
-      cRestMap.mapProgress?.text === "三块地基 1/3 · 继续" &&
-      cRestMap.mapProgress?.aria === "三块地基进度，1/3 已安放，继续" &&
-      !cRestMap.mapProgress?.text.includes("四次回声") &&
+      cRestMap.mapProgress?.text === "接着星芽" &&
+      cRestMap.mapProgress?.aria === "地下回声洞课程进度：共 3 站，现在第 2 站，继续" &&
       cOldSession?.completedActions?.map((action) => action.lp03Step).join(",") === "C" &&
       cOldSession?.completedActions?.[0]?.childCorrectCount === 1 &&
       cOldSession?.completedActions?.[0]?.modeledInputs?.length === 0,
@@ -465,9 +459,8 @@ try {
       dRestMap.progress?.foundationEPlaced === false &&
       dRestMap.runtime?.chapter4?.resume?.nextStepId === "E" &&
       dRestMap.runtime?.chapter4?.resume?.remainingStepIds?.join(",") === "E" &&
-      dRestMap.mapProgress?.text === "三块地基 2/3 · 继续" &&
-      dRestMap.mapProgress?.aria === "三块地基进度，2/3 已安放，继续" &&
-      !dRestMap.mapProgress?.text.includes("四次回声") &&
+      dRestMap.mapProgress?.text === "接着星芽" &&
+      dRestMap.mapProgress?.aria === "地下回声洞课程进度：共 3 站，现在第 2 站，继续" &&
       dOldSession?.completedActions?.map((action) => action.lp03Step).join(",") === "C,D",
     { dRestMap, dOldSession }
   );

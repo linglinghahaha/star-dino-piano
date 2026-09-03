@@ -1892,6 +1892,174 @@ html[data-motion="reduced"] #appShell .keyboard.real-piano .key.hint {
   display: grid !important;
 }
 
+/* 369h: S01 keeps the current staff position dominant while decorative layers recede. */
+#appShell.app-shell.staff-mode:not([data-staff-presentation="mini-training-dock"]) .staff-stage::before {
+  opacity: 0.62 !important;
+}
+
+#appShell.app-shell.staff-mode:not([data-staff-presentation="mini-training-dock"]) .staff-stage::after {
+  opacity: 0.30 !important;
+  box-shadow: inset 0 0 0 1px rgba(190, 244, 255, 0.05) !important;
+}
+
+#appShell.app-shell.staff-mode:not([data-staff-presentation="mini-training-dock"]) .staff-scene-art .svg-depth-stars-176,
+#appShell.app-shell.staff-mode:not([data-staff-presentation="mini-training-dock"]) .staff-scene-art .svg-stage-micro-179,
+#appShell.app-shell.staff-mode:not([data-staff-presentation="mini-training-dock"]) .staff-scene-art .svg-stars,
+#appShell.app-shell.staff-mode:not([data-staff-presentation="mini-training-dock"]) .staff-scene-art .svg-bridge-glints-176,
+#appShell.app-shell.staff-mode:not([data-staff-presentation="mini-training-dock"]) .staff-scene-art .svg-bridge-fine-179 {
+  opacity: 0.20 !important;
+}
+
+#appShell.app-shell.staff-mode:not([data-staff-presentation="mini-training-dock"]) .staff-scene-art .svg-left-planet,
+#appShell.app-shell.staff-mode:not([data-staff-presentation="mini-training-dock"]) .staff-scene-art .svg-left-polish-176,
+#appShell.app-shell.staff-mode:not([data-staff-presentation="mini-training-dock"]) .staff-scene-art .svg-left-detail-179 {
+  opacity: 0.42 !important;
+  filter: saturate(0.72) brightness(0.82) !important;
+}
+
+#appShell.app-shell.staff-mode:not([data-staff-presentation="mini-training-dock"]) .staff-scene-art .svg-right-portal {
+  opacity: 0.38 !important;
+  filter: saturate(0.68) brightness(0.78) !important;
+}
+
+#appShell.app-shell.staff-mode:not([data-staff-presentation="mini-training-dock"]) .staff-scene-art .svg-right-polish-176,
+#appShell.app-shell.staff-mode:not([data-staff-presentation="mini-training-dock"]) .staff-scene-art .svg-right-detail-179 {
+  opacity: 0.24 !important;
+  filter: saturate(0.62) brightness(0.74) !important;
+}
+
+#appShell.app-shell.staff-mode:not([data-staff-presentation="mini-training-dock"]) .staff-sky {
+  opacity: 0.20 !important;
+}
+
+#appShell.app-shell.staff-mode:not([data-staff-presentation="mini-training-dock"]) .staff-finish {
+  opacity: 0.42 !important;
+  filter: saturate(0.68) brightness(0.78) !important;
+  box-shadow: inset 0 -4px 0 rgba(90, 56, 45, 0.10) !important;
+  animation: none !important;
+}
+
+#appShell.app-shell.staff-mode:not([data-staff-presentation="mini-training-dock"]) .staff-progress .staff-dot {
+  width: 8px !important;
+  height: 4px !important;
+  min-width: 8px !important;
+  min-height: 4px !important;
+  border: 0 !important;
+  border-radius: 999px !important;
+  background: rgba(185, 222, 251, 0.18) !important;
+  box-shadow: none !important;
+}
+
+#appShell.app-shell.staff-mode:not([data-staff-presentation="mini-training-dock"]) .staff-progress .staff-dot.done {
+  background: rgba(255, 212, 122, 0.42) !important;
+}
+
+#appShell.app-shell.staff-mode:not([data-staff-presentation="mini-training-dock"]) .staff-progress .staff-dot.active {
+  width: 20px !important;
+  min-width: 20px !important;
+  height: 6px !important;
+  min-height: 6px !important;
+  background: linear-gradient(90deg, #ff826f, #ffd37c) !important;
+  box-shadow: 0 0 10px rgba(255, 179, 102, 0.24) !important;
+}
+
+#appShell.app-shell.staff-mode:not([data-staff-presentation="mini-training-dock"]) #staffSteps .staff-step.locked,
+#appShell.app-shell.staff-mode:not([data-staff-presentation="mini-training-dock"]) #staffSteps .staff-step[data-step-state="locked"] {
+  opacity: 0.20 !important;
+  filter: saturate(0.52) brightness(0.78) !important;
+  box-shadow: none !important;
+}
+
+#appShell.app-shell.staff-mode:not([data-staff-presentation="mini-training-dock"]) #staffSteps .staff-step.current,
+#appShell.app-shell.staff-mode:not([data-staff-presentation="mini-training-dock"]) #staffSteps .staff-step.current.hint,
+#appShell.app-shell.staff-mode:not([data-staff-presentation="mini-training-dock"]) #staffSteps .staff-step[data-step-state="current"] {
+  opacity: 1 !important;
+  box-shadow:
+    0 0 0 4px rgba(255, 255, 255, 0.86),
+    0 0 0 9px var(--note-soft, rgba(203, 132, 250, 0.18)),
+    0 14px 24px rgba(3, 12, 29, 0.20) !important;
+  filter: drop-shadow(0 8px 10px rgba(2, 10, 27, 0.22)) !important;
+}
+
+html #appShell.app-shell.staff-mode:not([data-staff-presentation="mini-training-dock"]) #staffSteps .staff-step.current .staff-note-aura,
+html #appShell.app-shell.staff-mode:not([data-staff-presentation="mini-training-dock"]) #staffSteps .staff-step[data-step-state="current"] .staff-note-aura {
+  opacity: 0.44 !important;
+  animation: none !important;
+  transform: none !important;
+  filter: none !important;
+  box-shadow: 0 0 0 6px var(--note-soft, rgba(203, 132, 250, 0.16)) !important;
+}
+
+#appShell.app-shell.staff-mode[data-staff-presentation="full-bridge"] .staff-jump-footprints,
+#appShell.app-shell.staff-mode[data-staff-presentation="full-bridge"] .staff-jump-footprints span {
+  display: none !important;
+}
+
+#appShell.app-shell.staff-mode[data-staff-presentation="full-bridge"] .staff-jump-guide {
+  display: block !important;
+  opacity: 0.36 !important;
+  mix-blend-mode: normal !important;
+}
+
+#appShell.app-shell.staff-mode[data-staff-presentation="full-bridge"] .staff-jump-guide-shadow {
+  opacity: 0.24 !important;
+  filter: none !important;
+}
+
+#appShell.app-shell.staff-mode[data-staff-presentation="full-bridge"] .staff-jump-guide-path {
+  stroke-width: 3px !important;
+  opacity: 0.54 !important;
+  filter: none !important;
+  animation: none !important;
+}
+
+#appShell.app-shell.staff-mode[data-staff-presentation="full-bridge"] .staff-steps::before,
+#appShell.app-shell.staff-mode[data-staff-presentation="full-bridge"] .staff-steps::after,
+#appShell.app-shell.staff-mode[data-staff-presentation="bridge-check"] .staff-steps::before,
+#appShell.app-shell.staff-mode[data-staff-presentation="bridge-check"] .staff-steps::after,
+#appShell.app-shell.staff-mode[data-staff-repair-state="repair"] .staff-steps::before,
+#appShell.app-shell.staff-mode[data-staff-repair-state="repair"] .staff-steps::after {
+  opacity: 0 !important;
+  animation: none !important;
+}
+
+#appShell.app-shell.staff-mode[data-staff-presentation="bridge-check"] .staff-jump-guide,
+#appShell.app-shell.staff-mode[data-staff-presentation="bridge-check"] .staff-jump-footprints,
+#appShell.app-shell.staff-mode[data-staff-presentation="bridge-check"] .staff-jump-footprints span,
+#appShell.app-shell.staff-mode[data-staff-repair-state="repair"] .staff-jump-guide,
+#appShell.app-shell.staff-mode[data-staff-repair-state="repair"] .staff-jump-footprints,
+#appShell.app-shell.staff-mode[data-staff-repair-state="repair"] .staff-jump-footprints span {
+  display: none !important;
+  opacity: 0 !important;
+  animation: none !important;
+}
+
+html[data-motion="reduced"] #appShell.app-shell.staff-mode .staff-scene-art *,
+html[data-motion="reduced"] #appShell.app-shell.staff-mode .staff-jump-guide,
+html[data-motion="reduced"] #appShell.app-shell.staff-mode .staff-jump-guide-path,
+html[data-motion="reduced"] #appShell.app-shell.staff-mode .staff-jump-footprints,
+html[data-motion="reduced"] #appShell.app-shell.staff-mode .staff-jump-footprints span,
+html[data-motion="reduced"] #appShell.app-shell.staff-mode .staff-finish,
+html[data-motion="reduced"] #appShell.app-shell.staff-mode #staffSteps .staff-step.current .staff-note-aura,
+html[data-motion="reduced"] #appShell.app-shell.staff-mode #staffSteps .staff-step[data-step-state="current"] .staff-note-aura {
+  animation: none !important;
+  transition: none !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html #appShell.app-shell.staff-mode .staff-scene-art *,
+  html #appShell.app-shell.staff-mode .staff-jump-guide,
+  html #appShell.app-shell.staff-mode .staff-jump-guide-path,
+  html #appShell.app-shell.staff-mode .staff-jump-footprints,
+  html #appShell.app-shell.staff-mode .staff-jump-footprints span,
+  html #appShell.app-shell.staff-mode .staff-finish,
+  html #appShell.app-shell.staff-mode #staffSteps .staff-step.current .staff-note-aura,
+  html #appShell.app-shell.staff-mode #staffSteps .staff-step[data-step-state="current"] .staff-note-aura {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
 /* 338a M03: one story problem, one replay action, one Xingya invitation. */
 #appShell.app-shell:not(.staff-mode)[data-level-id="M03"] .coach-bubble {
   top: -112px !important;

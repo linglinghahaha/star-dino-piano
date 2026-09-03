@@ -1,6 +1,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import { createRequire } from "node:module";
+import { completeParentChallenge } from "./parental-challenge-helper.mjs";
 
 const require = createRequire(import.meta.url);
 const { chromium } = require("playwright");
@@ -35,7 +36,8 @@ async function waitReady(page) {
 async function openParentPanel(page) {
   if (await page.locator("#parentModal").isVisible()) return;
   await page.locator("#playParentGate").evaluate((button) => button.click());
-  await page.waitForSelector("#parentModal", { state: "visible", timeout: 3000 });
+  await completeParentChallenge(page);
+  await page.locator("#parentTabDevices").click();
   await page.locator(".parent-motion-setting").scrollIntoViewIfNeeded();
 }
 
@@ -175,7 +177,12 @@ try {
 
   await page.locator('.key.white-key[data-note="G"]').click();
   await page.waitForTimeout(900);
-  record("reduced motion preserves FG04 completion", await page.locator("#resultModal").isVisible());
+  const reducedCompletion = await page.evaluate(() => ({
+    modalHidden: document.querySelector("#resultModal")?.hidden === true,
+    appInert: Boolean(document.querySelector("#appShell")?.inert),
+    placedSlots: document.querySelectorAll("#baseBuild .build-slot.placed").length
+  }));
+  record("reduced motion preserves FG04 scene completion without a result modal", reducedCompletion.modalHidden && !reducedCompletion.appInert && reducedCompletion.placedSlots >= 2, reducedCompletion);
 
   const staffUrl = new URL(rootUrl);
   staffUrl.search = "?mode=staff&session=mini&check=motion-322a-staff";

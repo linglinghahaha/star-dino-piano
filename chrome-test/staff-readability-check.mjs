@@ -58,9 +58,10 @@ try {
       const details = await page.evaluate(() => {
         const stage = document.querySelector(".staff-stage");
         const scene = document.querySelector(".staff-scene-art");
-        const staffGroup = document.querySelector(".svg-staff-lines");
-        const lines = [...document.querySelectorAll(".svg-staff-lines .svg-staff-line")];
-        const measures = [...document.querySelectorAll(".svg-staff-lines .svg-measure-line")];
+        const staffGroup = document.querySelector("#staffNotation");
+        const lines = [...document.querySelectorAll("#staffNotation .staff-line")];
+        const measures = [...document.querySelectorAll("#staffNotation .staff-measure-line")];
+        const ledger = document.querySelector("#staffNotation .staff-ledger-line");
         const stageRect = stage?.getBoundingClientRect();
         const groupRect = staffGroup?.getBoundingClientRect();
         const style = (element) => element ? getComputedStyle(element) : null;
@@ -74,30 +75,35 @@ try {
           lines: lines.map((line) => ({
             display: style(line)?.display,
             opacity: Number(style(line)?.opacity || 0),
-            stroke: style(line)?.stroke,
-            strokeWidth: parsePx(style(line)?.strokeWidth)
+            backgroundImage: style(line)?.backgroundImage,
+            thickness: parsePx(style(line)?.height)
           })),
           measures: measures.map((line) => ({
             display: style(line)?.display,
             opacity: Number(style(line)?.opacity || 0),
-            strokeWidth: parsePx(style(line)?.strokeWidth)
+            thickness: parsePx(style(line)?.width)
           })),
+          ledger: {
+            display: style(ledger)?.display,
+            opacity: Number(style(ledger)?.opacity || 0),
+            thickness: parsePx(style(ledger)?.height)
+          },
           horizontalOverflow: document.documentElement.scrollWidth > document.documentElement.clientWidth + 1,
           verticalOverflow: document.documentElement.scrollHeight > document.documentElement.clientHeight + 1
         };
       });
 
       const linesReadable = details.lines.length === 5 && details.lines.every((line) => (
-        line.display !== "none" && line.opacity >= 0.95 && line.strokeWidth >= 7
+        line.display !== "none" && line.opacity >= 0.95 && line.backgroundImage !== "none" && line.thickness >= 7
       ));
       const measuresReadable = details.measures.length === 3 && details.measures.every((line) => (
-        line.display !== "none" && line.opacity >= 0.8 && line.strokeWidth >= 5
-      ));
+        line.display !== "none" && line.opacity >= 0.8 && line.thickness >= 5
+      )) && details.ledger.display !== "none" && details.ledger.opacity >= 0.95 && details.ledger.thickness >= 7;
       const staffHasUsefulGeometry = details.stage && details.group &&
         details.group.width >= details.stage.width * 0.5 &&
         details.group.height >= details.stage.height * 0.45;
 
-      record(`${viewport.id}: runs the 347a R01A shell`, details.runtimeVersion.includes("overhaul-347a-c4-r01a"), details);
+      record(`${viewport.id}: runs the current 369e shell`, details.runtimeVersion.includes("overhaul-369e-ipad-settlement-compactness-correction"), details);
       record(`${viewport.id}: five staff lines stay bold and visible`, details.sceneOpacity >= 0.76 && details.groupVisible && linesReadable, details);
       record(`${viewport.id}: measure lines and ledger stay visible`, measuresReadable && staffHasUsefulGeometry, details);
       record(`${viewport.id}: staff stage remains contained`, !details.horizontalOverflow && !details.verticalOverflow, details);

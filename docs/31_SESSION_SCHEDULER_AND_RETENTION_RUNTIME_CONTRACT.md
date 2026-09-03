@@ -1,6 +1,6 @@
 # 短课调度、自然休息与保持性证据运行合同
 
-状态：`specification_updated / existing_browser_runtime_passed_for_prior_scope / opening_review_spacing_and_fairness_runtime_pending / physical_device_and_child_evidence_missing`
+状态：`specification_updated / browser_runtime_passed_through_C4_R01B / opening_review_spacing_fairness_and_anchor_adversarial_passed / physical_device_teacher_and_child_evidence_missing`
 
 负责人：课程与调度任务锁定教学语义；原型任务负责运行实现、迁移和自动化。本文件不把浏览器实现等同于真实儿童或长期学习证据。
 
@@ -38,6 +38,18 @@
 
 这些是 `bundleId`，不是新的关卡 ID。`C1-01` 的 Do 回忆是 M01 内的短动作或同概念回忆，不得伪造一个不存在的新课程关卡。
 
+### Future Chapter 5 TH05 continuation rule
+
+未来 `TH05` 仍是一个公开任务，但内部固定为五次孩子明确点击才开始的短 action：`C5-04A` supports、`C5-04B1` near high bar、`C5-04B2` far high bar、`C5-04C1` relay bar 1、`C5-04C2` relay bar 2。每次分别只有 `2/4/4/5/5` 个有意义输入；完成一段后结束 session 并回到主页，不自动创建或开始下一段。
+
+- 地图返回、刷新和短暂后台恢复同一未结束 action 时沿用原 `sessionId`，恢复当前 step、错误、帮助和已完成世界结果。
+- 若困难、长等待或主动休息已诚实结束旧 session，下一次点击创建新的 `sessionId`，写 `resumeOfSessionId`，只续当前 action 的未完成 step；已安装桥墩、单颗星灯和桥段不重放。
+- 所有 TH05 continuation session 都是 story-first，`opening-review` 数量必须为 0。自然分段不能让旧题插在当前桥段前面。
+- `C5-04A/B1/B2/C1` 都不是 phase tail，不显示 settlement。`C5-04C2` 是第二个 Chapter 5 phase tail；只有正式 action 链完整且最后一段 clean 才可显示一次轻量 milestone，帮助完成仍进入 TH08，但不显示 clean milestone。
+- TH05 completion 后只暴露 TH08 一个当前故事入口，不自动建立 TH08 session。TH05 的分段 played/order 记录不能进入 TH03 role/register stable、TH08 two-measure stable 或 retained。
+- 第一次 TH08 固定为 `mode=core-relay-finale`，由孩子点击开始并在任何 paired 邀请之前打开花园；它是唯一 Chapter 5 story completion。TH06/TH07/TH08 together-encore 只能在 core TH08 正式 ended 之后的后来主页到访逐段安排，同一 completion session 内 optional session 数量必须为 0；optional 永远不能覆盖核心故事记录。
+- optional 不是能力分流：调度器不得从正确率、速度、stable、pitch、hand prompt 或配对毫秒推断“准备好”。孩子点击唯一邀请即可尝试；退出、疲劳、麦克风、单点或顺序 fallback 只延期加演，不影响已经完成的花园。
+
 ## Session 生命周期
 
 1. 只有孩子或家长从地图明确开始一段短课时才创建新的 `sessionId`。
@@ -70,6 +82,10 @@
 - 短课内部正确后自动推进，不要求孩子理解“关闭”“下一关”按钮。
 - 到休息点后不得继续自动跳到下一 bundle，也不得用倒计时催促继续。
 - 休息画面以角色动作和世界状态表达结束；地图恢复可操作，但不弹出必须关闭的成绩窗。
+- 孩子主页同时只能有一个 enabled 当前故事入口：active 优先恢复同一 session，随后是 resume，再随后才是调度器给出的下一 bundle。已完成地点是安静世界地标，未来地点是远景，不得与当前任务组成同权按钮清单。
+- 第五章 core TH08 结束后，TH06 若被安排也必须作为后来一次到访的唯一当前邀请；TH07 bar 1、TH07 bar 2 和 TH08 together-encore 各自需要新的孩子点击和新 session。任何 optional action 都不能与自由练习、复习候选或未来 action 并列，也不能重写 core finale 的 story completion/route。
+- 正确、错误、assisted、modeled 和小动作完成都不得创建遮住场景或键盘的居中大框；正式孩子路径不得打开 `resultModal`。错误修复使用琴键原位反馈和角色安全区气泡，短课结果使用世界变化表达。
+- 孩子主页的当前入口必须由统一课程导演派生；地图渲染、`levelIndex`、URL 和完成集合不得各自猜测下一关。完整合同见 `docs/52_CHILD_COURSE_DIRECTOR_AND_NONBLOCKING_FEEDBACK_ACCEPTANCE_CHECKLIST.md`。
 - 同一目标连续两次答错后进入正常修复；辅助重试仍失败时，给一个可完成的示范成功，保留世界变化，写 `needsPractice=true`，在下一个故事安全点休息。
 - 不在错误画面立即结束。最后一个孩子动作应是有意义的修复成功。
 - 同一 session 不重复强制完整检查。孩子主动从地图自由重玩可以记录普通练习，但不因此改变 retained 条件。
@@ -220,7 +236,7 @@ M03 的内部无错计数不能提前变成 stable event。首次完整 `Re -> D
 - `passed_browser`：`338a` 保留了 M08“安装五片真实屋顶 -> 检查同一屋顶气密点 -> 吃力时在屋顶闭合后推迟检查”，并通过 `97/97` 专项、跨 session 和自然休息回归；这不等于儿童理解或实体 iPad 通过。
 - `passed_browser`：M03 第一次正式无错 `D4 -> C4` 仍只写 played，第二次 qualifying completion 才可写 stable，同 session retained 仍为 0；主管复跑 session 矩阵 `72/72` 和 M03/garden 专项 `32/32`。
 - `passed_browser`：正式 `C2-03` clean、assisted、modeled 三条实际运行路线都会结束 session 并持久落到花园入口；assisted/modeled 保持 stable/retained 为 0 和 `needsPractice=true`，刷新/根地址恢复不创建新 session。
-- `missing_runtime`：上述全局 opening-review 间隔、公平轮换和困难 review 后强制 story-first 是本次课程审查新增合同，等待 `C4-R01A` 单独实现和主管浏览器验收；既有 `338a-346a` 结果不能证明它们已经运行。
+- `passed_browser`：主管在冻结候选上复跑 `C4-R01A` 调度器 `35/35`、`C4-R01B` 生命周期 `31/31` 和精确锚点对抗检查 `9/9`。证据覆盖全局 opening-review 间隔、公平候选轮换、困难 review 后下一次正式短课强制 review-free story-first、resume session 不插入 review、retained 精确锚点身份，以及缺失/错配/重复锚点一律 fail closed。该浏览器通过不等于真实保持性学习证据，LP05 仍保持锁定。
 - `missing`：真实 iPad 上的后台恢复、系统时间/时区变化行为。
 - `missing`：教师复核和 3-5 名 4-6 岁儿童对短课长度、自然停点与隔日回忆的观察。
 

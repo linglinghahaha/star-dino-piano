@@ -30,6 +30,7 @@ audio/**
 # Local build output, when introduced.
 dist/**
 build/**
+tmp/**
 .vite/**
 node_modules/**
 **/__pycache__/**

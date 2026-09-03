@@ -27,6 +27,25 @@ async function waitReady(page) {
   await page.waitForSelector("#appShell", { state: "visible", timeout: 8000 });
 }
 
+async function solveParentChallenge(page) {
+  await page.waitForSelector("#parentChallenge", { state: "visible", timeout: 4000 });
+  const answer = await page.evaluate(() => {
+    const question = document.querySelector("#parentChallengeQuestion")?.textContent || "";
+    const match = question.match(/(\d+)\s*\+\s*(\d+)/);
+    return match ? Number(match[1]) + Number(match[2]) : NaN;
+  });
+  if (!Number.isFinite(answer)) throw new Error("parent challenge question is not readable");
+  const choice = page.locator(`#parentChallengeChoices button[data-parent-challenge-answer="${answer}"]`);
+  await choice.waitFor({ state: "visible", timeout: 4000 });
+  const box = await choice.boundingBox();
+  if (!box) throw new Error("parent challenge answer has no hit area");
+  await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2);
+  await page.mouse.down();
+  await page.waitForTimeout(2200);
+  await page.mouse.up();
+  await page.waitForSelector("#parentModal", { state: "visible", timeout: 5000 });
+}
+
 async function currentTarget(page) {
   return page.evaluate(() => Number(document.querySelector(".key.target")?.dataset.midi || NaN));
 }
@@ -225,7 +244,12 @@ try {
     { microphonePrivacyCopy }
   );
   await micPage.locator("#playParentGate").click();
-  await micPage.waitForSelector("#parentModal", { state: "visible", timeout: 4000 });
+  await solveParentChallenge(micPage);
+  await micPage.locator("#parentTabDevices").click();
+  await micPage.waitForSelector("#parentPanelDevices", { state: "visible", timeout: 4000 });
+  await micPage.locator("#parentMicButton").click();
+  await micPage.waitForFunction(() => document.querySelector("#parentMicButton")?.classList.contains("active"), null, { timeout: 5000 });
+  await micPage.waitForFunction(() => document.querySelector("#parentHeardState")?.textContent?.includes("D"), null, { timeout: 5000 });
   const parentMicState = await micPage.evaluate(() => ({
     inputMode: document.querySelector("#parentInputMode")?.textContent,
     heardState: document.querySelector("#parentHeardState")?.textContent,
@@ -270,7 +294,7 @@ try {
   }));
   record(
     "stopping microphone closes the local stream and returns to touch input",
-    stoppedMic.mic.tracksStopped === 1 && stoppedMic.mic.closeCalls === 1 &&
+    stoppedMic.mic.tracksStopped === 2 && stoppedMic.mic.closeCalls === 2 &&
       stoppedMic.inputStatus === "输入：屏幕琴键" && stoppedMic.heardStatus === "听到：-",
     stoppedMic
   );
@@ -280,14 +304,14 @@ try {
     window.handleInput(65, "麦克风");
     window.handleInput(67, "麦克风");
   });
-  await micPage.waitForSelector("#resultModal:not([hidden])", { timeout: 8000 });
-  await micPage.evaluate(() => window.startLevelCheckReplay());
-  await micPage.waitForSelector("#resultModal", { state: "hidden", timeout: 4000 });
+  await micPage.waitForFunction(() => document.querySelector("#appShell")?.dataset.levelRunMode === "check", null, { timeout: 8000 });
+  await micPage.waitForFunction(() => document.querySelector("#resultModal")?.hidden === true, null, { timeout: 4000 });
   await micPage.waitForTimeout(120);
   await micPage.evaluate(() => {
     for (const midi of [60, 62, 64, 65, 67]) window.handleInput(midi, "麦克风");
   });
-  await micPage.waitForSelector("#resultModal:not([hidden])", { timeout: 8000 });
+  await micPage.waitForTimeout(260);
+  await micPage.waitForFunction(() => document.querySelector("#resultModal")?.hidden === true, null, { timeout: 4000 });
   const experimentalEvidence = await micPage.evaluate(() => {
     const level = JSON.parse(localStorage.getItem("starDinoLearningStats") || "{}").levels?.M08 || {};
     return {

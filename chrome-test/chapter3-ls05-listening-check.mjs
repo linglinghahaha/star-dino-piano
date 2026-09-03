@@ -1,6 +1,8 @@
 import fs from "node:fs";
 import path from "node:path";
 import { createRequire } from "node:module";
+import { canonicalC1C2History } from "./canonical-course-fixture.mjs";
+import { completeParentChallenge } from "./parental-challenge-helper.mjs";
 
 const require = createRequire(import.meta.url);
 const { chromium } = require("playwright");
@@ -31,7 +33,7 @@ function runtimeFixture() {
   return {
     version: 1,
     active: null,
-    history: [{ sessionId: "C2-03-entry", bundleId: "C2-03", status: "ended", completedActions: [{ actionId: "S01-check", kind: "staff", targetId: "S01" }] }],
+    history: canonicalC1C2History({ completedAt: "2026-07-11T01:00:00.000Z", tag: "chapter3-ls05" }),
     lastRest: null,
     chapter3: {
       entryEventId: "CH3_ENTRY_AIR_CHECK",
@@ -115,6 +117,17 @@ async function view(page) {
     const childText = [document.querySelector("#nextAction"), document.querySelector("#heardStatus"), document.querySelector("#ls05Compare"), document.querySelector("#listeningCallProgress")]
       .filter(Boolean).map((node) => node.innerText || node.textContent || "").join(" ");
     const targetNodes = [...document.querySelectorAll("[data-target-note='true'], .white-key.target, .white-key.target-muted")];
+    const visible = (element) => {
+      if (!element || element.closest("[hidden]")) return false;
+      const style = getComputedStyle(element);
+      const box = element.getBoundingClientRect();
+      return style.display !== "none" && style.visibility !== "hidden" && Number(style.opacity) > 0.01 && box.width > 0 && box.height > 0;
+    };
+    const mapShell = document.querySelector("#mapShell");
+    const mapMarkers = [...document.querySelectorAll(".map-node, #gardenRestMarker")];
+    const visibleMarkers = mapMarkers.filter(visible);
+    const parentText = ["#parentLearningFocus", "#parentLearningDetail", "#parentMasteryStatus", "#parentProgressText", "#parentEvidenceList"]
+      .map((selector) => document.querySelector(selector)?.innerText || "").join(" ");
     return {
       runtime, learning, active: runtime.active, chapter3: runtime.chapter3 || {}, attempt,
       phase: document.querySelector("#gardenScene")?.dataset.listeningPhase || "",
@@ -140,7 +153,22 @@ async function view(page) {
       parentDetail: document.querySelector("#parentLearningDetail")?.textContent || "",
       parentProgress: document.querySelector("#parentProgressText")?.textContent || "",
       parentMastery: document.querySelector("#parentMasteryStatus")?.textContent || "",
-      parentEvidence: document.querySelector("#parentEvidenceList")?.innerText?.replace(/\s+/g, " ").trim() || ""
+      parentEvidence: document.querySelector("#parentEvidenceList")?.innerText?.replace(/\s+/g, " ").trim() || "",
+      parentText,
+      journey: {
+        plan: childJourneyPlan(),
+        courseDirector: mapShell?.dataset.courseDirector || "",
+        state: mapShell?.dataset.journeyState || "",
+        chapter: mapShell?.dataset.journeyChapter || "",
+        bundle: mapShell?.dataset.journeyBundle || "",
+        target: mapShell?.dataset.journeyTarget || "",
+        previousLabel: document.querySelector("#journeyPreviousLabel")?.textContent?.trim() || "",
+        previous: document.querySelector("#journeyPrevious")?.textContent?.trim() || "",
+        current: document.querySelector("#journeyTitle")?.textContent?.trim() || "",
+        visibleMarkerIds: visibleMarkers.map((marker) => marker.id),
+        enabledMarkerIds: visibleMarkers.filter((marker) => !marker.disabled).map((marker) => marker.id),
+        currentMarkerIds: visibleMarkers.filter((marker) => marker.hasAttribute("aria-current")).map((marker) => marker.id)
+      }
     };
   });
 }
@@ -286,10 +314,46 @@ function activeRuntimeForSeed(sessionId) {
   return runtime;
 }
 
+function activeZeroInputLs05WithPriorCompletion() {
+  const runtime = activeRuntimeForSeed("C3-04-active-zero-input");
+  runtime.history.push({
+    sessionId: "C3-03-prior-complete",
+    bundleId: "C3-03",
+    formalSession: true,
+    status: "ended",
+    actions: [{ actionId: "LS04-listening" }],
+    completedActions: [{ actionId: "LS04-listening", kind: "garden-listening", targetId: "LS04", completedAt: "2026-07-11T01:20:00.000Z" }],
+    endedAt: "2026-07-11T01:20:00.000Z",
+    endReason: "natural-rest"
+  });
+  runtime.history.push({
+    sessionId: "C3-04-prior-complete",
+    bundleId: "C3-04",
+    formalSession: true,
+    status: "ended",
+    actions: [{ actionId: "LS05-listening" }],
+    completedActions: [{ actionId: "LS05-listening", kind: "garden-listening", targetId: "LS05", completedAt: "2026-07-11T01:25:00.000Z" }],
+    endedAt: "2026-07-11T01:25:00.000Z",
+    endReason: "natural-rest"
+  });
+  return runtime;
+}
+
+const progressTruth = await makePage();
+await seed(progressTruth.page, activeZeroInputLs05WithPriorCompletion());
+const progressTruthMap = await view(progressTruth.page);
+record("Active zero-input LS05 is never presented as just completed", progressTruthMap.journey.target === "LS05"
+  && progressTruthMap.journey.state === "active"
+  && progressTruthMap.journey.current === "叫醒三朵花"
+  && progressTruthMap.journey.previousLabel === "刚完成"
+  && progressTruthMap.journey.previous === "两颗种子找到声音朋友", progressTruthMap.journey);
+await progressTruth.page.screenshot({ path: path.join(screenshotDir, "ls05_active_zero_input_progress_truth_1024x768.png") });
+await progressTruth.context.close();
+
 const main = await makePage();
 await seed(main.page);
 let current = await view(main.page);
-record("LS04 rest exposes an enabled LS05 map entry without creating C3-04", current.marker.includes("三朵花") && !current.markerDisabled && current.mapProgress.includes("花粉环 0/5") && !current.active, current);
+record("LS04 rest resolves to the one canonical LS05-ready journey without creating C3-04", !current.active && !current.chapter3.lessonEvidence?.LS05 && current.journey.courseDirector === "true" && current.journey.state === "ready" && current.journey.chapter === "C3" && current.journey.bundle === "C3-04" && current.journey.target === "LS05" && current.journey.plan?.chapterId === "C3" && current.journey.plan?.bundleId === "C3-04" && current.journey.plan?.targetId === "LS05" && current.journey.plan?.state === "ready" && current.journey.plan?.sessionId === null && current.journey.plan?.resumeOfSessionId === null && current.journey.plan?.actionable === true && current.journey.visibleMarkerIds.join(",") === "gardenRestMarker" && current.journey.enabledMarkerIds.join(",") === "gardenRestMarker" && current.journey.currentMarkerIds.join(",") === "gardenRestMarker", current);
 current = await start(main.page);
 record("Explicit child gesture creates one formal C3-04 action", current.active?.bundleId === "C3-04" && current.active.actions?.length === 1 && current.active.actions[0].targetId === "LS05", current.active);
 record("C reference is visibly started but not yet scored or completed", current.phase === "reference" && current.speech.includes("C") && current.speech.includes("Do") && current.attempt.referencePlayed === false && current.attempt.audioLifecycle.some((event) => event.kind === "started" && event.context === "reference" && Boolean(event.startedAt)) && current.attempt.scoredCalls.length === 0, current);
@@ -336,7 +400,7 @@ const sessionId = current.active.sessionId;
 const sequenceText = sequence.join(",");
 await main.page.locator("#mapReturn").click();
 current = await view(main.page);
-record("Map pause preserves the same active session and current flower step", current.active?.sessionId === sessionId && current.marker.includes("继续花粉铃"), current);
+record("Map pause preserves the same active LS05 journey and current flower step", current.active?.sessionId === sessionId && current.attempt?.callIndex === 0 && current.attempt?.replayCountChild === 1 && current.journey.courseDirector === "true" && current.journey.state === "active" && current.journey.chapter === "C3" && current.journey.bundle === "C3-04" && current.journey.target === "LS05" && current.journey.plan?.chapterId === "C3" && current.journey.plan?.bundleId === "C3-04" && current.journey.plan?.targetId === "LS05" && current.journey.plan?.state === "active" && current.journey.plan?.sessionId === sessionId && current.journey.plan?.resumeOfSessionId === current.active?.resumeOfSessionId && current.journey.plan?.actionable === true && current.journey.visibleMarkerIds.join(",") === "gardenRestMarker" && current.journey.enabledMarkerIds.join(",") === "gardenRestMarker" && current.journey.currentMarkerIds.join(",") === "gardenRestMarker", current);
 await main.page.locator("#gardenRestMarker").click();
 await waitPhase(main.page, "awaiting-response");
 current = await view(main.page);
@@ -419,6 +483,7 @@ const modeledCallTargets = modeledTrace.filter((event) => event.callIndex === 0 
 record("Fourth wrong models only the current call and ends the old session at safe rest", current.runtime.history.at(-1)?.endReason === "modeled-safe-rest" && current.chapter3.resume?.nextTargetId === "LS05" && current.chapter3.resume?.ls05Attempt?.callIndex === 1 && current.chapter3.resume?.ls05Attempt?.sequence.join(",") === modeledSequence && !current.chapter3.lessonEvidence.LS05, current.chapter3.resume);
 record("Fourth wrong uses one target demonstration without a second overlapping target note", modeledCallTargets.filter((event) => event.kind === "target-replay").length === 4 && modeledCallTargets.filter((event) => event.kind === "modeled" && event.targetAlreadyPlayed).length === 1 && !modeledTrace.some((event) => event.kind === "target" && event.reason === "modeled"), modeledCallTargets);
 await modeled.page.locator("#mapParentGate").click();
+await completeParentChallenge(modeled.page);
 current = await view(modeled.page);
 record("Modeled safe rest parent evidence shows truthful partial progress and practice need", current.parentFocus.includes("C/D/E 小音组") && current.parentProgress === "C/D/E 三朵花 1/5" && current.parentDetail.includes("modeled 有") && current.parentDetail.includes("不是绝对音感测试") && current.parentMastery === "本次做到这里" && current.parentEvidence.includes("今天需要提示"), current);
 await modeled.page.locator("#parentClose").click();
@@ -508,8 +573,9 @@ record("Ordinary next-call playback is not counted as system replay", current.le
 record("LS05 completion leaves chapter3.completed false and does not create LS06", current.chapter3.completed === false && current.chapter3.ls05Completed === true && !JSON.stringify(current.runtime).includes("LS06"), current.chapter3);
 record("Chapter 1/2 and LS04 sentinel evidence is unchanged", current.learning.levels.M07?.stableCompletions === 1 && current.learning.levels.LS04?.stableCompletions === 1 && current.learning.retention.retainedEvents.some((event) => event.eventId === "sentinel-retained"), current.learning);
 await stablePage.page.locator("#mapParentGate").click();
+await completeParentChallenge(stablePage.page);
 current = await view(stablePage.page);
-record("Parent rest view reports real LS05 listening evidence and both replay counts", current.parentFocus.includes("C/D/E 小音组") && current.parentDetail.includes("首答 4/5") && current.parentDetail.includes("C = Do") && current.parentDetail.includes("孩子主动重听 0") && current.parentDetail.includes("系统重听 1") && current.parentDetail.includes("不是绝对音感测试") && current.parentProgress === "C/D/E 三朵花 5/5" && current.parentMastery === "本次减提示完成", current);
+record("Parent rest view uses C/D/E note names and reports real listening evidence with both replay counts", current.parentFocus.includes("C/D/E 小音组") && current.parentText.includes("C/D/E") && !/(^|[^A-Za-z])(Do|Re|Mi)(?=$|[^A-Za-z])/.test(current.parentText) && current.parentDetail.includes("首答 4/5") && current.parentDetail.includes("孩子主动重听 0") && current.parentDetail.includes("系统重听 1") && current.parentDetail.includes("不是绝对音感测试") && current.parentProgress === "C/D/E 三朵花 5/5" && current.parentMastery === "本次减提示完成", current);
 await stablePage.page.screenshot({ path: path.join(screenshotDir, "ls05_parent_1366x1024.png") });
 await stablePage.context.close();
 
@@ -534,6 +600,8 @@ await mic.context.close();
 const sound = await makePage();
 await seed(sound.page);
 await sound.page.locator("#mapParentGate").click();
+await completeParentChallenge(sound.page);
+await sound.page.locator("#parentTabDevices").click();
 await sound.page.locator("#parentSoundToggle").click();
 await sound.page.locator("#parentClose").click();
 await sound.page.locator("#gardenRestMarker").click();
@@ -545,6 +613,8 @@ await press(sound.page, current.attempt.sequence[soundCall]);
 current = await view(sound.page);
 record("Sound disabled keeps the current call non-scoring", current.attempt.callIndex === soundCall && current.attempt.correctCount === 0 && current.attempt.totalWrongCount === 0 && current.attempt.earlyInputs.at(-1)?.phase === "sound-paused", current.attempt);
 await sound.page.locator("#playParentGate").click();
+await completeParentChallenge(sound.page);
+await sound.page.locator("#parentTabDevices").click();
 await sound.page.locator("#parentSoundToggle").click();
 await sound.page.locator("#parentClose").click();
 await sound.page.locator("#listeningReplay").click();
@@ -557,12 +627,16 @@ await seed(failedReplay.page);
 await start(failedReplay.page);
 current = await waitPhase(failedReplay.page, "awaiting-response");
 await failedReplay.page.locator("#playParentGate").click();
+await completeParentChallenge(failedReplay.page);
+await failedReplay.page.locator("#parentTabDevices").click();
 await failedReplay.page.locator("#parentSoundToggle").click();
 await failedReplay.page.locator("#parentClose").click();
 await failedReplay.page.locator("#listeningReplay").click();
 current = await waitPhase(failedReplay.page, "sound-paused");
 record("A failed child replay does not consume the replay allowance", current.attempt.replayCountChild === 0 && current.attempt.callIndex === 0, current.attempt);
 await failedReplay.page.locator("#playParentGate").click();
+await completeParentChallenge(failedReplay.page);
+await failedReplay.page.locator("#parentTabDevices").click();
 await failedReplay.page.locator("#parentSoundToggle").click();
 await failedReplay.page.locator("#parentClose").click();
 await failedReplay.page.locator("#listeningReplay").click();
@@ -660,6 +734,8 @@ await seed(midi.page);
 await start(midi.page);
 await waitPhase(midi.page, "awaiting-response");
 await midi.page.locator("#playParentGate").click();
+await completeParentChallenge(midi.page);
+await midi.page.locator("#parentTabDevices").click();
 await midi.page.locator("#parentMidiButton").click();
 await midi.page.locator("#parentClose").click();
 current = await view(midi.page);
@@ -681,6 +757,8 @@ await press(volumeZero.page, current.attempt.sequence[0]);
 current = await view(volumeZero.page);
 record("Volume zero keeps LS05 non-scoring on the same call", current.attempt.callIndex === 0 && current.attempt.correctCount === 0 && current.attempt.totalWrongCount === 0, current.attempt);
 await volumeZero.page.locator("#playParentGate").click();
+await completeParentChallenge(volumeZero.page);
+await volumeZero.page.locator("#parentTabDevices").click();
 await volumeZero.page.locator("#parentVolumeControl").fill("60");
 await volumeZero.page.locator("#parentClose").click();
 await volumeZero.page.locator("#listeningReplay").click();

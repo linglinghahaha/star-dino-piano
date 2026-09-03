@@ -115,6 +115,8 @@ const readMiniState = async () => page.evaluate(() => {
     className: el.className,
     text: el.textContent.trim()
   }));
+  const rest = document.querySelector(".staff-finish[data-destination='mini-rest']");
+  const restStyle = rest ? getComputedStyle(rest) : null;
   const modal = document.querySelector("#resultModal");
   const stats = JSON.parse(localStorage.getItem("starDinoLearningStats") || "{}");
   return {
@@ -126,12 +128,15 @@ const readMiniState = async () => page.evaluate(() => {
     chapterTitle: text("#chapterTitle"),
     modeHint: text("#modeHint"),
     staffPrompt: text("#staffPrompt"),
+    nextAction: text("#nextAction"),
     dinoPlace: document.querySelector("#staffDinoWrap")?.dataset.place || "",
     keyboardTargetVisible: document.querySelector("#keyboard")?.dataset.targetVisible || "",
     stepCount: steps.length,
     doneCount: steps.filter((step) => step.state === "done").length,
     currentCount: steps.filter((step) => step.state === "current").length,
     miniRestCount: steps.filter((step) => step.miniRest === "true").length,
+    restDestinationVisible: Boolean(rest && restStyle?.display !== "none" && Number(restStyle?.opacity || 0) > 0.01 && rest.getBoundingClientRect().width > 0),
+    restDestinationInteractive: Boolean(rest?.matches("button, a, input, [tabindex]:not([tabindex='-1'])")),
     steps,
     progressDots: document.querySelectorAll(".staff-progress .staff-dot").length,
     modalHidden: modal?.hidden ?? true,
@@ -156,7 +161,7 @@ try {
   record("initial keeps mini session in URL", state.url.includes("session=mini"), state);
   record("initial app dataset is mini", state.appStaffSession === "mini" && state.yardStaffSession === "mini", state);
   record("initial renders exactly three staff pads", state.stepCount === 3 && state.progressDots === 3, state);
-  record("initial marks one mini rest pad", state.miniRestCount === 1, state);
+  record("initial separates the rest star from all three staff pads", state.miniRestCount === 0 && state.restDestinationVisible && !state.restDestinationInteractive, state);
   record("initial uses mini badge and copy", state.levelBadge === "S01·短" && state.modeHint.includes("观察小段"), state);
   record("initial has no horizontal overflow", state.bodyOverflowX <= 2, state);
   record("initial hides staff-position word on current pad", !state.currentPadVisual.placeVisible, state.currentPadVisual);
@@ -165,7 +170,7 @@ try {
   await tapMidi(62, 560);
   state = await readMiniState();
   record("wrong input does not complete mini", state.modalHidden && state.doneCount === 0 && state.currentCount === 1, state);
-  record("wrong input still keeps three pads", state.stepCount === 3 && state.miniRestCount === 1, state);
+  record("wrong input still keeps three pads and the separate rest star", state.stepCount === 3 && state.miniRestCount === 0 && state.restDestinationVisible, state);
   record(
     "wrong input shows compact staff-position capsule",
     state.currentPadVisual.placeVisible &&
@@ -178,12 +183,11 @@ try {
   await tapMidi(60);
   await tapMidi(62);
   await tapMidi(64);
-  await page.waitForFunction(() => !document.querySelector("#resultModal")?.hidden, null, { timeout: 8000 });
   await page.waitForTimeout(260);
 
   state = await readMiniState();
-  record("completion opens mini result", state.resultKind === "staff-mini", state);
-  record("completion labels rest point", state.resultTitle.includes("小休息星") && state.resultAuto.includes("观察到这里"), state);
+  record("completion remains at the mini-rest scene without a result modal", state.modalHidden && state.dinoPlace === "mini-rest" && state.doneCount === 3, state);
+  record("completion labels the mini rest through the staff world rather than a result card", state.nextAction.includes("休息"), state);
   record("completion does not write full S01 staff stats", !state.staffStats.S01, state);
   record("completion leaves dino at mini rest", state.dinoPlace === "mini-rest", state);
   record("completion keeps mini URL", state.url.includes("session=mini"), state);
@@ -191,14 +195,15 @@ try {
 
   await page.waitForTimeout(3800);
   state = await readMiniState();
-  record("mini does not auto-enter staff-check", state.resultKind === "staff-mini" && state.appScaffold === "staff", state);
+  record("mini does not auto-enter staff-check", state.modalHidden && state.appScaffold === "staff" && state.dinoPlace === "mini-rest", state);
   record("mini still has no full S01 stats after pause", !state.staffStats.S01, state);
 
+  const beforeInactiveModalClick = state;
   await page.evaluate(() => document.querySelector("#modalNext")?.click());
-  await waitReady();
+  await page.waitForTimeout(180);
   state = await readMiniState();
-  record("manual replay resets mini route", state.modalHidden && state.stepCount === 3 && state.doneCount === 0 && state.currentCount === 1, state);
-  record("manual replay still does not write full S01 stats", !state.staffStats.S01, state);
+  record("hidden legacy result control cannot take over the mini route", state.modalHidden && state.doneCount === beforeInactiveModalClick.doneCount && state.dinoPlace === "mini-rest", state);
+  record("hidden legacy result control still does not write full S01 stats", !state.staffStats.S01, state);
 
   record("browser console clean", browserErrors.length === 0, { browserErrors });
 

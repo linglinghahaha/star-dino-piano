@@ -1,4 +1,5 @@
 import { createRequire } from "node:module";
+import { canonicalC1C2History } from "./canonical-course-fixture.mjs";
 
 const require = createRequire(import.meta.url);
 const { chromium } = require("playwright");
@@ -54,6 +55,7 @@ function summarizeChecks() {
   const failed = checks.filter((check) => !check.pass);
   console.log(`chapter4 LP03 checks: ${checks.length - failed.length}/${checks.length}`);
   checks.forEach((check) => console.log(`${check.pass ? "PASS" : "FAIL"} ${check.name}`));
+  if (failed.length) console.log(JSON.stringify({ failed }, null, 2));
   if (errors.length) console.log(`browser diagnostics: ${JSON.stringify(errors)}`);
   console.log(`last scenario: ${scenarioDetails()}`);
   return failed.length === 0 && errors.length === 0;
@@ -81,7 +83,7 @@ function formalRuntimeFixture() {
     version: 1,
     active: null,
     history: [
-      { sessionId: "C2-03-lp03-garden-entry", bundleId: "C2-03", status: "ended", completedActions: [{ actionId: "S01-check", kind: "staff", targetId: "S01" }] },
+      ...canonicalC1C2History({ completedAt, tag: "lp03" }),
       { sessionId: ls08SessionId, bundleId: "C3-07", status: "ended", completedActions: [{ actionId: "LS08-listening", kind: "garden-listening", targetId: "LS08" }] },
       { sessionId: lp02SessionId, bundleId: "C4-01", status: "ended", completedActions: [{ actionId: "LP02-low-c-home", kind: "chapter4-keyboard", targetId: "LP02", completedAt }] }
     ],
@@ -727,7 +729,16 @@ const formal = await makePage({ formal: true, sessionSeed: "lp03-formal" });
 await formal.page.goto(mapUrl(), { waitUntil: "domcontentloaded" });
 await formal.page.waitForSelector("#bootLoader", { state: "hidden", timeout: 30000 });
 const formalMapEntry = await snapshot(formal.page);
-record("LP03 map entry derives its own 0/3 progress instead of LP01 echoes", formalMapEntry.screen === "map" && formalMapEntry.mapProgress?.text === "三块地基 0/3 · 准备" && formalMapEntry.mapProgress?.aria === "三块地基进度，0/3 已安放，准备" && !formalMapEntry.mapProgress?.text.includes("四次回声"), formalMapEntry.mapProgress);
+record(
+  "LP03 map keeps the child-facing second journey state while accessibility exposes the canonical course stop",
+  formalMapEntry.screen === "map" &&
+    formalMapEntry.mapProgress?.text === "跟着星芽" &&
+    formalMapEntry.mapProgress?.aria === "地下回声洞课程进度：共 3 站，现在第 2 站，准备" &&
+    formalMapEntry.marker?.phase === "chapter4-lp03-entry" &&
+    formalMapEntry.marker?.strong === "铺低音 C-D-E 地基" &&
+    formalMapEntry.marker?.disabled === false,
+  { mapProgress: formalMapEntry.mapProgress, marker: formalMapEntry.marker }
+);
 await formal.page.locator("#gardenRestMarker").click();
 await waitForLp03Response(formal.page, 48);
 current = await snapshot(formal.page);
@@ -758,7 +769,15 @@ current = await snapshot(formal.page);
 const lp03Evidence = current.runtime?.chapter4?.lessonEvidence?.LP03;
 record("LP03 completion writes played route and stage observations but stable/retained remain zero", lp03Evidence?.played === true && lp03Evidence?.stable === false && lp03Evidence?.retained === false && lp03Evidence?.routeEvents?.length === 3 && lp03Evidence?.seamChecks?.length === 3 && current.runtime?.chapter4?.lp03Progress?.played === true, lp03Evidence);
 record("LP03 completion naturally returns to map without starting LP04", current.screen === "map" && !current.runtime?.active && current.runtime?.history?.at(-1)?.bundleId === "C4-02", current.runtime?.history?.at(-1));
-record("LP03 completion map derives 3/3 rest progress instead of LP01 echoes", current.mapProgress?.text === "三块地基 3/3 · 休息" && current.mapProgress?.aria === "三块地基进度，3/3 已安放，休息" && !current.mapProgress?.text.includes("四次回声"), current.mapProgress);
+record(
+  "LP03 completion opens the child-facing LP04 journey without creating C4-03",
+  current.mapProgress?.text === "跟着星芽" &&
+    current.mapProgress?.aria === "地下回声洞课程进度：共 3 站，现在第 3 站，准备" &&
+    current.marker?.phase === "chapter4-lp04-ready" &&
+    current.marker?.strong === "送 E-D-C 向下回声" &&
+    current.marker?.disabled === false,
+  { mapProgress: current.mapProgress, marker: current.marker }
+);
 const completionPresentation = await formal.page.evaluate(() => {
   renderParentPanel();
   return {

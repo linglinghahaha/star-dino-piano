@@ -18,6 +18,7 @@ function record(name, pass, details = {}) {
 function url(search = "") {
   const target = new URL(baseUrl);
   target.search = search;
+  target.searchParams.set("legacyMap", "true");
   return target.toString();
 }
 

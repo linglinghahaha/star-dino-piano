@@ -101,10 +101,14 @@ try {
   const targetAfterF = await page.locator(".key.white-key.target").getAttribute("data-note");
   await page.locator('.key.white-key[data-note="G"]').click();
   await page.waitForTimeout(900);
-  const reducedResultVisible = await page.locator("#resultModal").isVisible();
+    const reducedCompletion = await page.evaluate(() => ({
+      modalHidden: document.querySelector("#resultModal")?.hidden === true,
+      appInert: Boolean(document.querySelector("#appShell")?.inert),
+      placedSlots: document.querySelectorAll("#baseBuild .build-slot.placed").length
+    }));
   record("color-reduced wrong input does not advance", initialReducedTarget === "F" && targetAfterWrong === "F", { initialReducedTarget, targetAfterWrong });
   record("color-reduced route advances by key identity", targetAfterF === "G", { targetAfterF });
-  record("color-reduced FG04 route completes", reducedResultVisible, { reducedResultVisible });
+    record("color-reduced FG04 route completes in the world without a result modal", reducedCompletion.modalHidden && !reducedCompletion.appInert && reducedCompletion.placedSlots >= 2, reducedCompletion);
   await page.screenshot({ path: `${screenshotPrefix}_reduced_complete.png`, fullPage: false });
 
   record("browser console is clean", browserErrors.length === 0, { browserErrors });

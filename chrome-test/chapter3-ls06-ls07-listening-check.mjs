@@ -1,6 +1,8 @@
 import fs from "node:fs";
 import path from "node:path";
 import { createRequire } from "node:module";
+import { canonicalC1C2History } from "./canonical-course-fixture.mjs";
+import { completeParentChallenge } from "./parental-challenge-helper.mjs";
 
 const require = createRequire(import.meta.url);
 const { chromium } = require("playwright");
@@ -24,7 +26,7 @@ function runtimeFixture({ ls06 = false, ls07 = false } = {}) {
   return {
     version: 1,
     active: null,
-    history: [{ sessionId: "C2-03-entry", bundleId: "C2-03", status: "ended", completedActions: [{ actionId: "S01-check", kind: "staff", targetId: "S01" }] }],
+    history: canonicalC1C2History({ completedAt, tag: "chapter3-ls06-ls07" }),
     lastRest: null,
     chapter3: {
       entryEventId: "CH3_ENTRY_AIR_CHECK",
@@ -129,6 +131,15 @@ async function view(page) {
     });
     const childSurface = [document.querySelector("#nextAction"), document.querySelector("#heardStatus"), document.querySelector("#ls05Compare"), document.querySelector("#listeningCallProgress")]
       .filter(Boolean).map((node) => node.innerText || node.textContent || "").join(" ");
+    const visible = (element) => {
+      if (!element || element.closest("[hidden]")) return false;
+      const style = getComputedStyle(element);
+      const box = element.getBoundingClientRect();
+      return style.display !== "none" && style.visibility !== "hidden" && Number(style.opacity) > 0.01 && box.width > 0 && box.height > 0;
+    };
+    const mapShell = document.querySelector("#mapShell");
+    const mapMarkers = [...document.querySelectorAll(".map-node, #gardenRestMarker")];
+    const visibleMarkers = mapMarkers.filter(visible);
     return {
       runtime, learning, active: runtime.active, chapter3: runtime.chapter3 || {}, action, attempt,
       phase: document.querySelector("#gardenScene")?.dataset.listeningPhase || "",
@@ -151,7 +162,18 @@ async function view(page) {
       parentFocus: document.querySelector("#parentLearningFocus")?.textContent || "",
       parentDetail: document.querySelector("#parentLearningDetail")?.textContent || "",
       parentProgress: document.querySelector("#parentProgressText")?.textContent || "",
-      parentMastery: document.querySelector("#parentMasteryStatus")?.textContent || ""
+      parentMastery: document.querySelector("#parentMasteryStatus")?.textContent || "",
+      journey: {
+        plan: childJourneyPlan(),
+        courseDirector: mapShell?.dataset.courseDirector || "",
+        state: mapShell?.dataset.journeyState || "",
+        chapter: mapShell?.dataset.journeyChapter || "",
+        bundle: mapShell?.dataset.journeyBundle || "",
+        target: mapShell?.dataset.journeyTarget || "",
+        visibleMarkerIds: visibleMarkers.map((marker) => marker.id),
+        enabledMarkerIds: visibleMarkers.filter((marker) => !marker.disabled).map((marker) => marker.id),
+        currentMarkerIds: visibleMarkers.filter((marker) => marker.hasAttribute("aria-current")).map((marker) => marker.id)
+      }
     };
   });
 }
@@ -302,11 +324,12 @@ await main.page.screenshot({ path: path.join(screenshotDir, "ls06_waiting_1366x1
 await completeRemaining(main.page);
 await main.page.waitForFunction(() => document.body.classList.contains("screen-map"), null, { timeout: 10000 });
 current = await view(main.page);
-record("LS06 completes at map rest without creating LS07", current.chapter3.lessonEvidence.LS06?.completedAt && current.chapter3.completed === false && !current.active && current.marker.includes("E/F") && !current.runtime.history.some((session) => session.bundleId === "C3-06"), current.chapter3);
+record("LS06 completes at map rest with one canonical LS07 route and no C3-06 session", current.chapter3.lessonEvidence.LS06?.completedAt && current.chapter3.completed === false && !current.active && !current.runtime.history.some((session) => session.bundleId === "C3-06") && current.journey.courseDirector === "true" && current.journey.state === "rest" && current.journey.chapter === "C3" && current.journey.bundle === "C3-06" && current.journey.target === "LS07" && current.journey.plan?.chapterId === "C3" && current.journey.plan?.bundleId === "C3-06" && current.journey.plan?.targetId === "LS07" && current.journey.plan?.state === "rest" && current.journey.plan?.sessionId === null && current.journey.plan?.resumeOfSessionId === null && current.journey.plan?.actionable === true && current.journey.visibleMarkerIds.join(",") === "gardenRestMarker" && current.journey.enabledMarkerIds.join(",") === "gardenRestMarker" && current.journey.currentMarkerIds.join(",") === "gardenRestMarker", current);
 record("LS06 map rest announces only the completed echo-vine stage", current.runtime.lastRest?.bundleId === "C3-05" && current.runtime.lastRest?.reward === "回声藤拱门" && current.runtime.lastRest?.reason === "natural-rest" && current.mapSessionDetail === "回声藤拱门已经搭好，边界花在等你。" && !current.mapSessionDetail.includes("边界花已经安顿好"), { detail: current.mapSessionDetail, lastRest: current.runtime.lastRest });
 record("LS06 clean 4/4 creates stable and no retained", current.learning.levels.LS06?.stableCompletions === 1 && current.learning.retention.stableEvents.filter((event) => event.skillKey === "level:LS06").length === 1 && current.learning.retention.retainedEvents.filter((event) => event.skillKey === "level:LS06").length === 0, current.learning.levels.LS06);
 await main.page.screenshot({ path: path.join(screenshotDir, "ls06_map_rest_1366x1024.png") });
 await main.page.locator("#mapParentGate").click();
+await completeParentChallenge(main.page);
 current = await view(main.page);
 record("LS06 map-rest parent evidence remains focused on C/G", current.parentFocus.includes("C/G") && current.parentDetail.includes("声音首答 4/4") && current.parentDetail.includes("不是绝对音感") && current.parentProgress.includes("4/4"), current);
 await main.page.locator("#parentClose").click();
@@ -345,6 +368,7 @@ record("LS07 completion exposes LS08 without creating C3-07", current.chapter3.c
 record("LS07 map rest announces the boundary-flower result only after LS07", current.runtime.lastRest?.bundleId === "C3-06" && current.runtime.lastRest?.reward === "两株边界花" && current.runtime.lastRest?.reason === "natural-rest" && current.mapSessionDetail === "两株边界花已经安顿好，今天先歇一歇。", { detail: current.mapSessionDetail, lastRest: current.runtime.lastRest });
 await main.page.screenshot({ path: path.join(screenshotDir, "ls07_map_rest_1366x1024.png") });
 await main.page.locator("#mapParentGate").click();
+await completeParentChallenge(main.page);
 current = await view(main.page);
 record("LS07 parent evidence separates opening guide from post-prompt boundary help", current.parentFocus.includes("E/F") && current.parentDetail.includes("声音首答 3/4") && current.parentDetail.includes("可见边界带路 是") && current.parentDetail.includes("边界强帮助 无") && current.parentProgress.includes("4/4"), current);
 await main.context.close();
@@ -415,13 +439,13 @@ await waitPhase(repair.page, "awaiting-response");
 await press(repair.page, repairWrong);
 current = await waitPhase(repair.page, "pair-compare");
 record("LS06 second valid confusion shows an equal neutral pair", current.compare.includes("C") && current.compare.includes("G") && current.compareItems.length === 2 && current.compareItems.every((item) => item.rect.width === current.compareItems[0].rect.width && item.rect.height === current.compareItems[0].rect.height && item.color === current.compareItems[0].color && item.background === current.compareItems[0].background && !item.className), current.compareItems);
-await repair.page.screenshot({ path: path.join(screenshotDir, "ls06_pair_1024x768.png") });
 const pairEvidence = { sessionId: current.active.sessionId, sequence: current.attempt.sequence.join(","), callIndex: current.attempt.callIndex, wrongCount: current.attempt.callWrongCount, repairStage: current.attempt.callRepairStage, pair: current.attempt.callConfusionPair.join(",") };
 await repair.page.locator("#mapReturn").click();
 await repair.page.waitForFunction(() => document.body.classList.contains("screen-map"), null, { timeout: 8000 });
 await repair.page.locator("#gardenRestMarker").click();
 current = await waitPhase(repair.page, "pair-compare");
 record("LS06 pair comparison survives map pause with the same session and evidence", current.active.sessionId === pairEvidence.sessionId && current.attempt.sequence.join(",") === pairEvidence.sequence && current.attempt.callIndex === pairEvidence.callIndex && current.attempt.callWrongCount === pairEvidence.wrongCount && current.attempt.callRepairStage === pairEvidence.repairStage && current.attempt.callConfusionPair.join(",") === pairEvidence.pair, current.attempt);
+await repair.page.screenshot({ path: path.join(screenshotDir, "ls06_pair_1024x768.png") });
 await waitPhase(repair.page, "awaiting-response");
 await press(repair.page, repairWrong);
 current = await waitPhase(repair.page, "assisted-retry");

@@ -1,6 +1,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import { createRequire } from "node:module";
+import { canonicalC1C2History } from "./canonical-course-fixture.mjs";
 
 const require = createRequire(import.meta.url);
 const { chromium } = require("playwright");
@@ -57,24 +58,24 @@ async function seedStorage(page, values) {
 }
 
 function endedC203({ assisted = 0, modeled = 0, stable = false } = {}) {
-  return {
-    sessionId: `C2-03-${assisted}-${modeled}-${stable}`,
-    bundleId: "C2-03",
-    status: "ended",
-    actionIndex: 0,
-    actions: [{ actionId: "S01-check", kind: "staff", targetId: "S01", runMode: "check" }],
-    completedActions: [{
-      actionId: "S01-check",
+  const history = canonicalC1C2History({
+    completedAt: "2026-07-12T06:00:00.000Z",
+    tag: `m03-garden-${assisted}-${modeled}-${stable}`
+  });
+  const c203 = history.find((session) => session.bundleId === "C2-03");
+  c203.completedActions = c203.completedActions.map((action) => action.actionId === "S01-check"
+    ? {
+      ...action,
       kind: "staff",
       targetId: "S01",
       runMode: "check",
       assistedSuccesses: assisted,
       modeledSuccesses: modeled,
       qualifyingStable: stable
-    }],
-    endedAt: "2026-07-12T06:00:00.000Z",
-    endReason: modeled || assisted ? "assisted-safe-rest" : "natural-rest"
-  };
+    }
+    : action);
+  c203.endReason = modeled || assisted ? "assisted-safe-rest" : "natural-rest";
+  return history;
 }
 
 async function readGarden(page) {
@@ -146,7 +147,7 @@ const answerCarrierText = (snapshot) => snapshot.surfaces
   .join(" | ");
 
 const initial = await readM03();
-record("M03 runs the 347a R01A shell", initial.version.includes("overhaul-347a-c4-r01a"), initial);
+record("M03 runs the current 369e course-director shell", initial.version.includes("overhaul-369e-ipad-settlement-compactness-correction"), initial);
 record("M03 uses the wheel identity and removes the seed identity", initial.allVisibleText.includes("会唱小车轮") && !initial.allVisibleText.includes("听音小种子"), initial);
 record("M03 initial state has no duplicate story ribbon or listening guide", !initial.storyVisible && !initial.guideVisible, initial);
 record("M03 initial coach gives one role-correct invitation", initial.coach.includes("小车轮先唱") && initial.coach.includes("你弹同样的键") && !initial.coach.includes("星芽唱"), initial);
@@ -211,9 +212,9 @@ await m03Page.close();
 
 const mapCases = [
   { id: "before", history: [], visible: false },
-  { id: "clean", history: [endedC203({ stable: true })], visible: true },
-  { id: "assisted", history: [endedC203({ assisted: 1 })], visible: true },
-  { id: "modeled", history: [endedC203({ modeled: 1 })], visible: true },
+  { id: "clean", history: endedC203({ stable: true }), visible: true },
+  { id: "assisted", history: endedC203({ assisted: 1 }), visible: true },
+  { id: "modeled", history: endedC203({ modeled: 1 }), visible: true },
   { id: "debug-isolated", history: [], visible: false, debugStats: true }
 ];
 
@@ -232,16 +233,16 @@ for (const spec of mapCases) {
   const state = await readGarden(page);
   record(`garden ${spec.id}: visibility follows formal ended C2-03 history`, state.visible === spec.visible, state);
   if (spec.visible) {
-    record(`garden ${spec.id}: marker is the explicit Chapter 3 entry button`, state.tagName === "BUTTON" && state.role === null && state.ariaCurrent === "location" && state.tabIndex === 0, state);
+    record(`garden ${spec.id}: marker is the explicit current Chapter 3 task`, state.tagName === "BUTTON" && state.role === null && state.ariaCurrent === "step" && state.tabIndex === 0, state);
     record(`garden ${spec.id}: no old route remains current`, state.activeNodes.length === 0 && state.currentNodes.length === 1 && state.currentNodes[0] === "gardenRestMarker" && state.actionBadges.length === 0, state);
-    record(`garden ${spec.id}: no autoplay or Chapter 3 session starts before the click`, state.audioContexts === 0 && state.activeSession === null && state.historyCount === 1, state);
+    record(`garden ${spec.id}: no autoplay or Chapter 3 session starts before the click`, state.audioContexts === 0 && state.activeSession === null && state.historyCount === 13, state);
   }
   if (spec.id === "clean") await page.screenshot({ path: path.join(screenshotDir, "garden_clean_1194x834_dpr2.png") });
   await page.close();
 }
 
 const refreshPage = await makePage({ width: 1366, height: 1024, deviceScaleFactor: 2 });
-await seedStorage(refreshPage, { starDinoSessionRuntime: { version: 1, active: null, history: [endedC203({ modeled: 1 })], lastRest: null } });
+await seedStorage(refreshPage, { starDinoSessionRuntime: { version: 1, active: null, history: endedC203({ modeled: 1 }), lastRest: null } });
 await refreshPage.goto(url(), { waitUntil: "domcontentloaded", timeout: 12000 });
 await waitReady(refreshPage, "#mapShell");
 const rootState = await readGarden(refreshPage);

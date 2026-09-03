@@ -9,7 +9,7 @@ const noteIdentityMatrix = {
     locator: "两黑键左边",
     keyShort: "2黑左",
     staffPosition: "下加一线",
-    staffShort: "下方小线",
+    staffShort: "下加一线",
     storyRole: "第一块地板 / 起点跳台",
     block: "基地地板",
     courseStatus: "core",
@@ -25,8 +25,8 @@ const noteIdentityMatrix = {
     color: "#FB9608",
     locator: "两黑键中间",
     keyShort: "2黑中",
-    staffPosition: "谱线下面",
-    staffShort: "线下面",
+    staffPosition: "下加一间",
+    staffShort: "下加一间",
     storyRole: "车轮 / 中间小灯",
     block: "车轮",
     courseStatus: "core",
@@ -416,6 +416,196 @@ const mapNodes = [
   { levelId: "FG04", title: "桥前地图" }
 ];
 
+const childJourneyChapters = [
+  { id: "C1", title: "月球基地", short: "认键", icon: "1" },
+  { id: "C2", title: "星星桥", short: "读谱", icon: "2" },
+  { id: "C3", title: "呼吸花园", short: "听音", icon: "3" },
+  { id: "C4", title: "地下回声洞", short: "音区", icon: "4" }
+];
+
+const childJourneyBundleOrder = [
+  "C1-01", "C1-02", "C1-03", "C1-04", "C1-05", "C1-06", "C1-07", "C1-08", "C1-09", "C1-10",
+  "C2-01", "C2-02", "C2-03",
+  "C3-01", "C3-02", "C3-03", "C3-04", "C3-05", "C3-06", "C3-07",
+  "C4-01", "C4-02", "C4-03"
+];
+
+const childJourneyBundleNext = {
+  "C1-01": "叫醒 C-D-E 三颗小灯",
+  "C1-02": "听小车轮唱 D-C",
+  "C1-03": "用 C-D-E 接好小桥",
+  "C1-04": "用 C-G-C 完成大跳墙",
+  "C1-05": "记住 C-D-E-D-C 星灯顺序",
+  "C1-06": "沿 C-D-E-F-G 合上屋顶",
+  "C1-07": "找到 F 和 G 的新位置",
+  "C1-08": "分清 E-F-G 三颗近邻星",
+  "C1-09": "把 F、G 键位连到谱位",
+  "C1-10": "去星星桥看五线谱",
+  "C2-01": "走完整座星星桥",
+  "C2-02": "少提示再走一次星星桥",
+  "C2-03": "进入呼吸花园",
+  "C3-01": "唤醒第三片 E 音符叶",
+  "C3-02": "听 C 和 D 找声音朋友",
+  "C3-03": "用 C-D-E 叫醒三朵花",
+  "C3-04": "听远处的 C 和 G",
+  "C3-05": "分清挨在一起的 E 和 F",
+  "C3-06": "记住两个声音的先后",
+  "C3-07": "进入地下回声洞",
+  "C4-01": "铺低音 C-D-E 三块地基",
+  "C4-02": "让 E-D-C 沿地基向下回声",
+  "C4-03": "当前开放故事已经完成"
+};
+
+const childJourneyBundleOutcomes = {
+  "C1-01": "第一块地板锁定，星芽站稳",
+  "C1-02": "三颗小灯都醒来了",
+  "C1-03": "小车轮滚回停放位",
+  "C1-04": "小桥展开，倒数灯亮起",
+  "C1-05": "大跳墙升起来了",
+  "C1-06": "五颗记忆星挂好了",
+  "C1-07": "月亮屋顶已经合上",
+  "C1-08": "F、G 两块落脚垫亮起",
+  "C1-09": "E-F-G 三颗近邻星排好",
+  "C1-10": "桥前小地图展开",
+  "C2-01": "星芽跳到小休息星",
+  "C2-02": "星芽到达对面星球",
+  "C2-03": "星星桥留下永久星光",
+  "C3-01": "两片音符叶打开",
+  "C3-02": "三片叶组成完整小芽",
+  "C3-03": "两颗种子找到声音朋友",
+  "C3-04": "三朵花一起开放",
+  "C3-05": "回声藤连到远处",
+  "C3-06": "两朵花分开站稳",
+  "C3-07": "根须打开地下通道",
+  "C4-01": "洞门打开，低音 C 地基落下",
+  "C4-02": "低音 C-D-E 地基铺好",
+  "C4-03": "向下回声照亮了咚咚"
+};
+
+const childJourneyChapterGuides = {
+  C1: {
+    goal: "建好月球基地，把 C-D-E-F-G 的音名和琴键位置连起来",
+    start: "星芽刚来到月球基地",
+    phases: [
+      { title: "先认识 C-D-E", bundles: ["C1-01", "C1-02", "C1-03"] },
+      { title: "让音符向上、向下走", bundles: ["C1-04", "C1-05", "C1-06"] },
+      { title: "补齐 F-G 五音路线", bundles: ["C1-07", "C1-08", "C1-09"] },
+      { title: "把键位连到谱位", bundles: ["C1-10"] }
+    ]
+  },
+  C2: {
+    goal: "看懂 C-D-E-F-G 的谱位，帮助星芽跳到对面星球",
+    start: "月球基地建好，星星桥出现",
+    phases: [
+      { title: "先看懂三颗谱线星", bundles: ["C2-01"] },
+      { title: "走完整座星星桥", bundles: ["C2-02"] },
+      { title: "少提示确认路线", bundles: ["C2-03"] }
+    ]
+  },
+  C3: {
+    goal: "听出熟悉音符的声音，再在琴键上找到它们",
+    start: "星芽抵达呼吸花园",
+    phases: [
+      { title: "看见、听见、再回弹", bundles: ["C3-01", "C3-02"] },
+      { title: "从两音听到三音", bundles: ["C3-03", "C3-04"] },
+      { title: "比较远音和近音", bundles: ["C3-05", "C3-06"] },
+      { title: "记住两个声音顺序", bundles: ["C3-07"] }
+    ]
+  },
+  C4: {
+    goal: "认识高低音区，让低音 C-D-E 带星芽找到咚咚",
+    start: "根须打开地下通道",
+    phases: [
+      { title: "先分清高 C 和低 C", bundles: ["C4-01"] },
+      { title: "找到低音 C-D-E", bundles: ["C4-02"] },
+      { title: "听见 E-D-C 向下走", bundles: ["C4-03"] }
+    ]
+  }
+};
+
+const childJourneyActionTitles = {
+  "M01-do-revisit": "再找到一次 C，让地板锁紧",
+  "M07-check": "让星灯记住 C-D-E-D-C",
+  "M08-check": "点亮 C-D-E-F-G 安全光",
+  "FG03-check": "少提示排好 E-F-G",
+  "FG04-check": "自己找到 F、G 的谱位"
+};
+
+const childJourneyActionCues = {
+  "S01-mini": "C D E",
+  "S01-guided": "C D E F G",
+  "S01-check": "C D E F G"
+};
+
+const childJourneyActionOutcomes = {
+  "M01-intro": "第一块月亮地板已经落下",
+  "M04-up": "咔哒小桥已经展开",
+  "M07-guided": "五颗记忆星已经挂好",
+  "M08-guided": "五块月亮屋顶已经合上",
+  "FG01-guided": "F 落脚垫已经放好",
+  "FG03-guided": "E-F-G 三颗近邻星已经排好",
+  "FG04-guided": "桥前小地图已经展开",
+  "LS01-visible": "第一片音符叶已经打开",
+  "LP01-register-listening": "高 C 和低 C 的洞纹已经亮起",
+  "LP03-c-awake": "低音 C 锚石已经醒来",
+  "LP04-e-echo": "E 回声已经出发",
+  "LP04-d-echo": "E-D 回声已经连起来"
+};
+
+const childJourneyTargetCopy = {
+  M01: { title: "铺第一块月亮地板", focus: "认识 C · 找到两黑键左边" },
+  M02: { title: "叫醒三颗小灯", focus: "认出 C-D-E · 找到三个相邻键位" },
+  M03: { title: "听会唱的小车轮", focus: "听 D-C · 从声音找到琴键" },
+  M04: { title: "接好咔哒小桥", focus: "按 C-D-E · 感受向右走" },
+  M05: { title: "点亮火箭倒数灯", focus: "按 E-D-C · 感受向左走" },
+  M06: { title: "立起大跳墙", focus: "分清 C 和 G · 找到远距离键位" },
+  M07: { title: "挂好星星记忆串", focus: "记住 C-D-E-D-C · 减少亮光提示" },
+  M08: { title: "合上月亮屋顶", focus: "找到 C-D-E-F-G · 连成五音路线" },
+  FG01: { title: "放下 F 落脚垫", focus: "认识 F · 找到三黑键左边" },
+  FG02: { title: "打开 G 星门", focus: "认识 G · 找到三黑键左中" },
+  FG03: { title: "排好三颗近邻星", focus: "分清 E-F-G · 记住相邻键位" },
+  FG04: { title: "铺好桥前小地图", focus: "把 F、G 音名连到五线谱位置" },
+  S01: { title: "让星芽跳过星星桥", focus: "看谱位 · 读音名 · 找到同名琴键" },
+  LS01: { title: "打开第一片音符叶", focus: "听 C · 找到两黑键左边" },
+  LS02: { title: "伸直第二片音符叶", focus: "听 D · 找到两黑键中间" },
+  LS03: { title: "唤醒第三片音符叶", focus: "听 E · 自己找到两次" },
+  LS04: { title: "帮 C 和 D 找朋友", focus: "比较 C、D 的声音 · 听后找键" },
+  LS05: { title: "叫醒三朵花", focus: "听 C-D-E 小集合 · 找到相邻琴键" },
+  LS06: { title: "搭起 C-G 回声藤", focus: "比较远距离 C、G · 听后找键" },
+  LS07: { title: "解开 E-F 边界花", focus: "分清相邻 E、F · 找到键盘边界" },
+  LS08: { title: "让两声根须向下长", focus: "记住两个声音的先后顺序" },
+  LP01: { title: "听两个 C 的回声", focus: "分清高 C 和低 C · 建立音区概念" },
+  LP02: { title: "帮低音 C 找到家", focus: "找到下面一组两黑键左边的 C" },
+  LP03: { title: "铺低音 C-D-E 地基", focus: "在低音区找到 C-D-E 相邻路线" },
+  LP04: { title: "送 E-D-C 向下回声", focus: "从 E 走到 C · 听见并找到下降方向" }
+};
+
+const parentStoryReviewCatalog = {
+  "C1-01": { title: "第一块月亮地板", notes: "C", focus: "音名和两黑键左边" },
+  "C1-02": { title: "三颗小灯醒醒", notes: "C-D-E", focus: "三个相邻琴键" },
+  "C1-03": { title: "会唱的小车轮", notes: "D-C", focus: "听声音找琴键" },
+  "C1-04": { title: "咔哒小桥和倒数灯", notes: "C-D-E / E-D-C", focus: "向上和向下" },
+  "C1-05": { title: "大跳墙", notes: "C-G-C", focus: "远距离键位" },
+  "C1-06": { title: "星星记忆串", notes: "C-D-E-D-C", focus: "五音顺序记忆" },
+  "C1-07": { title: "合上月亮屋顶", notes: "C-D-E-F-G", focus: "五音连续路线" },
+  "C1-08": { title: "F、G 落脚垫", notes: "F-G", focus: "三黑键组定位" },
+  "C1-09": { title: "三颗近邻星", notes: "E-F-G", focus: "相邻键位辨认" },
+  "C1-10": { title: "桥前小地图", notes: "F-G", focus: "键位连接谱位" },
+  "C2-01": { title: "星星桥前三跳", notes: "C-D-E", focus: "第一次看谱位" },
+  "C2-02": { title: "走完整座星星桥", notes: "C-D-E-F-G", focus: "读谱并找到同名琴键" },
+  "C2-03": { title: "星星桥少提示确认", notes: "C-D-E-F-G", focus: "减少提示读谱" },
+  "C3-01": { title: "打开两片音符叶", notes: "C-D", focus: "看见、听见、再回弹" },
+  "C3-02": { title: "唤醒第三片音符叶", notes: "E", focus: "听音后独立找键" },
+  "C3-03": { title: "声音朋友", notes: "C-D", focus: "两个声音比较" },
+  "C3-04": { title: "叫醒三朵花", notes: "C-D-E", focus: "三音集合听辨" },
+  "C3-05": { title: "远音回声藤", notes: "C-G", focus: "远距离声音比较" },
+  "C3-06": { title: "边界花", notes: "E-F", focus: "相邻声音和键盘边界" },
+  "C3-07": { title: "两声根须", notes: "C-D", focus: "两个声音的先后" },
+  "C4-01": { title: "两个 C 的回声", notes: "低音 C / 中央 C", focus: "高低音区比较" },
+  "C4-02": { title: "三块低音地基", notes: "低音 C-D-E", focus: "低音区相邻路线" },
+  "C4-03": { title: "向下回声", notes: "低音 E-D-C", focus: "听见并找到下降方向" }
+};
+
 const staffCourse = {
   id: "S01",
   title: "星星桥第一跳",
@@ -423,7 +613,7 @@ const staffCourse = {
   prompt: "看五线谱上的音符垫，按同名琴键，星芽就跳到对面星球。",
   steps: [
     { midi: 60, label: "第1颗星", lane: "middle-c", x: 30.2, staffHint: "下加一线" },
-    { midi: 62, label: "第2颗星", lane: "d", x: 39.3, staffHint: "谱线下面" },
+    { midi: 62, label: "第2颗星", lane: "d", x: 39.3, staffHint: "下加一间" },
     { midi: 64, label: "第3颗星", lane: "e", x: 48.4, staffHint: "第一线" },
     { midi: 65, label: "第4颗星", lane: "f", x: 57.5, staffHint: "第一间" },
     { midi: 67, label: "第5颗星", lane: "g", x: 66.7, staffHint: "第二线" },
@@ -464,6 +654,12 @@ const LP03_LONG_WAIT_MS = 20000;
 const LP03_CHILD_NOTE_DURATION_MS = 440;
 const LP03_TARGET_NOTE_DURATION_MS = 640;
 const LP03_EXTERNAL_INPUT_MAX_MS = 2400;
+const LP04_ASSISTED_WAIT_MS = 5200;
+const LP04_LONG_WAIT_MS = 20000;
+const LP04_CHILD_NOTE_DURATION_MS = 440;
+const LP04_TARGET_NOTE_DURATION_MS = 640;
+const LP04_EXTERNAL_INPUT_MAX_MS = 2400;
+const LP04_TRANSITION_PAUSE_MS = 560;
 const chapter3Lessons = {
   LS01: { id: "LS01", midi: 60, letter: "C", solfege: "Do", locator: "两黑键左侧", leaf: 1, prompt: "打开第一片叶" },
   LS02: { id: "LS02", midi: 62, letter: "D", solfege: "Re", locator: "两黑键中间", leaf: 2, prompt: "伸直第二片叶" },
@@ -541,6 +737,17 @@ const chapter4Config = {
       { actionId: "LP03-e-place", id: "E", midi: 52, foundationKey: "foundationEPlaced", action: "place" }
     ],
     parentFocus: "低音 C-D-E 地基路线"
+  },
+  lp04: {
+    levelId: "LP04",
+    bundleId: "C4-03",
+    actionIds: ["LP04-e-echo", "LP04-d-echo", "LP04-c-echo"],
+    steps: [
+      { actionId: "LP04-e-echo", id: "E", midi: 52, echoKey: "echoEReached" },
+      { actionId: "LP04-d-echo", id: "D", midi: 50, echoKey: "echoDReached" },
+      { actionId: "LP04-c-echo", id: "C", midi: 48, echoKey: "echoCReached" }
+    ],
+    parentFocus: "E-D-C 向下回声"
   }
 };
 
@@ -679,6 +886,14 @@ const preschoolSessionBundles = [
       { actionId: "LP03-d-place", kind: "chapter4-keyboard", targetId: "LP03", lp03Step: "D", runMode: "guided", reviewableForMastery: false },
       { actionId: "LP03-e-place", kind: "chapter4-keyboard", targetId: "LP03", lp03Step: "E", runMode: "guided", reviewableForMastery: false }
     ]
+  },
+  {
+    bundleId: "C4-03",
+    actions: [
+      { actionId: "LP04-e-echo", kind: "chapter4-keyboard", targetId: "LP04", lp04Step: "E", runMode: "guided", reviewableForMastery: false },
+      { actionId: "LP04-d-echo", kind: "chapter4-keyboard", targetId: "LP04", lp04Step: "D", runMode: "guided", reviewableForMastery: false },
+      { actionId: "LP04-c-echo", kind: "chapter4-keyboard", targetId: "LP04", lp04Step: "C", runMode: "guided", reviewableForMastery: false }
+    ]
   }
 ];
 
@@ -796,12 +1011,18 @@ const scaffoldLabels = {
 };
 
 const staffLaneY = {
-  // Treble staff positions for C4-G4 on the short, wider-spaced staff.
-  "middle-c": 89.5,
-  d: 82,
-  e: 74.5,
-  f: 67,
-  g: 59.5
+  // Treble staff positions shared by the visible lines, note pads and jump path.
+  "middle-c": 90.5,
+  d: 83,
+  e: 75.5,
+  f: 68,
+  g: 60.5
+};
+
+const staffMiniRestPosition = {
+  x: 70,
+  y: 67,
+  place: "mini-rest"
 };
 
 const roofCarrySlots = [
@@ -855,6 +1076,9 @@ function nextPlayableLevelIndex(completed = loadCompletedLevels()) {
 
 function initialScreen() {
   const params = new URLSearchParams(window.location.search);
+  if (params.get("mode") === "free-piano") {
+    return freePianoRuntimeIsActive() && !storedFormalSessionIsActive() ? "free-piano" : "map";
+  }
   if (isExplicitChapter4DirectMode(params)) return "chapter4";
   if (params.get("mode") === "staff") return "staff";
   if (params.get("screen") === "map") return "map";
@@ -866,7 +1090,7 @@ function isExplicitChapter4DirectMode(params = new URLSearchParams(window.locati
   return params.get("mode") === "chapter4" &&
     params.get("directMode") === "true" &&
     params.get("formalSession") === "false" &&
-    ["LP01", "LP02", "LP03"].includes(params.get("lesson") || "LP01");
+    ["LP01", "LP02", "LP03", "LP04"].includes(params.get("lesson") || "LP01");
 }
 
 function initialChapter4DirectLesson() {
@@ -973,9 +1197,11 @@ function normalizeChapter4Runtime(source = {}) {
     resume: source.resume && typeof source.resume === "object" ? source.resume : null,
     openingReviewQueue: Array.isArray(source.openingReviewQueue) ? source.openingReviewQueue : [],
     reviewScheduler: normalizeChapter4ReviewScheduler(source.reviewScheduler),
+    openingReviewAttempts: Array.isArray(source.openingReviewAttempts) ? source.openingReviewAttempts : [],
     lp01Attempts: Array.isArray(source.lp01Attempts) ? source.lp01Attempts : [],
     lp02Attempts: Array.isArray(source.lp02Attempts) ? source.lp02Attempts : [],
     lp03Attempts: Array.isArray(source.lp03Attempts) ? source.lp03Attempts : [],
+    lp04Attempts: Array.isArray(source.lp04Attempts) ? source.lp04Attempts : [],
     lp03Progress: {
       foundationCAnchored: inheritedCAnchor,
       foundationCAwake: Boolean(storedProgress.foundationCAwake),
@@ -989,7 +1215,30 @@ function normalizeChapter4Runtime(source = {}) {
       routeEvents: Array.isArray(storedProgress.routeEvents) ? storedProgress.routeEvents : [],
       originSessionId: storedProgress.originSessionId || null,
       lastSessionId: storedProgress.lastSessionId || null
-    }
+    },
+    lp04Progress: normalizeLp04Progress(source.lp04Progress)
+  };
+}
+
+function normalizeLp04Progress(source = {}) {
+  const echoEReached = Boolean(source?.echoEReached);
+  const echoDReached = echoEReached && Boolean(source?.echoDReached);
+  const claimedC = echoDReached && Boolean(source?.echoCReached);
+  const completeEvidence = claimedC && Boolean(source?.played) && Number.isFinite(isoTimeMs(source?.completedAt));
+  // Three unfinalized flags are not a completion: resume from the final C action.
+  const echoCReached = completeEvidence;
+  const complete = echoEReached && echoDReached && echoCReached;
+  return {
+    echoEReached,
+    echoDReached,
+    echoCReached,
+    dongdongPartialReveal: complete,
+    played: complete && Boolean(source?.played),
+    needsPractice: Boolean(source?.needsPractice),
+    completedAt: complete && typeof source?.completedAt === "string" ? source.completedAt : null,
+    originSessionId: typeof source?.originSessionId === "string" ? source.originSessionId : null,
+    lastSessionId: typeof source?.lastSessionId === "string" ? source.lastSessionId : null,
+    routeEvents: Array.isArray(source?.routeEvents) ? source.routeEvents : []
   };
 }
 
@@ -1149,6 +1398,14 @@ const AUDIO_VOLUME_CAP = 0.7;
 const AUDIO_DEFAULT_VOLUME = 0.6;
 const AUDIO_EFFECT_GAIN = 0.36;
 const MOTION_SETTINGS_KEY = "starDinoMotionSettings";
+const FREE_PIANO_RUNTIME_KEY = "starDinoFreePianoRuntime";
+const M03_AUDIO_ATTEMPT_STORAGE_KEY = "starDinoM03AudioAttempt";
+const PARENT_LEARNING_STORAGE_KEYS = [
+  SESSION_RUNTIME_KEY,
+  "starDinoCompletedLevels",
+  "starDinoLearningStats",
+  FREE_PIANO_RUNTIME_KEY
+];
 const WORKSHOP_IDLE_IDENTITY_MS = 4800;
 const WORKSHOP_IDLE_LOCATOR_MS = 8800;
 const LEVEL_INTRO_RESPONSE_DELAY_MS = 1770;
@@ -1200,6 +1457,34 @@ function saveMotionSettings() {
     localStorage.setItem(MOTION_SETTINGS_KEY, JSON.stringify(state.motionSettings));
   } catch (error) {
     // Motion comfort remains usable for the current session when storage is unavailable.
+  }
+}
+
+function freePianoRuntimeIsActive() {
+  try {
+    return JSON.parse(localStorage.getItem(FREE_PIANO_RUNTIME_KEY) || "{}").active === true;
+  } catch (error) {
+    return false;
+  }
+}
+
+function storedFormalSessionIsActive() {
+  try {
+    return JSON.parse(localStorage.getItem(SESSION_RUNTIME_KEY) || "{}").active?.status === "active";
+  } catch (error) {
+    return false;
+  }
+}
+
+function saveFreePianoRuntime(active) {
+  try {
+    if (active) {
+      localStorage.setItem(FREE_PIANO_RUNTIME_KEY, JSON.stringify({ active: true }));
+    } else {
+      localStorage.removeItem(FREE_PIANO_RUNTIME_KEY);
+    }
+  } catch (error) {
+    // Free play remains usable in memory when optional local storage is unavailable.
   }
 }
 
@@ -1271,15 +1556,30 @@ const state = {
   activeSession: initialActiveSession,
   audioSettings: loadAudioSettings(),
   motionSettings: loadMotionSettings(),
+  parentSelectedTab: "overview",
+  parentDataResetPending: false,
+  parentDataResetInProgress: false,
+  freePianoLastMidi: null,
+  freePianoLastSource: "屏幕琴键",
   practiceAttempt: null,
+  staffMiniChildInputs: [],
   stepHadWrong: false,
   lastInputMidi: null,
   lastInputResult: null,
   audio: null,
+  microphoneRequest: null,
+  microphoneRequestSerial: 0,
   sfx: null,
   audioUnlocked: false,
   midiAccess: null,
+  midiInputCount: 0,
+  midiDeviceNames: [],
+  midiConnectionMessage: "",
+  recentMidiNoteOns: [],
   autoAdvanceTimer: null,
+  milestoneSettlementUntil: 0,
+  milestoneSettlementTimer: null,
+  milestoneSettlement: null,
   dinoMoodTimer: null,
   staffMoodTimer: null,
   levelIntroTimer: null,
@@ -1508,7 +1808,10 @@ function selectChapter4OpeningReview({ scheduler, history = [], now = new Date()
       requiredReview: true,
       reviewSkillKey: candidate.skillKey,
       reviewPriority: candidate.priority,
-      reviewMode: candidate.nextMode
+      reviewMode: candidate.nextMode,
+      reviewReason: candidate.reason,
+      reviewAnchorSessionId: candidate.sourceSessionId || null,
+      reviewAnchorCreatedAt: candidate.createdAt || null
     }
   };
 }
@@ -1574,6 +1877,225 @@ function settleChapter4OpeningReview(scheduler, { skillKey, sessionId, endedAt =
     candidate.cooldownAfterSessionId = sessionId;
   }
   return next;
+}
+
+function chapter4OpeningReviewContext(attempt, skillKey) {
+  const session = state.activeSession;
+  const action = currentSessionAction(session);
+  if (!attempt || !session || !action || session.status !== "active" || session.formalSession !== true ||
+    session.bundleId !== chapter4Config.lp04.bundleId || session.directMode === true || session.voluntaryReplay === true) return null;
+  if (action.role !== "opening-review" || action.requiredReview !== true || action.reviewSkillKey !== skillKey ||
+    action.targetId !== attempt.levelId || session.reviewSkillKey !== skillKey || attempt.directMode === true ||
+    attempt.formalSession !== true || (attempt.sessionId && attempt.sessionId !== session.sessionId)) return null;
+  return { session, action };
+}
+
+function chapter4OpeningReviewIsDifficult(attempt) {
+  const baselineRemediation = attempt?.reviewMode === "remediation" && attempt?.reviewBaselineScaffold === true;
+  return Boolean(
+    attempt?.needsPractice || (attempt?.strongCueUsed && !baselineRemediation) || attempt?.modeled || attempt?.accessibilityVisualAssist ||
+    attempt?.hasExperimentalInput || attempt?.experimentalInput || (attempt?.totalWrongCount || attempt?.wrongCount || 0) >= 2
+  );
+}
+
+function chapter4OpeningReviewCanBeStable(context, attempt) {
+  if (!context || context.action.reviewMode !== "reduced-cue" || chapter4OpeningReviewIsDifficult(attempt)) return false;
+  if (attempt?.levelId === "LP01") {
+    return attempt.correctCount >= 3 && attempt.presentedCallCount === 4 && attempt.resolvedCallCount === 4 &&
+      attempt.replayCountChild <= 1 && !attempt.strongCueUsed && !attempt.modeled &&
+      !attempt.accessibilityVisualAssist && !attempt.hasExperimentalInput && !attempt.targetRevealedBeforeResponse &&
+      !attempt.crossedSessionBoundary && !attempt.needsPractice && !attempt.openingReviewRequired;
+  }
+  if (attempt?.levelId === "LP02") {
+    return attempt.firstChildMidi === 48 && attempt.firstInputRoute === "屏幕" && attempt.wrongCount === 0 &&
+      !attempt.strongCueUsed && !attempt.modeled && !attempt.accessibilityVisualAssist &&
+      !attempt.experimentalInput && !attempt.microphoneConfidence;
+  }
+  return false;
+}
+
+function chapter4OpeningReviewInputRoutes(attempt) {
+  if (attempt?.levelId === "LP01") {
+    return { "touch-bubble": attempt.scoredCalls.filter((call) => typeof call.inputRoute === "string" && call.inputRoute.length > 0).length };
+  }
+  if (attempt?.levelId === "LP02" && attempt.firstInputRoute) return { [attempt.firstInputRoute]: 1 };
+  return {};
+}
+
+function selectedChapter4OpeningReviewRetainedAnchor(context, formalAttempt, completedAt) {
+  const action = context?.action;
+  const skillKey = action?.reviewSkillKey;
+  const expectedSessionId = action?.reviewAnchorSessionId;
+  const expectedCompletedAt = action?.reviewAnchorCreatedAt;
+  const completedMs = isoTimeMs(completedAt);
+  const sessionStartedMs = isoTimeMs(formalAttempt?.sessionStartedAt);
+  if (!skillKey || typeof expectedSessionId !== "string" || expectedSessionId.length === 0 ||
+    !Number.isFinite(isoTimeMs(expectedCompletedAt)) || !Number.isFinite(completedMs) || !Number.isFinite(sessionStartedMs)) return null;
+  const matches = chapter4QualifiedStableAnchors(state.learningStats.retention, skillKey).filter((event) => {
+    const anchorSessionId = event?.sourceSessionId || event?.sessionId;
+    const anchorCompletedAt = event?.endedAt || event?.completedAt;
+    return anchorSessionId === expectedSessionId && anchorCompletedAt === expectedCompletedAt &&
+      typeof event?.sessionId === "string" && event.sessionId.length > 0 &&
+      event.sessionId !== formalAttempt.sessionId && anchorSessionId !== formalAttempt.sessionId;
+  });
+  if (matches.length !== 1) return null;
+  const anchor = matches[0];
+  const anchorMs = isoTimeMs(anchor.endedAt || anchor.completedAt);
+  if (!Number.isFinite(anchorMs) || anchor.localDateKey === formalAttempt.localDateKey || anchorMs > sessionStartedMs ||
+    completedMs < anchorMs || completedMs - anchorMs < RETENTION_MIN_INTERVAL_MS || anchor.clockValid === false) return null;
+  return anchor;
+}
+
+function recordChapter4OpeningReviewMastery({ attempt, context, completedAt }) {
+  if (!attempt || !context || !validFormalEvidenceAttempt({
+    formalSession: true,
+    sessionId: context.session.sessionId,
+    localDateKey: context.session.localDateKey,
+    sessionStartedAt: context.session.startedAt
+  })) return { stableEvent: null, retainedEvent: null, clockValid: false };
+  const skillKey = context.action.reviewSkillKey;
+  const existingStable = state.learningStats.retention.stableEvents.find((event) =>
+    event?.skillKey === skillKey && event?.sessionId === context.session.sessionId && event?.sessionActionId === context.action.actionId
+  );
+  if (existingStable) return { stableEvent: existingStable, retainedEvent: null, clockValid: true };
+  const existingRetained = state.learningStats.retention.retainedEvents.find((event) =>
+    event?.skillKey === skillKey && event?.sessionId === context.session.sessionId && event?.sessionActionId === context.action.actionId
+  );
+  if (existingRetained) return { stableEvent: null, retainedEvent: existingRetained, clockValid: true };
+  const formalAttempt = {
+    formalSession: true,
+    sessionId: context.session.sessionId,
+    bundleId: context.session.bundleId,
+    sessionActionId: context.action.actionId,
+    sessionRole: "opening-review",
+    reviewSkillKey: skillKey,
+    localDateKey: context.session.localDateKey,
+    sessionStartedAt: context.session.startedAt
+  };
+  const retainedDue = context.action.reviewReason === "retained-due";
+  const anchor = retainedDue ? selectedChapter4OpeningReviewRetainedAnchor(context, formalAttempt, completedAt) : null;
+  if (retainedDue && !anchor) return { stableEvent: null, retainedEvent: null, clockValid: false };
+  if (!advanceRetentionWallClock(completedAt, formalAttempt)) return { stableEvent: null, retainedEvent: null, clockValid: false };
+  const inputRoutes = chapter4OpeningReviewInputRoutes(attempt);
+  const stableEvent = {
+    eventId: evidenceEventId("stable"),
+    evidenceType: "stable",
+    skillKey,
+    levelId: attempt.levelId,
+    sessionId: context.session.sessionId,
+    bundleId: context.session.bundleId,
+    sessionActionId: context.action.actionId,
+    sessionRole: "opening-review",
+    reviewSkillKey: skillKey,
+    completedAt,
+    localDateKey: context.session.localDateKey,
+    runMode: context.action.runMode,
+    wrongCount: attempt.totalWrongCount || attempt.wrongCount || 0,
+    cueStrength: "soft",
+    strongCueFrames: 0,
+    inputRoutes,
+    experimentalInput: false,
+    thresholdVersion: RETENTION_THRESHOLD_VERSION
+  };
+  let retainedEvent = null;
+  if (retainedDue && !state.learningStats.retention.retainedEvents.some((event) => event?.skillKey === skillKey && event?.sessionId === context.session.sessionId)) {
+    retainedEvent = {
+      ...stableEvent,
+      eventId: evidenceEventId("retained"),
+      evidenceType: "retained",
+      anchorStableEventId: anchor.eventId,
+      elapsedFromStableMs: isoTimeMs(completedAt) - isoTimeMs(anchor.completedAt)
+    };
+    state.learningStats.retention.retainedEvents.push(retainedEvent);
+  } else if (!retainedDue) {
+    state.learningStats.retention.stableEvents.push(stableEvent);
+    const existing = { ...(state.learningStats.levels[attempt.levelId] || {}) };
+    existing.stableCompletions = (Number(existing.stableCompletions) || 0) + 1;
+    state.learningStats.levels[attempt.levelId] = existing;
+  }
+  saveLearningStats();
+  return { stableEvent: retainedEvent ? null : stableEvent, retainedEvent, clockValid: true };
+}
+
+function chapter4OpeningReviewResult(context, attempt) {
+  if (chapter4OpeningReviewIsDifficult(attempt)) return "difficult";
+  return chapter4OpeningReviewCanBeStable(context, attempt) ? "stable" : "remediation-complete";
+}
+
+function recordChapter4OpeningReviewOutcome({ attempt, context, summary, result }) {
+  if (!attempt || !context || !summary || !result) return null;
+  const { session, action } = context;
+  const existing = session.completedActions.find((completed) => completed?.actionId === action.actionId);
+  if (existing) return existing;
+  const completedAt = summary.completedAt || new Date().toISOString();
+  const mastery = result === "stable"
+    ? recordChapter4OpeningReviewMastery({ attempt, context, completedAt })
+    : { stableEvent: null, retainedEvent: null, clockValid: null };
+  const settledResult = result === "stable" && !mastery.stableEvent && !mastery.retainedEvent
+    ? "remediation-complete"
+    : (mastery.retainedEvent ? "retained" : result);
+  summary.stable = settledResult === "stable" || settledResult === "retained";
+  summary.retained = settledResult === "retained";
+  const evidence = {
+    ...summary,
+    actionId: action.actionId,
+    kind: action.kind,
+    targetId: action.targetId,
+    bundleId: session.bundleId,
+    sessionId: session.sessionId,
+    role: "opening-review",
+    requiredReview: true,
+    reviewSkillKey: action.reviewSkillKey,
+    reviewMode: action.reviewMode || null,
+    reviewReason: action.reviewReason || null,
+    reviewAnchorSessionId: action.reviewAnchorSessionId || null,
+    reviewAnchorCreatedAt: action.reviewAnchorCreatedAt || null,
+    reviewResult: settledResult,
+    completedAt
+  };
+  action.reviewOutcomeRecorded = true;
+  action.reviewResult = settledResult;
+  session.completedActions.push(evidence);
+  state.chapter4.openingReviewAttempts.push(evidence);
+  state.chapter4.openingReviewAttempts = state.chapter4.openingReviewAttempts.slice(-20);
+  state.chapter4.reviewScheduler = settleChapter4OpeningReview(state.chapter4.reviewScheduler, {
+    skillKey: action.reviewSkillKey,
+    sessionId: session.sessionId,
+    endedAt: completedAt,
+    result: settledResult
+  });
+  persistChapter4Progress();
+  persistChapter4Attempt();
+  return evidence;
+}
+
+function advanceChapter4AfterOpeningReview(attempt) {
+  const context = chapter4OpeningReviewContext(attempt, attempt?.reviewSkillKey || currentSessionAction()?.reviewSkillKey);
+  if (!context || state.chapter4DirectMode) return false;
+  const { session } = context;
+  const nextIndex = session.actionIndex + 1;
+  const nextAction = session.actions[nextIndex];
+  if (!nextAction || nextAction.targetId !== "LP04" || nextAction.role !== "lesson") return false;
+  session.actionIndex = nextIndex;
+  nextAction.chapter4Attempt ||= createLp04Attempt(session, { stepId: nextAction.lp04Step });
+  persistActiveSession();
+  state.chapter4RestView = null;
+  showChapter4Screen();
+  return true;
+}
+
+function finishChapter4OpeningReviewAtRest(attempt, reason = "review-deferred") {
+  const context = chapter4OpeningReviewContext(attempt, attempt?.reviewSkillKey || currentSessionAction()?.reviewSkillKey);
+  if (!context || state.chapter4DirectMode) return false;
+  clearChapter4Timers();
+  attempt.phase = "review-deferred";
+  persistChapter4Attempt();
+  const action = currentChapter4Action();
+  state.chapter4RestView = action ? { ...action, chapter4Attempt: JSON.parse(JSON.stringify(attempt)) } : null;
+  finishActiveSessionAtRest({ reward: "洞口稍作休息", reason });
+  renderChapter4Screen();
+  state.chapter4FeedbackTimer = setTimeout(() => showMapScreen(), 900);
+  return true;
 }
 
 function migrateChapter4ReviewSchedulerInState() {
@@ -1698,6 +2220,9 @@ if (window.__STAR_DINO_R01A_TEST__ === true) {
     reconcileChapter4ReviewScheduler,
     selectChapter4OpeningReview,
     composeChapter4ReviewPlan,
+    normalizeLp04Progress,
+    lp04FormalEntranceFrom,
+    chapter4BundleSnapshot: () => JSON.parse(JSON.stringify(sessionBundleById.get("C4-03") || null)),
     classifyLp02OpeningReviewInput,
     settleChapter4OpeningReview,
     createR01AFixture: renderR01ATestFixture,
@@ -1733,7 +2258,7 @@ function persistSessionRuntimeSchemaUpgrade() {
     const parsed = JSON.parse(raw);
     const normalized = state.sessionRuntime;
     const staleChapterCompletion = Boolean(parsed.chapter3?.completed);
-    if (staleChapterCompletion || !Array.isArray(parsed.chapter3?.ls04Attempts) || !Array.isArray(parsed.chapter3?.ls05Attempts) || !Array.isArray(parsed.chapter3?.ls06Attempts) || !Array.isArray(parsed.chapter3?.ls07Attempts) || !Array.isArray(parsed.chapter3?.ls08Attempts) || !Object.hasOwn(parsed.chapter3 || {}, "visibleSliceCompleted") || !Object.hasOwn(parsed.chapter3 || {}, "ls04Completed") || !Object.hasOwn(parsed.chapter3 || {}, "ls05Completed") || !Object.hasOwn(parsed.chapter3 || {}, "ls06Completed") || !Object.hasOwn(parsed.chapter3 || {}, "ls07Completed") || !Object.hasOwn(parsed.chapter3 || {}, "ls08Completed") || !Object.hasOwn(parsed.chapter3 || {}, "ls05PartialRest") || !Object.hasOwn(parsed.chapter3 || {}, "ls06PartialRest") || !Object.hasOwn(parsed.chapter3 || {}, "ls07PartialRest") || !Object.hasOwn(parsed.chapter3 || {}, "ls08PartialRest") || !parsed.chapter4 || !Array.isArray(parsed.chapter4.lp01Attempts) || !Array.isArray(parsed.chapter4.lp02Attempts) || !Array.isArray(parsed.chapter4.lp03Attempts) || !parsed.chapter4.lp03Progress) {
+    if (staleChapterCompletion || !Array.isArray(parsed.chapter3?.ls04Attempts) || !Array.isArray(parsed.chapter3?.ls05Attempts) || !Array.isArray(parsed.chapter3?.ls06Attempts) || !Array.isArray(parsed.chapter3?.ls07Attempts) || !Array.isArray(parsed.chapter3?.ls08Attempts) || !Object.hasOwn(parsed.chapter3 || {}, "visibleSliceCompleted") || !Object.hasOwn(parsed.chapter3 || {}, "ls04Completed") || !Object.hasOwn(parsed.chapter3 || {}, "ls05Completed") || !Object.hasOwn(parsed.chapter3 || {}, "ls06Completed") || !Object.hasOwn(parsed.chapter3 || {}, "ls07Completed") || !Object.hasOwn(parsed.chapter3 || {}, "ls08Completed") || !Object.hasOwn(parsed.chapter3 || {}, "ls05PartialRest") || !Object.hasOwn(parsed.chapter3 || {}, "ls06PartialRest") || !Object.hasOwn(parsed.chapter3 || {}, "ls07PartialRest") || !Object.hasOwn(parsed.chapter3 || {}, "ls08PartialRest") || !parsed.chapter4 || !Array.isArray(parsed.chapter4.openingReviewAttempts) || !Array.isArray(parsed.chapter4.lp01Attempts) || !Array.isArray(parsed.chapter4.lp02Attempts) || !Array.isArray(parsed.chapter4.lp03Attempts) || !parsed.chapter4.lp03Progress) {
       saveSessionRuntime(normalized);
     }
   } catch (error) {
@@ -1783,6 +2308,22 @@ const els = {
   mapSessionStatus: document.querySelector("#mapSessionStatus"),
   mapSessionTitle: document.querySelector("#mapSessionTitle"),
   mapSessionDetail: document.querySelector("#mapSessionDetail"),
+  mapFloorResult: document.querySelector("#mapFloorResult"),
+  mapWorkshopFloorResult: document.querySelector("#mapWorkshopFloorResult"),
+  mapDongdongPartialReveal: document.querySelector("#mapDongdongPartialReveal"),
+  journeyDirector: document.querySelector("#journeyDirector"),
+  journeyChapters: document.querySelector("#journeyChapters"),
+  journeyXingya: document.querySelector("#journeyXingya"),
+  journeyGoal: document.querySelector("#journeyGoal"),
+  journeyPhase: document.querySelector("#journeyPhase"),
+  journeyPreviousStep: document.querySelector("#journeyPreviousStep"),
+  journeyPreviousMark: document.querySelector("#journeyPreviousMark"),
+  journeyPreviousLabel: document.querySelector("#journeyPreviousLabel"),
+  journeyPrevious: document.querySelector("#journeyPrevious"),
+  journeyKicker: document.querySelector("#journeyKicker"),
+  journeyTitle: document.querySelector("#journeyTitle"),
+  journeyLearning: document.querySelector("#journeyLearning"),
+  journeyNext: document.querySelector("#journeyNext"),
   gardenRestMarker: document.querySelector("#gardenRestMarker"),
   chapter4Panel: document.querySelector("#chapter4Panel"),
   chapter4Scene: document.querySelector("#chapter4Scene"),
@@ -1790,6 +2331,8 @@ const els = {
   chapter4SoundSource: document.querySelector("#chapter4SoundSource"),
   chapter4Bubbles: document.querySelector("#chapter4Bubbles"),
   chapter4Foundation: document.querySelector("#chapter4Foundation"),
+  chapter4EchoRoute: document.querySelector("#chapter4EchoRoute"),
+  chapter4DongdongPartial: document.querySelector("#chapter4DongdongPartial"),
   chapter4XingyaImage: document.querySelector("#chapter4XingyaImage"),
   chapter4Speech: document.querySelector("#chapter4Speech"),
   chapter4SpeechKicker: document.querySelector("#chapter4SpeechKicker"),
@@ -1882,8 +2425,27 @@ const els = {
   resultModal: document.querySelector("#resultModal"),
   resultText: document.querySelector("#resultText"),
   modalNext: document.querySelector("#modalNext"),
+  milestoneSettlement: document.querySelector("#milestoneSettlement"),
+  milestoneSettlementTitle: document.querySelector("#milestoneSettlementTitle"),
+  milestoneSettlementOutcome: document.querySelector("#milestoneSettlementOutcome"),
+  milestoneSettlementNext: document.querySelector("#milestoneSettlementNext"),
+  parentChallenge: document.querySelector("#parentChallenge"),
+  parentChallengeQuestion: document.querySelector("#parentChallengeQuestion"),
+  parentChallengeChoices: document.querySelector("#parentChallengeChoices"),
+  parentChallengeProgress: document.querySelector("#parentChallengeProgress"),
+  parentChallengeStatus: document.querySelector("#parentChallengeStatus"),
+  parentChallengeCancel: document.querySelector("#parentChallengeCancel"),
   parentModal: document.querySelector("#parentModal"),
   parentClose: document.querySelector("#parentClose"),
+  parentTabList: document.querySelector("#parentTabList"),
+  parentNextTask: document.querySelector("#parentNextTask"),
+  parentNextFocus: document.querySelector("#parentNextFocus"),
+  parentChapterOverview: document.querySelector("#parentChapterOverview"),
+  parentStoryCount: document.querySelector("#parentStoryCount"),
+  parentStoryState: document.querySelector("#parentStoryState"),
+  parentStoryList: document.querySelector("#parentStoryList"),
+  parentFreePianoButton: document.querySelector("#parentFreePianoButton"),
+  parentFreePianoState: document.querySelector("#parentFreePianoState"),
   parentProgressText: document.querySelector("#parentProgressText"),
   parentStaffState: document.querySelector("#parentStaffState"),
   parentInputMode: document.querySelector("#parentInputMode"),
@@ -1901,7 +2463,14 @@ const els = {
   parentMotionToggle: document.querySelector("#parentMotionToggle"),
   parentMotionState: document.querySelector("#parentMotionState"),
   parentMicButton: document.querySelector("#parentMicButton"),
-  parentMidiButton: document.querySelector("#parentMidiButton")
+  parentMidiButton: document.querySelector("#parentMidiButton"),
+  parentDataResetButton: document.querySelector("#parentDataResetButton"),
+  parentDataResetConfirm: document.querySelector("#parentDataResetConfirm"),
+  parentDataResetCancel: document.querySelector("#parentDataResetCancel"),
+  parentDataResetConfirmButton: document.querySelector("#parentDataResetConfirmButton"),
+  freePianoPanel: document.querySelector("#freePianoPanel"),
+  freePianoInput: document.querySelector("#freePianoInput"),
+  freePianoHeard: document.querySelector("#freePianoHeard")
 };
 
 Object.assign(els, {
@@ -1913,6 +2482,7 @@ Object.assign(els, {
   staffJumpGuidePath: document.querySelector("#staffJumpGuidePath"),
   staffJumpGuideShadow: document.querySelector("#staffJumpGuideShadow"),
   staffJumpFootprints: document.querySelector("#staffJumpFootprints"),
+  staffFinish: document.querySelector(".staff-finish"),
   staffVisualCue: document.querySelector("#staffVisualCue"),
   staffSteps: document.querySelector("#staffSteps"),
   staffDinoWrap: document.querySelector("#staffDinoWrap"),
@@ -1981,8 +2551,7 @@ function shouldSuppressListeningObjectIdentity(level = activeLevel()) {
 
 function friendlyStaffHint(step) {
   const hint = step?.staffHint || "谱面";
-  if (hint === "下加一线") return "下方小线";
-  if (hint === "谱线下面") return "线下面";
+  if (hint === "谱线下面" || hint === "线下面") return "下加一间";
   return hint;
 }
 
@@ -2172,6 +2741,11 @@ function currentResponseRecordText() {
     const stored = state.chapter4.lessonEvidence.LP02 || state.chapter4.lp02Attempts.at(-1);
     const summary = active || stored;
     return summary ? `低音 C 找家 · 路线 ${summary.firstInputRoute || summary.inputRoute || "未记录"} · 不限时` : "本轮未按键 · 只记录不限时";
+  }
+  if (chapter4Level === "LP04") {
+    const progress = chapter4Lp04Progress();
+    const done = [progress.echoEReached, progress.echoDReached, progress.echoCReached].filter(Boolean).length;
+    return `下降回声 E-D-C ${done}/3 · 不限时`;
   }
   const listeningLevel = currentListeningParentLevel();
   if (listeningLevel === "LS08") {
@@ -2424,11 +2998,14 @@ function staffSuccessStoryFor(target, targetStep, nextStep) {
 
 function staffWrongStoryFor(target, targetStep, heard) {
   const targetId = noteIdentity(target, targetStep);
+  const isReducedCueCheck = state.staffRunMode === "check";
   if (isReservedNote(heard)) {
     return {
       title: "后面学",
       subtitle: `先跳 ${targetId.letter}`,
-      feedback: `${heard.name}后面 · ${targetId.letter} · ${targetId.staffHint} · ${targetId.keyShort}`,
+      feedback: isReducedCueCheck
+        ? `${heard.name}后面 · ${targetId.letter} · ${targetId.staffHint}`
+        : `${heard.name}后面 · ${targetId.letter} · ${targetId.staffHint} · ${targetId.keyShort}`,
       tip: "看亮垫"
     };
   }
@@ -2436,7 +3013,9 @@ function staffWrongStoryFor(target, targetStep, heard) {
   return {
     title: "看落点",
     subtitle: `亮垫 ${targetId.letter}`,
-    feedback: `${heardText}${targetId.letter} · ${targetId.staffHint} · ${targetId.keyShort}`,
+    feedback: isReducedCueCheck
+      ? `${heardText}${targetId.letter} · ${targetId.staffHint}`
+      : `${heardText}${targetId.letter} · ${targetId.staffHint} · ${targetId.keyShort}`,
     tip: "看落点"
   };
 }
@@ -2904,6 +3483,7 @@ function currentChapter4ParentLevel() {
   const active = currentChapter4Action();
   if (active?.targetId) return active.targetId;
   if (state.screen !== "map") return null;
+  if (hasFormalLp04EntranceEvidence()) return "LP04";
   if (chapter4HasPendingLp01Review()) return "LP01";
   if (state.chapter4.resume?.nextTargetId === "LP03" || state.chapter4.lessonEvidence.LP03?.completedAt || state.chapter4.lp03Attempts.length || chapter4Lp03Progress().routeEvents.length) return "LP03";
   if (state.chapter4.resume?.nextTargetId === "LP02" || state.chapter4.lessonEvidence.LP02?.completedAt || state.chapter4.lp02Attempts.length) return "LP02";
@@ -2911,10 +3491,38 @@ function currentChapter4ParentLevel() {
   return null;
 }
 
+function isLp04ReadyAfterFoundationPresentation() {
+  const progress = chapter4Lp04Progress();
+  const completedSegments = [progress.echoEReached, progress.echoDReached, progress.echoCReached].filter(Boolean).length;
+  const activeLp04 = state.activeSession?.status === "active" && state.activeSession.bundleId === chapter4Config.lp04.bundleId;
+  const resumedLp04 = state.chapter4.resume?.nextTargetId === "LP04";
+  const hasLp04RouteEvidence = Boolean(
+    state.chapter4.lessonEvidence.LP04 ||
+    state.chapter4.lp04Attempts.length ||
+    progress.routeEvents?.length
+  );
+  return hasFormalLp04EntranceEvidence() && completedSegments === 0 && !progress.played && !activeLp04 && !resumedLp04 && !hasLp04RouteEvidence;
+}
+
 function currentEvidenceState() {
   const chapter4Level = currentChapter4ParentLevel();
   if (chapter4Level) {
     const stored = state.learningStats.levels[chapter4Level] || {};
+    if (chapter4Level === "LP04") {
+      const progress = chapter4Lp04Progress();
+      const partial = state.chapter4.lessonEvidence.LP04 || state.chapter4.lp04Attempts.at(-1) || null;
+      return {
+        played: Boolean(partial?.played || progress.played),
+        stable: false,
+        retained: false,
+        todayNeedsPractice: Boolean(progress.needsPractice || stored.todayNeedsPractice === true && stored.todayNeedsPracticeDate === localDateKeyAt()),
+        lastWrongCount: Number(stored.lastWrongCount) || 0,
+        mini: false,
+        chapter4: true,
+        chapter4Level,
+        partial
+      };
+    }
     const skillKey = evidenceSkillKey("level", chapter4Level);
     const partial = chapter4Level === "LP01" ? state.chapter4.lessonEvidence.LP01 : null;
     return {
@@ -3013,6 +3621,29 @@ function currentMasterySummary() {
       detail: evidence.played
         ? "本节记录低音 C、D、E 路线与阶段观察，以后会在更少提示和隔次复习中再确认。"
         : "让每一块地基在声音结束后安放好。"
+    };
+  }
+  if (evidence.chapter4Level === "LP04") {
+    const progress = chapter4Lp04Progress();
+    const done = [progress.echoEReached, progress.echoDReached, progress.echoCReached].filter(Boolean).length;
+    const needsPractice = Boolean(evidence.todayNeedsPractice);
+    if (isLp04ReadyAfterFoundationPresentation()) {
+      return {
+        ...evidence,
+        stable: false,
+        retained: false,
+        status: "三块地基已经接好",
+        detail: "三块低音地基已经安放、接好，所以现在可以听 E-D-C 的向下回声。"
+      };
+    }
+    return {
+      ...evidence,
+      stable: false,
+      retained: false,
+      status: needsPractice ? "今天需要提示" : (evidence.played ? "跟着下降回声走过" : "准备跟着下降回声走"),
+      detail: needsPractice
+        ? `今天需要提示；E-D-C 已走过 ${done}/3。`
+        : (evidence.played ? `跟着下降回声走过；E-D-C 已走过 ${done}/3。` : `E-D-C 目前 ${done}/3。`)
     };
   }
   if (state.screen === "garden" && !evidence.listening) {
@@ -3213,6 +3844,20 @@ function currentLearningSummary() {
       detail: `低音地基 ${done}/3；${routeDetail}，${currentDetail}。这只是低音 C、D、E 的当前路线，还需要以后在更少提示和隔次复习中确认。`
     };
   }
+  if (chapter4Level === "LP04") {
+    const progress = chapter4Lp04Progress();
+    const done = [progress.echoEReached, progress.echoDReached, progress.echoCReached].filter(Boolean).length;
+    if (isLp04ReadyAfterFoundationPresentation()) {
+      return {
+        focus: chapter4Config.lp04.parentFocus,
+        detail: "三块低音地基已经安放、接好，所以现在可以听 E-D-C 的向下回声。"
+      };
+    }
+    return {
+      focus: chapter4Config.lp04.parentFocus,
+      detail: `${progress.needsPractice ? "今天需要提示" : "跟着下降回声走"}；E-D-C 已走过 ${done}/3。`
+    };
+  }
   if (usesLs08ParentEvidence()) {
     const active = currentLs08Action()?.listeningAttempt;
     const resume = state.chapter3.resume?.nextTargetId === "LS08" ? state.chapter3.resume.ls08Attempt : null;
@@ -3297,13 +3942,13 @@ function currentLearningSummary() {
     if (hasVerifiedStableStaff(stored)) {
       return {
         focus: "星桥 C-G 谱位 · 已稳定",
-        detail: "Do/Re/Mi/Fa/Sol：谱位、唱名、键位已完成少提示复读。"
+        detail: "C-D-E-F-G：谱位、音名、键位已完成少提示复读。"
       };
     }
     if (state.practiceAttempt?.runMode === "check") {
       return {
         focus: "星桥 C-G 谱位 · 少提示复读",
-        detail: "看谱位和唱名自己找 C-D-E-F-G，不亮目标键。"
+        detail: "看谱位和音名自己找 C-D-E-F-G，不亮目标键。"
       };
     }
     if (state.staffComplete || stored?.completions > 0) {
@@ -3351,11 +3996,50 @@ function staffDinoTipForStep(step) {
   return "跳亮垫";
 }
 
+function renderFreePianoScreen() {
+  if (els.mainTitle) els.mainTitle.textContent = "自由琴键";
+  if (els.levelMap) els.levelMap.innerHTML = "";
+  if (els.levelBadge) els.levelBadge.textContent = "♪";
+  if (els.freePianoInput) {
+    els.freePianoInput.textContent = freePianoInputLabel(state.freePianoLastSource);
+  }
+  if (els.freePianoHeard) {
+    const identity = freePianoIdentityForMidi(state.freePianoLastMidi);
+    els.freePianoHeard.textContent = identity ? `听到：${identity.name}` : "听到：-";
+  }
+  if (els.keyboardPanel) els.keyboardPanel.setAttribute("aria-label", "自由琴键钢琴");
+  renderFreePianoKeyboard();
+}
+
+let lastRenderedShellScreen = null;
+let mapShellScrollResetRevision = 0;
+
+function resetMapShellScrollOnEntry() {
+  const mapShell = els.mapShell;
+  if (!mapShell) return;
+  const revision = ++mapShellScrollResetRevision;
+  const reset = () => {
+    if (revision !== mapShellScrollResetRevision || state.screen !== "map" || mapShell.hidden) return;
+    mapShell.scrollLeft = 0;
+    mapShell.scrollTop = 0;
+  };
+  reset();
+  requestAnimationFrame(() => {
+    reset();
+    requestAnimationFrame(reset);
+  });
+}
+
 function render() {
   renderShellMode();
   if (state.screen === "map") {
     renderMapScreen();
     refreshParentPanelIfOpen();
+    return;
+  }
+
+  if (state.screen === "free-piano") {
+    renderFreePianoScreen();
     return;
   }
 
@@ -3388,14 +4072,17 @@ function render() {
   const rawPartColor = part?.color || target.color;
   const partImage = imageForPart(visualPart);
   const levelComplete = state.stepIndex >= level.parts.length;
+  setM02CompletionInstructionalSurface(level.id === "M02" && levelComplete);
   const isLevelCheckRun = isLevelReducedCueRun(level);
   const isListening = isListeningLevel(level);
   const revealListeningTarget = shouldRevealListeningTarget(level);
   const hideListeningIdentity = shouldHideListeningIdentity(level);
   const suppressListeningObjectIdentity = shouldSuppressListeningObjectIdentity(level);
+  const suppressM07CheckObjectIdentity = isLevelCheckRun && level.id === "M07";
+  const suppressCurrentObjectIdentity = suppressListeningObjectIdentity || suppressM07CheckObjectIdentity;
   const partColor = hideListeningIdentity ? LISTENING_IDENTITY_NEUTRAL : rawPartColor;
-  const objectPartColor = suppressListeningObjectIdentity ? LISTENING_IDENTITY_NEUTRAL : partColor;
-  const displayStepLabel = suppressListeningObjectIdentity ? "听声音找琴键" : stepLabel;
+  const objectPartColor = suppressCurrentObjectIdentity ? LISTENING_IDENTITY_NEUTRAL : partColor;
+  const displayStepLabel = suppressListeningObjectIdentity ? "听声音找琴键" : suppressM07CheckObjectIdentity ? "接亮这颗星" : stepLabel;
   const showLevelTarget = !levelComplete && (!isLevelCheckRun || state.lastInputResult === "wrong");
   const targetIndex = Math.max(0, notes.findIndex((note) => note.midi === target.midi));
   const targetCenterNumber = ((targetIndex + 0.5) / notes.length) * 100;
@@ -3466,14 +4153,14 @@ function render() {
   els.hangingPart.style.setProperty("--part-color-soft", alpha(objectPartColor, 0.18));
   els.hangingPart.style.setProperty("--part-image", imageCssUrl(partImage));
   els.hangingPart.dataset.shape = visualPart?.shape || part?.shape || "brick";
-  if (suppressListeningObjectIdentity) {
+  if (suppressCurrentObjectIdentity) {
     delete els.hangingPart.dataset.noteName;
     delete els.hangingPart.dataset.solfege;
   } else {
     els.hangingPart.dataset.noteName = visualPartNote.name;
     els.hangingPart.dataset.solfege = visualPartNote.solfege;
   }
-  els.hangingPart.dataset.identityHidden = suppressListeningObjectIdentity ? "true" : "false";
+  els.hangingPart.dataset.identityHidden = suppressCurrentObjectIdentity ? "true" : "false";
   if (level.id === "M08") {
     els.hangingPart.dataset.blueprintStep = String(Math.min(level.parts.length, state.stepIndex + 1));
     els.hangingPart.dataset.roofMode = roofMode;
@@ -3484,11 +4171,11 @@ function render() {
   els.hangingPart.classList.add("drop-hint");
   if (els.hangingPartArt) els.hangingPartArt.style.setProperty("--part-image", imageCssUrl(partImage));
   if (els.hangingPartBadge) {
-    els.hangingPartBadge.hidden = suppressListeningObjectIdentity;
-    els.hangingPartBadge.innerHTML = suppressListeningObjectIdentity
+    els.hangingPartBadge.hidden = suppressCurrentObjectIdentity;
+    els.hangingPartBadge.innerHTML = suppressCurrentObjectIdentity
       ? ""
       : `<b>${visualPartNote.name}</b>`;
-    els.hangingPartBadge.style.setProperty("--note-color", suppressListeningObjectIdentity ? LISTENING_IDENTITY_NEUTRAL : visualPartNote.color);
+    els.hangingPartBadge.style.setProperty("--note-color", suppressCurrentObjectIdentity ? LISTENING_IDENTITY_NEUTRAL : visualPartNote.color);
   }
   if (els.hangingPartLabel) els.hangingPartLabel.textContent = partObjectLabel(visualPart, visualPartNote);
   if (els.moonYard) {
@@ -3642,7 +4329,7 @@ function render() {
     els.coachBubble.style.setProperty("--target-soft", alpha(partColor, 0.16));
   }
   if (els.coachDino) {
-    els.coachDino.src = isListening ? dinoImages.listen : dinoImages.point;
+    setCompanionPose(isListening ? "listen" : "point");
     els.coachDino.style.setProperty("--red", partColor);
   }
   els.dinoName.textContent = target.dino || "星芽";
@@ -3679,21 +4366,25 @@ function render() {
 }
 
 function renderShellMode() {
+  const enteringMap = state.screen === "map" && lastRenderedShellScreen !== "map";
   document.body.classList.toggle("screen-map", state.screen === "map");
   document.body.classList.toggle("screen-play", state.screen === "play");
   document.body.classList.toggle("screen-staff", state.screen === "staff");
   document.body.classList.toggle("screen-garden", state.screen === "garden");
   document.body.classList.toggle("screen-chapter4", state.screen === "chapter4");
+  document.body.classList.toggle("screen-free-piano", state.screen === "free-piano");
   if (state.auditMode) {
     document.body.dataset.audit = state.auditMode;
   } else {
     document.body.removeAttribute("data-audit");
   }
   if (els.mapShell) els.mapShell.hidden = state.screen !== "map";
+  if (enteringMap) resetMapShellScrollOnEntry();
   if (els.appShell) {
     els.appShell.hidden = state.screen === "map";
     els.appShell.classList.toggle("staff-mode", state.screen === "staff");
     els.appShell.classList.toggle("chapter4-mode", state.screen === "chapter4");
+    els.appShell.classList.toggle("free-piano-mode", state.screen === "free-piano");
     if (state.screen !== "garden") delete els.appShell.dataset.chapter3;
     if (state.screen !== "chapter4") {
       delete els.appShell.dataset.chapter4Lesson;
@@ -3709,21 +4400,570 @@ function renderShellMode() {
   if (els.staffPanel) els.staffPanel.hidden = state.screen !== "staff";
   if (els.gardenPanel) els.gardenPanel.hidden = state.screen !== "garden";
   if (els.chapter4Panel) els.chapter4Panel.hidden = state.screen !== "chapter4";
+  if (els.freePianoPanel) els.freePianoPanel.hidden = state.screen !== "free-piano";
   document.querySelector(".build-panel")?.toggleAttribute("hidden", state.screen !== "play");
   document.querySelector(".practice-panel")?.toggleAttribute("hidden", state.screen !== "play");
+  if (els.keyboardPanel) {
+    els.keyboardPanel.setAttribute("aria-label", state.screen === "free-piano" ? "自由琴键钢琴" : "屏幕钢琴");
+  }
+  if (els.mapReturn) {
+    const freePiano = state.screen === "free-piano";
+    els.mapReturn.setAttribute("aria-label", freePiano ? "结束自由琴键并回到课程主页" : "回到音阶岛");
+    els.mapReturn.title = freePiano ? "回到课程主页" : "回到音阶岛";
+  }
   if (els.staffModeButton) {
     els.staffModeButton.textContent = state.screen === "staff" ? "月球基地" : "小恐龙跳";
+  }
+  lastRenderedShellScreen = state.screen;
+}
+
+function childJourneyDirectorMode() {
+  return new URLSearchParams(window.location.search).get("legacyMap") !== "true";
+}
+
+function courseProgressionHistoryIsEligible(session) {
+  return Boolean(
+    session?.status === "ended" &&
+    (session.formalSession !== false || String(session.bundleId || "").startsWith("C1-")) &&
+    session.directMode !== true &&
+    session.debugMode !== true &&
+    session.voluntaryReplay !== true
+  );
+}
+
+function endedSessionsForBundle(bundleId) {
+  return state.sessionRuntime.history.filter((session) =>
+    session?.bundleId === bundleId && courseProgressionHistoryIsEligible(session)
+  );
+}
+
+function completedCourseActionIds(bundleId) {
+  return new Set(endedSessionsForBundle(bundleId).flatMap((session) => Array.isArray(session.completedActions)
+    ? session.completedActions.map((action) => action?.actionId).filter(Boolean)
+    : []));
+}
+
+function sessionBundleCurriculumComplete(bundleId) {
+  const bundle = sessionBundleById.get(bundleId);
+  const ended = endedSessionsForBundle(bundleId);
+  if (!bundle || !ended.length) return false;
+  if (ended.some((session) => !Array.isArray(session.completedActions))) return true;
+  const completed = completedCourseActionIds(bundleId);
+  return bundle.actions.every((action) => completed.has(action.actionId));
+}
+
+function legacyBaseBundleComplete(bundleId) {
+  const bundle = sessionBundleById.get(bundleId);
+  if (!bundle || endedSessionsForBundle(bundleId).length || !bundleId.startsWith("C1-")) return false;
+  const targetIds = [...new Set(bundle.actions.filter((action) => action.kind === "level").map((action) => action.targetId))];
+  return targetIds.length > 0 && targetIds.every((targetId) => state.completed.has(targetId));
+}
+
+function firstIncompleteAction(bundleId) {
+  const bundle = sessionBundleById.get(bundleId);
+  if (!bundle) return null;
+  const completed = completedCourseActionIds(bundleId);
+  return bundle.actions.find((action) => !completed.has(action.actionId)) || bundle.actions[0] || null;
+}
+
+function firstPendingBundleId(bundleIds) {
+  return bundleIds.find((bundleId) => !sessionBundleCurriculumComplete(bundleId) && !legacyBaseBundleComplete(bundleId)) || null;
+}
+
+function journeyChapterIdForBundle(bundleId = "") {
+  const prefix = String(bundleId).slice(0, 2);
+  return childJourneyChapters.some((chapter) => chapter.id === prefix) ? prefix : "C1";
+}
+
+function journeyKindForAction(action) {
+  if (!action) return "none";
+  if (action.kind === "level") return "level";
+  if (action.kind === "staff") return "staff";
+  if (["garden", "garden-listening"].includes(action.kind)) return "garden";
+  if (["chapter4-listening", "chapter4-keyboard"].includes(action.kind)) return "chapter4";
+  return "none";
+}
+
+function journeyActionCopy(action, bundleId) {
+  const fallback = { title: "星芽的下一段旅程", focus: "跟着故事继续认识声音和琴键" };
+  const target = childJourneyTargetCopy[action?.targetId] || fallback;
+  const actionTitle = childJourneyActionTitles[action?.actionId];
+  if (actionTitle) return { title: actionTitle, focus: target.focus };
+  if (action?.targetId === "S01") {
+    if (bundleId === "C2-01") return { title: "先跳三颗谱线星", focus: target.focus };
+    if (bundleId === "C2-03") return { title: "少提示再跳一次星星桥", focus: "自己看谱位 · 读音名 · 找到同名琴键" };
+  }
+  return target;
+}
+
+function nextJourneyLandmark(bundleId, action) {
+  const bundle = sessionBundleById.get(bundleId);
+  const actionIndex = bundle?.actions.findIndex((candidate) => candidate.actionId === action?.actionId) ?? -1;
+  const completed = completedCourseActionIds(bundleId);
+  const nextAction = actionIndex >= 0
+    ? bundle.actions.slice(actionIndex + 1).find((candidate) => !completed.has(candidate.actionId))
+    : null;
+  if (nextAction) return journeyActionCopy(nextAction, bundleId).title;
+  return childJourneyBundleNext[bundleId] || "继续下一段故事";
+}
+
+function journeyGuideForPlan(plan) {
+  const guide = childJourneyChapterGuides[plan.chapterId] || childJourneyChapterGuides.C1;
+  const phaseIndex = Math.max(0, guide.phases.findIndex((phase) => phase.bundles.includes(plan.bundleId)));
+  const phase = guide.phases[phaseIndex] || guide.phases.at(-1);
+  const bundleIndex = childJourneyBundleOrder.indexOf(plan.bundleId);
+  const previousBundleId = bundleIndex > 0 ? childJourneyBundleOrder[bundleIndex - 1] : null;
+  const currentBundle = sessionBundleById.get(plan.bundleId);
+  const completedCurrentActionIds = completedCourseActionIds(plan.bundleId);
+  const latestCompletedCurrentAction = currentBundle?.actions
+    .filter((action) => completedCurrentActionIds.has(action.actionId))
+    .at(-1) || null;
+  const activeActionIsUnfinished = ["active", "resume"].includes(plan.state) &&
+    latestCompletedCurrentAction?.actionId === plan.actionId &&
+    state.sessionRuntime.active?.voluntaryReplay !== true &&
+    !state.sessionRuntime.active?.completedActions?.some((action) => action?.actionId === plan.actionId);
+  const repeatsCompletedCurrentAction = plan.state === "active" &&
+    latestCompletedCurrentAction?.actionId === plan.actionId &&
+    sessionBundleCurriculumComplete(plan.bundleId);
+  let currentActionOutcome = latestCompletedCurrentAction && !activeActionIsUnfinished
+    ? (repeatsCompletedCurrentAction
+      ? (childJourneyBundleOutcomes[plan.bundleId] || "这一段旅程已经完成")
+      : (childJourneyActionOutcomes[latestCompletedCurrentAction.actionId] || `${journeyActionCopy(latestCompletedCurrentAction, plan.bundleId).title}已经完成`))
+    : null;
+  if (!currentActionOutcome && plan.targetId === "LS02" && (
+    state.chapter3.leaves[0] || state.chapter3.lessonEvidence.LS01?.completedAt
+  )) {
+    currentActionOutcome = childJourneyActionOutcomes["LS01-visible"];
+  }
+  const previousBundleIsComplete = Boolean(previousBundleId && (
+    sessionBundleCurriculumComplete(previousBundleId) || legacyBaseBundleComplete(previousBundleId)
+  ));
+  const previousLandmark = plan.state === "complete"
+    ? (childJourneyBundleOutcomes[plan.bundleId] || "这一段旅程已经完成")
+    : (currentActionOutcome || (previousBundleIsComplete
+      ? (childJourneyBundleOutcomes[previousBundleId] || "上一站已经完成")
+      : guide.start));
+  const hasCompletedLandmark = plan.state === "complete" || Boolean(currentActionOutcome) || previousBundleIsComplete;
+  return {
+    goal: guide.goal,
+    phaseLabel: plan.state === "complete"
+      ? `${guide.phases.length} 个阶段完成`
+      : `第 ${phaseIndex + 1}/${guide.phases.length} 阶段 · ${phase.title}`,
+    previousLandmark,
+    previousState: hasCompletedLandmark ? "done" : "start",
+    previousLabel: hasCompletedLandmark ? "刚完成" : "故事起点",
+    nextLandmark: plan.state === "complete" && plan.chapterId !== "C4" ? "第一段学习旅程完成" : plan.nextLandmark
+  };
+}
+
+function chapter4Lp04Complete() {
+  const progress = chapter4Lp04Progress();
+  return Boolean(
+    progress.echoEReached &&
+    progress.echoDReached &&
+    progress.echoCReached &&
+    progress.dongdongPartialReveal &&
+    progress.played &&
+    Number.isFinite(isoTimeMs(progress.completedAt))
+  );
+}
+
+function chapter4JourneyDescriptor() {
+  if (!state.chapter4.lessonEvidence.LP02?.completedAt) {
+    const resume = state.chapter4.resume?.nextTargetId === "LP02";
+    return {
+      bundleId: chapter4Config.bundleId,
+      action: sessionBundleById.get(chapter4Config.bundleId).actions.find((action) => action.targetId === (resume ? "LP02" : "LP01")),
+      state: resume ? "resume" : "ready",
+      resumeOfSessionId: resume ? state.chapter4.resume?.endedSessionId || null : null
+    };
+  }
+  if (!hasFormalLp03EntranceEvidence()) return null;
+  if (!hasFormalLp04EntranceEvidence()) {
+    const action = chapter4Config.lp03.steps
+      .filter((step) => lp03RemainingStepIds().includes(step.id))
+      .map((step) => sessionBundleById.get(chapter4Config.lp03.bundleId).actions.find((candidate) => candidate.actionId === step.actionId))
+      .find(Boolean);
+    return action ? {
+      bundleId: chapter4Config.lp03.bundleId,
+      action,
+      state: state.chapter4.resume?.nextTargetId === "LP03" ? "resume" : "ready",
+      resumeOfSessionId: state.chapter4.resume?.nextTargetId === "LP03" ? state.chapter4.resume?.endedSessionId || null : null
+    } : null;
+  }
+  if (chapter4Lp04Complete()) return { complete: true };
+  const remaining = chapter4Config.lp04.steps.find((step) => !chapter4Lp04Progress()?.[step.echoKey]);
+  const action = sessionBundleById.get(chapter4Config.lp04.bundleId).actions.find((candidate) => candidate.actionId === remaining?.actionId);
+  return action ? {
+    bundleId: chapter4Config.lp04.bundleId,
+    action,
+    state: state.chapter4.resume?.nextTargetId === "LP04" ? "resume" : "ready",
+    resumeOfSessionId: state.chapter4.resume?.nextTargetId === "LP04" ? state.chapter4.resume?.endedSessionId || null : null
+  } : null;
+}
+
+function readyJourneyState(bundleId) {
+  if (endedSessionsForBundle(bundleId).length && !sessionBundleCurriculumComplete(bundleId)) return "resume";
+  const index = childJourneyBundleOrder.indexOf(bundleId);
+  const previousBundleId = index > 0 ? childJourneyBundleOrder[index - 1] : null;
+  return state.sessionRuntime.lastRest?.bundleId === previousBundleId ? "rest" : "ready";
+}
+
+function journeyPlanForAction({ bundleId, action, journeyState, sessionId = null, resumeOfSessionId = null }) {
+  const chapterId = journeyChapterIdForBundle(bundleId);
+  const chapter = childJourneyChapters.find((item) => item.id === chapterId) || childJourneyChapters[0];
+  const copy = journeyActionCopy(action, bundleId);
+  const roleIsReview = action?.role === "opening-review";
+  return {
+    chapterId,
+    worldId: chapter.title,
+    state: journeyState,
+    bundleId,
+    actionId: action?.actionId || null,
+    targetId: action?.targetId || null,
+    primaryKind: journeyKindForAction(action),
+    sessionId,
+    resumeOfSessionId,
+    primaryStoryLabel: copy.title,
+    learningFocus: copy.focus,
+    primaryActionLabel: ["active", "resume"].includes(journeyState) ? `继续${copy.title}` : copy.title,
+    nextLandmark: roleIsReview ? `找稳后继续：${nextJourneyLandmark(bundleId, action)}` : nextJourneyLandmark(bundleId, action),
+    roleIsReview,
+    actionable: true
+  };
+}
+
+function childJourneyPlan() {
+  const active = state.activeSession?.status === "active" ? state.activeSession : null;
+  if (active) {
+    return journeyPlanForAction({
+      bundleId: active.bundleId,
+      action: currentSessionAction(active),
+      journeyState: "active",
+      sessionId: active.sessionId,
+      resumeOfSessionId: active.resumeOfSessionId || null
+    });
+  }
+
+  const pendingBase = firstPendingBundleId(childJourneyBundleOrder.filter((bundleId) => bundleId.startsWith("C1-")));
+  if (pendingBase) {
+    return journeyPlanForAction({
+      bundleId: pendingBase,
+      action: firstIncompleteAction(pendingBase),
+      journeyState: readyJourneyState(pendingBase),
+      resumeOfSessionId: endedSessionsForBundle(pendingBase).at(-1)?.sessionId || null
+    });
+  }
+
+  const gardenEntranceReached = hasReachedGardenEntrance();
+  const pendingStaff = gardenEntranceReached ? null : firstPendingBundleId(["C2-01", "C2-02", "C2-03"]);
+  if (pendingStaff) {
+    return journeyPlanForAction({
+      bundleId: pendingStaff,
+      action: firstIncompleteAction(pendingStaff),
+      journeyState: readyJourneyState(pendingStaff),
+      resumeOfSessionId: endedSessionsForBundle(pendingStaff).at(-1)?.sessionId || null
+    });
+  }
+
+  if (!gardenEntranceReached) {
+    return {
+      chapterId: "C2",
+      worldId: "星星桥",
+      state: "unavailable",
+      bundleId: null,
+      targetId: null,
+      primaryKind: "none",
+      sessionId: null,
+      resumeOfSessionId: null,
+      primaryStoryLabel: "星星桥先歇一歇",
+      learningFocus: "课程记录正在重新连接",
+      primaryActionLabel: "",
+      nextLandmark: "完成星星桥后进入呼吸花园",
+      actionable: false
+    };
+  }
+
+  if (!hasFormalChapter4EntranceEvidence()) {
+    const gardenPlan = nextGardenSessionPlan();
+    if (gardenPlan) {
+      const bundle = sessionBundleById.get(gardenPlan.bundleId);
+      const action = bundle?.actions.find((candidate) => gardenPlan.actionIds.includes(candidate.actionId)) || null;
+      const hasResume = Boolean(gardenPlan.resumeOfSessionId || state.chapter3.resume?.nextTargetId);
+      return journeyPlanForAction({
+        bundleId: gardenPlan.bundleId,
+        action,
+        journeyState: hasResume ? "resume" : readyJourneyState(gardenPlan.bundleId),
+        resumeOfSessionId: gardenPlan.resumeOfSessionId || null
+      });
+    }
+    return {
+      chapterId: "C3",
+      worldId: "呼吸花园",
+      state: "unavailable",
+      bundleId: null,
+      targetId: null,
+      primaryKind: "none",
+      sessionId: null,
+      resumeOfSessionId: null,
+      primaryStoryLabel: "花园在这里休息",
+      learningFocus: "已经长出的声音线索都会保留",
+      primaryActionLabel: "",
+      nextLandmark: "地底入口准备好后继续",
+      actionable: false
+    };
+  }
+
+  const chapter4 = chapter4JourneyDescriptor();
+  if (chapter4?.complete) {
+    return {
+      chapterId: "C4",
+      worldId: "地下回声洞",
+      state: "complete",
+      bundleId: "C4-03",
+      targetId: "LP04",
+      primaryKind: "none",
+      sessionId: null,
+      resumeOfSessionId: null,
+      primaryStoryLabel: "洞底传来了回应",
+      learningFocus: "听过高低 C，也沿着低音 E-D-C 把回声送到了洞底",
+      primaryActionLabel: "",
+      nextLandmark: "下一段：跟着脚印继续找声音的主人",
+      actionable: false
+    };
+  }
+  if (chapter4?.action) {
+    return journeyPlanForAction({
+      bundleId: chapter4.bundleId,
+      action: chapter4.action,
+      journeyState: chapter4.state,
+      resumeOfSessionId: chapter4.resumeOfSessionId
+    });
+  }
+  return {
+    chapterId: "C4",
+    worldId: "地下回声洞",
+    state: "unavailable",
+    bundleId: null,
+    targetId: null,
+    primaryKind: "none",
+    sessionId: null,
+    resumeOfSessionId: null,
+    primaryStoryLabel: "回声洞先歇一歇",
+    learningFocus: "已经完成的声音路线都会保留",
+    primaryActionLabel: "",
+    nextLandmark: "下一段地底故事准备好后继续",
+    actionable: false
+  };
+}
+
+function journeyKickerForPlan(plan) {
+  if (plan.state === "active") return `${plan.roleIsReview ? "先找回" : "继续"} · ${plan.worldId}`;
+  if (plan.state === "resume") return `接着来 · ${plan.worldId}`;
+  if (plan.state === "rest") return `下一站 · ${plan.worldId}`;
+  if (plan.state === "complete") return "第一段旅程完成";
+  if (plan.state === "unavailable") return `休息点 · ${plan.worldId}`;
+  return `现在 · ${plan.worldId}`;
+}
+
+function journeyLaunchCopy(plan) {
+  return plan.primaryActionLabel || plan.primaryStoryLabel;
+}
+
+function journeyVisualCue(plan) {
+  const actionCue = childJourneyActionCues[plan?.actionId];
+  if (actionCue) return actionCue;
+  const cues = {
+    M01: "C · 两黑左",
+    M02: "C D E",
+    M03: "D C",
+    M04: "C D E",
+    M05: "E D C",
+    M06: "C G C",
+    M07: "C D E D C",
+    M08: "C D E F G",
+    FG01: "F",
+    FG02: "G",
+    FG03: "E F G",
+    FG04: "F G",
+    S01: "C D E F G",
+    LS01: "C",
+    LS02: "D",
+    LS03: "E",
+    LS04: "C D",
+    LS05: "C D E",
+    LS06: "C G",
+    LS07: "E F",
+    LS08: "C D E",
+    LP01: "C C",
+    LP02: "C",
+    LP03: "C D E",
+    LP04: "E D C"
+  };
+  return cues[plan?.targetId] || "";
+}
+
+function journeyObjectImage(plan) {
+  const objects = {
+    M01: partImages.floor,
+    M02: partImages.light,
+    M03: partImages.wheel,
+    M04: partImages.bridge,
+    M05: partImages.light,
+    M06: partImages.wall,
+    M07: partImages.star,
+    M08: partImages.roof,
+    FG01: partImages.bridge,
+    FG02: partImages.wall,
+    FG03: partImages.star,
+    FG04: partImages.bridge,
+    S01: partImages.star,
+    LS01: partImages.light,
+    LS02: partImages.light,
+    LS03: partImages.light,
+    LP01: partImages.brick,
+    LP02: partImages.brick,
+    LP03: partImages.brick,
+    LP04: partImages.brick
+  };
+  return objects[plan?.targetId] || partImages.star;
+}
+
+function journeyLocatorCue(plan) {
+  if (plan?.targetId === "M01") return "two-black-left-c";
+  if (plan?.targetId === "M02") return "cde";
+  return "";
+}
+
+function appendJourneyLocatorCue(node, plan) {
+  const cue = journeyLocatorCue(plan);
+  if (!cue) return;
+  const glyph = document.createElement("span");
+  glyph.className = `node-learning-glyph cue-${cue}`;
+  glyph.setAttribute("aria-hidden", "true");
+  if (cue === "two-black-left-c") {
+    glyph.innerHTML = '<i class="glyph-white">C</i><i class="glyph-black black-one"></i><i class="glyph-black black-two"></i>';
+  } else {
+    glyph.innerHTML = '<i class="glyph-white">C</i><i class="glyph-white">D</i><i class="glyph-white">E</i>';
+  }
+  node.classList.add("journey-has-glyph");
+  node.appendChild(glyph);
+}
+
+function completedJourneyChapterIds() {
+  const c1Done = !firstPendingBundleId(childJourneyBundleOrder.filter((bundleId) => bundleId.startsWith("C1-")));
+  const c2Done = c1Done && hasReachedGardenEntrance();
+  const c3Done = c2Done && hasFormalChapter4EntranceEvidence();
+  const c4Done = c3Done && chapter4Lp04Complete();
+  return new Set([
+    ...(c1Done ? ["C1"] : []),
+    ...(c2Done ? ["C2"] : []),
+    ...(c3Done ? ["C3"] : []),
+    ...(c4Done ? ["C4"] : [])
+  ]);
+}
+
+function renderChildJourneyDirector(plan, enabled) {
+  if (!els.journeyDirector || !els.mapShell) return;
+  els.mapShell.dataset.courseDirector = String(enabled);
+  els.journeyDirector.hidden = !enabled;
+  if (!enabled || !plan) return;
+  const guide = journeyGuideForPlan(plan);
+  els.mapShell.dataset.journeyState = plan.state;
+  els.mapShell.dataset.journeyChapter = plan.chapterId;
+  els.mapShell.dataset.journeyBundle = plan.bundleId || "none";
+  els.mapShell.dataset.journeyTarget = plan.targetId || "none";
+  const completedChapters = completedJourneyChapterIds();
+  const currentIndex = childJourneyChapters.findIndex((chapter) => chapter.id === plan.chapterId);
+  els.journeyChapters.innerHTML = childJourneyChapters.map((chapter, index) => {
+    const chapterState = completedChapters.has(chapter.id) ? "done" : (index === currentIndex ? "current" : "future");
+    const icon = chapterState === "done" ? "✓" : chapter.icon;
+    return `<span class="journey-chapter" data-state="${chapterState}" role="listitem"><i class="journey-chapter-icon" aria-hidden="true">${icon}</i><strong>${chapter.title}</strong><small>${chapter.short}</small></span>`;
+  }).join("");
+  if (els.journeyGoal) els.journeyGoal.textContent = guide.goal;
+  if (els.journeyPhase) els.journeyPhase.textContent = guide.phaseLabel;
+  if (els.journeyPreviousStep) els.journeyPreviousStep.dataset.state = guide.previousState;
+  if (els.journeyPreviousMark) els.journeyPreviousMark.textContent = guide.previousState === "done" ? "✓" : "●";
+  if (els.journeyPreviousLabel) els.journeyPreviousLabel.textContent = guide.previousLabel;
+  if (els.journeyPrevious) els.journeyPrevious.textContent = guide.previousLandmark;
+  els.journeyKicker.textContent = journeyKickerForPlan(plan);
+  els.journeyTitle.textContent = plan.primaryStoryLabel;
+  els.journeyLearning.textContent = `本领：${plan.learningFocus}`;
+  els.journeyNext.textContent = guide.nextLandmark;
+  els.journeyXingya.src = ["C3", "C4"].includes(plan.chapterId) ? gardenCharacterAssets.safeOpen : dinoImages.point;
+  if (plan.actionable) els.journeyDirector.removeAttribute("aria-current");
+  else els.journeyDirector.setAttribute("aria-current", plan.state === "complete" ? "page" : "step");
+}
+
+function journeyChapterProgress(plan) {
+  const bundleIds = childJourneyBundleOrder.filter((bundleId) => bundleId.startsWith(`${plan.chapterId}-`));
+  const completedCount = bundleIds.filter((bundleId) => sessionBundleCurriculumComplete(bundleId) || legacyBaseBundleComplete(bundleId)).length;
+  const bundleIndex = bundleIds.indexOf(plan.bundleId);
+  const position = plan.state === "complete"
+    ? bundleIds.length
+    : (bundleIndex >= 0 ? bundleIndex + 1 : Math.min(bundleIds.length, completedCount + 1));
+  const stateLabel = {
+    active: "进行中",
+    resume: "继续",
+    rest: "下一站",
+    ready: "准备",
+    unavailable: "休息",
+    complete: "完成"
+  }[plan.state] || "准备";
+  return {
+    position: Math.max(1, position || 1),
+    total: Math.max(1, bundleIds.length || 1),
+    stateLabel
+  };
+}
+
+function renderChildJourneyMapHeader(plan, enabled) {
+  if (!enabled || !plan) return;
+  const progress = journeyChapterProgress(plan);
+  if (els.mapChapterLabel) els.mapChapterLabel.textContent = plan.worldId;
+  if (els.mapStarCount) {
+    els.mapStarCount.textContent = plan.state === "resume" ? "接着星芽" : (plan.state === "active" ? "正在和星芽一起做" : "跟着星芽");
+    els.mapStarCount.setAttribute(
+      "aria-label",
+      `${plan.worldId}课程进度：共 ${progress.total} 站，现在第 ${progress.position} 站，${progress.stateLabel}`
+    );
   }
 }
 
 function renderMapScreen() {
   if (!els.mapShell) return;
+  const courseDirectorEnabled = childJourneyDirectorMode();
+  const journeyPlan = courseDirectorEnabled ? childJourneyPlan() : null;
+  const c1FloorInstalled = formalBundleCurriculumComplete("C1-01");
+  const mapFocusChapter = ["C1", "C2", "C3", "C4"].includes(journeyPlan?.chapterId) ? journeyPlan.chapterId : "C1";
+  els.mapShell.dataset.mapVisual = "v6";
+  els.mapShell.dataset.mapFocusChapter = mapFocusChapter;
+  els.mapShell.dataset.c1FloorInstalled = String(c1FloorInstalled);
+  if (els.mapFloorResult) els.mapFloorResult.hidden = true;
+  if (els.mapWorkshopFloorResult) els.mapWorkshopFloorResult.hidden = !c1FloorInstalled;
+  renderChildJourneyDirector(journeyPlan, courseDirectorEnabled);
   const gardenReached = hasReachedGardenEntrance();
   const chapter4Entrance = hasFormalChapter4EntranceEvidence();
-  const activeChapter4 = state.activeSession?.status === "active" && [chapter4Config.bundleId, chapter4Config.lp03.bundleId].includes(state.activeSession.bundleId);
+  const lp04Eligible = hasFormalLp04EntranceEvidence();
+  const activeChapter4 = state.activeSession?.status === "active" && [chapter4Config.bundleId, chapter4Config.lp03.bundleId, chapter4Config.lp04.bundleId].includes(state.activeSession.bundleId);
   const activeLp03 = activeChapter4 && state.activeSession?.bundleId === chapter4Config.lp03.bundleId;
+  const activeLp04 = activeChapter4 && state.activeSession?.bundleId === chapter4Config.lp04.bundleId;
   const lp03Available = hasFormalLp03EntranceEvidence();
   const lp03Progress = chapter4Lp03Progress();
+  const lp04Progress = chapter4Lp04Progress();
+  if (els.mapDongdongPartialReveal) {
+    const partialRevealVisible = Boolean(lp04Progress.dongdongPartialReveal);
+    els.mapDongdongPartialReveal.hidden = !partialRevealVisible;
+    els.mapDongdongPartialReveal.dataset.worldState = partialRevealVisible ? "lp04-partial-reveal" : "hidden";
+  }
+  const lp04Complete = Boolean(
+    lp04Progress.echoEReached &&
+    lp04Progress.echoDReached &&
+    lp04Progress.echoCReached &&
+    lp04Progress.dongdongPartialReveal &&
+    lp04Progress.played &&
+    Number.isFinite(isoTimeMs(lp04Progress.completedAt))
+  );
   const baseComplete = levels.every((level) => state.completed.has(level.id));
   const staffReadiness = fgBridgeReadiness();
   const shouldFocusStaff = !gardenReached && state.screen === "map" && baseComplete && !state.staffComplete && staffReadiness.ready;
@@ -3798,7 +5038,12 @@ function renderMapScreen() {
       state.chapter4.resume?.nextTargetId === "LP03" ||
       lp03Progress.played ||
       (lp03Available && !["LP01", "LP02"].includes(action?.targetId));
-    if (lp03MapProgressContext) {
+    if (lp04Eligible) {
+      const done = [lp04Progress.echoEReached, lp04Progress.echoDReached, lp04Progress.echoCReached].filter(Boolean).length;
+      const echoState = lp04Complete ? "休息" : (activeLp04 ? "正在回声" : (state.chapter4.resume?.nextTargetId === "LP04" ? "继续" : "准备"));
+      els.mapStarCount.textContent = `向下回声 ${done}/3 · ${echoState}`;
+      els.mapStarCount.setAttribute("aria-label", `向下回声进度，E-D-C 已完成 ${done}/3，${echoState}`);
+    } else if (lp03MapProgressContext) {
       const done = [lp03Progress.foundationCAwake, lp03Progress.foundationDPlaced, lp03Progress.foundationEPlaced].filter(Boolean).length;
       const routeState = lp03Progress.played ? "休息" : (activeLp03 ? "正在铺" : (state.chapter4.resume?.nextTargetId === "LP03" ? "继续" : "准备"));
       els.mapStarCount.textContent = `三块地基 ${done}/3 · ${routeState}`;
@@ -3814,6 +5059,7 @@ function renderMapScreen() {
       els.mapStarCount.setAttribute("aria-label", `地下回声洞低音 C 找家，${homeState}`);
     }
   }
+  renderChildJourneyMapHeader(journeyPlan, courseDirectorEnabled);
   if (els.gardenRestMarker) {
     els.gardenRestMarker.hidden = !gardenReached;
     const chapter3Done = Boolean(state.chapter3.ls08Completed || state.chapter3.lessonEvidence.LS08?.completedAt);
@@ -3826,19 +5072,38 @@ function renderMapScreen() {
     els.gardenRestMarker.disabled = chapter4Entrance ? (!activeChapter4 && !canStartChapter4) : chapter3Done;
     els.gardenRestMarker.dataset.chapter3State = chapter3Done ? "complete" : ((activeGarden || waitingResume) ? "resume" : "ready");
     els.gardenRestMarker.dataset.chapter4State = chapter4Entrance
-      ? (lp03Progress.played ? "complete" : ((activeChapter4 || state.chapter4.resume) ? "resume" : (lp03Available ? "lp03-entry" : "entry")))
+      ? (lp04Eligible
+        ? (lp04Complete ? "complete" : ((activeLp04 || state.chapter4.resume?.nextTargetId === "LP04") ? "resume" : "ready"))
+        : ((activeChapter4 || state.chapter4.resume) ? "resume" : (lp03Available ? "lp03-entry" : "entry")))
       : "locked";
     els.gardenRestMarker.setAttribute("aria-label", `${markerCopy.strong}，${markerCopy.small}`);
     const markerStrong = els.gardenRestMarker.querySelector("strong");
     const markerSmall = els.gardenRestMarker.querySelector("small");
     if (markerStrong) markerStrong.textContent = markerCopy.strong;
     if (markerSmall) markerSmall.textContent = markerCopy.small;
-    if (gardenReached) els.gardenRestMarker.setAttribute("aria-current", "location");
+    const journeyMarkerActive = courseDirectorEnabled && journeyPlan?.actionable && ["garden", "chapter4"].includes(journeyPlan.primaryKind);
+    els.gardenRestMarker.classList.toggle("active", journeyMarkerActive);
+    if (courseDirectorEnabled) {
+      els.gardenRestMarker.disabled = !journeyMarkerActive;
+      els.gardenRestMarker.classList.remove("journey-has-glyph");
+      els.gardenRestMarker.style.removeProperty("--journey-object-image");
+      if (journeyMarkerActive) {
+        if (markerStrong) markerStrong.textContent = journeyLaunchCopy(journeyPlan);
+        if (markerSmall) markerSmall.textContent = journeyVisualCue(journeyPlan);
+        els.gardenRestMarker.style.setProperty("--journey-object-image", imageCssUrl(journeyObjectImage(journeyPlan)));
+        els.gardenRestMarker.setAttribute("aria-current", "step");
+        els.gardenRestMarker.setAttribute("aria-label", `现在要${journeyPlan.primaryActionLabel}`);
+      } else {
+        els.gardenRestMarker.removeAttribute("aria-current");
+      }
+    } else if (gardenReached) els.gardenRestMarker.setAttribute("aria-current", "location");
     else els.gardenRestMarker.removeAttribute("aria-current");
   }
   els.mapShell.dataset.chapter4Phase = !chapter4Entrance
     ? "locked"
-    : (lp03Progress.played ? "chapter4-complete" : (lp03Available ? "chapter4-lp03-entry" : "chapter4-entry"));
+    : (lp04Eligible
+      ? (lp04Complete ? "chapter4-lp04-complete" : ((activeLp04 || state.chapter4.resume?.nextTargetId === "LP04") ? "chapter4-lp04-resume" : "chapter4-lp04-ready"))
+      : (lp03Available ? "chapter4-lp03-entry" : "chapter4-entry"));
   els.mapShell.querySelectorAll(".garden-branch").forEach((path) => {
     path.hidden = !gardenReached;
   });
@@ -3859,13 +5124,36 @@ function renderMapScreen() {
 
   for (const node of els.mapShell.querySelectorAll(".map-node")) {
     node.querySelector(".node-action-badge")?.remove();
+    node.querySelector(".node-learning-glyph")?.remove();
+    node.classList.remove("journey-has-glyph");
+    node.style.removeProperty("--journey-object-image");
     const levelId = node.dataset.level;
     const index = levels.findIndex((level) => level.id === levelId);
+    const nodeTitle = node.querySelector(".node-title");
+    const nodeNote = node.querySelector(".node-note");
+    if (nodeTitle && !nodeTitle.dataset.journeyOriginalHtml) {
+      nodeTitle.dataset.journeyOriginalHtml = nodeTitle.innerHTML;
+    }
+    if (nodeTitle?.dataset.journeyOriginalHtml) {
+      nodeTitle.innerHTML = nodeTitle.dataset.journeyOriginalHtml;
+    }
+    if (nodeNote && !nodeNote.dataset.journeyOriginalText) {
+      nodeNote.dataset.journeyOriginalText = nodeNote.textContent;
+    }
+    if (nodeNote?.dataset.journeyOriginalText) nodeNote.textContent = nodeNote.dataset.journeyOriginalText;
+    const directorActive = Boolean(courseDirectorEnabled && journeyPlan?.actionable && (
+      (journeyPlan.primaryKind === "level" && journeyPlan.targetId === levelId) ||
+      (journeyPlan.primaryKind === "staff" && node.dataset.screen === "staff")
+    ));
+    const legacyActive = !gardenReached && !shouldFocusStaff && index === state.levelIndex && state.screen !== "staff";
     node.classList.toggle("done", state.completed.has(levelId));
-    node.classList.toggle("active", !gardenReached && !shouldFocusStaff && index === state.levelIndex && state.screen !== "staff");
+    node.classList.toggle("active", courseDirectorEnabled ? directorActive : legacyActive);
+    node.disabled = courseDirectorEnabled ? !directorActive : false;
+    if (courseDirectorEnabled && !directorActive) node.setAttribute("aria-hidden", "true");
+    else node.removeAttribute("aria-hidden");
     if (node.dataset.screen === "staff") {
       node.classList.toggle("done", state.staffComplete);
-      node.classList.toggle("active", !gardenReached && (state.screen === "staff" || shouldFocusStaff));
+      node.classList.toggle("active", courseDirectorEnabled ? directorActive : (!gardenReached && (state.screen === "staff" || shouldFocusStaff)));
       node.classList.toggle("needs-practice", baseComplete && !state.staffComplete && !staffReadiness.ready);
       node.setAttribute("aria-label", `${node.textContent.trim()} ${state.staffComplete ? "已完成" : (staffReadiness.ready ? "未完成" : "F/G 还需练稳")}`);
     } else {
@@ -3873,12 +5161,20 @@ function renderMapScreen() {
     }
 
     if (node.classList.contains("active")) {
+      if (courseDirectorEnabled && nodeTitle) nodeTitle.textContent = journeyLaunchCopy(journeyPlan);
+      if (courseDirectorEnabled && nodeNote) nodeNote.textContent = journeyVisualCue(journeyPlan);
+      if (courseDirectorEnabled) {
+        node.style.setProperty("--journey-object-image", imageCssUrl(journeyObjectImage(journeyPlan)));
+        appendJourneyLocatorCue(node, journeyPlan);
+      }
       node.setAttribute("aria-current", "step");
       const badge = document.createElement("span");
       badge.className = "node-action-badge";
-      badge.textContent = node.dataset.screen === "staff" ? "跳" : "出发";
+      badge.textContent = courseDirectorEnabled ? "▶" : (node.dataset.screen === "staff" ? "跳" : "出发");
       node.appendChild(badge);
-      node.setAttribute("aria-label", `${node.textContent.trim()} 当前地点，点击开始`);
+      node.setAttribute("aria-label", courseDirectorEnabled
+        ? `现在要${journeyPlan.primaryActionLabel}`
+        : `${node.textContent.trim()} 当前地点，点击开始`);
     } else {
       node.removeAttribute("aria-current");
     }
@@ -3888,7 +5184,23 @@ function renderMapScreen() {
 
 function chapter4MapMarkerCopy({ activeChapter4 = false } = {}) {
   const progress = chapter4Lp03Progress();
-  if (progress.played) return { strong: "三块地基路", small: "C-D-E 已经接好" };
+  if (hasFormalLp04EntranceEvidence()) {
+    const lp04 = chapter4Lp04Progress();
+    const done = [lp04.echoEReached, lp04.echoDReached, lp04.echoCReached].filter(Boolean).length;
+    const completed = Boolean(
+      lp04.echoEReached &&
+      lp04.echoDReached &&
+      lp04.echoCReached &&
+      lp04.dongdongPartialReveal &&
+      lp04.played &&
+      Number.isFinite(isoTimeMs(lp04.completedAt))
+    );
+    if (!completed && isLp04ReadyAfterFoundationPresentation()) return { strong: "向下回声", small: "三块地基接好，点这里听 E-D-C" };
+    if (activeChapter4 && state.activeSession?.bundleId === chapter4Config.lp04.bundleId) return { strong: "向下回声", small: `继续 ${done}/3` };
+    if (state.chapter4.resume?.nextTargetId === "LP04") return { strong: "向下回声", small: `继续 ${done}/3` };
+    if (!completed) return { strong: "向下回声", small: "点这里听 E-D-C" };
+    return { strong: "洞底回声", small: "E-D-C 已经走过" };
+  }
   if (hasFormalLp03EntranceEvidence()) {
     if (activeChapter4 && state.activeSession?.bundleId === chapter4Config.lp03.bundleId) return { strong: "三块地基", small: "继续刚才的低音路线" };
     if (state.chapter4.resume?.nextTargetId === "LP03") return { strong: "三块地基", small: "点这里继续下一块" };
@@ -3945,8 +5257,14 @@ function gardenMapMarkerCopy({ chapter3Done, activeGarden, leafCount }) {
 
 function currentInputModeLabel() {
   if (state.audio?.running) return "麦克风听音中";
-  if (state.midiAccess) return "MIDI 已连接";
+  if (midiDeviceConnected()) return "MIDI 已连接";
   return "屏幕琴键";
+}
+
+function midiConnectionPanelCopy() {
+  if (!navigator.requestMIDIAccess) return "当前浏览器不支持 Web MIDI；直接点屏幕琴键。";
+  if (midiDeviceConnected()) return `已连接：${state.midiDeviceNames.join("、")}`;
+  return state.midiConnectionMessage || "仅部分浏览器可连接；iPad 网页先用屏幕琴键。";
 }
 
 function audioVolumePercent() {
@@ -3990,6 +5308,7 @@ function setGameSoundEnabled(enabled) {
   applyAudioSettings();
   if (!state.audioSettings.enabled) {
     interruptTeachingPianoSequence("audio-disabled");
+    interruptActiveChapter4ExternalInput("audio-disabled");
     interruptActiveAudioAExternalInput("audio-disabled");
   }
 }
@@ -4002,6 +5321,7 @@ function setGameSoundVolume(percent) {
   applyAudioSettings();
   if (state.audioSettings.volume <= 0) {
     interruptTeachingPianoSequence("volume-muted");
+    interruptActiveChapter4ExternalInput("volume-muted");
     interruptActiveAudioAExternalInput("volume-muted");
   }
 }
@@ -4071,16 +5391,182 @@ function initContrastPreferenceListener() {
   else media.addListener?.(handleChange);
 }
 
+function formalParentHistorySessions(bundleId = null) {
+  return state.sessionRuntime.history.filter((session) =>
+    reviewCandidateHistoryIsFormal(session) &&
+    (!bundleId || session.bundleId === bundleId) &&
+    Array.isArray(session.completedActions)
+  );
+}
+
+function parentBundleIsFormallyComplete(bundleId) {
+  const bundle = sessionBundleById.get(bundleId);
+  if (!bundle) return false;
+  const completed = new Set(formalParentHistorySessions(bundleId)
+    .flatMap((session) => session.completedActions.map((action) => action?.actionId).filter(Boolean)));
+  return bundle.actions.every((action) => completed.has(action.actionId));
+}
+
+function parentCompletedStoryItems() {
+  return childJourneyBundleOrder
+    .filter(parentBundleIsFormallyComplete)
+    .map((bundleId) => ({
+      bundleId,
+      chapter: childJourneyChapters.find((candidate) => candidate.id === journeyChapterIdForBundle(bundleId)),
+      ...(parentStoryReviewCatalog[bundleId] || {
+        title: childJourneyBundleOutcomes[bundleId] || "完成的故事",
+        notes: "已学音名",
+        focus: "故事练习"
+      })
+    }));
+}
+
+function parentNoteNameOnlyText(value) {
+  return Object.entries(noteIdentityMatrix).reduce((text, [letter, identity]) =>
+    text.replaceAll(`${identity.solfege}/${letter}`, letter).replaceAll(identity.solfege, letter), String(value || ""));
+}
+
+function setParentTab(tabId, { focus = false } = {}) {
+  const requested = ["overview", "stories", "devices"].includes(tabId) ? tabId : "overview";
+  if (requested !== "devices") dismissParentDataResetConfirmation();
+  state.parentSelectedTab = requested;
+  document.querySelectorAll("[data-parent-tab]").forEach((tab) => {
+    const selected = tab.dataset.parentTab === requested;
+    tab.setAttribute("aria-selected", String(selected));
+    tab.tabIndex = selected ? 0 : -1;
+    if (selected && focus) tab.focus({ preventScroll: true });
+  });
+  document.querySelectorAll("[data-parent-panel]").forEach((panel) => {
+    panel.hidden = panel.dataset.parentPanel !== requested;
+    if (!panel.hidden) panel.scrollTop = 0;
+  });
+}
+
+function renderParentDataResetControl() {
+  const pending = state.parentDataResetPending === true;
+  const inProgress = state.parentDataResetInProgress === true;
+  if (els.parentDataResetConfirm) els.parentDataResetConfirm.hidden = !pending;
+  if (els.parentDataResetButton) els.parentDataResetButton.disabled = inProgress;
+  if (els.parentDataResetCancel) els.parentDataResetCancel.disabled = inProgress;
+  if (els.parentDataResetConfirmButton) els.parentDataResetConfirmButton.disabled = inProgress;
+}
+
+function dismissParentDataResetConfirmation() {
+  if (!state.parentDataResetPending && !state.parentDataResetInProgress) return false;
+  state.parentDataResetPending = false;
+  if (!state.parentDataResetInProgress) renderParentDataResetControl();
+  return true;
+}
+
+function requestParentDataReset() {
+  if (state.parentDataResetInProgress || state.parentDataResetPending) return false;
+  state.parentDataResetPending = true;
+  renderParentDataResetControl();
+  requestAnimationFrame(() => {
+    els.parentDataResetConfirm?.scrollIntoView({ block: "nearest", inline: "nearest" });
+    els.parentDataResetCancel?.focus({ preventScroll: true });
+  });
+  return true;
+}
+
+function stopActiveLearningForParentDataReset() {
+  stopMicrophone("parent-data-reset");
+  interruptTeachingPianoSequence("parent-data-reset");
+  clearAutoAdvance();
+  clearWorkshopIdleHints();
+  clearAssistedRepairState();
+  clearDinoMoodTimer();
+  clearLevelIntro();
+  clearListeningPrompt();
+  clearGardenTimers();
+  clearLs08Timers();
+  clearChapter4Timers();
+  keepResultModalHidden();
+}
+
+function confirmParentDataReset() {
+  if (!state.parentDataResetPending || state.parentDataResetInProgress) return false;
+  state.parentDataResetInProgress = true;
+  renderParentDataResetControl();
+  stopActiveLearningForParentDataReset();
+  try {
+    PARENT_LEARNING_STORAGE_KEYS.forEach((key) => localStorage.removeItem(key));
+  } catch (error) {
+    // Navigation still restores a clean in-memory home when storage is unavailable.
+  }
+  try {
+    sessionStorage.removeItem(M03_AUDIO_ATTEMPT_STORAGE_KEY);
+  } catch (error) {
+    // Session storage is optional for direct M03 previews.
+  }
+  const destination = new URL(window.location.href);
+  destination.search = "screen=map";
+  destination.hash = "";
+  window.location.replace(destination.toString());
+  return true;
+}
+
+function renderParentPhaseA() {
+  const plan = childJourneyPlan();
+  if (els.parentNextTask) els.parentNextTask.textContent = plan.primaryStoryLabel;
+  if (els.parentNextFocus) els.parentNextFocus.textContent = plan.learningFocus;
+
+  if (els.parentChapterOverview) {
+    els.parentChapterOverview.innerHTML = childJourneyChapters.map((chapter) => {
+      const bundleIds = childJourneyBundleOrder.filter((bundleId) => bundleId.startsWith(`${chapter.id}-`));
+      const completed = bundleIds.filter(parentBundleIsFormallyComplete).length;
+      const current = plan.chapterId === chapter.id;
+      const status = completed === bundleIds.length ? "已完成" : (current ? "正在学习" : "尚未开始");
+      const percent = bundleIds.length ? Math.round((completed / bundleIds.length) * 100) : 0;
+      return `<div class="parent-chapter-row${current ? " is-current" : ""}" role="group" aria-label="${chapter.title}，${completed}/${bundleIds.length}，${status}">
+        <span><strong>${chapter.title}</strong><small>${status}</small></span>
+        <i aria-hidden="true"><b style="width:${percent}%"></b></i>
+        <em>${completed}/${bundleIds.length}</em>
+      </div>`;
+    }).join("");
+  }
+
+  const stories = parentCompletedStoryItems();
+  const activeFormalSession = Boolean(state.activeSession?.status === "active");
+  if (els.parentStoryCount) els.parentStoryCount.textContent = `${stories.length} 段`;
+  if (els.parentStoryState) {
+    els.parentStoryState.textContent = activeFormalSession
+      ? "先让这一小段在休息点停下。"
+      : (stories.length ? "已完成内容可以查看；重新体验功能正在准备。" : "完成故事后会出现在这里。");
+  }
+  if (els.parentStoryList) {
+    els.parentStoryList.innerHTML = stories.length
+      ? stories.map((story) => `<article class="parent-story-row" data-review-bundle="${story.bundleId}">
+          <span class="parent-story-chapter">${story.chapter?.title || "学习旅程"}</span>
+          <span class="parent-story-copy"><strong>${story.title}</strong><small>${story.notes} · ${story.focus}</small></span>
+          <button type="button" disabled aria-disabled="true">${activeFormalSession ? "先到休息点" : "故事回顾即将开放"}</button>
+        </article>`).join("")
+      : `<div class="parent-story-empty"><span aria-hidden="true">☆</span><strong>还没有完成的故事</strong></div>`;
+  }
+
+  if (els.parentFreePianoButton) {
+    els.parentFreePianoButton.disabled = activeFormalSession;
+    els.parentFreePianoButton.textContent = activeFormalSession ? "进行中" : "打开";
+  }
+  if (els.parentFreePianoState) {
+    els.parentFreePianoState.textContent = activeFormalSession
+      ? "先让这一小段在休息点停下。"
+      : "不记分，也不改变正式课程。";
+  }
+  setParentTab(state.parentSelectedTab);
+}
+
 function renderParentPanel() {
   if (!els.parentModal) return;
+  renderParentPhaseA();
   const learning = currentLearningSummary();
   const mastery = currentMasterySummary();
   const chapter4Level = currentChapter4ParentLevel();
   if (els.parentLearningFocus) {
-    els.parentLearningFocus.textContent = learning.focus;
+    els.parentLearningFocus.textContent = parentNoteNameOnlyText(learning.focus);
   }
   if (els.parentLearningDetail) {
-    els.parentLearningDetail.textContent = learning.detail;
+    els.parentLearningDetail.textContent = parentNoteNameOnlyText(learning.detail);
   }
   if (els.parentMasteryStatus) {
     els.parentMasteryStatus.textContent = mastery.status;
@@ -4089,7 +5575,7 @@ function renderParentPanel() {
     els.parentMasteryDetail.textContent = mastery.detail;
   }
   if (els.parentEvidenceList) {
-    const rows = chapter4Level === "LP03"
+    let rows = chapter4Level === "LP03"
       ? [
         ["三块地基已安放", mastery.played],
         ["本节只做路线观察", mastery.played],
@@ -4108,6 +5594,14 @@ function renderParentPanel() {
         ["隔日再次减提示完成", mastery.retained],
         ["今天需要提示", mastery.todayNeedsPractice]
       ]);
+    if (chapter4Level === "LP04") {
+      rows = [
+        ["在故事帮助下玩过", mastery.played],
+        ["以后再做少提示确认", false],
+        ["隔日确认尚未开始", false],
+        ["今天需要提示", mastery.todayNeedsPractice]
+      ];
+    }
     els.parentEvidenceList.innerHTML = rows
       .map(([label, active]) => `<span class="parent-evidence-chip${active ? " is-active" : ""}"><i aria-hidden="true">${active ? "✓" : "·"}</i>${label}</span>`)
       .join("");
@@ -4126,6 +5620,10 @@ function renderParentPanel() {
       const progress = chapter4Lp03Progress();
       const done = [progress.foundationCAwake, progress.foundationDPlaced, progress.foundationEPlaced].filter(Boolean).length;
       els.parentProgressText.textContent = `三块地基 ${done}/3`;
+    } else if (chapter4Level === "LP04") {
+      const progress = chapter4Lp04Progress();
+      const done = [progress.echoEReached, progress.echoDReached, progress.echoCReached].filter(Boolean).length;
+      els.parentProgressText.textContent = `下降回声 E-D-C ${done}/3`;
     } else if (usesLs08ParentEvidence()) {
       const activeAttempt = currentLs08Action()?.listeningAttempt;
       const resumeAttempt = state.chapter3.resume?.nextTargetId === "LS08" ? state.chapter3.resume.ls08Attempt : null;
@@ -4159,7 +5657,9 @@ function renderParentPanel() {
         : Math.min(4, activeAttempt?.scoredCalls?.length || lastAttempt?.scoredCalls?.length || 0);
       els.parentProgressText.textContent = `C/D 找朋友 ${count}/4`;
     } else {
-      els.parentProgressText.textContent = `基地 ${state.completed.size}/${levels.length}`;
+      const firstChapterBundles = childJourneyBundleOrder.filter((bundleId) => bundleId.startsWith("C1-"));
+      const completed = firstChapterBundles.filter((bundleId) => parentBundleIsFormallyComplete(bundleId) || legacyBaseBundleComplete(bundleId)).length;
+      els.parentProgressText.textContent = `月球基地 ${completed}/${firstChapterBundles.length}`;
     }
   }
   if (els.parentStaffState) {
@@ -4180,6 +5680,11 @@ function renderParentPanel() {
       ? "少提示复读中"
       : (state.staffComplete ? "小恐龙跳已完成" : "小恐龙跳待玩");
   }
+  if (chapter4Level === "LP04" && els.parentStaffState) {
+    els.parentStaffState.textContent = mastery.todayNeedsPractice
+      ? "今天需要提示"
+      : (mastery.played ? "跟着下降回声走过" : "下降回声准备中");
+  }
   if (els.parentInputMode) {
     els.parentInputMode.textContent = currentInputModeLabel();
   }
@@ -4196,12 +5701,12 @@ function renderParentPanel() {
     els.parentMicButton.querySelector("strong").textContent = state.audio?.running ? "暂停听音" : "听钢琴声音";
   }
   if (els.parentMidiButton) {
-    els.parentMidiButton.classList.toggle("active", !!state.midiAccess);
+    const midiConnected = midiDeviceConnected();
+    els.parentMidiButton.classList.toggle("active", midiConnected);
     els.parentMidiButton.toggleAttribute("disabled", !navigator.requestMIDIAccess);
-    els.parentMidiButton.querySelector("small").textContent = navigator.requestMIDIAccess
-      ? "仅部分浏览器可连接；iPad 网页先用屏幕琴键。"
-      : "当前浏览器不支持 Web MIDI；直接点屏幕琴键。";
+    els.parentMidiButton.querySelector("small").textContent = midiConnectionPanelCopy();
   }
+  renderParentDataResetControl();
 }
 
 function refreshParentPanelIfOpen() {
@@ -4225,6 +5730,23 @@ const transientFeedbackSelector = [
 
 function clearTransientFeedback() {
   document.querySelectorAll(transientFeedbackSelector).forEach((element) => element.remove());
+  els.keyboard?.querySelectorAll(".m01-local-feedback").forEach((key) => key.classList.remove("m01-local-feedback"));
+}
+
+function clearMilestoneSettlementSurface() {
+  clearTransientFeedback();
+  els.keyboard?.querySelectorAll(".target, .target-muted, .correct, .wrong, .hint, .hit-correct, .hit-wrong, .program-correct, .program-wrong, .program-hint, .pressed").forEach((key) => {
+    key.classList.remove("target", "target-muted", "correct", "wrong", "hint", "hit-correct", "hit-wrong", "program-correct", "program-wrong", "program-hint", "pressed");
+  });
+  els.moonYard?.classList.remove("success-flash", "stage-result-correct", "stage-result-wrong");
+}
+
+function milestoneSettlementIsVisible() {
+  return Boolean(
+    els.resultModal &&
+    !els.resultModal.hidden &&
+    els.resultModal.dataset.result === "milestone"
+  );
 }
 
 function pauseMicrophoneInputForModal() {
@@ -4236,34 +5758,386 @@ function pauseMicrophoneInputForModal() {
   gate.quietSince = 0;
 }
 
+function keepResultModalHidden() {
+  if (!els.resultModal) return;
+  if (state.milestoneSettlementTimer) {
+    clearTimeout(state.milestoneSettlementTimer);
+    state.milestoneSettlementTimer = null;
+  }
+  state.milestoneSettlementUntil = 0;
+  state.milestoneSettlement = null;
+  document.body.classList.remove("milestone-settlement-active");
+  els.resultModal.hidden = true;
+  els.resultModal.inert = true;
+  els.resultModal.setAttribute("aria-hidden", "true");
+  els.resultModal.querySelector(".result-card")?.setAttribute("aria-labelledby", "resultTitle");
+  els.resultModal.querySelector(".result-card")?.setAttribute("aria-describedby", "resultText");
+  if (els.milestoneSettlement) els.milestoneSettlement.hidden = true;
+  delete els.resultModal.dataset.result;
+  if (els.modalNext) {
+    els.modalNext.hidden = false;
+    els.modalNext.disabled = false;
+    els.modalNext.removeAttribute("tabindex");
+  }
+  els.resultModal.querySelectorAll(".result-confetti-effect").forEach((effect) => effect.remove());
+}
+
 function gameplayInputIsBlocked() {
-  return Boolean(!els.parentModal?.hidden || !els.resultModal?.hidden);
+  const milestoneVisible = Boolean(
+    els.resultModal &&
+    !els.resultModal.hidden &&
+    els.resultModal.dataset.result === "milestone"
+  );
+  return Boolean(!els.parentChallenge?.hidden || !els.parentModal?.hidden || milestoneVisible);
+}
+
+function milestoneSettlementAllowedForBundle(bundleId) {
+  // LP10 / C4-09 owns the future Chapter 4 phase tail; current C4 lessons do not.
+  return journeyChapterIdForBundle(bundleId) !== "C4" || bundleId === "C4-09";
+}
+
+function formalSessionEarnedMilestone(ended) {
+  const incompleteRestReasons = new Set([
+    "review-deferred",
+    "assisted-safe-rest",
+    "early-rest",
+    "guide-rest",
+    "lp01-early-rest"
+  ]);
+  return Boolean(
+    ended?.formalSession === true &&
+    sessionBundleById.has(ended.bundleId) &&
+    milestoneSettlementAllowedForBundle(ended.bundleId) &&
+    ended.directMode !== true &&
+    ended.voluntaryReplay !== true &&
+    !incompleteRestReasons.has(ended.endReason) &&
+    Array.isArray(ended.completedActions) &&
+    ended.completedActions.length > 0 &&
+    formalBundleCurriculumComplete(ended.bundleId) &&
+    journeyPhaseCompletedByBundle(ended.bundleId)
+  );
+}
+
+function formalBundleCurriculumComplete(bundleId) {
+  const bundle = sessionBundleById.get(bundleId);
+  if (!bundle) return false;
+  const completed = new Set(
+    endedSessionsForBundle(bundleId)
+      .filter((session) => session?.formalSession === true && session?.directMode !== true && session?.voluntaryReplay !== true)
+      .flatMap((session) => Array.isArray(session.completedActions) ? session.completedActions : [])
+      .map((action) => action?.actionId)
+      .filter(Boolean)
+  );
+  return bundle.actions.every((action) => completed.has(action.actionId));
+}
+
+function journeyPhaseCompletedByBundle(bundleId) {
+  const chapterId = journeyChapterIdForBundle(bundleId);
+  const guide = childJourneyChapterGuides[chapterId];
+  const phase = guide?.phases.find((candidate) => candidate.bundles.includes(bundleId));
+  if (!phase || phase.bundles.at(-1) !== bundleId) return false;
+  return phase.bundles.every((candidateId) => formalBundleCurriculumComplete(candidateId));
+}
+
+function milestoneSettlementCopy(ended, reward) {
+  const bundleComplete = formalBundleCurriculumComplete(ended.bundleId);
+  const latestAction = ended.completedActions.at(-1);
+  const actionOutcome = childJourneyActionOutcomes[latestAction?.actionId];
+  const outcome = bundleComplete
+    ? (childJourneyBundleOutcomes[ended.bundleId] || actionOutcome || reward)
+    : (actionOutcome || reward || "星芽完成了这一小段");
+  const plan = childJourneyPlan();
+  const nextName = plan?.actionable
+    ? plan.primaryStoryLabel
+    : (plan?.nextLandmark || "回到学习旅程");
+  return {
+    title: "这一阶段完成！",
+    outcome,
+    nextName
+  };
+}
+
+function showMilestoneSettlement(ended, reward = "") {
+  if (!els.resultModal || !formalSessionEarnedMilestone(ended)) return false;
+  const copy = milestoneSettlementCopy(ended, reward);
+  if (state.milestoneSettlementTimer) clearTimeout(state.milestoneSettlementTimer);
+  clearMilestoneSettlementSurface();
+  document.body.classList.add("milestone-settlement-active");
+  state.milestoneSettlementUntil = performance.now() + 2300;
+  state.milestoneSettlement = {
+    sessionId: ended.sessionId,
+    bundleId: ended.bundleId,
+    title: copy.title,
+    nextName: copy.nextName
+  };
+  els.resultModal.dataset.result = "milestone";
+  if (els.milestoneSettlementTitle) els.milestoneSettlementTitle.textContent = copy.title;
+  if (els.milestoneSettlementOutcome) els.milestoneSettlementOutcome.textContent = copy.outcome;
+  if (els.milestoneSettlementNext) els.milestoneSettlementNext.textContent = copy.nextName;
+  if (els.milestoneSettlement) els.milestoneSettlement.hidden = false;
+  els.resultModal.querySelector(".result-card")?.setAttribute("aria-labelledby", "milestoneSettlementTitle");
+  els.resultModal.querySelector(".result-card")?.setAttribute("aria-describedby", "milestoneSettlementOutcome");
+  if (els.modalNext) {
+    els.modalNext.hidden = true;
+    els.modalNext.disabled = true;
+    els.modalNext.setAttribute("tabindex", "-1");
+  }
+  els.resultModal.hidden = false;
+  els.resultModal.inert = false;
+  els.resultModal.setAttribute("aria-hidden", "false");
+  requestAnimationFrame(() => requestAnimationFrame(() => {
+    if (milestoneSettlementIsVisible()) clearMilestoneSettlementSurface();
+  }));
+  restartResultMeter();
+  state.milestoneSettlementTimer = setTimeout(() => {
+    state.milestoneSettlementTimer = null;
+    showMapScreen();
+  }, 2320);
+  return true;
+}
+
+function deferMapForMilestoneSettlement() {
+  if (
+    !els.resultModal ||
+    els.resultModal.hidden ||
+    els.resultModal.dataset.result !== "milestone"
+  ) return false;
+  const remaining = state.milestoneSettlementUntil - performance.now();
+  if (remaining <= 0) {
+    hideResultModal();
+    return false;
+  }
+  if (state.milestoneSettlementTimer) clearTimeout(state.milestoneSettlementTimer);
+  state.milestoneSettlementTimer = setTimeout(() => {
+    state.milestoneSettlementTimer = null;
+    showMapScreen();
+  }, remaining + 20);
+  return true;
+}
+
+const PARENT_CHALLENGE_HOLD_MS = 2000;
+const PARENT_CHALLENGE_TIMEOUT_MS = 45000;
+let parentReturnFocus = null;
+let parentChallengeState = null;
+let parentPanelAuthorized = false;
+
+function randomParentChallengeInteger(minimum, maximum) {
+  return Math.floor(Math.random() * (maximum - minimum + 1)) + minimum;
+}
+
+function shuffledParentChallengeChoices(choices) {
+  const result = [...choices];
+  for (let index = result.length - 1; index > 0; index -= 1) {
+    const swapIndex = randomParentChallengeInteger(0, index);
+    [result[index], result[swapIndex]] = [result[swapIndex], result[index]];
+  }
+  return result;
+}
+
+function createParentChallengeRound() {
+  const answer = randomParentChallengeInteger(11, 18);
+  const left = randomParentChallengeInteger(3, answer - 3);
+  const right = answer - left;
+  const lower = answer - randomParentChallengeInteger(1, 3);
+  const upper = answer + randomParentChallengeInteger(1, 3);
+  return {
+    answer,
+    left,
+    right,
+    choices: shuffledParentChallengeChoices([answer, lower, upper]),
+    holdValue: null,
+    holdStartedAt: 0,
+    holdTimer: null,
+    progressFrame: null,
+    timeoutTimer: null
+  };
+}
+
+function clearParentChallengeTimers(round = parentChallengeState) {
+  if (!round) return;
+  if (round.holdTimer) clearTimeout(round.holdTimer);
+  if (round.progressFrame) cancelAnimationFrame(round.progressFrame);
+  if (round.timeoutTimer) clearTimeout(round.timeoutTimer);
+  round.holdTimer = null;
+  round.progressFrame = null;
+  round.timeoutTimer = null;
+  round.holdValue = null;
+  round.holdStartedAt = 0;
+}
+
+function setParentChallengeProgress(value, text) {
+  const progress = Math.max(0, Math.min(100, Math.round(value)));
+  if (els.parentChallengeProgress) {
+    els.parentChallengeProgress.style.setProperty("--parent-challenge-progress", `${progress}%`);
+    els.parentChallengeProgress.setAttribute("aria-valuenow", String(progress));
+    els.parentChallengeProgress.setAttribute("aria-valuetext", text);
+  }
+}
+
+function setParentChallengeStatus(message) {
+  if (els.parentChallengeStatus) els.parentChallengeStatus.textContent = message;
+}
+
+function scheduleParentChallengeTimeout(round) {
+  round.timeoutTimer = setTimeout(() => {
+    if (parentChallengeState === round) closeParentChallenge();
+  }, PARENT_CHALLENGE_TIMEOUT_MS);
+}
+
+function renderParentChallengeRound(status = "选择后按住答案。") {
+  const round = parentChallengeState;
+  if (!round || !els.parentChallengeChoices) return;
+  els.parentChallengeQuestion.textContent = `${round.left} + ${round.right} 是多少？`;
+  els.parentChallengeChoices.replaceChildren();
+  for (const value of round.choices) {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = "parent-challenge-answer";
+    button.dataset.parentChallengeAnswer = String(value);
+    button.textContent = String(value);
+    button.setAttribute("aria-label", `答案 ${value}`);
+    button.addEventListener("pointerdown", (event) => {
+      if (event.button !== 0 && event.pointerType !== "touch") return;
+      event.preventDefault();
+      button.setPointerCapture?.(event.pointerId);
+      beginParentChallengeHold(value);
+    });
+    button.addEventListener("pointerup", () => endParentChallengeHold(value));
+    button.addEventListener("pointercancel", () => cancelParentChallengeHold(value));
+    button.addEventListener("lostpointercapture", () => cancelParentChallengeHold(value));
+    button.addEventListener("keydown", (event) => {
+      if (event.repeat || !["Enter", " ", "Spacebar"].includes(event.key)) return;
+      event.preventDefault();
+      beginParentChallengeHold(value);
+    });
+    button.addEventListener("keyup", (event) => {
+      if (["Enter", " ", "Spacebar"].includes(event.key)) {
+        event.preventDefault();
+        endParentChallengeHold(value);
+      }
+    });
+    els.parentChallengeChoices.append(button);
+  }
+  setParentChallengeProgress(0, "尚未开始");
+  setParentChallengeStatus(status);
+  scheduleParentChallengeTimeout(round);
+  requestAnimationFrame(() => {
+    if (parentChallengeState === round && !els.parentChallenge?.hidden) {
+      els.parentChallengeChoices?.querySelector("button")?.focus({ preventScroll: true });
+    }
+  });
+}
+
+function failParentChallenge(status) {
+  if (!parentChallengeState) return;
+  clearParentChallengeTimers(parentChallengeState);
+  parentChallengeState = createParentChallengeRound();
+  renderParentChallengeRound(status);
+}
+
+function updateParentChallengeProgress(round) {
+  if (parentChallengeState !== round || round.holdValue === null) return;
+  const elapsed = performance.now() - round.holdStartedAt;
+  const progress = (elapsed / PARENT_CHALLENGE_HOLD_MS) * 100;
+  setParentChallengeProgress(progress, progress >= 100 ? "确认完成" : "正在确认");
+  if (progress < 100) round.progressFrame = requestAnimationFrame(() => updateParentChallengeProgress(round));
+}
+
+function beginParentChallengeHold(value) {
+  const round = parentChallengeState;
+  if (!round || !els.parentChallenge || els.parentChallenge.hidden || round.holdValue !== null) return;
+  if (value !== round.answer) {
+    failParentChallenge("未通过，请重新试一次。");
+    return;
+  }
+  round.holdValue = value;
+  round.holdStartedAt = performance.now();
+  setParentChallengeStatus("正在确认，请继续按住。");
+  updateParentChallengeProgress(round);
+  round.holdTimer = setTimeout(() => {
+    if (parentChallengeState !== round || round.holdValue !== value) return;
+    clearParentChallengeTimers(round);
+    parentPanelAuthorized = true;
+    closeParentChallenge({ returnFocus: false, preserveAuthorization: true });
+    openParentPanel();
+  }, PARENT_CHALLENGE_HOLD_MS);
+}
+
+function endParentChallengeHold(value) {
+  const round = parentChallengeState;
+  if (!round || round.holdValue !== value) return;
+  if (performance.now() - round.holdStartedAt < PARENT_CHALLENGE_HOLD_MS) {
+    failParentChallenge("请再按住答案一会儿。");
+  }
+}
+
+function cancelParentChallengeHold(value) {
+  const round = parentChallengeState;
+  if (!round || round.holdValue !== value) return;
+  failParentChallenge("请重新试一次。");
+}
+
+function openParentChallenge(trigger = document.activeElement) {
+  if (!els.parentChallenge || !els.parentModal?.hidden || !els.parentChallenge.hidden) return false;
+  parentPanelAuthorized = false;
+  parentReturnFocus = trigger instanceof HTMLElement ? trigger : null;
+  clearTransientFeedback();
+  stopMicrophone("parent-challenge");
+  parentChallengeState = createParentChallengeRound();
+  els.parentChallenge.hidden = false;
+  document.body.classList.add("parent-challenge-open");
+  syncModalBackgroundInert();
+  renderParentChallengeRound();
+  requestAnimationFrame(() => els.parentChallengeChoices?.querySelector("button")?.focus({ preventScroll: true }));
+  return true;
+}
+
+function closeParentChallenge({ returnFocus = true, preserveAuthorization = false } = {}) {
+  clearParentChallengeTimers();
+  parentChallengeState = null;
+  if (els.parentChallenge) els.parentChallenge.hidden = true;
+  document.body.classList.remove("parent-challenge-open");
+  if (!preserveAuthorization) parentPanelAuthorized = false;
+  syncModalBackgroundInert();
+  if (returnFocus && parentReturnFocus?.isConnected) parentReturnFocus.focus({ preventScroll: true });
+  if (!preserveAuthorization) parentReturnFocus = null;
 }
 
 function openParentPanel() {
-  parentReturnFocus = document.activeElement instanceof HTMLElement ? document.activeElement : null;
+  if (!parentPanelAuthorized) {
+    openParentChallenge();
+    return false;
+  }
+  if (!parentReturnFocus && document.activeElement instanceof HTMLElement) parentReturnFocus = document.activeElement;
   clearTransientFeedback();
   pauseMicrophoneInputForModal();
+  state.parentSelectedTab = "overview";
   renderParentPanel();
   els.parentModal.hidden = false;
   document.body.classList.add("parent-panel-open");
   syncModalBackgroundInert();
   requestAnimationFrame(() => els.parentClose?.focus({ preventScroll: true }));
+  return true;
 }
 
-function closeParentPanel() {
+function closeParentPanel({ returnFocus = true } = {}) {
+  dismissParentDataResetConfirmation();
   els.parentModal.hidden = true;
   document.body.classList.remove("parent-panel-open");
+  parentPanelAuthorized = false;
   syncModalBackgroundInert();
   const returnTarget = parentReturnFocus;
   parentReturnFocus = null;
-  if (returnTarget?.isConnected) returnTarget.focus({ preventScroll: true });
+  if (returnFocus && returnTarget?.isConnected) returnTarget.focus({ preventScroll: true });
 }
 
-let parentReturnFocus = null;
+function revokeParentAccessForLifecycle() {
+  closeParentChallenge({ returnFocus: false });
+  closeParentPanel({ returnFocus: false });
+}
 
 function syncModalBackgroundInert() {
-  const modalOpen = !els.parentModal.hidden || !els.resultModal.hidden;
+  const modalOpen = !els.parentChallenge?.hidden || !els.parentModal.hidden;
   if (els.mapShell) els.mapShell.inert = modalOpen;
   if (els.appShell) els.appShell.inert = modalOpen;
 }
@@ -4406,7 +6280,9 @@ function renderActionCue(part, target) {
     : level?.id === "M08"
       ? `<small>星芽说</small><strong>唱 ${id.solfege}</strong><span>把这块装进蓝图</span>`
     : level?.id === "M01"
-      ? `<small>星芽说</small><strong>唱 ${id.solfege}</strong><span>地板该落下啦</span>`
+      ? levelComplete
+        ? `<small>星芽说</small><strong>地板安好啦</strong><span>我们一起站稳啦</span>`
+        : `<small>星芽说</small><strong>唱 ${id.solfege}</strong><span>地板该落下啦</span>`
       : `<small>星芽说</small><strong>唱 ${id.solfege}</strong>${locatorVisualHtml(target, "黑键", "coach-locator")}<span>${id.letter} · ${id.keyShort}</span>`;
     els.coachBubble.style.setProperty("--target-color", color);
     els.coachBubble.style.setProperty("--target-soft", alpha(color, 0.16));
@@ -4441,7 +6317,7 @@ function scheduleWorkshopIdleHints(initialDelayMs = 0) {
 
 function showWorkshopIdleHint(stage) {
   const level = activeLevel();
-  if (state.screen !== "play" || !level || state.stepIndex >= level.parts.length || !els.resultModal.hidden) return;
+  if (state.screen !== "play" || !level || state.stepIndex >= level.parts.length) return;
   const targetMidi = activeTargetMidi();
   const target = noteForMidi(targetMidi);
   if (!target) return;
@@ -4467,7 +6343,7 @@ function showWorkshopIdleHint(stage) {
   } else {
     state.practiceAttempt.idleLocatorHints = (state.practiceAttempt.idleLocatorHints || 0) + 1;
     markAttemptCue("strong");
-    showInputEffect(targetMidi, "hint");
+    showInputEffect(targetMidi, "hint", { showLabel: !usesM01LocalFeedback(), local: usesM01LocalFeedback() });
     showNoteBurst(targetMidi, "hint", target);
   }
 
@@ -4633,6 +6509,7 @@ function renderBuildScene(level) {
   renderMemoryStarRoute(level);
   renderFgStarRoute(level);
   renderRoofScaleRoute(level);
+  renderFg04StaffPrep(level);
   applyGroundedAssemblyGeometry(level);
 }
 
@@ -4921,6 +6798,46 @@ function renderFgStarRoute(level) {
   });
 }
 
+function renderFg04StaffPrep(level) {
+  if (!els.moonYard) return;
+  els.moonYard.querySelector("#fg04StaffPrep")?.remove();
+  if (level?.id !== "FG04") return;
+
+  const staff = document.createElement("div");
+  staff.id = "fg04StaffPrep";
+  staff.className = "fg04-staff-prep";
+  staff.setAttribute("role", "img");
+  staff.setAttribute("aria-label", "高音谱表：F 第一间，G 第二线");
+  staff.innerHTML = `
+    <span class="fg04-staff-line line-1" aria-hidden="true"></span>
+    <span class="fg04-staff-line line-2" aria-hidden="true"></span>
+    <span class="fg04-staff-line line-3" aria-hidden="true"></span>
+    <span class="fg04-staff-line line-4" aria-hidden="true"></span>
+    <span class="fg04-staff-line line-5" aria-hidden="true"></span>
+    <b class="fg04-treble-clef" aria-hidden="true">𝄞</b>
+  `;
+
+  const notePositions = [
+    { note: "F", x: 58, y: 74 },
+    { note: "G", x: 77, y: 66 }
+  ];
+  notePositions.forEach((position, index) => {
+    const token = document.createElement("span");
+    token.className = "fg04-note-token";
+    if (index < state.stepIndex) token.classList.add("done");
+    if (index === state.stepIndex) token.classList.add("current");
+    if (index > state.stepIndex) token.classList.add("upcoming");
+    token.dataset.note = position.note;
+    token.style.left = `${position.x}%`;
+    token.style.top = `${position.y}%`;
+    token.textContent = position.note;
+    token.setAttribute("aria-hidden", "true");
+    staff.appendChild(token);
+  });
+
+  els.moonYard.appendChild(staff);
+}
+
 function renderMemoryStarRoute(level) {
   if (!els.memoryStarRoute) return;
   const isMemoryRoute = level?.id === "M07";
@@ -4934,7 +6851,10 @@ function renderMemoryStarRoute(level) {
   }
   els.memoryStarRoute.removeAttribute("aria-hidden");
   els.memoryStarRoute.setAttribute("role", "img");
-  els.memoryStarRoute.setAttribute("aria-label", "星星路线 C D E D C");
+  const isLevelCheckRun = isLevelReducedCueRun(level);
+  els.memoryStarRoute.setAttribute("aria-label", isLevelCheckRun
+    ? "五星记忆路线，按顺序自己接亮"
+    : "星星路线 C D E D C");
 
   const points = [
     { x: 10, y: 68 },
@@ -4944,7 +6864,6 @@ function renderMemoryStarRoute(level) {
     { x: 90, y: 68 }
   ];
   const parts = level.parts || [];
-  const isLevelCheckRun = isLevelReducedCueRun(level);
   const showLocator = !isLevelCheckRun || state.lastInputResult === "wrong";
   const path = `M ${points[0].x} ${points[0].y} C 26 66, 38 61, ${points[2].x} ${points[2].y} S 76 66, ${points[4].x} ${points[4].y}`;
   const dinoIndex = Math.min(Math.max(state.stepIndex, 0), points.length - 1);
@@ -4973,7 +6892,7 @@ function renderMemoryStarRoute(level) {
     const isCurrent = index === state.stepIndex;
     const isUpcoming = index > state.stepIndex;
     const currentLabel = note.name;
-    const primaryLabel = currentLabel;
+    const primaryLabel = !isLevelCheckRun || isDone || isCurrent ? currentLabel : "";
     const secondaryLabel = isCurrent
       ? (showLocator ? id.keyShort : "自己找")
       : (isDone ? "亮了" : "");
@@ -5142,14 +7061,17 @@ function setStaffDinoTip(message, color, tone = "ready") {
   }
 }
 
-function syncStaffFallbackCopy({ target, targetId, staffHint, isCheckRun, finished }) {
+function syncStaffFallbackCopy({ target, targetId, staffHint, isCheckRun, isRepairState, finished }) {
+  const concealCheckAnswer = isCheckRun && !isRepairState && !finished;
   const title = finished ? "星桥到达" : (isCheckRun ? "少提示星桥" : staffCourse.title);
   const prompt = finished
     ? "星芽跳到对面星球。"
+    : concealCheckAnswer
+    ? "看当前谱位，自己找键。"
     : isCheckRun
     ? `看${staffHint}，读 ${targetId.letter}，自己找键。`
     : `看${staffHint}，读 ${targetId.letter}，找${targetId.keyLong}。`;
-  const cueText = finished ? "星桥完成" : `${targetId.full} · ${staffHint} · ${targetId.keyShort}`;
+  const cueText = finished ? "星桥完成" : concealCheckAnswer ? "看当前谱位，自己找键。" : `${targetId.full} · ${staffHint} · ${targetId.keyShort}`;
 
   if (els.levelTitle) els.levelTitle.textContent = title;
   if (els.levelPrompt) els.levelPrompt.textContent = prompt;
@@ -5184,6 +7106,8 @@ function syncStaffFallbackCopy({ target, targetId, staffHint, isCheckRun, finish
     els.targetNote.style.setProperty("--target-glow", alpha(target.color, 0.20));
     els.targetNote.innerHTML = finished
       ? `<small>完成</small><strong>✓</strong><span>对面星球</span><em>星桥完成</em>`
+      : concealCheckAnswer
+      ? `<small>少提示</small><strong>♪</strong><span>看当前谱位</span><em>自己找键</em>`
       : `<small>${isCheckRun ? "少提示" : "下一跳"}</small><strong>${target.name}</strong><span>${targetId.keyShort}</span><em>${staffHint}</em>`;
   }
   if (els.stageStoryRibbon) {
@@ -5192,12 +7116,12 @@ function syncStaffFallbackCopy({ target, targetId, staffHint, isCheckRun, finish
     els.stageStoryRibbon.innerHTML = `
       <span class="story-part-icon" style="--part-image:${imageCssUrl(partImages.star)}"></span>
       <span class="story-problem">${finished ? "星桥已经连到对面" : "星芽要跳到谱线星垫"}</span>
-      <span class="story-note-pill" style="--note-color:${target.color}">${finished ? "✓" : target.name}</span>
-      <span class="locator-mini" aria-hidden="true">${finished ? "终点" : locatorVisualHtml(target, "", "story-locator")}</span>
+      <span class="story-note-pill" style="--note-color:${target.color}">${finished ? "✓" : concealCheckAnswer ? "♪" : target.name}</span>
+      <span class="locator-mini" aria-hidden="true">${finished ? "终点" : concealCheckAnswer ? "当前谱位" : locatorVisualHtml(target, "", "story-locator")}</span>
       <span class="story-staff-chip">${finished ? "完成" : staffHint}</span>
     `;
   }
-  if (els.stageNoteText) els.stageNoteText.textContent = finished ? "✓" : target.name;
+  if (els.stageNoteText) els.stageNoteText.textContent = finished ? "✓" : concealCheckAnswer ? "♪" : target.name;
   if (els.stageNoteName) els.stageNoteName.textContent = finished ? "完成" : "";
   if (els.coachNote) els.coachNote.textContent = finished ? "星桥完成" : target.solfege;
   if (els.coachBubble) els.coachBubble.textContent = cueText;
@@ -5215,18 +7139,21 @@ function renderStaffScreen() {
   const finished = state.staffStepIndex >= steps.length;
   const isCheckRun = state.staffRunMode === "check";
   const isMini = isMiniStaffSession();
+  const staffPresentation = isMini ? "mini-training-dock" : (isCheckRun ? "bridge-check" : "full-bridge");
   const isRepairState = !finished && state.lastInputResult === "wrong";
+  const concealCheckAnswer = isCheckRun && !isRepairState && !finished;
   const showStaffTarget = !finished && (!isCheckRun || isRepairState);
 
   if (els.mainTitle) els.mainTitle.textContent = isMini ? "星桥前三跳" : (isCheckRun ? "少提示星桥" : staffCourse.title);
   els.levelBadge.textContent = isMini ? "S01·短" : (isCheckRun ? "S01·复" : staffCourse.id);
-  syncStaffFallbackCopy({ target, targetId, staffHint, isCheckRun, finished });
+  syncStaffFallbackCopy({ target, targetId, staffHint, isCheckRun, isRepairState, finished });
   if (els.appShell) {
     els.appShell.dataset.phase = "staff";
     els.appShell.dataset.scaffold = isCheckRun ? "staff-check" : "staff";
     els.appShell.dataset.levelId = staffCourse.id;
     els.appShell.dataset.staffRunMode = state.staffRunMode;
     els.appShell.dataset.staffSession = state.staffSessionMode;
+    els.appShell.dataset.staffPresentation = staffPresentation;
     els.appShell.dataset.staffRepairState = isRepairState ? "repair" : "idle";
   }
   if (els.moonYard) {
@@ -5235,6 +7162,7 @@ function renderStaffScreen() {
     els.moonYard.dataset.levelId = staffCourse.id;
     els.moonYard.dataset.staffRunMode = state.staffRunMode;
     els.moonYard.dataset.staffSession = state.staffSessionMode;
+    els.moonYard.dataset.staffPresentation = staffPresentation;
     els.moonYard.dataset.staffRepairState = isRepairState ? "repair" : "idle";
   }
   if (els.chapterTitle) els.chapterTitle.textContent = isMini ? "观察小段 · 到休息星" : (isCheckRun ? "少提示复读 · 自己找键" : `${phase.label} · ${scaffoldLabels.staff}`);
@@ -5242,6 +7170,8 @@ function renderStaffScreen() {
     ? isMini
       ? "前三跳完成，到小休息星先停一下。"
       : "全读对了，小恐龙跳到对面星球啦。"
+    : concealCheckAnswer
+    ? "看当前谱位，自己找键。"
     : isCheckRun
     ? `看${targetId.staffHint}，读 ${targetId.letter}，自己找键。`
     : isMini
@@ -5256,13 +7186,32 @@ function renderStaffScreen() {
     const targetStageStep = targetStep || finalStep;
     const targetX = targetStageStep?.x ?? finalStep.x;
     const targetY = staffLaneY[targetStageStep?.lane] || staffLaneY[finalStep.lane] || 60;
+    els.staffStage.style.setProperty("--staff-y-c", `${staffLaneY["middle-c"]}%`);
+    els.staffStage.style.setProperty("--staff-y-d", `${staffLaneY.d}%`);
+    els.staffStage.style.setProperty("--staff-y-e", `${staffLaneY.e}%`);
+    els.staffStage.style.setProperty("--staff-y-f", `${staffLaneY.f}%`);
+    els.staffStage.style.setProperty("--staff-y-g", `${staffLaneY.g}%`);
+    els.staffStage.style.setProperty("--staff-line-gap", `${staffLaneY.e - staffLaneY.g}%`);
     els.staffStage.style.setProperty("--staff-target-x", `${targetX}%`);
     els.staffStage.style.setProperty("--staff-target-y", `${targetY}%`);
     els.staffStage.style.setProperty("--staff-target-color", targetColor);
     els.staffStage.style.setProperty("--staff-target-soft", alpha(targetColor, 0.22));
     els.staffStage.dataset.targetLane = targetStageStep?.lane || "";
     els.staffStage.dataset.targetDone = finished ? "true" : "false";
+    els.staffStage.dataset.staffPresentation = staffPresentation;
+    els.staffStage.dataset.staffMiniProgress = isMini ? (finished ? "3-of-3-complete" : `${state.staffStepIndex}-of-3`) : "";
+    els.staffStage.dataset.staffDestinationState = finished ? "reached" : "waiting";
     els.staffStage.dataset.repairState = isRepairState ? "repair" : "idle";
+  }
+  if (els.staffFinish) {
+    els.staffFinish.textContent = isMini ? "小休息星" : "星星门";
+    els.staffFinish.dataset.destination = isMini ? "mini-rest" : "full-bridge-finish";
+    els.staffFinish.dataset.destinationState = finished ? "reached" : "waiting";
+    els.staffFinish.setAttribute("role", "img");
+    els.staffFinish.setAttribute("aria-label", isMini
+      ? `小休息星，三颗谱垫已完成 ${Math.min(state.staffStepIndex, 3)} 颗`
+      : "星星桥终点");
+    els.staffFinish.tabIndex = -1;
   }
   els.nextAction.style.setProperty("--part-color", targetColor);
   els.nextAction.style.setProperty("--part-color-soft", alpha(targetColor, 0.16));
@@ -5271,6 +7220,10 @@ function renderStaffScreen() {
       <span class="cue-chip cue-pos"><small>亮垫</small><strong>${target.name}</strong></span>
       <span class="cue-connector" aria-hidden="true"></span>
       <span class="cue-chip cue-key-place"><small>找键</small><strong>${targetId.keyShort}</strong></span>
+    `
+    : concealCheckAnswer
+    ? `
+      <span class="cue-chip cue-pos"><small>看谱</small><strong>当前谱位</strong></span>
     `
     : `
       <span class="cue-chip cue-pos"><small>看谱</small><strong>${staffHint}</strong></span>
@@ -5281,7 +7234,7 @@ function renderStaffScreen() {
     `;
   if (els.staffVisualCue) {
     const fgSupport = staffFgSupportInfo(targetStep || finalStep);
-    els.staffVisualCue.hidden = isRepairState;
+    els.staffVisualCue.hidden = isRepairState || concealCheckAnswer;
     els.staffVisualCue.style.setProperty("--target-color", targetColor);
     els.staffVisualCue.style.setProperty("--target-soft", alpha(targetColor, 0.22));
     els.staffVisualCue.dataset.cueState = finished ? "done" : state.lastInputResult === "wrong" ? "wrong" : "ready";
@@ -5291,7 +7244,7 @@ function renderStaffScreen() {
       ? `<span class="staff-cue-success" aria-hidden="true">✓</span><span class="staff-cue-flow" aria-hidden="true"></span><span class="staff-cue-finish-orb" aria-hidden="true"></span>`
       : `<span class="staff-cue-pad-icon" aria-hidden="true"><i></i></span><span class="staff-cue-flow" aria-hidden="true"></span>${fgSupport.needed ? `<span class="staff-cue-fg-support" aria-hidden="true"><i></i><b>${fgSupport.label}</b></span>` : ""}${locatorVisualHtml(target, "找这格", "staff-cue-locator")}`;
   }
-  els.staffNoteCard.hidden = isRepairState;
+  els.staffNoteCard.hidden = isRepairState || concealCheckAnswer;
   els.staffNoteCard.style.setProperty("--target-color", targetColor);
   els.staffNoteCard.style.setProperty("--target-soft", alpha(targetColor, 0.16));
   els.staffNoteCard.style.setProperty("--target-glow", alpha(targetColor, 0.22));
@@ -5299,6 +7252,8 @@ function renderStaffScreen() {
     ? isMini
       ? `<small>小休息星</small><strong>✓</strong><span>前三跳完成</span>`
       : `<small>全部读完</small><strong>✓</strong><span>对面星球</span>`
+    : concealCheckAnswer
+    ? `<small>少提示</small><strong>♪</strong><span>看当前谱位</span>`
     : isCheckRun
     ? `<small>少提示</small><strong>${target.name}</strong><span>${staffHint}</span>`
     : isMini
@@ -5333,16 +7288,17 @@ function renderStaffScreen() {
 function renderStaffSteps() {
   els.staffSteps.innerHTML = "";
   const steps = activeStaffSteps();
-  const miniFinalIndex = isMiniStaffSession() ? steps.length - 1 : -1;
+  const isMini = isMiniStaffSession();
+  const isCheckRun = state.staffRunMode === "check";
   steps.forEach((step, index) => {
     const note = noteForMidi(step.midi) || notes[0];
     const isDone = index < state.staffStepIndex || state.staffComplete;
     const isCurrent = index === state.staffStepIndex && !state.staffComplete;
     const isFuture = !isDone && !isCurrent;
     const isHint = state.lastInputResult === "wrong" && index === state.staffStepIndex;
-    const isMiniRest = index === miniFinalIndex;
     const fgSupport = isCurrent ? staffFgSupportInfo(step) : { needed: false, source: "" };
-    const noteLabel = `<strong>${note.name}</strong>`;
+    const concealCurrentCheckAnswer = isCurrent && isCheckRun;
+    const noteLabel = `<strong>${isFuture || concealCurrentCheckAnswer ? "" : note.name}</strong>`;
     const pad = document.createElement("button");
     pad.className = "staff-step";
     pad.type = "button";
@@ -5360,19 +7316,22 @@ function renderStaffSteps() {
     pad.dataset.revealed = isHint ? "true" : "false";
     pad.dataset.fgSupport = fgSupport.needed ? "true" : "false";
     pad.dataset.fgSupportSource = fgSupport.needed ? fgSupport.source : "";
-    pad.dataset.miniRest = isMiniRest ? "true" : "false";
-    pad.setAttribute("aria-label", `${step.label}，谱位${step.staffHint || ""}，音名 ${note.name}`);
+    pad.dataset.miniRest = "false";
+    pad.dataset.trainingPad = isMini ? "true" : "false";
+    pad.setAttribute("aria-label", isFuture
+      ? `${step.label}，等待`
+      : isCurrent && isCheckRun
+      ? `当前，谱位${step.staffHint || ""}`
+      : `${step.label}，谱位${step.staffHint || ""}，音名 ${note.name}`);
     if (isDone) pad.classList.add("done");
     if (isCurrent) pad.classList.add("current");
     if (isFuture) pad.classList.add("locked");
     if (isHint) pad.classList.add("hint");
     if (fgSupport.needed) pad.classList.add("fg-support");
-    if (isMiniRest) pad.classList.add("mini-rest");
     pad.innerHTML = `
       <span class="staff-note-aura" aria-hidden="true"></span>
       <span class="staff-note-head" aria-hidden="true"><i></i></span>
       ${fgSupport.needed ? `<span class="staff-fg-support-mark" aria-hidden="true"><i></i></span>` : ""}
-      ${isMiniRest ? `<span class="staff-mini-rest-mark" aria-hidden="true">休</span>` : ""}
       <span class="staff-note-label">
         ${noteLabel}
       </span>
@@ -5490,17 +7449,10 @@ function updateStaffJumpGuide() {
 }
 
 function staffDinoPosition() {
+  if (isMiniStaffSession() && state.staffStepIndex >= activeStaffStepCount()) {
+    return staffMiniRestPosition;
+  }
   if (state.staffComplete) {
-    if (isMiniStaffSession()) {
-      const restStep = activeStaffSteps()[activeStaffStepCount() - 1];
-      if (restStep) {
-        return {
-          x: restStep.x,
-          y: (staffLaneY[restStep.lane] || 60) - 7.5,
-          place: "mini-rest"
-        };
-      }
-    }
     return { x: 88, y: 55.5, place: "finish" };
   }
 
@@ -5604,7 +7556,7 @@ function clearAllLs08PointerActivations() {
     scheduleLs08PointerCleanup(midi, activation);
   }
   syncLs08RenderedPointerState();
-  activeMidis.forEach((midi) => releaseGardenInput(midi, "屏幕"));
+  activeMidis.forEach((midi) => releaseTrackedKeyboardInput(midi, "屏幕"));
 }
 
 function releaseLs08PointerFromDocument(event) {
@@ -5615,7 +7567,15 @@ function releaseLs08PointerFromDocument(event) {
   if (!activation.removed) return;
   ls08DocumentReleaseEvents.add(event);
   syncLs08RenderedPointerState();
-  if (activation.shouldRelease) releaseGardenInput(midi, "屏幕");
+  if (activation.shouldRelease) releaseTrackedKeyboardInput(midi, "屏幕");
+}
+
+function releaseTrackedKeyboardInput(midi, source) {
+  if (state.screen === "chapter4") {
+    releaseChapter4Input(midi, source);
+    return;
+  }
+  releaseGardenInput(midi, source);
 }
 
 function ls08MidiHasActivePointer(midi) {
@@ -5725,14 +7685,148 @@ function clearAllChapter4BubblePointerActivations() {
   syncChapter4BubblePointerState();
 }
 
+const freePianoChromaticLayout = [
+  { midi: 60, name: "C", color: noteIdentityMatrix.C.color },
+  { midi: 61, name: "C#", color: "#5F7286", blackClass: "black-cs", center: "14.285714%" },
+  { midi: 62, name: "D", color: noteIdentityMatrix.D.color },
+  { midi: 63, name: "D#", color: "#5F7286", blackClass: "black-ds", center: "28.571429%" },
+  { midi: 64, name: "E", color: noteIdentityMatrix.E.color },
+  { midi: 65, name: "F", color: noteIdentityMatrix.F.color },
+  { midi: 66, name: "F#", color: "#5F7286", blackClass: "black-fs", center: "57.142857%" },
+  { midi: 67, name: "G", color: noteIdentityMatrix.G.color },
+  { midi: 68, name: "G#", color: "#5F7286", blackClass: "black-gs", center: "71.428571%" },
+  { midi: 69, name: "A", color: noteIdentityMatrix.A.color },
+  { midi: 70, name: "A#", color: "#5F7286", blackClass: "black-as", center: "85.714286%" },
+  { midi: 71, name: "B", color: noteIdentityMatrix.B.color }
+];
+
+const freePianoChromaticByMidi = new Map(freePianoChromaticLayout.map((note) => [note.midi, note]));
+
+function freePianoIdentityForMidi(midi) {
+  const known = freePianoChromaticByMidi.get(Number(midi));
+  if (known) return known;
+  const pitchClasses = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
+  const normalized = Number(midi);
+  if (!Number.isInteger(normalized) || normalized < 0 || normalized > 127) return null;
+  return { midi: normalized, name: pitchClasses[normalized % 12], color: "#5F7286" };
+}
+
+function freePianoInputLabel(source) {
+  if (source === "MIDI") return "外接琴键";
+  if (source === "麦克风") return "钢琴声音";
+  return "屏幕琴键";
+}
+
+function handleFreePianoInput(midi, source, { pointer = false } = {}) {
+  if (state.screen !== "free-piano") return false;
+  const identity = freePianoIdentityForMidi(midi);
+  if (!identity) return false;
+  state.freePianoLastMidi = identity.midi;
+  state.freePianoLastSource = source;
+  const inputLabel = freePianoInputLabel(source);
+  if (els.freePianoInput) els.freePianoInput.textContent = inputLabel;
+  if (els.freePianoHeard) els.freePianoHeard.textContent = `听到：${identity.name}`;
+  if (els.inputStatus) els.inputStatus.textContent = `输入：${inputLabel}`;
+  if (els.heardStatus) els.heardStatus.textContent = `听到：${identity.name}`;
+  if (source !== "麦克风") {
+    playPianoNote(midiFrequency(identity.midi), { gain: 0.10, duration: 0.48 });
+  }
+  const key = els.keyboard?.querySelector(`[data-midi="${identity.midi}"]`);
+  if (key && !pointer) {
+    pulseKeyboardKey(key, identity, "press", { showLabel: !identity.blackClass });
+  } else if (key && pointer && !identity.blackClass) {
+    showKeyPressLabel(key, identity, "press");
+  }
+  return true;
+}
+
+function releaseFreePianoInput(midi) {
+  const key = els.keyboard?.querySelector(`[data-midi="${Number(midi)}"]`);
+  if (key) releaseKeyboardPress(key);
+}
+
+function bindFreePianoKey(key, identity) {
+  key.addEventListener("pointerdown", (event) => {
+    key.setPointerCapture?.(event.pointerId);
+    beginKeyboardPress(key);
+    showKeyPressRipple(key);
+    key.freePianoPointerPlayed = true;
+    clearTimeout(key.freePianoPointerTimer);
+    key.freePianoPointerTimer = setTimeout(() => {
+      key.freePianoPointerPlayed = false;
+      key.freePianoPointerTimer = null;
+    }, 900);
+    handleFreePianoInput(identity.midi, "屏幕", { pointer: true });
+  });
+  ["pointerup", "pointerleave", "pointercancel"].forEach((eventName) => {
+    key.addEventListener(eventName, () => releaseKeyboardPress(key));
+  });
+  key.addEventListener("click", () => {
+    if (key.freePianoPointerPlayed) {
+      key.freePianoPointerPlayed = false;
+      clearTimeout(key.freePianoPointerTimer);
+      key.freePianoPointerTimer = null;
+      return;
+    }
+    beginKeyboardPress(key);
+    showKeyPressRipple(key);
+    handleFreePianoInput(identity.midi, "屏幕", { pointer: true });
+    setTimeout(() => releaseKeyboardPress(key), 180);
+  });
+  key.addEventListener("blur", () => releaseKeyboardPress(key));
+}
+
+function renderFreePianoKeyboard() {
+  els.keyboard.innerHTML = "";
+  els.keyboard.className = "keyboard real-piano free-piano-keyboard";
+  els.keyboard.dataset.scaffold = "free";
+  els.keyboard.dataset.targetVisible = "false";
+
+  const guideLayer = document.createElement("div");
+  guideLayer.className = "keyboard-guide-layer free-piano-guide-layer";
+  guideLayer.setAttribute("aria-hidden", "true");
+  guideLayer.innerHTML = `<span class="keyboard-guide-band guide-two-black"></span><span class="keyboard-guide-band guide-three-black"></span>`;
+  els.keyboard.appendChild(guideLayer);
+
+  const whiteNotes = freePianoChromaticLayout.filter((note) => !note.blackClass);
+  whiteNotes.forEach((identity, index) => {
+    const key = document.createElement("button");
+    key.className = "key white-key free-piano-white-key";
+    key.type = "button";
+    key.dataset.midi = String(identity.midi);
+    key.dataset.note = identity.name;
+    key.style.setProperty("--key-index", index + 1);
+    key.style.setProperty("--note-color", identity.color);
+    key.style.setProperty("--press-glow", alpha(identity.color, 0.22));
+    key.setAttribute("aria-label", `${identity.name} 琴键`);
+    key.innerHTML = `<span class="key-color-dot" aria-hidden="true"></span><div class="key-content"><strong>${identity.name}</strong></div>`;
+    bindFreePianoKey(key, identity);
+    els.keyboard.appendChild(key);
+  });
+
+  freePianoChromaticLayout.filter((note) => note.blackClass).forEach((identity) => {
+    const key = document.createElement("button");
+    key.className = `black-key ${identity.blackClass} free-piano-black-key`;
+    key.type = "button";
+    key.dataset.midi = String(identity.midi);
+    key.dataset.note = identity.name;
+    key.style.setProperty("--black-center", identity.center);
+    key.setAttribute("aria-label", `${identity.name} 黑键`);
+    bindFreePianoKey(key, identity);
+    els.keyboard.appendChild(key);
+  });
+}
+
 function renderKeyboard(target, options = {}) {
   els.keyboard.innerHTML = "";
   els.keyboard.classList.add("real-piano");
+  els.keyboard.classList.remove("free-piano-keyboard");
   els.keyboard.classList.remove("is-playing", "is-releasing");
   const level = options.level || (state.screen === "play" ? activeLevel() : null);
   const scaffold = options.scaffold || level?.scaffold || (state.screen === "staff" ? "staff" : "strong");
   const showTargetCue = shouldShowKeyboardTarget(level, options);
   const concealTargetIdentity = Boolean(options.concealTargetIdentity);
+  const usesLocalM01Feedback = level?.id === "M01";
   markAttemptCue(options.disableTarget ? "none" : (showTargetCue ? "strong" : "soft"));
   els.keyboard.dataset.scaffold = scaffold;
   els.keyboard.dataset.targetVisible = showTargetCue ? "true" : "false";
@@ -5780,13 +7874,15 @@ function renderKeyboard(target, options = {}) {
       key.classList.add("hit");
       if (state.lastInputResult) key.classList.add(`hit-${state.lastInputResult}`);
     }
-    const tapBadge = isTargetKey ? `<span class="tap-badge" aria-hidden="true"></span><span class="tap-finger" aria-hidden="true"><i></i></span>` : "";
+    const tapBadge = isTargetKey && !usesLocalM01Feedback
+      ? `<span class="tap-badge" aria-hidden="true"></span><span class="tap-finger" aria-hidden="true"><i></i></span>`
+      : "";
     const keyLabel = reserved
       ? `<strong>${note.name}</strong><span>后面</span>`
       : `<strong>${note.name}</strong>`;
     const keyTag = reserved ? "后面学" : (friendlyKeyLocator(note) || locatorShort[index]);
     const keyFindTag = reserved ? `<span class="key-find-tag">${keyTag}</span>` : "";
-    const keyLocatorVisual = !reserved && isTargetKey
+    const keyLocatorVisual = !usesLocalM01Feedback && !reserved && isTargetKey
       ? locatorVisualHtml(note, "住这里", "key-locator-mini")
       : "";
     key.innerHTML = `${tapBadge}${keyFindTag}${keyLocatorVisual}<span class="key-color-dot" aria-hidden="true"></span><div class="key-content">${keyLabel}</div>`;
@@ -5808,7 +7904,7 @@ function renderKeyboard(target, options = {}) {
         if (played) traceLs08(ensureLs08Attempt(), "child-key", { reason: "pointer", midis: [note.midi], pairIndex: ensureLs08Attempt()?.pairIndex });
         handleInput(note.midi, "屏幕");
       }
-      if (state.screen === "play" && !isListeningLevel() && activeLevel()?.id !== "M08") showKeyPressLabel(key, note);
+      if (state.screen === "play" && !isListeningLevel() && activeLevel()?.id !== "M08" && els.appShell?.dataset.m02CompletionSurface !== "true") showKeyPressLabel(key, note);
     });
     key.addEventListener("pointerup", (event) => {
       if (ls08DocumentReleaseEvents.has(event)) return;
@@ -5925,19 +8021,22 @@ function pulseKeyboardKey(key, note, result = "press", options = {}) {
   if (!key) return;
   if (key.pressTimer) clearTimeout(key.pressTimer);
   key.classList.remove("program-press", "program-correct", "program-wrong", "program-hint");
+  if (options.local === true) key.classList.add("m01-local-feedback");
   beginKeyboardPress(key);
   key.classList.add("program-press", `program-${result}`);
   showKeyPressRipple(key, result);
   if (note && options.showLabel !== false) showKeyPressLabel(key, note, result);
-  const hold = result === "hint" ? 520 : 340;
+  const hold = options.local === true ? 420 : (result === "hint" ? 520 : 340);
   key.pressTimer = setTimeout(() => {
     releaseKeyboardPress(key);
     key.classList.remove("program-press", `program-${result}`);
+    key.classList.remove("m01-local-feedback");
     key.pressTimer = null;
   }, hold);
 }
 
 function showKeyPressLabel(key, note, result = "press") {
+  if (usesM01LocalFeedback()) return;
   const rect = key.getBoundingClientRect();
   const label = document.createElement("span");
   const staffClass = state.screen === "staff" ? " staff-key-label" : "";
@@ -5976,17 +8075,17 @@ function clearAssistedRepairState() {
   if (state.practiceAttempt) state.practiceAttempt.assistedMode = false;
 }
 
-function beginAssistedRepair(targetMidi) {
+function beginAssistedRepair(targetMidi, { restoring = false } = {}) {
   const attempt = state.practiceAttempt;
   const stepWrongs = attempt?.activeStepRecord?.wrongs || 0;
   if (!attempt?.formalSession || stepWrongs < 3) return false;
   if (state.assistedSuccessPending) {
-    if (stepWrongs >= 4) completeModeledSuccess(targetMidi, "assisted-retry-wrong");
+    if (!restoring && stepWrongs >= 4) completeModeledSuccess(targetMidi, "assisted-retry-wrong");
     return true;
   }
   state.assistedSuccessPending = true;
   attempt.assistedMode = true;
-  markAttemptCue("strong");
+  if (!restoring) markAttemptCue("strong");
   if (state.activeSession) {
     state.activeSession.restAfterCurrentLevel = true;
     persistActiveSession();
@@ -6079,6 +8178,16 @@ function markAssistedRepairSuccess() {
 
 function handleInput(midi, source) {
   if (gameplayInputIsBlocked()) return;
+  if (state.screen === "free-piano") {
+    handleFreePianoInput(midi, source);
+    return;
+  }
+  if (state.screen === "map") {
+    const identity = freePianoIdentityForMidi(midi);
+    if (els.inputStatus) els.inputStatus.textContent = `输入：${source === "屏幕" ? "屏幕琴键" : source}`;
+    if (els.heardStatus) els.heardStatus.textContent = `听到：${identity?.name || "-"}`;
+    return;
+  }
   if (state.screen === "chapter4") {
     handleChapter4Input(midi, source);
     return;
@@ -6107,9 +8216,11 @@ function handleInput(midi, source) {
   const target = noteForMidi(targetMidi);
   const inputLevel = activeLevel();
   const usesBlueprintLock = inputLevel?.id === "M08";
+  const usesLocalM01Feedback = inputLevel?.id === "M01";
+  const usesCompanionGentleFeedback = ["M01", "M02", "M03"].includes(inputLevel?.id);
   state.lastInputMidi = midi;
 
-  els.heardStatus.textContent = `听到：${heard ? heard.name : midi}`;
+  els.heardStatus.textContent = `听到：${heard?.name || freePianoIdentityForMidi(midi)?.name || "-"}`;
   els.inputStatus.textContent = `输入：${source}`;
 
   if (midi === targetMidi) {
@@ -6120,14 +8231,15 @@ function handleInput(midi, source) {
     const droppedPart = activePart();
     const level = inputLevel;
     const suppressListeningCompletionEffects = level?.id === "M03" && state.stepIndex === level.parts.length - 1;
-    if (!usesBlueprintLock && !suppressListeningCompletionEffects) showFlyingPart(droppedPart);
+    if (!usesBlueprintLock && !usesLocalM01Feedback && !suppressListeningCompletionEffects) showFlyingPart(droppedPart);
     pulseBuildStage("correct");
     playCorrectSound();
     state.stepIndex += 1;
     state.stepHadWrong = false;
     setRouteJustLocked(level, state.stepIndex - 1);
-    render();
     const levelFinished = state.stepIndex >= activeLevel().parts.length;
+    if (level?.id === "M02" && !levelFinished) clearM02StepHandoffFeedback();
+    render();
     if (!levelFinished) {
       beginPracticeStepClock();
       scheduleWorkshopIdleHints();
@@ -6147,13 +8259,15 @@ function handleInput(midi, source) {
         : `${correctId.letter} 找到了，${story.subtitle}。`;
       // A correct input changes the plan, crane card, character and piano immediately.
       // Keep the large scene toast for repair only so it cannot cover the next blueprint step.
-      setDinoMood("good");
+      setDinoMood(level?.id === "M02" ? "jump" : "good", level?.id === "M02" ? 680 : 760);
       if (isListeningLevel(activeLevel())) {
         scheduleListeningPrompt(560);
       }
     }
-    showInputEffect(correctMidi, "correct", { showLabel: !usesBlueprintLock && !suppressListeningCompletionEffects });
-    if (!usesBlueprintLock && !suppressListeningCompletionEffects) {
+    if (!(level?.id === "M02" && !levelFinished)) {
+      showInputEffect(correctMidi, "correct", { showLabel: !usesBlueprintLock && !usesLocalM01Feedback && !suppressListeningCompletionEffects });
+    }
+    if (!usesBlueprintLock && !usesLocalM01Feedback && !usesCompanionGentleFeedback && !suppressListeningCompletionEffects) {
       showKeySpriteEffect(correctMidi, "correct");
       showNoteBurst(correctMidi, "correct", heard || target);
       showMusicFlight(correctMidi, heard || target, getPlayFlightTarget(state.stepIndex - 1), "correct");
@@ -6168,7 +8282,7 @@ function handleInput(midi, source) {
     els.feedback.classList.add("bad");
     const listeningRepair = isListeningLevel(activeLevel());
     els.feedback.textContent = wrongFeedbackFor(heard, target);
-    if (!listeningRepair && !usesBlueprintLock) {
+    if (!listeningRepair && !usesBlueprintLock && !usesCompanionGentleFeedback) {
       const story = wrongStoryFor(activeLevel(), target, heard);
       showStageInputToast("wrong", {
         title: story.title,
@@ -6177,24 +8291,28 @@ function handleInput(midi, source) {
       });
     }
     setDinoMood("bad");
-    showInputEffect(midi, "wrong", { showLabel: !usesBlueprintLock });
-    if (!listeningRepair && !usesBlueprintLock) showNoteBurst(midi, "wrong", heard);
+    showInputEffect(midi, "wrong", { showLabel: !usesBlueprintLock && !usesLocalM01Feedback });
+    if (!listeningRepair && !usesBlueprintLock && !usesLocalM01Feedback && !usesCompanionGentleFeedback) showNoteBurst(midi, "wrong", heard);
     if (listeningRepair) {
       setTimeout(() => playListeningPrompt(), 220);
     }
     setTimeout(() => {
-      showInputEffect(targetMidi, "hint", { showLabel: !usesBlueprintLock });
-      if (!listeningRepair && !usesBlueprintLock) {
+      showInputEffect(targetMidi, "hint", { showLabel: !usesBlueprintLock && !usesLocalM01Feedback });
+      if (!listeningRepair && !usesBlueprintLock && !usesLocalM01Feedback && !usesCompanionGentleFeedback) {
         showNoteBurst(targetMidi, "hint", target);
         showMusicFlight(targetMidi, target, getPlayFlightTarget(state.stepIndex), "hint");
       }
     }, 90);
-    if (!listeningRepair && !usesBlueprintLock) showKeySpriteEffect(midi, "wrong");
+    if (!listeningRepair && !usesBlueprintLock && !usesLocalM01Feedback && !usesCompanionGentleFeedback) showKeySpriteEffect(midi, "wrong");
     beginAssistedRepair(targetMidi);
   }
 }
 
 function releaseGardenInput(midi, source) {
+  if (state.screen === "free-piano") {
+    releaseFreePianoInput(midi);
+    return;
+  }
   if (state.screen === "chapter4") {
     releaseChapter4Input(midi, source);
     return;
@@ -10033,14 +12151,17 @@ function currentChapter4Action(targetId = null) {
 }
 
 function createDirectChapter4Action(levelId) {
-  const targetId = ["LP02", "LP03"].includes(levelId) ? levelId : "LP01";
+  const targetId = ["LP02", "LP03", "LP04"].includes(levelId) ? levelId : "LP01";
   const action = {
     actionId: targetId === "LP01"
       ? chapter4Config.lp01.actionId
-      : (targetId === "LP02" ? chapter4Config.lp02.actionId : chapter4Config.lp03.actionIds[0]),
+      : (targetId === "LP02"
+        ? chapter4Config.lp02.actionId
+        : (targetId === "LP03" ? chapter4Config.lp03.actionIds[0] : chapter4Config.lp04.steps[0].actionId)),
     kind: targetId === "LP01" ? "chapter4-listening" : "chapter4-keyboard",
     targetId,
     lp03Step: targetId === "LP03" ? "C" : null,
+    lp04Step: targetId === "LP04" ? "E" : null,
     runMode: targetId === "LP01" ? "check" : "guided",
     formalSession: false,
     directMode: true
@@ -10049,7 +12170,9 @@ function createDirectChapter4Action(levelId) {
     ? createLp01Attempt(null, { formalSession: false, directMode: true })
     : (targetId === "LP02"
       ? createLp02Attempt(null, { formalSession: false, directMode: true })
-      : createLp03Attempt(null, { formalSession: false, directMode: true, stepId: "C" }));
+      : (targetId === "LP03"
+        ? createLp03Attempt(null, { formalSession: false, directMode: true, stepId: "C" })
+        : createLp04Attempt(null, { formalSession: false, directMode: true, stepId: "E" })));
   return action;
 }
 
@@ -10100,6 +12223,8 @@ function resetLp01Call(attempt) {
 
 function createLp01Attempt(session = state.activeSession, options = {}) {
   const seed = session?.sessionId || options.seed || "C4-01-direct-LP01";
+  const reviewMode = options.reviewMode === "reduced-cue" ? "reduced-cue" : (options.reviewMode === "remediation" ? "remediation" : null);
+  const reducedCueReview = reviewMode === "reduced-cue";
   const attempt = {
     version: 1,
     levelId: "LP01",
@@ -10112,9 +12237,10 @@ function createLp01Attempt(session = state.activeSession, options = {}) {
     bubbleMapping: lp01BubbleMappingForSeed(seed),
     lowSideSeed: null,
     sequence: lp01SequenceForSeed(seed),
-    phase: "lp01-model-ready",
+    reviewMode,
+    phase: reducedCueReview ? "lp01-reduced-cue-ready" : "lp01-model-ready",
     modelIndex: 0,
-    modelCompleted: false,
+    modelCompleted: reducedCueReview,
     modelActiveBubbleId: null,
     modelEvents: [],
     modelReplayCount: 0,
@@ -10149,6 +12275,8 @@ function createLp01Attempt(session = state.activeSession, options = {}) {
 }
 
 function createLp02Attempt(session = state.activeSession, options = {}) {
+  const reviewMode = options.reviewMode === "reduced-cue" ? "reduced-cue" : (options.reviewMode === "remediation" ? "remediation" : null);
+  const remediationReview = reviewMode === "remediation";
   return {
     version: 1,
     levelId: "LP02",
@@ -10156,9 +12284,11 @@ function createLp02Attempt(session = state.activeSession, options = {}) {
     sessionId: session?.sessionId || null,
     formalSession: options.formalSession ?? Boolean(session),
     directMode: Boolean(options.directMode),
-    phase: options.reconnectRequired ? "lp02-reconnect-ready" : "lp02-guide",
-    reconnectRequired: Boolean(options.reconnectRequired),
-    reconnectCompleted: !options.reconnectRequired,
+    reviewMode,
+    reviewBaselineScaffold: remediationReview,
+    phase: options.reconnectRequired || remediationReview ? "lp02-reconnect-ready" : "lp02-guide",
+    reconnectRequired: Boolean(options.reconnectRequired || remediationReview),
+    reconnectCompleted: !(options.reconnectRequired || remediationReview),
     targetMidi: 48,
     firstChildMidi: null,
     firstInputRoute: null,
@@ -10173,7 +12303,7 @@ function createLp02Attempt(session = state.activeSession, options = {}) {
     noteNameCorrect: false,
     registerCorrect: false,
     wrongOctave: false,
-    strongCueUsed: false,
+    strongCueUsed: remediationReview,
     modeled: false,
     accessibilityVisualAssist: false,
     experimentalInput: false,
@@ -10294,6 +12424,64 @@ function createLp03Attempt(session = state.activeSession, options = {}) {
   };
 }
 
+function lp04StepForId(stepId) {
+  return chapter4Config.lp04.steps.find((step) => step.id === stepId) || null;
+}
+
+function createLp04Attempt(session = state.activeSession, options = {}) {
+  const step = lp04StepForId(options.stepId || currentChapter4Action()?.lp04Step || "E") || chapter4Config.lp04.steps[0];
+  return {
+    version: 1,
+    levelId: "LP04",
+    bundleId: chapter4Config.lp04.bundleId,
+    actionId: step.actionId,
+    stepId: step.id,
+    targetMidi: step.midi,
+    echoKey: step.echoKey,
+    sessionId: session?.sessionId || null,
+    formalSession: options.formalSession ?? Boolean(session),
+    directMode: Boolean(options.directMode),
+    phase: "lp04-model-ready",
+    openingModelCompleted: Boolean(session?.lp04OpeningModelCompleted),
+    openingModelStartedAt: null,
+    openingModelEndedAt: null,
+    transitionReadyAt: null,
+    transitionReason: null,
+    transitionWaitingForRelease: false,
+    targetSource: null,
+    targetStartedAt: null,
+    targetEndedAt: null,
+    responseStartedAt: null,
+    firstChildMidi: null,
+    firstInputRoute: null,
+    firstResponseMs: null,
+    childCorrectCount: 0,
+    wrongCount: 0,
+    repairStage: "none",
+    lastWrongInput: null,
+    pendingLp04Input: null,
+    pendingModeledReason: null,
+    completionSource: null,
+    timingInterrupted: false,
+    microphoneConfidence: null,
+    inputArmed: false,
+    strongCueUsed: false,
+    modeled: false,
+    experimentalInput: false,
+    childInputs: [],
+    modeledInputs: [],
+    inputRoutes: {},
+    observations: [],
+    audioTrace: [],
+    audioTransaction: null,
+    inputEvents: [],
+    routeArmed: { "屏幕": true, MIDI: !(options.heldMidiNotes || []).length, "麦克风": true },
+    routeHeldMidi: { "屏幕": options.heldPointerMidi ?? null, MIDI: options.heldMidiNotes?.[0] ?? null, "麦克风": null },
+    heldMidiNotes: Array.isArray(options.heldMidiNotes) ? options.heldMidiNotes.slice() : [],
+    outcomeRecorded: false
+  };
+}
+
 function normalizeLp03AttemptEvidence(attempt) {
   if (!attempt || attempt.levelId !== "LP03") return attempt;
   if (!Array.isArray(attempt.childInputs)) attempt.childInputs = [];
@@ -10304,18 +12492,39 @@ function normalizeLp03AttemptEvidence(attempt) {
   return attempt;
 }
 
+function normalizeLp04AttemptEvidence(attempt) {
+  if (!attempt || attempt.levelId !== "LP04") return attempt;
+  if (!Array.isArray(attempt.childInputs)) attempt.childInputs = [];
+  if (!Array.isArray(attempt.modeledInputs)) attempt.modeledInputs = [];
+  if (!Array.isArray(attempt.observations)) attempt.observations = [];
+  if (!Array.isArray(attempt.inputEvents)) attempt.inputEvents = [];
+  if (!Array.isArray(attempt.heldMidiNotes)) attempt.heldMidiNotes = [];
+  if (!attempt.inputRoutes || typeof attempt.inputRoutes !== "object" || Array.isArray(attempt.inputRoutes)) attempt.inputRoutes = {};
+  if (!attempt.routeArmed || typeof attempt.routeArmed !== "object") attempt.routeArmed = { "屏幕": true, MIDI: true, "麦克风": true };
+  if (!attempt.routeHeldMidi || typeof attempt.routeHeldMidi !== "object") attempt.routeHeldMidi = { "屏幕": null, MIDI: null, "麦克风": null };
+  if (!Number.isFinite(attempt.childCorrectCount)) attempt.childCorrectCount = 0;
+  if (!Number.isFinite(attempt.wrongCount)) attempt.wrongCount = 0;
+  if (!['none', 'normal', 'assisted'].includes(attempt.repairStage)) attempt.repairStage = 'none';
+  if (!Object.hasOwn(attempt, 'openingModelCompleted')) attempt.openingModelCompleted = false;
+  return attempt;
+}
+
 function ensureChapter4Attempt() {
   const action = currentChapter4Action();
   if (!action) return null;
   if (!action.chapter4Attempt) {
     action.chapter4Attempt = action.targetId === "LP01"
-      ? createLp01Attempt(state.activeSession, { formalSession: !state.chapter4DirectMode, directMode: state.chapter4DirectMode })
+      ? createLp01Attempt(state.activeSession, { formalSession: !state.chapter4DirectMode, directMode: state.chapter4DirectMode, reviewMode: action.reviewMode })
       : (action.targetId === "LP02"
-        ? createLp02Attempt(state.activeSession, { formalSession: !state.chapter4DirectMode, directMode: state.chapter4DirectMode })
-        : createLp03Attempt(state.activeSession, { formalSession: !state.chapter4DirectMode, directMode: state.chapter4DirectMode, stepId: action.lp03Step }));
+        ? createLp02Attempt(state.activeSession, { formalSession: !state.chapter4DirectMode, directMode: state.chapter4DirectMode, reviewMode: action.reviewMode })
+        : (action.targetId === "LP03"
+          ? createLp03Attempt(state.activeSession, { formalSession: !state.chapter4DirectMode, directMode: state.chapter4DirectMode, stepId: action.lp03Step })
+          : createLp04Attempt(state.activeSession, { formalSession: !state.chapter4DirectMode, directMode: state.chapter4DirectMode, stepId: action.lp04Step })));
     persistChapter4Attempt();
   }
-  return normalizeLp03AttemptEvidence(action.chapter4Attempt);
+  return action.targetId === "LP04"
+    ? normalizeLp04AttemptEvidence(action.chapter4Attempt)
+    : normalizeLp03AttemptEvidence(action.chapter4Attempt);
 }
 
 function persistChapter4Progress() {
@@ -10339,7 +12548,7 @@ function clearChapter4Timers() {
 function chapter4TargetMidi(attempt = ensureChapter4Attempt()) {
   if (!attempt) return null;
   if (attempt.levelId === "LP02") return 48;
-  if (attempt.levelId === "LP03") return attempt.targetMidi;
+  if (["LP03", "LP04"].includes(attempt.levelId)) return attempt.targetMidi;
   return attempt.sequence[attempt.callIndex] ?? null;
 }
 
@@ -10620,17 +12829,19 @@ function scheduleLp01AssistedTimeout() {
 
 function renderChapter4Progress(attempt) {
   if (!els.chapter4CallProgress) return;
-  const total = attempt?.levelId === "LP01" ? 4 : (attempt?.levelId === "LP03" ? 3 : 1);
+  const total = attempt?.levelId === "LP01" ? 4 : (["LP03", "LP04"].includes(attempt?.levelId) ? 3 : 1);
   const lp03Foundation = attempt?.levelId === "LP03" ? lp03FoundationState(attempt) : null;
   const done = attempt?.levelId === "LP01"
     ? attempt.resolvedCallCount
     : (attempt?.levelId === "LP03"
       ? [lp03Foundation.cAwake, lp03Foundation.dPlaced, lp03Foundation.ePlaced].filter(Boolean).length
-      : (attempt?.phase === "lp02-complete" ? 1 : 0));
+      : (attempt?.levelId === "LP04"
+        ? [state.chapter4.lp04Progress?.echoEReached, state.chapter4.lp04Progress?.echoDReached, state.chapter4.lp04Progress?.echoCReached].filter(Boolean).length
+        : (attempt?.phase === "lp02-complete" ? 1 : 0)));
   els.chapter4CallProgress.innerHTML = Array.from({ length: total }, (_, index) => `<span class="${index < done ? "done" : ""}" aria-hidden="true"></span>`).join("");
   els.chapter4CallProgress.setAttribute("aria-label", attempt?.levelId === "LP01"
     ? `声音泡泡进度，四次声音比较已解决 ${done} 次`
-    : (attempt?.levelId === "LP03" ? `三块地基进度，已安放 ${done}/3` : `低音 C 找家${done ? "已完成" : "进行中"}`));
+    : (attempt?.levelId === "LP03" ? `三块地基进度，已安放 ${done}/3` : (attempt?.levelId === "LP04" ? `\u5730\u6d1e\u56de\u58f0 ${done}/3` : `低音 C 找家${done ? "已完成" : "进行中"}`)));
 }
 
 function lp03WrongRepairCopy(attempt, target) {
@@ -10664,6 +12875,56 @@ function lp03StatusCopy(phase) {
   return "等待下一步";
 }
 
+function lp04StatusCopy(phase) {
+  if (["lp04-model-playing", "lp04-target-playing", "lp04-modeled-playing"].includes(phase)) return "正在播放钢琴声";
+  if (phase === "lp04-child-echo-playing") return "正在播放刚才的琴键声";
+  if (phase === "lp04-wrong-repair-playing") return "正在重听这一段回声";
+  if (["lp04-awaiting-response", "lp04-assisted"].includes(phase)) return "等待孩子输入";
+  if (phase === "lp04-transition-pause") return "回声先停一停";
+  if (["lp04-model-ready", "lp04-target-ready"].includes(phase)) return "准备播放示范音";
+  if (phase === "lp04-step-complete") return "这一段回声已完成";
+  if (phase === "lp04-complete") return "三段回声已完成";
+  if (phase === "sound-paused") return "声音已暂停";
+  return "等待下一步";
+}
+
+function lp04WrongRepairCopy(attempt) {
+  const wrong = attempt?.lastWrongInput;
+  const target = attempt?.stepId || "E";
+  if (wrong?.sameNameWrongOctave) return { kicker: "\u5730\u6d1e\u56de\u58f0", main: `\u8fd9\u6b21\u627e\u66f4\u4f4e\u7684 ${target}`, support: `\u518d\u542c\u4e00\u904d\u73b0\u5728\u7684 ${target}\u3002` };
+  if (wrong?.isBlack) return { kicker: "\u5730\u6d1e\u56de\u58f0", main: `\u56de\u5230 ${target}`, support: `\u518d\u542c\u4e00\u904d\u73b0\u5728\u7684 ${target}\u3002` };
+  if (wrong?.status === "completed-step-repeat") return { kicker: "\u5730\u6d1e\u56de\u58f0", main: "\u90a3\u4e00\u6bb5\u56de\u58f0\u5df2\u7ecf\u63a5\u4f4f\u4e86", support: `\u73b0\u5728\u542c ${target}\u3002` };
+  if (wrong?.status === "future-step") return { kicker: "\u5730\u6d1e\u56de\u58f0", main: "\u90a3\u4e00\u6bb5\u56de\u58f0\u7b49\u4f1a\u513f\u518d\u6765", support: `\u73b0\u5728\u542c ${target}\u3002` };
+  return { kicker: "\u5730\u6d1e\u56de\u58f0", main: `\u542c ${target}`, support: "\u56de\u58f0\u4f1a\u7559\u5728\u5f53\u524d\u8fd9\u4e00\u6bb5\u3002" };
+}
+
+function lp04CharacterSpeech(attempt) {
+  const target = attempt?.stepId || "E";
+  const solfege = target === "E" ? "Mi" : (target === "D" ? "Re" : "Do");
+  if (attempt?.phase === "lp04-model-ready") return { kicker: "\u5730\u6d1e\u56de\u58f0", main: "\u542c\u542c\u6211\u7684\u4f4e\u4f4e\u56de\u58f0\uff1aMi\u3001Re\u3001Do", support: "\u6211\u5531 Mi\u3001Re\u3001Do\uff1b\u6d1e\u91cc\u627e E\u3001D\u3001C\u3002" };
+  if (attempt?.phase === "lp04-model-playing") return { kicker: "\u5730\u6d1e\u56de\u58f0", main: "\u6211\u5728\u5531 Mi\u3001Re\u3001Do", support: "\u7b49\u6bcf\u4e00\u58f0\u90fd\u505c\u7a33\u3002" };
+  if (["lp04-target-ready", "lp04-target-playing"].includes(attempt?.phase)) return { kicker: "\u5730\u6d1e\u56de\u58f0", main: `\u6211\u5531 ${solfege}\uff0c\u4f60\u627e ${target}`, support: "\u7b49\u58f0\u97f3\u505c\u7a33\u540e\u518d\u6309\u3002" };
+  if (attempt?.phase === "lp04-child-echo-playing") {
+    const heard = chapter4NoteForMidi(attempt.pendingLp04Input?.midi);
+    const heardName = heard?.isBlack ? heard.pitchName : heard?.name;
+    return heardName
+      ? { kicker: "\u5730\u6d1e\u56de\u58f0", main: `\u4f60\u521a\u624d\u5f39\u7684\u662f ${heardName}`, support: "\u7b49\u7434\u952e\u58f0\u505c\u7a33\u3002" }
+      : { kicker: "\u5730\u6d1e\u56de\u58f0", main: "\u542c\u542c\u521a\u624d\u8fd9\u4e00\u58f0", support: "\u7b49\u7434\u952e\u58f0\u505c\u7a33\u3002" };
+  }
+  return null;
+}
+
+function lp04RepairSpeechFor(attempt) {
+  const wrong = attempt?.lastWrongInput;
+  const target = attempt?.stepId || "E";
+  const wrongName = wrong?.isBlack ? wrong.pitchName : (wrong?.name || wrong?.pitchName);
+  if (wrong?.sameNameWrongOctave) return { kicker: "\u5730\u6d1e\u56de\u58f0", main: `\u521a\u624d\u662f\u9ad8\u4e00\u4e2a ${target}\uff0c\u8fd9\u6b21\u627e\u66f4\u4f4e\u7684 ${target}`, support: `\u518d\u542c\u4e00\u904d\u73b0\u5728\u7684 ${target}\u3002` };
+  if (wrong?.status === "completed-step-repeat") return { kicker: "\u5730\u6d1e\u56de\u58f0", main: "\u90a3\u4e00\u6bb5\u56de\u58f0\u5df2\u7ecf\u63a5\u4f4f\u4e86", support: `\u73b0\u5728\u542c ${target}\u3002` };
+  if (wrong?.status === "future-step") return { kicker: "\u5730\u6d1e\u56de\u58f0", main: "\u90a3\u4e00\u6bb5\u56de\u58f0\u7b49\u4f1a\u513f\u518d\u6765", support: `\u73b0\u5728\u542c ${target}\u3002` };
+  if (wrongName) return { kicker: "\u5730\u6d1e\u56de\u58f0", main: `\u521a\u624d\u662f ${wrongName}\uff0c\u8fd9\u6b21\u627e ${target}`, support: `\u518d\u542c\u4e00\u904d\u73b0\u5728\u7684 ${target}\u3002` };
+  return { kicker: "\u5730\u6d1e\u56de\u58f0", main: `\u542c ${target}`, support: "\u56de\u58f0\u4f1a\u7559\u5728\u5f53\u524d\u8fd9\u4e00\u6bb5\u3002" };
+}
+
 function chapter4SpeechCopy(attempt) {
   if (!attempt) return { kicker: "地下入口", main: "洞口在等你", support: "点入口再出发。" };
   if (attempt.levelId === "LP02") {
@@ -10678,6 +12939,23 @@ function chapter4SpeechCopy(attempt) {
     if (attempt.phase === "lp02-complete") return { kicker: "第一块地基", main: "低音 C 找到家了", support: "我唱 Do。今天先在洞口歇一歇。" };
     if (attempt.phase === "sound-paused") return { kicker: "声音先停住", main: "点重听再继续", support: "刚才的位置和记录都留着。" };
     return { kicker: "低音 C 的家", main: "找下面的 C", support: "两个都叫 Do。找到下面那个 C，按一下。" };
+  }
+  if (attempt.levelId === "LP04") {
+    const characterSpeech = lp04CharacterSpeech(attempt);
+    if (characterSpeech) return characterSpeech;
+    const target = attempt.stepId || "E";
+    if (attempt.phase === "sound-paused") return { kicker: "地洞回声", main: "声音先暂停", support: "重听后再继续。" };
+    if (attempt.phase === "lp04-model-ready") return { kicker: "地洞回声", main: "先听 E-D-C", support: "整段向下回声只听一次。" };
+    if (attempt.phase === "lp04-model-playing") return { kicker: "地洞回声", main: "正在听 E-D-C", support: "等每一声都停稳。" };
+    if (attempt.phase === "lp04-transition-pause") return { kicker: "地洞回声", main: "回声先停一停", support: "等手指和声音都安静。" };
+    if (["lp04-target-ready", "lp04-target-playing"].includes(attempt.phase)) return { kicker: "地洞回声", main: `先听 ${target}`, support: "等声音停稳后再按。" };
+    if (attempt.phase === "lp04-child-echo-playing") return { kicker: "地洞回声", main: `刚才是 ${target}`, support: "等琴键声停稳。" };
+    if (attempt.phase === "lp04-wrong-repair-playing") return lp04RepairSpeechFor(attempt);
+    if (attempt.phase === "lp04-assisted") return { kicker: "地洞回声", main: `找 ${target}`, support: "看看两枚黑键，再听一次。" };
+    if (attempt.phase === "lp04-modeled-playing") return { kicker: "地洞回声", main: `星芽带着弹 ${target}`, support: "这一小段先在这里歇一歇。" };
+    if (attempt.phase === "lp04-step-complete") return { kicker: "地洞回声", main: `${target} 已放好`, support: "下一段回声安静等着。" };
+    if (attempt.phase === "lp04-complete") return { kicker: "地洞回声", main: "E-D-C 已完成", support: "洞里只亮起眼睛和颈盾。" };
+    return { kicker: "地洞回声", main: `弹 ${target}`, support: "先等钢琴声停稳，再选一枚键。" };
   }
   if (attempt.levelId === "LP03") {
     const target = lp03TargetName(attempt);
@@ -10723,7 +13001,7 @@ function renderChapter4Screen() {
   if (!action || !attempt) return;
   const lessonId = action.targetId;
   const phase = attempt.phase;
-  if (els.mainTitle) els.mainTitle.textContent = lessonId === "LP01" ? "地下回声洞" : (lessonId === "LP02" ? "低音 C 的家" : "三块地基石");
+  if (els.mainTitle) els.mainTitle.textContent = lessonId === "LP01" ? "地下回声洞" : (lessonId === "LP02" ? "低音 C 的家" : (lessonId === "LP03" ? "三块地基石" : "地洞回声"));
   if (els.levelBadge) els.levelBadge.textContent = state.chapter4DirectMode ? `${lessonId}·审` : lessonId;
   if (els.appShell) {
     els.appShell.dataset.chapter4Lesson = lessonId;
@@ -10736,10 +13014,12 @@ function renderChapter4Screen() {
   if (els.chapter4Scene) {
     els.chapter4Scene.dataset.chapter4Phase = phase;
     els.chapter4Scene.dataset.audioPlaying = attempt.audioTransaction && !attempt.audioTransaction.endedAt ? "true" : "false";
-    els.chapter4Scene.dataset.repairStage = attempt.levelId === "LP03"
+    els.chapter4Scene.dataset.repairStage = ["LP03", "LP04"].includes(attempt.levelId)
       ? (attempt.repairStage || (attempt.strongCueUsed ? "assisted" : "none"))
       : (attempt.callRepairStage || (attempt.strongCueUsed ? "assisted" : "none"));
     els.chapter4Scene.dataset.lp03Locator = attempt.levelId === "LP03" && ["lp03-assisted", "lp03-visual-assist"].includes(phase) ? "two-black" : "none";
+    els.chapter4Scene.dataset.lp04EchoStep = attempt.levelId === "LP04" ? (attempt.stepId || "") : "";
+    els.chapter4Scene.dataset.lp04PartialReveal = attempt.levelId === "LP04" && state.chapter4.lp04Progress?.dongdongPartialReveal ? "true" : "false";
   }
   const copy = chapter4SpeechCopy(attempt);
   if (els.chapter4SpeechKicker) els.chapter4SpeechKicker.textContent = copy.kicker;
@@ -10755,25 +13035,59 @@ function renderChapter4Screen() {
       ? attempt.resolvedCallCount
       : (attempt.levelId === "LP03"
         ? [lp03FoundationState(attempt).cAwake, lp03FoundationState(attempt).dPlaced, lp03FoundationState(attempt).ePlaced].filter(Boolean).length
-        : (state.chapter4.lessonEvidence.LP01?.resolvedCallCount || 0));
-    const count = attempt.levelId === "LP03" ? 3 : 4;
+        : (attempt.levelId === "LP04"
+          ? [state.chapter4.lp04Progress?.echoEReached, state.chapter4.lp04Progress?.echoDReached, state.chapter4.lp04Progress?.echoCReached].filter(Boolean).length
+          : (state.chapter4.lessonEvidence.LP01?.resolvedCallCount || 0)));
+    const count = ["LP03", "LP04"].includes(attempt.levelId) ? 3 : 4;
     els.chapter4CaveRings.innerHTML = Array.from({ length: count }, (_, index) => `<span class="${index < done ? "done" : ""}" style="--ring-index:${index}" aria-hidden="true"></span>`).join("");
   }
   if (els.chapter4Foundation) {
     const lp03Foundation = lp03FoundationState(attempt);
+    const lp04Progress = chapter4Lp04Progress();
     const installed = attempt.levelId === "LP02" && attempt.phase === "lp02-complete";
     els.chapter4Foundation.dataset.installed = installed ? "true" : "false";
     els.chapter4Foundation.dataset.foundationState = attempt.levelId === "LP03"
       ? "three-stone-route"
-      : (installed ? "installed" : "landing-place");
-    els.chapter4Foundation.dataset.lp03 = attempt.levelId === "LP03" ? "true" : "false";
+      : (attempt.levelId === "LP04" ? "three-stone-base" : (installed ? "installed" : "landing-place"));
+    els.chapter4Foundation.dataset.lp03 = ["LP03", "LP04"].includes(attempt.levelId) ? "true" : "false";
+    els.chapter4Foundation.dataset.lp04 = "false";
+    els.chapter4Foundation.dataset.lp04Base = attempt.levelId === "LP04" ? "true" : "false";
     els.chapter4Foundation.dataset.foundationCAnchored = lp03Foundation.cAnchored ? "true" : "false";
     els.chapter4Foundation.dataset.foundationCAwake = lp03Foundation.cAwake ? "true" : "false";
     els.chapter4Foundation.dataset.foundationDPlaced = lp03Foundation.dPlaced ? "true" : "false";
     els.chapter4Foundation.dataset.foundationEPlaced = lp03Foundation.ePlaced ? "true" : "false";
+    els.chapter4Foundation.dataset.echoEReached = lp04Progress.echoEReached ? "true" : "false";
+    els.chapter4Foundation.dataset.echoDReached = lp04Progress.echoDReached ? "true" : "false";
+    els.chapter4Foundation.dataset.echoCReached = lp04Progress.echoCReached ? "true" : "false";
     [...els.chapter4Foundation.querySelectorAll("span")].forEach((stone, index) => {
       stone.textContent = ["C", "D", "E"][index] || "";
     });
+  }
+  if (els.chapter4EchoRoute) {
+    const lp04 = attempt.levelId === "LP04";
+    const progress = chapter4Lp04Progress();
+    const openingModelEnded = Boolean(
+      attempt.openingModelCompleted &&
+      Number.isFinite(isoTimeMs(state.activeSession?.lp04OpeningModelEndedAt || attempt.openingModelEndedAt))
+    );
+    els.chapter4EchoRoute.hidden = !lp04;
+    els.chapter4EchoRoute.dataset.echoEReached = progress.echoEReached ? "true" : "false";
+    els.chapter4EchoRoute.dataset.echoDReached = progress.echoDReached ? "true" : "false";
+    els.chapter4EchoRoute.dataset.echoCReached = progress.echoCReached ? "true" : "false";
+    els.chapter4EchoRoute.querySelectorAll("[data-echo-segment]").forEach((segment) => {
+      const stepId = segment.dataset.echoSegment;
+      const step = lp04StepForId(stepId);
+      const isCurrent = lp04 && openingModelEnded && stepId === attempt.stepId && !progress[step?.echoKey];
+      segment.dataset.current = isCurrent ? "true" : "false";
+      const label = segment.querySelector("b");
+      if (label) label.textContent = isCurrent ? stepId : "";
+    });
+  }
+  if (els.chapter4DongdongPartial) {
+    const lp04 = attempt.levelId === "LP04";
+    const partialReveal = lp04 && chapter4Lp04Progress().dongdongPartialReveal;
+    els.chapter4DongdongPartial.hidden = !lp04;
+    els.chapter4DongdongPartial.dataset.revealState = partialReveal ? "partial" : "obscured";
   }
   if (els.chapter4SoundSource) {
     const sourcePhases = new Set([
@@ -10781,7 +13095,8 @@ function renderChapter4Screen() {
       "pair-compare", "assisted", "visual-assist", "modeled-playing", "correct-feedback"
     ]);
     const recoverySource = phase === "sound-paused" && attempt.soundPauseContext !== "lp01-model";
-    els.chapter4SoundSource.hidden = !(attempt.levelId === "LP01" && (sourcePhases.has(phase) || recoverySource));
+    const lp04Source = attempt.levelId === "LP04" && ["lp04-model-playing", "lp04-target-playing", "lp04-child-echo-playing", "lp04-wrong-repair-playing", "lp04-modeled-playing"].includes(phase);
+    els.chapter4SoundSource.hidden = !((attempt.levelId === "LP01" && (sourcePhases.has(phase) || recoverySource)) || lp04Source);
   }
   renderChapter4Progress(attempt);
   const bubbles = [...(els.chapter4Bubbles?.querySelectorAll(".chapter4-bubble") || [])];
@@ -10798,25 +13113,27 @@ function renderChapter4Screen() {
   if (els.chapter4Replay) {
     const wholeTargetReplay = attempt.levelId === "LP01" && ["awaiting-response", "assisted", "visual-assist"].includes(phase);
     const lp03Replay = attempt.levelId === "LP03" && ["lp03-awaiting-response", "lp03-assisted", "lp03-visual-assist", "lp03-seam-awaiting-response"].includes(phase);
+    const lp04Replay = attempt.levelId === "LP04" && ["lp04-awaiting-response", "lp04-assisted"].includes(phase);
     const soundRecovery = phase === "sound-paused";
-    els.chapter4Replay.hidden = !(wholeTargetReplay || lp03Replay || soundRecovery);
-    els.chapter4Replay.disabled = (wholeTargetReplay || lp03Replay) && Boolean(attempt.audioTransaction && !attempt.audioTransaction.endedAt);
+    els.chapter4Replay.hidden = !(wholeTargetReplay || lp03Replay || lp04Replay || soundRecovery);
+    els.chapter4Replay.disabled = (wholeTargetReplay || lp03Replay || lp04Replay) && Boolean(attempt.audioTransaction && !attempt.audioTransaction.endedAt);
   }
   if (els.chapter4StartCheck) {
-    const lp01Start = attempt.levelId === "LP01" && ["lp01-model-ready", "lp01-model"].includes(phase);
+    const lp01Start = attempt.levelId === "LP01" && ["lp01-model-ready", "lp01-model", "lp01-reduced-cue-ready"].includes(phase);
     const lp02ReconnectStart = attempt.levelId === "LP02" && phase === "lp02-reconnect-ready";
     const lp03Start = attempt.levelId === "LP03" && ["lp03-model-ready", "lp03-seam-ready"].includes(phase);
-    els.chapter4StartCheck.hidden = !(lp01Start || lp02ReconnectStart || lp03Start);
+    const lp04Start = attempt.levelId === "LP04" && ["lp04-model-ready", "lp04-target-ready"].includes(phase);
+    els.chapter4StartCheck.hidden = !(lp01Start || lp02ReconnectStart || lp03Start || lp04Start);
     const startLabel = lp02ReconnectStart
       ? "听两个 C"
-      : (lp03Start ? "听一声" : (phase === "lp01-model-ready" ? "听两个声音" : "开始听"));
+      : (lp04Start ? (phase === "lp04-model-ready" ? "听 E-D-C" : `听 ${attempt.stepId}`) : (lp03Start ? "听一声" : (phase === "lp01-model-ready" ? "听两个声音" : "开始听")));
     els.chapter4StartCheck.textContent = startLabel;
-    els.chapter4StartCheck.setAttribute("aria-label", lp03Start ? "播放示范音" : startLabel);
+    els.chapter4StartCheck.setAttribute("aria-label", (lp03Start || lp04Start) ? "播放示范音" : startLabel);
   }
   if (els.chapter4VisualAssist) els.chapter4VisualAssist.hidden = !((attempt.levelId === "LP01" && phase === "assisted") || (attempt.levelId === "LP03" && phase === "lp03-assisted"));
-  if (els.chapter4Status) els.chapter4Status.textContent = attempt.levelId === "LP03" ? lp03StatusCopy(phase) : copy.main;
-  if (els.keyboardPanel) els.keyboardPanel.hidden = !["LP02", "LP03"].includes(lessonId);
-  if (["LP02", "LP03"].includes(lessonId)) renderChapter4Keyboard(attempt);
+  if (els.chapter4Status) els.chapter4Status.textContent = attempt.levelId === "LP03" ? lp03StatusCopy(phase) : (attempt.levelId === "LP04" ? lp04StatusCopy(phase) : copy.main);
+  if (els.keyboardPanel) els.keyboardPanel.hidden = !["LP02", "LP03", "LP04"].includes(lessonId);
+  if (["LP02", "LP03", "LP04"].includes(lessonId)) renderChapter4Keyboard(attempt);
   else if (els.keyboard) els.keyboard.innerHTML = "";
 }
 
@@ -10834,6 +13151,10 @@ function resumeChapter4Flow({ fromReload = false } = {}) {
   renderChapter4Screen();
   if (attempt.phase === "sound-paused") return;
   if (attempt.levelId === "LP01") {
+    if (attempt.phase === "lp01-reduced-cue-ready") {
+      if (!state.chapter4DirectMode && state.audioUnlocked) beginLp01Check();
+      return;
+    }
     if (attempt.phase === "lp01-model-ready") {
       if (!state.chapter4DirectMode && state.audioUnlocked) startLp01ModelStep(attempt.modelIndex || 0);
       return;
@@ -10852,6 +13173,43 @@ function resumeChapter4Flow({ fromReload = false } = {}) {
     }
     if (attempt.phase === "awaiting-response") scheduleLp01ResponseTimeout();
     else if (attempt.phase === "assisted") scheduleLp01AssistedTimeout();
+    return;
+  }
+  if (attempt.levelId === "LP02" && attempt.phase === "lp02-complete" && attempt.outcomeRecorded) {
+    settlePersistedLp02Completion(attempt);
+    return;
+  }
+  if (attempt.levelId === "LP04") {
+    if (attempt.audioTransaction?.endedAt && !attempt.audioTransaction?.interruptedAt && recoverEndedLp04AudioTransaction(attempt)) return;
+    if (["lp04-step-complete", "lp04-complete"].includes(attempt.phase) && attempt.outcomeRecorded) {
+      settlePersistedLp04Completion(attempt);
+      return;
+    }
+    if (attempt.phase === "lp04-model-ready") {
+      if (!state.chapter4DirectMode && state.audioUnlocked) playLp04OpeningModel("session-opening");
+      return;
+    }
+    if (attempt.phase === "lp04-target-ready") {
+      if (!state.chapter4DirectMode && state.audioUnlocked) playLp04CurrentTarget("system-first");
+      return;
+    }
+    if (attempt.phase === "lp04-transition-pause") {
+      scheduleLp04TargetAfterBoundary(attempt);
+      return;
+    }
+    if (attempt.phase === "lp04-awaiting-response") {
+      armLp04Input(attempt);
+      persistChapter4Attempt();
+      renderChapter4Screen();
+      scheduleLp04ResponseTimeout(attempt);
+      return;
+    }
+    if (attempt.phase === "lp04-assisted") {
+      armLp04Input(attempt);
+      persistChapter4Attempt();
+      renderChapter4Screen();
+      scheduleLp04AssistedTimeout(attempt);
+    }
     return;
   }
   if (attempt.levelId === "LP03") {
@@ -11150,6 +13508,45 @@ function recordLp01Outcome(attempt, { reason, storyResolvedBySupport = false } =
   const completedAt = new Date().toISOString();
   const played = attempt.presentedCallCount === 4 && attempt.resolvedCallCount === 4;
   const stableCandidate = played && lp01StableEligible(attempt);
+  const reviewContext = chapter4OpeningReviewContext(attempt, CHAPTER4_REVIEW_SKILLS.LP01);
+  if (reviewContext) {
+    const reviewResult = chapter4OpeningReviewResult(reviewContext, attempt);
+    const difficult = reviewResult === "difficult";
+    const summary = {
+      levelId: "LP01",
+      bundleId: reviewContext.session.bundleId,
+      sessionId: reviewContext.session.sessionId,
+      completedAt,
+      played,
+      stable: reviewResult === "stable",
+      retained: false,
+      reason,
+      correctCount: attempt.correctCount,
+      wrongCount: attempt.totalWrongCount,
+      replayCountChild: attempt.replayCountChild,
+      replayCountSystem: attempt.replayCountSystem,
+      strongCueUsed: attempt.strongCueUsed,
+      modeled: attempt.modeled,
+      accessibilityVisualAssist: attempt.accessibilityVisualAssist,
+      hasExperimentalInput: attempt.hasExperimentalInput,
+      presentedCallCount: attempt.presentedCallCount,
+      resolvedCallCount: attempt.resolvedCallCount,
+      unpresentedCallCount: Math.max(0, 4 - attempt.presentedCallCount),
+      storyResolvedBySupport: Boolean(storyResolvedBySupport),
+      storyCompletionSource: storyResolvedBySupport ? "xingya-support" : "child-resolved-calls",
+      needsPractice: difficult,
+      openingReviewRequired: difficult,
+      bubbleMapping: { ...attempt.bubbleMapping },
+      sequence: attempt.sequence.slice(),
+      scoredCalls: attempt.scoredCalls.map((call) => ({ ...call }))
+    };
+    attempt.storyResolvedBySupport = summary.storyResolvedBySupport;
+    attempt.storyCompletionSource = summary.storyCompletionSource;
+    attempt.outcomeRecorded = true;
+    recordChapter4OpeningReviewOutcome({ attempt, context: reviewContext, summary, result: reviewResult });
+    persistChapter4Attempt();
+    return summary;
+  }
   let stable = false;
   if (attempt.formalSession && !state.chapter4DirectMode) {
     const session = state.activeSession;
@@ -11253,6 +13650,13 @@ function settleLp01Completion(attempt, { needsRest = null } = {}) {
   if (!attempt || attempt.levelId !== "LP01" || attempt.phase !== "lp01-complete" || state.chapter4DirectMode) return false;
   clearChapter4Timers();
   const shouldRest = needsRest ?? Boolean(attempt.needsPractice || attempt.strongCueUsed || attempt.modeled || attempt.accessibilityVisualAssist);
+  const reviewContext = chapter4OpeningReviewContext(attempt, CHAPTER4_REVIEW_SKILLS.LP01);
+  if (reviewContext) {
+    const completed = reviewContext.session.completedActions.find((action) => action?.actionId === reviewContext.action.actionId);
+    return shouldRest || completed?.reviewResult === "difficult"
+      ? finishChapter4OpeningReviewAtRest(attempt)
+      : advanceChapter4AfterOpeningReview(attempt);
+  }
   if (shouldRest) finishLp01EarlyRest(attempt, "lp01-difficult-complete", { alreadyRecorded: true });
   else advanceChapter4ToLp02();
   return true;
@@ -11271,6 +13675,10 @@ function finishLp01EarlyRest(attempt, reason, { alreadyRecorded = false } = {}) 
   attempt.storyCompletionSource = "xingya-support";
   attempt.needsPractice = true;
   attempt.openingReviewRequired = true;
+  if (chapter4OpeningReviewContext(attempt, CHAPTER4_REVIEW_SKILLS.LP01)) {
+    if (!alreadyRecorded) recordLp01Outcome(attempt, { reason, storyResolvedBySupport: true });
+    return finishChapter4OpeningReviewAtRest(attempt);
+  }
   if (!alreadyRecorded) recordLp01Outcome(attempt, { reason, storyResolvedBySupport: true });
   else {
     const summary = state.chapter4.lessonEvidence.LP01;
@@ -11361,11 +13769,12 @@ function startLp02Reconnect() {
     phase: "lp02-reconnect-playing",
     onEnded: () => {
       attempt.reconnectCompleted = true;
-      attempt.phase = "lp02-guide";
+      attempt.phase = attempt.reviewMode === "remediation" ? "lp02-assisted" : "lp02-guide";
       attempt.responseStartedAt = new Date().toISOString();
       persistChapter4Attempt();
       renderChapter4Screen();
-      scheduleLp02ResponseTimeout();
+      if (attempt.phase === "lp02-assisted") scheduleLp02AssistedTimeout();
+      else scheduleLp02ResponseTimeout();
     }
   });
   return Boolean(playback);
@@ -11376,16 +13785,19 @@ function renderChapter4Keyboard(attempt) {
   els.keyboard.innerHTML = "";
   els.keyboard.className = "keyboard chapter4-keyboard";
   const lp03 = attempt.levelId === "LP03";
+  const lp04 = attempt.levelId === "LP04";
   const assistTarget = ["lp02-assisted", "lp02-modeled-playing"].includes(attempt.phase) ||
     (lp03 && ["lp03-visual-assist", "lp03-modeled-playing"].includes(attempt.phase));
   els.keyboard.dataset.targetVisible = assistTarget ? "true" : "false";
-  els.keyboard.dataset.locatorCue = lp03 && ["lp03-assisted", "lp03-visual-assist"].includes(attempt.phase) ? "two-black" : "none";
-  const pendingMidi = ["lp02-input-playing", "lp03-child-echo-playing", "lp03-seam-child-echo-playing"].includes(attempt.phase)
-    ? Number((attempt.pendingLp02Input || attempt.pendingLp03Input)?.midi)
+  els.keyboard.dataset.locatorCue = (lp03 && ["lp03-assisted", "lp03-visual-assist"].includes(attempt.phase)) || (lp04 && attempt.phase === "lp04-assisted") ? "two-black" : "none";
+  const pendingMidi = ["lp02-input-playing", "lp03-child-echo-playing", "lp03-seam-child-echo-playing", "lp04-child-echo-playing"].includes(attempt.phase)
+    ? Number((attempt.pendingLp02Input || attempt.pendingLp03Input || attempt.pendingLp04Input)?.midi)
     : null;
   const showCommittedWrong = lp03
     ? attempt.phase === "lp03-wrong-repair-playing" && state.lastInputResult === "wrong"
-    : !["lp02-input-playing", "lp03-child-echo-playing", "lp03-seam-child-echo-playing"].includes(attempt.phase) && state.lastInputResult === "wrong";
+    : (lp04
+      ? attempt.phase === "lp04-wrong-repair-playing" && state.lastInputResult === "wrong"
+      : !["lp02-input-playing", "lp03-child-echo-playing", "lp03-seam-child-echo-playing", "lp04-child-echo-playing"].includes(attempt.phase) && state.lastInputResult === "wrong");
   chapter4WhiteMidis.forEach((midi, index) => {
     const note = chapter4NoteForMidi(midi);
     const key = document.createElement("button");
@@ -11397,9 +13809,12 @@ function renderChapter4Keyboard(attempt) {
     if (assistTarget && midi === (lp03 ? attempt.targetMidi : 48)) key.classList.add("lp02-assist-target");
     if (midi === pendingMidi) key.classList.add("lp02-current-playing");
     if (showCommittedWrong && midi === state.lastInputMidi) key.classList.add("hit-wrong");
-    const label = midi === 48 ? "低音 C" : (midi === 60 ? "中央 C" : note.name);
-    key.setAttribute("aria-label", `${label}，${note.locator}`);
-    key.innerHTML = `<span><strong>${note.name}</strong>${midi === 48 ? "<small>低音</small>" : (midi === 60 ? "<small>中央</small>" : "")}</span>`;
+    const lp04Letter = lp04 ? note.name : "";
+    const label = lp04 ? `${lp04Letter} 白键` : (midi === 48 ? "低音 C" : (midi === 60 ? "中央 C" : note.name));
+    key.setAttribute("aria-label", lp04 ? label : `${label}，${note.locator}`);
+    key.innerHTML = lp04
+      ? `<span><strong>${lp04Letter}</strong></span>`
+      : `<span><strong>${note.name}</strong>${midi === 48 ? "<small>低音</small>" : (midi === 60 ? "<small>中央</small>" : "")}</span>`;
     bindChapter4KeyboardKey(key, note);
     els.keyboard.appendChild(key);
   });
@@ -11411,12 +13826,12 @@ function renderChapter4Keyboard(attempt) {
     key.type = "button";
     key.dataset.midi = String(midi);
     key.style.left = `${(lowerWhiteIndex / 14) * 100}%`;
-    if (lp03 && ["lp03-assisted", "lp03-visual-assist"].includes(attempt.phase) && [49, 51].includes(midi)) {
+    if ((lp03 && ["lp03-assisted", "lp03-visual-assist"].includes(attempt.phase) || (lp04 && attempt.phase === "lp04-assisted")) && [49, 51].includes(midi)) {
       key.classList.add("lp03-locator-key");
     }
     if (midi === pendingMidi) key.classList.add("lp02-current-playing");
     if (showCommittedWrong && midi === state.lastInputMidi) key.classList.add("hit-wrong");
-    key.setAttribute("aria-label", `黑键，${note.locator}`);
+    key.setAttribute("aria-label", lp04 ? `${note.pitchName} 黑键` : `黑键，${note.locator}`);
     bindChapter4KeyboardKey(key, note);
     els.keyboard.appendChild(key);
   });
@@ -11438,7 +13853,7 @@ function bindChapter4KeyboardKey(key, note) {
     const activation = endLs08PointerActivation(note.midi, event);
     if (activation.tracked && activation.removed) {
       syncLs08RenderedPointerState();
-      if (activation.shouldRelease) releaseGardenInput(note.midi, "屏幕");
+      if (activation.shouldRelease) releaseChapter4Input(note.midi, "屏幕");
     }
   });
   key.addEventListener("pointercancel", (event) => {
@@ -11446,7 +13861,7 @@ function bindChapter4KeyboardKey(key, note) {
     const activation = endLs08PointerActivation(note.midi, event);
     if (activation.tracked && activation.removed) {
       syncLs08RenderedPointerState();
-      if (activation.shouldRelease) releaseGardenInput(note.midi, "屏幕");
+      if (activation.shouldRelease) releaseChapter4Input(note.midi, "屏幕");
     }
   });
   key.addEventListener("click", (event) => {
@@ -11454,7 +13869,7 @@ function bindChapter4KeyboardKey(key, note) {
     beginKeyboardPress(key);
     showKeyPressRipple(key);
     handleChapter4Input(note.midi, "屏幕", { activation: "accessible-click", startsNewPress: true });
-    releaseGardenInput(note.midi, "屏幕");
+    releaseChapter4Input(note.midi, "屏幕");
     releaseKeyboardPress(key);
   });
 }
@@ -11465,6 +13880,7 @@ function scheduleLp02ResponseTimeout() {
     state.chapter4Timer = null;
     const attempt = ensureChapter4Attempt();
     if (!attempt || attempt.levelId !== "LP02" || attempt.phase !== "lp02-guide") return;
+    attempt.reviewBaselineScaffold = false;
     attempt.strongCueUsed = true;
     attempt.phase = "lp02-assisted";
     persistChapter4Attempt();
@@ -11583,11 +13999,13 @@ function commitLp02PendingInput(attempt) {
     occurredAt
   });
   if (attempt.wrongCount >= 3) {
+    attempt.reviewBaselineScaffold = false;
     attempt.strongCueUsed = true;
     completeLp02Modeled("repeated-repair");
     return;
   }
   if (attempt.wrongCount >= 2) {
+    attempt.reviewBaselineScaffold = false;
     attempt.strongCueUsed = true;
     attempt.phase = "lp02-assisted";
     persistChapter4Attempt();
@@ -11674,6 +14092,10 @@ function handleChapter4Input(midi, source, meta = {}) {
     handleLp03Input(midi, source, meta);
     return;
   }
+  if (attempt.levelId === "LP04") {
+    handleLp04Input(midi, source, meta);
+    return;
+  }
   if (attempt.levelId === "LP01") {
     attempt.observations.push({ event: "non-scoring-note", midi, source, phase: attempt.phase, occurredAt: now });
     if (source === "麦克风" || source === "MIDI") {
@@ -11710,6 +14132,10 @@ function releaseChapter4Input(midi, source) {
     releaseLp03Input(attempt, midi, source);
     return;
   }
+  if (attempt.levelId === "LP04") {
+    releaseLp04Input(attempt, midi, source);
+    return;
+  }
   if (attempt.levelId !== "LP02") return;
   const held = attempt.routeHeldMidi[source];
   if (attempt.routeArmed[source] !== false && held === null) {
@@ -11737,6 +14163,7 @@ function completeLp02Modeled(reason) {
   const attempt = ensureChapter4Attempt();
   if (!attempt || attempt.levelId !== "LP02") return;
   clearChapter4Timers();
+  attempt.reviewBaselineScaffold = false;
   attempt.strongCueUsed = true;
   startChapter4TeachingSequence(attempt, {
     context: "lp02-modeled",
@@ -11787,6 +14214,26 @@ function finalizeLp02Completion(attempt, { source, modeled = false } = {}) {
   attempt.outcomeRecorded = true;
   attempt.completionSource = source;
   attempt.phase = "lp02-complete";
+  const reviewContext = chapter4OpeningReviewContext(attempt, CHAPTER4_REVIEW_SKILLS.LP02);
+  if (reviewContext) {
+    const reviewResult = chapter4OpeningReviewResult(reviewContext, attempt);
+    const summary = {
+      ...evidence,
+      bundleId: reviewContext.session.bundleId,
+      sessionId: reviewContext.session.sessionId,
+      completedAt,
+      played: true,
+      stable: reviewResult === "stable",
+      retained: false,
+      needsPractice: reviewResult === "difficult"
+    };
+    recordChapter4OpeningReviewOutcome({ attempt, context: reviewContext, summary, result: reviewResult });
+    persistChapter4Attempt();
+    renderChapter4Screen();
+    if (reviewResult === "difficult") finishChapter4OpeningReviewAtRest(attempt);
+    else advanceChapter4AfterOpeningReview(attempt);
+    return;
+  }
   if (attempt.formalSession && !state.chapter4DirectMode) {
     const existing = state.learningStats.levels.LP02 || { completions: 0, formalCompletions: 0, stableCompletions: 0 };
     existing.completions = (Number(existing.completions) || 0) + 1;
@@ -11818,6 +14265,23 @@ function finalizeLp02Completion(attempt, { source, modeled = false } = {}) {
   state.chapter4RestView = action ? { ...action, chapter4Attempt: JSON.parse(JSON.stringify(attempt)) } : null;
   finishActiveSessionAtRest({ reward: "第一块地基", reason: "natural-rest" });
   state.chapter4FeedbackTimer = setTimeout(() => showMapScreen(), 1050);
+}
+
+function settlePersistedLp02Completion(attempt) {
+  if (!attempt || attempt.levelId !== "LP02" || !attempt.outcomeRecorded || attempt.phase !== "lp02-complete" || state.chapter4DirectMode) return false;
+  const reviewContext = chapter4OpeningReviewContext(attempt, CHAPTER4_REVIEW_SKILLS.LP02);
+  if (reviewContext) {
+    const completed = reviewContext.session.completedActions.find((action) => action?.actionId === reviewContext.action.actionId);
+    if (!completed) return false;
+    return completed.reviewResult === "difficult"
+      ? finishChapter4OpeningReviewAtRest(attempt)
+      : advanceChapter4AfterOpeningReview(attempt);
+  }
+  const action = currentChapter4Action();
+  state.chapter4RestView = action ? { ...action, chapter4Attempt: JSON.parse(JSON.stringify(attempt)) } : null;
+  finishActiveSessionAtRest({ reward: "第一块地基", reason: "natural-rest" });
+  state.chapter4FeedbackTimer = setTimeout(() => showMapScreen(), 1050);
+  return true;
 }
 
 function lp03InputIsHeld(attempt) {
@@ -12884,10 +15348,862 @@ function releaseLp03Input(attempt, midi, source) {
   return true;
 }
 
+function chapter4Lp04Progress() {
+  if (!state.chapter4.lp04Progress || typeof state.chapter4.lp04Progress !== "object") {
+    state.chapter4.lp04Progress = normalizeLp04Progress();
+  }
+  return state.chapter4.lp04Progress;
+}
+
+function lp04InputIsHeld(attempt) {
+  return Boolean(
+    attempt?.routeHeldMidi?.["屏幕"] !== null ||
+    attempt?.routeHeldMidi?.MIDI !== null ||
+    attempt?.routeHeldMidi?.["麦克风"] !== null ||
+    (attempt?.heldMidiNotes || []).length
+  );
+}
+
+function armLp04Input(attempt) {
+  if (!attempt) return false;
+  attempt.inputArmed = !lp04InputIsHeld(attempt);
+  return attempt.inputArmed;
+}
+
+function queueLp04TargetAfterBoundary(attempt, reason) {
+  if (!attempt || attempt.levelId !== "LP04") return false;
+  clearChapter4Timers();
+  attempt.phase = "lp04-transition-pause";
+  attempt.inputArmed = false;
+  attempt.transitionReason = reason;
+  attempt.transitionReadyAt = new Date(Date.now() + LP04_TRANSITION_PAUSE_MS).toISOString();
+  attempt.transitionWaitingForRelease = lp04InputIsHeld(attempt);
+  persistChapter4Attempt();
+  renderChapter4Screen();
+  scheduleLp04TargetAfterBoundary(attempt);
+  return true;
+}
+
+function scheduleLp04TargetAfterBoundary(attempt = ensureChapter4Attempt()) {
+  if (!attempt || attempt.levelId !== "LP04" || attempt.phase !== "lp04-transition-pause") return false;
+  if (state.chapter4FeedbackTimer) clearTimeout(state.chapter4FeedbackTimer);
+  const readyAt = isoTimeMs(attempt.transitionReadyAt);
+  const waitMs = Number.isFinite(readyAt) ? Math.max(0, readyAt - Date.now()) : LP04_TRANSITION_PAUSE_MS;
+  state.chapter4FeedbackTimer = setTimeout(() => {
+    state.chapter4FeedbackTimer = null;
+    const current = ensureChapter4Attempt();
+    if (current !== attempt || current.phase !== "lp04-transition-pause") return;
+    if (lp04InputIsHeld(current)) {
+      current.transitionWaitingForRelease = true;
+      persistChapter4Attempt();
+      renderChapter4Screen();
+      return;
+    }
+    if (!state.audioUnlocked) {
+      current.transitionReadyAt = null;
+      current.transitionReason = null;
+      current.transitionWaitingForRelease = false;
+      current.phase = "lp04-target-ready";
+      current.inputArmed = false;
+      persistChapter4Attempt();
+      renderChapter4Screen();
+      return;
+    }
+    current.transitionReadyAt = null;
+    current.transitionReason = null;
+    current.transitionWaitingForRelease = false;
+    playLp04CurrentTarget("after-transition-boundary");
+  }, waitMs);
+  return true;
+}
+
+function lp04PendingInput(attempt, midi, source, meta = {}, occurredAt = new Date().toISOString()) {
+  const started = Date.parse(attempt?.responseStartedAt || "");
+  return {
+    midi,
+    source,
+    activation: meta.activation || null,
+    occurredAt,
+    targetMidi: attempt?.targetMidi ?? null,
+    phase: attempt?.phase || null,
+    responseMs: !attempt?.timingInterrupted && Number.isFinite(started) ? Math.max(0, Date.now() - started) : null,
+    onsetRecorded: false,
+    external: isMicrophoneSource(source)
+  };
+}
+
+function recordLp04InputOnset(attempt, pending, startedAt = new Date().toISOString()) {
+  if (!attempt || !pending || pending.onsetRecorded) return;
+  const note = chapter4NoteForMidi(pending.midi);
+  attempt.inputEvents.push({
+    event: "onset",
+    midi: pending.midi,
+    pitchName: note?.pitchName || null,
+    isBlack: Boolean(note?.isBlack),
+    route: pending.source,
+    occurredAt: pending.occurredAt,
+    audioStartedAt: startedAt
+  });
+  pending.onsetRecorded = true;
+}
+
+function recordLp04ChildInput(attempt, pending, { correct = false } = {}) {
+  if (!attempt || !pending || pending.childInputRecorded) return null;
+  const note = chapter4NoteForMidi(pending.midi);
+  const target = chapter4NoteForMidi(pending.targetMidi);
+  const noteNameCorrect = Boolean(note && target && note.name === target.name);
+  const registerCorrect = Boolean(note && target && note.octave === target.octave);
+  const input = {
+    midi: pending.midi,
+    targetMidi: pending.targetMidi,
+    pitchName: note?.pitchName || null,
+    octave: note?.octave ?? null,
+    isBlack: Boolean(note?.isBlack),
+    targetPitchName: target?.pitchName || null,
+    targetOctave: target?.octave ?? null,
+    noteNameCorrect,
+    registerCorrect,
+    sameNameWrongOctave: Boolean(noteNameCorrect && pending.midi !== pending.targetMidi),
+    route: pending.source,
+    correct: Boolean(correct),
+    experimental: isMicrophoneSource(pending.source),
+    occurredAt: pending.occurredAt,
+    committedAt: new Date().toISOString()
+  };
+  attempt.childInputs.push(input);
+  attempt.inputRoutes[pending.source] = (attempt.inputRoutes[pending.source] || 0) + 1;
+  if (correct) attempt.childCorrectCount += 1;
+  pending.childInputRecorded = true;
+  return input;
+}
+
+function recordLp04ModeledInput(attempt, reason) {
+  if (!attempt || attempt.modeledInputs.some((input) => input.stepId === attempt.stepId)) return null;
+  const target = chapter4NoteForMidi(attempt.targetMidi);
+  const input = {
+    source: "model",
+    targetMidi: attempt.targetMidi,
+    pitchName: target?.pitchName || null,
+    octave: target?.octave ?? null,
+    stepId: attempt.stepId,
+    reason,
+    completedAt: new Date().toISOString()
+  };
+  attempt.modeledInputs.push(input);
+  return input;
+}
+
+function lp04RouteEvent(attempt, { source, modeled = false } = {}) {
+  return {
+    stepId: attempt.stepId,
+    targetMidi: attempt.targetMidi,
+    sessionId: attempt.formalSession ? (state.activeSession?.sessionId || attempt.sessionId) : null,
+    route: source,
+    firstChildMidi: attempt.firstChildMidi,
+    firstInputRoute: attempt.firstInputRoute,
+    firstResponseMs: attempt.timingInterrupted ? null : attempt.firstResponseMs,
+    wrongCount: attempt.wrongCount,
+    childCorrectCount: attempt.childCorrectCount,
+    childInputs: attempt.childInputs.map((input) => ({ ...input })),
+    inputRoutes: { ...attempt.inputRoutes },
+    repairStage: attempt.repairStage,
+    modeledInputs: attempt.modeledInputs.map((input) => ({ ...input })),
+    lastWrongInput: attempt.lastWrongInput ? { ...attempt.lastWrongInput } : null,
+    strongCueUsed: Boolean(attempt.strongCueUsed),
+    modeled: Boolean(modeled || attempt.modeled),
+    experimentalInput: Boolean(attempt.experimentalInput),
+    microphoneConfidence: attempt.microphoneConfidence,
+    timingInterrupted: Boolean(attempt.timingInterrupted),
+    completedAt: new Date().toISOString()
+  };
+}
+
+function copyLp04RouteEvent(event) {
+  return {
+    ...event,
+    childInputs: (event?.childInputs || []).map((input) => ({ ...input })),
+    inputRoutes: { ...(event?.inputRoutes || {}) },
+    modeledInputs: (event?.modeledInputs || []).map((input) => ({ ...input })),
+    lastWrongInput: event?.lastWrongInput ? { ...event.lastWrongInput } : null
+  };
+}
+
+function lp04ActionCompletion(attempt, event) {
+  const session = state.activeSession;
+  const action = currentChapter4Action("LP04");
+  if (!session || !action || action.actionId !== attempt.actionId || action.lp04CompletionRecorded) return null;
+  action.lp04CompletionRecorded = true;
+  const completion = {
+    actionId: action.actionId,
+    kind: "chapter4-keyboard",
+    targetId: "LP04",
+    lp04Step: attempt.stepId,
+    runMode: "guided",
+    reviewableForMastery: false,
+    stable: false,
+    retained: false,
+    completedAt: event.completedAt,
+    ...copyLp04RouteEvent(event)
+  };
+  session.completedActions.push(completion);
+  return completion;
+}
+
+function lp04NeedsNaturalRest(attempt) {
+  return Boolean(attempt?.strongCueUsed || attempt?.modeled || attempt?.experimentalInput || attempt?.wrongCount >= 2);
+}
+
+function lp04EndedTransactionIsValid(attempt, transaction, context) {
+  return Boolean(
+    attempt?.levelId === "LP04" &&
+    transaction?.context === context &&
+    Number.isFinite(isoTimeMs(transaction.startedAt)) &&
+    Number.isFinite(isoTimeMs(transaction.endedAt)) &&
+    isoTimeMs(transaction.endedAt) >= isoTimeMs(transaction.startedAt)
+  );
+}
+
+function settleLp04OpeningModelEnded(attempt, transaction) {
+  const session = state.activeSession;
+  if (!lp04EndedTransactionIsValid(attempt, transaction, "lp04-opening-model") || !session || session.bundleId !== chapter4Config.lp04.bundleId) return false;
+  session.lp04OpeningModelCompleted = true;
+  session.lp04OpeningModelEndedAt = transaction.endedAt;
+  attempt.openingModelCompleted = true;
+  attempt.openingModelEndedAt = transaction.endedAt;
+  persistActiveSession();
+  if (transaction.returnQueued) {
+    attempt.phase = "lp04-target-ready";
+    attempt.inputArmed = false;
+    persistChapter4Attempt();
+    renderChapter4Screen();
+    return true;
+  }
+  if (!state.audioUnlocked) {
+    attempt.phase = "lp04-target-ready";
+    attempt.inputArmed = false;
+    persistChapter4Attempt();
+    renderChapter4Screen();
+    return true;
+  }
+  return queueLp04TargetAfterBoundary(attempt, "opening-model-ended");
+}
+
+function settleLp04TargetEnded(attempt, transaction) {
+  if (!lp04EndedTransactionIsValid(attempt, transaction, "lp04-target")) return false;
+  attempt.targetEndedAt = transaction.endedAt;
+  if (transaction.returnQueued) {
+    attempt.phase = attempt.openingModelCompleted ? "lp04-target-ready" : "lp04-model-ready";
+    attempt.inputArmed = false;
+    persistChapter4Attempt();
+    renderChapter4Screen();
+    return true;
+  }
+  attempt.phase = "lp04-awaiting-response";
+  attempt.soundPauseContext = null;
+  attempt.responseStartedAt = new Date().toISOString();
+  armLp04Input(attempt);
+  persistChapter4Attempt();
+  renderChapter4Screen();
+  scheduleLp04ResponseTimeout(attempt);
+  return true;
+}
+
+function settleLp04WrongRepairEnded(attempt, transaction) {
+  if (!lp04EndedTransactionIsValid(attempt, transaction, "lp04-wrong-repair")) return false;
+  if (transaction.returnQueued) {
+    attempt.phase = attempt.wrongCount >= 2 ? "lp04-assisted" : "lp04-awaiting-response";
+    attempt.inputArmed = false;
+    persistChapter4Attempt();
+    renderChapter4Screen();
+    return true;
+  }
+  if (attempt.pendingModeledReason) return completeLp04Modeled(attempt.pendingModeledReason, { targetAlreadyPlayed: true });
+  if (attempt.wrongCount >= 2) {
+    attempt.strongCueUsed = true;
+    attempt.repairStage = "assisted";
+    attempt.phase = "lp04-assisted";
+    armLp04Input(attempt);
+    persistChapter4Attempt();
+    renderChapter4Screen();
+    scheduleLp04AssistedTimeout(attempt);
+    return true;
+  }
+  attempt.phase = "lp04-awaiting-response";
+  attempt.responseStartedAt = new Date().toISOString();
+  armLp04Input(attempt);
+  persistChapter4Attempt();
+  renderChapter4Screen();
+  scheduleLp04ResponseTimeout(attempt);
+  return true;
+}
+
+function settleLp04ModeledEnded(attempt, transaction) {
+  if (!lp04EndedTransactionIsValid(attempt, transaction, "lp04-modeled")) return false;
+  recordLp04ModeledInput(attempt, transaction.payload?.reason || attempt.pendingModeledReason || "modeled");
+  return completeLp04Step(attempt, { source: "model", modeled: true });
+}
+
+function resetLp04EndedTransactionToReplay(attempt, transaction) {
+  const opening = transaction?.context === "lp04-opening-model" && !attempt?.openingModelCompleted;
+  attempt.audioTransaction = null;
+  attempt.pendingLp04Input = null;
+  attempt.inputArmed = false;
+  attempt.phase = opening ? "lp04-model-ready" : "lp04-target-ready";
+  attempt.observations.push({ event: "ended-transaction-replay-required", context: transaction?.context || null, occurredAt: new Date().toISOString() });
+  persistChapter4Attempt();
+  renderChapter4Screen();
+  return true;
+}
+
+function recoverEndedLp04AudioTransaction(attempt) {
+  const transaction = attempt?.audioTransaction;
+  if (!transaction?.endedAt || transaction.interruptedAt || !String(transaction.context || "").startsWith("lp04-")) return false;
+  if (attempt.outcomeRecorded && ["lp04-step-complete", "lp04-complete"].includes(attempt.phase)) return false;
+  const context = transaction.context;
+  let settled = false;
+  if (context === "lp04-opening-model" && attempt.phase === "lp04-model-playing") settled = settleLp04OpeningModelEnded(attempt, transaction);
+  else if (context === "lp04-target" && attempt.phase === "lp04-target-playing") settled = settleLp04TargetEnded(attempt, transaction);
+  else if (context === "lp04-child-input" && attempt.phase === "lp04-child-echo-playing" && lp04EndedTransactionIsValid(attempt, transaction, context) && attempt.pendingLp04Input) {
+    commitLp04PendingInput(attempt);
+    settled = attempt.phase !== "lp04-child-echo-playing" || attempt.outcomeRecorded;
+  }
+  else if (context === "lp04-wrong-repair" && attempt.phase === "lp04-wrong-repair-playing") settled = settleLp04WrongRepairEnded(attempt, transaction);
+  else if (context === "lp04-modeled" && attempt.phase === "lp04-modeled-playing") settled = settleLp04ModeledEnded(attempt, transaction);
+  if (!settled) return resetLp04EndedTransactionToReplay(attempt, transaction);
+  if (transaction.returnQueued) consumeChapter4QueuedReturn(attempt, transaction);
+  return true;
+}
+
+function playLp04OpeningModel(reason = "session-opening") {
+  const attempt = ensureChapter4Attempt();
+  const session = state.activeSession;
+  if (!attempt || attempt.levelId !== "LP04" || !session || session.bundleId !== chapter4Config.lp04.bundleId) return false;
+  if (attempt.openingModelCompleted || session.lp04OpeningModelCompleted) {
+    attempt.openingModelCompleted = true;
+    return queueLp04TargetAfterBoundary(attempt, "opening-model-already-ended");
+  }
+  clearChapter4Timers();
+  return Boolean(startChapter4TeachingSequence(attempt, {
+    context: "lp04-opening-model",
+    kind: "unscored-opening-model",
+    reason,
+    midis: [52, 50, 48],
+    payload: { stepId: attempt.stepId, reason },
+    phase: "lp04-model-playing",
+    gapMs: LP04_TARGET_NOTE_DURATION_MS + LP01_REPAIR_GAP_MS,
+    noteDurationMs: LP04_TARGET_NOTE_DURATION_MS,
+    onStarted: (transaction) => {
+      attempt.inputArmed = false;
+      attempt.openingModelStartedAt = transaction.startedAt;
+    },
+    onEnded: (transaction) => settleLp04OpeningModelEnded(attempt, transaction)
+  }));
+}
+
+function playLp04CurrentTarget(reason = "system-first") {
+  const attempt = ensureChapter4Attempt();
+  if (!attempt || attempt.levelId !== "LP04" || !Number.isFinite(attempt.targetMidi)) return false;
+  clearChapter4Timers();
+  const replayReason = reason === "sound-recovery"
+    ? (attempt.audioTransaction?.payload?.sourceReason || attempt.targetSource || "system-first")
+    : reason;
+  return Boolean(startChapter4TeachingSequence(attempt, {
+    context: "lp04-target",
+    kind: "target",
+    reason: replayReason,
+    midis: [attempt.targetMidi],
+    payload: { targetMidi: attempt.targetMidi, stepId: attempt.stepId, sourceReason: replayReason },
+    phase: "lp04-target-playing",
+    noteDurationMs: LP04_TARGET_NOTE_DURATION_MS,
+    onStarted: (transaction) => {
+      attempt.targetSource = replayReason;
+      attempt.targetStartedAt = transaction.startedAt;
+      attempt.inputArmed = false;
+    },
+    onEnded: (transaction) => settleLp04TargetEnded(attempt, transaction)
+  }));
+}
+
+function scheduleLp04ResponseTimeout(attempt = ensureChapter4Attempt()) {
+  if (!attempt || attempt.levelId !== "LP04") return;
+  if (state.chapter4Timer) clearTimeout(state.chapter4Timer);
+  state.chapter4Timer = setTimeout(() => {
+    state.chapter4Timer = null;
+    const current = ensureChapter4Attempt();
+    if (current !== attempt || current.phase !== "lp04-awaiting-response") return;
+    current.strongCueUsed = true;
+    current.repairStage = "assisted";
+    current.phase = "lp04-assisted";
+    armLp04Input(current);
+    persistChapter4Attempt();
+    renderChapter4Screen();
+    scheduleLp04AssistedTimeout(current);
+  }, LP04_LONG_WAIT_MS);
+}
+
+function scheduleLp04AssistedTimeout(attempt = ensureChapter4Attempt()) {
+  if (!attempt || attempt.levelId !== "LP04") return;
+  if (state.chapter4Timer) clearTimeout(state.chapter4Timer);
+  state.chapter4Timer = setTimeout(() => {
+    state.chapter4Timer = null;
+    const current = ensureChapter4Attempt();
+    if (current !== attempt || current.phase !== "lp04-assisted") return;
+    completeLp04Modeled("assisted-timeout");
+  }, LP04_ASSISTED_WAIT_MS);
+}
+
+function beginLp04InputTransaction(attempt, pending, { recovery = false } = {}) {
+  if (!attempt || !pending) return false;
+  clearChapter4Timers();
+  attempt.pendingLp04Input = pending;
+  attempt.inputArmed = false;
+  return Boolean(startChapter4TeachingSequence(attempt, {
+    context: "lp04-child-input",
+    kind: "child-key",
+    reason: pending.source === "MIDI"
+      ? (recovery ? "midi-local-monitor-recovery" : "midi-local-monitor")
+      : (recovery ? "sound-recovery-child-key" : (pending.activation || "screen")),
+    midis: [pending.midi],
+    payload: { ...pending, recovery },
+    phase: "lp04-child-echo-playing",
+    child: true,
+    noteDurationMs: LP04_CHILD_NOTE_DURATION_MS,
+    onStarted: (transaction) => {
+      if (recovery || pending.releaseRequested) {
+        attempt.routeArmed[pending.source] = true;
+        attempt.routeHeldMidi[pending.source] = null;
+      } else {
+        attempt.routeArmed[pending.source] = false;
+        attempt.routeHeldMidi[pending.source] = pending.midi;
+      }
+      recordLp04InputOnset(attempt, pending, transaction.startedAt);
+    },
+    onEnded: () => commitLp04PendingInput(attempt)
+  }));
+}
+
+function beginLp04ExternalInputTransaction(attempt, pending) {
+  if (!attempt || !pending) return false;
+  clearChapter4Timers();
+  attempt.pendingLp04Input = pending;
+  attempt.inputArmed = false;
+  attempt.routeArmed[pending.source] = false;
+  attempt.routeHeldMidi[pending.source] = pending.midi;
+  const occurredAt = new Date().toISOString();
+  beginChapter4AudioTransaction(attempt, {
+    context: "lp04-external-input",
+    kind: "external-child-key",
+    reason: "microphone-gate-accepted",
+    midis: [pending.midi],
+    durationMs: LP04_EXTERNAL_INPUT_MAX_MS,
+    payload: { ...pending, requiresQuietEnd: true },
+    phase: "lp04-child-echo-playing",
+    scheduledAt: occurredAt,
+    startedAt: occurredAt
+  });
+  state.chapter4Timer = setTimeout(() => {
+    state.chapter4Timer = null;
+    const transaction = attempt.audioTransaction;
+    if (!transaction || transaction.endedAt || transaction.interruptedAt || transaction.context !== "lp04-external-input") return;
+    attempt.timingInterrupted = true;
+    enterChapter4SoundPause(attempt, "lp04-external-input", "external-input-release-timeout");
+  }, LP04_EXTERNAL_INPUT_MAX_MS);
+  return true;
+}
+
+function recordLp04WrongInput(attempt, pending) {
+  const note = chapter4NoteForMidi(pending.midi);
+  const target = chapter4NoteForMidi(pending.targetMidi);
+  const progress = chapter4Lp04Progress();
+  const inputStep = chapter4Config.lp04.steps.find((step) => step.midi === pending.midi);
+  const currentIndex = chapter4Config.lp04.steps.findIndex((step) => step.id === attempt.stepId);
+  const inputIndex = inputStep ? chapter4Config.lp04.steps.findIndex((step) => step.id === inputStep.id) : -1;
+  const status = inputStep && progress[inputStep.echoKey]
+    ? "completed-step-repeat"
+    : (inputIndex > currentIndex ? "future-step" : "wrong-step");
+  const noteNameCorrect = Boolean(note && target && note.name === target.name);
+  const registerCorrect = Boolean(note && target && note.octave === target.octave);
+  attempt.wrongCount += 1;
+  attempt.repairStage = attempt.wrongCount >= 2 ? "assisted" : "normal";
+  attempt.lastWrongInput = {
+    midi: pending.midi,
+    pitchName: note?.pitchName || null,
+    name: note?.name || null,
+    isBlack: Boolean(note?.isBlack),
+    noteNameCorrect,
+    registerCorrect,
+    sameNameWrongOctave: Boolean(noteNameCorrect && pending.midi !== pending.targetMidi),
+    status
+  };
+  attempt.inputEvents.push({
+    event: "wrong-route",
+    midi: pending.midi,
+    targetMidi: pending.targetMidi,
+    pitchName: note?.pitchName || null,
+    isBlack: Boolean(note?.isBlack),
+    noteNameCorrect,
+    registerCorrect,
+    sameNameWrongOctave: attempt.lastWrongInput.sameNameWrongOctave,
+    status,
+    route: pending.source,
+    occurredAt: pending.occurredAt
+  });
+  if (attempt.wrongCount >= 2) attempt.strongCueUsed = true;
+}
+
+function startLp04WrongRepair(attempt, pending, { recovery = false } = {}) {
+  if (!attempt || !pending || !Number.isFinite(attempt.targetMidi)) return false;
+  clearChapter4Timers();
+  return Boolean(startChapter4TeachingSequence(attempt, {
+    context: "lp04-wrong-repair",
+    kind: "repair-target",
+    reason: recovery ? "sound-recovery-target" : "child-then-target",
+    midis: [attempt.targetMidi],
+    payload: { ...pending, targetMidi: attempt.targetMidi, recovery },
+    phase: "lp04-wrong-repair-playing",
+    noteDurationMs: LP04_TARGET_NOTE_DURATION_MS,
+    onEnded: (transaction) => settleLp04WrongRepairEnded(attempt, transaction)
+  }));
+}
+
+function completeLp04Modeled(reason, { targetAlreadyPlayed = false } = {}) {
+  const attempt = ensureChapter4Attempt();
+  if (!attempt || attempt.levelId !== "LP04" || attempt.outcomeRecorded) return false;
+  clearChapter4Timers();
+  attempt.strongCueUsed = true;
+  attempt.modeled = true;
+  attempt.pendingModeledReason = reason;
+  return Boolean(startChapter4TeachingSequence(attempt, {
+    context: "lp04-modeled",
+    kind: "modeled-target",
+    reason: targetAlreadyPlayed ? `${reason}-after-repair` : reason,
+    midis: [attempt.targetMidi],
+    payload: { targetMidi: attempt.targetMidi, stepId: attempt.stepId, reason, targetAlreadyPlayed },
+    phase: "lp04-modeled-playing",
+    noteDurationMs: LP04_TARGET_NOTE_DURATION_MS,
+    onEnded: (transaction) => settleLp04ModeledEnded(attempt, transaction)
+  }));
+}
+
+function commitLp04PendingInput(attempt) {
+  const pending = attempt?.pendingLp04Input;
+  if (!attempt || !pending || attempt.outcomeRecorded) return false;
+  attempt.pendingLp04Input = null;
+  if (!attempt.firstInputRoute && !isMicrophoneSource(pending.source)) {
+    attempt.firstChildMidi = pending.midi;
+    attempt.firstInputRoute = pending.source;
+    attempt.firstResponseMs = pending.responseMs;
+  }
+  state.lastInputMidi = pending.midi;
+  const correct = pending.midi === pending.targetMidi;
+  recordLp04ChildInput(attempt, pending, { correct });
+  if (isMicrophoneSource(pending.source)) {
+    attempt.experimentalInput = true;
+    attempt.strongCueUsed = true;
+    attempt.microphoneConfidence = correct ? "confirmed" : "uncertain";
+    if (correct) {
+      attempt.firstChildMidi ??= pending.midi;
+      attempt.firstInputRoute ??= pending.source;
+      attempt.firstResponseMs ??= pending.responseMs;
+      return completeLp04Step(attempt, { source: "microphone-assisted", modeled: false });
+    }
+    attempt.observations.push({ event: "microphone-unscored", midi: pending.midi, occurredAt: pending.occurredAt });
+    attempt.phase = "lp04-awaiting-response";
+    attempt.responseStartedAt = new Date().toISOString();
+    armLp04Input(attempt);
+    persistChapter4Attempt();
+    renderChapter4Screen();
+    scheduleLp04ResponseTimeout(attempt);
+    return false;
+  }
+  if (correct) {
+    state.lastInputResult = "correct";
+    return completeLp04Step(attempt, { source: pending.source, modeled: false });
+  }
+  state.lastInputResult = "wrong";
+  recordLp04WrongInput(attempt, pending);
+  const completedChildTransaction = attempt.audioTransaction;
+  if (attempt.wrongCount >= 3) attempt.pendingModeledReason = "repeated-repair";
+  persistChapter4Attempt();
+  renderChapter4Screen();
+  const started = startLp04WrongRepair(attempt, pending);
+  if (started) handoffChapter4QueuedReturn(attempt, completedChildTransaction);
+  return false;
+}
+
+function advanceLp04ToNextAction({ autoplay = true } = {}) {
+  const session = state.activeSession;
+  if (!session || session.bundleId !== chapter4Config.lp04.bundleId) return false;
+  const previous = currentChapter4Action()?.chapter4Attempt;
+  const nextIndex = session.actionIndex + 1;
+  const nextAction = session.actions[nextIndex];
+  if (!nextAction || nextAction.targetId !== "LP04") return false;
+  session.actionIndex = nextIndex;
+  nextAction.chapter4Attempt = createLp04Attempt(session, {
+    stepId: nextAction.lp04Step,
+    heldMidiNotes: previous?.heldMidiNotes || [],
+    heldPointerMidi: previous?.routeHeldMidi?.["屏幕"] ?? null
+  });
+  persistActiveSession();
+  if (autoplay) showChapter4Screen();
+  else renderChapter4Screen();
+  return true;
+}
+
+function lp04EvidenceSummary(progress, sessionId = null) {
+  const routeEvents = (progress.routeEvents || []).map(copyLp04RouteEvent);
+  return {
+    levelId: "LP04",
+    bundleId: chapter4Config.lp04.bundleId,
+    sessionId,
+    completedAt: progress.completedAt,
+    played: Boolean(progress.played),
+    stable: 0,
+    retained: 0,
+    needsPractice: Boolean(progress.needsPractice),
+    echoEReached: Boolean(progress.echoEReached),
+    echoDReached: Boolean(progress.echoDReached),
+    echoCReached: Boolean(progress.echoCReached),
+    dongdongPartialReveal: Boolean(progress.dongdongPartialReveal),
+    routeEvents,
+    stageObservation: {
+      skill: "low-direction:E3-C3",
+      count: routeEvents.length,
+      stable: 0,
+      retained: 0
+    }
+  };
+}
+
+function finishLp04EarlyRest(attempt, reason, { returnQueued = false } = {}) {
+  if (!attempt || state.chapter4DirectMode) return false;
+  const progress = chapter4Lp04Progress();
+  const remaining = chapter4Config.lp04.steps.filter((step) => !progress[step.echoKey]);
+  if (!remaining.length) return false;
+  const session = state.activeSession;
+  state.chapter4.resume = {
+    bundleId: chapter4Config.lp04.bundleId,
+    nextTargetId: "LP04",
+    nextStepId: remaining[0].id,
+    remainingStepIds: remaining.map((step) => step.id),
+    endedSessionId: session?.sessionId || attempt.sessionId || null,
+    reason,
+    createdAt: new Date().toISOString(),
+    lp04Progress: JSON.parse(JSON.stringify(progress))
+  };
+  state.chapter4RestView = currentChapter4Action()
+    ? { ...currentChapter4Action(), chapter4Attempt: JSON.parse(JSON.stringify(attempt)) }
+    : null;
+  persistChapter4Progress();
+  persistChapter4Attempt();
+  finishActiveSessionAtRest({ reward: `${attempt.stepId} \u56de\u58f0`, reason });
+  renderChapter4Screen();
+  if (!returnQueued) state.chapter4FeedbackTimer = setTimeout(() => showMapScreen(), 900);
+  return true;
+}
+
+function finishLp04Session(attempt, { reason = "natural-rest", returnQueued = false } = {}) {
+  const progress = chapter4Lp04Progress();
+  if (!(progress.echoEReached && progress.echoDReached && progress.echoCReached)) return false;
+  progress.dongdongPartialReveal = true;
+  progress.played = true;
+  progress.completedAt ||= new Date().toISOString();
+  progress.lastSessionId = state.activeSession?.sessionId || attempt?.sessionId || progress.lastSessionId;
+  const evidence = lp04EvidenceSummary(progress, progress.lastSessionId);
+  if (attempt) {
+    attempt.phase = "lp04-complete";
+    attempt.inputArmed = false;
+    attempt.outcomeRecorded = true;
+  }
+  if (attempt?.formalSession && !state.chapter4DirectMode && !state.chapter4.lessonEvidence.LP04?.completedAt) {
+    state.chapter4.lessonEvidence.LP04 = evidence;
+    state.chapter4.lp04Attempts.push(evidence);
+    state.chapter4.lp04Attempts = state.chapter4.lp04Attempts.slice(-20);
+    const existing = state.learningStats.levels.LP04 || { completions: 0, formalCompletions: 0, stableCompletions: 0 };
+    existing.completions = (Number(existing.completions) || 0) + 1;
+    existing.formalCompletions = (Number(existing.formalCompletions) || 0) + 1;
+    existing.stableCompletions = 0;
+    existing.needsPractice = Boolean(progress.needsPractice);
+    existing.todayNeedsPractice = Boolean(progress.needsPractice);
+    existing.todayNeedsPracticeDate = progress.needsPractice ? localDateKeyAt(progress.completedAt) : existing.todayNeedsPracticeDate;
+    existing.lastCompletedAt = progress.completedAt;
+    existing.lastFormalCompletedAt = progress.completedAt;
+    existing.lastAttempt = { ...evidence };
+    state.learningStats.levels.LP04 = existing;
+    saveLearningStats();
+  }
+  persistChapter4Progress();
+  persistChapter4Attempt();
+  renderChapter4Screen();
+  if (state.chapter4DirectMode) return true;
+  state.chapter4.resume = null;
+  state.chapter4RestView = currentChapter4Action()
+    ? { ...currentChapter4Action(), chapter4Attempt: JSON.parse(JSON.stringify(attempt)) }
+    : null;
+  persistChapter4Progress();
+  finishActiveSessionAtRest({ reward: "E-D-C \u56de\u58f0", reason });
+  if (!returnQueued) state.chapter4FeedbackTimer = setTimeout(() => showMapScreen(), 1050);
+  return true;
+}
+
+function settlePersistedLp04Completion(attempt) {
+  if (!attempt?.outcomeRecorded || attempt?.levelId !== "LP04") return false;
+  const session = state.activeSession;
+  const action = currentChapter4Action("LP04");
+  if (!session || session.bundleId !== chapter4Config.lp04.bundleId || action?.chapter4Attempt !== attempt) return false;
+  if (attempt.phase === "lp04-step-complete") {
+    if (attempt.stepId === "C") {
+      const progress = chapter4Lp04Progress();
+      const completion = session.completedActions?.find((entry) =>
+        entry?.actionId === action.actionId &&
+        entry?.targetId === "LP04" &&
+        entry?.lp04Step === "C" &&
+        Number.isFinite(isoTimeMs(entry?.completedAt))
+      );
+      if (!progress.echoCReached && progress.echoEReached && progress.echoDReached && attempt.outcomeRecorded && completion) {
+        progress.echoCReached = true;
+        progress.originSessionId ||= attempt.sessionId || session.sessionId || null;
+        progress.lastSessionId = session.sessionId || attempt.sessionId || progress.lastSessionId;
+        persistChapter4Progress();
+      }
+      if (!progress.echoCReached) {
+        attempt.outcomeRecorded = false;
+        attempt.pendingLp04Input = null;
+        attempt.phase = attempt.openingModelCompleted ? "lp04-target-ready" : "lp04-model-ready";
+        attempt.inputArmed = false;
+        persistChapter4Attempt();
+        renderChapter4Screen();
+        return false;
+      }
+      return finishLp04Session(attempt, { reason: "recovery-session-settle" });
+    }
+    if (lp04NeedsNaturalRest(attempt)) return finishLp04EarlyRest(attempt, attempt.modeled ? "modeled-safe-rest" : "repeated-repair");
+    return advanceLp04ToNextAction({ autoplay: false });
+  }
+  if (attempt.phase === "lp04-complete") return finishLp04Session(attempt, { reason: "recovery-session-settle" });
+  return false;
+}
+
+function completeLp04Step(attempt, { source, modeled = false } = {}) {
+  if (!attempt || attempt.outcomeRecorded) return false;
+  clearChapter4Timers();
+  const progress = chapter4Lp04Progress();
+  if (attempt.stepId === "D" && !progress.echoEReached) return false;
+  if (attempt.stepId === "C" && (!progress.echoEReached || !progress.echoDReached)) return false;
+  attempt.pendingLp04Input = null;
+  attempt.outcomeRecorded = true;
+  attempt.modeled = Boolean(modeled || attempt.modeled);
+  attempt.completionSource = source;
+  attempt.inputArmed = false;
+  attempt.phase = "lp04-step-complete";
+  progress[attempt.echoKey] = true;
+  progress.originSessionId ||= attempt.sessionId || null;
+  progress.lastSessionId = state.activeSession?.sessionId || attempt.sessionId || progress.lastSessionId;
+  progress.needsPractice = Boolean(progress.needsPractice || lp04NeedsNaturalRest(attempt));
+  const event = lp04RouteEvent(attempt, { source, modeled });
+  progress.routeEvents = Array.isArray(progress.routeEvents) ? progress.routeEvents : [];
+  progress.routeEvents.push(event);
+  progress.routeEvents = progress.routeEvents.slice(-12);
+  lp04ActionCompletion(attempt, event);
+  const returnQueued = attempt.audioTransaction?.returnQueued === true;
+  persistChapter4Progress();
+  persistChapter4Attempt();
+  renderChapter4Screen();
+  if (attempt.stepId === "C") return finishLp04Session(attempt, { reason: "natural-rest", returnQueued });
+  if (lp04NeedsNaturalRest(attempt)) return finishLp04EarlyRest(attempt, attempt.modeled ? "modeled-safe-rest" : "repeated-repair", { returnQueued });
+  const advanced = advanceLp04ToNextAction({ autoplay: false });
+  if (advanced && !returnQueued) queueLp04TargetAfterBoundary(ensureChapter4Attempt(), "child-echo-ended");
+  return advanced;
+}
+
+function handleLp04Input(midi, source, meta = {}) {
+  const attempt = ensureChapter4Attempt();
+  if (!attempt || attempt.levelId !== "LP04") return false;
+  const occurredAt = new Date().toISOString();
+  const interruptedExternal = attempt.phase === "sound-paused" && attempt.soundPauseContext === "lp04-external-input";
+  if (attempt.phase === "sound-paused") {
+    recoverChapter4Sound();
+    if (!interruptedExternal) {
+      attempt.observations.push({ event: "sound-paused-input", midi, source, occurredAt });
+      persistChapter4Attempt();
+      return false;
+    }
+  }
+  if (source === "MIDI") {
+    const held = new Set(attempt.heldMidiNotes || []);
+    if (held.size > 0) {
+      attempt.observations.push({ event: "held-midi", midi, source, phase: attempt.phase, occurredAt });
+      persistChapter4Attempt();
+      return false;
+    }
+    held.add(midi);
+    attempt.heldMidiNotes = [...held];
+  }
+  if (!['lp04-awaiting-response', 'lp04-assisted'].includes(attempt.phase) || !attempt.inputArmed) {
+    attempt.observations.push({ event: "input-blocked", midi, source, phase: attempt.phase, occurredAt });
+    persistChapter4Attempt();
+    return false;
+  }
+  if (attempt.routeArmed[source] === false) {
+    attempt.observations.push({ event: "not-rearmed", midi, source, phase: attempt.phase, occurredAt });
+    persistChapter4Attempt();
+    return false;
+  }
+  const pending = lp04PendingInput(attempt, midi, source, meta, occurredAt);
+  return isMicrophoneSource(source)
+    ? beginLp04ExternalInputTransaction(attempt, pending)
+    : beginLp04InputTransaction(attempt, pending);
+}
+
+function releaseLp04Input(attempt, midi, source) {
+  if (!attempt) return false;
+  if (source === "MIDI") {
+    const held = new Set(attempt.heldMidiNotes || []);
+    const numeric = Number(midi);
+    if (Number.isFinite(numeric)) held.delete(numeric);
+    attempt.heldMidiNotes = [...held];
+  }
+  const heldMidi = attempt.routeHeldMidi[source];
+  if (attempt.routeArmed[source] !== false && heldMidi === null) {
+    if (attempt.phase === "lp04-child-echo-playing" && attempt.pendingLp04Input?.source === source && !attempt.audioTransaction?.startedAt) {
+      attempt.pendingLp04Input.releaseRequested = true;
+      persistChapter4Attempt();
+    }
+    if (source === "MIDI" && attempt.phase === "lp04-awaiting-response" && !lp04InputIsHeld(attempt)) {
+      armLp04Input(attempt);
+      persistChapter4Attempt();
+      renderChapter4Screen();
+    }
+    return false;
+  }
+  if (!isMicrophoneSource(source) && heldMidi !== null && Number.isFinite(Number(midi)) && Number(midi) !== Number(heldMidi)) return false;
+  attempt.routeHeldMidi[source] = null;
+  attempt.routeArmed[source] = true;
+  attempt.inputEvents.push({ event: "release-rearm", midi: isMicrophoneSource(source) ? null : midi, route: source, occurredAt: new Date().toISOString() });
+  if (isMicrophoneSource(source) && attempt.phase === "lp04-child-echo-playing" && attempt.audioTransaction?.context === "lp04-external-input" && !attempt.audioTransaction.endedAt && !attempt.audioTransaction.interruptedAt) {
+    if (state.chapter4Timer) clearTimeout(state.chapter4Timer);
+    state.chapter4Timer = null;
+    recordLp04InputOnset(attempt, attempt.pendingLp04Input, attempt.audioTransaction.startedAt);
+    finishChapter4AudioTransaction(attempt, () => commitLp04PendingInput(attempt));
+    return true;
+  }
+  if (attempt.phase === "lp04-transition-pause" && !lp04InputIsHeld(attempt)) {
+    attempt.transitionWaitingForRelease = false;
+    persistChapter4Attempt();
+    renderChapter4Screen();
+    scheduleLp04TargetAfterBoundary(attempt);
+    return true;
+  }
+  if (['lp04-awaiting-response', 'lp04-assisted'].includes(attempt.phase) && !lp04InputIsHeld(attempt)) armLp04Input(attempt);
+  persistChapter4Attempt();
+  renderChapter4Screen();
+  return true;
+}
+
 function interruptActiveChapter4ExternalInput(reason = "interrupted") {
   const attempt = currentChapter4Action()?.chapter4Attempt;
   const transaction = attempt?.audioTransaction;
-  if (!attempt || !transaction || transaction.endedAt || transaction.interruptedAt || !["lp02-external-input", "lp03-external-input"].includes(transaction.context)) return false;
+  if (!attempt || !transaction || transaction.endedAt || transaction.interruptedAt || !["lp02-external-input", "lp03-external-input", "lp04-external-input"].includes(transaction.context)) return false;
   clearChapter4Timers();
   attempt.timingInterrupted = true;
   enterChapter4SoundPause(attempt, transaction.context, reason);
@@ -12966,6 +16282,31 @@ function recoverChapter4Sound() {
     renderChapter4Screen();
     if (attempt.phase === "lp03-seam-awaiting-response") scheduleLp03SeamTimeout(attempt);
     else scheduleLp03ResponseTimeout(attempt);
+  } else if (context === "lp04-opening-model") {
+    playLp04OpeningModel("sound-recovery");
+  } else if (context === "lp04-target") {
+    playLp04CurrentTarget("sound-recovery");
+  } else if (context === "lp04-child-input") {
+    const pending = attempt.pendingLp04Input || interrupted?.payload;
+    if (pending) beginLp04InputTransaction(attempt, pending, { recovery: true });
+  } else if (context === "lp04-wrong-repair") {
+    const pending = interrupted?.payload;
+    if (pending) startLp04WrongRepair(attempt, pending, { recovery: true });
+  } else if (context === "lp04-modeled") {
+    completeLp04Modeled(interrupted?.payload?.reason || attempt.pendingModeledReason || "sound-recovery-modeled");
+  } else if (context === "lp04-external-input") {
+    const pending = attempt.pendingLp04Input || interrupted?.payload;
+    attempt.pendingLp04Input = null;
+    attempt.audioTransaction = null;
+    attempt.routeHeldMidi["麦克风"] = null;
+    attempt.routeArmed["麦克风"] = true;
+    attempt.phase = pending?.phase === "lp04-assisted" ? "lp04-assisted" : "lp04-awaiting-response";
+    attempt.inputArmed = !lp04InputIsHeld(attempt);
+    attempt.observations.push({ event: "external-input-retry-required", midi: pending?.midi ?? null, source: "microphone", occurredAt: new Date().toISOString() });
+    persistChapter4Attempt();
+    renderChapter4Screen();
+    if (attempt.phase === "lp04-assisted") scheduleLp04AssistedTimeout(attempt);
+    else scheduleLp04ResponseTimeout(attempt);
   }
 }
 
@@ -13630,11 +16971,12 @@ function handleStaffInput(midi, source) {
   const heard = noteForMidi(midi);
   const target = noteForMidi(targetMidi) || notes[0];
   state.lastInputMidi = midi;
-  els.heardStatus.textContent = `听到：${heard ? heard.name : midi}`;
+  els.heardStatus.textContent = `听到：${heard?.name || freePianoIdentityForMidi(midi)?.name || "-"}`;
   els.inputStatus.textContent = `输入：${source}`;
 
   if (midi === targetMidi) {
     recordPracticeInput({ correct: true, target, heard: heard || target, source });
+    recordStaffMiniChildInput(midi, source, "correct");
     const assistedRepair = markAssistedRepairSuccess();
     state.lastInputResult = "correct";
     const fromPosition = staffDinoPosition();
@@ -13646,6 +16988,7 @@ function handleStaffInput(midi, source) {
     playCorrectSound();
     state.staffStepIndex += 1;
     state.stepHadWrong = false;
+    if (state.staffStepIndex < activeStaffStepCount()) persistStaffMiniPendingAttempt();
     render();
     if (state.staffStepIndex < activeStaffStepCount()) beginPracticeStepClock();
     els.inputStatus.textContent = `输入：${source}`;
@@ -13678,11 +17021,12 @@ function handleStaffInput(midi, source) {
     }
   } else {
     recordPracticeInput({ correct: false, target, heard, source });
+    recordStaffMiniChildInput(midi, source, "wrong");
     state.lastInputResult = "wrong";
     playWrongSound();
     render();
     els.inputStatus.textContent = `输入：${source}`;
-    els.heardStatus.textContent = `听到：${heard ? heard.name : midi}`;
+    els.heardStatus.textContent = `听到：${heard?.name || freePianoIdentityForMidi(midi)?.name || "-"}`;
     els.staffFeedback.classList.remove("good", "bad");
     els.staffFeedback.classList.add("bad");
     const wrongStory = staffWrongStoryFor(target, targetStep, heard);
@@ -13698,6 +17042,7 @@ function handleStaffInput(midi, source) {
       wrongKey?.classList.remove("hit", "hit-wrong", "wrong", "pressed");
     }, 940);
     beginAssistedRepair(targetMidi);
+    persistStaffMiniPendingAttempt();
   }
 }
 
@@ -13737,7 +17082,21 @@ function triggerStaffDinoMotion(type, fromPosition, toPosition) {
         state.staffMoodTimer = null;
       }, 460);
     }
-  }, type === "stumble" ? 920 : 1080);
+    if (type === "jump" && isMiniStaffSession()) clearStaffMiniStepTransients();
+  }, state.motionSettings.reduced ? 90 : type === "stumble" ? 920 : isMiniStaffSession() ? 760 : 1080);
+}
+
+function clearStaffMiniStepTransients() {
+  if (!isMiniStaffSession()) return;
+  document.querySelectorAll([
+    ".key-press-label",
+    ".note-feedback-burst.staff-note-burst",
+    ".music-flight",
+    ".music-flight-landing",
+    ".staff-landing-ripple",
+    ".staff-hop-arc",
+    ".staff-hop-spark"
+  ].join(", ")).forEach((element) => element.remove());
 }
 
 function setStaffDinoMood(mood, duration = 760) {
@@ -13834,6 +17193,7 @@ function showStaffDinoLeapTrail(fromPosition, toPosition, note) {
 }
 
 function showStaffStageToast(type, { title, note, subtitle }) {
+  return;
   if (!els.staffStage) return;
   els.staffStage.querySelectorAll(".staff-stage-toast").forEach((toast) => toast.remove());
   const toast = document.createElement("div");
@@ -13883,7 +17243,7 @@ function completeStaffCourse() {
   setStaffDinoMood("celebrate", 1400);
   showStaffCelebration();
   if (!showSessionCompletion({ kind: "staff", id: staffCourse.id, reward: isMini ? "小休息星" : staffCourse.reward })) {
-    showStaffResultModal();
+    scheduleStaffCompletionTransition();
   }
 }
 
@@ -13905,26 +17265,54 @@ function completeLevel(source) {
   els.nextAction.innerHTML = wasListening
     ? `<span class="cue-success">✓</span><span class="cue-text strong">听音找键成功</span>`
     : `<span class="cue-success">✓</span><span class="cue-text strong">${level.reward}亮起来</span>`;
+  if (level.id === "M02") setM02CompletionInstructionalSurface(true);
   setDinoMood("celebrate", 1400);
   if (!wasListening) showStageCelebration();
   if (!showSessionCompletion({ kind: "level", id: level.id, reward: level.reward })) {
-    if (wasListening) {
-      hideResultModal();
-      clearAutoAdvance();
-      state.autoAdvanceTimer = setTimeout(() => goLevel(1), 1750);
-    } else {
-      showResultModal(level);
-    }
+    scheduleWorkshopCompletionTransition(level);
   }
+}
+
+function scheduleWorkshopCompletionTransition(level) {
+  const isFinalLevel = state.levelIndex >= levels.length - 1;
+  const needsLevelCheckReplay = levelNeedsReducedCueReplay(level) && !isStableLevelAttempt(level);
+  const staffReadiness = fgBridgeReadiness();
+  const shouldPracticeFgBeforeStaff = !needsLevelCheckReplay && isFinalLevel && !state.staffComplete && !staffReadiness.ready;
+  const shouldGoStaffAfterBase = !needsLevelCheckReplay && isFinalLevel && !state.staffComplete && staffReadiness.ready;
+  hideResultModal();
+  clearAutoAdvance();
+  state.autoAdvanceTimer = setTimeout(() => {
+    if (needsLevelCheckReplay) {
+      startLevelCheckReplay();
+    } else if (!isFinalLevel) {
+      goLevel(1);
+    } else if (shouldPracticeFgBeforeStaff) {
+      routeToFgPrep(staffReadiness);
+    } else if (shouldGoStaffAfterBase) {
+      showStaffScreen();
+    }
+  }, isFinalLevel || needsLevelCheckReplay ? 1100 : 700);
+}
+
+function scheduleStaffCompletionTransition() {
+  if (isMiniStaffSession()) return;
+  const remediation = staffRemediationPlan();
+  const needsCheckReplay = !remediation && !isStableStaffAttempt();
+  if (!remediation && !needsCheckReplay) return;
+  hideResultModal();
+  clearAutoAdvance();
+  state.autoAdvanceTimer = setTimeout(() => {
+    if (remediation) routeToStaffRemediation(remediation);
+    else startStaffCheckReplay();
+  }, 850);
 }
 
 function setDinoMood(mood, duration = 760) {
   if (!els.dinoSvg) return;
   clearDinoMoodTimer();
-  els.dinoSvg.src = dinoImages[mood] || dinoImages.point;
-  if (els.coachDino) els.coachDino.src = dinoImages[mood] || dinoImages.point;
-  els.dinoSvg.classList.remove("mood-good", "mood-bad", "mood-celebrate", "mood-point", "mood-listen");
-  els.coachDino?.classList.remove("mood-good", "mood-bad", "mood-celebrate", "mood-point", "mood-listen");
+  setCompanionPose(mood);
+  els.dinoSvg.classList.remove("mood-good", "mood-bad", "mood-celebrate", "mood-point", "mood-listen", "mood-jump");
+  els.coachDino?.classList.remove("mood-good", "mood-bad", "mood-celebrate", "mood-point", "mood-listen", "mood-jump");
   void els.dinoSvg.getBoundingClientRect();
   void els.coachDino?.getBoundingClientRect();
   els.dinoSvg.classList.add(`mood-${mood}`);
@@ -13932,12 +17320,79 @@ function setDinoMood(mood, duration = 760) {
   state.dinoMoodTimer = setTimeout(() => {
     els.dinoSvg.classList.remove(`mood-${mood}`);
     els.dinoSvg.classList.add("mood-point");
-    els.dinoSvg.src = dinoImages.point;
+    setCompanionPose("point");
     els.coachDino?.classList.remove(`mood-${mood}`);
     els.coachDino?.classList.add("mood-point");
-    if (els.coachDino) els.coachDino.src = dinoImages.point;
     state.dinoMoodTimer = null;
   }, duration);
+}
+
+function setCompanionPose(pose = "point") {
+  const normalizedPose = pose === "bad" ? "try-again" : pose;
+  const imageKey = normalizedPose === "try-again" ? "bad" : normalizedPose;
+  const image = dinoImages[imageKey] || dinoImages.point;
+  if (els.appShell) els.appShell.dataset.companionState = normalizedPose;
+  [els.dinoSvg, els.coachDino].filter(Boolean).forEach((element) => {
+    element.dataset.companionState = normalizedPose;
+    element.src = image;
+  });
+}
+
+function setM02CompletionInstructionalSurface(completed) {
+  if (!els.appShell) return;
+  if (!completed && els.appShell.dataset.m02CompletionSurface !== "true") return;
+  if (!completed) {
+    delete els.appShell.dataset.m02CompletionSurface;
+    [els.targetNote, els.coachBubble, els.stageNoteOrb].filter(Boolean).forEach((element) => {
+      element.hidden = false;
+      element.removeAttribute("aria-hidden");
+      element.style.removeProperty("display");
+    });
+    if (els.hangingPart) {
+      els.hangingPart.hidden = false;
+      els.hangingPart.style.removeProperty("display");
+    }
+    return;
+  }
+
+  els.appShell.dataset.m02CompletionSurface = "true";
+  [els.targetNote, els.coachBubble, els.stageNoteOrb].filter(Boolean).forEach((element) => {
+    element.hidden = true;
+    element.setAttribute("aria-hidden", "true");
+    element.style.setProperty("display", "none", "important");
+  });
+  if (els.hangingPart) {
+    els.hangingPart.hidden = true;
+    els.hangingPart.style.setProperty("display", "none", "important");
+    els.hangingPart.classList.remove("drop-hint", "identity-reminder");
+  }
+  const clearKeyboardMarkers = () => {
+    if (els.appShell?.dataset.m02CompletionSurface !== "true") return;
+    els.keyboard?.querySelectorAll(".key").forEach((key) => {
+      key.classList.remove("target", "target-muted", "correct", "wrong", "hint", "hit", "hit-correct", "hit-wrong", "program-press", "program-correct", "program-wrong", "pressed");
+      key.querySelectorAll(".tap-badge, .key-touch-ripple").forEach((marker) => marker.remove());
+    });
+    document.querySelectorAll(".key-press-label").forEach((marker) => marker.remove());
+  };
+  clearKeyboardMarkers();
+  requestAnimationFrame(clearKeyboardMarkers);
+  if (els.dinoHint) els.dinoHint.textContent = "三盏小灯都醒来啦。";
+  if (els.modeHint) els.modeHint.textContent = "";
+}
+
+function clearM02StepHandoffFeedback() {
+  document.querySelectorAll(".key-press-label").forEach((marker) => marker.remove());
+  els.keyboard?.querySelectorAll(".key").forEach((key) => {
+    key.classList.remove("correct", "wrong", "hint", "hit", "hit-correct", "hit-wrong", "program-press", "program-correct", "program-wrong", "pressed");
+    key.querySelectorAll(".key-touch-ripple").forEach((marker) => marker.remove());
+  });
+}
+
+function clearCompanionWorldFeedback() {
+  if (!els.moonYard) return;
+  clearTimeout(els.moonYard.companionFeedbackTimer);
+  els.moonYard.companionFeedbackTimer = null;
+  delete els.moonYard.dataset.companionWorldFeedback;
 }
 
 function clearDinoMoodTimer() {
@@ -13949,20 +17404,29 @@ function clearDinoMoodTimer() {
 
 function showInputEffect(midi, className, options = {}) {
   requestAnimationFrame(() => {
+    if (milestoneSettlementIsVisible()) return;
+    if (els.appShell?.dataset.m02CompletionSurface === "true") return;
     const key = els.keyboard.querySelector(`[data-midi="${midi}"]`);
     if (!key) return;
     const note = noteForMidi(midi);
-    pulseKeyboardKey(key, note, className, options);
+    const localFeedback = options.local === true || usesM01LocalFeedback();
+    pulseKeyboardKey(key, note, className, { ...options, local: localFeedback, showLabel: localFeedback ? false : options.showLabel });
     key.classList.remove("correct", "wrong", "hint");
     void key.offsetWidth;
     key.classList.add(className);
-    const duration = className === "hint" ? 1120 : 920;
-    setTimeout(() => key.classList.remove(className), duration);
+    const duration = localFeedback ? 620 : (className === "hint" ? 1120 : 920);
+    setTimeout(() => key.classList.remove(className, "m01-local-feedback"), duration);
   });
 }
 
+function usesM01LocalFeedback() {
+  return activeLevel()?.id === "M01";
+}
+
 function showKeySpriteEffect(midi, effectName) {
+  if (usesM01LocalFeedback() || milestoneSettlementIsVisible()) return;
   requestAnimationFrame(() => {
+    if (milestoneSettlementIsVisible()) return;
     const key = els.keyboard.querySelector(`[data-midi="${midi}"]`);
     const image = effectImages[effectName];
     if (!key || !image) return;
@@ -13982,7 +17446,9 @@ function showKeySpriteEffect(midi, effectName) {
 }
 
 function showNoteBurst(midi, result, note) {
+  if (usesM01LocalFeedback() || milestoneSettlementIsVisible()) return;
   requestAnimationFrame(() => {
+    if (milestoneSettlementIsVisible()) return;
     const key = els.keyboard.querySelector(`[data-midi="${midi}"]`);
     if (!key) return;
 
@@ -14068,7 +17534,9 @@ function elementCenter(element, xRatio = 0.5, yRatio = 0.5) {
 }
 
 function showMusicFlight(midi, note, targetElement, type = "correct") {
+  if (usesM01LocalFeedback() || milestoneSettlementIsVisible()) return;
   requestAnimationFrame(() => {
+    if (milestoneSettlementIsVisible()) return;
     const key = els.keyboard?.querySelector(`[data-midi="${midi}"]`);
     const target = targetElement || (state.screen === "staff" ? els.staffStage : els.moonYard);
     const start = elementCenter(key, 0.5, type === "hint" ? 0.30 : 0.24);
@@ -14144,6 +17612,7 @@ function routeRepairToastHtml(type, note) {
 }
 
 function showStageInputToast(type, { title, note, subtitle }) {
+  return;
   if (!els.moonYard) return;
   els.moonYard.querySelectorAll(".stage-input-toast").forEach((toast) => toast.remove());
   const toast = document.createElement("div");
@@ -14169,6 +17638,7 @@ function showStageInputToast(type, { title, note, subtitle }) {
 }
 
 function pulseBuildStage(type) {
+  if (usesM01LocalFeedback()) return;
   if (!els.moonYard) return;
   els.moonYard.classList.remove("stage-result-correct", "stage-result-wrong");
   void els.moonYard.offsetWidth;
@@ -14224,6 +17694,7 @@ function showLevelIntro() {
 }
 
 function showStageCelebration() {
+  if (usesM01LocalFeedback() || milestoneSettlementIsVisible()) return;
   if (activeLevel()?.id === "M08" && els.buildBlueprint) {
     els.buildBlueprint.classList.remove("blueprint-payoff");
     els.roofWorldBuild?.classList.remove("roof-world-payoff");
@@ -14255,6 +17726,7 @@ function showStaffCelebration() {
 }
 
 function showFlyingPart(part) {
+  if (usesM01LocalFeedback() || milestoneSettlementIsVisible()) return;
   if (!part) return;
   const note = noteForMidi(part.midi);
   const flying = document.createElement("div");
@@ -14297,6 +17769,19 @@ function flashBuildArea(partIndex, isLevelComplete = false) {
       added.classList.remove("just-added");
       void added.offsetWidth;
       added.classList.add("just-added");
+    }
+    if (usesM01LocalFeedback()) {
+      els.moonYard.classList.add("m01-local-world-feedback");
+      setTimeout(() => els.moonYard?.classList.remove("m01-local-world-feedback"), 620);
+    }
+    const levelId = activeLevel()?.id;
+    if (["M01", "M02", "M03"].includes(levelId)) {
+      clearTimeout(els.moonYard?.companionFeedbackTimer);
+      els.moonYard.dataset.companionWorldFeedback = isLevelComplete ? "complete" : "correct";
+      els.moonYard.companionFeedbackTimer = setTimeout(() => {
+        if (els.moonYard) delete els.moonYard.dataset.companionWorldFeedback;
+        if (els.moonYard) els.moonYard.companionFeedbackTimer = null;
+      }, 720);
     }
   });
 }
@@ -14459,21 +17944,17 @@ function updateResultSummary({ prizeName, prizeImage, prizeColor, nextName, next
 }
 
 function openResultModal() {
-  els.resultModal.hidden = false;
-  syncModalBackgroundInert();
+  keepResultModalHidden();
 }
 
 function hideResultModal() {
-  els.resultModal.hidden = true;
-  syncModalBackgroundInert();
-  delete els.resultModal.dataset.result;
-  els.modalNext.hidden = false;
-  els.resultModal.querySelector(".auto-next")?.removeAttribute("hidden");
-  els.resultModal.querySelectorAll(".result-confetti-effect").forEach((effect) => effect.remove());
+  keepResultModalHidden();
 }
 
 function restartResultMeter() {
-  const meter = els.resultModal.querySelector(".auto-next i");
+  const meter = els.resultModal.dataset.result === "milestone"
+    ? els.resultModal.querySelector(".milestone-settlement-return i")
+    : els.resultModal.querySelector(".auto-next i");
   if (!meter) return;
   meter.style.animation = "none";
   void meter.offsetWidth;
@@ -14552,7 +18033,7 @@ function startBootSequence() {
           if (isListeningLevel()) playListeningPrompt();
         }
       } else if (state.screen === "staff") {
-        beginPracticeStepClock();
+        if (!state.practiceAttempt?.activeStepRecord) beginPracticeStepClock();
       } else if (state.screen === "garden") {
         if (isAudioAGardenActive()) restoreGardenPendingAttempt();
         recoverGardenEquipmentState();
@@ -15725,6 +19206,113 @@ function clearGardenTimers() {
   clearPairedListeningTimers();
 }
 
+function isFormalStaffMiniAction(action = currentSessionAction()) {
+  return Boolean(
+    state.activeSession?.status === "active" &&
+    state.activeSession.formalSession === true &&
+    state.staffSessionMode === "mini" &&
+    action?.kind === "staff" &&
+    action.actionId === "S01-mini" &&
+    action.targetId === staffCourse.id
+  );
+}
+
+function recordStaffMiniChildInput(midi, source, result) {
+  if (!isFormalStaffMiniAction()) return;
+  state.staffMiniChildInputs.push({
+    midi: Number(midi),
+    source,
+    result,
+    time: new Date().toISOString()
+  });
+}
+
+function persistStaffMiniPendingAttempt() {
+  const action = currentSessionAction();
+  if (!isFormalStaffMiniAction(action) || state.staffComplete) return false;
+  const attempt = state.practiceAttempt;
+  action.staffMiniAttempt = {
+    version: 1,
+    targetId: action.targetId,
+    stepIndex: state.staffStepIndex,
+    wrongCount: Math.max(0, Number(attempt?.wrongs) || 0),
+    currentStepWrongCount: Math.max(0, Number(attempt?.activeStepRecord?.wrongs) || 0),
+    inputRoutes: { ...(attempt?.inputRoutes || {}) },
+    childInputs: state.staffMiniChildInputs.map((input) => ({ ...input })),
+    lastInputMidi: Number.isInteger(state.lastInputMidi) ? state.lastInputMidi : null,
+    lastInputResult: state.lastInputResult || null,
+    stepHadWrong: Boolean(state.stepHadWrong),
+    repairStage: state.assistedSuccessPending && attempt?.assistedMode ? "assisted" : "none",
+    practiceAttempt: JSON.parse(JSON.stringify(attempt || createPracticeAttempt("staff", staffCourse.id, state.staffRunMode)))
+  };
+  persistActiveSession();
+  return true;
+}
+
+function restoreStaffMiniPendingAttempt() {
+  state.staffMiniChildInputs = [];
+  const action = currentSessionAction();
+  const pending = isFormalStaffMiniAction(action) && action.staffMiniAttempt?.targetId === action.targetId
+    ? action.staffMiniAttempt
+    : null;
+  const stepIndex = Number(pending?.stepIndex);
+  if (!pending || !Number.isInteger(stepIndex) || stepIndex < 0 || stepIndex >= activeStaffStepCount()) {
+    return { restored: false, repairStage: "none" };
+  }
+
+  const rawAttempt = pending.practiceAttempt && typeof pending.practiceAttempt === "object"
+    ? JSON.parse(JSON.stringify(pending.practiceAttempt))
+    : {};
+  const attempt = {
+    ...createPracticeAttempt("staff", staffCourse.id, state.staffRunMode),
+    ...rawAttempt,
+    kind: "staff",
+    id: staffCourse.id,
+    runMode: state.staffRunMode,
+    wrongTargets: { ...(rawAttempt.wrongTargets || {}) },
+    inputRoutes: { ...(pending.inputRoutes || rawAttempt.inputRoutes || {}) },
+    stepRecords: Array.isArray(rawAttempt.stepRecords)
+      ? rawAttempt.stepRecords.map((record) => ({ ...record, inputRoutes: { ...(record.inputRoutes || {}) } }))
+      : [],
+    modeledInputs: Array.isArray(rawAttempt.modeledInputs) ? rawAttempt.modeledInputs.map((input) => ({ ...input })) : []
+  };
+  attempt.wrongs = Math.max(0, Number(pending.wrongCount) || Number(attempt.wrongs) || 0);
+  const expectedStepKey = `staff:${stepIndex}`;
+  if (attempt.activeStepRecord?.key === expectedStepKey) {
+    attempt.activeStepRecord = {
+      ...attempt.activeStepRecord,
+      index: stepIndex,
+      startedAt: performance.now(),
+      inputRoutes: { ...(attempt.activeStepRecord.inputRoutes || {}) }
+    };
+  } else {
+    attempt.activeStepRecord = null;
+  }
+
+  state.staffStepIndex = stepIndex;
+  state.staffComplete = false;
+  state.lastInputMidi = Number.isInteger(pending.lastInputMidi) ? pending.lastInputMidi : null;
+  state.lastInputResult = ["correct", "wrong"].includes(pending.lastInputResult) ? pending.lastInputResult : null;
+  state.stepHadWrong = Boolean(pending.stepHadWrong || attempt.activeStepRecord?.wrongs);
+  state.staffMiniChildInputs = Array.isArray(pending.childInputs)
+    ? pending.childInputs
+      .filter((input) => Number.isInteger(input?.midi) && ["correct", "wrong"].includes(input?.result))
+      .map((input) => ({ midi: input.midi, source: input.source || "屏幕", result: input.result, time: input.time || null }))
+    : [];
+  state.practiceAttempt = stampPracticeAttemptSession(attempt);
+  state.practiceAttempt.assistedMode = false;
+  const repairStage = pending.repairStage === "assisted" && (state.practiceAttempt.activeStepRecord?.wrongs || 0) >= 3
+    ? "assisted"
+    : "none";
+  return { restored: true, repairStage };
+}
+
+function clearStaffMiniPendingAttempt(action = currentSessionAction()) {
+  if (!action?.staffMiniAttempt) return;
+  delete action.staffMiniAttempt;
+  if (action === currentSessionAction()) state.staffMiniChildInputs = [];
+}
+
 function persistGardenPendingAttempt() {
   const action = currentSessionAction();
   if (!action || action.kind !== "garden") return;
@@ -15825,7 +19413,19 @@ function scheduleGardenLongWait() {
 
 function gardenLessonCopy(lesson) {
   const count = lesson?.id === "LS03" ? state.chapter3.ls03QualifiedInputs : 0;
-  if (!lesson) return { kicker: "花园休息", main: "三片叶长好啦", support: "星芽在新家园里休息。" };
+  if (!lesson) {
+    const grownLeafCount = state.chapter3.leaves.filter(Boolean).length;
+    if (grownLeafCount === 1) {
+      return { kicker: "花园休息", main: "第一片叶长好啦", support: "下一次继续伸直第二片叶。" };
+    }
+    if (grownLeafCount === 2) {
+      return { kicker: "花园休息", main: "两片叶长好啦", support: "第三片叶还在等 E。" };
+    }
+    if (grownLeafCount >= 3) {
+      return { kicker: "花园休息", main: "三片叶长好啦", support: "星芽在新家园里休息。" };
+    }
+    return { kicker: "花园休息", main: "先在这里歇一歇", support: "已经走过的声音会留在这里。" };
+  }
   const audioAttempt = state.gardenAudioAttempt;
   if (audioAttempt?.lessonId === lesson.id) {
     if (["model-scheduled", "model-playing"].includes(audioAttempt.phase)) {
@@ -15883,7 +19483,7 @@ function ls04Copy(attempt) {
     return { kicker: "再听一次", main: `刚按了 ${heard?.name || "别的键"}`, support: "先听刚才的键，再听种核的声音。" };
   }
   if (attempt.phase === "correct-feedback") return { kicker: "找到了", main: "两边叶子靠近一点", support: "下一声会自己响起。" };
-  if (attempt.phase === "complete") return { kicker: "声音朋友找到啦", main: "两边叶子握住了", support: "今天先在花园歇一歇。" };
+  if (attempt.phase === "complete") return { kicker: "声音朋友找到啦", main: "两边叶子握住了", support: "两边叶子握住了，下一处声音在等你。" };
   return { kicker: `第 ${attempt.callIndex + 1} 声`, main: "弹同样的声音", support: "可以按扬声器重听。" };
 }
 
@@ -16450,7 +20050,7 @@ function renderGardenScreen() {
   }).join("");
   els.nextAction.textContent = equipmentState !== "safe-open"
     ? "背包检查空气"
-    : (lesson ? `${lesson.letter} · ${lesson.locator} · ${lesson.prompt}` : "三片叶长好啦");
+    : (lesson ? `${lesson.letter} · ${lesson.locator} · ${lesson.prompt}` : copy.main);
   els.inputStatus.textContent = "输入：屏幕琴键";
   renderKeyboard(noteForMidi(lesson?.midi ?? 60) || notes[0], {
     scaffold: lesson?.id === "LS03" && ls03Count === 1 ? "garden-weaker" : "garden-visible",
@@ -16501,9 +20101,13 @@ function completedSessionBundle(bundleId) {
 }
 
 function hasReachedGardenEntrance() {
-  return state.sessionRuntime.history.some((session) =>
+  const persistedGardenEvidence = state.chapter3.airCheckComplete && Object.values(state.chapter3.lessonEvidence || {}).some((evidence) =>
+    typeof evidence?.completedAt === "string" && evidence.completedAt.length > 0 &&
+    typeof evidence?.sessionId === "string" && evidence.sessionId.length > 0
+  );
+  return persistedGardenEvidence || state.sessionRuntime.history.some((session) =>
     session?.bundleId === "C2-03" &&
-    session?.status === "ended" &&
+    courseProgressionHistoryIsEligible(session) &&
     Array.isArray(session.completedActions) &&
     session.completedActions.some((action) =>
       action?.actionId === "S01-check" && action?.kind === "staff" && action?.targetId === staffCourse.id
@@ -16539,6 +20143,27 @@ function hasFormalLp03EntranceEvidence() {
     Array.isArray(session.completedActions) &&
     session.completedActions.some((action) => action?.targetId === "LP02" && action?.completedAt)
   );
+}
+
+function lp04FormalEntranceFrom({ progress, lessonEvidence, history }) {
+  if (!(progress.foundationCAwake && progress.foundationDPlaced && progress.foundationEPlaced && progress.played)) return false;
+  const formalHistory = (history || []).filter((session) =>
+    session?.bundleId === chapter4Config.lp03.bundleId && session?.status === "ended" &&
+    session?.formalSession === true && session?.directMode !== true && session?.debugMode !== true
+  );
+  const completed = new Set(formalHistory.flatMap((session) => session.completedActions || [])
+    .filter((action) => action?.targetId === "LP03" && action?.completedAt)
+    .map((action) => action.actionId));
+  return chapter4Config.lp03.actionIds.every((actionId) => completed.has(actionId)) &&
+    Boolean(lessonEvidence?.LP03?.completedAt);
+}
+
+function hasFormalLp04EntranceEvidence() {
+  return lp04FormalEntranceFrom({
+    progress: chapter4Lp03Progress(),
+    lessonEvidence: state.chapter4.lessonEvidence,
+    history: state.sessionRuntime.history
+  });
 }
 
 function hasReviewableFormalHistory(stored) {
@@ -16625,25 +20250,34 @@ function createActiveSession(bundle, requestedTargetId = null) {
     startedAt: now.toISOString(),
     localDateKey: localDateKeyAt(now)
   };
-  const voluntaryReplay = completedSessionBundle(bundle.bundleId);
-  const baseStartIndex = baseStartIndexForBundle(bundle, requestedTargetId, voluntaryReplay);
+  const priorEndedSessions = endedSessionsForBundle(bundle.bundleId);
+  const curriculumComplete = sessionBundleCurriculumComplete(bundle.bundleId);
+  const partialResume = priorEndedSessions.length > 0 && !curriculumComplete;
+  const completedActionIds = completedCourseActionIds(bundle.bundleId);
+  const incompleteIndex = bundle.actions.findIndex((action) => !completedActionIds.has(action.actionId));
+  const voluntaryReplay = curriculumComplete;
+  const baseStartIndex = partialResume && incompleteIndex >= 0
+    ? incompleteIndex
+    : baseStartIndexForBundle(bundle, requestedTargetId, voluntaryReplay);
   const baseActions = bundle.actions.slice(baseStartIndex).map((action) => ({
     ...action,
-    role: voluntaryReplay ? "voluntary-replay" : "lesson",
+    role: voluntaryReplay ? "voluntary-replay" : (partialResume ? "lesson-resume" : "lesson"),
     requiredReview: false,
     reviewSkillKey: null
   }));
-  const review = voluntaryReplay ? null : selectOpeningReview(bundle, identity);
+  const review = voluntaryReplay || partialResume ? null : selectOpeningReview(bundle, identity);
   const actions = review ? [review, ...baseActions] : baseActions;
   return {
     ...identity,
+    formalSession: true,
     reviewSkillKey: review?.reviewSkillKey || null,
     voluntaryReplay,
     status: "active",
     actionIndex: 0,
     actions,
     completedActions: [],
-    restAfterCurrentLevel: false
+    restAfterCurrentLevel: false,
+    resumeOfSessionId: partialResume ? priorEndedSessions.at(-1)?.sessionId || null : null
   };
 }
 
@@ -16654,8 +20288,9 @@ function persistActiveSession() {
 
 function sessionUrlSuffix() {
   const session = state.activeSession;
-  if (!session) return "";
-  return `&bundle=${encodeURIComponent(session.bundleId)}&sessionId=${encodeURIComponent(session.sessionId)}`;
+  const legacyMap = new URLSearchParams(window.location.search).get("legacyMap") === "true" ? "&legacyMap=true" : "";
+  if (!session) return legacyMap;
+  return `${legacyMap}&bundle=${encodeURIComponent(session.bundleId)}&sessionId=${encodeURIComponent(session.sessionId)}`;
 }
 
 function startActiveSessionAction(actionIndex = state.activeSession?.actionIndex || 0) {
@@ -16777,6 +20412,7 @@ function createGardenActiveSession(plan) {
     bundleId: plan.bundleId,
     startedAt: now.toISOString(),
     localDateKey: localDateKeyAt(now),
+    formalSession: true,
     reviewSkillKey: null,
     voluntaryReplay: false,
     status: "active",
@@ -16831,7 +20467,39 @@ function nextChapter4SessionPlan() {
       ? { bundleId: chapter4Config.bundleId, actionIds: [chapter4Config.lp02.actionId], resumeOfSessionId: resume.endedSessionId || null, reconnectRequired: true }
       : { bundleId: chapter4Config.bundleId, actionIds: [chapter4Config.lp01.actionId, chapter4Config.lp02.actionId], resumeOfSessionId: null, reconnectRequired: false };
   }
-  if (!hasFormalLp03EntranceEvidence() || chapter4Lp03Progress().played) return null;
+  if (!hasFormalLp03EntranceEvidence()) return null;
+  if (hasFormalLp04EntranceEvidence()) {
+    const resume = state.chapter4.resume?.nextTargetId === "LP04" ? state.chapter4.resume : null;
+    const progress = state.chapter4.lp04Progress;
+    const remaining = chapter4Config.lp04.steps.filter((step) => !progress?.[step.echoKey]);
+    if (!remaining.length) return null;
+    const baseActions = sessionBundleById.get(chapter4Config.lp04.bundleId).actions
+      .filter((action) => remaining.some((step) => step.actionId === action.actionId));
+    if (resume) return {
+      bundleId: chapter4Config.lp04.bundleId,
+      actionIds: baseActions.map((action) => action.actionId),
+      actions: baseActions,
+      resumeOfSessionId: resume.endedSessionId || null,
+      remainingStepIds: remaining.map((step) => step.id)
+    };
+    const sessionId = createSessionId(chapter4Config.lp04.bundleId);
+    const composed = composeChapter4ReviewPlan({
+      actions: baseActions,
+      scheduler: state.chapter4.reviewScheduler,
+      history: state.sessionRuntime.history,
+      sessionId
+    });
+    return {
+      bundleId: chapter4Config.lp04.bundleId,
+      actionIds: baseActions.map((action) => action.actionId),
+      actions: composed.actions,
+      review: composed.review,
+      reviewSkillKey: composed.review?.reviewSkillKey || null,
+      remainingStepIds: remaining.map((step) => step.id),
+      resumeOfSessionId: null,
+      sessionId
+    };
+  }
   const resume = state.chapter4.resume?.nextTargetId === "LP03" ? state.chapter4.resume : null;
   const remaining = lp03RemainingStepIds();
   const actionIds = chapter4Config.lp03.steps
@@ -16853,7 +20521,7 @@ function createChapter4ActiveSession(plan) {
   if (!bundle || !plan) return null;
   const now = new Date();
   const session = {
-    sessionId: createSessionId(bundleId),
+    sessionId: plan.sessionId || createSessionId(bundleId),
     bundleId,
     startedAt: now.toISOString(),
     localDateKey: localDateKeyAt(now),
@@ -16862,20 +20530,22 @@ function createChapter4ActiveSession(plan) {
     formalSession: true,
     status: "active",
     actionIndex: 0,
-    actions: bundle.actions.filter((action) => plan.actionIds.includes(action.actionId)).map((action) => ({
+    actions: (Array.isArray(plan.actions) ? plan.actions : bundle.actions.filter((action) => plan.actionIds.includes(action.actionId))).map((action) => ({
       ...action,
-      role: plan.resumeOfSessionId ? "lesson-resume" : "lesson",
-      requiredReview: false,
-      reviewSkillKey: null
+      role: action.role === "opening-review" ? "opening-review" : (plan.resumeOfSessionId ? "lesson-resume" : "lesson"),
+      requiredReview: action.role === "opening-review",
+      reviewSkillKey: action.reviewSkillKey || null
     })),
     completedActions: [],
     restAfterCurrentLevel: false,
     resumeOfSessionId: plan.resumeOfSessionId || null
   };
+  session.reviewSkillKey = plan.reviewSkillKey || session.actions.find((action) => action.role === "opening-review")?.reviewSkillKey || null;
   const action = session.actions[0];
-  if (action?.targetId === "LP01") action.chapter4Attempt = createLp01Attempt(session);
-  if (action?.targetId === "LP02") action.chapter4Attempt = createLp02Attempt(session, { reconnectRequired: plan.reconnectRequired });
+  if (action?.targetId === "LP01") action.chapter4Attempt = createLp01Attempt(session, { reviewMode: action.reviewMode });
+  if (action?.targetId === "LP02") action.chapter4Attempt = createLp02Attempt(session, { reconnectRequired: plan.reconnectRequired, reviewMode: action.reviewMode });
   if (action?.targetId === "LP03") action.chapter4Attempt = createLp03Attempt(session, { stepId: action.lp03Step });
+  if (action?.targetId === "LP04") action.chapter4Attempt = createLp04Attempt(session, { stepId: action.lp04Step });
   return session;
 }
 
@@ -16890,7 +20560,7 @@ function startChapter4FromMap() {
   if (!hasFormalChapter4EntranceEvidence()) return;
   unlockChapter4AudioFromGesture();
   if (state.activeSession?.status === "active") {
-    if ([chapter4Config.bundleId, chapter4Config.lp03.bundleId].includes(state.activeSession.bundleId)) startActiveSessionAction(state.activeSession.actionIndex);
+    if ([chapter4Config.bundleId, chapter4Config.lp03.bundleId, chapter4Config.lp04.bundleId].includes(state.activeSession.bundleId)) startActiveSessionAction(state.activeSession.actionIndex);
     return;
   }
   const plan = nextChapter4SessionPlan();
@@ -17175,6 +20845,7 @@ function shouldDeferSessionCheck(session, completion) {
 function finishActiveSessionAtRest({ reward = "", reason = "natural-rest" } = {}) {
   const session = state.activeSession;
   if (!session) return null;
+  session.actions.forEach((action) => clearStaffMiniPendingAttempt(action));
   if (session.bundleId.startsWith("C3-")) {
     session.actions.forEach((action) => {
       clearGardenPendingAttempt(action);
@@ -17200,6 +20871,7 @@ function finishActiveSessionAtRest({ reward = "", reason = "natural-rest" } = {}
     state.sessionRuntime.chapter4 = state.chapter4;
   }
   saveSessionRuntime(state.sessionRuntime);
+  showMilestoneSettlement(ended, reward);
   return ended;
 }
 
@@ -17225,6 +20897,7 @@ function showSessionCompletion({ kind, id, reward }) {
   const session = state.activeSession;
   if (!session) return false;
   if (kind === "staff" && isMiniStaffSession()) recordMiniObservationEvent();
+  if (kind === "staff" && isMiniStaffSession()) clearStaffMiniPendingAttempt();
   const completion = recordSessionActionCompletion({ kind, id, reward });
   if (!completion) return false;
   const deferCheck = shouldDeferSessionCheck(session, completion);
@@ -17237,7 +20910,7 @@ function showSessionCompletion({ kind, id, reward }) {
     finishActiveSessionAtRest({ reward, reason: deferCheck ? "review-deferred" : (session.restAfterCurrentLevel ? "assisted-safe-rest" : "natural-rest") });
   }
 
-  hideResultModal();
+  if (hasNext) hideResultModal();
   clearAutoAdvance();
   if (hasNext) {
     els.nextAction.innerHTML = `<span class="cue-success">✓</span><span class="cue-text strong">星芽继续出发</span>`;
@@ -17245,15 +20918,57 @@ function showSessionCompletion({ kind, id, reward }) {
   state.autoAdvanceTimer = setTimeout(() => {
     if (hasNext) startActiveSessionAction(state.activeSession?.actionIndex || 0);
     else showMapScreen();
-  }, hasNext ? 1450 : 1750);
+  }, hasNext ? 650 : 1400);
+  return true;
+}
+
+function enterFreePiano() {
+  if (state.activeSession?.status === "active") {
+    state.parentSelectedTab = "devices";
+    renderParentPanel();
+    return false;
+  }
+  clearAutoAdvance();
+  clearGardenTimers();
+  clearLs08Timers();
+  clearChapter4Timers();
+  clearAssistedRepairState();
+  clearWorkshopIdleHints();
+  clearLevelIntro();
+  clearListeningPrompt();
+  clearTransientFeedback();
+  hideResultModal();
+  closeParentPanel();
+  saveFreePianoRuntime(true);
+  state.screen = "free-piano";
+  state.freePianoLastMidi = null;
+  state.freePianoLastSource = midiDeviceConnected() ? "MIDI" : (state.audio?.running ? "麦克风" : "屏幕琴键");
+  history.replaceState(null, "", "?mode=free-piano");
+  render();
+  requestAnimationFrame(() => els.keyboard?.querySelector(".white-key")?.focus({ preventScroll: true }));
+  return true;
+}
+
+function exitFreePiano() {
+  if (state.screen !== "free-piano") return showMapScreen();
+  clearTransientFeedback();
+  hideResultModal();
+  saveFreePianoRuntime(false);
+  state.screen = "map";
+  state.freePianoLastMidi = null;
+  history.replaceState(null, "", "?screen=map");
+  render();
+  requestAnimationFrame(() => els.mapParentGate?.focus({ preventScroll: true }));
   return true;
 }
 
 function showMapScreen() {
+  if (state.screen === "staff") persistStaffMiniPendingAttempt();
+  if (deferMapForMilestoneSettlement()) return;
   const pendingChapter4 = currentChapter4Action()?.chapter4Attempt;
   const chapter4Playback = state.teachingPlayback;
   const chapter4ExternalInputIsActive = Boolean(
-    ["lp02-external-input", "lp03-external-input"].includes(pendingChapter4?.audioTransaction?.context) &&
+    ["lp02-external-input", "lp03-external-input", "lp04-external-input"].includes(pendingChapter4?.audioTransaction?.context) &&
     !pendingChapter4.audioTransaction.endedAt &&
     !pendingChapter4.audioTransaction.interruptedAt
   );
@@ -17282,7 +20997,7 @@ function showMapScreen() {
     finishLp03SeamDeferred(pendingChapter4);
     return;
   }
-  if (state.screen === "chapter4" && pendingChapter4 && !["lp01-complete", "lp01-early-rest", "lp01-supported-story-rest", "lp02-complete", "lp03-complete"].includes(pendingChapter4.phase)) {
+  if (state.screen === "chapter4" && pendingChapter4 && !["lp01-complete", "lp01-early-rest", "lp01-supported-story-rest", "lp02-complete", "lp03-complete", "lp04-complete"].includes(pendingChapter4.phase)) {
     pendingChapter4.callTimingInterrupted = true;
     pendingChapter4.timingInterrupted = true;
     persistChapter4Attempt();
@@ -17378,10 +21093,12 @@ function showMapScreen() {
   clearWorkshopIdleHints();
   clearLevelIntro();
   clearListeningPrompt();
+  clearCompanionWorldFeedback();
   hideResultModal();
   state.screen = "map";
   state.chapter4RestView = null;
   history.replaceState(null, "", `?screen=map${sessionUrlSuffix()}`);
+  if (reloadPendingPwaShellAtMap()) return;
   render();
 }
 
@@ -17735,6 +21452,14 @@ function renderM03AudioState() {
   const phase = attempt?.phase || "model-ready";
   if (els.appShell) els.appShell.dataset.teachingAudioPhase = phase;
   if (els.moonYard) els.moonYard.dataset.teachingAudioPhase = phase;
+  const pose = phase === "complete"
+    ? "celebrate"
+    : phase.startsWith("wrong-repair")
+      ? "try-again"
+      : phase.startsWith("child-echo")
+        ? "good"
+        : "listen";
+  setCompanionPose(pose);
   if (!els.m03InstructionStatus) return;
   if (phase === "model-scheduled") els.m03InstructionStatus.textContent = "小车轮准备唱一声。";
   else if (phase === "model-playing") els.m03InstructionStatus.textContent = "小车轮正在唱。";
@@ -17775,7 +21500,7 @@ function persistM03AudioAttempt() {
     return;
   }
   try {
-    sessionStorage.setItem("starDinoM03AudioAttempt", JSON.stringify(snapshot));
+    sessionStorage.setItem(M03_AUDIO_ATTEMPT_STORAGE_KEY, JSON.stringify(snapshot));
   } catch (error) {
     // Direct M03 previews remain usable when session storage is unavailable.
   }
@@ -17819,7 +21544,7 @@ function clearM03FormalSnapshot(action = currentSessionAction()) {
 function clearM03AudioAttempt(action = currentSessionAction()) {
   clearM03FormalSnapshot(action);
   try {
-    sessionStorage.removeItem("starDinoM03AudioAttempt");
+    sessionStorage.removeItem(M03_AUDIO_ATTEMPT_STORAGE_KEY);
   } catch (error) {
     // There is nothing else to clear when session storage is unavailable.
   }
@@ -17841,7 +21566,7 @@ function restoreM03AudioAttempt() {
   }
   if (!formalOwner) {
     try {
-      snapshot = JSON.parse(sessionStorage.getItem("starDinoM03AudioAttempt") || "null");
+    snapshot = JSON.parse(sessionStorage.getItem(M03_AUDIO_ATTEMPT_STORAGE_KEY) || "null");
     } catch (error) {
       snapshot = null;
     }
@@ -18429,6 +22154,7 @@ function startLevelCheckReplay() {
 function resetStaffCourse(runMode = state.staffRunMode || "guided") {
   if (isMiniStaffSession() && runMode === "check") runMode = "guided";
   state.staffRunMode = runMode;
+  clearAssistedRepairState();
   state.staffStepIndex = 0;
   state.staffComplete = false;
   state.lastInputMidi = null;
@@ -18436,7 +22162,8 @@ function resetStaffCourse(runMode = state.staffRunMode || "guided") {
   state.staffInputMarkerSerial += 1;
   state.stepHadWrong = false;
   state.practiceAttempt = stampPracticeAttemptSession(createPracticeAttempt("staff", staffCourse.id, state.staffRunMode));
-  clearAssistedRepairState();
+  state.staffMiniChildInputs = [];
+  const miniRecovery = restoreStaffMiniPendingAttempt();
   clearAutoAdvance();
   clearWorkshopIdleHints();
   clearDinoMoodTimer();
@@ -18445,6 +22172,7 @@ function resetStaffCourse(runMode = state.staffRunMode || "guided") {
     clearTimeout(state.staffMotionTimer);
     state.staffMotionTimer = null;
   }
+  els.staffDinoWrap?.classList.remove("is-jumping", "is-stumbling");
   clearLevelIntro();
   clearListeningPrompt();
   hideResultModal();
@@ -18454,7 +22182,8 @@ function resetStaffCourse(runMode = state.staffRunMode || "guided") {
     els.staffDino.src = dinoImages.point;
   }
   render();
-  beginPracticeStepClock();
+  if (!state.practiceAttempt?.activeStepRecord) beginPracticeStepClock();
+  if (miniRecovery.repairStage === "assisted") beginAssistedRepair(activeStaffStep()?.midi, { restoring: true });
 }
 
 function startStaffCheckReplay() {
@@ -18475,6 +22204,7 @@ function goLevel(delta) {
     clearM03AudioAttempt();
   }
   clearAutoAdvance();
+  clearCompanionWorldFeedback();
   state.levelIndex = Math.max(0, Math.min(levels.length - 1, state.levelIndex + delta));
   state.screen = "play";
   state.levelRunMode = "guided";
@@ -18615,8 +22345,8 @@ function microphonePitchFromFrequency(frequencyOrEstimate, confidence) {
   const frequency = Number(estimate.frequency);
   const pitch = frequencyToPitch(frequency);
   if (!pitch || Math.abs(pitch.cents) > MIC_ACCEPT_CENTS) return null;
-  if (state.screen === "chapter4" && ["LP02", "LP03"].includes(currentChapter4Action()?.targetId)) {
-    if (pitch.midi === 48 && estimate.octaveAmbiguous) return null;
+  if (state.screen === "chapter4" && ["LP02", "LP03", "LP04"].includes(currentChapter4Action()?.targetId)) {
+    if (estimate.octaveAmbiguous) return null;
     const chapter4Note = chapter4NoteForMidi(pitch.midi);
     return chapter4Note ? {
       ...pitch,
@@ -18627,7 +22357,7 @@ function microphonePitchFromFrequency(frequencyOrEstimate, confidence) {
     } : null;
   }
   const note = noteForMidi(pitch.midi);
-  return note && !isReservedNote(note) ? {
+  return note && (state.screen === "free-piano" || !isReservedNote(note)) ? {
     ...pitch,
     note,
     confidence: estimate.confidence,
@@ -18636,9 +22366,72 @@ function microphonePitchFromFrequency(frequencyOrEstimate, confidence) {
   } : null;
 }
 
+function microphoneRequestCanRun(request) {
+  return state.microphoneRequest === request && !request.cancelled && document.visibilityState !== "hidden";
+}
+
+function releaseMicrophoneResources(owner) {
+  if (!owner) return;
+  if (owner.resourcesReleased) {
+    const lateStream = owner.stream;
+    const lateCtx = owner.ctx;
+    owner.stream = null;
+    owner.ctx = null;
+    try {
+      lateStream?.getTracks?.().forEach((track) => track.stop());
+    } catch (error) {
+      // A late permission resolution can only leave a fresh stream to release.
+    }
+    try {
+      const closing = lateCtx?.close?.();
+      Promise.resolve(closing).catch(() => undefined);
+    } catch (error) {
+      // A context closed by the cancellation path is already detached.
+    }
+    return;
+  }
+  owner.resourcesReleased = true;
+  owner.running = false;
+  if (owner.raf !== null && owner.raf !== undefined) {
+    cancelAnimationFrame(owner.raf);
+    owner.raf = null;
+  }
+  const stream = owner.stream;
+  const ctx = owner.ctx;
+  owner.stream = null;
+  owner.ctx = null;
+  owner.analyser = null;
+  owner.samples = null;
+  try {
+    stream?.getTracks?.().forEach((track) => track.stop());
+  } catch (error) {
+    // Stopping an already-ended browser track must not keep a microphone state alive.
+  }
+  try {
+    const closing = ctx?.close?.();
+    Promise.resolve(closing).catch(() => undefined);
+  } catch (error) {
+    // Some browser contexts reject a second close; resources are already detached above.
+  }
+}
+
+function resetMicrophoneUi() {
+  els.micButton?.classList.remove("active");
+  const micLabel = els.micButton?.querySelector("span:last-child");
+  if (micLabel) micLabel.textContent = "开始听音";
+  if (els.inputStatus) els.inputStatus.textContent = midiDeviceConnected() ? "输入：MIDI" : "输入：屏幕琴键";
+  if (els.heardStatus) els.heardStatus.textContent = "听到：-";
+  renderParentPanel();
+}
+
 async function toggleMicrophone() {
   if (state.audio?.running) {
     stopMicrophone();
+    return;
+  }
+
+  if (state.microphoneRequest) {
+    stopMicrophone("microphone-cancelled");
     return;
   }
 
@@ -18647,6 +22440,19 @@ async function toggleMicrophone() {
     return;
   }
 
+  const request = {
+    token: ++state.microphoneRequestSerial,
+    cancelled: false,
+    cancelReason: null,
+    stream: null,
+    ctx: null,
+    analyser: null,
+    samples: null,
+    running: false,
+    raf: null,
+    resourcesReleased: false
+  };
+  state.microphoneRequest = request;
   let stream = null;
   let ctx = null;
   try {
@@ -18657,11 +22463,25 @@ async function toggleMicrophone() {
         autoGainControl: false
       }
     });
+    request.stream = stream;
+    if (!microphoneRequestCanRun(request)) {
+      releaseMicrophoneResources(request);
+      return;
+    }
 
     const AudioContext = window.AudioContext || window.webkitAudioContext;
     if (!AudioContext) throw new Error("AudioContext unavailable");
     ctx = new AudioContext();
+    request.ctx = ctx;
+    if (!microphoneRequestCanRun(request)) {
+      releaseMicrophoneResources(request);
+      return;
+    }
     if (ctx.state === "suspended") await ctx.resume();
+    if (!microphoneRequestCanRun(request)) {
+      releaseMicrophoneResources(request);
+      return;
+    }
     const source = ctx.createMediaStreamSource(stream);
     const analyser = ctx.createAnalyser();
     analyser.fftSize = MIC_ESTIMATOR_FFT_SIZE;
@@ -18669,45 +22489,55 @@ async function toggleMicrophone() {
     source.connect(analyser);
 
     const samples = new Float32Array(analyser.fftSize);
-    state.audio = {
-      ctx,
-      stream,
+    if (!microphoneRequestCanRun(request)) {
+      releaseMicrophoneResources(request);
+      return;
+    }
+    state.audio = Object.assign(request, {
       analyser,
       samples,
       running: true,
       raf: null,
       microphoneGate: createMicrophoneGate()
-    };
+    });
+    state.microphoneRequest = null;
     els.micButton.classList.add("active");
     els.micButton.querySelector("span:last-child").textContent = "暂停听音";
     setMicrophoneUi(state.audio, "输入：麦克风听音", "听到：等待清楚单音");
     renderParentPanel();
     listenLoop();
   } catch (error) {
-    stream?.getTracks?.().forEach((track) => track.stop());
-    ctx?.close?.();
-    els.feedback.textContent = "麦克风没有打开，检查浏览器权限。";
-    renderParentPanel();
+    request.stream ??= stream;
+    request.ctx ??= ctx;
+    const wasCurrentRequest = state.microphoneRequest === request || state.audio === request;
+    if (state.audio === request) state.audio = null;
+    if (state.microphoneRequest === request) state.microphoneRequest = null;
+    releaseMicrophoneResources(request);
+    if (wasCurrentRequest) {
+      resetMicrophoneUi();
+      els.feedback.textContent = "麦克风没有打开，检查浏览器权限。";
+    }
   }
 }
 
-function stopMicrophone() {
-  if (!state.audio) return;
-  interruptActiveChapter4ExternalInput("microphone-stopped");
-  interruptActiveAudioAExternalInput("microphone-stopped");
-  interruptActiveAudioBExternalInput("microphone-stopped");
-  interruptActiveAudioCExternalInput("microphone-stopped");
+function stopMicrophone(reason = "microphone-stopped") {
   const audio = state.audio;
-  cancelAnimationFrame(audio.raf);
-  audio.stream.getTracks().forEach((track) => track.stop());
-  audio.ctx.close();
-  state.audio.running = false;
-  state.audio = null;
-  els.micButton.classList.remove("active");
-  els.micButton.querySelector("span:last-child").textContent = "开始听音";
-  els.inputStatus.textContent = state.midiAccess ? "输入：MIDI" : "输入：屏幕琴键";
-  els.heardStatus.textContent = "听到：-";
-  renderParentPanel();
+  const request = state.microphoneRequest;
+  if (!audio && !request) return false;
+  if (request) {
+    request.cancelled = true;
+    request.cancelReason = reason;
+    state.microphoneRequest = null;
+  }
+  if (audio) state.audio = null;
+  interruptActiveChapter4ExternalInput(reason);
+  interruptActiveAudioAExternalInput(reason);
+  interruptActiveAudioBExternalInput(reason);
+  interruptActiveAudioCExternalInput(reason);
+  releaseMicrophoneResources(audio);
+  if (request !== audio) releaseMicrophoneResources(request);
+  resetMicrophoneUi();
+  return true;
 }
 
 function listenLoop() {
@@ -18730,8 +22560,8 @@ function listenLoop() {
       releaseGardenInput(null, "麦克风");
     } else if (state.screen === "garden" && (currentListeningAction("LS04") || currentListeningAction("LS05")) && gateResult.state === "quiet") {
       releaseGardenInput(null, "麦克风");
-    } else if (state.screen === "chapter4" && ["LP02", "LP03"].includes(currentChapter4Action()?.targetId) && gateResult.state === "quiet") {
-      releaseGardenInput(null, "麦克风");
+    } else if (state.screen === "chapter4" && ["LP02", "LP03", "LP04"].includes(currentChapter4Action()?.targetId) && gateResult.state === "quiet") {
+      releaseChapter4Input(null, "麦克风");
     } else if (isAudioAM03Active() && gateResult.state === "quiet") {
       releaseGardenInput(null, "麦克风");
     } else if (isAudioAGardenActive() && gateResult.state === "quiet") {
@@ -18758,8 +22588,10 @@ function listenLoop() {
   if (!detectedPitch) {
     setMicrophoneUi(audio, "输入：麦克风试听", "听到：再弹清楚一点");
   } else if (gateResult.state === "accepted") {
-    setMicrophoneUi(audio, "输入：麦克风", `听到：${detectedPitch.note.name || "黑键"}`);
-    handleInput(detectedPitch.note.midi, "麦克风");
+    if (!micInputSuppressedByRecentMidi(detectedPitch.note.midi)) {
+      setMicrophoneUi(audio, "输入：麦克风", `听到：${detectedPitch.note.name || "黑键"}`);
+      handleInput(detectedPitch.note.midi, "麦克风");
+    }
   } else if (gateResult.state === "held") {
     setMicrophoneUi(audio, "输入：麦克风听音", `听到：${detectedPitch.note.name || "黑键"} · 等琴音停一下`);
   } else {
@@ -18941,47 +22773,102 @@ function frequencyToMidi(frequency) {
   return frequencyToPitch(frequency)?.midi ?? null;
 }
 
+function midiDeviceConnected() {
+  return !!state.midiAccess && state.midiInputCount > 0;
+}
+
+const MIDI_MIC_SUPPRESSION_WINDOW_MS = 1500;
+const MIDI_MIC_RECENT_EVENT_LIMIT = 12;
+
+function pruneRecentMidiNoteOns(now = performance.now()) {
+  const events = Array.isArray(state.recentMidiNoteOns) ? state.recentMidiNoteOns : [];
+  state.recentMidiNoteOns = events.filter((event) =>
+    Number.isInteger(event?.midi) && Number.isFinite(event?.at) && now - event.at < MIDI_MIC_SUPPRESSION_WINDOW_MS
+  );
+  return state.recentMidiNoteOns;
+}
+
+function recordRecentMidiNoteOn(midi, at = performance.now()) {
+  const normalizedMidi = Number(midi);
+  if (!Number.isInteger(normalizedMidi) || normalizedMidi < 0 || normalizedMidi > 127) return;
+  const events = pruneRecentMidiNoteOns(at);
+  events.push({ midi: normalizedMidi, at });
+  state.recentMidiNoteOns = events.slice(-MIDI_MIC_RECENT_EVENT_LIMIT);
+}
+
+// A real piano key can arrive first through MIDI and then through the microphone.
+// Suppress only that same pitch so a different note remains a meaningful input route.
+function micInputSuppressedByRecentMidi(midi) {
+  if (!midiDeviceConnected()) return false;
+  const normalizedMidi = Number(midi);
+  if (!Number.isInteger(normalizedMidi)) return false;
+  return pruneRecentMidiNoteOns().some((event) => event.midi === normalizedMidi);
+}
+
 async function connectMIDI() {
   if (!navigator.requestMIDIAccess) {
-    els.feedback.textContent = "这里还听不到 MIDI，先用屏幕琴键；麦克风只是可选试听。";
+    state.midiConnectionMessage = "当前浏览器不支持 Web MIDI；直接点屏幕琴键。";
     els.midiButton.disabled = true;
     renderParentPanel();
     return;
   }
 
+  state.midiConnectionMessage = "正在查找 MIDI 键盘…";
+  renderParentPanel();
   try {
     const access = await navigator.requestMIDIAccess({ sysex: false });
     state.midiAccess = access;
-    bindMIDIInputs(access);
+    bindMIDIInputs(access, { announce: true });
     access.onstatechange = () => bindMIDIInputs(access);
-    els.midiButton.classList.add("active");
-    els.inputStatus.textContent = "输入：MIDI";
-    els.feedback.textContent = "MIDI 准备好了，弹一个音。";
     renderParentPanel();
   } catch (error) {
-    els.feedback.textContent = "MIDI 没有连接成功，检查浏览器权限或键盘连接。";
+    state.midiConnectionMessage = ["NotAllowedError", "SecurityError"].includes(error?.name)
+      ? "浏览器没有允许 MIDI 权限；请在网站权限中允许后重试。"
+      : "MIDI 连接失败；请检查键盘连接后重试。";
     renderParentPanel();
   }
 }
 
-function bindMIDIInputs(access) {
-  const inputs = [...access.inputs.values()];
+function bindMIDIInputs(access, { announce = false } = {}) {
+  const allInputs = [...access.inputs.values()];
+  const previousInputCount = state.midiInputCount;
+  const inputs = allInputs.filter((input) => input.state !== "disconnected");
+  allInputs
+    .filter((input) => input.state === "disconnected")
+    .forEach((input) => { input.onmidimessage = null; });
+  state.midiInputCount = inputs.length;
+  state.midiDeviceNames = [...new Set(inputs.map((input) => input.name || "MIDI 设备"))];
+  els.midiButton?.classList.toggle("active", inputs.length > 0);
+
   if (inputs.length === 0) {
-    els.feedback.textContent = "没有发现 MIDI 输入设备。";
+    state.recentMidiNoteOns = [];
+    state.midiConnectionMessage = announce
+      ? "没有发现 MIDI 输入设备。"
+      : (previousInputCount > 0 ? "MIDI 键盘已断开；可重新连接或使用屏幕琴键。" : state.midiConnectionMessage);
+    if (els.inputStatus && !state.audio?.running) els.inputStatus.textContent = "输入：屏幕琴键";
     renderParentPanel();
     return;
   }
 
+  state.midiConnectionMessage = "";
   for (const input of inputs) {
     input.onmidimessage = (message) => {
       const [status, note, velocity] = message.data;
       const command = status & 0xf0;
       const isNoteOn = command === 0x90 && velocity > 0;
       const isNoteOff = command === 0x80 || (command === 0x90 && velocity === 0);
-      if (isNoteOn) handleInput(note, "MIDI");
+      if (isNoteOn) {
+        recordRecentMidiNoteOn(note);
+        handleInput(note, "MIDI");
+      }
       if (isNoteOff) releaseGardenInput(note, "MIDI");
     };
   }
+
+  if (announce) {
+    if (els.inputStatus) els.inputStatus.textContent = "输入：MIDI";
+  }
+  renderParentPanel();
 }
 
 function initSupportState() {
@@ -18995,12 +22882,30 @@ function unlockAudioFromGesture() {
   state.audioUnlocked = true;
 }
 
+const PWA_SHELL_UPDATE_PENDING_KEY = "starDinoPwaShellUpdatePending";
+
+function reloadPendingPwaShellAtMap() {
+  if (sessionStorage.getItem(PWA_SHELL_UPDATE_PENDING_KEY) !== "1") return false;
+  if (state.screen !== "map" || state.activeSession?.status === "active") return false;
+  sessionStorage.removeItem(PWA_SHELL_UPDATE_PENDING_KEY);
+  window.location.reload();
+  return true;
+}
+
 function registerPwaShell() {
   if (!("serviceWorker" in navigator) || !window.isSecureContext) return;
+  const controlledBeforeRegistration = Boolean(navigator.serviceWorker.controller);
+  navigator.serviceWorker.addEventListener("controllerchange", () => {
+    if (!controlledBeforeRegistration) return;
+    sessionStorage.setItem(PWA_SHELL_UPDATE_PENDING_KEY, "1");
+    reloadPendingPwaShellAtMap();
+  }, { once: true });
   const register = () => {
-    navigator.serviceWorker.register("./service-worker.js", { scope: "./" }).catch(() => {
-      // The touch-first prototype remains playable when a browser disallows service workers.
-    });
+    navigator.serviceWorker.register("./service-worker.js", { scope: "./" })
+      .then((registration) => registration.update().catch(() => {}))
+      .catch(() => {
+        // The touch-first prototype remains playable when a browser disallows service workers.
+      });
   };
   if (document.readyState === "complete") {
     register();
@@ -19015,6 +22920,7 @@ document.addEventListener("pointercancel", releaseLs08PointerFromDocument, { cap
 document.addEventListener("pointerup", releaseChapter4BubblePointerFromDocument, { capture: true });
 document.addEventListener("pointercancel", releaseChapter4BubblePointerFromDocument, { capture: true });
 window.addEventListener("blur", () => {
+  revokeParentAccessForLifecycle();
   clearAllLs08PointerActivations();
   clearAllChapter4BubblePointerActivations();
   interruptTeachingPianoSequence("window-blur");
@@ -19025,26 +22931,38 @@ window.addEventListener("blur", () => {
 });
 document.addEventListener("visibilitychange", () => {
   if (document.visibilityState === "hidden") {
+    revokeParentAccessForLifecycle();
+    const microphoneStopped = stopMicrophone("document-hidden");
     interruptTeachingPianoSequence("document-hidden");
-    interruptActiveChapter4ExternalInput("document-hidden");
-    interruptActiveAudioAExternalInput("document-hidden");
-    interruptActiveAudioBExternalInput("document-hidden");
-    interruptActiveAudioCExternalInput("document-hidden");
+    if (!microphoneStopped) {
+      interruptActiveChapter4ExternalInput("document-hidden");
+      interruptActiveAudioAExternalInput("document-hidden");
+      interruptActiveAudioBExternalInput("document-hidden");
+      interruptActiveAudioCExternalInput("document-hidden");
+    }
   }
 });
 window.addEventListener("pagehide", () => {
+  dismissParentDataResetConfirmation();
+  revokeParentAccessForLifecycle();
+  const microphoneStopped = stopMicrophone("pagehide");
   interruptTeachingPianoSequence("pagehide");
-  interruptActiveChapter4ExternalInput("pagehide");
-  interruptActiveAudioAExternalInput("pagehide");
-  interruptActiveAudioBExternalInput("pagehide");
-  interruptActiveAudioCExternalInput("pagehide");
+  if (!microphoneStopped) {
+    interruptActiveChapter4ExternalInput("pagehide");
+    interruptActiveAudioAExternalInput("pagehide");
+    interruptActiveAudioBExternalInput("pagehide");
+    interruptActiveAudioCExternalInput("pagehide");
+  }
 });
 document.addEventListener("keydown", (event) => {
   if (!event.metaKey && !event.ctrlKey && !event.altKey) unlockAudioFromGesture();
 }, { capture: true });
 els.micButton.addEventListener("click", toggleMicrophone);
 els.midiButton.addEventListener("click", connectMIDI);
-els.mapReturn.addEventListener("click", showMapScreen);
+els.mapReturn.addEventListener("click", () => {
+  if (state.screen === "free-piano") exitFreePiano();
+  else showMapScreen();
+});
 els.staffModeButton.addEventListener("click", () => {
   if (state.screen === "staff") {
     state.screen = "play";
@@ -19100,6 +23018,11 @@ els.chapter4StartCheck?.addEventListener("click", () => {
     startLp02Reconnect();
     return;
   }
+  if (attempt.levelId === "LP04") {
+    if (attempt.phase === "lp04-model-ready") playLp04OpeningModel("session-opening");
+    else if (attempt.phase === "lp04-target-ready") playLp04CurrentTarget("system-first");
+    return;
+  }
   if (attempt.levelId === "LP03") {
     if (attempt.phase === "lp03-model-ready") playLp03CurrentTarget("system-first");
     else if (attempt.phase === "lp03-seam-ready") {
@@ -19117,6 +23040,9 @@ els.chapter4Replay?.addEventListener("click", () => {
   const attempt = ensureChapter4Attempt();
   if (!attempt) return;
   if (attempt.phase === "sound-paused") recoverChapter4Sound();
+  else if (attempt.levelId === "LP04" && ["lp04-awaiting-response", "lp04-assisted"].includes(attempt.phase)) {
+    playLp04CurrentTarget("child-replay");
+  }
   else if (attempt.levelId === "LP03" && ["lp03-awaiting-response", "lp03-assisted", "lp03-visual-assist"].includes(attempt.phase)) {
     playLp03CurrentTarget("child-replay");
   } else if (attempt.levelId === "LP03" && attempt.phase === "lp03-seam-awaiting-response") {
@@ -19227,15 +23153,33 @@ els.ls05VisualAssist?.addEventListener("click", () => {
   else enableLs05VisualAssist();
 });
 els.mapParentGate.addEventListener("click", () => {
-  openParentPanel();
+  openParentChallenge(els.mapParentGate);
 });
 els.playParentGate?.addEventListener("click", () => {
-  openParentPanel();
+  openParentChallenge(els.playParentGate);
 });
+els.parentChallengeCancel?.addEventListener("click", () => closeParentChallenge());
 els.parentClose.addEventListener("click", closeParentPanel);
 els.parentModal.addEventListener("click", (event) => {
   if (event.target === els.parentModal) closeParentPanel();
 });
+els.parentTabList?.addEventListener("click", (event) => {
+  const tab = event.target.closest("[data-parent-tab]");
+  if (tab) setParentTab(tab.dataset.parentTab, { focus: true });
+});
+els.parentTabList?.addEventListener("keydown", (event) => {
+  if (!["ArrowLeft", "ArrowRight", "Home", "End"].includes(event.key)) return;
+  const tabs = [...els.parentTabList.querySelectorAll("[data-parent-tab]")];
+  const currentIndex = Math.max(0, tabs.indexOf(document.activeElement));
+  const nextIndex = event.key === "Home"
+    ? 0
+    : (event.key === "End"
+      ? tabs.length - 1
+      : (currentIndex + (event.key === "ArrowRight" ? 1 : -1) + tabs.length) % tabs.length);
+  event.preventDefault();
+  setParentTab(tabs[nextIndex].dataset.parentTab, { focus: true });
+});
+els.parentFreePianoButton?.addEventListener("click", enterFreePiano);
 els.parentMicButton.addEventListener("click", async () => {
   await toggleMicrophone();
   renderParentPanel();
@@ -19260,7 +23204,19 @@ els.parentVolumeControl?.addEventListener("change", () => {
 els.parentMotionToggle?.addEventListener("click", () => {
   setParentReducedMotion(!state.motionSettings.reduced);
 });
+els.parentDataResetButton?.addEventListener("click", requestParentDataReset);
+els.parentDataResetCancel?.addEventListener("click", dismissParentDataResetConfirmation);
+els.parentDataResetConfirmButton?.addEventListener("click", confirmParentDataReset);
 document.addEventListener("keydown", (event) => {
+  if (!els.parentChallenge?.hidden) {
+    if (event.key === "Escape") {
+      event.preventDefault();
+      closeParentChallenge();
+    } else if (event.key === "Tab") {
+      trapModalFocus(els.parentChallenge, event);
+    }
+    return;
+  }
   if (!els.parentModal.hidden) {
     if (event.key === "Escape") {
       event.preventDefault();
@@ -19269,12 +23225,6 @@ document.addEventListener("keydown", (event) => {
       trapModalFocus(els.parentModal, event);
     }
     return;
-  }
-  if (!els.resultModal.hidden) {
-    if (event.key === "Escape") {
-      event.preventDefault();
-      els.modalNext.click();
-    }
   }
 });
 els.targetNote.addEventListener("click", () => {
@@ -19297,6 +23247,7 @@ els.resetLevel.addEventListener("click", () => {
 });
 els.nextLevel.addEventListener("click", () => goLevel(1));
 els.modalNext.addEventListener("click", () => {
+  if (els.resultModal.hidden) return;
   const resultKind = els.resultModal.dataset.result;
   clearAutoAdvance();
   hideResultModal();
@@ -19347,6 +23298,7 @@ applyMotionSettings();
 applyContrastPreference();
 initSupportState();
 applyAudioSettings();
+keepResultModalHidden();
 if (state.screen === "garden") {
   if (currentLs08Action()) {
     ensureLs08Attempt();
@@ -19366,6 +23318,11 @@ if (state.screen === "garden") {
 } else if (state.screen === "chapter4") {
   ensureChapter4Attempt();
   setTimeout(() => resumeChapter4Flow({ fromReload: !state.chapter4DirectMode }), 0);
+} else if (state.screen === "staff") {
+  const miniRecovery = restoreStaffMiniPendingAttempt();
+  if (miniRecovery.repairStage === "assisted") {
+    setTimeout(() => beginAssistedRepair(activeStaffStep()?.midi, { restoring: true }), 0);
+  }
 }
 render();
 setInstructionFeedback();

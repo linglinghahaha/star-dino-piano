@@ -2,6 +2,20 @@
 
 ## Status
 
+Status: `historical_pre_98_source_prompt_record / not_current_dispatch / runtimeApproval=false / integrationAllowed=false / releaseCleared=false`
+
+2026-07-29 geography supersession: the generated-v2 files and prompts below
+are retained as source-concept history and must not be rewritten as if they had
+depicted the later Mingshi canon. Do not reuse prompts that describe a literal
+low planet, Dongdong's current cave as his home world, or a bridge between a
+moon "home planet" and a low planet. Current Season One art must follow
+`docs/92_CHAPTER4_SUSPENSE_AND_GLOBAL_VISUAL_UNIFICATION_SPEC.md` and
+`docs/98_DONGDONG_MINGSHI_ORIGIN_AND_SEASON_ONE_BOUNDARY.md`: the moon outpost
+is one endpoint, the breathing garden and underground echo cave are layers of
+the ecology planet, the cave contains Dongdong's temporary resonance-stone
+outpost, and Mingshi remains an off-map future location. Existing bitmap bytes
+remain unchanged and unapproved.
+
 The earlier SVG character and five-chapter boards were rejected in human review. They are wireframes only and must not be used as style references, public concept art, or runtime assets.
 
 This brief defines the polished bitmap concept package generated with the built-in image generation model. The character, chapter and prop package now exists under `concepts/generated-v2`; selected files remain source concepts only and are not runtime assets.

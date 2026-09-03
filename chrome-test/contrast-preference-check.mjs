@@ -1,6 +1,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import { createRequire } from "node:module";
+import { completeParentChallenge } from "./parental-challenge-helper.mjs";
 
 const require = createRequire(import.meta.url);
 const { chromium } = require("playwright");
@@ -144,9 +145,9 @@ try {
 
     await gotoScreen(high.page, "?mode=staff&check=contrast-staff", ".staff-stage");
     const staff = await high.page.evaluate(() => {
-      const lines = [...document.querySelectorAll(".svg-staff-lines .svg-staff-line")].map((line) => {
+      const lines = [...document.querySelectorAll("#staffNotation .staff-line")].map((line) => {
         const style = getComputedStyle(line);
-        return { stroke: style.stroke, strokeWidth: style.strokeWidth, opacity: style.opacity };
+        return { backgroundColor: style.backgroundColor, thickness: style.height, opacity: style.opacity };
       });
       const keyboard = document.querySelector(".keyboard.real-piano");
       const keyboardStyle = keyboard ? getComputedStyle(keyboard) : null;
@@ -161,7 +162,7 @@ try {
     });
     record(
       "high-contrast S01 strengthens all five staff lines",
-      staff.contrast === "more" && staff.lineCount === 5 && staff.lines.every((line) => Number.parseFloat(line.strokeWidth) >= 8 && Number.parseFloat(line.opacity) >= 0.99),
+      staff.contrast === "more" && staff.lineCount === 5 && staff.lines.every((line) => Number.parseFloat(line.thickness) >= 8 && Number.parseFloat(line.opacity) >= 0.99),
       staff
     );
     record(
@@ -173,7 +174,7 @@ try {
 
     await gotoScreen(high.page, "?level=M01&check=contrast-parent", ".moon-yard");
     await high.page.locator("#playParentGate").click();
-    await high.page.waitForSelector("#parentModal", { state: "visible", timeout: 3000 });
+    await completeParentChallenge(high.page);
     const parent = await readPageSurface(high.page, [".parent-card", ".parent-status-card", ".parent-option"]);
     record(
       "high-contrast parent surface stays opaque and contained",
@@ -191,7 +192,10 @@ try {
 record("browser console is clean", browserErrors.length === 0, { browserErrors });
 
 const failed = checks.filter((check) => !check.pass);
-checks.forEach((check) => console.log(`${check.pass ? "PASS" : "FAIL"} ${check.name}`));
+checks.forEach((check) => {
+  console.log(`${check.pass ? "PASS" : "FAIL"} ${check.name}`);
+  if (!check.pass) console.log(JSON.stringify(check.details, null, 2));
+});
 console.log(`contrast preference checks: ${checks.length - failed.length} passed, ${failed.length} failed`);
 
 if (failed.length > 0) process.exitCode = 1;

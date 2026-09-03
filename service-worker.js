@@ -1,4 +1,5 @@
-const CACHE_NAME = "star-dino-pwa-overhaul-347a-c4-r01a";
+const CACHE_NAME = "star-dino-pwa-overhaul-369i-pwa-cache-retirement";
+// 369i requalifies the PWA cache after retiring one cache-only historical asset.
 
 const APP_SHELL = [
   "./",
@@ -16,8 +17,16 @@ const APP_SHELL = [
   "./current-overhaul.css?v=overhaul-340d-p1",
   "./roof-blueprint-overrides.css?v=overhaul-340c",
   "./chapter3-visible.css?v=overhaul-343a-p1",
-  "./chapter4-slice.css?v=overhaul-347a-c4-r01a",
-  "./app.js?v=overhaul-347a-c4-r01a",
+  "./chapter4-slice.css?v=overhaul-366a-c4-settlement-lp04-continuity-correction",
+  "./course-director.css?v=overhaul-365b-parental-challenge-pointer-cancel-correction",
+  "./parent-experience.css?v=overhaul-365b-parental-challenge-pointer-cancel-correction",
+  "./child-feedback-intensity.css?v=overhaul-369e-ipad-settlement-compactness-correction",
+  "./m01-m03-companion-feedback.css?v=overhaul-365b-parental-challenge-pointer-cancel-correction",
+  "./world-map-v5-prototype.css?v=overhaul-361a-dark-scifi-map-v5-reference",
+  "./world-map-v6-dark-scifi.css?v=overhaul-367b-world-map-pwa-qualification",
+  "./s01-mini-training-dock.css?v=overhaul-368b-s01-mini-continuity-correction",
+  "./staff-notation-geometry.css?v=overhaul-369a-staff-notation-geometry-correction",
+  "./app.js?v=overhaul-369e-ipad-settlement-compactness-correction",
   "./assets/runtime/app-icon.png",
   "./assets/runtime/app-icon.webp",
   "./assets/runtime/fx-correct-sparkle.webp",
@@ -33,8 +42,8 @@ const APP_SHELL = [
   "./assets/runtime/part-wall.webp",
   "./assets/runtime/part-wheel.webp",
   "./assets/runtime/scale-island-map-bg.webp",
-  "./assets/runtime/staff-dino-hop-bg-v1.webp",
-  "./assets/runtime/staff-star-bridge-scene-tablet-v172.webp",
+  "./assets/runtime/world-map-v5-361a.webp",
+ "./assets/runtime/staff-star-bridge-scene-tablet-v172.webp",
   "./assets/runtime/staff-star-bridge-scene-wide-v172.webp",
   "./assets/runtime/success-badge.webp",
   "./assets/runtime/xingya-suit-celebrate.webp",
@@ -43,7 +52,7 @@ const APP_SHELL = [
   "./assets/runtime/xingya-suit-listen.webp",
   "./assets/runtime/xingya-suit-point.webp",
   "./assets/runtime/xingya-garden-invite-v1.webp",
-  "./assets/runtime/xingya-suit-point-flat-m08-v3.webp",
+  "./assets/runtime/xingya-suit-point-m08-route-a2.png",
   "./assets/runtime/xingya-suit-try-again.webp"
 ];
 

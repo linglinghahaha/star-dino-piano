@@ -1,5 +1,6 @@
 import fs from "node:fs";
 import { createRequire } from "node:module";
+import { canonicalC1C2History } from "./canonical-course-fixture.mjs";
 
 const require = createRequire(import.meta.url);
 const { chromium } = require("playwright");
@@ -48,7 +49,7 @@ function formalLs08Fixture({ endedEcho = true } = {}) {
     version: 1,
     active: null,
     history: [
-      { sessionId: "C2-03-entry", bundleId: "C2-03", status: "ended", completedActions: [{ actionId: "S01-check", kind: "staff", targetId: "S01" }] },
+      ...canonicalC1C2History({ completedAt, tag: "lp01-lp02" }),
       { sessionId, bundleId: "C3-07", status: "ended", completedActions: [{ actionId: "LS08-listening", kind: "garden-listening", targetId: "LS08" }] }
     ],
     lastRest: { sessionId, bundleId: "C3-07", reward: "地底根系", reason: "natural-rest", endedAt: completedAt, localDateKey: "2026-07-14" },
@@ -216,6 +217,11 @@ async function view(page) {
       marker: document.querySelector("#gardenRestMarker")?.innerText?.replace(/\s+/g, " ").trim() || "",
       markerDisabled: document.querySelector("#gardenRestMarker")?.disabled,
       markerState: document.querySelector("#gardenRestMarker")?.dataset.chapter4State || "",
+      journeyChapter: document.querySelector("#mapShell")?.dataset.journeyChapter || "",
+      journeyBundle: document.querySelector("#mapShell")?.dataset.journeyBundle || "",
+      journeyTarget: document.querySelector("#mapShell")?.dataset.journeyTarget || "",
+      journeyTitle: document.querySelector("#journeyTitle")?.textContent?.trim() || "",
+      journeyLearning: document.querySelector("#journeyLearning")?.textContent?.replace(/\s+/g, " ").trim() || "",
       speech: document.querySelector("#chapter4Speech")?.innerText?.replace(/\s+/g, " ").trim() || "",
       characterSrc: document.querySelector("#chapter4XingyaImage")?.getAttribute("src") || "",
       characterAssetState: document.querySelector("#chapter4Scene")?.dataset.characterAssetState || "",
@@ -595,7 +601,7 @@ await locked.context.close();
 const main = await makePage({ width: 1366, height: 1024 }, { sessionUuid: "chapter4-main-seed" });
 await seed(main.page);
 current = await view(main.page);
-record("Formal ended LS08 echo exposes an enabled underground entrance without auto-starting C4-01", current.phase === "chapter4-entry" && !current.markerDisabled && current.marker.includes("地下入口") && !current.runtime.active, current);
+record("Formal ended LS08 echo exposes an enabled underground entrance without auto-starting C4-01", current.phase === "chapter4-entry" && !current.markerDisabled && current.journeyChapter === "C4" && current.journeyBundle === "C4-01" && current.journeyTarget === "LP01" && current.journeyTitle === "听两个 C 的回声" && !current.runtime.active, current);
 await startFormal(main.page);
 current = await view(main.page);
 record("Explicit entrance click creates the only formal C4-01 session", current.runtime.active?.bundleId === "C4-01" && current.attempt.formalSession === true && current.attempt.directMode === false, current.runtime.active);
@@ -1126,7 +1132,7 @@ await startCheck(correctFeedbackMap.page);
 const correctFeedbackMapSessionId = (await view(correctFeedbackMap.page)).runtime.active?.sessionId;
 await answerCorrectAndInterrupt(correctFeedbackMap.page, "correct-feedback", "map");
 current = await waitPhase(correctFeedbackMap.page, "chapter4-entry");
-record("LP01 map progress describes four comparisons rather than four different pitches", current.mapStarText.includes("四次回声 1/4") && current.mapStarAria.includes("四次声音比较已解决 1 次") && !`${current.mapStarText} ${current.mapStarAria}`.includes("四个声音"), { mapStarText: current.mapStarText, mapStarAria: current.mapStarAria });
+record("LP01 map keeps the child-facing active journey state while accessibility exposes the current course position", current.mapStarText === "正在和星芽一起做" && current.mapStarAria.includes("地下回声洞课程进度：共 3 站，现在第 1 站，进行中") && current.journeyTitle === "听两个 C 的回声" && current.journeyLearning.includes("分清高 C 和低 C") && !`${current.mapStarText} ${current.mapStarAria} ${current.journeyLearning}`.includes("四个声音"), { mapStarText: current.mapStarText, mapStarAria: current.mapStarAria, journeyTitle: current.journeyTitle, journeyLearning: current.journeyLearning });
 await correctFeedbackMap.page.locator("#gardenRestMarker").click();
 current = await waitPhase(correctFeedbackMap.page, ["target-playing", "awaiting-response"]);
 let storedLp01 = current.runtime.active?.actions?.find((action) => action.targetId === "LP01")?.chapter4Attempt;

@@ -1,0 +1,154 @@
+/* 361a prototype-only V5 dark sci-fi world map treatment. */
+#mapShell.map-shell[data-map-visual="v5"] {
+  background: #071225 url("assets/runtime/world-map-v5-361a.webp") center / cover no-repeat !important;
+}
+
+#mapShell.map-shell[data-map-visual="v5"]::before,
+#mapShell.map-shell[data-map-visual="v5"] .map-route,
+#mapShell.map-shell[data-map-visual="v5"] .map-landmark-wash {
+  display: none !important;
+}
+
+#mapShell.map-shell[data-map-visual="v5"] .map-v4-focus-mask {
+  --map-v5-dim-alpha: 0.16;
+  position: absolute;
+  z-index: 3;
+  display: block;
+  pointer-events: none;
+  opacity: 0;
+  background: radial-gradient(ellipse at center, rgba(2, 13, 30, var(--map-v5-dim-alpha)) 0, rgba(2, 13, 30, 0.09) 34%, rgba(2, 13, 30, 0.035) 60%, transparent 88%);
+}
+
+#mapShell.map-shell[data-map-visual="v5"] .map-v4-focus-mask[data-map-v4-landmark="C1"] {
+  left: 0;
+  top: 12%;
+  width: 44%;
+  height: 44%;
+}
+
+#mapShell.map-shell[data-map-visual="v5"] .map-v4-focus-mask[data-map-v4-landmark="C2"] {
+  left: 16%;
+  top: -2%;
+  width: 68%;
+  height: 34%;
+}
+
+#mapShell.map-shell[data-map-visual="v5"] .map-v4-focus-mask[data-map-v4-landmark="C3"] {
+  left: 60%;
+  top: 12%;
+  width: 40%;
+  height: 44%;
+}
+
+#mapShell.map-shell[data-map-visual="v5"] .map-v4-focus-mask[data-map-v4-landmark="C4"] {
+  left: 30%;
+  top: 70%;
+  width: 44%;
+  height: 30%;
+}
+
+#mapShell.map-shell[data-map-visual="v5"][data-map-focus-chapter="C1"] .map-v4-focus-mask:not([data-map-v4-landmark="C1"]),
+#mapShell.map-shell[data-map-visual="v5"][data-map-focus-chapter="C2"] .map-v4-focus-mask:not([data-map-v4-landmark="C2"]),
+#mapShell.map-shell[data-map-visual="v5"][data-map-focus-chapter="C3"] .map-v4-focus-mask:not([data-map-v4-landmark="C3"]),
+#mapShell.map-shell[data-map-visual="v5"][data-map-focus-chapter="C4"] .map-v4-focus-mask:not([data-map-v4-landmark="C4"]) {
+  opacity: 1;
+}
+
+#mapShell.map-shell[data-map-visual="v5"] .map-brand,
+#mapShell.map-shell[data-map-visual="v5"] .chapter-pill,
+#mapShell.map-shell[data-map-visual="v5"] .star-pill,
+#mapShell.map-shell[data-map-visual="v5"] .parent-gate {
+  background: rgba(5, 22, 45, 0.82) !important;
+  border: 1px solid rgba(117, 225, 242, 0.48) !important;
+  box-shadow: 0 5px 16px rgba(0, 5, 16, 0.30) !important;
+  color: #f3fbff !important;
+  backdrop-filter: blur(8px);
+}
+
+#mapShell.map-shell[data-map-visual="v5"] .map-brand *,
+#mapShell.map-shell[data-map-visual="v5"] .chapter-pill *,
+#mapShell.map-shell[data-map-visual="v5"] .star-pill *,
+#mapShell.map-shell[data-map-visual="v5"] .parent-gate * {
+  color: inherit !important;
+}
+
+#mapShell.map-shell[data-map-visual="v5"] .chapter-pill::before,
+#mapShell.map-shell[data-map-visual="v5"] .star-pill::before {
+  color: #7eeeff !important;
+}
+
+#mapShell.map-shell[data-map-visual="v5"] .journey-director::before {
+  background: linear-gradient(90deg, rgba(3, 17, 35, 0.88), rgba(3, 17, 35, 0.74)) !important;
+}
+
+#mapShell.map-shell[data-map-visual="v5"] .map-node.active,
+#mapShell.map-shell[data-map-visual="v5"] .garden-rest-marker.active {
+  background: rgba(5, 22, 45, 0.94) !important;
+  border: 2px solid #f1bf63 !important;
+  box-shadow: 0 9px 20px rgba(0, 5, 17, 0.42), 0 0 0 1px rgba(105, 236, 247, 0.46) !important;
+  width: clamp(276px, 27vw, 320px) !important;
+  min-width: 276px !important;
+  grid-template-columns: 58px minmax(0, 1fr) !important;
+  gap: 10px !important;
+  padding-right: 18px !important;
+}
+
+#mapShell.map-shell[data-map-visual="v5"] .map-node.active *,
+#mapShell.map-shell[data-map-visual="v5"] .garden-rest-marker.active * {
+  color: #f8fcff !important;
+}
+
+#mapShell.map-shell[data-map-visual="v5"] .map-node.active .node-title,
+#mapShell.map-shell[data-map-visual="v5"] .garden-rest-marker.active strong {
+  max-width: none !important;
+}
+
+#mapShell.map-shell[data-map-visual="v5"] .map-node.active .node-mascot,
+#mapShell.map-shell[data-map-visual="v5"] .garden-rest-marker.active .garden-rest-icon {
+  width: 58px !important;
+  height: 58px !important;
+}
+
+#mapShell.map-shell[data-map-visual="v5"] .garden-rest-marker.active .garden-rest-copy {
+  grid-column: 2 !important;
+  grid-row: 1 !important;
+  width: 100% !important;
+  justify-items: stretch !important;
+}
+
+#mapShell.map-shell[data-map-visual="v5"] .garden-rest-marker.active strong,
+#mapShell.map-shell[data-map-visual="v5"] .garden-rest-marker.active small {
+  text-align: left !important;
+}
+
+#mapShell.map-shell[data-map-visual="v5"] .map-node.active .node-action-badge,
+#mapShell.map-shell[data-map-visual="v5"] .garden-rest-marker.active .node-action-badge {
+  background: #f1bf63 !important;
+  color: #10243d !important;
+  border-color: rgba(255, 250, 224, 0.92) !important;
+}
+
+#mapShell.map-shell[data-map-visual="v5"] .map-floor-result {
+  display: none !important;
+}
+
+#mapShell.map-shell[data-map-visual="v5"] .map-workshop-floor-result {
+  left: 18.9%;
+  top: 41.5%;
+  z-index: 5;
+  width: clamp(66px, 7.2vw, 90px);
+  height: 5px;
+  border: 0;
+  border-radius: 2px;
+  background: repeating-linear-gradient(90deg, rgba(145, 237, 244, 0.76) 0 10px, rgba(40, 130, 151, 0.68) 10px 12px, transparent 12px 15px);
+  box-shadow: 0 2px 3px rgba(0, 6, 17, 0.38), 0 0 5px rgba(110, 229, 240, 0.24);
+  animation: none !important;
+}
+
+#mapShell.map-shell[data-map-visual="v5"] .map-workshop-floor-result::before {
+  content: none;
+}
+
+#mapShell.map-shell[data-map-visual="v5"] .map-workshop-floor-result::after {
+  content: none;
+}

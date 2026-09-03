@@ -1,6 +1,6 @@
 # Chapter 4 Low-Register Runtime Contract
 
-状态：`specification_passed / LP01_LP03_and_C4_R01A_browser_runtime_passed_at_347a / LP04_C4_R01B_next / LP05_LP10_runtime_incomplete / device_teacher_child_evidence_missing`
+状态：`specification_passed / LP01_LP03_and_C4_R01A_browser_runtime_passed_at_347a / LP04_and_C4_R01B_browser_lifecycle_supervisor_accepted_uncommitted / LP05_LP10_runtime_incomplete / device_teacher_child_evidence_missing`
 
 负责人：课程故事、整体调度与独立审查任务锁定教学语义；原型任务负责运行实现、浏览器门禁、截图和输入证据；媒体任务只生产可追溯候选，未经调度复核不得接入运行时。
 
@@ -34,10 +34,12 @@ Story mode 只有在正式 `C3-07/LS08` session 以 clean、bounded assisted 或
 
 角色连续性：
 
-1. 星芽仍在可呼吸花园和地下生态层活动，保持角色本体、三颗头芽、探索背带和星星背包，不无头盔返回月面真空。
-2. 咚咚是原创圆扇形颈盾、四足低姿、三只短角、宽脚掌的低重心角色；不能漂移成带额外颈盾尖刺的通用三角龙贴画、长期双足吉祥物，也不能用笨拙、怪兽化动作制造笑点。
-3. 咚咚按“声音 -> 洞中剪影 -> 眼睛/颈盾局部 -> 三枚脚印 -> LP05 完整出现”的顺序揭晓，不能在 LP01 自动播放完整角色成片。
-4. 低音的视觉重量只营造氛围，不得通过更暗颜色、更大石头、左侧位置或角色动作提前给出答案。
+1. 森芽星是当前可呼吸生态星球的正式名称。星芽仍在森芽星的可呼吸花园和地下生态层活动，保持角色本体、三颗头芽、探索背带和星星背包，不无头盔返回月面真空。
+2. 咚咚来自鸣石星的星岩家园，目前暂时守护森芽星地下回声洞里的共鸣石前哨。第一季不会前往鸣石星；当前洞穴不是咚咚的出生地，`咚咚的低音星球` 也不是鸣石星的正式名称。
+3. 咚咚是原创圆扇形连续颈盾、四足低姿、鼻角一只、眉角两只、完整尾巴和宽脚掌的低重心角色；不能漂移成带额外颈盾尖刺/王冠齿的通用三角龙贴画、长期双足吉祥物，也不能用笨拙、怪兽化动作制造笑点。
+4. 咚咚按“声音 -> 被建筑遮挡的宽低剪影 -> 眼睛/颈盾局部 -> 三枚脚印 -> LP05 完整出现”的顺序揭晓，不能在 LP01 自动播放完整角色成片。
+5. 低音的视觉重量只营造氛围，不得通过更暗颜色、更大石头、左侧位置或角色动作提前给出答案。
+6. LP05 的教学音、三枚脚印和世界变化全部结束后，未来实现才可让咚咚说 `我从鸣石星来。`；这句非教学台词不触发下一关，不创建鸣石星地图目标，也不写 played、stable 或 retained。
 
 ## 三、正式短课与自然停点
 
@@ -46,15 +48,17 @@ Story mode 只有在正式 `C3-07/LS08` session 以 clean、bounded assisted 或
 | `C4-01` | `LP01 -> LP02` | LP01 两次不计分模型 + 最多 4 次高低首答；LP02 1-2 次低 C 找家 | 每 1-2 次真实已解决比较增加中性洞纹；顺利时四题点亮洞口，困难时星芽可帮助打开故事入口但不能补造未呈现题；LP02 让第一块地基落下 | LP01 吃力时停在发光洞口并写 partial/needsPractice；下次先重听一组不计分 C4/C3 模型，再续 LP02，不重播整组四次比较，后续 opening review 再取回高低比较 |
 | `C4-02` | `LP03` | 3 次路线输入：C 唤醒/锁紧既有锚石，D、E 各落下一块；状态顺利时可加 3 个地基接缝检查 | LP02 的 C 锚石保持原位，D、E 加入后形成永久三石地基路 | 接缝检查延期时直接在已完成的地基路休息 |
 | `C4-03` | `LP04` | 3 个低音下降输入 | 回声光到达洞底，局部剪影出现 | 剪影保持可见，不自动进入脚印关 |
-| `C4-04` | `LP05` | 3 个 E-F-G 脚印 + 最多 3 次已教近邻比较 | 咚咚完整出现并成为朋友 | 咚咚在最后脚印旁坐下 |
-| `C4-05` | `LP06` | 3 个远跳输入 | 大拱石永久滚入桥位 | 不追加稳定检查，直接看大动作结果 |
-| `C4-06` | `LP07` | 5 个熟悉低音脚印 | 五枚左手邀请脚印永久亮起 | 只记录 handPrompted；咚咚与孩子组成小队后休息 |
-| `C4-07` | `LP08` | 3 个 C-D-E 谱位；顺利时可加 3 个轨道检查 | 地下谱线地图亮起前三个家 | 强帮助后在已亮地图休息，检查延期 |
-| `C4-08` | `LP09` | 3 个 E-F-G 支撑；顺利时可加 3 个压力检查 | 三个上层支撑永久锁紧 | 桥保持稳定，不拆支撑重做 |
-| `C4-09A` | `LP10` guided | 6 个 C-D-E-F-G-E 谱桥输入 | 咚咚到达信号塔，低音桥完成并发出可用信号 | Chapter 5 可解锁；不自动开始检查 |
-| `C4-09B` | later `LP10` check | 6 个同音序少提示输入 | 原桥上的六个信号锚依次稳定 | 只测当前稳定；咚咚不重新过桥，完成后回地图 |
+| `C4-04` | `LP05` | 3 个 E-F-G 脚印 + 状态合适时最多 3 次已教近邻比较 | E 唤醒浅起点，F/G 补回后两枚；比较完成或诚实延期后，咚咚只在故事单元末完整出现并成为朋友 | 咚咚在最后脚印旁坐下；不为强制可选比较扣住故事奖励 |
+| `C4-05` | `LP06` | 3 个依次按下并真实松开的 `C3-G3-C3` 单音；允许同指移动 | 第一个 C 松楔、G 滚石、最后 C 让大拱石永久落座 | 不追加稳定检查；咚咚坐在石旁望向 LP07 脚印，自然休息 |
+| `C4-06` | `LP07` | 5 个正确且真实松开的熟悉低音 `C3-D3-E3-D3-C3`；右手、单指、触屏、MIDI 或麦克风路线均可推进故事 | 每次合格 release 永久点亮一枚脚印；第五枚让咚咚与孩子组成小队并指向 LP08 | 写 `handPrompted=left`，默认 `actualHand=unknown`；不判断手型或技巧；自然休息，不自动开始 LP08 |
+| `C4-07` | `LP08` | 3 个逐一呈现的 C-D-E 引导循环；状态顺利时再以非 C-D-E 顺序各检查一次 | C 第二间、D 第三线、E 第三间永久亮成一小节地下轨道；检查只锁紧三个现有接缝 | 强帮助、长等待或疲劳后保留地图并延期检查；只写 C3-E3 子集 played/逐音观察，不写完整 bass-staff stable；自然休息，不自动开始 LP09 |
+| `C4-08` | `LP09` | E 复用既有第三间家并放下折叠支架，F 第四线/G 第四间各装一根新支架；状态顺利时再以非 E-F-G 顺序各检查一次 | 三根支架永久锁紧；检查只让压力光通过现有支架 | 强帮助、长等待或疲劳后保留支架并延期检查；只写 E3-G3 子集 played/逐音观察，不写完整 bass-staff stable；自然休息，不自动开始 LP10 |
+| `C4-09A` | `LP10` guided | 6 个真实 release 的 C-D-E-F-G-E 谱桥输入；疲劳/帮助后可在首个 E 保存 3/6 | 六个落脚信号接通，咚咚永久到达信号塔，星芽在花园中继台回答 | guided/assisted/modeled 故事完成可解锁 Chapter 5；仅 clean formal phase tail 可显示一次约 2.3s 无按钮轻量结算；不自动开始检查 |
+| `C4-09B` | later scheduler-selected `LP10` check | 独立 session 的 6 个同音序少提示输入 | 原桥上的六个信号锚依次点亮；桥、咚咚、星芽和章节结算不重播 | 只测当前 bass-staff stable；不是强制地图节点，不阻挡 Chapter 5，不授予 retained，完成后回唯一当前故事任务 |
 
-`C4-09A/B` 是同一 `C4-09` 故事 bundle 的两个持久阶段，不是两个新的课程 level id。恢复状态必须保存 bridgeBuilt、dongdongAtSignalTower、signalAnchorCount 和 checkDeferred；刷新不能把角色送回桥头。
+`C4-09A/B` 是同一 `C4-09` 故事 bundle 的故事阶段与以后调度的复习阶段，不是两个新的课程 level id。A 完成即写 storyComplete/phaseComplete 并允许课程导演进入 Chapter 5；B 以 deferred review action 存在，不得让“最早未完成 bundle”逻辑把它误判成孩子的强制下一地图节点。恢复状态必须保存 crossingStepIndex、bridgeBuilt、dongdongAtSignalTower、storySignalSent、xingyaSignalReceived、signalAnchorCount、checkDeferred、milestoneShown 和 nextStoryTarget；刷新不能把角色送回桥头、重播结算或创建 B session。
+
+LP05 完整揭晓是场景内故事结果，不是 phase settlement；`C4-04` 的 `settlementEligibility=none`。只有 `C4-09A / LP10 guided` 是第四章 phase tail，且仍受 clean formal 条件约束。
 
 通用分流：
 
@@ -108,15 +112,32 @@ Story mode 只有在正式 `C3-07/LS08` session 以 clean、bounded assisted 或
 
 - LP02 已永久放下 C 锚石。LP03 固定为 `C3-D3-E3`：先用 C3 唤醒/锁紧该锚石，再用 D3、E3 放下两块新石；不能把 C 重新悬起或再次落下。可选检查只点亮门-C、C-D、D-E 三个既有接缝，不移动任何石头。
 - LP04 固定为低音下降 `E3-D3-C3`。目标音播放前不亮答案键；错误后先说孩子音，再重放目标和当前方向。
-- LP05 固定先教 `E3-F3-G3` 三个家，再做同一近邻集合的短比较；完整咚咚只在故事单元结束时出现。
-- LP06 固定为 `C3-G3-C3` 远跳，只记录路线 played，不授予独立 G 家或跨度能力。
-- LP07 固定为熟悉路线 `C3-D3-E3-D3-C3`，并写 handPrompted=`left`；touch/MIDI/mic 的 note event 不得自动写 actualHand=`left`。
+- LP05 固定先教 `E3-F3-G3` 三个家：E 唤醒浅起点，F/G 补回后两枚；状态合适时才做同一近邻集合的最多三次短比较。比较完成或因帮助、等待、疲劳而诚实延期后，故事单元才结束，完整咚咚只在此时出现一次；不得为强制可选比较扣住故事奖励。
+- LP06 固定为 `C3-G3-C3` 三个依次按下并真实松开的单音；允许同一根手指重新定位，不要求保持 C、同时按、五指张开或连奏。三个动作分别松楔、滚石、落座，只记录路线 played，不授予独立 G 家、完整 C3-G3 稳定、手型、指法、左手或跨度能力。
+- LP07 固定为五个依次按下并真实松开的熟悉音 `C3-D3-E3-D3-C3`。每个合格 release 只新增一枚永久脚印；暂停、刷新、repair 和后续 wrong 不得熄灭或重复盖章。第五枚形成小队并指向 LP08，随后自然休息，不自动开下一课。
+- LP07 开始时写 `handPrompted=left`，默认 `actualHand=unknown`。touch/MIDI/mic 的 note event 不得推断或改写真实用手；只有成人现场观察可另写可选 `adultConfirmedHandUse`，且它不参与 stable、retained、手型、指法或技巧判断。
+- 使用右手、同一根手指重新定位或屏幕琴键不是错误，不减少脚印和故事奖励。wrong note 不推进，只显示当前 C/D/E 的音名字母与准确黑键定位；wrong octave 写 `noteNameCorrect=true/registerCorrect=false` 并提示“名字对，低音家不同”。
 
 ### LP08-LP10 低音谱表
 
-- LP08 引导按 `C3-D3-E3` 点亮对应低音谱位地图；可选检查让已有轨道接通，不清空谱位。
-- LP09 引导按 `E3-F3-G3` 锁紧对应低音谱位支撑；可选检查读取压力点，不拆桥。
-- LP10 guided 和 later check 都固定为 `C3-D3-E3-F3-G3-E3`。guided 让咚咚过桥，later check 只让六个信号锚稳定；两段使用同音序但不同世界状态。
+- LP08 使用一小节宽、五条固定粗线且间距适合 iPad 的低音谱表。引导按 `C3-D3-E3` 逐一建立第二间、第三线、第三间：一次只显示一个当前音符和脚印，未来 C/D/E 答案不得同时铺开。普通界面显示当前字母和一个准确键位定位，当前脚印落位时可播放一次目标低音钢琴声；角色对话可说唱名。
+- LP08 引导后只有在没有 repeated repair、strong/assisted/modeled、长等待或疲劳时，才可在同一 session 追加三点 light check。检查由 session seed 从 C/D/E 的非升序全排列中确定，三个音各一次；作答前不得出现答案字母、唱名、目标声音、目标键光、目标颜色或未来位置。当前无字母谱位与固定真实键盘必须保留。
+- LP08 引导每个合格 release 永久锁定一个谱位家；check 只锁紧现有 railJoint，不重新生成谱位。暂停、刷新、wrong、延期和 later review 都不得清空或重复计数。三个家完成后 LP09 可以保持提示继续，但本课自然休息且不自动启动 LP09。
+- LP08 guided/assisted/modeled 只写 `bass-staff:C3-E3 played`、cueStrength、route 和 needsPractice；light check 保存每音 firstResponseCorrect、target/actual/register、wrongCount 和 cueStrength。它不写完整 `bass-staff:C3-G3 stable` 或 retained；该能力仍只可能在 LP09 已教 F/G 后由 LP10 later check 形成。
+- LP08 核心作答为触屏，精确 MIDI 可选；麦克风不作为谱位作答或 LP08 证据路线。wrong note 先保留孩子真实音的结束，再显示孩子音名字母、当前目标谱位/字母和准确键位；wrong octave 写 `noteNameCorrect=true/registerCorrect=false` 并提示“名字对，低音家不同”。
+- LP09 必须继承 LP08 的 C/D/E staffHome、railJoint 和 E 第三间。引导按 `E3-F3-G3`：E 只放下既有家下方的折叠支架，不重建 E 家；F 第四线和 G 第四间各建立一个新 staffHome 并安装一根新支架。一次只有当前音符/支架具有教学权重，已有地图保持低强调但不消失。
+- LP09 guided 可为当前 E/F/G 显示音名字母、播放一次目标低音钢琴声并给一个准确定位：E=两黑右，F=三黑左第一个白键，G=同组三黑第一与第二个黑键之间。角色对话可说 Mi/Fa/Sol；机械锁紧声必须在教学音结束后播放且无稳定教学音高。
+- LP09 只有在没有 repeated repair、strong/assisted/modeled、长等待或疲劳时，才可追加三点 light pressure check。检查由 session seed 从 E/F/G 的非升序全排列中确定，三个音各一次；作答前只保留当前无字母谱位、pressurePoint 和固定真实键盘，不得出现答案字母、唱名、目标声音、目标颜色、目标键光或未来答案。
+- LP09 引导每个合格 release 只改变一个持久对象：supportCount 1/2/3；pressure check 只增加 pressureJointCount 1/2/3，不重建 staffHome/support。暂停、刷新、wrong、延期和 later review 都不得清空、重复或让桥重新摇晃。三个支架完成后自然休息，不自动启动 LP10。
+- LP09 guided/assisted/modeled 只写 `bass-staff:E3-G3 played`、cueStrength、route 和 needsPractice；light check 保存每音 firstResponseCorrect、target/actual/register、confusionPair、wrongCount 和 cueStrength。它不写完整 `bass-staff:C3-G3 stable` 或 retained。
+- LP09 核心作答为触屏，精确 MIDI 可选；麦克风不作为谱位作答或 LP09 证据路线。E/F wrong repair 必须比较第三间/第四线和两黑右/三黑左；F/G repair 比较第四线/第四间和三黑左/第一第二黑键之间，不得只写“G 在两个黑键之间”。wrong octave 继续写 name-correct/register-wrong。
+- LP10 guided 和 later check 都固定为六个真实 release 的 `C3-D3-E3-F3-G3-E3`，自由时间、不考节奏。guided 一次只显示当前谱位，可给当前音名字母和准确键位定位，并可保留一个孩子视角左手邀请；右手、同指、触屏或精确 MIDI 都能完成，音高不能证明真实用手。每个正确 release 只增 crossingStepIndex 并在孩子音结束后移动咚咚；未来谱位不得以答案权重预亮。
+- LP10 guided 可在 crossingStepIndex=3 的首个 E 中途平台安全休息。续玩只执行 F-G-E，保留前三步、角色位置和同一故事 bundle 关联；不得重放 C-D-E 或把跨 session 续完回填为 clean first-run/stable。最终 E 后写 bridgeBuilt=true、dongdongAtSignalTower=true、storySignalSent=true、xingyaSignalReceived=true、Chapter 5 unlocked=true。
+- LP10 guided clean formal completion 是 C4-09 phase tail，按 `docs/52` 只显示一次约 2.3 秒、无按钮、无成绩、不中断琴键安全区的轻量结算；assisted/modeled/partial/early-rest/replay/direct/debug 不结算，但故事完成仍可解锁 Chapter 5。结算后主页唯一当前任务为 `TH01 两个 C 说你好`，随后为 `TH02 G 回声接力`；只有孩子再次点击才创建新 session。
+- LP10 later check 只能由 scheduler 在以后明确选择并创建新 session；不得紧跟 guided 自动开始、不得作为 C4-09 未完成故事节点阻挡 Chapter 5。六次作答前只显示当前无字母低音谱位、真实键盘和中性 signalAnchor；不得出现答案字母、唱名、目标声音、颜色、目标键光、未来答案或咚咚移动。每个 correct 只增 signalAnchorCount，结束不重播 crossing、Xingya 回答或 milestone。
+- LP10 guided/assisted/modeled 写 `bass-staff:C3-G3 played`、crossing evidence、cueStrength 和 needsPractice，不写 stable。later check 只有六个音正确八度、总 wrongCount<=2 且整次无 strong/assisted/modeled/visual target-key answer 时才写 `bass-staff:C3-G3 stable`；不得同时回填 `low-key:C3-G3 stable`、真实左手或 retained。retained 仍只来自符合 `docs/31` 的更后 opening review。
+- LP10 每个 session 的六个预算单位是目标/世界进度槽位，不是孩子所有尝试的硬上限。wrong、replay 和 repair 分开记录，不占目标槽位，也不能因计数到顶而阻断故事；later check 的 `wrongCount<=2` 只决定 stable 资格。
+- LP10 核心作答为触屏，精确 MIDI 可选；麦克风不作为谱位 check 或 stable 路线。wrong 时孩子音先完整结束，再出现当前目标音名字母、谱位和准确键位；wrong octave 写 name-correct/register-wrong。桥不坍塌，咚咚停在最近完成步，repair 后可继续但 later check 的 cue 使用必须如实阻断 stable。
 - wrong octave 必须记录 noteNameCorrect=true、registerCorrect=false，并提示低音家；不能计 bass staff correct。
 
 ## 六、played、stable、retained 与手部证据
@@ -125,11 +146,13 @@ Story mode 只有在正式 `C3-07/LS08` session 以 clean、bounded assisted 或
 | --- | --- | --- | --- |
 | 高低 C 比较 | 四次调用均真实呈现并解决后才写 played；assisted/modeled 可写 played + needsPractice。若为保护孩子提前收短，只写 storyResolvedBySupport + partial/needsPractice，不写 played | 同一 session 至少 3/4 个第一次完整泡泡选择正确；最多一次孩子整题重听；无候选预听、strong、modeled、visual-assist、实验输入、跨 session 拼接或错后回填 | “绝对音感”“低音天赋”；把未呈现调用或修对结果回填为首答正确 |
 | 低音 C 家 | 引导中触屏找到 C3，或精确 MIDI C3 写 played；confirmed 麦克风只能写 experimental assisted story progress | later reduced-cue 的触屏首答找到正确低音 C；无 strong/modeled/visual/mic，且 MIDI/麦克风不在首版建立 stable | C4 同名按对算低音正确；用 LP02 成功删除或回填 LP01 needsPractice |
-| 低音 C3-G3 键位 | 完成相关引导路线 | reduced-cue 路线最多 2 次 wrong，正确 register，无 strong key glow | LP06 远跳一次等于 G 稳定 |
-| 左手邀请 | LP07 提示左手并完成路线 | 只能记录 prompted/observed；需成人确认才有 actual hand evidence | 仅凭低音音高声称左手技术掌握 |
-| 低音谱位 | 完成 LP08-LP10 guided | LP10 later signal check 最多 2 次 wrong，无 strong glow，所有音正确八度 | 故事过桥等于谱位稳定 |
+| 低音 C3-G3 键位 | 完成相关引导路线 | 当前没有可调度的合格动作；在教师复核并明确派发独立 opening review 前保持 missing | LP05-LP10、LP06 远跳或现有 C4-R01 被当成完整键位 stable |
+| 左手邀请 | LP07 写 `handPrompted=left` 并完成熟悉路线；默认 `actualHand=unknown` | 仅成人现场观察可写可选 `adultConfirmedHandUse`，但它不产生 stable/retained | 仅凭低音音高、触屏、MIDI 或麦克风声称真实用手、手型、指法或左手技术掌握 |
+| 低音谱位 | LP08 写 C3-E3 子集 played，LP09 补 E3-G3 子集 played，LP10 guided 完成整桥 played | 只有 LP09 已教完 F/G 后的 LP10 later signal check 才可按最多 2 次 wrong、无 strong glow、所有音正确八度写完整 `bass-staff:C3-G3 stable` | LP08 三点检查、故事过桥、麦克风音高或错八度同名音等于完整谱位稳定 |
 
 stable 事件使用 register-qualified skill key，例如 `low-key:C3-G3`、`bass-staff:C3-G3`。不能与高音 `C4-G4` 的证据合并成 letter-only key。
+
+`low-key:C3-G3 stable` 当前没有可调度的合格动作。现有 C4-R01 只覆盖高低 C 比较或低音 C 找家，LP10 later check 只覆盖 `bass-staff:C3-G3 stable`；在教师复核并明确派发独立 opening review 前保持 missing，不得用已写阈值伪装成已完成调度规格。
 
 retained 只能来自 scheduler 选择的 later opening review。普通重玩、LP10 同故事 check、调试深链和同日重复都不能写 retained。
 
@@ -151,10 +174,11 @@ retained 只能来自 scheduler 选择的 later opening review。普通重玩、
 
 ### 麦克风/真钢琴
 
-- LP01 不使用麦克风作为计分输入；让孩子弹一个 C 来回答会提前混入 LP02 的键位任务。实验麦克风路线从 LP02-LP06 开始。
+- LP01 不使用麦克风作为计分输入；让孩子弹一个 C 来回答会提前混入 LP02 的键位任务。实验麦克风路线从 LP02-LP07 开始。
 - 仅家长设置明确开启；不在孩子首次进章时弹权限。
 - MVP 本地处理，不上传、不保存原始家庭录音。
-- 可实验性推动 LP02-LP06 sequential played；不能证明 hand use、bass-staff reading、stable 或 retained，直到真机校准通过。
+- 可实验性推动 LP02-LP06 sequential assisted story progress。LP07 麦克风只形成 experimental assisted story progress，始终写 `actualHand=unknown`，不能证明 hand use、bass-staff reading、stable 或 retained。
+- LP07 只有在本地教学事务结束后，确认音稳定且随后检测到音结束或静音后才允许 rearm；同一持续音不能盖出第二枚脚印。uncertain/noisy/bleed/octave-ambiguous 仍不算 wrong，也不能推进。
 - wrong octave、uncertain、noisy 和 speaker bleed 必须分开；uncertain 不算孩子答错，触屏始终可接管。
 
 ## 八、音频与角色反馈
@@ -176,7 +200,10 @@ retained 只能来自 scheduler 选择的 later opening review。普通重玩、
 - LP01 比较时两个候选必须同尺寸、同亮度、同位置权重；目标声来自中性中央声源。
 - LP05 完整角色揭晓不能遮住 E-F-G 边界或键盘。
 - LP08-LP10 五线谱五根线足够粗、间距适合 iPad，一到两个小节长，不用长谱页。
-- 左手图标只在 LP07/后续手任务出现；不在低音初识时提前给出“低音等于左手”的误解。
+- LP08 固定为一个宽的一小节谱窗，左端低音谱号和五线全程稳定；一次只有当前 C/D/E 音符获得教学权重。咚咚待在谱表外侧，不遮线、间、谱号、音符或琴键；轨道末端两个无字支撑空位不能烘焙 F/G 答案。
+- LP09 复用同一稳定谱窗。进入时 E 第三间已亮，E 折叠支架与两个中性空位可以可见，但 F/G 的线间位置、字母和颜色答案在轮到当前目标前不能烘焙或预亮；支架和压力效果不得遮住第四线、第四间或键盘。
+- LP10 使用一到两个小节长的同一低音谱桥，信号塔和花园中继台终点首屏可辨。guided/check 都一次只强调当前音符；咚咚移动、颈盾反光、信号束、星芽回应和轻量结算都不得遮五线、谱号、当前音符或键盘。later check 中咚咚固定在塔边，未来信号锚中性且无音高答案。
+- 左手图标只在 LP07/后续手任务出现；不在低音初识时提前给出“低音等于左手”的误解。LP07 使用琴键旁、从孩子视角看的标准左手图标；角色朝向可能产生镜像，因此咚咚的某只前爪不得成为唯一左右提示。
 - 自然停点无必须关闭/下一关弹层，角色和永久世界状态保持可看。
 
 ## 十、必须自动验证的门禁
@@ -190,17 +217,17 @@ retained 只能来自 scheduler 选择的 later opening review。普通重玩、
 5. LP03 进入时必须继承 LP02 已落下的 C 锚石；C 输入只唤醒/锁紧，D/E 才新增石头。安装与门-C、C-D、D-E 接缝检查状态不同；地图、刷新、休息、repair 和 later check 均不重置或重放已完成石头。
 6. LP04 目标音播放前输入关闭，答案键不亮；wrong 先识别孩子音再重放目标。
 7. LP05 E/F/G 边界和完整咚咚揭晓顺序正确，作答前角色动作不泄题。
-8. LP06 不写独立 G stable 或跨度 mastery。
-9. LP07 handPrompted 与 actualHand/adultConfirmed 分开；touch/MIDI 音高不伪造手部证据。
-10. LP08 C3/D3/E3、LP09 E3/F3/G3 谱位和 MIDI 完全匹配 `docs/14`。
+8. LP06 三个输入严格为真实 release 分开的 `C3-G3-C3`；C/G 当前定位、错八度、逐步松楔/滚石/落座和刷新不倒退正确；不写独立 G、完整 C3-G3、手型、指法、左手、连奏或跨度 stable/mastery，也不自动开始 LP07。
+9. LP07 五个真实 release 按 `C3-D3-E3-D3-C3` 各生成一枚持久脚印，暂停/刷新/repair 不倒退或重复；右手、单指、touch/MIDI/mic 不算手部错误；`handPrompted=left`、`actualHand=unknown` 与可选 `adultConfirmedHandUse` 分开，音高不伪造手部证据，也不写手型、指法、技巧 stable/retained；第五枚后自然休息且不自动开始 LP08。
+10. LP08 只按 C3 第二间、D3 第三线、E3 第三间逐一引导；未来答案不同时出现。每个合格 release 永久建一个 staffHome；可选 check 使用含 C/D/E 各一次且不等于 C-D-E 的可复现排列，只增 railJoint。触屏与精确 MIDI 八度正确，麦克风不评分；引导/检查提示、延期、刷新和证据边界符合本节，LP08 不写完整 bass-staff stable/retained。
 11. wrong octave 在 LP08-LP10 不计正确，但得到“名字对、低音家不同”的温和修复。
-12. LP08/LP09 引导与检查使用不同世界状态，已完成地图/支撑不倒退。
-13. LP10 guided 和 check 是不同 session；guided 完成后 Chapter 5 可解锁，check 不让咚咚重新过桥。
-14. LP10 刷新恢复保存 bridgeBuilt、角色终点、signalAnchorCount、checkDeferred。
+12. LP08/LP09 引导与检查使用不同世界状态，已完成地图/支撑不倒退；LP08 检查前不存在答案字母、唱名、目标声音、目标键光、目标颜色或三个未来答案垫；LP09 继承 E 家，E 只放下折叠支架，F/G 才新增谱位，check 使用含 E/F/G 各一次且不等于 E-F-G 的可复现排列并只增 pressureJoint。两课都不让角色或道具遮谱表教学对象，不写完整 bass-staff stable/retained。
+13. LP10 guided 和 check 是不同 session；guided 的六个 release、3/6 安全休息/续玩、任意手有效、逐步移动、音频先后和最终四个世界字段正确。guided/assisted/modeled story completion 解锁 Chapter 5；只有 clean formal phase tail 单次结算，check 不自动开始、不成为强制地图节点、不让咚咚重新过桥、不重播星芽回应/结算。
+14. LP10 刷新/根地址/地图恢复保存 crossingStepIndex、bridgeBuilt、dongdongAtSignalTower、storySignalSent、xingyaSignalReceived、signalAnchorCount、checkDeferred、milestoneShown 和 nextStoryTarget；任何恢复都不倒退、重复结算或静默创建 session。
 15. repeated repair/strong/assisted/modeled/长等待/疲劳会延期同 session 检查并保留故事结果。
 16. modeled success 不进入 child correct、firstTry、touch/MIDI/mic inputRoutes、stable 或 retained。
 17. stable skill key 带 register，不能与 C4-G4 证据合并。
-18. 同 session、同日期、少于 8 小时、普通重玩、direct/debug 都不能授予 retained；显式教师/审计 direct mode 对正式历史零写入。
+18. LP10 later check 最多 2 wrong、正确八度且无 strong/assisted/modeled/visual target-key answer 才写 bass-staff stable；不交叉授予 low-key stable、真实左手或 retained。同 session、同日期、少于 8 小时、普通重玩、direct/debug 都不能授予 retained；显式教师/审计 direct mode 对正式历史零写入。
 19. MIDI 错误八度、note-off 去抖和外接琴双音风险有自动/人工证据。
 20. microphone confirmed/uncertain/noisy/octave-ambiguous/speaker-bleed 状态分开；uncertain 不算 wrong。
 21. 教学音起音后 540ms 音频优先、声音关闭和音量上限通过。
@@ -237,7 +264,8 @@ retained 只能来自 scheduler 选择的 later opening review。普通重玩、
 
 - `passed`：本文件的 Chapter 4 音高、短课、故事、谱位、手部证据、输入和测试规格已锁定。
 - `passed_browser_lp01_lp03_and_r01a`：`LP01-LP03` 的高低 C、低音 C 家、`C3-D3-E3` 地基路线、连续双八度键盘、地图、自然停点、错误修复、教学音生命周期、诚实阶段证据与隔离 opening-review 调度核心已进入获批 `overhaul-347a-c4-r01a` / `af9aa28` 浏览器基线。
-- `next_gated_runtime_work`：现在只可派发 `LP04`，并必须在同一候选内通过 `C4-R01B` 对真实 C4-03 actions 的整合证据。`LP05-LP10` 运行、咚咚完整揭晓、左手和低音谱表仍为 missing/locked。
+- `passed_browser_lp04_and_C4_R01B_uncommitted`：冻结观察基线 359a `app.js` SHA-256 为 `5AB01914C5B2AFA0E17838AAB59C2E0CAC5D8A4CA8E0956A23F382A4818AE566`；它继承 358a 已通过的 LP04 main `27/27`、input `8/8`、audio `11/11`、R01B lifecycle `31/31`、foundation `20/20` 和主管 retained 对抗探针 `9/9`，只增加主页内部滚动归零。当前未批准浏览器/PWA 体验候选 369a（`overhaul-369a-staff-notation-geometry-correction`）`app.js` SHA-256 为 `197C588C32460159E6EED94CC3E3250D89756503CDEADDC6E620DA76E9DD9A96`；368b 是 S01 连续性/PWA 前序，367b 是恢复前序，366a 是教学核心前序。369a 仅验证高音谱表 C4-G4 可见几何；LP08+ 低音谱表仍未实现、未验证。369a 继续保持 Chapter 4 课程与证据边界，不能反向改写已批准 347a 基线，也不能替代或继承 359a 的观察身份。
+- `next_gated_runtime_work`：当前 369a 只拥有浏览器/PWA 资格与高音谱表几何候选事实；368b 连续性前序、367b 恢复证据、366a 教学核心和 `359A` 47 文件观察冻结包继续分离。当前先做成人实体 iPad 声音预听，教师阶段 A 与外部视觉筛查可并行；首名方向观察必须等成人预听获主管接受。LP05 的四道实现前门禁仍是成人预听获主管接受、首名儿童无阻断 P0、教师阶段 B 无课程 P0 和主管明确窄派工。`LP05-LP10`、咚咚完整揭晓、左手和低音谱表不会自动解锁。
 - `missing`：真实 iPad、MIDI、原声钢琴麦克风、教师和儿童证据。
 
-当前只能说“第四章规格完整，LP01-LP03 与 C4-R01A 浏览器运行通过”，不能说完整低音章、左手教学或 bass-staff 学习效果已实现或验证。
+当前只能说“第四章规格已覆盖 LP01-LP10，LP01-LP03 与 C4-R01A 已进入批准基线，LP04 与 R01B 浏览器生命周期在 359a 冻结观察基线及当前未批准 369a 体验候选中保持通过；369a 只验证高音谱表 C4-G4，`low-key:C3-G3 stable` 调度规格与 LP08+ 低音谱表运行实现仍 missing”，不能说完整低音章、左手教学或 bass-staff 学习效果已实现或验证。

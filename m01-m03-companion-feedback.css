@@ -1,0 +1,110 @@
+/* 363a: presentation-only companionship for the first three moon-base lessons. */
+#appShell.app-shell:not(.staff-mode)[data-level-id="M01"] .coach-overlay,
+#appShell.app-shell:not(.staff-mode)[data-level-id="M02"] .coach-overlay,
+#appShell.app-shell:not(.staff-mode)[data-level-id="M03"] .coach-overlay {
+  pointer-events: none !important;
+}
+
+#appShell.app-shell:not(.staff-mode)[data-level-id="M01"] .coach-dino,
+#appShell.app-shell:not(.staff-mode)[data-level-id="M02"] .coach-dino,
+#appShell.app-shell:not(.staff-mode)[data-level-id="M03"] .coach-dino {
+  transform-origin: center bottom !important;
+}
+
+#appShell.app-shell[data-companion-state="good"] .coach-dino,
+#appShell.app-shell[data-companion-state="good"] #dinoSvg {
+  animation: companionGoodGlow 620ms ease-out both !important;
+}
+
+#appShell.app-shell[data-companion-state="jump"] .coach-dino,
+#appShell.app-shell[data-companion-state="jump"] #dinoSvg {
+  animation: companionJumpGlow 680ms ease-out both !important;
+}
+
+#appShell.app-shell[data-companion-state="try-again"] .coach-dino,
+#appShell.app-shell[data-companion-state="try-again"] #dinoSvg {
+  animation: companionTryAgainGlow 560ms ease-out both !important;
+}
+
+#appShell.app-shell[data-companion-state="celebrate"] .coach-dino,
+#appShell.app-shell[data-companion-state="celebrate"] #dinoSvg {
+  animation: companionCelebrateGlow 900ms ease-out both !important;
+}
+
+#appShell.app-shell[data-level-id="M02"] .moon-yard[data-companion-world-feedback] .build-slot.just-added .slot-art {
+  animation: companionLightInstall 680ms cubic-bezier(.2, .82, .22, 1) both !important;
+}
+
+#appShell.app-shell[data-level-id="M03"] .moon-yard[data-companion-world-feedback] .build-slot.just-added .slot-art {
+  animation: companionWheelSettle 640ms cubic-bezier(.2, .82, .22, 1) both !important;
+}
+
+#appShell.app-shell[data-level-id="M01"] .moon-yard[data-companion-world-feedback] .build-slot.just-added .slot-art {
+  animation: companionFloorSettle 560ms cubic-bezier(.2, .82, .22, 1) both !important;
+}
+
+#appShell.app-shell:not(.staff-mode) .moon-yard[data-companion-world-feedback] .build-slot.just-added {
+  pointer-events: none !important;
+}
+
+@keyframes companionGoodGlow {
+  0% { filter: brightness(1) saturate(1); }
+  42% { filter: brightness(1.14) saturate(1.12) drop-shadow(0 0 8px rgba(255, 220, 119, .36)); }
+  100% { filter: brightness(1) saturate(1); }
+}
+
+@keyframes companionJumpGlow {
+  0% { filter: brightness(1) saturate(1); }
+  38% { filter: brightness(1.18) saturate(1.14) drop-shadow(0 0 10px rgba(113, 218, 255, .42)); }
+  100% { filter: brightness(1) saturate(1); }
+}
+
+@keyframes companionTryAgainGlow {
+  0% { filter: brightness(1) saturate(1); }
+  42% { filter: brightness(1.05) saturate(.86) drop-shadow(0 0 7px rgba(255, 190, 116, .25)); }
+  100% { filter: brightness(1) saturate(1); }
+}
+
+@keyframes companionCelebrateGlow {
+  0% { filter: brightness(1) saturate(1); }
+  45% { filter: brightness(1.2) saturate(1.16) drop-shadow(0 0 12px rgba(255, 226, 128, .46)); }
+  100% { filter: brightness(1) saturate(1); }
+}
+
+@keyframes companionLightInstall {
+  0% { filter: brightness(.94) saturate(.9); opacity: .82; }
+  44% { filter: brightness(1.28) saturate(1.18) drop-shadow(0 0 9px rgba(255, 222, 119, .52)); opacity: 1; }
+  100% { filter: brightness(1) saturate(1); opacity: 1; }
+}
+
+@keyframes companionWheelSettle {
+  0% { filter: brightness(.96) saturate(.9); opacity: .84; }
+  48% { filter: brightness(1.18) saturate(1.12) drop-shadow(0 0 8px rgba(109, 204, 255, .4)); opacity: 1; }
+  100% { filter: brightness(1) saturate(1); opacity: 1; }
+}
+
+@keyframes companionFloorSettle {
+  0% { filter: brightness(.96) saturate(.92); opacity: .84; }
+  48% { filter: brightness(1.14) saturate(1.08) drop-shadow(0 0 8px rgba(203, 132, 250, .36)); opacity: 1; }
+  100% { filter: brightness(1) saturate(1); opacity: 1; }
+}
+
+html[data-motion="reduced"] #appShell.app-shell[data-level-id="M01"] .coach-dino,
+html[data-motion="reduced"] #appShell.app-shell[data-level-id="M02"] .coach-dino,
+html[data-motion="reduced"] #appShell.app-shell[data-level-id="M03"] .coach-dino,
+html[data-motion="reduced"] #appShell.app-shell[data-level-id="M01"] #dinoSvg,
+html[data-motion="reduced"] #appShell.app-shell[data-level-id="M02"] #dinoSvg,
+html[data-motion="reduced"] #appShell.app-shell[data-level-id="M03"] #dinoSvg,
+html[data-motion="reduced"] #appShell.app-shell:not(.staff-mode) .moon-yard[data-companion-world-feedback] .build-slot.just-added .slot-art {
+  animation: none !important;
+}
+
+html[data-motion="reduced"] #appShell.app-shell[data-companion-state="good"] .coach-dino,
+html[data-motion="reduced"] #appShell.app-shell[data-companion-state="jump"] .coach-dino,
+html[data-motion="reduced"] #appShell.app-shell[data-companion-state="celebrate"] .coach-dino,
+html[data-motion="reduced"] #appShell.app-shell[data-companion-state="good"] #dinoSvg,
+html[data-motion="reduced"] #appShell.app-shell[data-companion-state="jump"] #dinoSvg,
+html[data-motion="reduced"] #appShell.app-shell[data-companion-state="celebrate"] #dinoSvg,
+html[data-motion="reduced"] #appShell.app-shell:not(.staff-mode) .moon-yard[data-companion-world-feedback] .build-slot.just-added .slot-art {
+  filter: brightness(1.12) saturate(1.04) !important;
+}

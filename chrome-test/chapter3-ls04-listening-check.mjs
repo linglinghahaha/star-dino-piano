@@ -1,6 +1,8 @@
 import fs from "node:fs";
 import path from "node:path";
 import { createRequire } from "node:module";
+import { canonicalC1C2History } from "./canonical-course-fixture.mjs";
+import { completeParentChallenge } from "./parental-challenge-helper.mjs";
 
 const require = createRequire(import.meta.url);
 const { chromium } = require("playwright");
@@ -26,12 +28,7 @@ function runtimeFixture() {
   return {
     version: 1,
     active: null,
-    history: [{
-      sessionId: "C2-03-entry",
-      bundleId: "C2-03",
-      status: "ended",
-      completedActions: [{ actionId: "S01-check", kind: "staff", targetId: "S01" }]
-    }],
+    history: canonicalC1C2History({ completedAt: "2026-07-11T01:00:00.000Z", tag: "chapter3-ls04" }),
     lastRest: null,
     chapter3: {
       entryEventId: "CH3_ENTRY_AIR_CHECK",
@@ -113,6 +110,17 @@ async function view(page) {
       return { width: rect.width, height: rect.height, background: style.backgroundColor, border: style.borderColor, transform: style.transform };
     });
     const targetNodes = [...document.querySelectorAll("[data-target-note='true'], .white-key.target, .white-key.target-muted")];
+    const visible = (element) => {
+      if (!element || element.closest("[hidden]")) return false;
+      const style = getComputedStyle(element);
+      const box = element.getBoundingClientRect();
+      return style.display !== "none" && style.visibility !== "hidden" && Number(style.opacity) > 0.01 && box.width > 0 && box.height > 0;
+    };
+    const mapShell = document.querySelector("#mapShell");
+    const mapMarkers = [...document.querySelectorAll(".map-node, #gardenRestMarker")];
+    const visibleMarkers = mapMarkers.filter(visible);
+    const parentText = ["#parentLearningFocus", "#parentLearningDetail", "#parentMasteryStatus", "#parentMasteryDetail", "#parentProgressText", "#parentEvidenceList"]
+      .map((selector) => document.querySelector(selector)?.innerText || "").join(" ");
     return {
       version: document.querySelector("script[src*='app.js']")?.src || "",
       screen: document.body.className,
@@ -140,6 +148,18 @@ async function view(page) {
       parentMasteryDetail: document.querySelector("#parentMasteryDetail")?.textContent || "",
       parentProgress: document.querySelector("#parentProgressText")?.textContent || "",
       parentEvidence: document.querySelector("#parentEvidenceList")?.innerText?.replace(/\s+/g, " ").trim() || "",
+      parentText,
+      journey: {
+        plan: childJourneyPlan(),
+        courseDirector: mapShell?.dataset.courseDirector || "",
+        state: mapShell?.dataset.journeyState || "",
+        chapter: mapShell?.dataset.journeyChapter || "",
+        bundle: mapShell?.dataset.journeyBundle || "",
+        target: mapShell?.dataset.journeyTarget || "",
+        visibleMarkerIds: visibleMarkers.map((marker) => marker.id),
+        enabledMarkerIds: visibleMarkers.filter((marker) => !marker.disabled).map((marker) => marker.id),
+        currentMarkerIds: visibleMarkers.filter((marker) => marker.hasAttribute("aria-current")).map((marker) => marker.id)
+      },
       forbiddenControls: [...document.querySelectorAll("button")].filter((button) => {
         const rect = button.getBoundingClientRect();
         const style = getComputedStyle(button);
@@ -167,7 +187,7 @@ async function startLs04(page) {
 const main = await makePage();
 await seed(main.page);
 let current = await view(main.page);
-record("Legacy 339d visible completion migrates to an enabled LS04-ready map state", current.marker.includes("C/D 找朋友") && current.marker.includes("点这里听种核") && !current.markerDisabled && current.mapProgress.includes("找朋友 0/4"), current);
+record("Legacy 339d completion resolves to the one canonical LS04-ready journey", current.journey.courseDirector === "true" && current.journey.state === "ready" && current.journey.chapter === "C3" && current.journey.bundle === "C3-03" && current.journey.target === "LS04" && current.journey.plan?.chapterId === "C3" && current.journey.plan?.bundleId === "C3-03" && current.journey.plan?.targetId === "LS04" && current.journey.plan?.state === "ready" && current.journey.plan?.sessionId === null && current.journey.plan?.resumeOfSessionId === null && current.journey.plan?.actionable === true && current.journey.visibleMarkerIds.join(",") === "gardenRestMarker" && current.journey.enabledMarkerIds.join(",") === "gardenRestMarker" && current.journey.currentMarkerIds.join(",") === "gardenRestMarker" && !current.active, current);
 record("Migrated LS03 evidence does not fabricate LS04 completion", !current.chapter3.completed && !current.chapter3.lessonEvidence?.LS04, current.chapter3);
 
 await startLs04(main.page);
@@ -213,7 +233,7 @@ const sessionId = current.active.sessionId;
 const sequenceBeforePause = current.attempt.sequence.join(",");
 await main.page.locator("#mapReturn").click();
 current = await view(main.page);
-record("Map pause keeps the same active C3-03 and current call", current.active?.sessionId === sessionId && current.marker.includes("继续听声音"), current);
+record("Map pause keeps the same active C3-03 journey and current call", current.active?.sessionId === sessionId && current.attempt?.callIndex === 0 && current.attempt?.totalWrongCount === 1 && current.journey.courseDirector === "true" && current.journey.state === "active" && current.journey.chapter === "C3" && current.journey.bundle === "C3-03" && current.journey.target === "LS04" && current.journey.plan?.chapterId === "C3" && current.journey.plan?.bundleId === "C3-03" && current.journey.plan?.targetId === "LS04" && current.journey.plan?.state === "active" && current.journey.plan?.sessionId === sessionId && current.journey.plan?.resumeOfSessionId === current.active?.resumeOfSessionId && current.journey.plan?.actionable === true && current.journey.visibleMarkerIds.join(",") === "gardenRestMarker" && current.journey.enabledMarkerIds.join(",") === "gardenRestMarker" && current.journey.currentMarkerIds.join(",") === "gardenRestMarker", current);
 await main.page.locator("#gardenRestMarker").click();
 await waitForPhase(main.page, "awaiting-response");
 current = await view(main.page);
@@ -233,6 +253,7 @@ while ((await view(main.page)).attempt?.callIndex < 4) {
 await waitForPhase(main.page, "complete");
 const completedScene = await view(main.page);
 record("Four calls finish with a world result and no modal or next controls", completedScene.phase === "complete" && completedScene.modalHidden && completedScene.forbiddenControls.length === 0, completedScene);
+record("LS04 completion copy does not promise a day-long stop before the immediate LS05 route", !completedScene.speech.includes("今天先在花园歇一歇"), completedScene.speech);
 await main.page.screenshot({ path: path.join(screenshotDir, "ls04_complete_1024x768.png") });
 await main.page.waitForFunction(() => document.body.classList.contains("screen-map"), null, { timeout: 6000 });
 current = await view(main.page);
@@ -243,8 +264,9 @@ record("LS04 completion persists its own result without marking the whole chapte
 record("Chapter 1/2 sentinel evidence remains intact", current.learning.levels.M07?.stableCompletions === 1 && current.learning.retention.retainedEvents.some((event) => event.eventId === "sentinel-retained"), current.learning);
 await main.page.screenshot({ path: path.join(screenshotDir, "ls04_complete_map_1024x768.png") });
 await main.page.locator("#mapParentGate").click();
+await completeParentChallenge(main.page);
 current = await view(main.page);
-record("Parent panel on the LS04 map rest shows the C/D listening focus and real stable evidence", current.parentFocus.includes("C/D 小音组") && current.parentDetail.includes("C = Do") && current.parentDetail.includes("D = Re") && current.parentDetail.includes("不是绝对音感测试") && current.parentMastery === "本次减提示完成" && current.parentProgress === "C/D 找朋友 4/4" && current.parentEvidence.includes("本次减提示完成"), current);
+record("Parent panel on the LS04 map rest uses C/D note names and real stable listening evidence", current.parentFocus.includes("C/D 小音组") && current.parentText.includes("C/D") && !/(^|[^A-Za-z])(Do|Re|Mi)(?=$|[^A-Za-z])/.test(current.parentText) && current.parentDetail.includes("不是绝对音感测试") && current.parentMastery === "本次减提示完成" && current.parentProgress === "C/D 找朋友 4/4" && current.parentEvidence.includes("本次减提示完成"), current);
 await main.page.screenshot({ path: path.join(screenshotDir, "ls04_parent_stable_1024x768.png") });
 await main.page.locator("#parentClose").click();
 await main.context.close();
@@ -268,9 +290,10 @@ current = await view(assisted.page);
 const modeledHistory = current.history.find((session) => session.bundleId === "C3-03");
 record("Fourth wrong models only the current call and ends at a safe rest", modeledHistory?.endReason === "modeled-safe-rest" && modeledHistory.completedActions?.[0]?.modeled === true && modeledHistory.completedActions[0].scoredCalls.length === 1 && !current.chapter3.completed, modeledHistory);
 record("Modeled input does not enter child routes or create stable/retained", !current.learning.retention.stableEvents.some((event) => event.skillKey === "level:LS04") && !current.learning.retention.retainedEvents.some((event) => event.skillKey === "level:LS04") && current.learning.levels.LS04?.needsPractice === true, current.learning.levels.LS04);
-record("A later explicit click starts a fresh C3-03 attempt", !current.markerDisabled && current.marker.includes("点这里听种核"), current);
+record("Modeled rest exposes one fresh LS04-ready route without an active session", !current.active && current.journey.courseDirector === "true" && current.journey.state === "ready" && current.journey.chapter === "C3" && current.journey.bundle === "C3-03" && current.journey.target === "LS04" && current.journey.plan?.chapterId === "C3" && current.journey.plan?.bundleId === "C3-03" && current.journey.plan?.targetId === "LS04" && current.journey.plan?.state === "ready" && current.journey.plan?.sessionId === null && current.journey.plan?.resumeOfSessionId === null && current.journey.plan?.actionable === true && current.journey.visibleMarkerIds.join(",") === "gardenRestMarker" && current.journey.enabledMarkerIds.join(",") === "gardenRestMarker" && current.journey.currentMarkerIds.join(",") === "gardenRestMarker", current);
 await assisted.page.screenshot({ path: path.join(screenshotDir, "ls04_modeled_rest_1194x834.png") });
 await assisted.page.locator("#mapParentGate").click();
+await completeParentChallenge(assisted.page);
 current = await view(assisted.page);
 record("Modeled rest parent evidence stays played/needs-practice without stable", current.parentFocus.includes("C/D 小音组") && current.parentMastery === "在故事帮助下玩过" && current.parentMasteryDetail.includes("今天需要提示"), current);
 await assisted.page.locator("#parentClose").click();
@@ -298,6 +321,7 @@ await threshold.page.waitForFunction(() => document.body.classList.contains("scr
 current = await view(threshold.page);
 record("A completed 2/4 round is played but does not create stable or retained", current.learning.levels.LS04?.completions === 1 && current.learning.levels.LS04?.stableCompletions === 0 && !current.learning.retention.stableEvents.some((event) => event.skillKey === "level:LS04") && !current.learning.retention.retainedEvents.some((event) => event.skillKey === "level:LS04"), current.learning.levels.LS04);
 await threshold.page.locator("#mapParentGate").click();
+await completeParentChallenge(threshold.page);
 current = await view(threshold.page);
 record("A 2/4 parent summary shows played and today-needs-practice, not stable", current.parentMastery === "在故事帮助下玩过" && current.parentMasteryDetail.includes("今天需要提示") && current.parentEvidence.includes("今天需要提示"), current);
 await threshold.context.close();
@@ -350,6 +374,7 @@ current = await view(microphone.page);
 record("Four real microphone-route inputs can complete played story evidence", current.learning.levels.LS04?.completions === 1 && current.learning.levels.LS04?.lastInputRoutes?.麦克风 === 4 && current.learning.levels.LS04?.lastExperimentalInput === true, current.learning.levels.LS04);
 record("Experimental microphone completion creates no LS04 stable or retained evidence", current.learning.levels.LS04?.stableCompletions === 0 && !current.learning.retention.stableEvents.some((event) => event.skillKey === "level:LS04") && !current.learning.retention.retainedEvents.some((event) => event.skillKey === "level:LS04"), current.learning.retention);
 await microphone.page.locator("#mapParentGate").click();
+await completeParentChallenge(microphone.page);
 current = await view(microphone.page);
 record("Experimental microphone parent summary remains played/needs-practice without stable", current.parentMastery === "在故事帮助下玩过" && current.parentMasteryDetail.includes("今天需要提示"), current);
 await microphone.context.close();
@@ -359,6 +384,8 @@ async function exerciseSilentRecovery({ volumeZero = false, failAudioContext = f
   await seed(holder.page);
   if (!failAudioContext) {
     await holder.page.locator("#mapParentGate").click();
+    await completeParentChallenge(holder.page);
+    await holder.page.locator("#parentTabDevices").click();
     if (volumeZero) {
       await holder.page.locator("#parentVolumeControl").evaluate((input) => {
         input.value = "0";
@@ -379,6 +406,8 @@ async function exerciseSilentRecovery({ volumeZero = false, failAudioContext = f
   record(`${volumeZero ? "Volume zero" : failAudioContext ? "AudioContext failure" : "Sound disabled"} keeps LS04 non-scoring and recoverable`, silent.phase === "sound-paused" && silent.attempt.callIndex === 0 && silent.attempt.totalWrongCount === 0 && silent.attempt.correctCount === 0 && silent.attempt.earlyInputs.length === 1 && !silent.chapter3.lessonEvidence?.LS04, silent);
   if (!failAudioContext) {
     await holder.page.locator("#playParentGate").click();
+    await completeParentChallenge(holder.page);
+    await holder.page.locator("#parentTabDevices").click();
     if (volumeZero) {
       await holder.page.locator("#parentVolumeControl").evaluate((input) => {
         input.value = "60";

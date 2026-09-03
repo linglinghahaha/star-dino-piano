@@ -8,6 +8,8 @@
 
 当前权威规划在 [docs/README.md](docs/README.md)。如果根目录旧素材说明、旧设计草案和 `docs/` 冲突，以 `docs/18_CURRENT_PLANNING_REVIEW.md` 为准。
 
+当前未批准浏览器/PWA 体验候选为 `overhaul-369e-ipad-settlement-compactness-correction`；369d 保留为课程路由/PWA 直接前序，冻结成人实体 iPad 预听与方向性儿童观察仍只使用 359a。Figma 方案 A 是视觉结构候选，不是最终美术或运行批准：[打开独立 Figma 候选文件](https://www.figma.com/design/WyRtsab3RaH6cFwIfCoUXZ)。
+
 ## 当前定位
 
 - 触屏优先：不连 MIDI、不用麦克风也应该能完整玩。

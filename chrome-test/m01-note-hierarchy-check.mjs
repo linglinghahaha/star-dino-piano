@@ -58,6 +58,11 @@ try {
       const state = await page.evaluate(() => {
         const visible = (element) => {
           if (!element) return false;
+          for (let parent = element; parent; parent = parent.parentElement) {
+            if (parent.hidden) return false;
+            const parentStyle = getComputedStyle(parent);
+            if (parentStyle.display === "none" || parentStyle.visibility === "hidden") return false;
+          }
           const style = getComputedStyle(element);
           const rect = element.getBoundingClientRect();
           return style.display !== "none" && style.visibility !== "hidden" && Number(style.opacity) > 0.01 && rect.width > 0 && rect.height > 0;
@@ -92,6 +97,13 @@ try {
           targetCardVisible: visible(document.querySelector("#targetNote")),
           stageOrbVisible: visible(document.querySelector("#stageNoteOrb")),
           currentSlotLetterVisible: visible(document.querySelector(".build-slot.current .slot-note-letter")),
+          feedback: {
+            visible: visible(document.querySelector("#feedback")),
+            text: document.querySelector("#feedback")?.textContent?.replace(/\s+/g, " ").trim() || "",
+            parentClass: document.querySelector("#feedback")?.parentElement?.className || "",
+            rect: rect(document.querySelector("#feedback"))
+          },
+          keyboardRect: rect(document.querySelector("#keyboard")),
           primaryKeys,
           horizontalOverflow: document.documentElement.scrollWidth > document.documentElement.clientWidth + 1,
           verticalOverflow: document.documentElement.scrollHeight > document.documentElement.clientHeight + 1
@@ -104,7 +116,7 @@ try {
       const keyOrder = state.primaryKeys.map((key) => key.primary).join("");
       const secondaryOrder = state.primaryKeys.map((key) => key.secondary).join("");
 
-      record(`${viewport.id}: runs the 347a R01A shell`, state.runtimeVersion.includes("overhaul-347a-c4-r01a"), state);
+      record(`${viewport.id}: runs the current 369e shell`, state.runtimeVersion.includes("overhaul-369e-ipad-settlement-compactness-correction"), state);
       record(`${viewport.id}: story card contains the story problem without a duplicate identity row`, state.storyIdentitySuppressed === "true" && state.storyCueCount === 0 && !/[A-G]|Do|Re|Mi|Fa|Sol|黑键/.test(state.storyText), state);
       record(`${viewport.id}: hanging part shows only the C note name`, state.badge.visible && state.badge.primary === "C" && state.badge.secondary === "", state.badge);
       record(`${viewport.id}: Xingya owns the only initial solfege prompt`, state.coachText.includes("唱 Do") && !state.coachText.includes("C") && !state.coachText.includes("黑"), state);
@@ -112,6 +124,40 @@ try {
       record(`${viewport.id}: real piano keys show only C-G note names`, keyOrder === "CDEFG" && secondaryOrder === "", state.primaryKeys);
       record(`${viewport.id}: larger Xingya remains inside the scene`, dinoContained && (state.coachRect?.width || 0) >= 140 && (state.coachRect?.height || 0) >= 140, { coachRect: state.coachRect, yardRect: state.yardRect });
       record(`${viewport.id}: M01 hierarchy has no page overflow`, !state.horizontalOverflow && !state.verticalOverflow, state);
+
+      await page.locator('#keyboard .key[data-midi="62"]').click();
+      await page.waitForTimeout(180);
+      const wrongFeedback = await page.evaluate(() => {
+        const element = document.querySelector("#feedback");
+        const visible = (candidate) => {
+          if (!candidate) return false;
+          for (let parent = candidate; parent; parent = parent.parentElement) {
+            if (parent.hidden) return false;
+            const parentStyle = getComputedStyle(parent);
+            if (parentStyle.display === "none" || parentStyle.visibility === "hidden") return false;
+          }
+          const style = getComputedStyle(candidate);
+          const box = candidate.getBoundingClientRect();
+          return style.display !== "none" && style.visibility !== "hidden" && Number(style.opacity) > 0.01 && box.width > 0 && box.height > 0;
+        };
+        const box = element?.getBoundingClientRect();
+        const keyboard = document.querySelector("#keyboard")?.getBoundingClientRect();
+        const modal = document.querySelector("#resultModal");
+        return {
+          visible: visible(element),
+          text: element?.textContent?.replace(/\s+/g, " ").trim() || "",
+          parentClass: element?.parentElement?.className || "",
+          rect: box ? { left: box.left, top: box.top, right: box.right, bottom: box.bottom, width: box.width, height: box.height } : null,
+          keyboardRect: keyboard ? { left: keyboard.left, top: keyboard.top, right: keyboard.right, bottom: keyboard.bottom, width: keyboard.width, height: keyboard.height } : null,
+          modalVisible: Boolean(modal && !modal.hidden && getComputedStyle(modal).display !== "none")
+        };
+      });
+      const feedbackAboveKeyboard = Boolean(wrongFeedback.rect && wrongFeedback.keyboardRect && wrongFeedback.rect.bottom <= wrongFeedback.keyboardRect.top + 1);
+      record(
+        `${viewport.id}: wrong M01 feedback is visible in one compact status row above the keyboard`,
+        wrongFeedback.visible && wrongFeedback.parentClass === "status-row" && /D/.test(wrongFeedback.text) && /C/.test(wrongFeedback.text) && !/(?:Do|Re|Mi|唱名)/.test(wrongFeedback.text) && feedbackAboveKeyboard && !wrongFeedback.modalVisible,
+        { state, wrongFeedback, feedbackAboveKeyboard }
+      );
       await page.screenshot({ path: `${screenshotPrefix}_${viewport.id}.png`, fullPage: false });
     } finally {
       await context.close();
