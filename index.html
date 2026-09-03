@@ -45,6 +45,67 @@
       window.addEventListener('orientationchange', updateStageScale);
       updateStageScale();
       document.addEventListener('DOMContentLoaded', updateStageScale);
+
+      // Drawer interaction & Preview logic
+      document.addEventListener('DOMContentLoaded', function() {
+        var hubs = document.querySelectorAll('.phase-hub');
+
+        // Create interactive toast container
+        var toast = document.createElement('div');
+        toast.className = 'hub-toast-notice';
+        document.body.appendChild(toast);
+
+        function showNotice(msg) {
+          toast.textContent = msg;
+          toast.classList.add('visible');
+          clearTimeout(toast._timer);
+          toast._timer = setTimeout(function() {
+            toast.classList.remove('visible');
+          }, 2400);
+        }
+        window.showHubNotice = showNotice;
+
+        hubs.forEach(function(hub) {
+          var header = hub.querySelector('.phase-hub-header');
+          if (header) {
+            header.addEventListener('click', function(e) {
+              e.stopPropagation();
+              var isOpen = hub.classList.contains('drawer-open');
+              // Close other drawers so screen stays neat and gorgeous
+              hubs.forEach(function(h) {
+                h.classList.remove('drawer-open');
+                var hdr = h.querySelector('.phase-hub-header');
+                if (hdr) hdr.setAttribute('aria-expanded', 'false');
+              });
+              if (!isOpen) {
+                hub.classList.add('drawer-open');
+                header.setAttribute('aria-expanded', 'true');
+              }
+            });
+          }
+
+          // In locked hubs, intercept clicks on locked nodes
+          if (hub.classList.contains('locked')) {
+            hub.addEventListener('click', function(e) {
+              var btn = e.target.closest('.map-node');
+              if (btn) {
+                e.preventDefault();
+                e.stopPropagation();
+                var title = btn.querySelector('.node-title') ? btn.querySelector('.node-title').innerText.replace(/\s+/g, ' ') : '该关卡';
+                showNotice('★ ' + title + ' 暂未解锁，星芽还在为你准备材料，完成上一站就可以开启啦！');
+              }
+            }, true);
+          }
+        });
+
+        // Continuously ensure locked buttons remain clickable for preview notice
+        setInterval(function() {
+          document.querySelectorAll('.phase-hub.locked .map-node[disabled]').forEach(function(btn) {
+            btn.removeAttribute('disabled');
+            btn.setAttribute('aria-disabled', 'true');
+          });
+        }, 300);
+      });
     })();
   </script>
 </head>
@@ -167,20 +228,23 @@
         </span>
       </div>
       <!-- 4 大建造阶段里程碑站台 (Phase Hubs) -->
-      <div class="phase-hub phase-hub-1 active" data-phase="1">
-        <header class="phase-hub-header">
-          <span class="phase-hub-badge">阶段 01</span>
+      <!-- 4 大建造阶段里程碑站台 (Phase Hubs: 3D 糖果抽屉收纳与五线谱道路顺位) -->
+      <div class="phase-hub phase-hub-1 active drawer-open" data-phase="1">
+        <header class="phase-hub-header" role="button" aria-expanded="true" tabindex="0" title="点击展开/收起 月面工坊">
+          <img class="phase-hub-icon" src="assets/runtime/icon-phase-1.webp" alt="工坊">
+          <span class="phase-hub-badge">01</span>
           <div class="phase-hub-title-group">
-            <strong>起步地基</strong>
-            <small>先认识 C-D-E</small>
+            <strong>月面工坊</strong>
+            <small>工坊起步 · 认识 C-D-E</small>
           </div>
           <span class="phase-status-tag current">进行中</span>
+          <span class="drawer-toggle-arrow">▼</span>
         </header>
         <div class="phase-nodes-list">
           <button class="map-node node-1" type="button" data-level="M01">
             <span class="node-mascot node-do"></span>
             <span class="node-title"><b>1</b> 找到 C</span>
-            <span class="node-note">C</span>
+            <span class="node-note">C 琴键</span>
           </button>
           <button class="map-node node-2" type="button" data-level="M02">
             <span class="node-mascot node-lights"></span>
@@ -190,96 +254,112 @@
           <button class="map-node node-3" type="button" data-level="M03">
             <span class="node-mascot node-wheel"></span>
             <span class="node-title"><b>3</b> 听车轮</span>
-            <span class="node-note">听 D / C</span>
+            <span class="node-note">听音辨键</span>
           </button>
         </div>
       </div>
 
       <div class="phase-hub phase-hub-2 locked" data-phase="2">
-        <header class="phase-hub-header">
-          <span class="phase-hub-badge">阶段 02</span>
+        <header class="phase-hub-header" role="button" aria-expanded="false" tabindex="0" title="点击展开/收起 音符舞台">
+          <img class="phase-hub-icon" src="assets/runtime/icon-phase-2.webp" alt="舞台">
+          <span class="phase-hub-badge">02</span>
           <div class="phase-hub-title-group">
-            <strong>工坊装配</strong>
-            <small>音阶起伏连弹</small>
+            <strong>音符舞台</strong>
+            <small>律动连弹 · 音阶起伏</small>
           </div>
           <span class="phase-status-tag locked">待解锁</span>
+          <span class="drawer-toggle-arrow">▼</span>
         </header>
         <div class="phase-nodes-list">
           <button class="map-node node-4" type="button" data-level="M04">
+            <span class="node-lock-badge">🔒</span>
             <span class="node-mascot node-bridge"></span>
             <span class="node-title"><b>4</b> 咔哒小桥</span>
             <span class="node-note">C D E</span>
           </button>
           <button class="map-node node-5" type="button" data-level="M05">
+            <span class="node-lock-badge">🔒</span>
             <span class="node-mascot node-rocket"></span>
             <span class="node-title"><b>5</b> 倒数灯</span>
             <span class="node-note">E D C</span>
           </button>
           <button class="map-node node-6" type="button" data-level="M06">
+            <span class="node-lock-badge">🔒</span>
             <span class="node-mascot node-wall"></span>
             <span class="node-title"><b>6</b> 大跳墙</span>
             <span class="node-note">C G C</span>
           </button>
           <button class="map-node node-7" type="button" data-level="M07">
+            <span class="node-lock-badge">🔒</span>
             <span class="node-mascot node-star-lights"></span>
             <span class="node-title"><b>7</b> 星星串</span>
-            <span class="node-note">C D E D C</span>
+            <span class="node-note">音阶起伏</span>
           </button>
         </div>
       </div>
 
       <div class="phase-hub phase-hub-3 locked" data-phase="3">
-        <header class="phase-hub-header">
-          <span class="phase-hub-badge">阶段 03</span>
+        <header class="phase-hub-header" role="button" aria-expanded="false" tabindex="0" title="点击展开/收起 奇幻花房">
+          <img class="phase-hub-icon" src="assets/runtime/icon-phase-3.webp" alt="花房">
+          <span class="phase-hub-badge">03</span>
           <div class="phase-hub-title-group">
-            <strong>合上屋顶</strong>
-            <small>补齐 F-G 键位</small>
+            <strong>奇幻花房</strong>
+            <small>花穹装配 · 补齐 F-G</small>
           </div>
           <span class="phase-status-tag locked">待解锁</span>
+          <span class="drawer-toggle-arrow">▼</span>
         </header>
         <div class="phase-nodes-list">
           <button class="map-node node-8" type="button" data-level="M08">
+            <span class="node-lock-badge">🔒</span>
             <span class="node-mascot node-roof"></span>
             <span class="node-title"><b>8</b> 月亮屋顶</span>
-            <span class="node-note">C-G</span>
+            <span class="node-note">C-G 连奏</span>
           </button>
           <button class="map-node node-9" type="button" data-level="FG01">
+            <span class="node-lock-badge">🔒</span>
             <span class="node-mascot node-bridge"></span>
             <span class="node-title"><b>9</b> F 垫</span>
-            <span class="node-note">F</span>
+            <span class="node-note">认识 F 键</span>
           </button>
           <button class="map-node node-10" type="button" data-level="FG02">
+            <span class="node-lock-badge">🔒</span>
             <span class="node-mascot node-wall"></span>
             <span class="node-title"><b>10</b> G 门</span>
-            <span class="node-note">G</span>
+            <span class="node-note">认识 G 键</span>
           </button>
           <button class="map-node node-11" type="button" data-level="FG03">
+            <span class="node-lock-badge">🔒</span>
             <span class="node-mascot node-star-lights"></span>
             <span class="node-title"><b>11</b> 近邻星</span>
-            <span class="node-note">E F G</span>
+            <span class="node-note">E F G 连弹</span>
           </button>
         </div>
       </div>
 
       <div class="phase-hub phase-hub-4 locked" data-phase="4">
-        <header class="phase-hub-header">
-          <span class="phase-hub-badge">阶段 04</span>
+        <header class="phase-hub-header" role="button" aria-expanded="false" tabindex="0" title="点击展开/收起 晶石星门">
+          <img class="phase-hub-icon" src="assets/runtime/icon-phase-4.webp" alt="星门">
+          <span class="phase-hub-badge">04</span>
           <div class="phase-hub-title-group">
-            <strong>星图启航</strong>
-            <small>连通星星桥</small>
+            <strong>晶石星门</strong>
+            <small>穿过星洞 · 星图启航</small>
           </div>
           <span class="phase-status-tag locked">待解锁</span>
+          <span class="drawer-toggle-arrow">▼</span>
         </header>
         <div class="phase-nodes-list">
           <button class="map-node node-12" type="button" data-level="FG04">
+            <span class="node-lock-badge">🔒</span>
             <span class="node-mascot node-staff-art"></span>
             <span class="node-title"><b>12</b> 桥前地图</span>
-            <span class="node-note">F G</span>
+            <span class="node-note">五线谱识音</span>
           </button>
           <button class="map-node node-staff" type="button" data-screen="staff">
+            <span class="node-lock-badge">🔒</span>
             <span class="node-mascot node-staff-art"></span>
-            <span class="node-title"><b>★</b> 小恐龙跳</span>
-            <span class="node-note">S01</span>
+            <span class="node-title"><b>★</b> 星龙飞跃</span>
+            <span class="node-note">星图启航</span>
           </button>
         </div>
       </div>
