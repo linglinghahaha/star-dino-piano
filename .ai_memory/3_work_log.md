@@ -111,5 +111,24 @@
   - 展开抽屉升级为 20px 模糊的高通透毛玻璃糖果托盘，配备小巧的【收起 ▲】折叠按钮
   - 实测优化空间拓扑：阶段 2 展开时与左侧阶段 1 胶囊保持 109px 净距，与右侧阶段 3 胶囊保持 172px 净距，全态最小净距均达 107px+，彻底消灭横向撞车与堆叠压迫感
   - 通过 Playwright 测量全部几何边界并截取全态高清图归档至 walkthrough.md
-  - 提交代码并推送到远程 feature/ui-visual-revamp 分支
+  - 推进并全面落地“选项 1：关卡内互动弹奏界面打磨（核心教学闭环）”：
+  - 琴键 3D 触感与呼吸引导重构（keyboard-overrides.css）：
+    * 白键注入象牙微渐变与内高光，按下增加 6px 真实物理下陷深度（translateY(6px) scaleY(0.985)）与内阴影变化
+    * 黑键增加 5px 按压下沉与深空立体投影
+    * 目标键注入呼吸脉冲光环（keyTargetPulse），引导手势配备轻盈弹跳微动效（tapFingerBounce）
+  - 全面解禁历史遗留动效抑制（child-feedback-intensity.css & app.js）：
+    * 移除 M01 强行隐藏 tap-badge、tap-finger、build-slot 的规则
+    * 移除对 flying-part、sprite-effect、note-feedback-burst 的全局隐藏抑制
+    * 解除 app.js 中 usesLocalM01Feedback 与 usesCompanionGentleFeedback 的硬编码限制，恢复星火飞扬与音符爆发动效
+  - 重构大号儿童友好通关庆典卡片与双按钮闭环（course-director.css / index.html / app.js）：
+    * 引入 Q 弹入场弹窗、欢呼跳跃的宇航员星芽、金色闪光勋章与高清奖品卡片
+    * 解决 CSS 规则中的伪元素球形光晕遮挡问题，通过全面禁用 summary 后代伪元素，彻底恢复清晰通透的卡片双排布局
+    * 增强文字排版对比度：红棕色奖品名（#d35400）、深海蓝下一站名称（#1976d2）与柔和森林绿自动倒计时胶囊（#e8f5e9）
+    * 在 index.html 中引入 .result-actions 双按钮容器：醒目大号【继续下一关 ➔】与清爽蓝白【回到大地图】
+    * 修复 openResultModal 的隐藏阻断逻辑与参数空值保护，在关卡完成时稳定唤起庆典弹窗
+    * 点击【回到大地图】平滑切回世界大地图，第一关标记为金色对勾已完成，第二关点亮并提供出发按钮
+  - 编写并执行 Playwright 自动化全流程实机测试（test_play_flow.mjs）：
+    * 自动化覆盖：进入关卡 -> 首次弹奏 C -> 少提示复练 -> 触发通关卡片弹出 -> 点击【回到大地图】
+    * 验证全流程控制台 0 报错，保存 4 阶段实测高清截图至工件目录（level_entry_tactile.png、level_tap_c1.png、level_settlement_card.png、level_back_to_map.png）
+
 

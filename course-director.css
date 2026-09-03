@@ -2162,3 +2162,257 @@ html[data-motion="reduced"] .map-shell[data-course-director="true"] .garden-rest
   opacity: 0.65;
   filter: grayscale(0.2);
 }
+
+/* ==========================================================================
+   Level Celebration Modal Styling (儿童友好·通关庆典结算卡片)
+   ========================================================================== */
+#resultModal[hidden] {
+  display: none !important;
+}
+
+#resultModal.result-modal:not([data-result="milestone"]):not([hidden]) {
+  position: fixed !important;
+  inset: 0 !important;
+  z-index: 9999 !important;
+  display: grid !important;
+  place-items: center !important;
+  background: rgba(10, 18, 38, 0.78) !important;
+  backdrop-filter: blur(12px) !important;
+  pointer-events: auto !important;
+}
+
+#resultModal.result-modal:not([data-result="milestone"]) .result-card {
+  position: relative !important;
+  width: min(480px, calc(100vw - 40px)) !important;
+  max-width: 480px !important;
+  height: auto !important;
+  min-height: 0 !important;
+  max-height: 90vh !important;
+  overflow: visible !important;
+  background: linear-gradient(180deg, #ffffff 0%, #fffbf2 100%) !important;
+  border: 4px solid #ffd57a !important;
+  border-radius: 28px !important;
+  box-shadow:
+    0 24px 60px rgba(0, 0, 0, 0.42),
+    0 0 0 6px rgba(255, 213, 122, 0.28),
+    inset 0 2px 0 #ffffff !important;
+  padding: 28px 24px 24px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  text-align: center !important;
+  animation: modalBounceIn 0.45s cubic-bezier(0.175, 0.885, 0.32, 1.275) both !important;
+}
+
+@keyframes modalBounceIn {
+  0% { transform: scale(0.65) translateY(36px); opacity: 0; }
+  100% { transform: scale(1) translateY(0); opacity: 1; }
+}
+
+#resultModal.result-modal:not([data-result="milestone"]) .result-dino {
+  display: block !important;
+  position: static !important;
+  width: 100px !important;
+  height: 100px !important;
+  object-fit: contain !important;
+  filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.18)) !important;
+  animation: dinoJoyJump 1s ease-in-out infinite alternate !important;
+}
+
+@keyframes dinoJoyJump {
+  0% { transform: translateY(0); }
+  100% { transform: translateY(-12px); }
+}
+
+#resultModal.result-modal:not([data-result="milestone"]) .result-badge {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  margin: -12px 0 6px !important;
+}
+
+#resultModal.result-modal:not([data-result="milestone"]) .result-icon {
+  width: 64px !important;
+  height: 64px !important;
+  object-fit: contain !important;
+  filter: drop-shadow(0 4px 10px rgba(255, 180, 50, 0.45)) !important;
+}
+
+#resultModal.result-modal:not([data-result="milestone"]) h2 {
+  font-size: 26px !important;
+  font-weight: 950 !important;
+  color: #2c1a08 !important;
+  margin: 6px 0 4px !important;
+  line-height: 1.2 !important;
+}
+
+#resultModal.result-modal:not([data-result="milestone"]) p#resultText {
+  font-size: 15px !important;
+  font-weight: 700 !important;
+  color: #7a664e !important;
+  margin: 0 0 16px !important;
+}
+
+#resultModal .result-stars,
+#resultModal .result-stars *,
+#resultModal .result-summary::before,
+#resultModal .result-summary::after,
+#resultModal .result-summary *::before,
+#resultModal .result-summary *::after,
+#resultModal .result-prize::before,
+#resultModal .result-prize::after,
+#resultModal .result-prize *::before,
+#resultModal .result-prize *::after,
+#resultModal .result-next::before,
+#resultModal .result-next::after,
+#resultModal .result-next *::before,
+#resultModal .result-next *::after {
+  display: none !important;
+  content: none !important;
+  background: none !important;
+  opacity: 0 !important;
+}
+
+#resultModal.result-modal:not([data-result="milestone"]) .result-summary {
+  display: grid !important;
+  grid-template-columns: 1fr 1fr !important;
+  gap: 12px !important;
+  width: 100% !important;
+  max-width: 420px !important;
+  padding: 0 !important;
+  border: none !important;
+  background: transparent !important;
+  margin: 10px 0 14px !important;
+  box-sizing: border-box !important;
+}
+
+#resultModal.result-modal:not([data-result="milestone"]) .result-prize,
+#resultModal.result-modal:not([data-result="milestone"]) .result-next {
+  min-height: 84px !important;
+  padding: 10px 12px !important;
+  border: 2px solid #ffd57a !important;
+  border-radius: 18px !important;
+  background: #ffffff !important;
+  box-shadow: 0 8px 16px rgba(100, 80, 50, 0.08) !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  text-align: center !important;
+}
+
+#resultModal .result-prize-art {
+  display: block !important;
+  width: 44px !important;
+  height: 44px !important;
+  background-image: var(--result-prize-image) !important;
+  background-size: contain !important;
+  background-repeat: no-repeat !important;
+  background-position: center !important;
+  margin: 0 auto 4px !important;
+  filter: drop-shadow(0 3px 6px rgba(0, 0, 0, 0.15)) !important;
+}
+
+#resultModal .result-prize small,
+#resultModal .result-next small {
+  color: #636e72 !important;
+  font-size: 12px !important;
+  font-weight: 850 !important;
+}
+
+#resultModal #resultPrizeName {
+  color: #d35400 !important;
+  font-size: 18px !important;
+  font-weight: 950 !important;
+  text-shadow: none !important;
+  margin-top: 3px !important;
+}
+
+#resultModal #resultNextName {
+  color: #1976d2 !important;
+  font-size: 16px !important;
+  font-weight: 950 !important;
+  text-shadow: none !important;
+  margin-top: 3px !important;
+}
+
+#resultModal #resultNextHint {
+  color: #2e7d32 !important;
+  font-size: 12px !important;
+  font-weight: 850 !important;
+  margin-top: 2px !important;
+}
+
+#resultModal .auto-next {
+  min-width: 200px !important;
+  min-height: 32px !important;
+  max-height: 32px !important;
+  margin: 0 auto 16px !important;
+  padding: 0 16px !important;
+  background: #e8f5e9 !important;
+  border: 1.5px solid #a5d6a7 !important;
+  border-radius: 999px !important;
+  color: #1e6b47 !important;
+  box-shadow: none !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+#resultModal .auto-next span {
+  color: #1e6b47 !important;
+  font-size: 13px !important;
+  font-weight: 850 !important;
+}
+
+#resultModal .auto-next i {
+  display: none !important;
+}
+
+#resultModal.result-modal:not([data-result="milestone"]) .result-actions {
+  display: flex !important;
+  flex-direction: row !important;
+  gap: 12px !important;
+  width: 100% !important;
+  justify-content: center !important;
+}
+
+#resultModal.result-modal:not([data-result="milestone"]) .result-actions button {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  min-height: 48px !important;
+  padding: 10px 24px !important;
+  border-radius: 999px !important;
+  font-size: 16px !important;
+  font-weight: 950 !important;
+  cursor: pointer !important;
+  transition: transform 0.15s ease, box-shadow 0.15s ease !important;
+  box-sizing: border-box !important;
+}
+
+#resultModal.result-modal:not([data-result="milestone"]) button#modalNext {
+  flex: 1.2 !important;
+  background: linear-gradient(135deg, #ff9f1c 0%, #ff6b35 100%) !important;
+  color: #ffffff !important;
+  border: none !important;
+  box-shadow: 0 6px 18px rgba(255, 107, 53, 0.4), 0 3px 0 #cc4e1f !important;
+}
+
+#resultModal.result-modal:not([data-result="milestone"]) button#modalNext:active {
+  transform: translateY(3px) !important;
+  box-shadow: 0 2px 6px rgba(255, 107, 53, 0.4) !important;
+}
+
+#resultModal.result-modal:not([data-result="milestone"]) button#modalMap {
+  flex: 1 !important;
+  background: #ffffff !important;
+  color: #3b4c60 !important;
+  border: 2px solid #d4deea !important;
+  box-shadow: 0 4px 12px rgba(10, 30, 50, 0.08), 0 2px 0 #b6c4d4 !important;
+}
+
+#resultModal.result-modal:not([data-result="milestone"]) button#modalMap:active {
+  transform: translateY(2px) !important;
+  box-shadow: 0 2px 4px rgba(10, 30, 50, 0.08) !important;
+}

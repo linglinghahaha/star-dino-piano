@@ -16,7 +16,7 @@
   <link rel="stylesheet" href="styles.css?v=overhaul-340c">
   <link rel="stylesheet" href="staff-overrides.css?v=overhaul-340c">
   <link rel="stylesheet" href="play-overrides.css?v=overhaul-340c">
-  <link rel="stylesheet" href="keyboard-overrides.css?v=overhaul-340c">
+  <link rel="stylesheet" href="keyboard-overrides.css?v=tactile-keys-v10">
   <link rel="stylesheet" href="map-overrides.css?v=overhaul-340c">
   <link rel="stylesheet" href="quality-overrides.css?v=overhaul-340c">
   <link rel="stylesheet" href="quality-overrides-2.css?v=overhaul-340c">
@@ -26,9 +26,9 @@
   <link rel="stylesheet" href="roof-blueprint-overrides.css?v=overhaul-340c">
   <link rel="stylesheet" href="chapter3-visible.css?v=overhaul-343a-p1">
   <link rel="stylesheet" href="chapter4-slice.css?v=overhaul-366a-c4-settlement-lp04-continuity-correction">
-  <link rel="stylesheet" href="course-director.css?v=crisp-text-legibility-v9">
+  <link rel="stylesheet" href="course-director.css?v=crisp-text-legibility-v13">
   <link rel="stylesheet" href="parent-experience.css?v=overhaul-365b-parental-challenge-pointer-cancel-correction">
-  <link rel="stylesheet" href="child-feedback-intensity.css?v=overhaul-369e-ipad-settlement-compactness-correction">
+  <link rel="stylesheet" href="child-feedback-intensity.css?v=unsuppressed-v10">
   <link rel="stylesheet" href="m01-m03-companion-feedback.css?v=overhaul-365b-parental-challenge-pointer-cancel-correction">
   <!-- Disabled dark sci-fi overrides for vibrant cheerful children island map -->
   <!-- <link rel="stylesheet" href="world-map-v5-prototype.css?v=overhaul-361a-dark-scifi-map-v5-reference"> -->
@@ -1124,13 +1124,15 @@
           <span id="resultNextHint">自动出发</span>
         </div>
       </div>
-      <div class="result-stars" aria-hidden="true"><span></span><span></span><span></span></div>
-      <div class="auto-next"><span>自动去下一步</span><i></i></div>
-      <button class="result-skip" type="button" id="modalNext">继续</button>
+      <div class="auto-next"><span>自动前往大地图</span><i></i></div>
+      <div class="result-actions">
+        <button class="result-skip" type="button" id="modalNext">继续下一关 ➔</button>
+        <button class="result-map-btn" type="button" id="modalMap">回到大地图</button>
+      </div>
     </div>
   </div>
 
-  <script src="app.js?v=overhaul-369e-ipad-settlement-compactness-correction"></script>
+  <script src="app.js?v=modal-actions-v13"></script>
 </body>
 </html>
 

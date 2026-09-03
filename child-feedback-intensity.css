@@ -51,20 +51,15 @@
   animation: m01FloorSettle 560ms ease both !important;
 }
 
-/* M01 keeps the active answer on the key while the suspended part retains its letter identity. */
-#appShell.app-shell:not(.staff-mode)[data-level-id="M01"] .build-pad {
-  display: none !important;
-}
-
-#appShell.app-shell:not(.staff-mode)[data-level-id="M01"][data-level-complete="false"] .base .build-slot.current {
-  opacity: 0 !important;
-  box-shadow: none !important;
+/* M01: 允许显示手指引导与建筑插槽，给予孩子清晰正向指引 */
+#appShell.app-shell:not(.staff-mode)[data-level-id="M01"] .base .build-slot.current {
+  opacity: 0.8 !important;
+  box-shadow: 0 0 16px rgba(255, 180, 50, 0.4) !important;
 }
 
 #appShell.app-shell:not(.staff-mode)[data-level-id="M01"] .keyboard.real-piano .tap-badge,
-#appShell.app-shell:not(.staff-mode)[data-level-id="M01"] .keyboard.real-piano .tap-finger,
-#appShell.app-shell:not(.staff-mode)[data-level-id="M01"] .keyboard.real-piano .key-locator-mini {
-  display: none !important;
+#appShell.app-shell:not(.staff-mode)[data-level-id="M01"] .keyboard.real-piano .tap-finger {
+  display: block !important;
 }
 
 @keyframes m01KeySuccess {
@@ -220,14 +215,9 @@ body.milestone-settlement-active #appShell .stage-note-orb {
   }
 }
 
-body:has(#appShell[data-level-id="M01"]) .sprite-effect,
-body:has(#appShell[data-level-id="M01"]) .key-press-label,
-body:has(#appShell[data-level-id="M01"]) .note-feedback-burst,
-body:has(#appShell[data-level-id="M01"]) .music-flight,
-body:has(#appShell[data-level-id="M01"]) .music-flight-landing,
-body:has(#appShell[data-level-id="M01"]) .stage-confetti-effect,
+/* M01: 允许生动的音符飞行动效、烟花与零件安装，提升儿童成就感 */
 body:has(#appShell[data-level-id="M01"]) .flying-part {
-  display: none !important;
+  display: flex !important;
 }
 
 html[data-motion="reduced"] #resultModal.result-modal[data-result="milestone"] .result-card,

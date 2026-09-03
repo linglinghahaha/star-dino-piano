@@ -2425,6 +2425,7 @@ const els = {
   resultModal: document.querySelector("#resultModal"),
   resultText: document.querySelector("#resultText"),
   modalNext: document.querySelector("#modalNext"),
+  modalMap: document.querySelector("#modalMap"),
   milestoneSettlement: document.querySelector("#milestoneSettlement"),
   milestoneSettlementTitle: document.querySelector("#milestoneSettlementTitle"),
   milestoneSettlementOutcome: document.querySelector("#milestoneSettlementOutcome"),
@@ -8216,8 +8217,8 @@ function handleInput(midi, source) {
   const target = noteForMidi(targetMidi);
   const inputLevel = activeLevel();
   const usesBlueprintLock = inputLevel?.id === "M08";
-  const usesLocalM01Feedback = inputLevel?.id === "M01";
-  const usesCompanionGentleFeedback = ["M01", "M02", "M03"].includes(inputLevel?.id);
+  const usesLocalM01Feedback = false;
+  const usesCompanionGentleFeedback = false;
   state.lastInputMidi = midi;
 
   els.heardStatus.textContent = `听到：${heard?.name || freePianoIdentityForMidi(midi)?.name || "-"}`;
@@ -17274,24 +17275,15 @@ function completeLevel(source) {
 }
 
 function scheduleWorkshopCompletionTransition(level) {
-  const isFinalLevel = state.levelIndex >= levels.length - 1;
   const needsLevelCheckReplay = levelNeedsReducedCueReplay(level) && !isStableLevelAttempt(level);
-  const staffReadiness = fgBridgeReadiness();
-  const shouldPracticeFgBeforeStaff = !needsLevelCheckReplay && isFinalLevel && !state.staffComplete && !staffReadiness.ready;
-  const shouldGoStaffAfterBase = !needsLevelCheckReplay && isFinalLevel && !state.staffComplete && staffReadiness.ready;
-  hideResultModal();
-  clearAutoAdvance();
-  state.autoAdvanceTimer = setTimeout(() => {
-    if (needsLevelCheckReplay) {
+  if (needsLevelCheckReplay) {
+    clearAutoAdvance();
+    state.autoAdvanceTimer = setTimeout(() => {
       startLevelCheckReplay();
-    } else if (!isFinalLevel) {
-      goLevel(1);
-    } else if (shouldPracticeFgBeforeStaff) {
-      routeToFgPrep(staffReadiness);
-    } else if (shouldGoStaffAfterBase) {
-      showStaffScreen();
-    }
-  }, isFinalLevel || needsLevelCheckReplay ? 1100 : 700);
+    }, 850);
+    return;
+  }
+  showResultModal();
 }
 
 function scheduleStaffCompletionTransition() {
@@ -17420,7 +17412,7 @@ function showInputEffect(midi, className, options = {}) {
 }
 
 function usesM01LocalFeedback() {
-  return activeLevel()?.id === "M01";
+  return false;
 }
 
 function showKeySpriteEffect(midi, effectName) {
@@ -17786,7 +17778,9 @@ function flashBuildArea(partIndex, isLevelComplete = false) {
   });
 }
 
-function showResultModal(level) {
+function showResultModal(level = activeLevel()) {
+  level = level || activeLevel();
+  if (!level) return;
   const isFinalLevel = state.levelIndex >= levels.length - 1;
   const needsLevelCheckReplay = levelNeedsReducedCueReplay(level) && !isStableLevelAttempt(level);
   const isListening = isListeningLevel(level);
@@ -17807,16 +17801,19 @@ function showResultModal(level) {
     : isFinalLevel
     ? (shouldPracticeFgBeforeStaff ? "再稳一点！" : "基地完成！")
     : "星芽修好一块！";
-  els.resultModal.querySelector(".auto-next span").textContent = needsLevelCheckReplay
-    ? "自动开始少提示复练"
-    : isListening
-    ? "自动去下一关"
-    : shouldPracticeFgBeforeStaff
-    ? "自动回到预备练习"
-    : shouldGoStaffAfterBase
-    ? "小恐龙自动出发"
-    : (isFinalLevel ? "基地亮起来" : "自动出发");
-  els.modalNext.textContent = needsLevelCheckReplay ? "少提示复练" : (shouldPracticeFgBeforeStaff ? "继续练" : (shouldGoStaffAfterBase ? "小恐龙跳" : (isFinalLevel ? "继续看基地" : "继续")));
+  const autoNextSpan = els.resultModal.querySelector(".auto-next span");
+  if (autoNextSpan) {
+    autoNextSpan.textContent = needsLevelCheckReplay
+      ? "自动开始少提示复练"
+      : isListening
+      ? "自动去下一关"
+      : shouldPracticeFgBeforeStaff
+      ? "自动回到预备练习"
+      : shouldGoStaffAfterBase
+      ? "小恐龙自动出发"
+      : (isFinalLevel ? "基地亮起来" : "自动前往大地图");
+  }
+  els.modalNext.textContent = needsLevelCheckReplay ? "少提示复练" : (shouldPracticeFgBeforeStaff ? "继续练" : (shouldGoStaffAfterBase ? "小恐龙跳" : (isFinalLevel ? "继续看基地" : "继续下一关 ➔")));
   els.resultText.textContent = needsLevelCheckReplay
     ? `${level.reward}已经亮起来。下一遍不亮目标键，自己读音名找琴键。`
     : isListening
@@ -17847,17 +17844,10 @@ function showResultModal(level) {
     hideResultModal();
     if (needsLevelCheckReplay) {
       startLevelCheckReplay();
-    } else if (!isFinalLevel) {
-      goLevel(1);
-    } else if (shouldPracticeFgBeforeStaff) {
-      routeToFgPrep(staffReadiness);
-    } else if (shouldGoStaffAfterBase) {
-      showStaffScreen();
     } else {
-      els.feedback.textContent = "月球基地完成了！";
-      els.nextAction.textContent = "全部完成，可以重来";
+      showMapScreen();
     }
-  }, (isFinalLevel || needsLevelCheckReplay) ? 3200 : 2700);
+  }, (isFinalLevel || needsLevelCheckReplay) ? 3800 : 3500);
 }
 
 function showStaffResultModal() {
@@ -17944,11 +17934,16 @@ function updateResultSummary({ prizeName, prizeImage, prizeColor, nextName, next
 }
 
 function openResultModal() {
-  keepResultModalHidden();
+  if (!els.resultModal) return;
+  els.resultModal.hidden = false;
+  els.resultModal.inert = false;
+  els.resultModal.setAttribute("aria-hidden", "false");
+  document.body.classList.add("modal-open");
 }
 
 function hideResultModal() {
   keepResultModalHidden();
+  document.body.classList.remove("modal-open");
 }
 
 function restartResultMeter() {
@@ -20871,7 +20866,7 @@ function finishActiveSessionAtRest({ reward = "", reason = "natural-rest" } = {}
     state.sessionRuntime.chapter4 = state.chapter4;
   }
   saveSessionRuntime(state.sessionRuntime);
-  showMilestoneSettlement(ended, reward);
+  // 由 showResultModal 统一承接全套生动通关庆典卡片与双按钮交互
   return ended;
 }
 
@@ -20910,15 +20905,17 @@ function showSessionCompletion({ kind, id, reward }) {
     finishActiveSessionAtRest({ reward, reason: deferCheck ? "review-deferred" : (session.restAfterCurrentLevel ? "assisted-safe-rest" : "natural-rest") });
   }
 
-  if (hasNext) hideResultModal();
-  clearAutoAdvance();
   if (hasNext) {
+    hideResultModal();
+    clearAutoAdvance();
     els.nextAction.innerHTML = `<span class="cue-success">✓</span><span class="cue-text strong">星芽继续出发</span>`;
+    state.autoAdvanceTimer = setTimeout(() => {
+      startActiveSessionAction(state.activeSession?.actionIndex || 0);
+    }, 800);
+  } else {
+    clearAutoAdvance();
+    showResultModal();
   }
-  state.autoAdvanceTimer = setTimeout(() => {
-    if (hasNext) startActiveSessionAction(state.activeSession?.actionIndex || 0);
-    else showMapScreen();
-  }, hasNext ? 650 : 1400);
   return true;
 }
 
@@ -23285,6 +23282,11 @@ els.modalNext.addEventListener("click", () => {
     return;
   }
   goLevel(1);
+});
+els.modalMap?.addEventListener("click", () => {
+  clearAutoAdvance();
+  hideResultModal();
+  showMapScreen();
 });
 els.resultModal.addEventListener("click", (event) => {
   if (event.target === els.resultModal) {
