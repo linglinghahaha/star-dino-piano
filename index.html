@@ -154,72 +154,123 @@
           <small id="mapSessionDetail">这一小段已经安顿好，地图可以慢慢选。</small>
         </span>
       </div>
+      <!-- 4 大建造阶段里程碑站台 (Phase Hubs) -->
+      <div class="phase-hub phase-hub-1 active" data-phase="1">
+        <header class="phase-hub-header">
+          <span class="phase-hub-badge">阶段 01</span>
+          <div class="phase-hub-title-group">
+            <strong>起步地基</strong>
+            <small>先认识 C-D-E</small>
+          </div>
+          <span class="phase-status-tag current">进行中</span>
+        </header>
+        <div class="phase-nodes-list">
+          <button class="map-node node-1" type="button" data-level="M01">
+            <span class="node-mascot node-do"></span>
+            <span class="node-title"><b>1</b> 找到 C</span>
+            <span class="node-note">C</span>
+          </button>
+          <button class="map-node node-2" type="button" data-level="M02">
+            <span class="node-mascot node-lights"></span>
+            <span class="node-title"><b>2</b> 小灯醒醒</span>
+            <span class="node-note">C D E</span>
+          </button>
+          <button class="map-node node-3" type="button" data-level="M03">
+            <span class="node-mascot node-wheel"></span>
+            <span class="node-title"><b>3</b> 听车轮</span>
+            <span class="node-note">听 D / C</span>
+          </button>
+        </div>
+      </div>
 
-      <button class="map-node node-1" type="button" data-level="M01">
-        <span class="node-mascot node-do"></span>
-        <span class="node-title"><b>1</b> 找到 C</span>
-        <span class="node-note">C</span>
-      </button>
-      <button class="map-node node-2" type="button" data-level="M02">
-        <span class="node-mascot node-lights"></span>
-        <span class="node-title"><b>2</b> 小灯醒醒</span>
-        <span class="node-note">C D E</span>
-      </button>
-      <button class="map-node node-3" type="button" data-level="M03">
-        <span class="node-mascot node-wheel"></span>
-        <span class="node-title"><b>3</b> 听车轮</span>
-        <span class="node-note">听 D / C</span>
-      </button>
-      <button class="map-node node-4" type="button" data-level="M04">
-        <span class="node-mascot node-bridge"></span>
-        <span class="node-title"><b>4</b> 咔哒小桥</span>
-        <span class="node-note">C D E</span>
-      </button>
-      <button class="map-node node-5" type="button" data-level="M05">
-        <span class="node-mascot node-rocket"></span>
-        <span class="node-title"><b>5</b> 倒数灯</span>
-        <span class="node-note">E D C</span>
-      </button>
-      <button class="map-node node-6" type="button" data-level="M06">
-        <span class="node-mascot node-wall"></span>
-        <span class="node-title"><b>6</b> 大跳墙</span>
-        <span class="node-note">C G C</span>
-      </button>
-      <button class="map-node node-7" type="button" data-level="M07">
-        <span class="node-mascot node-star-lights"></span>
-        <span class="node-title"><b>7</b> 星星串</span>
-        <span class="node-note">C D E D C</span>
-      </button>
-      <button class="map-node node-8" type="button" data-level="M08">
-        <span class="node-mascot node-roof"></span>
-        <span class="node-title"><b>8</b> 月亮屋顶</span>
-        <span class="node-note">C-G</span>
-      </button>
-      <button class="map-node node-9" type="button" data-level="FG01">
-        <span class="node-mascot node-bridge"></span>
-        <span class="node-title"><b>9</b> F 垫</span>
-        <span class="node-note">F</span>
-      </button>
-      <button class="map-node node-10" type="button" data-level="FG02">
-        <span class="node-mascot node-wall"></span>
-        <span class="node-title"><b>10</b> G 门</span>
-        <span class="node-note">G</span>
-      </button>
-      <button class="map-node node-11" type="button" data-level="FG03">
-        <span class="node-mascot node-star-lights"></span>
-        <span class="node-title"><b>11</b> 近邻星</span>
-        <span class="node-note">E F G</span>
-      </button>
-      <button class="map-node node-12" type="button" data-level="FG04">
-        <span class="node-mascot node-staff-art"></span>
-        <span class="node-title"><b>12</b> 桥前地图</span>
-        <span class="node-note">F G</span>
-      </button>
-      <button class="map-node node-staff" type="button" data-screen="staff">
-        <span class="node-mascot node-staff-art"></span>
-        <span class="node-title"><b>★</b> 小恐龙跳</span>
-        <span class="node-note">S01</span>
-      </button>
+      <div class="phase-hub phase-hub-2 locked" data-phase="2">
+        <header class="phase-hub-header">
+          <span class="phase-hub-badge">阶段 02</span>
+          <div class="phase-hub-title-group">
+            <strong>工坊装配</strong>
+            <small>音阶起伏连弹</small>
+          </div>
+          <span class="phase-status-tag locked">待解锁</span>
+        </header>
+        <div class="phase-nodes-list">
+          <button class="map-node node-4" type="button" data-level="M04">
+            <span class="node-mascot node-bridge"></span>
+            <span class="node-title"><b>4</b> 咔哒小桥</span>
+            <span class="node-note">C D E</span>
+          </button>
+          <button class="map-node node-5" type="button" data-level="M05">
+            <span class="node-mascot node-rocket"></span>
+            <span class="node-title"><b>5</b> 倒数灯</span>
+            <span class="node-note">E D C</span>
+          </button>
+          <button class="map-node node-6" type="button" data-level="M06">
+            <span class="node-mascot node-wall"></span>
+            <span class="node-title"><b>6</b> 大跳墙</span>
+            <span class="node-note">C G C</span>
+          </button>
+          <button class="map-node node-7" type="button" data-level="M07">
+            <span class="node-mascot node-star-lights"></span>
+            <span class="node-title"><b>7</b> 星星串</span>
+            <span class="node-note">C D E D C</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="phase-hub phase-hub-3 locked" data-phase="3">
+        <header class="phase-hub-header">
+          <span class="phase-hub-badge">阶段 03</span>
+          <div class="phase-hub-title-group">
+            <strong>合上屋顶</strong>
+            <small>补齐 F-G 键位</small>
+          </div>
+          <span class="phase-status-tag locked">待解锁</span>
+        </header>
+        <div class="phase-nodes-list">
+          <button class="map-node node-8" type="button" data-level="M08">
+            <span class="node-mascot node-roof"></span>
+            <span class="node-title"><b>8</b> 月亮屋顶</span>
+            <span class="node-note">C-G</span>
+          </button>
+          <button class="map-node node-9" type="button" data-level="FG01">
+            <span class="node-mascot node-bridge"></span>
+            <span class="node-title"><b>9</b> F 垫</span>
+            <span class="node-note">F</span>
+          </button>
+          <button class="map-node node-10" type="button" data-level="FG02">
+            <span class="node-mascot node-wall"></span>
+            <span class="node-title"><b>10</b> G 门</span>
+            <span class="node-note">G</span>
+          </button>
+          <button class="map-node node-11" type="button" data-level="FG03">
+            <span class="node-mascot node-star-lights"></span>
+            <span class="node-title"><b>11</b> 近邻星</span>
+            <span class="node-note">E F G</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="phase-hub phase-hub-4 locked" data-phase="4">
+        <header class="phase-hub-header">
+          <span class="phase-hub-badge">阶段 04</span>
+          <div class="phase-hub-title-group">
+            <strong>星图启航</strong>
+            <small>连通星星桥</small>
+          </div>
+          <span class="phase-status-tag locked">待解锁</span>
+        </header>
+        <div class="phase-nodes-list">
+          <button class="map-node node-12" type="button" data-level="FG04">
+            <span class="node-mascot node-staff-art"></span>
+            <span class="node-title"><b>12</b> 桥前地图</span>
+            <span class="node-note">F G</span>
+          </button>
+          <button class="map-node node-staff" type="button" data-screen="staff">
+            <span class="node-mascot node-staff-art"></span>
+            <span class="node-title"><b>★</b> 小恐龙跳</span>
+            <span class="node-note">S01</span>
+          </button>
+        </div>
+      </div>
       <button class="garden-rest-marker" id="gardenRestMarker" type="button" aria-label="进入星桥尽头的花园入口" hidden>
         <span class="garden-rest-icon" aria-hidden="true">✦</span>
         <span class="garden-rest-copy">

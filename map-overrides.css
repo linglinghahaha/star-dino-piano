@@ -1,16 +1,13 @@
-﻿/* Final map pass: make level selection feel embedded in the game world. */
+/* Star Dino Workshop: Moon Base World Map */
 .map-shell {
-  color: #18314e;
+  color: #e8f4fc;
   background:
-    radial-gradient(circle at 51% 28%, rgba(255,255,255,0.18), transparent 25%),
-    linear-gradient(180deg, rgba(16,139,196,0.02), rgba(14,69,105,0.12)),
-    url("assets/runtime/scale-island-map-bg.webp") center / cover no-repeat !important;
+    radial-gradient(circle at 50% 18%, rgba(255,255,255,0.08), transparent 35%),
+    url("assets/runtime/world-map-star-workshop.webp") center / cover no-repeat !important;
 }
 
 .map-shell::before {
-  background:
-    linear-gradient(180deg, rgba(6,58,102,0.06), transparent 30%, rgba(8,40,71,0.10)),
-    radial-gradient(ellipse at 50% 56%, transparent 0 60%, rgba(4,25,48,0.12) 82%) !important;
+  display: none !important;
 }
 
 .map-topbar {
