@@ -1361,7 +1361,7 @@ html[data-motion="reduced"] .map-shell[data-course-director="true"] .garden-rest
   min-height: 834px !important;
   max-width: 1194px !important;
   max-height: 834px !important;
-  background: url("assets/runtime/world-map-ipad-pro-11.webp") center / 100% 100% no-repeat !important;
+  background: url("assets/runtime/world-map-vector-clean.webp") center / 100% 100% no-repeat !important;
   transform: translate(-50%, -50%) scale(var(--stage-scale, 1)) !important;
   transform-origin: center center !important;
   flex-shrink: 0 !important;
@@ -1393,10 +1393,193 @@ html[data-motion="reduced"] .map-shell[data-course-director="true"] .garden-rest
   display: none !important;
 }
 
-/* Phase Hub Base Positioning & 3D Creamy Candy Capsule Styling */
+/* ==========================================================================
+   LAYER 3: DYNAMIC SVG GOLDEN STAFF ROUTE (Animated Vector Path)
+   ========================================================================== */
+.dynamic-staff-route {
+  position: absolute !important;
+  inset: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  pointer-events: none !important;
+  z-index: 5 !important;
+}
+
+.staff-ribbon-base {
+  fill: none !important;
+  stroke: rgba(22, 10, 48, 0.38) !important;
+  stroke-width: 36px !important;
+  stroke-linecap: round !important;
+  stroke-linejoin: round !important;
+}
+
+.staff-ribbon-fill {
+  fill: none !important;
+  stroke: url(#goldStaffGrad) !important;
+  stroke-width: 26px !important;
+  stroke-linecap: round !important;
+  stroke-linejoin: round !important;
+  filter: drop-shadow(0 0 16px rgba(255, 215, 0, 0.55)) !important;
+}
+
+.staff-line {
+  fill: none !important;
+  stroke: #fff9e6 !important;
+  stroke-width: 2px !important;
+  stroke-linecap: round !important;
+  stroke-linejoin: round !important;
+  opacity: 0.92 !important;
+}
+
+.staff-pulse-stream {
+  fill: none !important;
+  stroke: #ffffff !important;
+  stroke-width: 5px !important;
+  stroke-linecap: round !important;
+  stroke-dasharray: 14 36 !important;
+  animation: staffStreamFlow 2.2s linear infinite !important;
+  filter: drop-shadow(0 0 6px #ffffff) !important;
+}
+
+@keyframes staffStreamFlow {
+  from {
+    stroke-dashoffset: 200;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+/* ==========================================================================
+   LAYER 2: INTERACTIVE LANDMARK PROPS (Clickable Animated Buildings)
+   ========================================================================== */
+.map-landmarks-layer {
+  position: absolute !important;
+  inset: 0 !important;
+  pointer-events: none !important;
+  z-index: 8 !important;
+}
+
+.map-landmark-prop {
+  position: absolute !important;
+  pointer-events: auto !important;
+  cursor: pointer !important;
+  user-select: none !important;
+  transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), filter 0.3s ease !important;
+  animation: landmarkGentleFloat 4s ease-in-out infinite !important;
+}
+
+@keyframes landmarkGentleFloat {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+/* Click Squash & Stretch Interactive Reaction */
+.map-landmark-prop.prop-squash {
+  animation: propSquashBounce 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
+}
+
+@keyframes propSquashBounce {
+  0% { transform: scale(1, 1); }
+  30% { transform: scale(1.18, 0.82) translateY(6px); }
+  60% { transform: scale(0.92, 1.15) translateY(-14px); }
+  85% { transform: scale(1.04, 0.96) translateY(-2px); }
+  100% { transform: scale(1, 1) translateY(0); }
+}
+
+.map-landmark-prop:hover {
+  filter: drop-shadow(0 14px 28px rgba(255, 215, 0, 0.55)) brightness(1.05) !important;
+}
+
+.map-landmark-prop:active {
+  transform: scale(0.95) !important;
+}
+
+.landmark-prop-img {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: contain !important;
+  filter: drop-shadow(0 12px 24px rgba(0, 0, 0, 0.32)) !important;
+  display: block !important;
+}
+
+.landmark-click-badge {
+  position: absolute !important;
+  bottom: 4px !important;
+  left: 50% !important;
+  transform: translateX(-50%) !important;
+  background: rgba(18, 12, 48, 0.82) !important;
+  border: 1.5px solid rgba(255, 220, 100, 0.8) !important;
+  border-radius: 999px !important;
+  padding: 3px 12px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 5px !important;
+  color: #fff9e6 !important;
+  font-size: 11px !important;
+  font-weight: 850 !important;
+  white-space: nowrap !important;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.45) !important;
+  pointer-events: none !important;
+  backdrop-filter: blur(8px) !important;
+  opacity: 0.92 !important;
+  transition: all 0.25s ease !important;
+}
+
+.map-landmark-prop:hover .landmark-click-badge {
+  background: #ffb703 !important;
+  color: #2b1700 !important;
+  transform: translateX(-50%) scale(1.08) !important;
+  box-shadow: 0 6px 16px rgba(255, 183, 3, 0.6) !important;
+}
+
+/* Specific Landmark Coordinates */
+/* 01: Workshop (Left Hill) */
+.map-landmark-prop.prop-workshop {
+  left: 65px !important;
+  top: 155px !important;
+  width: 270px !important;
+  height: 270px !important;
+  animation-delay: 0s !important;
+}
+
+/* 02: DJ Stage (Center Valley) */
+.map-landmark-prop.prop-stage {
+  left: 410px !important;
+  top: 240px !important;
+  width: 290px !important;
+  height: 250px !important;
+  animation-delay: 0.8s !important;
+}
+
+/* 03: Greenhouse Conservatory (Right Hill) */
+.map-landmark-prop.prop-greenhouse {
+  right: 55px !important;
+  top: 145px !important;
+  width: 280px !important;
+  height: 280px !important;
+  animation-delay: 1.6s !important;
+}
+
+/* 04: Ancient Crystal Portal (Bottom Center) */
+.map-landmark-prop.prop-portal {
+  left: 460px !important;
+  top: 505px !important;
+  width: 230px !important;
+  height: 230px !important;
+  animation-delay: 2.4s !important;
+}
+
+/* ==========================================================================
+   LAYER 4: PHASE HUBS & INTEGRATED 3D CANDY DRAWERS
+   ========================================================================== */
 .phase-hub {
   position: absolute;
-  z-index: 10;
+  z-index: 12;
   transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
   box-sizing: border-box;
   background: linear-gradient(180deg, #ffffff 0%, #fffbf0 60%, #fff4d9 100%);
@@ -1407,10 +1590,10 @@ html[data-motion="reduced"] .map-shell[data-course-director="true"] .garden-rest
   padding: 6px 14px 6px 8px;
 }
 
-/* Station 1: Moon Base Workshop (On golden road leading to steps) */
+/* Station 1: Moon Base Workshop (Directly anchored below workshop steps) */
 .phase-hub-1 {
   left: 45px !important;
-  top: 425px !important;
+  top: 435px !important;
   transform: none !important;
   width: auto !important;
   z-index: 16 !important;
@@ -1422,10 +1605,10 @@ html[data-motion="reduced"] .map-shell[data-course-director="true"] .garden-rest
   padding: 14px 18px 16px !important;
 }
 
-/* Station 2: Central Music Turntable (On golden road entering central DJ disc) */
+/* Station 2: Central Music Turntable (Directly anchored below DJ platform) */
 .phase-hub-2 {
   left: 540px !important;
-  top: 550px !important;
+  top: 545px !important;
   transform: translate(-50%, -50%) !important;
   width: auto !important;
   z-index: 15 !important;
@@ -1436,11 +1619,11 @@ html[data-motion="reduced"] .map-shell[data-course-director="true"] .garden-rest
   padding: 14px 18px 16px !important;
 }
 
-/* Station 3: Greenhouse Dome (On golden road approaching botanical dome) */
+/* Station 3: Greenhouse Dome (Directly anchored below conservatory) */
 .phase-hub-3 {
   right: 50px !important;
   left: auto !important;
-  top: 500px !important;
+  top: 455px !important;
   transform: none !important;
   width: auto !important;
   z-index: 14 !important;
@@ -1451,10 +1634,10 @@ html[data-motion="reduced"] .map-shell[data-course-director="true"] .garden-rest
   padding: 14px 18px 16px !important;
 }
 
-/* Station 4: Crystal Arch Portal (On golden road entering rock crystal cave) */
+/* Station 4: Crystal Arch Portal (Directly anchored below crystal arch portal) */
 .phase-hub-4 {
   left: 520px !important;
-  top: 740px !important;
+  top: 755px !important;
   transform: translate(-50%, -50%) !important;
   width: auto !important;
   z-index: 13 !important;
