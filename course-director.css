@@ -1507,68 +1507,38 @@ html[data-motion="reduced"] .map-shell[data-course-director="true"] .garden-rest
   display: block !important;
 }
 
-.landmark-click-badge {
-  position: absolute !important;
-  bottom: 4px !important;
-  left: 50% !important;
-  transform: translateX(-50%) !important;
-  background: rgba(18, 12, 48, 0.82) !important;
-  border: 1.5px solid rgba(255, 220, 100, 0.8) !important;
-  border-radius: 999px !important;
-  padding: 3px 12px !important;
-  display: inline-flex !important;
-  align-items: center !important;
-  gap: 5px !important;
-  color: #fff9e6 !important;
-  font-size: 11px !important;
-  font-weight: 850 !important;
-  white-space: nowrap !important;
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.45) !important;
-  pointer-events: none !important;
-  backdrop-filter: blur(8px) !important;
-  opacity: 0.92 !important;
-  transition: all 0.25s ease !important;
-}
-
-.map-landmark-prop:hover .landmark-click-badge {
-  background: #ffb703 !important;
-  color: #2b1700 !important;
-  transform: translateX(-50%) scale(1.08) !important;
-  box-shadow: 0 6px 16px rgba(255, 183, 3, 0.6) !important;
-}
-
 /* Specific Landmark Coordinates */
 /* 01: Workshop (Left Hill) */
 .map-landmark-prop.prop-workshop {
   left: 65px !important;
-  top: 155px !important;
+  top: 140px !important;
   width: 270px !important;
   height: 270px !important;
   animation-delay: 0s !important;
 }
 
-/* 02: DJ Stage (Center Valley) */
+/* 02: DJ Stage (Center Valley / Slightly elevated to give room below) */
 .map-landmark-prop.prop-stage {
-  left: 410px !important;
-  top: 240px !important;
-  width: 290px !important;
-  height: 250px !important;
+  left: 420px !important;
+  top: 165px !important;
+  width: 280px !important;
+  height: 240px !important;
   animation-delay: 0.8s !important;
 }
 
 /* 03: Greenhouse Conservatory (Right Hill) */
 .map-landmark-prop.prop-greenhouse {
   right: 55px !important;
-  top: 145px !important;
+  top: 135px !important;
   width: 280px !important;
   height: 280px !important;
   animation-delay: 1.6s !important;
 }
 
-/* 04: Ancient Crystal Portal (Bottom Center) */
+/* 04: Ancient Crystal Portal (Bottom Center Crater) */
 .map-landmark-prop.prop-portal {
-  left: 460px !important;
-  top: 505px !important;
+  left: 485px !important;
+  top: 580px !important;
   width: 230px !important;
   height: 230px !important;
   animation-delay: 2.4s !important;
@@ -1593,7 +1563,7 @@ html[data-motion="reduced"] .map-shell[data-course-director="true"] .garden-rest
 /* Station 1: Moon Base Workshop (Directly anchored below workshop steps) */
 .phase-hub-1 {
   left: 45px !important;
-  top: 435px !important;
+  top: 425px !important;
   transform: none !important;
   width: auto !important;
   z-index: 16 !important;
@@ -1607,13 +1577,14 @@ html[data-motion="reduced"] .map-shell[data-course-director="true"] .garden-rest
 
 /* Station 2: Central Music Turntable (Directly anchored below DJ platform) */
 .phase-hub-2 {
-  left: 540px !important;
-  top: 545px !important;
+  left: 555px !important;
+  top: 430px !important;
   transform: translate(-50%, -50%) !important;
   width: auto !important;
   z-index: 15 !important;
 }
 .phase-hub-2.drawer-open {
+  top: 475px !important;
   width: 440px !important;
   border-radius: 30px !important;
   padding: 14px 18px 16px !important;
@@ -1623,7 +1594,7 @@ html[data-motion="reduced"] .map-shell[data-course-director="true"] .garden-rest
 .phase-hub-3 {
   right: 50px !important;
   left: auto !important;
-  top: 455px !important;
+  top: 435px !important;
   transform: none !important;
   width: auto !important;
   z-index: 14 !important;
@@ -1636,13 +1607,16 @@ html[data-motion="reduced"] .map-shell[data-course-director="true"] .garden-rest
 
 /* Station 4: Crystal Arch Portal (Directly anchored below crystal arch portal) */
 .phase-hub-4 {
-  left: 520px !important;
-  top: 755px !important;
+  left: 595px !important;
+  top: 785px !important;
   transform: translate(-50%, -50%) !important;
   width: auto !important;
   z-index: 13 !important;
 }
 .phase-hub-4.drawer-open {
+  left: 320px !important;
+  top: 710px !important;
+  transform: translate(-50%, -50%) !important;
   width: 330px !important;
   border-radius: 30px !important;
   padding: 14px 18px 16px !important;
