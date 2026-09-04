@@ -131,4 +131,23 @@
     * 自动化覆盖：进入关卡 -> 首次弹奏 C -> 少提示复练 -> 触发通关卡片弹出 -> 点击【回到大地图】
     * 验证全流程控制台 0 报错，保存 4 阶段实测高清截图至工件目录（level_entry_tactile.png、level_tap_c1.png、level_settlement_card.png、level_back_to_map.png）
 
+## 2026-09-04
+- 深度响应用户反馈（画面杂乱、无法重回第一关、第一关过短、钢琴声小被音效盖过、多角度填报问卷）：
+- 调阅内置 5 大专业复核问卷（幼儿钢琴教师、成人iPad预检、音效听审、儿童实测观察、视觉聚焦）并全面填报
+- 打通大地图已通关节点免清缓存自由重玩：
+  * 修改 app.js 中 renderMapScreen 的 disabled 与 aria-hidden 判定，保持已通关节点激活可点
+  * 优化 startSessionBundleFromMap，支持传入指定关卡重新创建 Session，彻底告别必须清空 localStorage 才能重玩第一关的困境
+- Web Audio 混音台声学重构（让钢琴重回绝对主角）：
+  * AUDIO_EFFECT_GAIN 从 0.36 降至 0.10，避免噪音轰鸣
+  * 重塑 createPianoVoice：增益从 0.12 翻近三倍至 0.34，持续时间从 0.46s 延长至 1.4s 悠长余韵
+  * 优化双二阶低通滤波器（5200Hz -> 1400Hz）与包络曲线，真实还原三角钢琴击弦通透质感
+  * 通关与成功音效增加 320ms 延时避让并削减高频分贝，保证钢琴琴键自然衰减不被音效覆盖
+- 弹奏舞台视觉大扫除：
+  * 彻底消灭空中悬浮的假药丸吊件（#hangingPart）、左上角冗余故事飘条（#stageStoryRibbon）与杂色按键圆点
+  * 移除 .base::before / ::after 产生的椭圆重影虚框
+  * 重构 .build-slot 居中锚定在月面圆形基座中央（left: 50%; transform: translateX(-50%)），消除双重透视错位
+- 规划第一关微循环教学演进（听音-看谱-弹奏-三连律动）并归档
+- 编写 Playwright 自动化验证脚本（test_clean_and_replay.mjs），实机验证重玩流程与纯净画面全部通过
+
+
 

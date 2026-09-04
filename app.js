@@ -1396,7 +1396,7 @@ function saveLearningStats() {
 const AUDIO_SETTINGS_KEY = "starDinoAudioSettings";
 const AUDIO_VOLUME_CAP = 0.7;
 const AUDIO_DEFAULT_VOLUME = 0.6;
-const AUDIO_EFFECT_GAIN = 0.36;
+const AUDIO_EFFECT_GAIN = 0.10;
 const MOTION_SETTINGS_KEY = "starDinoMotionSettings";
 const FREE_PIANO_RUNTIME_KEY = "starDinoFreePianoRuntime";
 const M03_AUDIO_ATTEMPT_STORAGE_KEY = "starDinoM03AudioAttempt";
@@ -5147,10 +5147,11 @@ function renderMapScreen() {
       (journeyPlan.primaryKind === "staff" && node.dataset.screen === "staff")
     ));
     const legacyActive = !gardenReached && !shouldFocusStaff && index === state.levelIndex && state.screen !== "staff";
-    node.classList.toggle("done", state.completed.has(levelId));
+    const isCompleted = state.completed.has(levelId);
+    node.classList.toggle("done", isCompleted);
     node.classList.toggle("active", courseDirectorEnabled ? directorActive : legacyActive);
-    node.disabled = courseDirectorEnabled ? !directorActive : false;
-    if (courseDirectorEnabled && !directorActive) node.setAttribute("aria-hidden", "true");
+    node.disabled = courseDirectorEnabled ? (!directorActive && !isCompleted) : false;
+    if (courseDirectorEnabled && !directorActive && !isCompleted) node.setAttribute("aria-hidden", "true");
     else node.removeAttribute("aria-hidden");
     if (node.dataset.screen === "staff") {
       node.classList.toggle("done", state.staffComplete);
@@ -7730,7 +7731,7 @@ function handleFreePianoInput(midi, source, { pointer = false } = {}) {
   if (els.inputStatus) els.inputStatus.textContent = `输入：${inputLabel}`;
   if (els.heardStatus) els.heardStatus.textContent = `听到：${identity.name}`;
   if (source !== "麦克风") {
-    playPianoNote(midiFrequency(identity.midi), { gain: 0.10, duration: 0.48 });
+    playPianoNote(midiFrequency(identity.midi), { gain: 0.34, duration: 1.4 });
   }
   const key = els.keyboard?.querySelector(`[data-midi="${identity.midi}"]`);
   if (key && !pointer) {
@@ -7898,7 +7899,7 @@ function renderKeyboard(target, options = {}) {
         // AUDIO-A owns the child echo so a screen press cannot schedule a raw note
         // before its verified input transaction begins on click/keyboard activation.
         if (!audioATeachingSurfaceIsActive() && !audioBTeachingSurfaceIsActive() && !audioCTeachingSurfaceIsActive()) {
-          played = playPianoNote(note.frequency, { gain: 0.10, duration: 0.42 });
+          played = playPianoNote(note.frequency, { gain: 0.34, duration: 1.4 });
         }
       }
       if (isLs08Pointer) {
@@ -7937,7 +7938,7 @@ function renderKeyboard(target, options = {}) {
       if (state.screen === "garden" && currentLs08Action()) {
         beginKeyboardPress(key);
         showKeyPressRipple(key);
-        const played = playPianoNote(note.frequency, { gain: 0.10, duration: 0.42 });
+        const played = playPianoNote(note.frequency, { gain: 0.34, duration: 1.4 });
         if (played) traceLs08(ensureLs08Attempt(), "child-key", { reason: "accessible-click", midis: [note.midi], pairIndex: ensureLs08Attempt()?.pairIndex });
         handleInput(note.midi, "屏幕");
         releaseGardenInput(note.midi, "屏幕");
@@ -8103,7 +8104,7 @@ function beginAssistedRepair(targetMidi, { restoring = false } = {}) {
     if (els.dinoHint) els.dinoHint.textContent = `跟星芽一起按 ${id.letter}`;
   }
   state.assistedSuccessTimer = setTimeout(() => {
-    playPianoNote(target?.frequency || 261.63, { gain: 0.10, duration: 0.52 });
+    playPianoNote(target?.frequency || 261.63, { gain: 0.34, duration: 1.4 });
     showInputEffect(targetMidi, "hint");
     state.assistedSuccessTimer = setTimeout(() => {
       state.assistedSuccessTimer = null;
@@ -8145,7 +8146,7 @@ function completeModeledSuccess(targetMidi, reason) {
   state.lastInputMidi = targetMidi;
   state.lastInputResult = "correct";
   state.stepHadWrong = false;
-  playPianoNote(target?.frequency || 261.63, { gain: 0.10, duration: 0.56 });
+  playPianoNote(target?.frequency || 261.63, { gain: 0.34, duration: 1.4 });
   playCorrectSound();
 
   if (state.screen === "staff") {
@@ -20323,7 +20324,7 @@ function startActiveSessionAction(actionIndex = state.activeSession?.actionIndex
 }
 
 function startSessionBundleFromMap(bundleId, requestedTargetId = null) {
-  if (state.activeSession?.status === "active") {
+  if (state.activeSession?.status === "active" && (!requestedTargetId || state.activeSession.targetId === requestedTargetId)) {
     startActiveSessionAction(state.activeSession.actionIndex);
     return;
   }
@@ -21183,15 +21184,15 @@ function envelopeParam(param, start, duration, peak, attack = 0.012, decay = 0.1
 function createPianoVoice(sfx, frequency, options = {}, onPartialEnded = null) {
   const { ctx, noteBus, effectBus } = sfx;
   const start = ctx.currentTime + (options.delay || 0);
-  const duration = options.duration || 0.46;
-  const gainValue = options.gain || 0.12;
+  const duration = options.duration || 1.4;
+  const gainValue = options.gain || 0.34;
   const output = ctx.createGain();
   const toneFilter = ctx.createBiquadFilter();
   toneFilter.type = "lowpass";
-  toneFilter.frequency.setValueAtTime(4200, start);
-  toneFilter.frequency.exponentialRampToValueAtTime(1800, start + duration);
-  toneFilter.Q.value = 0.6;
-  envelopeParam(output.gain, start, duration, gainValue, 0.008, 0.13, 0.28);
+  toneFilter.frequency.setValueAtTime(5200, start);
+  toneFilter.frequency.exponentialRampToValueAtTime(1400, start + duration);
+  toneFilter.Q.value = 0.7;
+  envelopeParam(output.gain, start, duration, gainValue, 0.005, 0.28, 0.38);
   toneFilter.connect(output);
   output.connect(options.bus === "effect" ? effectBus : noteBus);
 
@@ -22037,7 +22038,7 @@ function playListeningPrompt() {
   const target = noteForMidi(activeTargetMidi());
   if (!target) return;
   clearListeningPrompt();
-  playPianoNote(target.frequency, { gain: 0.13, duration: 0.72 });
+  playPianoNote(target.frequency, { gain: 0.34, duration: 1.4 });
   if (els.heardStatus) els.heardStatus.textContent = "听到：小车轮唱了一声";
   if (els.feedback) {
     els.feedback.classList.remove("good", "bad");
@@ -22060,17 +22061,18 @@ function scheduleListeningPrompt(delay = 520) {
 }
 
 function playBlackKeyTick() {
-  playSoftNoiseHit({ gain: 0.010, duration: 0.08, frequency: 1450, filterType: "bandpass", q: 0.85 });
+  playSoftNoiseHit({ gain: 0.004, duration: 0.08, frequency: 1450, filterType: "bandpass", q: 0.85 });
 }
 
 function playVictorySound() {
-  playPianoNote(523.25, { gain: 0.070, duration: 0.48, bus: "effect" });
-  playPianoNote(659.25, { gain: 0.064, duration: 0.50, delay: 0.10, bus: "effect" });
-  playPianoNote(783.99, { gain: 0.070, duration: 0.62, delay: 0.22, bus: "effect" });
-  playPianoNote(1046.5, { gain: 0.034, duration: 0.56, delay: 0.34, bus: "effect" });
-  playBellPing(1318.51, { gain: 0.018, duration: 0.30, delay: 0.18 });
-  playBellPing(1567.98, { gain: 0.016, duration: 0.34, delay: 0.36 });
-  playSoftNoiseHit({ gain: 0.010, duration: 0.24, frequency: 3600, delay: 0.20 });
+  const sfxDelay = 0.32;
+  playPianoNote(523.25, { gain: 0.060, duration: 0.48, delay: sfxDelay, bus: "effect" });
+  playPianoNote(659.25, { gain: 0.054, duration: 0.50, delay: sfxDelay + 0.10, bus: "effect" });
+  playPianoNote(783.99, { gain: 0.060, duration: 0.62, delay: sfxDelay + 0.22, bus: "effect" });
+  playPianoNote(1046.5, { gain: 0.030, duration: 0.56, delay: sfxDelay + 0.34, bus: "effect" });
+  playBellPing(1318.51, { gain: 0.012, duration: 0.30, delay: sfxDelay + 0.18 });
+  playBellPing(1567.98, { gain: 0.010, duration: 0.34, delay: sfxDelay + 0.36 });
+  playSoftNoiseHit({ gain: 0.004, duration: 0.24, frequency: 3600, delay: sfxDelay + 0.20 });
 }
 
 function playTone(frequency, duration, type = "sine", gainValue = 0.08) {

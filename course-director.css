@@ -2416,3 +2416,106 @@ html[data-motion="reduced"] .map-shell[data-course-director="true"] .garden-rest
   transform: translateY(2px) !important;
   box-shadow: 0 2px 4px rgba(10, 30, 50, 0.08) !important;
 }
+
+/* ==========================================================================
+   内部弹奏画面大扫除：彻底根除空中悬浮假药丸、重影虚框与视觉杂乱
+   ========================================================================== */
+
+/* 1. 彻底隐藏星空中漂浮的假药丸吊件、多余故事飘条以及底部漂浮椭圆垫 */
+#appShell #hangingPart,
+#appShell .hanging-part,
+#appShell #stageStoryRibbon,
+#appShell .stage-story-ribbon,
+#appShell .build-pad,
+#appShell.app-shell:not(.staff-mode)[data-level-id] #hangingPart,
+#appShell.app-shell:not(.staff-mode)[data-level-id] .hanging-part,
+#appShell.app-shell:not(.staff-mode)[data-level-id] #stageStoryRibbon,
+#appShell.app-shell:not(.staff-mode)[data-level-id] .stage-story-ribbon,
+#appShell.app-shell:not(.staff-mode)[data-level-id] .build-pad {
+  display: none !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
+
+/* 2. 彻底清除地面基座 .base 伪元素光晕（彻底消除重影虚框） */
+#appShell.app-shell:not(.staff-mode) .base::before,
+#appShell.app-shell:not(.staff-mode) .base::after,
+#appShell.app-shell:not(.staff-mode)[data-level-id] .base::before,
+#appShell.app-shell:not(.staff-mode)[data-level-id] .base::after {
+  display: none !important;
+  content: none !important;
+  box-shadow: none !important;
+  border: none !important;
+  background: none !important;
+  opacity: 0 !important;
+}
+
+/* 3. 地面拼装插槽纯净透视化：居中锚定在月面圆形工坊基座上，消除偏位与刺眼多重发光框 */
+#appShell.app-shell:not(.staff-mode) .build-slot,
+#appShell.app-shell:not(.staff-mode)[data-level-id] .base .build-slot,
+#appShell.app-shell:not(.staff-mode) .moon-yard.yard-scene-floor .base.scene-floor .build-slot,
+#appShell.app-shell:not(.staff-mode) .moon-yard.yard-scene-floor .base.scene-floor .build-slot.current,
+#appShell.app-shell:not(.staff-mode) .moon-yard.yard-scene-floor .base.scene-floor .build-slot.placed,
+#appShell.app-shell:not(.staff-mode) .moon-yard.yard-scene-floor .base.scene-floor .build-slot.just-added,
+#appShell.app-shell:not(.staff-mode) .moon-yard.yard-scene-floor .base.scene-floor .build-slot:not(.current):not(.placed):not(.just-added) {
+  left: 50% !important;
+  transform: translateX(-50%) !important;
+  width: 280px !important;
+  height: 60px !important;
+  bottom: 45px !important;
+  background: rgba(255, 255, 255, 0.08) !important;
+  border: 2px dashed rgba(255, 215, 120, 0.45) !important;
+  box-shadow: none !important;
+  outline: none !important;
+  border-radius: 16px !important;
+}
+
+#appShell.app-shell:not(.staff-mode) .build-slot::before,
+#appShell.app-shell:not(.staff-mode) .build-slot::after,
+#appShell.app-shell:not(.staff-mode) .build-slot *::before,
+#appShell.app-shell:not(.staff-mode) .build-slot *::after,
+#appShell.app-shell:not(.staff-mode)[data-level-id] .base .build-slot::before,
+#appShell.app-shell:not(.staff-mode)[data-level-id] .base .build-slot::after,
+#appShell.app-shell:not(.staff-mode) .moon-yard.yard-scene-floor .base.scene-floor .build-slot::before,
+#appShell.app-shell:not(.staff-mode) .moon-yard.yard-scene-floor .base.scene-floor .build-slot::after {
+  display: none !important;
+  content: none !important;
+  box-shadow: none !important;
+}
+
+#appShell.app-shell:not(.staff-mode) .build-slot.current,
+#appShell.app-shell:not(.staff-mode)[data-level-id] .base .build-slot.current,
+#appShell.app-shell:not(.staff-mode) .moon-yard.yard-scene-floor .base.scene-floor .build-slot.current {
+  border: 3px solid #ffca28 !important;
+  background: rgba(255, 236, 179, 0.18) !important;
+  box-shadow: 0 0 16px rgba(255, 202, 40, 0.3) !important;
+  transform: translateX(-50%) !important;
+}
+
+#appShell.app-shell:not(.staff-mode) .build-slot.placed,
+#appShell.app-shell:not(.staff-mode)[data-level-id] .base .build-slot.placed,
+#appShell.app-shell:not(.staff-mode) .moon-yard.yard-scene-floor .base.scene-floor .build-slot.placed {
+  border: none !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  transform: translateX(-50%) !important;
+}
+
+/* 4. 已拼装构件（月亮地板）高清自然呈现于月面基座中央 */
+#appShell.app-shell:not(.staff-mode)[data-level-id] .base .build-slot.placed .slot-art,
+#appShell.app-shell:not(.staff-mode) .moon-yard.yard-scene-floor .base.scene-floor .build-slot.placed .slot-art {
+  display: block !important;
+  opacity: 1 !important;
+  background-image: var(--part-image) !important;
+  background-size: contain !important;
+  background-repeat: no-repeat !important;
+  background-position: center !important;
+  filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.3)) !important;
+}
+
+/* 4. 键盘按键纯化：隐藏细碎杂乱的彩色小圆点，使白键如象牙般纯净典雅 */
+.key .key-color-dot {
+  display: none !important;
+}
+
